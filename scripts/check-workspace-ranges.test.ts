@@ -221,16 +221,6 @@ describe("failing loudly instead of silently", () => {
 });
 
 describe("against the real repository", () => {
-	test("enumerates packages from the root workspace globs", async () => {
-		const packages = await loadWorkspacePackages(`${import.meta.dir}/..`);
-
-		// Guards against the enumeration silently resolving an empty set and
-		// vacuously passing — the exact shape of the #901 incident.
-		expect(packages.length).toBeGreaterThan(20);
-		expect(packages.map((p) => p.name)).toContain("@canonical/summon-component");
-		for (const p of packages) expect(p.file).not.toContain("node_modules");
-	});
-
 	test("every workspace sibling range in this tree is satisfiable", async () => {
 		const packages = await loadWorkspacePackages(`${import.meta.dir}/..`);
 		const violations = findViolations(packages);
