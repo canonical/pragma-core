@@ -1,0 +1,33 @@
+import * as values from "../../css/values/index.js";
+import type { CssValueType, Diagnostic } from "../../types/index.js";
+import makeDiagnostic from "../makeDiagnostic.js";
+import type { UsageRuleContext } from "./types.js";
+
+/** Check: css/type-mismatch — token type doesn't match the property's expected type. */
+export default function checkTypeMismatch(
+  ctx: UsageRuleContext,
+  results: Diagnostic[],
+): void {
+  if (ctx.insideMath) return;
+  const severity = ctx.config.diagnostics.get("css/type-mismatch");
+  if (!severity) return;
+  const tokenType = ctx.token?.cssType ?? ctx.prop?.cssType;
+  if (!tokenType || tokenType === "<unknown>") return;
+  const expectedType = values.expectedTypeForProperty(ctx.usage.property);
+  if (!expectedType) return;
+  if (values.isAssignable(tokenType, expectedType as CssValueType)) return;
+  if (values.isSuppressed("css/type-mismatch", ctx.usage.line, ctx.directives))
+    return;
+  const trimStart = ctx.lineText.length - ctx.lineText.trimStart().length;
+  const trimEnd = ctx.lineText.trimEnd().length;
+  results.push(
+    makeDiagnostic(
+      ctx.usage.line,
+      trimStart,
+      severity,
+      "css/type-mismatch",
+      `Type mismatch: \`${ctx.usage.cssVar}\` resolves to \`${tokenType}\` which is not assignable to \`${ctx.usage.property}\`. \`${ctx.usage.property}\` expects \`${expectedType}\`. [CSS Values Level 4 \u00A74; CSS Custom Properties Level 1 \u00A72]`,
+      trimEnd,
+    ),
+  );
+}

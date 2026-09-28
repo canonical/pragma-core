@@ -1,0 +1,24 @@
+{
+  "lineHeightExceptions": [
+    {
+      "product": "site",
+      "rootRole": "typography.text.secondary",
+      "members": [
+        "typography.text.secondary",
+        "typography.text.secondary.bold",
+        "typography.text.secondary.code",
+        "typography.text.secondary.prose",
+        "typography.text.secondary.prose.bold"
+      ],
+      "baselineCount": {
+        "numerator": 5,
+        "denominator": 2
+      },
+      "reason": "The inherited 14px/20px secondary-text family preserves its reviewed 20px line height on Site's 8px baseline.",
+      "visualEvidence": {
+        "singleLine": "One 20px line plus one 8px nudge-and-compensation unit occupies 28px (3.5 baselines) and exits on the 4px half-phase.",
+        "multiline": "Successive 20px lines advance by 2.5 baselines, alternate between the primary and half phase, and return to the primary phase every second line."
+      }
+    }
+  ]
+}

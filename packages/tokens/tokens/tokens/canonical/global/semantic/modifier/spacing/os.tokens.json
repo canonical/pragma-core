@@ -1,0 +1,24 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "spacing": {
+    "$type": "dimension",
+    "baseline": { "$value": "{dimension.050}" },
+    "gap": {
+      "field": { "block": { "$value": "{dimension.050}" } },
+      "mark": { "inline": { "$value": "{dimension.050}" } },
+      "group": { "block": { "$value": "{dimension.300}" } },
+      "pattern": { "block": { "$value": "{dimension.600}" } },
+      "region": { "block": { "$value": "{dimension.1200}" } }
+    },
+    "inset": {
+      "field": { "inline": { "$value": "{dimension.050}" } },
+      "action": { "inline": { "$value": "{dimension.100}" } },
+      "continuation": { "inline": { "$value": "{dimension.250}" } },
+      "surface": {
+        "inline": { "$value": "{dimension.100}" },
+        "block": { "$value": "{dimension.100}" }
+      },
+      "strip": { "block": { "$value": "{dimension.400}" } }
+    }
+  }
+}

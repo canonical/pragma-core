@@ -1,0 +1,167 @@
+/**
+ * LSP protocol subset types.
+ *
+ * Minimal definitions mirroring `vscode-languageserver-types` — declared
+ * locally to avoid coupling the type layer to the LSP SDK.
+ *
+ */
+
+// ---------------------------------------------------------------------------
+// Positions & ranges
+// ---------------------------------------------------------------------------
+
+/**
+ * Position in a text document (LSP convention).
+ */
+export interface Position {
+  /** 0-indexed line number. */
+  line: number;
+  /** 0-indexed character offset. */
+  character: number;
+}
+
+/** Range in a text document. */
+export interface Range {
+  start: Position;
+  end: Position;
+}
+
+// ---------------------------------------------------------------------------
+// Completions
+// ---------------------------------------------------------------------------
+
+/** Completion item kind (subset). */
+export enum CompletionItemKind {
+  Color = 16,
+  Variable = 6,
+  Property = 10,
+}
+
+/** Insert text format for completion items. */
+export enum InsertTextFormat {
+  PlainText = 1,
+  Snippet = 2,
+}
+
+/** LSP Command — used for post-insertion actions. */
+export interface Command {
+  title: string;
+  command: string;
+  arguments?: unknown[];
+}
+
+/** Completion item (abridged). */
+export interface CompletionItem {
+  label: string;
+  detail?: string;
+  kind?: CompletionItemKind;
+  sortText?: string;
+  insertText?: string;
+  insertTextFormat?: InsertTextFormat;
+  documentation?: MarkupContent;
+  /** Filter text used by the editor to match this item against the user's input. */
+  filterText?: string;
+  /** Command executed after insertion — used to dismiss suggestions. */
+  command?: Command;
+  /**
+   * Opaque payload echoed back by the client on `completionItem/resolve`.
+   * Carries the originating document URI so documentation can be built lazily.
+   */
+  data?: { uri?: string };
+}
+
+// ---------------------------------------------------------------------------
+// Markup
+// ---------------------------------------------------------------------------
+
+/** Markup content for hover/documentation. */
+export interface MarkupContent {
+  kind: "markdown" | "plaintext";
+  value: string;
+}
+
+// ---------------------------------------------------------------------------
+// Locations
+// ---------------------------------------------------------------------------
+
+/** Location in a file. */
+export interface Location {
+  uri: string;
+  range: Range;
+}
+
+/** Location link for go-to-definition. */
+export interface LocationLink {
+  targetUri: string;
+  targetRange: Range;
+  targetSelectionRange: Range;
+}
+
+// ---------------------------------------------------------------------------
+// Diagnostics
+// ---------------------------------------------------------------------------
+
+/** Diagnostic severity. */
+export enum DiagnosticSeverity {
+  Error = 1,
+  Warning = 2,
+  Information = 3,
+  Hint = 4,
+}
+
+/** LSP diagnostic. */
+export interface Diagnostic {
+  range: Range;
+  severity: DiagnosticSeverity;
+  code: string;
+  source: string;
+  message: string;
+}
+
+// ---------------------------------------------------------------------------
+// Code actions & edits
+// ---------------------------------------------------------------------------
+
+/** Code action (abridged). */
+export interface CodeAction {
+  title: string;
+  kind: string;
+  edit?: WorkspaceEdit;
+}
+
+/** Workspace edit (abridged). */
+export interface WorkspaceEdit {
+  changes: Record<string, TextEdit[]>;
+}
+
+/** Text edit. */
+export interface TextEdit {
+  range: Range;
+  newText: string;
+}
+
+// ---------------------------------------------------------------------------
+// Document colours  (§9.2)
+// ---------------------------------------------------------------------------
+
+/** LSP Color (0-1 RGBA). */
+export interface Color {
+  red: number;
+  green: number;
+  blue: number;
+  alpha: number;
+}
+
+/** LSP ColorInformation — a colour and the range it applies to. */
+export interface ColorInformation {
+  range: {
+    start: { line: number; character: number };
+    end: { line: number; character: number };
+  };
+  color: Color;
+}
+
+/** LSP ColorPresentation — how to display a picked colour. */
+export interface ColorPresentation {
+  label: string;
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "foreground": {
+      "secondary": {
+        "$root": {
+          "$value": "{color.foreground.secondary.warning.$root}",
+          "$description": "Fill color for secondary interactive elements conveying caution or potential issues"
+        }
+      },
+      "input": {
+        "$root": {
+          "$value": "{color.foreground.input.warning.$root}",
+          "$description": "Fill color for input elements in a warning validation state"
+        }
+      },
+      "primary": {
+        "$root": {
+          "$value": "{color.foreground.primary.warning.$root}",
+          "$description": "Fill color for primary interactive elements conveying caution or potential issues"
+        }
+      }
+    },
+    "text": {
+      "$root": {
+        "$value": "{color.text.warning.$root}",
+        "$description": "Text color for conveying caution or potential issues"
+      },
+      "onForegroundSecondary": {
+        "$root": {
+          "$value": "{color.text.onForegroundSecondary.warning.$root}",
+          "$description": "Warning text color for text placed on secondary foreground surfaces"
+        }
+      }
+    },
+    "icon": {
+      "$root": {
+        "$value": "{color.icon.warning.$root}",
+        "$description": "Icon color for conveying caution or potential issues"
+      }
+    },
+    "border": {
+      "$root": {
+        "$value": "{color.border.warning.$root}",
+        "$description": "Border color for elements conveying caution or potential issues that require attention"
+      }
+    },
+    "focusRing": {
+      "$root": {
+        "$value": "{color.focusRing.warning}",
+        "$description": "Focus ring color for elements in a warning state"
+      }
+    },
+    "$type": "color"
+  },
+  "$description": "Criticality: warning context."
+}

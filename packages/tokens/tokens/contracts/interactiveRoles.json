@@ -1,0 +1,88 @@
+{
+  "roles": [
+    {
+      "role": "color.foreground.primary",
+      "states": ["hover", "active", "disabled"],
+      "hasSurface": false,
+      "hasModifier": true
+    },
+    {
+      "role": "color.foreground.secondary",
+      "states": ["hover", "active", "disabled"],
+      "hasSurface": false,
+      "hasModifier": true
+    },
+    {
+      "role": "color.foreground.ghost",
+      "states": ["hover", "active", "disabled"],
+      "hasSurface": true,
+      "hasModifier": true
+    },
+    {
+      "role": "color.foreground.input",
+      "states": ["hover", "active", "disabled"],
+      "hasSurface": true,
+      "hasModifier": true
+    },
+    {
+      "role": "color.foreground.navigation.primary",
+      "states": ["hover", "active", "disabled"],
+      "hasSurface": true,
+      "hasModifier": false
+    },
+    {
+      "role": "color.foreground.navigation.secondary",
+      "states": ["hover", "active", "disabled"],
+      "hasSurface": false,
+      "hasModifier": false
+    },
+    {
+      "role": "color.foreground.checkbox.unselected",
+      "states": ["hover", "active", "disabled"],
+      "hasSurface": true,
+      "hasModifier": false
+    },
+    {
+      "role": "color.foreground.radio.unselected",
+      "states": ["hover", "active", "disabled"],
+      "hasSurface": true,
+      "hasModifier": false
+    },
+    {
+      "role": "color.foreground.checkbox.checkmark",
+      "states": ["disabled"],
+      "hasSurface": true,
+      "hasModifier": false
+    },
+    {
+      "role": "color.foreground.radio.checkmark",
+      "states": ["disabled"],
+      "hasSurface": true,
+      "hasModifier": false
+    },
+    {
+      "role": "color.foreground.switch.knob",
+      "states": ["disabled"],
+      "hasSurface": true,
+      "hasModifier": false
+    },
+    {
+      "role": "color.border",
+      "states": ["disabled"],
+      "hasSurface": false,
+      "hasModifier": true
+    },
+    {
+      "role": "color.text",
+      "states": ["disabled"],
+      "hasSurface": true,
+      "hasModifier": true
+    },
+    {
+      "role": "color.icon",
+      "states": ["disabled"],
+      "hasSurface": false,
+      "hasModifier": true
+    }
+  ]
+}

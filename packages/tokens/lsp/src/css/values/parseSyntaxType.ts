@@ -1,0 +1,53 @@
+import type { CssValueType } from "../../types/index.js";
+
+const KNOWN_CSS_TYPES: ReadonlySet<string> = new Set([
+  "<color>",
+  "<length>",
+  "<percentage>",
+  "<length-percentage>",
+  "<number>",
+  "<integer>",
+  "<angle>",
+  "<time>",
+  "<frequency>",
+  "<resolution>",
+  "<flex>",
+  "<alpha-value>",
+  "<family-name>",
+  "<easing-function>",
+  "<gradient>",
+  "<image>",
+  "<url>",
+]);
+
+/**
+ * Map an `@property` syntax descriptor to a CSS value type.
+ *
+ * Handles:
+ * - `"*"` — universal syntax (returns `"<unknown>"` since any value is valid)
+ * - Union types (`"<length> | <percentage>"`) — returns the first known member
+ * - List multipliers (`"<length>#"`, `"<color>+"`) — strips the trailing
+ *   `#` or `+` and resolves the base type
+ * - Simple known types (`"<color>"`, `"<length>"`, etc.)
+ */
+export default function parseSyntaxType(syntax: string): CssValueType {
+  const trimmed = syntax.trim();
+
+  // Universal syntax — accepts any value
+  if (trimmed === "*") return "<unknown>";
+
+  // Union: split on " | " and return the first known member
+  if (trimmed.includes("|")) {
+    for (const part of trimmed.split("|")) {
+      const resolved = parseSyntaxType(part);
+      if (resolved !== "<unknown>") return resolved;
+    }
+    return "<unknown>";
+  }
+
+  // Strip list multipliers: <type># or <type>+
+  const stripped = trimmed.replace(/[#+]$/, "");
+
+  if (KNOWN_CSS_TYPES.has(stripped)) return stripped as CssValueType;
+  return "<unknown>";
+}

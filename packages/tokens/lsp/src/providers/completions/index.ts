@@ -1,0 +1,5 @@
+export { default as buildCompletionItem } from "./buildCompletionItem.js";
+export { buildSortText, contextMatchScore } from "./buildSortText.js";
+export { default as provideCompletions } from "./provideCompletions.js";
+export { default as resolveCompletionItem } from "./resolveCompletionItem.js";
+export { default as resolveExpectedType } from "./resolveExpectedType.js";

@@ -1,0 +1,34 @@
+import type { AtRuleContext, ScopeType } from "../../types/index.js";
+
+const GLOBAL_SELECTORS = new Set([
+  ":root",
+  "html",
+  "body",
+  ":host",
+  ":host(*)",
+]);
+
+/** Classify a CSS selector + at-rule context into a scope type. */
+export default function classifySelectorScope(
+  selector: string,
+  atRules: AtRuleContext[],
+): ScopeType {
+  const trimmed = selector.trim();
+  if (trimmed === "*") return "universal";
+  for (const at of atRules) {
+    if (at.name === "media") return "media";
+    if (at.name === "layer") return "layer";
+    if (at.name === "supports") return "supports";
+  }
+  if (GLOBAL_SELECTORS.has(trimmed)) return "global";
+  if (
+    trimmed.startsWith(".") ||
+    trimmed.startsWith("#") ||
+    trimmed.includes("[") ||
+    trimmed.includes(">") ||
+    trimmed.includes("+") ||
+    trimmed.includes("~")
+  )
+    return "class";
+  return "other";
+}

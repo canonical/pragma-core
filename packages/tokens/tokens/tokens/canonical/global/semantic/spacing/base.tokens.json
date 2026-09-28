@@ -1,0 +1,78 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "spacing": {
+    "$type": "dimension",
+    "baseline": {
+      "$value": "{dimension.100}",
+      "$description": "Product baseline grid quantum. The unscoped default is Site (0.5rem)."
+    },
+    "gap": {
+      "field": {
+        "block": {
+          "$value": "{dimension.100}",
+          "$description": "Block gap between field-owned label, control, and help content."
+        }
+      },
+      "mark": {
+        "inline": {
+          "$value": "{dimension.100}",
+          "$description": "Inline gap between a mark or icon and the copy it labels."
+        }
+      },
+      "group": {
+        "block": {
+          "$value": "{dimension.300}",
+          "$description": "Block gap between items within one complete pattern."
+        }
+      },
+      "pattern": {
+        "block": {
+          "$value": "{dimension.800}",
+          "$description": "Block gap between complete patterns or sections."
+        }
+      },
+      "region": {
+        "block": {
+          "$value": "{dimension.1600}",
+          "$description": "Block gap between complete page regions."
+        }
+      }
+    },
+    "inset": {
+      "field": {
+        "inline": {
+          "$value": "{dimension.100}",
+          "$description": "Inline inset for data-entry content."
+        }
+      },
+      "action": {
+        "inline": {
+          "$value": "{dimension.200}",
+          "$description": "Inline inset for command surfaces."
+        }
+      },
+      "continuation": {
+        "inline": {
+          "$value": "{dimension.400}",
+          "$description": "Inline inset for copy following a mark or structural depth step."
+        }
+      },
+      "surface": {
+        "inline": {
+          "$value": "{dimension.200}",
+          "$description": "Inline inset owned by a structural surface."
+        },
+        "block": {
+          "$value": "{dimension.200}",
+          "$description": "Block inset owned by a structural surface."
+        }
+      },
+      "strip": {
+        "block": {
+          "$value": "{dimension.800}",
+          "$description": "Block inset owned by a full-bleed strip frame."
+        }
+      }
+    }
+  }
+}

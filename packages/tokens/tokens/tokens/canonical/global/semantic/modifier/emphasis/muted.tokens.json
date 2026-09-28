@@ -1,0 +1,25 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "text": {
+      "$root": {
+        "$value": "{color.text.muted.$root}",
+        "$description": "Subtle text color for low-emphasis or secondary information"
+      }
+    },
+    "icon": {
+      "$root": {
+        "$value": "{color.icon.muted.$root}",
+        "$description": "Subtle icon color for low-emphasis or decorative icons"
+      }
+    },
+    "border": {
+      "$root": {
+        "$value": "{color.border.muted.$root}",
+        "$description": "Subtle border color for low-emphasis elements such as dividers and decorative borders that don't need to meet contrast requirements"
+      }
+    },
+    "$type": "color"
+  },
+  "$description": "Emphasis: muted context."
+}

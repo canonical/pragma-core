@@ -1,0 +1,28 @@
+import * as values from "../../css/values/index.js";
+import type { Diagnostic } from "../../types/index.js";
+import makeDiagnostic from "../makeDiagnostic.js";
+import type { UsageRuleContext } from "./types.js";
+
+/** Check: css/unknown-var — var() references an unknown custom property. */
+export default function checkUnknownVar(
+  ctx: UsageRuleContext,
+  results: Diagnostic[],
+): void {
+  const severity = ctx.config.diagnostics.get("css/unknown-var");
+  if (!severity) return;
+  if (ctx.graph.hasToken(ctx.usage.cssVar)) return;
+  if (ctx.graph.hasProperty(ctx.usage.cssVar)) return;
+  if (ctx.graph.hasVar(ctx.usage.cssVar)) return;
+  if (values.isSuppressed("css/unknown-var", ctx.usage.line, ctx.directives))
+    return;
+  results.push(
+    makeDiagnostic(
+      ctx.usage.line,
+      ctx.usage.varNameColumn,
+      severity,
+      "css/unknown-var",
+      `\`var(${ctx.usage.cssVar})\` references a custom property not found in any reachable graph node. [CSS Custom Properties Level 1 \u2014 \u00A72]`,
+      ctx.usage.varNameColumn + ctx.usage.varNameLength,
+    ),
+  );
+}

@@ -1,0 +1,22 @@
+/**
+ * `status` command — show current config and artifact status.
+ *
+ * @note Impure — reads config, writes to stdout.
+ */
+import { loadConfigFile, resolveConfig } from "../protocol/index.js";
+
+export async function runStatus(rootDir: string): Promise<void> {
+  const { raw, configDir } = await loadConfigFile(rootDir);
+  const config = resolveConfig(raw, configDir ?? rootDir);
+  console.log("terrazzo-lsp status");
+  console.log("---");
+  console.log(`Root:       ${rootDir}`);
+  console.log(`Dist:       ${config.distDir}`);
+  console.log(
+    `Artifacts:  ${config.artifactPaths.length > 0 ? config.artifactPaths.join(", ") : "(none)"}`,
+  );
+  console.log(`Scan globs: ${config.scanGlobs.join(", ")}`);
+  console.log(
+    `Global CSS: ${config.globalStylesheets === null ? "(auto)" : config.globalStylesheets.join(", ") || "(none)"}`,
+  );
+}

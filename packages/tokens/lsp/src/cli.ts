@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+/** @see {@link ./cli/index.ts} for the CLI implementation. */
+import "./cli/index.js";

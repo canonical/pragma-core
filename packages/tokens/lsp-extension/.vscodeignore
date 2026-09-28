@@ -1,0 +1,11 @@
+extension.ts
+node_modules/**
+bun.lock
+install.mjs
+vsce-pack.mjs
+build-server.mjs
+tsconfig.json
+.vscode/**
+*.vsix
+*.svg
+!icon.png

@@ -1,0 +1,41 @@
+import {
+  SEMANTIC_TOKEN_MODIFIERS,
+  SEMANTIC_TOKEN_TYPES,
+} from "../providers/types.js";
+
+/** Return the advertised LSP capabilities for the chosen startup mode. */
+export default function getServerCapabilities(allowDegraded: boolean) {
+  if (allowDegraded) {
+    return {
+      textDocumentSync: 1,
+    } as const;
+  }
+
+  return {
+    textDocumentSync: 1,
+    completionProvider: {
+      triggerCharacters: ["-", "("],
+      // Documentation is built lazily in completionItem/resolve so a single
+      // keystroke does not render markdown tooltips for every token.
+      resolveProvider: true,
+    },
+    hoverProvider: true,
+    definitionProvider: true,
+    referencesProvider: true,
+    renameProvider: { prepareProvider: true },
+    semanticTokensProvider: {
+      legend: {
+        tokenTypes: [...SEMANTIC_TOKEN_TYPES],
+        tokenModifiers: [...SEMANTIC_TOKEN_MODIFIERS],
+      },
+      full: true,
+    },
+    workspaceSymbolProvider: true,
+    colorProvider: true,
+    documentLinkProvider: {},
+    inlayHintProvider: true,
+    codeActionProvider: {
+      codeActionKinds: ["quickfix"],
+    },
+  } as const;
+}

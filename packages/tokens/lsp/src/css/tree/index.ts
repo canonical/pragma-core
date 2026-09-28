@@ -1,0 +1,8 @@
+export {
+  findAncestor,
+  resolveAncestorAtRules,
+  resolveAncestorSelector,
+} from "./ancestors.js";
+export { default as extractDeclarationValue } from "./declarations.js";
+export { default as findLineageNode } from "./lineage.js";
+export { buildLineOffsets, getColumnAt, getLineAt } from "./lines.js";
