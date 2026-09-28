@@ -1,0 +1,37 @@
+{
+  "cli": {
+    "packageManager": "bun"
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "build:all": {
+      "dependsOn": ["^build:all"],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/build",
+        "{projectRoot}/storybook-static"
+      ],
+      "cache": true
+    },
+    "build:storybook": {
+      "dependsOn": ["^build:storybook"],
+      "outputs": ["{projectRoot}/storybook-static"],
+      "cache": true
+    },
+    "check": {
+      "dependsOn": ["^check", "^build"],
+      "cache": true
+    },
+    "check:fix": {
+      "dependsOn": ["^check:fix", "^build"],
+      "cache": true
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "cache": true
+    }
+  }
+}

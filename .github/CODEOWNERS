@@ -1,0 +1,3 @@
+# pragma-core. The shared lint configuration is co-owned by the teams whose
+# packages in pragma-web extend it, exactly as in canonical/pragma.
+/configs/biome/               @canonical/launchpad-ui  @canonical/workplace-engineering-ui  @canonical/pragma

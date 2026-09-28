@@ -1,0 +1,55 @@
+{
+  "name": "pragma-core",
+  "private": true,
+  "version": "0.0.1",
+  "description": "The Canonical toolchain: the pragma and summon command-line tools, the knowledge engine, the standards, the semantic models and the design tokens",
+  "author": {
+    "email": "webteam@canonical.com",
+    "name": "Canonical Webteam"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canonical/pragma-core"
+  },
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/canonical/pragma-core/issues"
+  },
+  "homepage": "https://github.com/canonical/pragma-core#readme",
+  "workspaces": [
+    "configs/*",
+    "packages/tools/*",
+    "packages/shared/*",
+    "packages/tokens/*",
+    "packages/engine/*",
+    "packages/integrations/*",
+    "packages/semantics/*",
+    "packages/summon/*",
+    "packages/cli/*"
+  ],
+  "scripts": {
+    "check:ranges": "bun scripts/check-workspace-ranges.ts",
+    "check:ranges:test": "bun test scripts/check-workspace-ranges.test.ts",
+    "build": "lerna run build",
+    "prepare": "bun run build",
+    "lerna": "lerna",
+    "check": "lerna run check",
+    "check:fix": "lerna run check:fix",
+    "test": "lerna run test",
+    "test:coverage": "lerna run test:coverage",
+    "publish:status": "bun scripts/publish-status.ts",
+    "special:clean": "bun run nx reset && lerna clean --yes && rm -rf node_modules **/dist **/node_modules"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
+    "lerna": "^10.0.0",
+    "nx": "^23.0.0"
+  },
+  "patchedDependencies": {
+    "ejs@5.0.1": "patches/ejs@5.0.1.patch",
+    "sigstore@4.1.0": "patches/sigstore@4.1.0.patch"
+  },
+  "engines": {
+    "node": "^22.13.0 || ^24.0.0 || ^26.0.0"
+  }
+}
