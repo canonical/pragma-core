@@ -1,0 +1,8 @@
+{
+  "extends": "@canonical/typescript-config",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["src/**/*.ts", "vite.config.ts", "vitest.config.ts"]
+}
