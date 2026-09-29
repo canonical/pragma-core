@@ -1,6 +1,6 @@
 # @canonical/summon-application
 
-Summon generators for scaffolding application structure: full applications, domains, pages, and wrappers. Produces code aligned with the [boilerplate reference app](../../../apps/react/boilerplate-vite/).
+Summon generators for scaffolding application structure: full applications, domains, pages, and wrappers. Produces code aligned with the [boilerplate reference app](https://github.com/canonical/pragma-web/tree/main/apps/react/boilerplate-vite).
 
 ## Generators
 

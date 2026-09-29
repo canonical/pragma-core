@@ -41,7 +41,7 @@ bun run build
 
 This runs the Terrazzo pipeline with `@canonical/terrazzo-plugin-css` and produces CSS files and a `tokens.json` artifact in `dist/`.
 
-See [Product baseline and component spacing](../../documentation/product-spacing.md)
+See [Product baseline and component spacing](../documentation/product-spacing.md)
 for the public spacing vocabulary, exact product matrix, selector behaviour,
 and line-height lattice contract.
 
