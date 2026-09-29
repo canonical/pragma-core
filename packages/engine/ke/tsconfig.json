@@ -1,0 +1,10 @@
+{
+  "extends": "@canonical/typescript-config",
+  "compilerOptions": {
+    "types": ["node", "@types/bun"],
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts", "testing/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}
