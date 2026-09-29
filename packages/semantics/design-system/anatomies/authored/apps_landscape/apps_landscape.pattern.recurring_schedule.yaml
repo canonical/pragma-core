@@ -1,0 +1,101 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# Every retired `attributes:` block on these children is kept as a comment rather than
+# migrated to `props:`: none of `required`, `type`, `min`, `inputMode`, `unit` or
+# `onSelector` is a property the referenced components declare in the ontology, and a
+# pin naming a property a component does not have is invisible to validation.
+node:
+  # role: Formik-bound schedule controls
+  uri: apps_landscape.pattern.recurring_schedule
+  edges:
+    - node:
+        # was uri: global.component.select; role: schedule type
+        # options: on a date, recurring; attributes: required: true
+        uri: global.component.select_field
+      relation:
+        cardinality: "1"
+    - node:
+        role: indented schedule branch
+        styles:
+          # was borderLeft: "1px solid $colors--theme--border-default" — the width and
+          # the style survive, and the colour resolves to the declared border colour.
+          # The roster has no inline-start border colour key, so the all-sides colour
+          # key carries it.
+          appearance.border.width: 1px
+          appearance.border.style: solid
+          appearance.border.color: color.border
+          # was paddingLeft: "$sph--large"; no spacing symbol corresponds to Vanilla's
+          # horizontal large step
+        edges:
+          - node:
+              # was uri: global.component.input; role: one-time date
+              # attributes: type: datetime-local, min: current local date-time formatted
+              # for the input, required: true
+              uri: global.component.date_time_field
+            relation:
+              cardinality: "0..1"   # rendered when start_type is on-a-date
+          - node:
+              role: recurring controls
+              edges:
+                - node:
+                    # was uri: global.component.input; role: recurring start date
+                    # attributes: type: datetime-local, min: current local date-time
+                    # formatted for the input, required: true
+                    uri: global.component.date_time_field
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: repeat interval row
+                    edges:
+                      - node:
+                          # was uri: global.component.input; role: repeat count
+                          # attributes: type: number, min: 7 when unit_of_time is
+                          # DAILY; otherwise 1, required: true
+                          uri: global.component.number_field
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          # was uri: global.component.select; role: repeat unit
+                          # attributes: required: true
+                          uri: global.component.select_field
+                        relation:
+                          cardinality: "1"
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # attributes: onSelector: none
+                    role: daily recurrence branch
+                  relation:
+                    cardinality: "0..1"   # rendered when unit_of_time is DAILY
+                - node:
+                    # role: weekly weekday selector; attributes: required: true
+                    uri: apps_landscape.component.multi_select_field
+                  relation:
+                    cardinality: "0..1"   # rendered when unit_of_time is WEEKLY
+                - node:
+                    # was uri: global.component.select; role: monthly date-derived
+                    # selector; attributes: required: true
+                    uri: global.component.select_field
+                  relation:
+                    cardinality: "0..1"   # rendered when unit_of_time is MONTHLY and start_date is truthy
+                - node:
+                    # role: yearly month selector; attributes: required: true
+                    uri: apps_landscape.component.multi_select_field
+                  relation:
+                    cardinality: "0..1"   # rendered when unit_of_time is YEARLY
+                - node:
+                    # was uri: global.component.select; role: end type
+                    # attributes: required: true
+                    uri: global.component.select_field
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # was uri: global.component.input; role: end date
+                    # attributes: type: datetime-local, min: start_date, required: true
+                    uri: global.component.date_time_field
+                  relation:
+                    cardinality: "0..1"   # rendered when end_type is on-a-date
+            relation:
+              cardinality: "0..1"   # rendered when start_type is recurring
+      relation:
+        cardinality: "1"

@@ -1,0 +1,33 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.avatar a ds:Component;
+    ds:name "Avatar";
+    ds:summary "The **UserAvatar** component is used to represent a user. It can display an image, initials, or a fallback icon.\n\n**Main Use Cases:**\n\n- **User Profile:** Display the user’s profile picture.\n- **Comments:** Show the avatar of the user who wrote a comment.\n- **Lists:** Represent users in a list of participants or contacts.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.user-avatar\n  styles:\n    layout.display: inline-grid\n    layout.align: center\n    layout.justify: center\n    size.width: size/medium\n    size.height: size/medium\n    appearance.background: color/background/alt\n    appearance.border: border/style/default\n    typography.size: typography/paragraph/default/strong\n  edges:\n    - switch:\n        on: props\n        cases:\n            - node:\n                role: image\n                styles:\n                  size.width: 100%\n                  size.height: 100%\n            - node:\n                role: initials\n                styles:\n                  typography.transform: uppercase\n            - node:\n                role: fallback icon\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "The UserAvatar is composed of a main container that can contain an image, initials, or a fallback icon.\n\n1. **Container:** The outermost wrapper that defines the shape and size of the avatar.\n2. **Image:** The user’s profile picture.\n3. **Initials:** The user’s initials, used as a fallback when an image is not available.\n4. **Fallback Icon:** A generic icon used when neither an image nor initials are available.\n\nhttps://www.figma.com/design/zLPPWH90vDkSUaTnYC0em0/Launchpad-components--new-?node-id=3085-629388&m=dev";
+    ds:usage "### 1. General Description\n\nUserAvatars are used to visually represent users in the interface. They help to create a more personal and engaging user experience.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **User representation:** Use whenever you need to represent a user in the UI.\n- **Personalization:** Use to personalize the user experience.\n\n2.2 When Not to Use\n\n- **Anonymous users:** Do not use for anonymous users. Use a generic icon instead.";
+    ds:guidelines "### Accessibility\n\n- **Alt text:** If the avatar is an image, provide descriptive alt text.\n- **Aria-label:** If the avatar is just an icon or initials, provide an aria-label with the user’s name.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "src";
+        ds:summary "The URL of the user's profile picture.";
+        ds:propertyType "url";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "name";
+        ds:summary "The name of the user, used to generate initials.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "size";
+        ds:summary "The size of the avatar.";
+        ds:propertyType "choice";
+        ds:optional "true";
+        ds:defaultValue "medium";
+        ds:constraints "small, medium, large"
+    ].

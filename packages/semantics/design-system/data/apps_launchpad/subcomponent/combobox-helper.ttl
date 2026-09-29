@@ -1,0 +1,26 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.combobox-helper a ds:Subcomponent;
+    ds:name "Combobox.Helper";
+    ds:summary "The **Combobox Helper** is a subcomponent of the Combobox that provides a dedicated area for displaying helper text or instructions.\n\n**Main Use Cases:**\n\n- **Instructions:** Provide instructions on how to use the Combobox.\n- **Hints:** Offer hints or suggestions to the user.\n- **Validation:** Display validation messages.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.subcomponent.combobox.helper\n  styles:\n    layout.display: flex\n    layout.direction: horizontal\n    layout.align: center\n    spacing.gap: spacing/inline/extra-small\n    appearance.background: color/background/default\n  edges:\n    - node:\n        role: icon container\n      relation:\n        cardinality: \"0..1\"\n        slotName: icon\n    - node:\n        role: helper text\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "The Combobox Helper is composed of a main container, an optional icon, and the helper text.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the helper.\n2. **Icon Container:** An optional container for an icon.\n3. **Helper Text:** The text that provides the help or instructions.";
+    ds:usage "### 1. General Description\n\nThe Combobox Helper is used to provide additional information or guidance to the user. It can be used to improve the usability of the Combobox, especially for complex use cases.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Complex Comboboxes:** Use when the Combobox has a complex behavior or a large number of options.\n- **Instructions:** Use to provide instructions that are always visible.\n\n2.2 When Not to Use\n\n- **Simple Comboboxes:** Do not use for simple Comboboxes where the usage is obvious.";
+    ds:guidelines "### Content Specification\n\n- **Clarity:** Use clear and concise language for the helper text.\n- **Brevity:** Keep the helper text short and to the point.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The content of the helper, usually text.";
+        ds:propertyType "node";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "icon";
+        ds:summary "An optional icon to be displayed next to the text.";
+        ds:propertyType "node";
+        ds:optional "true"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.combobox.

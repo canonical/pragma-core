@@ -1,0 +1,52 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+# The previous notation had markdown emphasis baked into the switch edge
+# (`*cases:*`, `*- node:*`) and did not parse; the switch below is that edge
+# recovered by hand, emphasis stripped and the discriminator named.
+node:
+  uri: apps_launchpad.component.chip
+  styles:
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.align: center
+  edges:
+    - node:
+        role: icon container
+      relation:
+        cardinality: "0..1"
+        slotName: icon
+    - node:
+        role: lead text
+      relation:
+        cardinality: "0..1"
+        slotName: lead
+    - node:
+        role: value text
+      relation:
+        cardinality: "1"
+        slotName: value
+    - node:
+        uri: apps_launchpad.component.badge
+      relation:
+        cardinality: "0..1"
+        slotName: badge
+    - switch:
+        on: props
+        cases:
+          - node:
+              role: interactive chip
+              edges:
+                - node:
+                    role: dismiss button
+                    edges:
+                      - node:
+                          role: dismiss icon
+                        relation:
+                          cardinality: "1"
+                  relation:
+                    cardinality: "0..1"
+                    slotName: dismiss
+          - node:
+              role: readonly chip
+      relation:
+        cardinality: "1"

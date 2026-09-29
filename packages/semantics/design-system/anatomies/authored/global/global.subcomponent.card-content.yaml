@@ -1,0 +1,26 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/component/Card/common/Content/styles.css on .ds.card-content, with the
+# parent's own child rules in src/lib/component/Card/styles.css
+# (.ds.card > .card-content, and the divider on a non-last section).
+node:
+  uri: global.subcomponent.card-content
+  styles:
+    layout.type: flex
+    layout.direction: column
+    layout.grid.row: 3
+    layout.grid.column: "1 / -1"
+    # --card-content-* are declared in :root. The block padding is deliberately
+    # asymmetric (one baseline above, two below), which no single spacing role
+    # can say.
+    spacing.gap: dimension.100                    # --card-content-gap, the block gap between fields
+    spacing.internal.block.start: dimension.100   # --card-content-padding-block-start
+    spacing.internal.block.end: dimension.200     # --card-content-padding-block-end
+    spacing.internal.inline.start: dimension.200  # --card-content-padding-inline, a surface inset
+    spacing.internal.inline.end: dimension.200    # --card-content-padding-inline, a surface inset
+    # A content section that is not the card's last draws the divider to the
+    # section below. The roster has no block-end colour key, so the bottom key
+    # carries it; the matching width, dimension.stroke.thickness.medium via
+    # --card-border-width, has no one-edge key at all.
+    appearance.border.bottom.color: color.border.muted
+    appearance.border.style: solid

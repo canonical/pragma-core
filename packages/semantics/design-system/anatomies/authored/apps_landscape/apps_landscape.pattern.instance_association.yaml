@@ -1,0 +1,35 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.pattern.instance_association
+  edges:
+    - node:
+        # semantic: p; content: Association
+        role: section label
+      relation:
+        cardinality: "1"
+    - node:
+        # was uri: global.component.checkbox; role: all instances control
+        uri: global.component.checkbox_field
+      relation:
+        cardinality: "1"
+    - node:
+        # role: tag selector
+        uri: apps_landscape.component.multi_select_field
+      relation:
+        cardinality: "0..1"   # rendered when all instances is false
+    - node:
+        role: selected tags container
+        styles:
+          layout.type: flex   # was layout.display: flex
+          layout.wrap: wrap
+          # was spacing.gap: $spv--x-small; no spacing symbol corresponds to Vanilla's
+          # vertical x-small step
+        edges:
+          - node:
+              # role: selected tag
+              uri: global.component.chip
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "0..1"   # rendered when all instances is false

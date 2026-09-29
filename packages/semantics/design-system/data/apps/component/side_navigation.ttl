@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.component.side_navigation a ds:Component;
+    ds:name "SideNavigation";
+    ds:summary "Spec reference: [https://docs.google.com/document/d/1AeX_4NtUHxXDJgKqrZEpTXPJBIU9pyXxp0HJGcitX5g/edit?tab=t.0#heading=h.yij8xaij9lcy](https://docs.google.com/document/d/1AeX_4NtUHxXDJgKqrZEpTXPJBIU9pyXxp0HJGcitX5g/edit?tab=t.0#heading=h.yij8xaij9lcy)\n\nThe applications side navigation provides users with a way to navigate through various sections, features, or pages of an application. It appears as a vertical panel on the left side of the screen. The navigation can have two levels: The primary and the secondary navigation. The primary navigation is always shown. The secondary navigation can be used as needed to display a second level of navigation.\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition.

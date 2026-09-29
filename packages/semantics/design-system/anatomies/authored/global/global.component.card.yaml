@@ -1,0 +1,66 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Card/styles.css on .ds.card
+# The Card is not a surface: it sets no background, so it reads flush on
+# whatever surface it sits on and stays delimited by its border, its radius and
+# the dividers between its sections. It is always a grid participant and a ROW
+# SUBGRID over four fixed section tracks — image, header, content, footer.
+node:
+  uri: global.component.card
+  styles:
+    layout.type: grid
+    layout.grid.rows: subgrid
+    layout.grid.columns: "minmax(0, 1fr)"
+    # Spans --card-span parent columns (a component-local count, default 1) and
+    # its own four section rows.
+    layout.grid.column: "span 1"
+    layout.grid.row: "span 4"
+    appearance.border.width: dimension.stroke.thickness.medium
+    appearance.border.style: solid
+    appearance.border.color: color.border.muted
+    appearance.radius: dimension.radius.medium
+    # Clips section corners (a full-bleed image) to the card radius.
+    layout.overflow: hidden
+  edges:
+    # Each section sits on its fixed row track and spans the card's single
+    # column. An absent section leaves its track empty for this card only.
+    # Image, content and footer draw a divider on their block-end edge when
+    # they are not the last section; the header draws none, so title and
+    # content read as one region.
+    - node:
+        uri: global.subcomponent.card-image
+        styles:
+          layout.grid.row: "1"
+          layout.grid.column: "1 / -1"
+          appearance.border.bottom.color: color.border.muted
+      relation:
+        cardinality: "0..1"
+        slotName: media
+    - node:
+        uri: global.subcomponent.card-header
+        styles:
+          layout.grid.row: "2"
+          layout.grid.column: "1 / -1"
+          # Collapsed to raw 0 when a content section follows, to close the
+          # header/content seam — unthemeable by design.
+          spacing.internal.block.end: 0
+      relation:
+        cardinality: "0..1"
+        slotName: header
+    - node:
+        uri: global.subcomponent.card-content
+        styles:
+          layout.grid.row: "3"
+          layout.grid.column: "1 / -1"
+          appearance.border.bottom.color: color.border.muted
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        uri: global.subcomponent.card-footer
+        styles:
+          layout.grid.row: "4"
+          layout.grid.column: "1 / -1"
+          appearance.border.bottom.color: color.border.muted
+      relation:
+        cardinality: "0..1"
+        slotName: footer

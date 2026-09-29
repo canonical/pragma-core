@@ -1,0 +1,22 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.combobox-group
+  styles:
+    layout.type: flex
+    layout.direction: column   # was vertical
+    appearance.border.style: none
+  edges:
+    - node:
+        role: group legend
+        styles:
+          typography.font: typography.text.primary.smallcaps   # was typography/paragraph/default/small-caps
+          typography.color: color.text.muted   # was color/text/muted
+      relation:
+        cardinality: "0..1"
+        slotName: groupTitle
+    - node:
+        role: option list
+      relation:
+        cardinality: "1..*"
+        slotName: default

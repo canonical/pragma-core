@@ -1,0 +1,11 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.textarea_input
+  styles:
+    layout.type: inline-block
+    # dropped spacing.internal: spacing/inline/medium — no spacing symbol corresponds
+    appearance.background: color.foreground.input   # was color/background/input
+    # dropped appearance.border: border/style/underline — a single-edge line style
+    # has no roster key, and the value named no declared colour
+    typography.font: typography.text.primary   # was typography/paragraph/default

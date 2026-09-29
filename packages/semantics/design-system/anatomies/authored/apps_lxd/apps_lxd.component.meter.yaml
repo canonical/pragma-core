@@ -1,0 +1,71 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `core:component:Meter`; the block's own uri is used instead.
+node:
+  uri: apps_lxd.component.meter
+  styles:
+    # Structural (implicitly invariant)
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    layout.align: start
+    # Themeable
+    # was spacing.gap: spacing/small; no spacing.small symbol is declared
+  edges:
+    - node:
+        role: meter bar container
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: flex   # was flow
+          layout.direction: row   # was horizontal
+          layout.align: start
+          size.width: fill
+          size.height: hug
+          # Themeable
+          appearance.background: color.background     # was color/background/meter
+          appearance.radius: dimension.radius.small   # was shape/rounded/small
+          # was size.min.height: size/meter/height; no dimension symbol corresponds
+        edges:
+          - node:
+              role: primary meter bar
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: block     # was layout.display: block
+                size.height: fill
+                # Dynamic width based on percentage prop
+                # Note: actual width calculation happens at runtime
+                # was size.min.width: size/meter/minimum; no dimension symbol corresponds
+                # Themeable
+                # was appearance.background: color/meter/primary; no meter colour symbol
+                # is declared
+                appearance.radius: dimension.radius.small   # was shape/rounded/small
+            relation:
+              cardinality: "1..1"
+          - node:
+              role: secondary meter bar
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: block     # was layout.display: block
+                size.height: fill
+                # Themeable
+                # was appearance.background: color/meter/secondary; no meter colour
+                # symbol is declared
+                appearance.radius: dimension.radius.small   # was shape/rounded/small
+            relation:
+              cardinality: "0..1"
+      relation:
+        cardinality: "1..1"
+        slotName: meter
+    - node:
+        role: description text
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: block       # was layout.display: block
+          # Themeable
+          # was typography.size: font/size/small; no fontSize symbol corresponds to the
+          # small text size
+          typography.color: color.text.muted
+          spacing.external.top: 0      # was spacing.margin.top: spacing/none
+          spacing.external.bottom: 0   # was spacing.margin.bottom: spacing/none
+      relation:
+        cardinality: "1..1"
+        slotName: description

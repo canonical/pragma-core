@@ -1,0 +1,59 @@
+---
+# Projections and styles together: the tree carries both its data
+# requirements and, per slot, the symbols the implementation consumes.
+node:
+  uri: global.component.entity-card
+  projection:
+    on: Component
+  styles:
+    layout.type: grid
+    spacing.gap: spacing.gap.group.block
+    appearance.background: [surface.color.background, color.background.container]
+    appearance.radius: dimension.radius.medium
+  edges:
+    - node:
+        uri: global.subcomponent.entity-card-header
+        projection:
+          field: _meta.title
+        styles:
+          typography.size: dimension.size.fontSize.400
+          typography.weight: typography.weight.semiBold
+          typography.color: [modifier.color.text, color.text]
+      relation:
+        cardinality: "1"
+        slotName: header
+    - node:
+        role: summary text
+        projection:
+          field: summary
+        styles:
+          typography.color: color.text.muted
+          typography.size: dimension.size.fontSize.200
+      relation:
+        cardinality: "0..1"
+    - node:
+        uri: global.component.chip
+        projection:
+          field: _meta.title
+      relation:
+        cardinality: "0..*"
+        slotName: tags
+        projection:
+          field: documentationStages
+    - switch:
+        on: internal
+        cases:
+          - node:
+              uri: global.subcomponent.entity-card-variant
+              projection:
+                on: Component
+                field: _meta.title
+          - node:
+              uri: global.subcomponent.entity-card-pattern
+              projection:
+                on: Pattern
+                field: _meta.title
+      relation:
+        cardinality: "0..*"
+        projection:
+          field: variants

@@ -1,0 +1,204 @@
+@prefix cs: <http://pragma.canonical.com/codestandards#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Turtle Category
+cs:turtle a cs:Category ;
+    rdfs:label "Turtle"@en ;
+    rdfs:comment "Standards specific to Turtle (RDF) file authoring"@en ;
+    cs:slug "turtle" .
+
+# Definitions vs Data Files Standard
+cs:turtle.structure.definitions_vs_data a cs:CodeStandard ;
+    rdfs:label "Definitions vs data files"@en ;
+    cs:hasCategory cs:turtle ;
+    cs:description """Turtle files must be organized into two directories based on their content:
+
+- `definitions/` contains schema files (ontologies) with classes, properties, and datatypes
+- `data/` contains instance files with actual data conforming to the schema
+
+This separation allows tools to distinguish between schema and instance data, enables different validation rules, and makes the codebase easier to navigate.""" ;
+    cs:do [
+        cs:description "Place ontology definitions (classes, properties, datatypes) in the `definitions/` directory." ;
+        cs:language "turtle" ;
+        cs:code """
+# definitions/ontology.ttl
+@prefix ds: <https://ds.canonical.com/> .
+
+ds:Component a owl:Class ;
+    rdfs:label "Component" .
+
+ds:name a owl:DatatypeProperty ;
+    rdfs:domain ds:UIElement ;
+    rdfs:range xsd:string .
+    """
+    ] ;
+    cs:do [
+        cs:description "Place instance data in the `data/` directory." ;
+        cs:language "turtle" ;
+        cs:code """
+# data/global/component/button.ttl
+@prefix ds: <https://ds.canonical.com/> .
+
+ds:global.component.button a ds:Component ;
+    ds:name "Button" .
+    """
+    ] ;
+    cs:dont [
+        cs:description "Mix class definitions and instance data in the same file." ;
+        cs:language "turtle" ;
+        cs:code """
+# Bad: Mixing schema and data
+ds:Component a owl:Class .
+ds:global.component.button a ds:Component .
+    """
+    ] ;
+    cs:dont [
+        cs:description "Place instance data in the `definitions/` directory." ;
+        cs:code """
+# Bad: Data file in definitions
+definitions/
+  └── button.ttl  # Contains instance data
+    """
+    ] .
+
+# Local Name Casing Convention Standard
+cs:turtle.naming.local_name_casing a cs:CodeStandard ;
+    rdfs:label "Local name casing convention"@en ;
+    cs:hasCategory cs:turtle ;
+    cs:description """Within a unified prefix namespace, differentiate between schema elements and instances using casing conventions for the local name (the part after the prefix colon):
+
+- **PascalCase** for classes (e.g., `ds:Component`, `ds:UIElement`)
+- **camelCase** for properties (e.g., `ds:name`, `ds:hasProperty`)
+- **lowercase** with dot-separated hierarchy and snake_case inside multi-word segments for instances (e.g., `ds:global.component.button`, `cs:turtle.naming.local_name_casing`)
+
+For code standards specifically, the subject IRI is the canonical identifier. Use `rdfs:label` only as a human-readable display title, never as a slug or lookup key.
+
+This convention allows a single prefix to serve both definitions and data, with the casing clearly indicating the type of resource.""" ;
+    cs:do [
+        cs:description "Use PascalCase for class names." ;
+        cs:language "turtle" ;
+        cs:code """
+ds:Component a owl:Class .
+ds:UIBlock a owl:Class .
+ds:ModifierFamily a owl:Class .
+    """
+    ] ;
+    cs:do [
+        cs:description "Use camelCase for property names." ;
+        cs:language "turtle" ;
+        cs:code """
+ds:name a owl:DatatypeProperty .
+ds:hasProperty a owl:ObjectProperty .
+ds:parentComponent a owl:ObjectProperty .
+    """
+    ] ;
+    cs:do [
+        cs:description "Use lowercase with dots for hierarchy and snake_case for multi-word instance segments." ;
+        cs:language "turtle" ;
+        cs:code """
+ds:global.component.button a ds:Component .
+ds:global.modifier_family.importance a ds:ModifierFamily .
+cs:turtle.naming.local_name_casing a cs:CodeStandard ;
+    rdfs:label "Local Name Casing Convention"@en .
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use lowercase for class names." ;
+        cs:language "turtle" ;
+        cs:code """
+# Bad: Class names should be PascalCase
+ds:component a owl:Class .
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use PascalCase for instance identifiers." ;
+        cs:language "turtle" ;
+        cs:code """
+# Bad: Instance names should be lowercase
+ds:GlobalComponentButton a ds:Component .
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use PascalCase or uppercase for property names." ;
+        cs:language "turtle" ;
+        cs:code """
+# Bad: Property names should be camelCase
+ds:HasProperty a owl:ObjectProperty .
+ds:NAME a owl:DatatypeProperty .
+    """
+    ] .
+
+# Unified Prefix Standard
+cs:turtle.naming.unified_prefix a cs:CodeStandard ;
+    rdfs:label "Unified prefix"@en ;
+    cs:hasCategory cs:turtle ;
+    cs:description """When a package uses a single namespace for both ontology and data, use a unified prefix with casing to distinguish between classes, properties, and instances. This simplifies prefix management and makes the relationship between schema and data more apparent.
+
+The namespace URI should be a base URI without a fragment or trailing path segment for ontology vs data (e.g., `https://ds.canonical.com/` rather than separate `https://ds.canonical.com/ontology#` and `https://ds.canonical.com/data/`).""" ;
+    cs:do [
+        cs:description "Use a single prefix for both definitions and data." ;
+        cs:language "turtle" ;
+        cs:code """
+# In both definitions/ and data/ files:
+@prefix ds: <https://ds.canonical.com/> .
+
+# Definitions use PascalCase/camelCase
+ds:Component a owl:Class .
+ds:name a owl:DatatypeProperty .
+
+# Data uses lowercase
+ds:global.component.button a ds:Component ;
+    ds:name "Button" .
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use separate prefixes for ontology and data when a unified prefix is preferred." ;
+        cs:language "turtle" ;
+        cs:code """
+# Bad: Unnecessarily complex when unified prefix suffices
+@prefix dso: <https://ds.canonical.com/ontology#> .
+@prefix ds: <https://ds.canonical.com/data/> .
+
+ds:global.component.button a dso:Component .
+    """
+    ] .
+
+# Prefix Declaration Standard
+cs:turtle.syntax.prefix_declaration a cs:CodeStandard ;
+    rdfs:label "Prefix declaration"@en ;
+    cs:hasCategory cs:turtle ;
+    cs:description """Every Turtle file must declare all prefixes used within the file at the top of the file. Each prefix should be declared exactly once. Standard prefixes (rdf, rdfs, owl, xsd, skos) should be declared when used but are commonly understood.""" ;
+    cs:do [
+        cs:description "Declare all prefixes at the top of the file." ;
+        cs:language "turtle" ;
+        cs:code """
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix ds:    <https://ds.canonical.com/> .
+
+ds:Component a owl:Class ;
+    rdfs:label "Component" .
+    """
+    ] ;
+    cs:dont [
+        cs:description "Declare the same prefix multiple times." ;
+        cs:language "turtle" ;
+        cs:code """
+# Bad: Duplicate prefix declaration
+@prefix ds: <https://ds.canonical.com/> .
+@prefix ds: <https://ds.canonical.com/> .
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use prefixes without declaring them." ;
+        cs:language "turtle" ;
+        cs:code """
+# Bad: Missing prefix declaration for ds:
+ds:Component a owl:Class .
+    """
+    ] .

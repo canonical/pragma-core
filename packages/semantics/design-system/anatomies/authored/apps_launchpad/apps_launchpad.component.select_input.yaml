@@ -1,0 +1,25 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.select_input
+  styles:
+    layout.type: inline-grid
+    typography.font: typography.text.primary   # was typography/paragraph/default
+    typography.color: color.text   # was color/text/default
+  edges:
+    - node:
+        role: native select
+        styles:
+          appearance.background: color.foreground.input   # was color/background/input
+          # dropped appearance.border: border/style/underline — a single-edge line
+          # style has no roster key, and the value named no declared colour
+          appearance.radius: dimension.radius.small   # was radius/small
+          # dropped spacing.padding: spacing/inline/extra-small — no spacing symbol corresponds
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        role: indicator icon
+        # dropped size.width/size.height: size/extra-small — no dimension symbol corresponds
+      relation:
+        cardinality: "0..1"

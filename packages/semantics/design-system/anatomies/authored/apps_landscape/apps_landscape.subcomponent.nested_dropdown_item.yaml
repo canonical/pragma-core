@@ -1,0 +1,31 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.subcomponent.nested_dropdown_item
+  edges:
+    - node:
+        # role: directional trigger
+        uri: global.component.button
+        edges:
+          - node:
+              role: label
+            relation:
+              cardinality: "0..1"   # rendered when label or el.props.label resolves to content
+              slotName: label
+          - node:
+              # role: directional chevron
+              uri: global.component.icon
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+    - node:
+        role: nested panel
+        edges:
+          - node:
+              role: inline filter or action content
+            relation:
+              cardinality: "1"
+              slotName: el
+      relation:
+        cardinality: "0..1"   # rendered when the trigger is open

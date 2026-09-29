@@ -1,0 +1,286 @@
+{
+  "$schema": "./src/config/source.schema.json",
+  "document": "NyzE_TLZDh",
+  "provider": "coda",
+  "extract": {
+    "output": "tmp/extract.json",
+    "tables": {
+      "uiBlocks": "grid-20dWwIHYhx",
+      "uiBlockTypes": "grid-bahkR65Cvp",
+      "tiers": "grid-KdW0T6RE3B",
+      "modifierFamilies": "grid-2diO06C-8N",
+      "modifiers": "grid-aygAVqOfFj",
+      "properties": "grid-20chnVyhaz",
+      "tags": "grid-lWjILO8uln",
+      "tagCategories": "grid-FhqOiepLOs",
+      "changeLog": "grid-909bbtNGDK",
+      "concepts": "grid-GnfOU3MM-3",
+      "conceptTypes": "grid-NN2EoogWeA"
+    }
+  },
+  "transform": {
+    "format": "ttl",
+    "outputDir": "data/",
+    "atomicity": "instance",
+    "cleanupExtract": false,
+    "tables": {
+      "uiBlocks": {
+        "@context": {
+          "ds": "https://ds.canonical.com/",
+          "name": "ds:name",
+          "summary": "ds:summary",
+          "anatomy_dsl": "ds:anatomyDsl",
+          "anatomy_classic": "ds:anatomyClassic",
+          "figma_link": "ds:figmaLink",
+          "usage": "ds:usage",
+          "guidelines": "ds:guidelines",
+          "tier": {
+            "@id": "ds:tier",
+            "@type": "@id"
+          },
+          "subcomponents": {
+            "@id": "ds:hasSubcomponent",
+            "@type": "@id",
+            "@container": "@set"
+          },
+          "inherits_from": {
+            "@id": "ds:inheritsFrom",
+            "@type": "@id"
+          },
+          "variant_of": {
+            "@id": "ds:variantOf",
+            "@type": "@id"
+          },
+          "tags_documentation_stage": {
+            "@id": "ds:documentationStage",
+            "@type": "@id",
+            "@container": "@set"
+          },
+          "properties": {
+            "@id": "ds:hasProperty",
+            "@inline": {
+              "table": "properties",
+              "class": "ds:Property",
+              "properties": {
+                "property name": "ds:name",
+                "type": "ds:propertyType",
+                "summary": "ds:summary",
+                "optional": "ds:optional",
+                "default": "ds:defaultValue",
+                "constraints": "ds:constraints"
+              }
+            }
+          },
+          "change_log": {
+            "@id": "ds:changeLog",
+            "@inline": {
+              "table": "changeLog",
+              "class": "ds:ChangeLogEntry",
+              "properties": {
+                "timestamp": "ds:timestamp",
+                "change": "ds:change",
+                "github_link": "ds:githubLink",
+                "type": "ds:changeType"
+              }
+            }
+          },
+          "modifier_families": {
+            "@id": "ds:hasModifierFamily",
+            "@type": "@id",
+            "@container": "@set"
+          }
+        },
+        "class": "{type}",
+        "uriTemplate": "{uri}",
+        "classProperties": {
+          "ds:Layout": {
+            "layout_grid_template": "ds:grid",
+            "layout_information_domain": "ds:domain"
+          }
+        },
+        "rowFilter": {
+          "nonEmpty": [
+            {
+              "column": "name"
+            }
+          ]
+        }
+      },
+      "tiers": {
+        "@context": {
+          "ds": "https://ds.canonical.com/",
+          "name": "ds:name"
+        },
+        "class": "ds:Tier",
+        "uriTemplate": "{uri}",
+        "rowFilter": {
+          "nonEmpty": [
+            {
+              "column": "name"
+            }
+          ]
+        }
+      },
+      "modifierFamilies": {
+        "@context": {
+          "ds": "https://ds.canonical.com/",
+          "name": "ds:name",
+          "summary": "ds:summary",
+          "tier": {
+            "@id": "ds:tier",
+            "@type": "@id"
+          }
+        },
+        "class": "ds:ModifierFamily",
+        "uriTemplate": "{uri}",
+        "rowFilter": {
+          "nonEmpty": [
+            {
+              "column": "name"
+            }
+          ]
+        }
+      },
+      "modifiers": {
+        "@context": {
+          "ds": "https://ds.canonical.com/",
+          "name": "ds:name",
+          "summary": "ds:summary",
+          "family": {
+            "@id": "ds:modifierFamily",
+            "@type": "@id"
+          }
+        },
+        "class": "ds:Modifier",
+        "uriTemplate": "{uri}",
+        "rowFilter": {
+          "nonEmpty": [
+            {
+              "column": "name"
+            }
+          ]
+        }
+      },
+      "tags": {
+        "@context": {
+          "ds": "https://ds.canonical.com/",
+          "Name": "ds:name",
+          "Category": {
+            "@id": "ds:category",
+            "@type": "@id"
+          },
+          "When to apply": "ds:whenToApply",
+          "When to remove": "ds:whenToRemove"
+        },
+        "class": "ds:Tag",
+        "uriTemplate": "ds:tag.{Name}",
+        "rowFilter": {
+          "nonEmpty": [
+            {
+              "column": "Name"
+            }
+          ]
+        }
+      },
+      "tagCategories": {
+        "@context": {
+          "ds": "https://ds.canonical.com/",
+          "Category": "ds:name"
+        },
+        "class": "ds:TagCategory",
+        "uriTemplate": "ds:tagcategory.{Category}",
+        "rowFilter": {
+          "nonEmpty": [
+            {
+              "column": "Category"
+            }
+          ]
+        }
+      },
+      "concepts": {
+        "@context": {
+          "ds": "https://ds.canonical.com/",
+          "name": "ds:name",
+          "summary": "ds:summary",
+          "content": "ds:content",
+          "known edge cases": "ds:knownEdgeCases",
+          "type": {
+            "@id": "ds:conceptType",
+            "@type": "@id"
+          },
+          "tier": {
+            "@id": "ds:tier",
+            "@type": "@id"
+          }
+        },
+        "class": "ds:Concept",
+        "uriTemplate": "ds:concept.{name}",
+        "rowFilter": {
+          "nonEmpty": [
+            {
+              "column": "name"
+            },
+            {
+              "column": "content",
+              "minLength": 20
+            }
+          ]
+        }
+      },
+      "conceptTypes": {
+        "@context": {
+          "ds": "https://ds.canonical.com/",
+          "Name": "ds:name",
+          "Notes": "ds:summary"
+        },
+        "class": "ds:ConceptType",
+        "uriTemplate": "ds:concepttype.{Name}",
+        "rowFilter": {
+          "nonEmpty": [
+            {
+              "column": "Name"
+            }
+          ]
+        }
+      }
+    },
+    "references": {
+      "uiBlocks": {
+        "uriTemplate": "{uri}",
+        "keyColumn": "name"
+      },
+      "uiBlockTypes": {
+        "uriTemplate": "ds:{name}",
+        "keyColumn": "name"
+      },
+      "tiers": {
+        "uriTemplate": "{uri}",
+        "keyColumn": "name"
+      },
+      "modifierFamilies": {
+        "uriTemplate": "{uri}",
+        "keyColumn": "name"
+      },
+      "modifiers": {
+        "uriTemplate": "{uri}",
+        "keyColumn": "name"
+      },
+      "tags": {
+        "uriTemplate": "ds:tag.{Name}",
+        "keyColumn": "Name"
+      },
+      "tagCategories": {
+        "uriTemplate": "ds:tagcategory.{Category}",
+        "keyColumn": "Category"
+      },
+      "concepts": {
+        "uriTemplate": "ds:concept.{name}",
+        "keyColumn": "name"
+      },
+      "conceptTypes": {
+        "uriTemplate": "ds:concepttype.{Name}",
+        "keyColumn": "Name"
+      }
+    }
+  }
+}

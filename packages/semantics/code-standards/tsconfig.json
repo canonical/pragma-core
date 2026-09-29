@@ -1,0 +1,9 @@
+{
+  "extends": "@canonical/typescript-config",
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "types": ["bun"]
+  },
+  "include": ["src/**/*.ts"]
+}

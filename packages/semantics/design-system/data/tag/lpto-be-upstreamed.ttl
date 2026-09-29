@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.lpto-be-upstreamed a ds:Tag;
+    ds:name "lp:to-be-upstreamed";
+    ds:category ds:tagcategory.implementation-status;
+    ds:whenToApply "";
+    ds:whenToRemove "".

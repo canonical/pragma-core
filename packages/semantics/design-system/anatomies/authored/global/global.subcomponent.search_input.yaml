@@ -1,0 +1,17 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration: react-ds-global-form ships no SearchInput, so the
+# structure and bindings are kept as the notation had them. The notation's
+# trailing markdown fence is dropped.
+node:
+  uri: global.subcomponent.search_input
+  edges:
+    - node:
+        role: query
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        role: clear
+      relation:
+        cardinality: "0..1"

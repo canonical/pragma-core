@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.inline_code a ds:Component;
+    ds:name "InlineCode";
+    ds:summary "The code component displays code, commands, and technical language that requires distinct visual treatment. This includes programming languages, domain-specific languages such as search syntax, terminal commands, file paths, and configuration values. This component is designed for simple, single-line code. For multi-line or more complex use cases, use [CodeSnippet](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-qaVsf7J6ln)  instead.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2305-13374&t=mrOkyDfhQY9JZwMz-1\n\nStyling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4394-108294&t=mrOkyDfhQY9JZwMz-1";
+    ds:usage "The component appears most often within paragraph text but can also be used in lists, Tables, and other structured content.\n\n### Inline code\n\nUse inline code for short, simple references within the normal text flow, such as commands, function names, or configuration keys. Keep inline code concise.\n\n### Code block\n\nUse code block when single-line code benefits from separation from surrounding text. Code block scrolls horizontally by default if the line length exceeds the available width. For code that requires wrapping or multiple lines, use Code snippet instead.\n\n### When to use\n\nTo display programming code, terminal commands, or domain-specific languages  \nFor technical values that should be interpreted literally  \nTo present executable snippets users may copy\n\n### When not to use\n\nFor regular prose or human-readable text - use paragraph text instead  \nFor emphasis or stress - use bold or italics instead  \nFor multi-line code - use [CodeSnippet](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-qaVsf7J6ln)  instead";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition.

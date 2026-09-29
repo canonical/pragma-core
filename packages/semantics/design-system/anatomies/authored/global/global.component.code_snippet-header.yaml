@@ -1,0 +1,34 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# A notation migration of the previous DSL: structure and bindings kept, values
+# migrated. The previous root uri said `global.subcomponent.code_snippet-header`;
+# the block is a component, ds:global.component.code_snippet-header.
+node:
+  uri: global.component.code_snippet-header
+  styles:
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.align: center
+    # Was `spacing.internal: spacing/small` — the key is not in the roster (a
+    # padding is bound per side) and no declared spacing semantic corresponds
+    # to spacing/small, so the binding is dropped.
+    # Was `appearance.border.bottom: border/style/divider` — dropped: the
+    # roster's key is appearance.border.bottom.color and no symbol declares a
+    # border/style/divider counterpart.
+    # Was `color/surface/code-header`; no symbol declares
+    # color.background.code.header, so this is the declared background the
+    # surface correspondence lands on.
+    appearance.background: color.background
+  edges:
+    - node:
+        role: filename
+        styles:
+          # Was `typography.size: font/size/small` — dropped, since
+          # typography.size admits dimension.* only and no dimension symbol
+          # corresponds to font/size/small.
+          typography.color: color.text.muted
+          # Was `layout.flex: 1`, which is not a roster key.
+          layout.flex.grow: 1
+      relation:
+        cardinality: "1"
+        slotName: default

@@ -1,0 +1,53 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.grouped_select
+  edges:
+    - node:
+        role: field wrapper
+        edges:
+          - node:
+              # semantic: label
+              role: field label
+            relation:
+              cardinality: "0..1"   # rendered when label is non-empty
+          - node:
+              # semantic: select
+              role: grouped selection control
+              edges:
+                - node:
+                    # semantic: option
+                    role: empty option
+                  relation:
+                    cardinality: "0..1"   # rendered when emptyOption.enabled is true
+                - node:
+                    # semantic: optgroup
+                    role: option group
+                    edges:
+                      - node:
+                          # semantic: option
+                          role: grouped option
+                        relation:
+                          cardinality: "0..*"
+                  relation:
+                    cardinality: "0..*"
+            relation:
+              cardinality: "1"
+          - node:
+              # semantic: paragraph
+              role: validation message
+              edges:
+                - node:
+                    # semantic: strong
+                    role: error prefix
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: error content
+                  relation:
+                    cardinality: "1"
+                    slotName: error
+            relation:
+              cardinality: "0..1"   # rendered when error is truthy
+      relation:
+        cardinality: "1"

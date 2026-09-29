@@ -1,0 +1,40 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.select_input a ds:Component;
+    ds:name "SelectInput";
+    ds:summary "## Description\n\nThe **Select** component is a form element that allows users to choose one option from a predefined list. It is a compact way to present a list of options, as only the selected option is visible by default.\n\n**Main Use Cases:**\n\n- **Forms:** Used in forms to allow users to select a single option from a list of choices.\n- **Settings:** Used in settings pages to allow users to configure their preferences.\n- **Filtering:** Used to filter a list of items based on a selected category.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.select\n  styles:\n    layout.display: inline-grid\n    typography.size: typography/paragraph/default\n    typography.color: color/text/default\n  edges:\n    - node:\n        role: native select\n        styles:\n          appearance.background: color/background/input\n          appearance.border: border/style/underline\n          appearance.radius: radius/small\n          spacing.padding: spacing/inline/extra-small\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        role: indicator icon\n        styles:\n          size.width: size/extra-small\n          size.height: size/extra-small\n      relation:\n        cardinality: \"0..1\"";
+    ds:anatomyClassic "The Select component is composed of a main container, a native select element, and an optional indicator icon.\n\n1. **Container:** The outermost wrapper that holds the select element and the indicator icon.\n2. **Native Select:** The native HTML select element that provides the core functionality.\n3. **Indicator Icon:** A visual indicator, usually a chevron, to indicate that the element is a dropdown.\n\nhttps://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2066-43&m=dev";
+    ds:usage "### 1. General Description\n\nSelect components are used when you have a list of options and you want to allow the user to select one of them. They are a good choice when you have limited space and you don’t want to overwhelm the user with a large number of options.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **List of options:** Use when you have a list of 5 or more options.\n- **Limited space:** Use when you have limited screen real estate.\n\n2.2 When Not to Use\n\n- **Few options:** Do not use if you have less than 5 options. Use Radio buttons instead.\n- **Binary choice:** Do not use for a binary choice. Use a Switch or a Checkbox instead.";
+    ds:guidelines "### Accessibility\n\n- **Label:** Always provide a label for the select element to improve accessibility.\n- **Keyboard Navigation:** The select element should be focusable and operable with the keyboard.\n\n### Keyboard Navigation\n\n- **Tab:** Moves focus to the select element.\n- **Enter / Space:** Opens the dropdown list of options.\n- **Up / Down Arrow:** Navigates through the options.\n- **Enter:** Selects the currently focused option.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "options";
+        ds:summary "The list of options to be rendered.";
+        ds:propertyType "list of text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The currently selected value.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "first element"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Whether the select is disabled or not.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ], [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "A label for the select element. ";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "“”"
+    ].

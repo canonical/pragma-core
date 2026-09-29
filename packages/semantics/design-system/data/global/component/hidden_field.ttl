@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.hidden_field a ds:Component;
+    ds:name "HiddenField";
+    ds:summary "A form control that carries a value with the form without presenting it to the user — used for contextual or system values that must travel with a submission but are not user-editable. It renders no label, guidance, or visible entry.";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# HiddenField renders through InvisibleWrapper — no label, description or error\n# chrome, and neither it nor HiddenInput ships a stylesheet — so this is a\n# notation migration: structure kept, the dangling uri: repaired.\nnode:\n  uri: global.component.hidden_field\n  edges:\n    - node:\n        # Was `global.subcomponent.hidden-input`, which names no subject; the\n        # real subject is global.subcomponent.hidden_input.\n        uri: global.subcomponent.hidden_input\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "Carries a fixed or derived value along with the form without presenting any visible part to the user.\n\n\n\n### When to use\n\n- A value must travel with the form but is set programmatically or derived rather than entered.\n\n- The value should remain constant and is not meant to be reviewed or changed during completion.\n\n\n\n### When not to use\n\n- The user should be able to see, confirm, or change the value — use [TextField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-QAuX4qtecx)  (or another visible field).";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition.

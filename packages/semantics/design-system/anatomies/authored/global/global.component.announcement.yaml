@@ -1,0 +1,32 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# A notation migration of the previous DSL: structure and bindings kept, values
+# migrated.
+node:
+  uri: global.component.announcement
+  styles:
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.align: center
+    layout.justify: center
+    size.width: fill
+    # Was `spacing.internal: spacing/medium` — the key is not in the roster (a
+    # padding is bound per side) and no declared spacing semantic corresponds
+    # to spacing/medium, so the binding is dropped.
+    # Was `color/surface/announcement`; no symbol declares
+    # color.background.announcement, so this is the declared background the
+    # surface correspondence lands on.
+    appearance.background: color.background
+  edges:
+    - node:
+        role: message
+        styles:
+          # Was `typography.size: font/size/small` — dropped, since
+          # typography.size admits dimension.* only and no dimension symbol
+          # corresponds to font/size/small.
+          # Was `typography.color: color/text/on-announcement` — dropped, since
+          # no symbol declares color.text.onAnnouncement.
+          typography.align: center
+      relation:
+        cardinality: "1"
+        slotName: default

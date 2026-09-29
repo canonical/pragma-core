@@ -1,0 +1,212 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.pattern.datatable a ds:Pattern;
+    ds:name "DataTable ";
+    ds:summary "The data table component presents structured tabular data and gives users tools to navigate and manipulate it. It suits application-tier products where users work with medium-to-large datasets.\n\nThe component is composed of several sub-components, each documented separately:\n\n- [DataTable.HeaderCell](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8yifr5hfPa) \n- [DataTable.BodyCell](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-xsvt3IgB-u) \n- [DataTable.PaginationBar](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-I82k_zrGpw) \n- [DataTable.GroupHeaderRow](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-2tgGCrnrBv) \n- [DataTable.SettingsMenu](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-wyr7Qk04SN) \n- [DataTable.ActionBar](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Tccmneq3YD) \n- [DataTable.PersistentSelection](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Zx_Vr61cn4) \n\nKey capabilities include sorting, pagination, row selection, inline editing, column management, grouping, and bulk actions. The component also adapts responsively across viewport sizes.\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3336-11041&t=8RN2Hpk8UX3gMX3u-4";
+    ds:usage "The data table is for presenting structured, tabular data in application-tier products. It is the right choice when users need to work with medium-to-large datasets that share a consistent structure, where each item has the same set of fields. The data table provides tools for navigating, organizing, and acting on that data, including sorting, pagination, row selection, inline editing, column management, grouping, and bulk actions. It is a complex component designed for workflows where data interaction is a core part of the user’s task, not a passive display.\n\n## When to use\n\n- The dataset has a consistent structure where each item shares the same set of fields.\n- Users need to scan or sort across many items.\n- Users need to perform actions on individual rows or in bulk, such as editing, deleting, or exporting.\n- The data is large enough that pagination, column management, or grouping would help users navigate it.\n\n## When not to use\n\n- The data is simple enough that a basic table or a list would suffice. If users only need to read a small, static dataset with no sorting, filtering, or row actions, a simpler component avoids unnecessary complexity.\n- Each item requires a rich visual representation, such as images, charts, or multi-line summaries. A card-based layout is better suited to this kind of content.\n- The dataset has only one or two attributes per item. A list or a key-value layout is more appropriate than a full table.\n- The primary task is comparison between two or three specific items rather than scanning a larger set. A dedicated comparison view serves this better than a table.\n\n## Sorting\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-4599&t=bxRtnsSQKBPwCGkE-4\n\n\n\nThe data table supports column-level sorting. Sorting is not enabled by default. The designer chooses which columns are sortable based on whether the sort order is obvious and helpful to the user. When a user sorts by a column, the table reorders its rows accordingly. Sorting follows a three-step cycle: ascending, descending, and back to unsorted.\n\nIf the table is paginated, sorting may reset the user to the first page and drop any active simple selection. If grouping is enabled, sorting applies only within each group, not across groups.\n\nRefer to [DataTable.HeaderCell](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8yifr5hfPa) for the full sorting interaction, header cell states, and edge cases such as sorting with pagination and double rows.\n\n\n\n\n\n## Pagination\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-5498&t=bxRtnsSQKBPwCGkE-4\n\nThe data table supports pagination to split large datasets into manageable pages. Two pagination modes are available: **offset pagination** for backends that support random-access page navigation, and **keyset pagination** for backends that can only determine whether more pages exist.\n\nThe designer chooses the pagination mode based on the backend’s capabilities. The pagination bar is sticky and always visible at the bottom of the table.\n\nRefer to [DataTable.PaginationBar](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-I82k_zrGpw) for the full anatomy, interaction details, and guidance on choosing page-size options.\n\n## Inline editing\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-7270&t=bxRtnsSQKBPwCGkE-4\n\n\n\nThe data table supports inline editing, allowing users to modify data values directly in the table without navigating to a separate form. Editing is configured at the column level. The designer chooses which columns are editable and which edit mode to use (text, textarea, or select).\n\nInline editing is best suited for quick, small corrections. For complex edits that involve validation, multi-field dependencies, or high-consequence changes, a dedicated edit form or detail panel is a better fit.\n\nRefer to [DataTable.BodyCell](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-xsvt3IgB-u) for the full editing interaction, save behavior options, and validation states.\n\n## Grouping\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-8159&t=bxRtnsSQKBPwCGkE-4\n\nThe data table supports grouping rows by a shared column value. When grouping is active, rows are organized under collapsible group header rows. Only columns with enumerated values (a small, known set of options) can be grouped. The user activates grouping through the table settings panel.\n\nA table can only be grouped by one column at a time. Grouping is incompatible with keyset pagination.\n\nRefer to [DataTable.GroupHeaderRow](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-2tgGCrnrBv) for the full grouping interaction, selection behavior within groups, and pagination considerations.\n\n## Row selection\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-11054&t=bxRtnsSQKBPwCGkE-4\n\nThe data table supports row selection through per-row checkboxes. Two selection modes are available: **simple selection** and **persistent selection**.\n\nSimple selection is page-scoped. The selection is dropped when the user navigates to a different table page, sorts, or applies any action that changes which rows are visible. Use simple selection when users only need to act on items visible on the current page.\n\nPersistent selection preserves the selection across page changes, sorting, and other navigation actions. It adds a persistent selection panel where users can review and manage their full selection. Use persistent selection when users need to build up a selection of items across multiple pages before performing a bulk action.\n\nRefer to the row selection section in Interactions for the full behavior, header checkbox states, shift selection, and performance considerations. Refer to the [DataTable.PersistentSelection](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Zx_Vr61cn4) for the panel UI and expanded view.\n\n## Bulk actions\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-12858&t=bxRtnsSQKBPwCGkE-4\n\nWhen row selection is enabled, the data table can show a bulk action bar at the bottom of the table. The bar appears when one or more rows are selected and provides action buttons for operations that apply to the entire selection, such as exporting, archiving, or deleting.\n\nThe designer defines which bulk actions are available for each table instance. The bar supports a maximum of 7 actions, with overflow grouped into expandable dropdown menus.\n\nRefer to the [DataTable.ActionBar](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Tccmneq3YD) for guidance on choosing bulk actions, destructive action styling, and interaction details.\n\n## Column management\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-11158&t=2PBanDq6QA2yNcI2-4\n\nUsers can customize the table layout by reordering, resizing, pinning, and hiding columns. These features are accessed through the header cell interactions (drag-and-drop reordering, resize handles) and the settings menu (reordering, pinning, visibility toggles). The settings menu is enabled by default and provides a centralized interface for all column customizations.\n\nColumn customizations are persisted in browser storage across sessions. Users can reset all customizations to their defaults through the settings menu.\n\nRefer to [DataTable.HeaderCell](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8yifr5hfPa) and [DataTable.SettingsMenu](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-wyr7Qk04SN) for the full interaction details and configuration options.\n\n## Density\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-12172&t=2PBanDq6QA2yNcI2-4\n\n\n\nDensity controls the vertical spacing of rows. Choose a density based on the user’s task and the amount of data they need to scan.\n\n- **Default** suits most use cases. It balances scannability with readability and provides enough vertical space for comfortable mouse interaction.\n- **Dense** works well when users need to compare many rows at once, such as scanning a log of recent events or triaging a long list of items. The reduced row height keeps more data visible without scrolling. Avoid dense spacing when rows contain complex content or when touch interaction is expected.\n- **Cozy** is a good fit when rows contain longer text values or when the table is not the only focus on the page. The extra breathing room reduces visual fatigue during extended reading. On mobile, cozy is the default density because it provides larger touch targets.\n- **Spacious** is appropriate when each row represents a distinct item the user evaluates individually, such as a list of candidates or detailed records. The generous spacing helps users focus on one row at a time. Avoid spacious spacing in tables with many rows, as it pushes content out of view. \n\n";
+    ds:guidelines "# Responsiveness\n\nThe data table follows a progressive responsive degradation strategy with five stages. Each stage activates only after the previous stage’s strategies are exhausted. This provides a structured path from full-width layouts down to narrow mobile viewports.\n\n## Stage 1: Fractional unit scaling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-13064&t=2PBanDq6QA2yNcI2-4\n\nColumns are generally defined in fractional units (`fr`) for their width. The columns scale according to their fractional unit and the content inside the minimum width. When the viewport grows wider, columns expand proportionally to fill the available space. When it shrinks, they compress until they reach their minimum widths.\n\nSome special columns, such as the checkbox column and the actions column, have a fixed width and are not defined with a fractional unit. These columns do not contain variable content, so they hug their content instead. In some cases, regular columns can also be defined with a fixed width rather than a fractional unit.\n\n\n\n## Stage 2: Double rows\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-13947&t=2PBanDq6QA2yNcI2-4\n\nIf the minimum width of all columns has been reached, the next possible responsiveness stage is double rows. This stage combines two columns into one by stacking a secondary value beneath a primary value in the same cell.\n\n### Configuration\n\nDouble rows are **disabled by default**. To enable them, the designer must define:\n\n- Which columns can be combined\n- Which column is the primary and which is the secondary in each pair\n- The order in which pairs combine, if there are multiple double-row pairs\n\nPairs are combined **one at a time** to meet space constraints, not all at once. Each time the minimum width is reached again, the next defined pair combines.\n\n### Combining behavior\n\nThe secondary column moves in with the primary one. The primary column stays in the same position while the secondary column disappears as a standalone column. It then appears as a second row within the primary column’s cells. The secondary value is shown in a lighter or smaller style beneath the primary value.\n\nThe combined column inherits the **minimum width of the primary column**. Sorting is only possible on the primary value.\n\nAfter a pair combines, the freed horizontal space allows the remaining columns to grow again. If the viewport continues to shrink, columns compress until the minimum width is reached once more. This triggers the next combination, if one is defined.\n\n**Interaction with user-hidden columns**\n\nIf either the primary or secondary column has been hidden by the user, they act as normal independent columns. Specific scenarios:\n\n- **Hiding the primary column while it is in a double row:** The secondary column becomes an independent column again.\n- **Hiding the secondary column before it would have combined:** No combining happens. The primary column continues as an independent column.\n- **Showing a previously hidden primary column when the current viewport would normally trigger combining:** The primary and secondary columns combine with each other.\n\n### When to use double rows\n\nUse double rows with caution. Combining columns reduces scannability and removes the ability to sort by the secondary value. It also requires the user to hold more information in their head, since two column headers map to one. Use double rows only where the two columns have a strong relationship and combining them genuinely makes sense.\n\n### \n\n## Stage 3: Hiding columns\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-15497&t=2PBanDq6QA2yNcI2-4\n\nAfter all defined double rows have been combined and the minimum width is reached again, the next stage is hiding columns one by one.\n\n### Configuration\n\nHiding columns is **disabled by default**. The designer must define whether any columns should be hidden, which columns to hide, and in what order.\n\nColumns are hidden **one at a time**. After a column is hidden, the remaining columns grow to fill the freed space. Only once the minimum width is reached again would the next column, if defined, be hidden.\n\n### Design considerations\n\nThe designer must consider whether the column being hidden is still relevant for the user at smaller breakpoints. Users should be able to override the hiding of columns through the table settings (showing and hiding columns).\n\n## Stage 4: Horizontal scrolling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-16138&t=2PBanDq6QA2yNcI2-4\n\nAt some point, even after combining all double rows and hiding columns, there is no more room for the table. The final responsiveness stage is horizontal scrolling.\n\nHorizontal scrolling is **enabled by default and cannot be disabled**. It must always be available as a fallback.\n\n### Column pinning during scroll\n\nBy default, the first data column and the actions column are pinned when horizontal scrolling is active. The actions column is always the last column when enabled, so pinning it keeps row-level actions visible while the user scrolls. The designer or developer can disable this default pinning behavior on a per-table basis, but the user cannot override it.\n\nIf the user has pinned additional columns, those columns are also pinned during horizontal scrolling.\n\n### Smart pinning behavior\n\nPinning is subject to a smart constraint. If too many columns are pinned, they could prevent the user from scrolling the table and lock the screen. When this would happen, columns are forcefully unpinned one by one until a meaningful portion of the table is viewable and scrollable again. This applies even to user-pinned columns and the first and last columns that are pinned by default. If pinning a column would lead to a locked-screen situation, pinning is disabled for that column.\n\n### Scroll indicators\n\nThicker borders, rather than drop shadows, visually separate pinned columns from the scrollable area. Horizontal and vertical scrolling can be active simultaneously, and drop shadows for both directions would be visually overwhelming. Borders handle the combined case more cleanly.\n\n### Mobile behavior\n\nOn mobile, screens are usually so narrow that pinned columns would leave almost no space to scroll the table. The smart pinning behavior therefore typically prevents pinning on mobile altogether. The table scrolls horizontally off the screen. In this case, drop shadows appear at the screen edges when content is scrolled underneath. These shadows indicate to the user that more content exists in that direction.\n\nPagination controls remain visible beneath the table on mobile (for example, items per page, total item count, and page navigation).\n\n## Stage 5: Alternative layout (optional)\n\nAs an optional final stage, a product team can choose to show data in a different format on smaller viewports, such as cards. This is not a feature of the table component itself. It is a product-specific implementation, as the requirements for alternative formats vary by product.\n\n## \n\n# Touchscreens\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-16990&t=2PBanDq6QA2yNcI2-4\n\nThe data table adapts its density, layout, and interaction patterns for touch devices and narrow viewports.\n\n## Default density\n\nOn touchscreens, the default density is “cozy.” This provides larger touch targets for actions inside the table. Inline action elements are sized up accordingly, and the table renders full-width within the mobile viewport.\n\n## Touch-for-hover\n\nSince hover states are unavailable on touch devices, the row hover effect should be triggered when the user selects a row by touch. The visual treatment is the same subtle background highlight used for hover on desktop.\n\n## Column resize and reorder via long press\n\nOn mobile, scrolling and dragging are the same gesture. Both column reordering and column resizing must be initiated with a long press to avoid ambiguity. The touch target for the column resize handle (the divider between column headers) should be slightly larger on mobile than on desktop to accommodate finger input.\n\n## \n\n# Interactions\n\n## Row hovering\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-17874&t=2PBanDq6QA2yNcI2-4\n\nA table body row can have a hover effect. When a row is hovered, it receives a distinct light background fill. All other rows retain the default white background.\n\nRow hovering is **enabled by default** but can be disabled.\n\n### Sub-element hover layering\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-18763&t=2PBanDq6QA2yNcI2-4\n\nIf an element within a hovered row has its own hover effect, that sub-element hover is rendered **on top of** the row-level hover. For example, an action icon such as an edit icon in the rightmost column shows its own, more prominent highlight layered over the row’s hover background. This makes sure that interactive elements within a row remain visually distinguishable even when the entire row is highlighted. Users can still identify exactly which element they are about to interact with.\n\n## Sticky header\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-19650&t=2PBanDq6QA2yNcI2-4\n\n### Default behavior\n\nThe header of a table is sticky at the top by default. This behavior can be overridden so that the header scrolls with the content instead.\n\nWhen sticky, the header row remains fixed at the top of the table while body rows scroll beneath it. It carries a layer 2 background and shows column names in bold text. A standard-weight bottom border visually separates the header from the body.\n\n### Scroll-state indicator (border thickness)\n\nWhen content is scrolled underneath the sticky header, the bottom border of the header row becomes thicker. When nothing is scrolled underneath, only the default border is shown.\n\nThis thicker border provides visual feedback that content is hidden behind the header. The design uses a border rather than a shadow because borders scale better to complex use cases.\n\n## Row selection\n\n### Overview\n\nThe data table supports two selection paradigms: **simple selection** and **persistent selection**. Both use per-row checkboxes and a header checkbox, but they differ in whether selections persist across navigation actions. When nothing is selected, neither the action bar nor the persistent selection panel is shown.\n\n### Simple selection\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-21110&t=2PBanDq6QA2yNcI2-4\n\nSimple selection allows users to select items on the current table page only. The selection is dropped if the user:\n\n- Applies a search or a filter.\n- Sorts the table by a different column.\n- Navigates to a different table page.\n- Takes any other action that would move selected items out of view.\n\nThis constraint exists because users cannot reasonably remember all selected items when those items are not visible and there is no way to view them all at once.\n\n\n\n### Persistent selection\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-23701&t=2PBanDq6QA2yNcI2-4\n\nPersistent selection adds a **persistent selection panel** to the bulk action bar. This panel persists selections across page changes, sorting, filtering, and searching. It allows users to build up a selection of items that may span different table pages. Users often need to perform bulk actions on items across multiple pages, so this model accommodates that workflow.\n\nWhen items are selected, a floating action bar appears at the bottom of the table. It shows the count (for example, “5 Selected”) and action buttons (Export, Archive, Assign, Tag, Delete), along with a deselect button (“X”).\n\nThe persistent selection panel UI, expanded view, deselection flows, and tooltips are documented in the [DataTable.PersistentSelection](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Zx_Vr61cn4) panel sub-component document.\n\n### **Header checkbox** \n\nThe header checkbox has three states:\n\n1. **Unchecked**: no children are selected.\n2. **Indeterminate** (children selected): some items on the current page have been selected.\n3. **Fully checked**: all items on the current page have been selected.\n\nSelecting the header checkbox when it is unchecked or indeterminate transitions it to the fully checked state and selects all children. Selecting it when fully checked transitions it to the unchecked state and deselects all items on the current page.\n\n### Checkbox tooltips\n\nAll selection checkboxes display a tooltip on hover. The tooltip text changes based on the checkbox state.\n\nTable 7\n\n### Shift selection\n\nIf the user selects one item, holds Shift, and then selects a second item, all items between those two are selected as a contiguous block. This range selection works in both simple and persistent selection modes.\n\n### Performance considerations\n\nIf there are performance concerns related to the number of selected items or frontend pagination, a **hard limit** on the number of items a user can select may need to be considered.\n\n## Column pinning (visual behavior)\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-26040&t=2PBanDq6QA2yNcI2-4\n\nThe how-to-pin interaction and settings panel interactions are documented in the header cell and settings menu sub-component documents respectively.\n\nVisual indicator: 2px border\n\nOnce one or more columns are pinned, a **2px vertical border line** appears on the right edge of the pinned column group. This border provides a clear line where scrollable content passes underneath the pinned area.\n\nWhen **multiple columns** are pinned simultaneously, only the **rightmost pinned column** shows the indicator border.\n\n### Why a border and not a shadow\n\nBorders are used instead of shadows because shadows do not scale well when pinned columns are combined with pinned rows. The border approach handles the combination of a pinned first column, a pinned action column, and a pinned header row cleanly. Shadows look awkward in that compound state.\n\n### Combined pinned columns and pinned rows\n\nWhen the table is scrolled both vertically and horizontally, pinned columns, the pinned header row, and a pinned action column can all be active at the same time. All pinned areas use border indicators consistently. An example of this combined state includes:\n\n- A pinned first column on the left.\n- A pinned action column (with edit icons) on the far right.\n- A pinned header row at the top.\n\nBorders are applied to each pinned boundary, maintaining visual clarity across all axes of scroll.\n\n### Multiple pinned columns\n\nThere is no stated limit on the number of columns that can be pinned. Multiple pinned columns sit side by side on the left of the table. Only the rightmost one carries the 2px border indicator. However, the smart pinning behavior described in the responsiveness guidelines applies: if too many pinned columns would prevent the user from scrolling the table, columns are forcefully unpinned until the table is usable again.\n\n## Loading state\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-26686&t=2PBanDq6QA2yNcI2-4\n\nWhen data has not yet loaded, the table enters a loading state. In place of data and interactive elements, skeleton loading items are shown. These are gray rectangular bars that pulse between two shades of gray in an animation.\n\n### Skeleton loading items\n\nSkeleton items should reflect as much as possible about the table structure and expected data:\n\n- **Text cells:** Randomize the width of each skeleton bar within sensible minimum and maximum widths.\n- **Double-row cells:** Stack two skeleton bars if a cell is known to show content in two rows.\n- **Checkboxes:** Show a square skeleton item in place of each checkbox.\n- **Icons:** Show a square skeleton item in place of each icon.\n\nThe goal is for the skeleton layout to mirror the realistic structure of the populated table. Column count, cell arrangement, and content shape should all match so the transition from loading to loaded feels seamless.\n\n### Header treatment\n\nIf the table headers are not fetched from the backend and are already known to the frontend, show them immediately with real text rather than replacing them with skeleton items. Only the table body shows skeleton loading in this scenario.\n\nWhile loading, disable checkboxes and resize handles in the header row.\n\n### Vertical fill and gradient fade-out\n\nBecause the number of incoming rows is unknown, skeleton loading rows should fill at least the full height available to the table component. The table body should not be scrollable while loading.\n\nIf the table’s height is unconstrained, choose a sensible minimum height for the skeleton loading area.\n\nA gradient fade-out is applied at the bottom of the table body. It progressively transitions the skeleton rows to transparent, visually communicating that the row count is indeterminate.";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "columns";
+        ds:summary "The column configuration for the table. Each column defines its label, cell type, width, min-width, sortable, editable, reorderable, pinnable, and other per-column settings. Refer to the header cell and body cell sub-component documents for the full set of per-column properties.";
+        ds:propertyType "object";
+        ds:constraints "At least one column is required.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "density";
+        ds:summary "Controls row height and vertical cell padding. On mobile, the default density is cozy.";
+        ds:propertyType "choice";
+        ds:optional "true";
+        ds:defaultValue "default"
+    ], [
+        a ds:Property;
+        ds:name "selection-mode";
+        ds:summary "Sets whether and how rows can be selected. Simple selection is page-scoped and dropped on navigation. Persistent selection persists across page changes, sorting, and filtering through a persistent selection panel.";
+        ds:propertyType "choice";
+        ds:constraints "Tables with grouping and selection must use persistent.";
+        ds:optional "true";
+        ds:defaultValue "none"
+    ], [
+        a ds:Property;
+        ds:name "unique-identifier-field";
+        ds:summary "The column or field used to uniquely identify each row. Used by persistent selection to track items across pages and display them in the persistent selection panel.";
+        ds:propertyType "text";
+        ds:constraints "Required when selection-mode is not none.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "max-selection-count";
+        ds:summary "A hard limit on the number of items a user can select. Use when there are performance concerns related to the number of selected items or frontend pagination of the selection.";
+        ds:propertyType "number";
+        ds:constraints "Must be a positive integer.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "pagination-mode";
+        ds:summary "Sets the pagination strategy. Offset provides random-access page navigation. Keyset supports forward and back navigation only.";
+        ds:propertyType "choice";
+        ds:constraints "Keyset pagination is incompatible with grouping and sorting.";
+        ds:optional "true";
+        ds:defaultValue "none"
+    ], [
+        a ds:Property;
+        ds:name "page-size-options";
+        ds:summary "The set of page sizes available in the page-size selector dropdown. The first value in the list is used as the default page size.";
+        ds:propertyType "list of text";
+        ds:constraints "Each value must be a positive integer.";
+        ds:optional "true";
+        ds:defaultValue "50, 75, 100"
+    ], [
+        a ds:Property;
+        ds:name "item-label";
+        ds:summary "A context-specific noun used in the pagination bar in place of \"Items\" (for example, \"Machines\" or \"Orders\"). Applied to the item amount label and the item count summary.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "items"
+    ], [
+        a ds:Property;
+        ds:name "default-sort-column";
+        ds:summary "The column the table is sorted by on initial load.";
+        ds:propertyType "text";
+        ds:constraints "Must reference a sortable column.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "default-sort-direction";
+        ds:summary "The sort direction applied on initial load.";
+        ds:propertyType "choice";
+        ds:constraints "Only applies when default-sort-column is set.";
+        ds:optional "true";
+        ds:defaultValue "ascending"
+    ], [
+        a ds:Property;
+        ds:name "grouping-columns";
+        ds:summary "The set of columns that support grouping. Only columns with a small, known set of values are valid.";
+        ds:propertyType "list of text";
+        ds:constraints "Each value must reference an enumerated-value column.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "default-group-column";
+        ds:summary "The column the table is grouped by on initial load. ";
+        ds:propertyType "text";
+        ds:constraints "Must reference a column in grouping-columns.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "group-order";
+        ds:summary "The order in which groups are displayed. Use a custom order when there is meaning associated with a specific sequence (for example, a status column ordered from start to finish).";
+        ds:propertyType "choice";
+        ds:constraints "When custom, a custom order must be provided.";
+        ds:optional "true";
+        ds:defaultValue "alphabetical"
+    ], [
+        a ds:Property;
+        ds:name "groups-expanded-by-default";
+        ds:summary "Whether groups are expanded or collapsed on initial load.";
+        ds:propertyType "boolean";
+        ds:constraints "Only applies when grouping is active.";
+        ds:optional "true";
+        ds:defaultValue "true"
+    ], [
+        a ds:Property;
+        ds:name "sticky-header";
+        ds:summary "Keeps the header row fixed at the top of the table during vertical scroll. Set to false to let the header scroll with the content.";
+        ds:propertyType "boolean";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "row-hover";
+        ds:summary "Applies a background highlight to body rows on hover. Set to false to disable the highlight.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "true"
+    ], [
+        a ds:Property;
+        ds:name "settings-menu";
+        ds:summary "Shows the settings menu gear icon in the header row.";
+        ds:propertyType "boolean";
+        ds:constraints "Only set to false when all column customization features are disabled.";
+        ds:optional "true";
+        ds:defaultValue "true"
+    ], [
+        a ds:Property;
+        ds:name "auto-pin-first-column";
+        ds:summary "Pins the first data column to the left edge of the table during horizontal scroll. The designer can disable this default behavior on a per-table basis.";
+        ds:propertyType "boolean";
+        ds:constraints "Only takes effect during horizontal scrolling. Subject to smart pinning constraints.";
+        ds:optional "true";
+        ds:defaultValue "true"
+    ], [
+        a ds:Property;
+        ds:name "auto-pin-actions-column";
+        ds:summary "Pins the actions column to the right edge of the table during horizontal scroll. The designer can disable this default behavior on a per-table basis.";
+        ds:propertyType "boolean";
+        ds:constraints "Only takes effect during horizontal scrolling. Subject to smart pinning constraints.";
+        ds:optional "true";
+        ds:defaultValue "true"
+    ], [
+        a ds:Property;
+        ds:name "responsive-stages";
+        ds:summary "Defines the column hiding order and double-row pairing rules that activate as the viewport narrows. Includes which columns can be combined, which is primary and secondary in each pair, the order in which pairs combine, which columns to hide, and in what order.";
+        ds:propertyType "object";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "bulk-actions";
+        ds:summary "The set of bulk actions shown in the bulk action bar when rows are selected. Each action defines a label and an optional icon. Actions can be standalone buttons or grouped into expandable dropdown menus. A grouped action defines a top-level button with a dropdown caret and a list of sub-actions that appear in a popover menu above the action bar (for example, an \"Export\" group expanding into \"Export as CSV\", \"Export as JSON\", and \"Export as PDF\"). Grouping is also available as a design choice when fewer than 7 actions exist.";
+        ds:propertyType "object";
+        ds:constraints "Maximum of 7 top-level actions. The deselect button does not count toward this limit.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "loading";
+        ds:summary " When true, the table shows skeleton loading items in place of data and disables interactive header elements.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ], [
+        a ds:Property;
+        ds:name "on-sort";
+        ds:summary "Called when the user sorts a column. Receives the column identifier and sort direction. Use for backend-paginated tables where sorting triggers a data fetch.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "on-page-change";
+        ds:summary "Called when the user navigates to a different page. Receives the target page number and page size. Use for backend-paginated tables where page changes trigger a data fetch.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "on-selection-change";
+        ds:summary "Called when the selection changes. Receives the current set of selected item identifiers.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "on-edit";
+        ds:summary "Called when a cell value is saved (either through auto-save or explicit save). Receives the row identifier, column identifier, and new value.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "on-bulk-action";
+        ds:summary "Called when the user performs a bulk action. Receives the action identifier and the set of selected item identifiers.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ];
+    ds:hasSubcomponent ds:apps.subcomponent.data_table-persistent_selection, ds:apps.subcomponent.data_table-group_header_row, ds:apps.subcomponent.data_table-body_cell, ds:apps.subcomponent.data_table-settings_menu, ds:apps.subcomponent.data_table-action_bar, ds:apps.subcomponent.data_table-header_cell, ds:apps.subcomponent.data_table-pagination_bar;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-03-24T00:00:00.000+01:00";
+        ds:change "initial commit";
+        ds:changeType "change"
+    ].

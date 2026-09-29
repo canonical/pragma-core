@@ -1,0 +1,42 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.text_input a ds:Component;
+    ds:name "TextInput";
+    ds:summary "The **TextInput** component is a form element that allows users to enter a single line of text.\n\n**Main Use Cases:**\n\n- **Forms:** Used in forms to allow users to enter a short text, such as a name or an email address.\n- **Search:** Used as the base for a search input.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.text-input\n  styles:\n    layout.display: inline-block\n    size.height: size/form-field\n    spacing.internal: spacing/inline/medium\n    appearance.background: color/background/input\n    appearance.border: border/style/underline\n    typography.size: typography/paragraph/default";
+    ds:anatomyClassic "https://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2066-28&m=dev\n\nThe TextInput is a single component with no subcomponents.\n\n\n\n1.  **TextInput:** The main text input area.";
+    ds:usage "### 1. General Description\n\nThe TextInput is used when you need to allow users to enter a single line of text. It is a versatile component that can be used in a variety of situations.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Single-line input:** Use when you need to allow users to enter single-line text.\n- **Short text:** Use when the expected input is a single line.\n\n2.2 When Not to Use\n\n- **Multi-line input:** Do not use for multi-line input. Use a Textarea instead.";
+    ds:guidelines "### Accessibility\n\n- **Label:** Always provide a label for the text input to improve accessibility.\n- **Input type:** Use the appropriate input type to provide the best user experience.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The current value of the text input. ";
+        ds:propertyType "text";
+        ds:defaultValue "“”";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "placeholder";
+        ds:summary "The placeholder text for the text input.";
+        ds:propertyType "text";
+        ds:defaultValue "“”";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Whether the text input is disabled or not.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "type";
+        ds:summary "The type of the text input.";
+        ds:propertyType "choice";
+        ds:defaultValue "text";
+        ds:optional "true";
+        ds:constraints "text, password, email, number, search, tel, url"
+    ].

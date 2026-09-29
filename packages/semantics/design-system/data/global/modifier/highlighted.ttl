@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier.highlighted a ds:Modifier;
+    ds:name "Highlighted";
+    ds:summary "";
+    ds:modifierFamily ds:global.modifier_family._emphasis.

@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_workplaceengineering.pattern.group_card a ds:Pattern;
+    ds:name "GroupCard";
+    ds:summary "Used in Directory\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps_workplaceengineering;
+    ds:documentationStage ds:tag.needsdefinition.

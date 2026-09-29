@@ -1,0 +1,14 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.side_panel-content a ds:Subcomponent;
+    ds:name "SidePanel.Content";
+    ds:summary "SidePanel.Content is the structured content container subcomponent for SidePanel. It organizes dialog content into predictable regions.\n\nMain use cases:\n\n- Build a complete side panel body with header, content, and footer actions.\n- Add a close affordance aligned in the header using MoSidePaneldal.Content.Header.CloseButton.\n- Keep action rows consistently right-aligned and wrapped for variable button counts.\n\nUse SidePanel.Content when modal content needs a canonical structure and reusable semantics. Use custom children directly on SidePanel when the layout must be intentionally non-standard";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.subcomponent.side-panel-content\n  styles:\n    layout.type: stack\n    layout.direction: vertical\n    spacing.gap: \"spacing/block/m\"\n    spacing.internal.block: \"spacing/block/l\"\n    spacing.internal.inline: \"spacing/inline/l\"\n    appearance.background: \"color/background/default\"\n  edges:\n    - node:\n        uri: app-launchpad.subcomponent.side-panel-content_header\n      relation:\n        cardinality: \"1\"\n        slotName: header\n\n    - node:\n        uri: app-launchpad.subcomponent.side-panel-content_body\n      relation:\n        cardinality: \"1\"\n        slotName: default\n\n    - node:\n        uri: app-launchpad.subcomponent.side-panel-content_footer\n      relation:\n        cardinality: \"0..1\"\n        slotName: footer";
+    ds:anatomyClassic "";
+    ds:usage "SidePanel.Content is used as the root content block inside a SidePanel children snippet.\n\n## When to use\n\nUse it to enforce consistent dialog composition, typically for worklfows that require user’s confirmation.\n\n## When not to use\n\n### Freeform non-dialog page layout\n\n**Incorrect pattern**: Using SidePanel.Content as a generic page section container.  \n**Remediation strategy**: Use standard layout containers intended for in-flow page content.\n\n### Action-only dialog with no context\n\n**Incorrect pattern**: Rendering only footer actions without body context.  \n**Remediation strategy**: Include Header and Body section that explain impact before actions.";
+    ds:guidelines "## **Keep structural order meaningful**\n\nPlace title/context before actions so assistive users get intent first.\n\n\n\n";
+    ds:tier ds:apps_launchpad;
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.side_panel-content-body, ds:apps_launchpad.subcomponent.side_panel-content-footer, ds:apps_launchpad.subcomponent.side_panel-content-header;
+    ds:parentComponent ds:apps_launchpad.component.drawer.

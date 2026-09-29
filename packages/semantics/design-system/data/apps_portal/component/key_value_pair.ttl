@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_portal.component.key_value_pair a ds:Component;
+    ds:name "Key value pair";
+    ds:summary "Key-value pairs help present a pair of data in a structured way. They are useful for displaying data in an organized manner, making it easier to understand and process information on the screen. Key value pairs consist of properties (keys) each paired with their respective values.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps_portal.

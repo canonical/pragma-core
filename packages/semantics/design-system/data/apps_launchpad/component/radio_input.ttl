@@ -1,0 +1,39 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.radio_input a ds:Component;
+    ds:name "RadioInput";
+    ds:summary "The **Radio** component is a form element that allows users to select one option from a list of mutually exclusive options.\n\n**Main Use Cases:**\n\n- **Forms:** Used in forms to allow users to select a single option from a list of choices.\n- **Settings:** Used in settings pages to allow users to configure their preferences.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.radio\n  styles:\n    layout.display: inline-block\n    size.width: size/extra-small\n    size.height: size/extra-small\n    appearance.border: border/style/default\n    appearance.background: color/background/default\n    appearance.radius: radius/full\n  edges:\n    - node:\n        role: marker\n        styles:\n          appearance.background: color/background/default\n      relation:\n        cardinality: \"1\"\n        slotName: marker";
+    ds:anatomyClassic "The Radio is composed of a main container and an optional marker.\n\n1. **Container:** The outermost wrapper that defines the shape and size of the radio button.\n2. **Marker:** A visual indicator that the radio button is selected.\n\nhttps://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2066-38&m=dev";
+    ds:usage "### 1. General Description\n\nThe Radio is used when you need to allow users to select one option from a set of options. It is a good choice when you have a small number of options that are mutually exclusive.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Single choice:** Use when you need to allow users to make a single choice from a list of options.\n- **Small number of options:** Use when you have a small number of options (2-5).\n\n2.2 When Not to Use\n\n- **Multiple choices:** Do not use for multiple choices. Use Checkboxes instead.\n- **Large number of options:** Do not use for a large number of options. Use a Select instead.";
+    ds:guidelines "### Accessibility\n\n- **Label:** Always provide a label for the radio button to improve accessibility.\n- **Fieldset and Legend:** Group related radio buttons in a fieldset with a legend.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "checked";
+        ds:summary "Whether the radio button is checked or not.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Whether the radio button is disabled or not.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The value of the radio button.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "name";
+        ds:summary "The name of the radio group. ";
+        ds:propertyType "text";
+        ds:optional "false"
+    ].

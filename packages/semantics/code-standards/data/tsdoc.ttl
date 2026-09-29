@@ -1,0 +1,241 @@
+@prefix cs: <http://pragma.canonical.com/codestandards#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# TSDoc Category
+cs:tsdoc a cs:Category ;
+    rdfs:label "TSDoc"@en ;
+    rdfs:comment "Standards for TypeScript documentation comments — placement, layering, and tag usage."@en ;
+    cs:slug "tsdoc" .
+
+# Module Tag Location
+cs:tsdoc.module_tag_location a cs:CodeStandard ;
+    rdfs:label "@module on barrel files only"@en ;
+    cs:hasCategory cs:tsdoc ;
+    cs:description "The `@module` TSDoc tag must appear only on barrel files such as `index.ts`. Ordinary source files must document their exported API directly and must not use file-level `@module` tags." ;
+    cs:do [
+        cs:description "Use `@module` on a barrel file that defines a package or folder-level API." ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Public protocol API.
+ * @module protocol
+ */
+export { createRequest, matchResponse } from './index.js';
+    """
+    ] ;
+    cs:do [
+        cs:description "Document an ordinary source file at the exported symbol instead of using `@module`." ;
+        cs:language "typescript" ;
+        cs:code """
+/** Build a completion item for a CSS variable. */
+export default function buildCompletionItem(name: string) {
+  // ...
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Add `@module` to a single-purpose implementation file." ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Build a completion item.
+ * @module providers/completions/buildCompletionItem
+ */
+export default function buildCompletionItem(name: string) {
+  // ...
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use file-level `@module` tags as a substitute for export documentation." ;
+        cs:language "typescript" ;
+        cs:code """
+/** @module helpers/formatCurrency */
+export default function formatCurrency(value: number) {
+  return `$${value}`;
+}
+    """
+    ] .
+
+# Documentation Layers
+cs:tsdoc.documentation_layers a cs:CodeStandard ;
+    rdfs:label "File-level vs export-level docs"@en ;
+    cs:hasCategory cs:tsdoc ;
+    cs:description "File-level and export-level TSDoc serve fundamentally different purposes. Export-level documentation describes *what the symbol does* — its API contract, parameters, return semantics, and side effects. File-level documentation describes *why this module exists* — its architectural role, the design invariants it upholds, and how its exports relate to each other. In single-export files the file exists solely to house that export, so file-level documentation is redundant; document only the exported symbol. In multi-export files, a file-level block is warranted when it explains the cohesion principle that binds the exports together — the reason they live in one file rather than separate ones." ;
+    cs:do [
+        cs:description "In single-export files, document only at the export level — the API contract belongs on the symbol." ;
+        cs:language "typescript" ;
+        cs:code """
+// resolveDefinition.ts — single export, no file-level block needed
+/** Resolve definition locations for a CSS custom property. */
+export default function resolveDefinition(cssVar: string, graph: TokenGraph) {
+  // ...
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "In multi-export files, use a file-level block to explain the module's architectural purpose — why these exports are grouped." ;
+        cs:language "typescript" ;
+        cs:code """
+// types.ts — multiple exports, file-level explains cohesion
+/**
+ * Shared types for diagnostic rule modules.
+ *
+ * Each diagnostic check receives one of these context objects,
+ * ensuring a uniform interface across per-usage and file-level rules.
+ */
+
+export interface UsageRuleContext { /* ... */ }
+export interface FileRuleContext { /* ... */ }
+    """
+    ] ;
+    cs:do [
+        cs:description "Use export-level TSDoc to describe the API contract: what the symbol does, its parameters, return value, and any side effects." ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Check: css/missing-fallback — var() without a fallback on an unregistered property.
+ *
+ * Pushes a diagnostic when a var() usage has no fallback and the property
+ * is not registered via @property.
+ */
+export default function checkMissingFallback(ctx: UsageRuleContext, results: Diagnostic[]) {
+  // ...
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Add a file-level block in a single-export file that restates what the export-level doc already says." ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: file-level repeats the export's own description
+/** Resolve definitions for CSS custom property usages. */
+
+/** Resolve definitions for CSS custom property usages. */
+export default function resolveDefinition() { /* ... */ }
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use file-level docs to describe *what* an export does — that belongs on the export itself." ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: file-level describes the function instead of the module's role
+/** Build a completion item for a CSS variable. */
+
+export default function buildCompletionItem(name: string) { /* ... */ }
+    """
+    ] ;
+    cs:dont [
+        cs:description "Omit file-level docs on multi-export modules where the grouping rationale is non-obvious." ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: reader cannot tell why these live together
+export function isCompletionRequest(req: WorkerRequest) { /* ... */ }
+export function isHoverRequest(req: WorkerRequest) { /* ... */ }
+export function isDiagnosticsRequest(req: WorkerRequest) { /* ... */ }
+    """
+    ] .
+
+# Self-Contained Documentation
+cs:tsdoc.self_contained a cs:CodeStandard ;
+    rdfs:label "Comments that stand alone"@en ;
+    cs:hasCategory cs:tsdoc ;
+    cs:description "TSDoc comments must be self-contained — a reader should fully understand the documented symbol from its comment alone. External links (public specs, RFCs, GitHub issues) are allowed as supplementary references, but the comment itself must never depend on them for comprehension. If an external concept drives the implementation, distill the essential information into the comment." ;
+    cs:do [
+        cs:description "Explain the concept inline so the reader needs nothing else" ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Encode a string as a percent-encoded URI component.
+ *
+ * Replaces every character that is not an unreserved character
+ * (A-Z, a-z, 0-9, `-`, `.`, `_`, `~`) with its UTF-8 percent-encoded form.
+ */
+export function encodeComponent(value: string): string {
+  // ...
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Add an external link as a supplementary reference after a self-sufficient explanation" ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Compare two semantic version strings.
+ *
+ * Compares major, minor, and patch numerically in that order.
+ * Returns a negative number if `a < b`, zero if equal, or a positive number if `a > b`.
+ * Pre-release versions (e.g. `1.0.0-alpha`) sort before their release counterpart.
+ *
+ * @see https://semver.org
+ */
+export function compareVersions(a: string, b: string): number {
+  // ...
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Reference a GitHub issue for additional context when the comment already explains the behaviour" ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Truncate session tokens to 64 characters before storage.
+ *
+ * Tokens longer than 64 characters exceed the column width in the
+ * sessions table and would be silently truncated by the database,
+ * so we enforce the limit explicitly.
+ *
+ * @see https://github.com/acme/backend/issues/412
+ */
+export function truncateToken(token: string): string {
+  // ...
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Point the reader to an external resource instead of explaining the behaviour" ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Encode a URI component.
+ *
+ * Implements RFC 3986 §2.1.
+ * @see https://datatracker.ietf.org/doc/html/rfc3986#section-2.1
+ */
+export function encodeComponent(value: string): string {
+  // ...
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Reference a wiki or internal doc as a substitute for inline explanation" ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Truncate session tokens before storage.
+ *
+ * See the security review document for rationale:
+ * https://wiki.internal/security/session-token-length
+ */
+export function truncateToken(token: string): string {
+  // ...
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Leave the reader unable to understand the symbol without following a link" ;
+        cs:language "typescript" ;
+        cs:code """
+/**
+ * Compare two semantic version strings.
+ *
+ * @see https://semver.org for the full specification.
+ */
+export function compareVersions(a: string, b: string): number {
+  // ...
+}
+    """
+    ] .

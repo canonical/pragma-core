@@ -1,0 +1,46 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.subcomponent.label_with_description a ds:Subcomponent;
+    ds:name "Label With Description";
+    ds:summary "Label with Description is a small presentational subcomponent for rich option or summary labels. It renders a primary paragraph, followed by muted supporting content in `<small>`, with an optional fixed-text `learn more` link that opens a new tab.\n\nThe link stops click propagation so it can be activated inside an otherwise clickable option without selecting or triggering the surrounding control. Despite its name, the component does not render a semantic `<label>` or programmatically associate itself with a form field.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.subcomponent.label_with_description\n  edges:\n    - node:\n        semantic: paragraph\n        role: primary option or item text\n        relation:\n          cardinality: \"1\"\n          slotName: label\n    - node:\n        semantic: small\n        role: supporting content\n        edges:\n          - node:\n              role: explanatory description\n              relation:\n                cardinality: \"0..1\"\n                slotName: description\n          - node:\n              semantic: link\n              role: external supporting resource\n              relation:\n                cardinality: \"0..1\"\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-62&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 36\n\n";
+    ds:usage "### When to use\n\n**Clarify a compact choice**\n\nPair a short option name with supporting detail inside rich custom-select options or comparable choice summaries.\n\n**Link optional background**\n\nOffer deeper supporting documentation without making that material necessary to complete the primary interaction.\n\n### When not to use\n\n**Label a form control**\n\nLabeling an input field that needs semantic form control association.\n\n**Incorrect pattern**: Using Label with Description as the main label for a text input, checkbox, or select by relying on its visual presentation without form semantics.\n\n**Remediation strategy**: Use the form component’s native `label` prop and semantic `<label htmlFor>` element; Label with Description is for option or summary content, not form field labeling.\n\n**Present essential instructions**\n\nPlacing critical task information only in optional supporting documentation.\n\n**Incorrect pattern**: Putting required step instructions solely behind a “Learn more” link, expecting users to open it to understand what to do.\n\n**Remediation strategy**: Keep essential task information visible in the main interface; use the component’s description and link only for optional background material.\n\n**Standalone navigation**\n\nUsing the component as a general content or navigation link outside a rich option context.\n\n**Incorrect pattern**: Rendering Label with Description as the entire content of a navigation list item or standalone link.\n\n**Remediation strategy**: Use a plain link or navigation component; Label with Description’s click-propagation stopping and specialized wording are designed for embedded explanatory content inside clickable options.";
+    ds:guidelines "### Accessibility\n\n- Do not assume this visual label programmatically labels a form control.\n- The fixed link name `learn more` is generic. Ensure surrounding description provides sufficient accessible context and avoid multiple indistinguishable links in one region.\n- New-tab behavior is not announced by component text. The surrounding experience should follow the product convention for communicating external/new-window destinations.\n- Do not pass interactive descendants in `label` or `description`; nested controls create confusing focus and activation behavior inside clickable options.\n\n### Content\n\n- Make the label independently meaningful and use the description for qualification.\n- Link only to directly relevant background material.\n- Put task-essential information in the description, not only at the linked destination.\n- The component inserts no punctuation or separator between description and link; author description text so the padded link reads naturally.\n\n### Responsive behavior\n\n- Supporting text explicitly allows normal whitespace wrapping. The source defines no breakpoint, truncation, or maximum width.\n- The primary paragraph also follows normal document wrapping. Consumers must ensure the containing option or summary allows sufficient height.\n- The link has left padding; verify it does not appear detached when a translated description wraps.\n\n### Keyboard\n\n- The Learn more link must remain independently focusable inside any surrounding clickable item.\n- Activating the link must not trigger the surrounding control.\n- The component adds no keyboard handlers; native anchor Enter activation is retained. Click propagation is stopped for pointer and synthesized click events.\n\n### Internationalization\n\n- Externalize `label` and `description` at the owning feature.\n- The visible `learn more` text is hardcoded lowercase English in source and cannot be localized through props.\n- Do not depend on English word order between description and link. A localizable upstream contract would need link text or a complete supporting-content slot.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`LabelWithDescription.className`";
+        ds:summary "Additional class on the primary paragraph only.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Does not style the description container or link. Preserve the relationship and visibility of both text levels. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`LabelWithDescription.description`";
+        ds:summary "Supporting content rendered inside `<small>`. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Use phrasing and inline content valid within `<small>`; block descendants can create unsuitable markup. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`LabelWithDescription.label`";
+        ds:summary "Primary content rendered inside a paragraph.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Use concise inline content valid within `<p>`. This does not label a form control. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "LabelWithDescription.link";
+        ds:summary "Destination for the conditional `learn more` anchor. ";
+        ds:propertyType "url";
+        ds:defaultValue "—";
+        ds:constraints "Opens with `target=\"_blank\"` and `rel=\"noopener noreferrer\"`; clicking stops propagation but keyboard activation remains native link behavior. ";
+        ds:optional "true"
+    ].

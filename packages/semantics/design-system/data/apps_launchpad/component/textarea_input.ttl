@@ -1,0 +1,41 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.textarea_input a ds:Component;
+    ds:name "TextareaInput";
+    ds:summary "The **Textarea** component is a form element that allows users to enter a multi-line text input.\n\n**Main Use Cases:**\n\n- **Forms:** Used in forms to allow users to enter a long text, such as a comment or a message.\n- **Editors:** Used as the base for a simple text editor.\n\n";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.textarea\n  styles:\n    layout.display: inline-block\n    spacing.internal: spacing/inline/medium\n    appearance.background: color/background/input\n    appearance.border: border/style/underline\n    typography.size: typography/paragraph/default";
+    ds:anatomyClassic "\n\nhttps://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2066-51&m=dev\n\n1.  **Textarea:** The main text input area.";
+    ds:usage "### 1. General Description\n\nThe Textarea is used when you need to allow users to enter a large amount of text. It is a versatile component that can be used in a variety of situations.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Multi-line input:** Use when you need to allow users to enter multi-line text.\n- **Long text:** Use when the expected input is longer than a single line.\n\n2.2 When Not to Use\n\n- **Single-line input:** Do not use for single-line input. Use a TextInput instead.\n\n";
+    ds:guidelines "### Accessibility\n\n- **Focusable elements:** Tooltips should only be used on focusable elements, such as buttons and links.\n- **Keyboard accessible:** The tooltip content should be accessible to keyboard users.\n\n### Keyboard Navigation\n\n- **Focus:** When the trigger element receives focus, the tooltip should appear.\n- **Escape:** Pressing the Escape key should dismiss the tooltip.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The current value of the textarea.";
+        ds:propertyType "text";
+        ds:defaultValue "“”";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "placeholder";
+        ds:summary "The placeholder text for the textarea.";
+        ds:propertyType "text";
+        ds:defaultValue "“”";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Whether the textarea is disabled or not. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "rows";
+        ds:summary "The number of visible text lines.";
+        ds:propertyType "object";
+        ds:defaultValue "2";
+        ds:optional "true"
+    ].

@@ -1,0 +1,26 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# `TruncatedCell` is a preset around this root, not a child in its rendered anatomy.
+node:
+  # role: expansion positioning context
+  uri: apps_landscape.component.expandable_truncation
+  edges:
+    - node:
+        role: collapsed or expanded layout
+        # Switches between inline clipping and an absolutely positioned expanded layer.
+        edges:
+          - node:
+              role: measured value
+              # Renders caller content and measures direct child nodes against the
+              # parent right edge.
+            relation:
+              cardinality: "1"
+              slotName: content
+          - node:
+              # role: one-way disclosure — requests expansion and displays either fixed
+              # copy or an overflowing-child count.
+              uri: global.component.button
+            relation:
+              cardinality: "0..1"   # rendered when one or more direct child nodes overflow and isExpanded is false
+      relation:
+        cardinality: "1"

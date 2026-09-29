@@ -1,0 +1,18 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_portal.layout.details_view a ds:Layout;
+    ds:name "Details view";
+    ds:summary "The Details view is the deepest level of navigation, the page for a single object or topic (a token, a user, an order). It sits at the end of a drill-down: a table, or list, or dashboard names a group of objects, the Details view shows everything about one and is where all actions on that thing live.  \n  \nUse it when a subject has more attributes, settings, or actions than a table row can hold. It groups those into labelled sections (identity, configuration, related resources) so people can read the full state of one entity and act on it in place. If you only need to compare or scan many items, use a list or table instead, reach for a Details view when the user has already chosen which *one*.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "TODO figma file in contribution folder\n\nhttps://www.figma.com/design/w6M9LWWabRp66iDFqUderB/26.10-Details-view---Design-system-contributions--Copy-?node-id=1-8";
+    ds:usage "# General description\n\nA Details view presents a single entity across stacked sections. Each section pairs a label column with its content and keeps its own actions nearby, so the page reads top-to-bottom as \"here's what this is, here's how it's configured, here's what you can do”. On the eight column layout, the labels occupy the first two columns, main content takes the four columns in the middle, and actions are placed in the last two columns.\n\n# When to use\n\n- A subject has enough attributes, settings, or actions that a table row can't hold them.\n- The user has drilled in from a table or list and needs the full picture of one item.\n- Actions are scoped to this entity (edit details, rename, delete) rather than to a set.\n\n# When not to use\n\n- You're showing many comparable items, use a list or table so people can scan and compare.\n- The object has less than two sections of fields and a single action, use a panel to avoid a full page navigation.\n\n# Guidelines\n\n- One action button per section. One primary button per view, the rest are secondary buttons. If multiple details can be changed, open a panel.\n- Inline actions (like in tables per row) is fine \n- Inline tables may require variations depending on complexity. \n  - Simple tables can stay in the middle four columns, or span also the right two columns, depending the number of table columns.\n  - If a table involves significant number of attributes, interaction or pagination, it may be better to use a separate tab, within the page connected to the subject.\n\n";
+    ds:guidelines "";
+    ds:tier ds:apps_portal;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-08-20T00:00:00.000+02:00";
+        ds:change "initial documentation of a found template for a layout";
+        ds:changeType "decision"
+    ].

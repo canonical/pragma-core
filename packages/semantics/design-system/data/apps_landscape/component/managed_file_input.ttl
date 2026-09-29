@@ -1,0 +1,75 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.managed_file_input a ds:Component;
+    ds:name "Managed File Input";
+    ds:summary "Managed File Input is a controlled single-file workflow with two mutually exclusive render states. When `value` is `null`, it renders Canonical Input as a native file picker and awaits `onFileUpload([...files])`; when `value` is a `File`, it replaces the picker with a filename, a dense delete-icon Button that invokes the supplied promise-returning remove callback, and optional label/help/error text.\n\nThe component does not retain the selected `File`, upload progress, removal progress, or failures. The parent must update `value` and surface callback errors. Its custom blur contract is unusual: the empty-state input stores its last blur event and invokes the inherited `onBlur` only after a later successful upload.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.managed_file_input\n  edges:\n    - node:\n        uri: global.component.input\n        attributes:\n          type: file\n          multiple: false\n        relation:\n          cardinality: \"0..1\"\n          condition: value is null\n    - node:\n        role: selected file state\n        edges:\n          - node:\n              semantic: label\n              role: selected-state label\n              relation:\n                cardinality: \"0..1\"\n                condition: label is truthy\n          - node:\n              semantic: p\n              role: help text\n              relation:\n                cardinality: \"0..1\"\n                condition: help is truthy\n          - node:\n              role: filename\n              relation:\n                cardinality: \"1\"\n          - node:\n              uri: global.component.button\n              role: remove file\n              relation:\n                cardinality: \"1\"\n          - node:\n              semantic: p\n              role: validation message\n              relation:\n                cardinality: \"0..1\"\n                condition: error is truthy\n        relation:\n          cardinality: \"0..1\"\n          condition: value is a File";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-75&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 38\n\n";
+    ds:usage "### When to use\n\n**Managed single upload**\n\nUse when selecting a file immediately invokes an asynchronous upload or preparation step.\n\n**Replace-by-removal flow**\n\nUse when the chosen file should be summarized by name and explicitly removed before another is selected.\n\n**Parent-controlled asynchronous processing**\n\nUse when a parent can await upload/removal work, update `value`, and pass resulting error/help state back into the component.\n\n### When not to use\n\n**Multiple files**\n\nUploading more than one file in a single operation.\n\n**Incorrect pattern**: Using Managed File Input when the application needs to accept and display multiple uploaded files simultaneously.\n\n**Remediation strategy**: Use a dedicated multi-file upload component or build a wrapper that manages an array of Managed File Input instances.\n\n**Deferred form upload**\n\nCollecting files locally without uploading until form submission.\n\n**Incorrect pattern**: Selecting a file into Managed File Input expecting it to remain local until the parent form is submitted as a whole.\n\n**Remediation strategy**: If files must remain entirely local, manage the File state in a plain state variable; Managed File Input is designed for immediate upload on selection.\n\n**Progress, cancellation, or replacement in place**\n\nShowing upload progress, retry/cancel options, file preview, or replacing files without explicit removal.\n\n**Incorrect pattern**: Expecting Managed File Input to display progress bars, cancel buttons, thumbnail previews, or allow drag-and-drop file replacement without removing the current file first.\n\n**Remediation strategy**: None of these features are implemented. For advanced file handling, build a custom component or use a specialized file-upload library.\n\n**Native blur semantics**\n\nTreating onBlur as a normal form input blur callback.\n\n**Incorrect pattern**: Assuming `onBlur` fires whenever the file picker loses focus, like standard input controls.\n\n**Remediation strategy**: Understand that `onBlur` is delayed until after a successful file upload and requires a previously stored blur event; the wrapper does not fire blur on picker close alone.";
+    ds:guidelines "### Accessibility\n\n- Empty-state label/error/help semantics are inherited from Canonical Input. Provide a visible or programmatic label.\n- Selected-state remove Button has off-screen text “Remove” plus a delete Icon, but the local source does not include the filename in the text label or set explicit ARIA on the Icon. Multiple controls need surrounding context and verification of the installed Canonical Icon behavior, or a more specific upstream label.\n- The Button always receives `aria-errormessage=\"${value.name}-error-message\"`, even when the error paragraph is absent. The id uses the filename without sanitization or uniqueness handling.\n- Selected-state `<label>` has no associated input. Treat it as visual text rather than claiming native label semantics.\n\n### Content and security\n\n- State accepted file types, size limits, and whether selection uploads immediately.\n- Validate content and size on the server; the accept attribute is only user guidance.\n- Show actionable upload or removal failures without exposing sensitive paths.\n- The selected error prefix and remove action text are hardcoded English.\n\n### Internationalization\n\n- Localize caller-supplied label, help, and error content. An upstream-ready version must also externalize “Remove” and “Error:”.\n- Preserve filenames verbatim; do not translate them. Allow bidirectional and non-ASCII names without using the raw value as an unsafe or duplicate DOM id.\n- Long filenames may need visible truncation with an accessible full value; no such behavior is implemented locally.\n\n### Keyboard navigation\n\n- The picker and remove action must remain reachable and operable by keyboard.\n- Native file-picker keyboard/device behavior comes from the browser and Canonical Input. The component adds no drag/drop or custom picker keys.\n- Removing does not locally restore focus to a newly rendered picker; parent state changes determine what appears next.\n\n### Device and layout\n\n- The selected-state filename and dense Button share normal inline flow. The only direct spacing override is the Button’s literal inline `marginLeft: \"0.5rem\"` plus `u-no-padding--left`.\n- No local stylesheet handles long filenames, wrapping, mobile layout, or touch targets; verify these in each containing form.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`ManagedFileInput.value`";
+        ds:summary "Selects empty or selected render state.";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `File | null`. Only one file is represented; parent updates control state. "
+    ], [
+        a ds:Property;
+        ds:name "`ManagedFileInput.onFileUpload`";
+        ds:summary "Awaited after a non-empty native `FileList` is copied to an array. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(files: File[]) => Promise<void>`. The picker forces `multiple={false}`, so normal UI selection supplies one item despite the array API. Rejections are not caught. "
+    ], [
+        a ds:Property;
+        ds:name "`ManagedFileInput.onFileRemove`";
+        ds:summary "Passed directly to the remove Button's click handler. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => Promise<void>`. Parent must update `value`; no local pending, disabled, or error behavior is added. Rejections are not caught. "
+    ], [
+        a ds:Property;
+        ds:name "`ManagedFileInput.error`";
+        ds:summary "Empty state passes it to Canonical Input; selected state adds `is-error` and renders custom error markup. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string | undefined`. The selected error id is derived verbatim from `value.name`; Button has `aria-errormessage` even when no error exists. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "ManagedFileInput.help";
+        ds:summary "Empty state passes it to Input; selected state renders it before the filename. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string | ReactNode`. React content is supported according to `InputProps`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ManagedFileInput.label`";
+        ds:summary "Labels the empty-state Input; selected state renders label-styled text. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string | ReactNode`. The selected-state `<label>` is not associated with a form control. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ManagedFileInput.onBlur`";
+        ds:summary "Not forwarded normally. The picker stores its blur event, then calls this callback only after a later awaited upload if such an event exists. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(event: FocusEvent<HTMLInputElement>) => void`. There is no callback on blur alone, after a rejected upload, or without a stored event. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ManagedFileInput` remaining Input props";
+        ds:summary "Forwarded to the empty-state Canonical Input, including contracts such as `accept`, `name`, `required`, `disabled`, classes, and data/ARIA props where supported. ";
+        ds:propertyType "object";
+        ds:defaultValue "Canonical Input defaults";
+        ds:constraints "TypeScript: `Omit<InputProps, \"multiple\" | \"onChange\" | \"type\" | \"value\">`. Consumers may supply any supported subset. They are not forwarded to selected-state markup. Local feedback, label, multiple, blur, and change props cannot be overridden. ";
+        ds:optional "true"
+    ].

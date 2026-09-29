@@ -1,0 +1,14 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.timeline-header a ds:Subcomponent;
+    ds:name "Timeline.Header";
+    ds:summary "The timeline header is an element located at the top of the component used to provide overall context or controls for the sequence. It houses the title of the timeline and the control bar for sorting or filtering. Its sole functionality is to define the scope of the events being viewed and provide the tools to manipulate their display.";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# Notation-only migration: the Timeline stylesheets carry no header selector, so\n# the structure and bindings are kept as the notation had them.\nnode:\n  uri: global.subcomponent.timeline-header\n  styles:\n    layout.type: flex\n    layout.direction: row\n    layout.justify: space-between\n  edges:\n    - node:\n        role: filters\n      relation:\n        cardinality: \"0..1\"\n        slotName: start\n    - node:\n        role: sorting\n      relation:\n        cardinality: \"0..1\"\n        slotName: end";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2653-20056&t=6a9B5L28GbEGD8q7-11";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:parentComponent ds:global.pattern.timeline.

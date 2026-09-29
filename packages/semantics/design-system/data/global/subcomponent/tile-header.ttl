@@ -1,0 +1,65 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.tile-header a ds:Subcomponent;
+    ds:name "Tile.Header";
+    ds:summary "The tile header is a fixed structural element at the top of the [Tile](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-eThhoLZg3Y) used to house essential identification metadata. It typically contains a single line of text or a small icon to establish the name of the data object. Its sole functionality is to provide a consistent visual starting point for the user to identify specific items within a repeating grid.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/component/Tile/common/Header/styles.css on .ds.tile-header.\nnode:\n  uri: global.subcomponent.tile-header\n  styles:\n    layout.type: flex\n    layout.direction: row\n    layout.align: center\n    spacing.gap: dimension.100                    # --tile-header-gap, the inline gap between marks\n    spacing.internal.block.start: dimension.100   # --tile-header-padding-block\n    spacing.internal.block.end: dimension.100     # --tile-header-padding-block\n    spacing.internal.inline.start: dimension.200  # --tile-header-padding-inline, a surface inset\n    spacing.internal.inline.end: dimension.200    # --tile-header-padding-inline, a surface inset\n    # The header reads --typography-weight-semibold, which no stratum declares —\n    # the declared spelling is --typography-weight-semiBold\n    # (typography.weight.semiBold) — so only the literal the chain falls back to\n    # is written.\n    typography.weight: 600";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:propertyType "element";
+        ds:optional "false"
+    ];
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-01-15T00:00:00.000+01:00";
+        ds:changeType "change"
+    ];
+    ds:parentComponent ds:global.component.tile;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ].

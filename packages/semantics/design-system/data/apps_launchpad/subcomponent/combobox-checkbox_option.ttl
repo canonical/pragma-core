@@ -1,0 +1,33 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.combobox-checkbox_option a ds:Subcomponent;
+    ds:name "Combobox.CheckboxOption";
+    ds:summary "The **Combobox CheckboxOption** is a subcomponent of the Combobox that represents an option that can be selected with a checkbox. It is used for multi-select Comboboxes.\n\n**Main Use Cases:**\n\n- **Multi-select:** Allow users to select multiple options from a list.\n- **Filtering:** Used in filtering interfaces where users can select multiple criteria.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.subcomponent.combobox.checkbox-option\n  styles:\n    layout.display: grid\n    appearance.background: color/background/default\n    spacing.padding: spacing/inline/medium\n  edges:\n    - node:\n        role: label text\n      relation:\n        cardinality: \"1\"\n        slotName: text\n    - node:\n        role: option icon\n      relation:\n        cardinality: \"0..1\"\n        slotName: icon\n    - node:\n        role: secondary text\n      relation:\n        cardinality: \"0..1\"\n        slotName: secondaryText\n    - node:\n        role: trailing text\n      relation:\n        cardinality: \"0..1\"\n        slotName: trailingText\n    - node:\n        uri: app-launchpad.component.checkbox\n      relation:\n        cardinality: \"1\"\n        slotName: checked";
+    ds:anatomyClassic "The Combobox CheckboxOption is composed of a main container, a checkbox, a label, and optional icons and secondary text.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the option.\n2. **Checkbox:** The checkbox that indicates whether the option is selected or not.\n3. **Label Text:** The primary text for the option.\n4. **Option Icon:** An optional icon to visually represent the option.\n5. **Secondary Text:** Optional text to provide additional information about the option.\n6. **Trailing Text:** Optional text that is displayed at the end of the option.";
+    ds:usage "### 1. General Description\n\nThe Combobox CheckboxOption is used to represent a selectable option in a multi-select Combobox. It provides a clear visual indication of the selection status of each option.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Multi-select Combobox:** Use as the option type in a multi-select Combobox.\n\n2.2 When Not to Use\n\n- **Single-select Combobox:** Do not use in a single-select Combobox. Use a simple option instead.";
+    ds:guidelines "### Content Specification\n\n- **Labels:** Use clear and concise labels for the options.\n- **Secondary text:** Use secondary text to provide additional information, but keep it short.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The value of the option.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The label for the option.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "hecke";
+        ds:summary "Whether the option is selected or not.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.combobox.

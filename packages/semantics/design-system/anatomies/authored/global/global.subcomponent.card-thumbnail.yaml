@@ -1,0 +1,35 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration: the structure and the bindings are kept, the values
+# are migrated off the retired slash notation.
+node:
+  uri: global.subcomponent.card-thumbnail
+  # Every spacing binding below is a ROLE match, not a value match: the retired
+  # value each line names is not a symbol in any namespace a spacing key admits,
+  # so the symbol says what the space IS for and the old value stays on the line.
+  styles:
+    layout.type: flex
+    layout.direction: row
+    layout.align: flex-start
+    # `spacing.internal: spacing/medium` is not a roster key and spacing/medium
+    # names no symbol; the four sides take the surface inset, which is what a
+    # padded card section reads elsewhere in the component.
+    spacing.internal.block.start: spacing.inset.surface.block
+    spacing.internal.block.end: spacing.inset.surface.block
+    spacing.internal.inline.start: spacing.inset.surface.inline
+    spacing.internal.inline.end: spacing.inset.surface.inline
+  edges:
+    - node:
+        role: image
+        styles:
+          size.width: 4rem
+          size.height: 4rem
+          layout.flex.shrink: 0
+          layout.objectFit: contain
+      relation:
+        cardinality: "1"
+    - node:
+        role: content
+      relation:
+        cardinality: "0..1"
+        slotName: default

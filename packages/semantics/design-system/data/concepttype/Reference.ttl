@@ -1,0 +1,7 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:concepttype.Reference a ds:ConceptType;
+    ds:name "Reference";
+    ds:summary "*Reference guides are* ***technical descriptions*** *of the machinery and how to operate it. Reference material is* ***information-oriented****.* \n\nReference material contains *propositional or theoretical* knowledge that a user looks to in their *work*.".

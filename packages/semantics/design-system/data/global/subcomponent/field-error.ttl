@@ -1,0 +1,29 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.field-error a ds:Subcomponent;
+    ds:name "Field.Error";
+    ds:summary "";
+    ds:anatomyDsl "---\n# Authored 2026-09-14 from @canonical/react-ds-global-form\n# src/lib/subcomponent/Field/Error/styles.css on .ds.field-error, with the\n# tokens it reads from src/index.css. The Error is the Field's common\n# validation message: one `<p role=\"alert\">` the Wrapper renders below the\n# control, sharing the label's edge alignment.\nnode:\n  uri: global.subcomponent.field-error\n  styles:\n    # --form-error-color is var(--modifier-color-text, var(--color-text-error)):\n    # the text channel first, so a caller recolouring the field recolours its\n    # error with it, and the error text semantic behind it. Per design review\n    # the validation colour is confined to this message and the input's bottom\n    # border, so the error carries the signal in its own text.\n    typography.color: [modifier.color.text, color.text.error]\n    # No type binding: the rule sets only `color` and `padding-inline`.\n    # index.css declares --form-error-font-size on the PRIMARY ramp, but\n    # nothing in the package consumes that variable — the message is a <p>\n    # carrying the `.p` class, so its type comes from the baseline typography\n    # engine, not from this rule. Same shape as the description.\n    # Aligned to the field edge like the label, not to the input's inner\n    # padding: padding-inline reads --form-label-padding-inline, which no\n    # stratum declares, falling back to 0.\n    spacing.internal.inline.start: 0\n    spacing.internal.inline.end: 0\n  edges:\n    - node:\n        role: error text\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-error;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-error;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.text.error
+    ].

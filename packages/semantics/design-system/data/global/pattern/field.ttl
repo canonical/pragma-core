@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.pattern.field a ds:Pattern;
+    ds:name "Field";
+    ds:summary "A form field is the unit that pairs a single input with the surrounding meaning a user needs to act on it: a label naming what is being asked, optional descriptive guidance, the input itself, and validation feedback when an entry is rejected. It is the common frame every concrete form control adopts so that labelling, help text, optionality and error reporting behave the same across a form.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "The shared frame for a single form control.\n\n\n\n### When to use\n\n- Whenever a form collects one value from the user and needs to label it, optionally describe it, and report validation outcomes consistently.\n\n\n\n### When not to use\n\n- For purely presentational, non-collecting controls (no value, no validation).\n\n- To group several fields — that is the job of a form section/group, not a single Field.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition.

@@ -1,0 +1,86 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.timeline-event a ds:Subcomponent;
+    ds:name "Timeline.Event";
+    ds:summary "An Event is the modular building block of a [Timeline ](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-PoLCAfKAMr) . Its primary purpose is to offer transactional transparency, clearly identifying the actor, the specific action taken, and the precise timing of one specific entry in the timeline.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/pattern/Timeline/common/Event/styles.css on .ds.timeline-event and its\n# child selectors (> .marker, ::before, > .content and the three content parts).\n# The stylesheet corrects the tree: the actor, datetime and payload are children\n# of a `.content` wrapper, not of the event, and the event also carries a marker.\nnode:\n  uri: global.subcomponent.timeline-event\n  styles:\n    layout.type: flex\n    layout.direction: row\n    # Position relative for the connecting line.\n    layout.position: relative\n    # The gap reads --timeline-event-gap then --spacing-medium; neither is\n    # declared anywhere, so only the literal the chain falls back to is written.\n    spacing.gap: 1rem\n  edges:\n    - node:\n        role: marker\n        styles:\n          layout.flex.shrink: 0\n          # --timeline-marker-size is a per-instance override slot with no\n          # declaration, so the 12px fallback is what resolves.\n          size.width: 12px\n          size.height: 12px\n          appearance.radius: 50%\n          # The primary foreground fills the dot, through the channel that\n          # importance provides it on; the criticality classes (.success, .error,\n          # .warning, .information) set that channel. The middle rank is reached\n          # through --timeline-marker-color, a per-instance override slot with no\n          # declaration of its own.\n          appearance.background: [modifier.color.foreground.primary, color.border, \"#ccc\"]\n          layout.position: relative\n          appearance.border.style: solid\n          # --timeline-marker-border-width has no declaration; 2px is the literal\n          # the chain falls back to. The border colour reads the modifier channel,\n          # then --timeline-marker-border-color (another undeclared override slot)\n          # and then --color-surface, which no stratum declares either.\n          appearance.border.width: 2px\n          appearance.border.color: [modifier.color.border, \"#fff\"]\n          # margin-top reads --timeline-marker-offset, undeclared, and the chain\n          # names no token, so the literal it falls back to is written.\n          spacing.external.block.start: 0.25rem\n          layout.stack: 1\n      relation:\n        cardinality: \"1\"\n    - node:\n        # drawn as ::before\n        role: connecting line\n        styles:\n          layout.position: absolute\n          # The line joining one event to the next, and the last event hides it\n          # (`:last-child::before { display: none }`) — which is why this edge\n          # is 0..1 where a pseudo-element part is otherwise exactly one.\n          # --timeline-line-width and --timeline-line-color\n          # have no declaration, so the width is the 2px fallback and the colour\n          # falls through to the border token.\n          size.width: 2px\n          appearance.background: [color.border, \"#e0e0e0\"]\n          # Its three offsets (left, top, bottom) are calc()s over the marker\n          # size, the marker offset and --timeline-event-spacing, so none is\n          # bound.\n      relation:\n        cardinality: \"0..1\"\n    - node:\n        role: content\n        styles:\n          layout.type: flex\n          layout.direction: row\n          layout.wrap: wrap\n          layout.align: baseline\n          layout.flex.grow: 1\n          layout.flex.shrink: 1\n          layout.flex.basis: 0%\n          size.min.width: 0\n          # --timeline-content-gap then --spacing-small: neither is declared, so\n          # the literal stands. The block-end padding reads\n          # --timeline-event-spacing then --spacing-large, also undeclared.\n          spacing.gap: 0.5rem\n          spacing.internal.block.end: 1.5rem\n        edges:\n          - node:\n              role: actor\n              styles:\n                # --timeline-actor-font-weight then --font-weight-semibold:\n                # neither is declared. --timeline-actor-color then\n                # --color-text-primary, also undeclared.\n                typography.weight: 600\n                typography.color: inherit\n            relation:\n              cardinality: \"0..1\"\n          - node:\n              role: datetime\n              styles:\n                # --timeline-datetime-font-size then --font-size-small, and\n                # --timeline-datetime-color then --color-text-secondary: none of\n                # the four is declared, so the literals stand.\n                typography.size: 0.875rem\n                typography.color: \"#666\"\n            relation:\n              cardinality: \"0..1\"\n          - node:\n              role: payload\n              styles:\n                # --timeline-payload-color then --color-text-primary, and\n                # --timeline-payload-line-height then --font-line-height-relaxed:\n                # none is declared.\n                typography.color: inherit\n                typography.lineHeight: 1.6\n                # Wraps to its own full-width line when the content is long.\n                layout.flex.basis: 100%\n            relation:\n              cardinality: \"1\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2653-20589&t=6a9B5L28GbEGD8q7-11";
+    ds:usage "### Event content\n\nAn Event item can include default content, custom content, or both. The default content contains the actor name, the description and the dateTime. Each can be hidden individually. Custom content can also span the full width of the component, in which case the marker and the default content is hidden.\n\n### Actor profile link\n\nAn Event can include an actor profile link. When doing so, all Markers representing the actor and the Actor name become clickable and link to the provided profile.\n\n### DateTime\n\nThe dateTime defaults to displaying the date and time in the user’s local format. It can be configured by the DS consumer to exclude the time or to use a specific format for all users. Additionally, dateTime can be displayed as relative time.\n\n### Marker styles\n\nThe component provides flexible marker styles to accommodate different use cases. A marker can be one of three sizes and can include one of three graphical elements. What marker style an event uses is determined by the Timeline component's marker combination property.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "Is fully custom";
+        ds:summary "Defines whether the Event uses a fully custom layout that spans over the full-width of the Timeline.";
+        ds:propertyType "boolean";
+        ds:defaultValue "False";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Actor name";
+        ds:summary "The actor's name. When it has empty value, the actor name is hidde.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Actor link";
+        ds:summary "The link to the actor's profile page.";
+        ds:propertyType "url";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Description";
+        ds:summary "Describes what the event is. When it has empty value, the description is hidde.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Show dateTime";
+        ds:summary "Defines whether the DateTime is included.";
+        ds:propertyType "boolean";
+        ds:defaultValue "True";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "DateTime";
+        ds:summary "The timestamp of the Event.";
+        ds:propertyType "datetime";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:global.pattern.timeline;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.foreground.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/connecting line";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border
+    ].

@@ -1,0 +1,81 @@
+###############################################################################
+# dt.s4.shapes.ttl — SHACL shapes for the platform catalogue
+#
+# Cardinality and structure for dt.s4.ttl. What SHACL cannot express is named
+# at the foot, with where it is executed, so no law is left as prose.
+#
+# NOT YET EXECUTED: no SHACL engine runs in this package today, and the
+# existing dt.shapes.ttl has the same standing. These shapes become live when
+# the first catalogue is generated and an engine is added to the test suite.
+###############################################################################
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dt:   <https://dt.canonical.com/> .
+@prefix dt-web: <https://dt.canonical.com/platform/web/> .
+
+dt:VariableShape
+    a sh:NodeShape ;
+    sh:targetClass dt:Variable ;
+    sh:property [ sh:path dt:declaredAt ; sh:minCount 1 ; sh:class dt:Declaration ] ;
+    sh:property [ sh:path dt:ofSymbol ; sh:maxCount 1 ; sh:class dt:TokenSymbol ] ;
+    sh:property [ sh:path dt:tier ; sh:maxCount 1 ; sh:class dt:Tier ] ;
+    sh:property [ sh:path dt:visibility ; sh:minCount 1 ; sh:maxCount 1 ; sh:class dt:Visibility ] .
+
+dt:DeclarationShape
+    a sh:NodeShape ;
+    sh:targetClass dt:Declaration ;
+    sh:property [ sh:path dt:under ; sh:minCount 1 ; sh:maxCount 1 ; sh:class dt:Condition ] ;
+    sh:property [ sh:path dt:emits ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path dt:at ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path dt:references ; sh:maxCount 1 ] ;
+    sh:property [ sh:path dt:alsoAt ; sh:class dt:Coordinate ] ;
+    sh:property [ sh:path dt:derives ; sh:maxCount 1 ; sh:class dt:Derivation ] ;
+    sh:property [ sh:path dt:computedFrom ; sh:maxCount 1 ; sh:class dt:Variable ] ;
+    # A rule without a source, or a source without a rule, is half a fact.
+    sh:xone (
+        [ sh:property [ sh:path dt:derives ; sh:minCount 1 ] ;
+          sh:property [ sh:path dt:computedFrom ; sh:minCount 1 ] ]
+        [ sh:property [ sh:path dt:derives ; sh:maxCount 0 ] ;
+          sh:property [ sh:path dt:computedFrom ; sh:maxCount 0 ] ]
+    ) .
+
+dt:ConditionShape
+    a sh:NodeShape ;
+    sh:targetClass dt:Condition ;
+    sh:property [ sh:path dt:selectsCoordinate ; sh:class dt:Coordinate ] .
+
+dt-web:ConditionShape
+    a sh:NodeShape ;
+    sh:targetClass dt:Condition ;
+    sh:property [ sh:path dt-web:selector ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path dt-web:inAtRule ; sh:maxCount 1 ] .
+
+###############################################################################
+# LAWS THAT SHACL CANNOT EXPRESS — each executed as a test
+#
+# L1 REGENERATION    Printing every dt:emits under its condition reproduces the
+#                    platform's output byte for byte.
+# L2 SLUG UNIQUENESS No two conditions share a minted IRI. The mint is lossy
+#                    (`.surface.surface` and `.surface .surface` collide), so
+#                    this is asserted, not assumed.
+# L3 BRIDGE          For every variable with dt:ofSymbol and every declaration
+#                    of it, the position (ofSymbol x condition's coordinates
+#                    x alsoAt) matches EXACTLY ONE dt:ResolvedValue in S3, or
+#                    the position is one S3 declines to hold. The match is to a
+#                    NODE, never to a value: a derived node carries none, and a
+#                    consumer follows its dt:derivedFrom to the symbol that
+#                    does.
+# L4 COORDINATES     Every coordinate named exists in S2. Catches the
+#                    axis/family divergence: `theme` encodes `mode`.
+# L5 CLOSURE         Every variable in a dt:references list is a dt:Variable
+#                    in the same catalogue.
+# L6 REACHABILITY    Every variable reaches one with dt:ofSymbol by a finite
+#                    chain of dt:references. A variable that reaches none is
+#                    something shipped that nothing authored — today that is
+#                    29 of 1,156: 16 lightness offsets and 13 slots of a
+#                    typography composite. Not the legacy twins, which each
+#                    reach their own symbol; and not the 187 variables whose
+#                    artifact id is no symbol, which are L3's phantoms.
+###############################################################################

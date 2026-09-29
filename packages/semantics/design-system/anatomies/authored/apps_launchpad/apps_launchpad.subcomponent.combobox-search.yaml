@@ -1,0 +1,16 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.combobox-search
+  styles:
+    layout.type: flex
+    layout.direction: column   # was vertical
+    # dropped spacing.gap: spacing/inline/small — no spacing symbol corresponds
+  edges:
+    # Was uri: app-launchpad.component.search-box, which resolves to no ds:
+    # subject — no tier declares a launchpad SearchBox — so the position is a role.
+    - node:
+        role: search box
+      relation:
+        cardinality: "1"
+        slotName: default

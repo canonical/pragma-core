@@ -1,0 +1,65 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: cron expression input
+  uri: apps_landscape.component.cron_schedule
+  edges:
+    - node:
+        role: default label cluster
+        edges:
+          - node:
+              # content: Schedule
+              role: label text
+            relation:
+              cardinality: "1"
+          - node:
+              # role: cron help trigger; a11y aria-label: Open cron help
+              uri: global.component.button
+              edges:
+                - node:
+                    uri: global.component.icon
+                    props:
+                      icon: help    # was name: help
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # was uri: global.component.modal; role: cron reference dialog
+                    uri: global.pattern.modal
+                    edges:
+                      - node:
+                          role: example section
+                          edges:
+                            - node:
+                                role: cron example part
+                              relation:
+                                cardinality: "5"
+                            - node:
+                                role: example prose
+                              relation:
+                                cardinality: "1"
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          role: accepted values section
+                          edges:
+                            - node:
+                                # was uri: global.component.main-table
+                                uri: global.component.table
+                              relation:
+                                cardinality: "2"
+                        relation:
+                          cardinality: "1"
+                  relation:
+                    cardinality: "0..1"   # rendered when isModalOpen
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"   # rendered when the label prop does not replace the default
+    - node:
+        role: help phrase
+      relation:
+        cardinality: "0..1"   # rendered when toCronPhrase returns successfully
+    - node:
+        role: error message
+      relation:
+        cardinality: "0..1"   # rendered when toCronPhrase throws Error and touched is truthy

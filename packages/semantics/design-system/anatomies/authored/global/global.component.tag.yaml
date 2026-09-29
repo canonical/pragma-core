@@ -1,0 +1,24 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# A notation migration of the previous DSL: structure and bindings kept, values
+# migrated. The previous root uri said `global.component.label`, which names no
+# block; the block this anatomy belongs to is Tag.
+node:
+  uri: global.component.tag
+  styles:
+    layout.type: inline
+    # Was `typography.size: font/size/label` — dropped, since typography.size
+    # admits dimension.* only and no dimension symbol corresponds to
+    # font/size/label.
+    typography.weight: typography.weight.medium
+  edges:
+    - node:
+        role: icon
+      relation:
+        cardinality: "0..1"
+        slotName: icon
+    - node:
+        role: content
+      relation:
+        cardinality: "1"
+        slotName: default

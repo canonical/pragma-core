@@ -1,0 +1,30 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.code_snippet-header a ds:Component;
+    ds:name "CodeSnippet.Header";
+    ds:summary "";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# A notation migration of the previous DSL: structure and bindings kept, values\n# migrated. The previous root uri said `global.subcomponent.code_snippet-header`;\n# the block is a component, ds:global.component.code_snippet-header.\nnode:\n  uri: global.component.code_snippet-header\n  styles:\n    layout.type: flex   # was flow\n    layout.direction: row   # was horizontal\n    layout.align: center\n    # Was `spacing.internal: spacing/small` — the key is not in the roster (a\n    # padding is bound per side) and no declared spacing semantic corresponds\n    # to spacing/small, so the binding is dropped.\n    # Was `appearance.border.bottom: border/style/divider` — dropped: the\n    # roster's key is appearance.border.bottom.color and no symbol declares a\n    # border/style/divider counterpart.\n    # Was `color/surface/code-header`; no symbol declares\n    # color.background.code.header, so this is the declared background the\n    # surface correspondence lands on.\n    appearance.background: color.background\n  edges:\n    - node:\n        role: filename\n        styles:\n          # Was `typography.size: font/size/small` — dropped, since\n          # typography.size admits dimension.* only and no dimension symbol\n          # corresponds to font/size/small.\n          typography.color: color.text.muted\n          # Was `layout.flex: 1`, which is not a roster key.\n          layout.flex.grow: 1\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:parentComponent ds:global.component.code_snippet;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.code_snippet-header;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.code_snippet-header;
+        ds:node "$root/filename";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ].

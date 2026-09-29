@@ -1,0 +1,45 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.multi_select_field
+  edges:
+    - node:
+        role: field wrapper
+        edges:
+          - node:
+              # semantic: label
+              role: outer field label
+            relation:
+              cardinality: "0..1"   # rendered when label is non-empty
+          - node:
+              # semantic: paragraph
+              role: help text
+            relation:
+              cardinality: "0..1"   # rendered when help is truthy
+              slotName: help
+          - node:
+              # was uri: global.component.multi_select, which names no subject;
+              # role: controlled selection control
+              role: controlled selection control
+              edges:
+                - node:
+                    role: dropdown footer
+                  relation:
+                    cardinality: "0..1"   # rendered when dropdownFooter or error is truthy
+                    slotName: dropdownFooter
+            relation:
+              cardinality: "1"
+          - node:
+              # semantic: paragraph
+              role: persistent error message
+            relation:
+              cardinality: "0..1"   # rendered when error is truthy
+              slotName: error
+          - node:
+              # semantic: paragraph
+              role: persistent warning message
+            relation:
+              cardinality: "0..1"   # rendered when warning is truthy
+              slotName: warning
+      relation:
+        cardinality: "1"

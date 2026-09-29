@@ -1,0 +1,47 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.chip a ds:Component;
+    ds:name "Chip";
+    ds:summary "The **Chip** component is a small, interactive element that is used to display a piece of information, such as a filter or a selection.\n\n**Main Use Cases:**\n\n- **Filters:** Represent a filter that has been applied.\n- **Selections:** Represent an item that has been selected.\n- **Tags:** Represent a tag that has been assigned to an item.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.chip\n  styles:\n    layout.type: flow\n    layout.direction: horizontal\n    layout.align: center\n  edges:\n    - node:\n        role: icon container\n      relation:\n        cardinality: \"0..1\"\n        slotName: icon\n    - node:\n        role: lead text\n      relation:\n        cardinality: \"0..1\"\n        slotName: lead\n    - node:\n        role: value text\n      relation:\n        cardinality: \"1\"\n        slotName: value\n    - uri: app-launchpad.component.badge\n      relation:\n        cardinality: \"0..1\"\n        slotName: badge\n    - switch:\n        on: props\n        *cases:*\n          *- node:*\n              *role: interactive chip*\n              *edges:*\n                *- node:*\n                    *role: dismiss button*\n                    *edges:*\n                      *- node:*\n                          *role: dismiss icon*\n                        *relation:*\n                          *cardinality: \"1\"*\n                  *relation:*\n                    *cardinality: \"0..1\"*\n                    *slotName: dismiss*\n          *- node:*\n              *role: readonly chip*\n      *relation:*\n        cardinality: \"1\"";
+    ds:anatomyClassic "The Chip is composed of a main container, a value, and optional icons, lead text, a badge, and a dismiss button.\n\n1. **Container:** The outermost wrapper that defines the shape and size of the chip.\n2. **Icon Container:** An optional container for an icon.\n3. **Lead Text:** Optional text that is displayed before the value.\n4. **Value Text:** The main text of the chip.\n5. **Badge:** An optional badge to display a count or a status.\n6. **Dismiss Button:** An optional button to remove the chip.\n\nhttps://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2066-19&m=dev";
+    ds:usage "### 1. General Description\n\nThe Chip is used to represent a small piece of information in a compact and interactive way. It is a versatile component that can be used in a variety of situations.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Filters:** Use to represent a filter that has been applied.\n- **Selections:** Use to represent an item that has been selected.\n- **Tags:** Use to represent a tag that has been assigned to an item.\n\n2.2 When Not to Use\n\n- **Actions:** Do not use for actions. Use a Button instead.\n- **Long information:** Do not use for long pieces of information.\n\n";
+    ds:guidelines "### Accessibility\n\n- **Label:** Provide a clear and descriptive label for the chip.\n- **Focus state:** Provide a clear focus state for the chip.\n- **Dismiss button:** If the chip is dismissible, provide a clear and descriptive label for the dismiss button.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The value to be displayed in the chip.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "lead";
+        ds:summary "Optional text to be displayed before the value.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "null"
+    ], [
+        a ds:Property;
+        ds:name "icon";
+        ds:summary "Optional icon to be displayed in the chip.";
+        ds:propertyType "node";
+        ds:optional "true";
+        ds:defaultValue "null"
+    ], [
+        a ds:Property;
+        ds:name "badge";
+        ds:summary "Optional badge to be displayed in the chip.";
+        ds:propertyType "node";
+        ds:optional "true";
+        ds:defaultValue "null"
+    ], [
+        a ds:Property;
+        ds:name "dismissible";
+        ds:summary "Whether the chip can be dismissed or not.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ].

@@ -1,0 +1,30 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The truncated value's disclosure structure belongs to Expandable Truncation rather
+# than being repeated as a sibling of every item.
+node:
+  # role: responsive boundary
+  uri: apps_landscape.pattern.information_grid
+  edges:
+    - node:
+        role: value collection
+        edges:
+          - node:
+              role: grid item
+              edges:
+                - node:
+                    role: value identifier
+                  relation:
+                    cardinality: "1"
+                    slotName: label
+                - node:
+                    role: read-only content
+                    # Renders regular content, a fixed mask, expandable truncation, or
+                    # the no-data state.
+                  relation:
+                    cardinality: "1"
+                    slotName: value
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "1"

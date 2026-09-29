@@ -1,0 +1,824 @@
+@prefix anatomy: <https://anatomy.canonical.com/> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+# The token graph. A consumed symbol is a dt: IRI, and SymbolListShape
+# constrains every member of anatomy:consumes to one.
+@prefix dt:      <https://dt.canonical.com/> .
+# The design system graph. Bound because ds:TokenBinding reuses
+# anatomy:styleKey and anatomy:styleState, and a reader of these shapes needs
+# the other end of that reuse in front of them.
+@prefix ds:      <https://ds.canonical.com/> .
+
+# ═══════════════════════════════════════════════════════════════
+# SHACL SHAPES FOR ANATOMY DSL 0.4.0
+# ═══════════════════════════════════════════════════════════════
+#
+# Constraints, patterns, enumerations, and encoding conventions.
+# Semantic definitions live in ontology.ttl.
+#
+# Shapes:
+#   SpecificationShape  — root document
+#   NamedNodeShape      — uri required, encoding pattern, props allowed,
+#                         edges and styles well-formed
+#   AnonymousNodeShape  — role required, props forbidden,
+#                         edges and styles well-formed
+#   EdgeShape           — edgeTarget XOR edgeSwitch
+#   RelationShape       — cardinality pattern, optional slotName,
+#                         optional traversal projection (field required)
+#   SwitchShape         — discriminator enum, minimum cases
+#   SwitchCaseShape     — case node required
+#   StyleShape          — reified key-value tuple (one key, one value,
+#                         optional closed-vocabulary interaction state);
+#                         targeted by PREDICATE, since style tuples carry
+#                         no rdf:type — see the shape for why
+#   ProjectionShape     — at least one of projectionType/projectionField
+#   PropShape           — reified name-value tuple (one name, one value)
+# ═══════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────
+# SPECIFICATION
+# ───────────────────────────────────────────────────────────────
+
+anatomy:SpecificationShape a sh:NodeShape ;
+    sh:targetClass anatomy:Specification ;
+    rdfs:label "Specification Shape" ;
+    skos:definition "Root document constraints." ;
+
+    sh:property [
+        sh:path anatomy:rootNode ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class anatomy:NamedNode ;
+        sh:message "Specification requires exactly one rootNode of type NamedNode." ;
+    ] .
+
+# ───────────────────────────────────────────────────────────────
+# NAMED NODE
+# ───────────────────────────────────────────────────────────────
+
+anatomy:NamedNodeShape a sh:NodeShape ;
+    sh:targetClass anatomy:NamedNode ;
+    rdfs:label "Named Node Shape" ;
+    skos:definition "URI encoding and presence constraints." ;
+
+    sh:property [
+        sh:path anatomy:uri ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:message "NamedNode requires exactly one non-empty uri." ;
+    ] ;
+
+    # URI encoding: dot-separated hierarchy, underscore for PascalCase
+    # word boundaries, hyphen for compound names from dotted labels.
+    # Reserved value "$custom" for consumer-provided components.
+    sh:property [
+        sh:path anatomy:uri ;
+        sh:pattern "^(\\$custom|[a-z][a-z0-9_-]*(\\.[a-z][a-z0-9_-]*)*)$" ;
+        sh:message "URI must be dot-separated lowercase path or '$custom'." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:role ;
+        sh:maxCount 0 ;
+        sh:message "NamedNode must not have a role (use AnonymousNode instead)." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasProjection ;
+        sh:maxCount 1 ;
+        sh:class anatomy:Projection ;
+        sh:message "NamedNode admits at most one projection." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasProp ;
+        sh:class anatomy:Prop ;
+        sh:message "hasProp must point at a Prop." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasEdge ;
+        sh:class anatomy:Edge ;
+        sh:message "hasEdge must point at an Edge." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasStyle ;
+        # Written as a negation rather than as sh:nodeKind
+        # sh:BlankNodeOrIRI, which is the same constraint: sem 0.1.0-alpha.2
+        # reports every blank-node style tuple as a violation of the nodeKind
+        # form, while rdf-validate-shacl accepts them. The negation is what
+        # the message says anyway, and both engines agree on it.
+        sh:not [ sh:nodeKind sh:Literal ] ;
+        sh:message "hasStyle must point at a style tuple, not a literal." ;
+    ] .
+
+# ───────────────────────────────────────────────────────────────
+# ANONYMOUS NODE
+# ───────────────────────────────────────────────────────────────
+
+anatomy:AnonymousNodeShape a sh:NodeShape ;
+    sh:targetClass anatomy:AnonymousNode ;
+    rdfs:label "Anonymous Node Shape" ;
+    skos:definition "Role presence and uri exclusion." ;
+
+    sh:property [
+        sh:path anatomy:role ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:message "AnonymousNode requires exactly one non-empty role." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:uri ;
+        sh:maxCount 0 ;
+        sh:message "AnonymousNode must not have a uri (use NamedNode instead)." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasProjection ;
+        sh:maxCount 1 ;
+        sh:class anatomy:Projection ;
+        sh:message "AnonymousNode admits at most one projection." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasProp ;
+        sh:maxCount 0 ;
+        sh:message "Props belong to components: anonymous nodes have no prop surface to pin — use a NamedNode." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasEdge ;
+        sh:class anatomy:Edge ;
+        sh:message "hasEdge must point at an Edge." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasStyle ;
+        # Written as a negation rather than as sh:nodeKind
+        # sh:BlankNodeOrIRI, which is the same constraint: sem 0.1.0-alpha.2
+        # reports every blank-node style tuple as a violation of the nodeKind
+        # form, while rdf-validate-shacl accepts them. The negation is what
+        # the message says anyway, and both engines agree on it.
+        sh:not [ sh:nodeKind sh:Literal ] ;
+        sh:message "hasStyle must point at a style tuple, not a literal." ;
+    ] .
+
+# ───────────────────────────────────────────────────────────────
+# EDGE
+# ───────────────────────────────────────────────────────────────
+
+anatomy:EdgeShape a sh:NodeShape ;
+    sh:targetClass anatomy:Edge ;
+    rdfs:label "Edge Shape" ;
+    skos:definition "Mutual exclusivity of edgeTarget and edgeSwitch." ;
+
+    sh:property [
+        sh:path anatomy:hasRelation ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class anatomy:Relation ;
+        sh:message "Edge requires exactly one relation." ;
+    ] ;
+
+    sh:or (
+        [
+            sh:property [
+                sh:path anatomy:edgeTarget ;
+                sh:minCount 1 ;
+                sh:maxCount 1 ;
+            ] ;
+            sh:property [
+                sh:path anatomy:edgeSwitch ;
+                sh:maxCount 0 ;
+            ] ;
+        ]
+        [
+            sh:property [
+                sh:path anatomy:edgeSwitch ;
+                sh:minCount 1 ;
+                sh:maxCount 1 ;
+            ] ;
+            sh:property [
+                sh:path anatomy:edgeTarget ;
+                sh:maxCount 0 ;
+            ] ;
+        ]
+    ) ;
+    sh:message "Edge requires exactly one of edgeTarget or edgeSwitch." .
+
+# ───────────────────────────────────────────────────────────────
+# RELATION
+# ───────────────────────────────────────────────────────────────
+
+anatomy:RelationShape a sh:NodeShape ;
+    sh:targetClass anatomy:Relation ;
+    rdfs:label "Relation Shape" ;
+    skos:definition "Cardinality pattern and slotName constraints." ;
+
+    sh:property [
+        sh:path anatomy:cardinality ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^\\d+(\\.\\.(\\d+|\\*))?$" ;
+        sh:message "Cardinality must match: digit+ ('..' (digit+ | '*'))?" ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:slotName ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+    ] ;
+
+    # A relation projection is a traversal: the field is mandatory.
+    # Type narrowing belongs on the child node, never on the relation.
+    sh:property [
+        sh:path anatomy:hasProjection ;
+        sh:maxCount 1 ;
+        sh:class anatomy:Projection ;
+        sh:node [
+            a sh:NodeShape ;
+            sh:property [
+                sh:path anatomy:projectionField ;
+                sh:minCount 1 ;
+                sh:message "Relation projections must name the traversal field." ;
+            ] ;
+            sh:property [
+                sh:path anatomy:projectionType ;
+                sh:maxCount 0 ;
+                sh:message "Type narrowing lives on the child node, not the relation." ;
+            ] ;
+        ] ;
+        sh:message "Relation admits at most one projection, and it must be a traversal (projectionField, no projectionType)." ;
+    ] .
+
+# ───────────────────────────────────────────────────────────────
+# SWITCH
+# ───────────────────────────────────────────────────────────────
+
+anatomy:SwitchShape a sh:NodeShape ;
+    sh:targetClass anatomy:Switch ;
+    rdfs:label "Switch Shape" ;
+    skos:definition "Discriminator vocabulary and minimum case count." ;
+
+    sh:property [
+        sh:path anatomy:discriminator ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:in ( "props" "internal" "override" ) ;
+        sh:message "Discriminator must be one of: props, internal, override." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:hasCase ;
+        sh:minCount 2 ;
+        sh:class anatomy:SwitchCase ;
+        sh:message "Switch requires at least two cases." ;
+    ] .
+
+# ───────────────────────────────────────────────────────────────
+# SWITCH CASE
+# ───────────────────────────────────────────────────────────────
+
+anatomy:SwitchCaseShape a sh:NodeShape ;
+    sh:targetClass anatomy:SwitchCase ;
+    rdfs:label "Switch Case Shape" ;
+    skos:definition "Each case resolves to a node." ;
+
+    sh:property [
+        sh:path anatomy:caseNode ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class anatomy:Node ;
+        sh:message "SwitchCase requires exactly one caseNode." ;
+    ] .
+
+# ───────────────────────────────────────────────────────────────
+# STYLE
+# ───────────────────────────────────────────────────────────────
+
+# Targeted by PREDICATE as well as by class, and the predicate target is the
+# one that does the work. Prop and Projection tuples carry an explicit
+# rdf:type (":hasProp [ a :Prop ; … ]"), so sh:targetClass reaches them;
+# style tuples do not (":hasStyle [ :styleKey … ; :styleValue … ]"), so a
+# class target alone matched NOTHING the transform emits and every
+# constraint below was inert — the CTI key pattern and the styleState
+# vocabulary included. sh:targetObjectsOf reaches them where they are.
+#
+# The alternative is to emit "a :Style" from the transform and rewrite the
+# golden pairs. That is the more uniform data model and worth doing on its
+# own terms; this shape is correct either way, since both targets stay.
+anatomy:StyleShape a sh:NodeShape ;
+    sh:targetClass anatomy:Style ;
+    sh:targetObjectsOf anatomy:hasStyle ;
+    rdfs:label "Style Shape" ;
+    skos:definition "Reified key-value tuple: exactly one key and one value." ;
+
+    # The key vocabulary is CLOSED, as styleState already is: one
+    # anatomy:StyleKey individual per canonical key in registry.ttl, whose
+    # roster is style-keys.yaml — measured over the reference stylesheets,
+    # with its provenance stated there and in registry.ttl. The sh:in below
+    # is PROJECTED from that roster by `bun run generate:shapes` and diffed
+    # in CI — never hand-edited.
+    #
+    # The pattern is the Path production of §4.1, not the old all-lowercase
+    # CTI one: a Key and a Symbol are one shape and the registry tells them
+    # apart, so a key may carry a camelCase segment
+    # (typography.lineHeight) exactly as a symbol may (color.focusRing).
+    sh:property [
+        sh:path anatomy:styleKey ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[a-z]+(\\.[A-Za-z0-9]+)+$" ;
+        sh:message "Style key must be a dotted path: a lowercase namespace then one or more segments." ;
+        # BEGIN GENERATED styleKey sh:in — bun run generate:shapes
+        sh:in (
+            "appearance.background"
+            "appearance.background.image"
+            "appearance.background.position"
+            "appearance.background.repeat"
+            "appearance.background.size"
+            "appearance.border.block.start.color"
+            "appearance.border.bottom.color"
+            "appearance.border.color"
+            "appearance.border.inline.end.color"
+            "appearance.border.style"
+            "appearance.border.top.width"
+            "appearance.border.width"
+            "appearance.native"
+            "appearance.opacity"
+            "appearance.outline.color"
+            "appearance.outline.offset"
+            "appearance.outline.style"
+            "appearance.outline.width"
+            "appearance.radius"
+            "appearance.visibility"
+            "interaction.cursor"
+            "interaction.pointerEvents"
+            "interaction.resize"
+            "interaction.select"
+            "layout.align"
+            "layout.alignContent"
+            "layout.alignSelf"
+            "layout.boxSizing"
+            "layout.container"
+            "layout.direction"
+            "layout.flex.basis"
+            "layout.flex.grow"
+            "layout.flex.shrink"
+            "layout.grid.area"
+            "layout.grid.autoFlow"
+            "layout.grid.autoRows"
+            "layout.grid.column"
+            "layout.grid.columns"
+            "layout.grid.row"
+            "layout.grid.rows"
+            "layout.justify"
+            "layout.listStyle"
+            "layout.objectFit"
+            "layout.offset.block.end"
+            "layout.offset.block.start"
+            "layout.offset.bottom"
+            "layout.offset.inline.start"
+            "layout.offset.left"
+            "layout.offset.right"
+            "layout.offset.top"
+            "layout.order"
+            "layout.overflow"
+            "layout.overflow.block"
+            "layout.overflow.inline"
+            "layout.overscroll"
+            "layout.position"
+            "layout.stack"
+            "layout.table.collapse"
+            "layout.table.layout"
+            "layout.table.spacing"
+            "layout.type"
+            "layout.verticalAlign"
+            "layout.wrap"
+            "motion.duration"
+            "motion.easing"
+            "motion.property"
+            "size.block"
+            "size.height"
+            "size.inline"
+            "size.max.block"
+            "size.max.height"
+            "size.max.width"
+            "size.min.block"
+            "size.min.height"
+            "size.min.width"
+            "size.width"
+            "spacing.external.block.end"
+            "spacing.external.block.start"
+            "spacing.external.bottom"
+            "spacing.external.inline.end"
+            "spacing.external.inline.start"
+            "spacing.external.left"
+            "spacing.external.right"
+            "spacing.external.top"
+            "spacing.gap"
+            "spacing.gap.block"
+            "spacing.gap.inline"
+            "spacing.internal.block.end"
+            "spacing.internal.block.start"
+            "spacing.internal.bottom"
+            "spacing.internal.inline.end"
+            "spacing.internal.inline.start"
+            "spacing.internal.left"
+            "spacing.internal.top"
+            "typography.align"
+            "typography.color"
+            "typography.decoration"
+            "typography.decoration.offset"
+            "typography.decoration.thickness"
+            "typography.direction"
+            "typography.font"
+            "typography.fontFamily"
+            "typography.letterSpacing"
+            "typography.lineHeight"
+            "typography.overflow"
+            "typography.size"
+            "typography.variant.caps"
+            "typography.variant.numeric"
+            "typography.weight"
+            "typography.whiteSpace"
+            "typography.wrap"
+        ) ;
+        # END GENERATED styleKey sh:in
+    ] ;
+
+    # The authored spelling, verbatim, as the evidence of what the reference
+    # says: a scalar as written, a sequence in its flow form. The symbols are
+    # NOT re-derived from it — anatomy:consumes carries them — so the three
+    # constraints here are only that the retired notation cannot reach the
+    # graph through it.
+    sh:property [
+        sh:path anatomy:styleValue ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Style requires exactly one value." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:styleValue ;
+        # The slash-delimited path is retired (AT.01). Anchored on the whole
+        # value, so a literal that merely holds a slash between spaces
+        # ("1 / -1", a grid line the reference writes 42 times) is untouched.
+        sh:not [ sh:pattern "^[A-Za-z0-9-]+(/[A-Za-z0-9-]+)+\\??$" ] ;
+        sh:message "The slash-delimited token path is retired: write the symbol's own dotted name." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:styleValue ;
+        # The trailing "?" marker is retired (AT.03). An element that
+        # resolves nowhere is a register row and a comment, not a sigil.
+        sh:not [ sh:pattern "\\?$" ] ;
+        sh:message "The trailing '?' optional marker is retired: an unresolved element is a register row and a comment." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:styleValue ;
+        sh:not [ sh:pattern "(^|[./])\\$?root([./]|$)" ] ;
+        sh:message "'root' and '$root' are not value segments." ;
+    ] ;
+
+    # THE SEAM. An rdf:List of dt:TokenSymbol IRIs in fallback order, whose
+    # head is the primary symbol; the authored spelling stays in styleValue as
+    # evidence. Whether a key carries one is the registry's business, and the
+    # generated sh:or below is where that is said.
+    sh:property [
+        sh:path anatomy:consumes ;
+        sh:maxCount 1 ;
+        sh:node anatomy:SymbolListShape ;
+        sh:message "consumes must be one rdf:List of dt: token symbols, in fallback order." ;
+    ] ;
+
+    # Closed v1 vocabulary, registry-governed. Additions go through the
+    # registry (checked, visited, dragged, pending, error, read-only are
+    # candidates), never through loosening this list ad hoc. There is no
+    # "default" state: an absent styleState IS the default.
+    #
+    # expanded, indeterminate and invalid entered that way, and the line they
+    # sit on is worth stating: a state is admitted where the implementation
+    # RE-VALUES a channel in it, and refused where it changes what exists. A
+    # disclosure header with a different background while open is the first;
+    # the panel that exists only while open is the second, and stays the
+    # Switch construct's.
+    #
+    # A state value that differs from its base state's is a LINT, not a
+    # constraint (AT.11): the reference does it — Button's :disabled reads a
+    # different symbol — so it is reported with its ranks and never rejected,
+    # and the report lives in design-system's validator, not here.
+    sh:property [
+        sh:path anatomy:styleState ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:in ( "hover" "active" "focus" "disabled" "selected" "expanded" "indeterminate" "invalid" ) ;
+        sh:message "styleState must be one of: hover, active, focus, disabled, selected, expanded, indeterminate, invalid (absent = default state)." ;
+    ] ;
+
+    # BEGIN GENERATED valueKind sh:or — bun run generate:shapes
+    sh:or (
+        [   # a primitive key: a literal, and nothing consumed
+            sh:property [
+                sh:path anatomy:styleKey ;
+                sh:in (
+                    "appearance.background.image"
+                    "appearance.background.position"
+                    "appearance.background.repeat"
+                    "appearance.background.size"
+                    "appearance.border.style"
+                    "appearance.native"
+                    "appearance.opacity"
+                    "appearance.outline.style"
+                    "appearance.visibility"
+                    "interaction.cursor"
+                    "interaction.pointerEvents"
+                    "interaction.resize"
+                    "interaction.select"
+                    "layout.align"
+                    "layout.alignContent"
+                    "layout.alignSelf"
+                    "layout.boxSizing"
+                    "layout.container"
+                    "layout.direction"
+                    "layout.flex.grow"
+                    "layout.flex.shrink"
+                    "layout.grid.area"
+                    "layout.grid.autoFlow"
+                    "layout.grid.autoRows"
+                    "layout.grid.column"
+                    "layout.grid.columns"
+                    "layout.grid.row"
+                    "layout.grid.rows"
+                    "layout.justify"
+                    "layout.listStyle"
+                    "layout.objectFit"
+                    "layout.order"
+                    "layout.overflow"
+                    "layout.overflow.block"
+                    "layout.overflow.inline"
+                    "layout.overscroll"
+                    "layout.position"
+                    "layout.stack"
+                    "layout.table.collapse"
+                    "layout.table.layout"
+                    "layout.table.spacing"
+                    "layout.type"
+                    "layout.verticalAlign"
+                    "layout.wrap"
+                    "motion.property"
+                    "typography.align"
+                    "typography.decoration"
+                    "typography.direction"
+                    "typography.overflow"
+                    "typography.variant.caps"
+                    "typography.variant.numeric"
+                    "typography.whiteSpace"
+                    "typography.wrap"
+                ) ;
+            ] ;
+            sh:property [ sh:path anatomy:consumes ; sh:maxCount 0 ] ;
+            sh:property [
+                sh:path anatomy:styleValue ;
+                sh:not [ sh:pattern "^[a-z]+(\\.[A-Za-z0-9]+)+$" ] ;
+            ] ;
+        ]
+        [   # a token key: the symbols are consumed, always
+            sh:property [
+                sh:path anatomy:styleKey ;
+                sh:in (
+                    "appearance.border.block.start.color"
+                    "appearance.border.bottom.color"
+                    "appearance.border.inline.end.color"
+                    "layout.offset.block.end"
+                    "layout.offset.block.start"
+                    "layout.offset.inline.start"
+                    "size.inline"
+                    "size.max.block"
+                    "size.min.block"
+                    "size.min.height"
+                    "spacing.gap.block"
+                    "spacing.gap.inline"
+                    "typography.decoration.offset"
+                ) ;
+            ] ;
+            sh:property [ sh:path anatomy:consumes ; sh:minCount 1 ] ;
+        ]
+        [   # an either key, consuming symbols
+            sh:property [
+                sh:path anatomy:styleKey ;
+                sh:in (
+                    "appearance.background"
+                    "appearance.border.color"
+                    "appearance.border.top.width"
+                    "appearance.border.width"
+                    "appearance.outline.color"
+                    "appearance.outline.offset"
+                    "appearance.outline.width"
+                    "appearance.radius"
+                    "layout.flex.basis"
+                    "layout.offset.bottom"
+                    "layout.offset.left"
+                    "layout.offset.right"
+                    "layout.offset.top"
+                    "motion.duration"
+                    "motion.easing"
+                    "size.block"
+                    "size.height"
+                    "size.max.height"
+                    "size.max.width"
+                    "size.min.width"
+                    "size.width"
+                    "spacing.external.block.end"
+                    "spacing.external.block.start"
+                    "spacing.external.bottom"
+                    "spacing.external.inline.end"
+                    "spacing.external.inline.start"
+                    "spacing.external.left"
+                    "spacing.external.right"
+                    "spacing.external.top"
+                    "spacing.gap"
+                    "spacing.internal.block.end"
+                    "spacing.internal.block.start"
+                    "spacing.internal.bottom"
+                    "spacing.internal.inline.end"
+                    "spacing.internal.inline.start"
+                    "spacing.internal.left"
+                    "spacing.internal.top"
+                    "typography.color"
+                    "typography.decoration.thickness"
+                    "typography.font"
+                    "typography.fontFamily"
+                    "typography.letterSpacing"
+                    "typography.lineHeight"
+                    "typography.size"
+                    "typography.weight"
+                ) ;
+            ] ;
+            sh:property [ sh:path anatomy:consumes ; sh:minCount 1 ] ;
+        ]
+        [   # an either key, carrying a primitive
+            sh:property [
+                sh:path anatomy:styleKey ;
+                sh:in (
+                    "appearance.background"
+                    "appearance.border.color"
+                    "appearance.border.top.width"
+                    "appearance.border.width"
+                    "appearance.outline.color"
+                    "appearance.outline.offset"
+                    "appearance.outline.width"
+                    "appearance.radius"
+                    "layout.flex.basis"
+                    "layout.offset.bottom"
+                    "layout.offset.left"
+                    "layout.offset.right"
+                    "layout.offset.top"
+                    "motion.duration"
+                    "motion.easing"
+                    "size.block"
+                    "size.height"
+                    "size.max.height"
+                    "size.max.width"
+                    "size.min.width"
+                    "size.width"
+                    "spacing.external.block.end"
+                    "spacing.external.block.start"
+                    "spacing.external.bottom"
+                    "spacing.external.inline.end"
+                    "spacing.external.inline.start"
+                    "spacing.external.left"
+                    "spacing.external.right"
+                    "spacing.external.top"
+                    "spacing.gap"
+                    "spacing.internal.block.end"
+                    "spacing.internal.block.start"
+                    "spacing.internal.bottom"
+                    "spacing.internal.inline.end"
+                    "spacing.internal.inline.start"
+                    "spacing.internal.left"
+                    "spacing.internal.top"
+                    "typography.color"
+                    "typography.decoration.thickness"
+                    "typography.font"
+                    "typography.fontFamily"
+                    "typography.letterSpacing"
+                    "typography.lineHeight"
+                    "typography.size"
+                    "typography.weight"
+                ) ;
+            ] ;
+            sh:property [ sh:path anatomy:consumes ; sh:maxCount 0 ] ;
+            sh:property [
+                sh:path anatomy:styleValue ;
+                sh:not [ sh:pattern "^[a-z]+(\\.[A-Za-z0-9]+)+$" ] ;
+            ] ;
+        ]
+    ) ;
+    sh:message "A style tuple must match its key's valueKind: a token key consumes symbols, a primitive key carries a literal and consumes none, an either key does one or the other." ;
+    # END GENERATED valueKind sh:or
+    rdfs:comment "The valueKind disjunction above is generated from registry.ttl." .
+
+# ───────────────────────────────────────────────────────────────
+# SYMBOL LIST
+# ───────────────────────────────────────────────────────────────
+
+anatomy:SymbolListShape a sh:NodeShape ;
+    rdfs:label "Symbol List Shape" ;
+    skos:definition """The shape of anatomy:consumes: every member of the
+    rdf:List is an IRI in the token graph's namespace whose local name is a
+    dotted symbol. The list is the fallback order, so its head is the primary
+    symbol; a member that is a literal, a blank node or an IRI outside dt: is
+    a violation. Whether a member RESOLVES — whether the token graph declares
+    that symbol — is not asked here: a name no stratum declares is kept as
+    consumed with a register row (AT.09), and the check belongs to the
+    consumer holding the strata.""" ;
+
+    sh:property [
+        sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:pattern "^https://dt\\.canonical\\.com/[a-z]+(\\.[A-Za-z0-9]+)+$" ;
+        sh:message "Every consumed element must be a dt: token symbol IRI with a dotted local name." ;
+    ] .
+
+# ───────────────────────────────────────────────────────────────
+# PROJECTION
+# ───────────────────────────────────────────────────────────────
+
+anatomy:ProjectionShape a sh:NodeShape ;
+    sh:targetClass anatomy:Projection ;
+    rdfs:label "Projection Shape" ;
+    skos:definition "Fragment-style graph binding: a type condition, a field path, or both — never neither." ;
+
+    sh:property [
+        sh:path anatomy:projectionType ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[A-Z][A-Za-z0-9_]*$" ;
+        sh:message "Projection type must be a GraphQL type name (PascalCase)." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:projectionField ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[_A-Za-z][_A-Za-z0-9]*(\\.[_A-Za-z][_A-Za-z0-9]*)*$" ;
+        sh:message "Projection field must be a dot-delimited path of GraphQL field names." ;
+    ] ;
+
+    sh:or (
+        [
+            sh:property [
+                sh:path anatomy:projectionType ;
+                sh:minCount 1 ;
+            ] ;
+        ]
+        [
+            sh:property [
+                sh:path anatomy:projectionField ;
+                sh:minCount 1 ;
+            ] ;
+        ]
+    ) ;
+    sh:message "Projection requires at least one of projectionType or projectionField." .
+
+# ───────────────────────────────────────────────────────────────
+# PROP
+# ───────────────────────────────────────────────────────────────
+
+anatomy:PropShape a sh:NodeShape ;
+    sh:targetClass anatomy:Prop ;
+    rdfs:label "Prop Shape" ;
+    skos:definition "Reified pinned-prop tuple: exactly one name and one value. Whether the prop exists on the referenced component is validated by consumers holding the design system graph, not here." ;
+
+    sh:property [
+        sh:path anatomy:propName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[a-z][a-zA-Z0-9]*$" ;
+        sh:message "Prop name must be a camelCase identifier as defined on the component." ;
+    ] ;
+
+    sh:property [
+        sh:path anatomy:propValue ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Prop requires exactly one value." ;
+    ] .

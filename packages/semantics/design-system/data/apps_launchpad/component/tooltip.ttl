@@ -1,0 +1,34 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.tooltip a ds:Component;
+    ds:name "Tooltip";
+    ds:summary "The **Tooltip** is a small pop-up box that appears when a user hovers over an element. It provides additional information about the element, such as its name or a brief description.\n\n**Main Use Cases:**\n\n- **Clarification:** Provide more information about an icon or a button.\n- **Hints:** Offer hints or instructions for a form field.\n- **Data Visualization:** Show the exact value of a data point on a chart.\n\n";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.tooltip\n  styles:\n    layout.display: contents\n  edges:\n    - node:\n        role: trigger\n        edges:\n          - node:\n              role: trigger element\n            relation:\n              cardinality: \"1\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n        slotName: trigger\n    - node:\n        role: popup\n        styles:\n          layout.display: block\n          position.type: absolute\n          appearance.background: color/background/inverted\n          appearance.border: border/style/none\n          appearance.radius: radius/small\n          appearance.shadow: shadow/overlay/default\n          typography.color: color/text/inverted\n          typography.size: typography/paragraph/extra-small\n        edges:\n          - node: \n              role: content\n            relation:\n              cardinality: \"1\"\n              slotName: default\n      relation:\n        cardinality: \"0..1\"";
+    ds:anatomyClassic "The Tooltip is composed of a trigger element and a popup.\n\n1. **Trigger:** The element that the user hovers over to show the tooltip.\n2. **Popup:** The box that appears with the additional information.\n3. **Content:** The text or other content inside the popup.\n\nhttps://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2066-52";
+    ds:usage "### 1. General Description\n\nTooltips are used to provide additional information that is not critical to the user’s workflow. They should be used sparingly, as they can be distracting if overused.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Non-essential information:** Use for information that is helpful but not essential.\n- **Space constraints:** Use when you have limited space and cannot display the information directly.\n\n2.2 When Not to Use\n\n- **Critical information:** Do not use for information that is critical to the user’s task.\n- **Long content:** Do not use for long-form content. Keep the content of the tooltip short and concise.";
+    ds:guidelines "### Accessibility\n\n- **Focusable elements:** Tooltips should only be used on focusable elements, such as buttons and links.\n- **Keyboard accessible:** The tooltip content should be accessible to keyboard users.\n\n### Keyboard Navigation\n\n- **Focus:** When the trigger element receives focus, the tooltip should appear.\n- **Escape:** Pressing the Escape key should dismiss the tooltip.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "content";
+        ds:summary "The content to be displayed in the tooltip.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "position";
+        ds:summary "The position of the tooltip relative to the trigger.";
+        ds:propertyType "choice";
+        ds:optional "true";
+        ds:defaultValue "block-start";
+        ds:constraints "[<position-area>](https://developer.mozilla.org/en-US/docs/Web/CSS/position-area)"
+    ], [
+        a ds:Property;
+        ds:name "delay";
+        ds:summary "The delay in milliseconds before the tooltip appears.";
+        ds:propertyType "number";
+        ds:optional "true";
+        ds:defaultValue "350"
+    ].

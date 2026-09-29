@@ -1,0 +1,28 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.combobox-search a ds:Subcomponent;
+    ds:name "Combobox.Search";
+    ds:summary "The **Combobox Search** is a subcomponent of the Combobox that provides a search input field to filter the options.\n\n**Main Use Cases:**\n\n- **Filtering:** Allow users to filter a long list of options.\n- **Search:** Provide a quick way to find a specific option.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.subcomponent.combobox.search\n  styles:\n    layout.display: flex\n    layout.direction: vertical\n    spacing.gap: spacing/inline/small\n  edges:\n    - node:\n        uri: app-launchpad.component.search-box\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "The Combobox Search is composed of a main container that holds a SearchBox component.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the search input.\n2. **SearchBox:** The input field where the user can type their search query.";
+    ds:usage "### 1. General Description\n\nThe Combobox Search is used to provide a search functionality within a Combobox. It is particularly useful when the Combobox has a large number of options.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Long lists:** Use when you have a long list of options that is difficult to navigate.\n- **Filtering:** Use to provide a powerful filtering mechanism.\n\n2.2 When Not to Use\n\n- **Short lists:** Do not use for short lists of options that can be easily scanned.";
+    ds:guidelines "### Accessibility\n\n- **Label:** Provide a clear label for the search input.\n- **Focus management:** Ensure that the focus is managed correctly when the search input is used.\n\n";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The current value of the search input.";
+        ds:propertyType "text";
+        ds:defaultValue "“”";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "placeholder";
+        ds:summary "The placeholder text for the search input.";
+        ds:propertyType "text";
+        ds:defaultValue "Search...";
+        ds:optional "true"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.combobox.

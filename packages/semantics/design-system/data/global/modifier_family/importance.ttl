@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier_family.importance a ds:ModifierFamily;
+    ds:name "Importance";
+    ds:summary "";
+    ds:tier ds:global;
+    ds:hasModifier ds:global.modifier.tertiary, ds:global.modifier.secondary, ds:global.modifier.primary.

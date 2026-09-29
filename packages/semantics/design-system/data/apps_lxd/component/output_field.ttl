@@ -1,0 +1,50 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.component.output_field a ds:Component;
+    ds:name "OutputField";
+    ds:summary "The OutputField component is a read-only display element that presents labelled information in a consistent, structured format. Use output fields to display read-only information with a label and optional help text. Output fields are ideal for displaying calculated values or results of user input in a consistent format, making them well suited for form contexts where certain values are derived or system-generated rather than directly editable by the user.";
+    ds:anatomyDsl "node:\n  uri: core:component:OutputField\n  styles:\n    # Structural (implicitly invariant)\n    layout.type: stack\n    layout.direction: vertical\n\n  edges:\n    - node:\n        uri: core:element:OutputFieldLabel\n        styles:\n          # Themeable\n          typography.color: color/text/label\n          typography.size: font/size/small\n        relation:\n          cardinality: \"1..1\"\n          slotName: label\n\n    - node:\n        uri: core:element:OutputFieldValue\n        styles:\n          # Themeable\n          typography.color: color/text/primary\n          typography.weight: font/weight/bold\n        relation:\n          cardinality: \"1..1\"\n          slotName: default\n\n    - node:\n        uri: core:element:OutputFieldHelpText\n        styles:\n          # Themeable\n          typography.color: color/text/muted\n          typography.size: font/size/small\n        relation:\n          cardinality: \"0..1\"\n          slotName: help";
+    ds:anatomyClassic " ";
+    ds:usage "**General description**\n\nThe OutputField component is a read-only display element that presents labelled information in a consistent, structured format. It pairs a descriptive label with a value to clearly communicate calculated results, system-generated data, or information that the user should see but not edit. An optional help text provides additional context where needed.\n\n**When to use**\n\nUse the OutputField component when you need to display information that is the result of user input, a system calculation, or a read-only property within a form or detail view, where visual consistency with surrounding form fields is important.\n\n*Example: displaying the automatically calculated CIDR range after a user configures a network subnet, shown as \"IPv4 address\" with value \"10.0.0.0/24\" alongside editable fields in the same form.*\n\n**When not to use**\n\n- Avoid using the OutputField component when the information being displayed is not directly related to form input or output — use plain text, a description list, or a summary table instead.\n- Do not use it for values the user should be able to edit, as the read-only presentation may cause confusion. \n- Avoid it for long-form content or rich text, as it is designed for concise single-value display.";
+    ds:guidelines "";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "Label";
+        ds:summary "The label for the output field.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Id";
+        ds:summary "The id of the output element. This is used to associate the label with the output element for form or accessibility purposes.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Value";
+        ds:summary "The value to be displayed in the output field.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Help";
+        ds:summary "Optional help text to provide additional information about the output field.";
+        ds:propertyType "ReactNode";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Required";
+        ds:summary "Whether the output field is required.";
+        ds:propertyType "boolean";
+        ds:optional "true"
+    ];
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-04-16T00:00:00.000+02:00";
+        ds:change "Added to React Components";
+        ds:changeType "decision";
+        ds:githubLink "https://github.com/canonical/react-components/pull/1346"
+    ].

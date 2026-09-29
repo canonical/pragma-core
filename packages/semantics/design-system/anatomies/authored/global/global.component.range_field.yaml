@@ -1,0 +1,93 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form src/lib/common/Wrapper/styles.css on .ds.field
+# and src/lib/component/RangeField/common/RangeControl/styles.css on .ds.range-control
+# The field chrome is the shared Wrapper's; the payload holds a control row of
+# two controls for one value. The CANONICAL control is the number input — it
+# carries the field name and id and is the target of the real <label for> — and
+# the slider is a mirror appended on hydration. The number input stays FIRST in
+# the DOM and is moved to the inline end with `order`, so it follows the
+# writing direction. Each control's own styles live in its own anatomy.
+node:
+  uri: global.component.range_field
+  styles:
+    layout.type: grid
+    layout.grid.columns: subgrid
+    # reads --form-field-columns.
+    layout.grid.column: "1 / -1"
+    layout.align: baseline
+    # reads --form-field-label-gap (--space-100 -> --dimension-100).
+    spacing.gap.block: spacing.gap.field.block
+  edges:
+    - node:
+        uri: global.subcomponent.field-label
+        styles:
+          layout.grid.column: "1 / -1"
+      relation:
+        cardinality: "1"
+        slotName: label
+    - node:
+        role: payload
+        styles:
+          layout.type: grid
+          layout.grid.columns: subgrid
+          layout.grid.column: "1 / -1"
+          # reads --form-group-gap (--space-100 -> --dimension-100).
+          spacing.gap.block: spacing.gap.field.block
+        edges:
+          - node:
+              uri: global.subcomponent.field-description
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "0..1"
+              slotName: description
+          - node:
+              role: range control row
+              styles:
+                layout.type: flex
+                layout.direction: row
+                layout.align: center
+                layout.grid.column: "1 / -1"
+                # reads --form-group-gap (--dimension-100) as the inline gap
+                # between the slider and the number input.
+                spacing.gap: spacing.gap.field.block
+              edges:
+                - node:
+                    uri: global.subcomponent.number_input
+                    styles:
+                      # Ordered last so it paints at the inline end, at a
+                      # fixed non-flexing width; reads
+                      # --form-range-number-width, a component-local size
+                      # whose chain ends in its own 5rem literal.
+                      layout.order: 1
+                      layout.flex.grow: 0
+                      layout.flex.shrink: 0
+                      layout.flex.basis: 5rem
+                      size.width: 5rem
+                  relation:
+                    cardinality: "1"
+                    slotName: default
+                - node:
+                    uri: global.subcomponent.range_input
+                    styles:
+                      # The slider flexes to fill whatever the number input
+                      # leaves.
+                      layout.flex.grow: 1
+                      layout.flex.shrink: 1
+                      layout.flex.basis: auto
+                      size.min.width: 0
+                  relation:
+                    cardinality: "0..1"
+                    slotName: slider
+            relation:
+              cardinality: "1"
+              slotName: default
+          - node:
+              uri: global.subcomponent.field-error
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "0..1"
+              slotName: error
+      relation:
+        cardinality: "1"

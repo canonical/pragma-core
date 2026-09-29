@@ -1,0 +1,57 @@
+---
+node:
+  uri: global.subcomponent.status-header
+  projection:
+    on: Component
+  styles:
+    layout.type: flex
+    layout.align: center
+    spacing.gap: spacing.gap.mark.inline
+  edges:
+    - node:
+        uri: global.subcomponent.status-header-title
+        projection:
+          field: _meta.title
+        props:
+          truncate: true
+        styles:
+          typography.weight: typography.weight.semiBold
+          typography.overflow: ellipsis
+      relation:
+        cardinality: "1"
+        slotName: title
+    - switch:
+        on: internal
+        cases:
+          - node:
+              uri: global.component.icon
+              props:
+                icon: spinner
+          - node:
+              uri: global.component.icon
+              props:
+                icon: checkmark
+          - node:
+              uri: global.component.icon
+              props:
+                icon: error
+      relation:
+        cardinality: "0..1"
+        slotName: status
+    - node:
+        uri: global.component.icon
+        props:
+          icon: chevron-down
+        styles:
+          size.width: dimension.200
+          size.height: dimension.200
+          typography.color: [modifier.color.icon, color.icon.muted]
+      relation:
+        cardinality: "1"
+        slotName: expand-indicator
+    # Consumer-filled icon slot: no glyph pinned — the consumer chooses.
+    - node:
+        uri: global.component.icon
+      relation:
+        cardinality: "0..1"
+        slotName: leading-icon

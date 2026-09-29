@@ -1,0 +1,28 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # semantic: section; a11y labelled-by: generated heading id
+  uri: apps_landscape.component.form_section
+  edges:
+    - node:
+        role: responsive grid
+        styles:
+          layout.type: grid   # was layout.display: grid
+          layout.grid.columns: "minmax(19rem, 24rem) minmax(28rem, 1fr)"   # was layout.columns
+          # was spacing.gap: $spv--large $sph--x-large; no spacing symbol corresponds to
+          # Vanilla's large/x-large steps, and one key carries one gap
+        edges:
+          - node:
+              # semantic: h2
+              role: section heading
+            relation:
+              cardinality: "1"
+          - node:
+              role: settings content
+              styles:
+                size.min.width: 0   # was size.min-width: 0
+            relation:
+              cardinality: "1"
+              slotName: children
+      relation:
+        cardinality: "1"

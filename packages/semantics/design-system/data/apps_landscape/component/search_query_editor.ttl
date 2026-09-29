@@ -1,0 +1,149 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.search_query_editor a ds:Component;
+    ds:name "Search Query Editor";
+    ds:summary "A thin Landscape adapter wrapping the shared lazy-loaded `CodeEditor` component for structured search queries. It requires a Monaco `languageId`, search terms, domain vocabulary, and a `configureSearchLanguage` callback that runs only when terms are non-empty.\n\nMain use cases:\n\n- Edit Landscape search syntax with Monaco code-editing features and term-based autocomplete  \n- Integrate custom domain vocabularies (profiles, statuses, groups) into structured search  \n- Display validation errors and caution warnings with semantic form integration  \n- Control the query through `value` and `onChange` callbacks without built-in submission";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.search_query_editor\n  role: structured search query field\n  edges:\n    - node:\n        role: editor loading state\n        relation:\n          cardinality: \"0..1\"\n          condition: lazy CodeEditorInner or Monaco editor is loading\n    - node:\n        role: field header\n        edges:\n          - node:\n              semantic: label\n              role: field label\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: supporting header content\n              relation:\n                cardinality: \"0..1\"\n                slotName: headerContent\n        relation:\n          cardinality: \"1\"\n    - node:\n        role: Monaco query input\n        relation:\n          cardinality: \"1\"\n    - node:\n        role: error message\n        relation:\n          cardinality: \"0..1\"\n          condition: error is truthy\n    - node:\n        role: warning message\n        relation:\n          cardinality: \"0..1\"\n          condition: warning is truthy";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=26-4&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 51\n\n";
+    ds:usage "### When to use\n\n**Edit structured search syntax**\n\nUse when users compose a Landscape search grammar whose terms and domain values benefit from Monaco editing and caller-configured suggestions.\n\n**Configure a domain search language**\n\nUse when the caller owns a stable language ID, searchable terms, vocabulary arrays, registration lifecycle, validation, and backend compatibility.\n\n### When not to use\n\n**Enter plain search text**\n\nWhen users only enter unrestricted text with no structured grammar.\n\n**Incorrect pattern**: Using this component for a simple text field where no syntax, terms, or Monaco features are needed.\n\n**Remediation strategy**: Use a basic search input or TextField component for plain text queries.\n\n**Edit general source code**\n\nWhen the query language is not a search-specific syntax.\n\n**Incorrect pattern**: Using this adapter to edit shell scripts, JSON, or other programming languages that should use CodeEditor directly.\n\n**Remediation strategy**: Use the shared CodeEditor component directly and configure it for your language’s Monaco setup.\n\n**Server-only or asynchronous suggestions**\n\nWhen suggestions require fetching from the backend or dynamic term loading.\n\n**Incorrect pattern**: Expecting this adapter to fetch terms, debounce input, validate asynchronously, or display query/loading errors.\n\n**Remediation strategy**: Build a custom editor that wraps CodeEditor with your own term-fetch logic and error handling, or pre-load all terms into the component props.";
+    ds:guidelines "### Accessibility\n\n- Error and warning messages include textual prefixes in addition to border colour.\n- Current Code Editor source uses fixed `htmlFor=\"code\"`, `code-error-message`, and `code-warning-message` values, does not assign a matching id to Monaco, and does not locally wire message ids through `aria-describedby`/`aria-errormessage`. Multiple instances can duplicate ids. Treat this as an upstream blocker and verify the generated Monaco accessibility tree before claiming label/error association.\n- Required is currently a visual label class only; the adapter does not prove an accessible required state.\n- Use `onBlur` with awareness that header actions are outside the form-control blur boundary.\n\n### Content\n\n- Keep terms and all vocabulary arrays aligned with the backend grammar and validation function.\n- Use errors for invalid/submission-blocking queries and warnings for non-blocking concerns. Both can render simultaneously, so consumers should avoid contradictory states.\n- Label, “Error:”, and “Warning:” content are English in shared source; only the label and message bodies are prop-driven.\n\n### State and async behavior\n\n- The adapter owns no state, effect, query, mutation, or async validation.\n- `useCallback` recreates the pre-mount function when language id, terms identity, language-config identity, or configurator identity changes. Whether an already-mounted Monaco model is reconfigured is dependency lifecycle behavior, not guaranteed here.\n- Code Editor and Monaco both have loading fallbacks, but no prop exposes a caller-controlled loading state.\n- Theme is selected from `useTheme` as `vs-dark` or `vs-light`.\n\n### Keyboard\n\n- Monaco owns text editing, commands, and suggestion keyboard navigation. Caller options can disable or alter them.\n- The wrapper adds no keyboard handlers or focus management.\n- Header content precedes the editor in DOM order and may become a tab stop before Monaco.\n\n### Device / layout\n\n- Shared editor minimum height is `16rem`; border colours use `$colors--theme--border-default`, `$colors--theme--border-high-contrast`, and Vanilla error/caution states.\n- Header is a non-wrapping flex row with `justify-content: space-between`; no local breakpoint or overflow treatment exists.\n- Container is a flex column. Monaco sizing beyond the `16rem` minimum depends on its options and containing layout; the saved-search consumer enables `automaticLayout` and word wrap, but those are not component defaults.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`label`";
+        ds:summary "Visible field label forwarded to Code Editor.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Shared source hardcodes `htmlFor=\"code\"`; no matching Monaco id is set locally. "
+    ], [
+        a ds:Property;
+        ds:name "`value`";
+        ds:summary "Controlled query text.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string | undefined`. Editable consumers should update it from `onChange`. "
+    ], [
+        a ds:Property;
+        ds:name "`onChange`";
+        ds:summary "Receives Monaco model changes.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(value: string | undefined) => void`. No debounce, normalization, validation, or state update occurs locally. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onBlur`";
+        ds:summary "Runs when blur leaves the shared form-control container. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Moving focus within that control does not call it; moving from Monaco to `headerContent` does because the header is outside the control. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`error`";
+        ds:summary "Adds error classes, border, and an Error-prefixed paragraph. ";
+        ds:propertyType "text";
+        ds:defaultValue "false";
+        ds:constraints "TypeScript: `string | false`. Can coexist with `warning`; source does not prioritize one. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`warning`";
+        ds:summary "Adds caution classes, border, and a Warning-prefixed paragraph. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string | false`. `undefined` is also falsy, and warning can coexist with error. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`required`";
+        ds:summary "Adds `is-required` to the label.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Does not set Monaco `aria-required` or enforce submission. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`className`";
+        ds:summary "Additional class on the Monaco Editor surface.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Does not target the outer form group.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`labelClassName`";
+        ds:summary "Additional class on the label.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Combined with `p-form__label` and required state. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`headerContent`";
+        ds:summary "Content rendered at the opposite side of the header row. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `React.ReactNode`. Interactive content sits outside the blur boundary used by the Monaco control. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`options`";
+        ds:summary "Overrides search and shared Code Editor defaults.";
+        ds:propertyType "object";
+        ds:defaultValue "`fixedOverflowWidgets: true`, `suggestOnTriggerCharacters: true`, `quickSuggestions: true` ";
+        ds:constraints "TypeScript: `React.ComponentProps<typeof CodeEditor>[\"options\"]`. Spread last after local and shared Code Editor defaults. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`languageId`";
+        ds:summary "Passed to Monaco as `language` and to the configurator. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Caller owns uniqueness, registration, and lifecycle. "
+    ], [
+        a ds:Property;
+        ds:name "`terms`";
+        ds:summary "Search terms passed to the configurator.";
+        ds:propertyType "list of text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string[]`. An empty array skips configuration entirely; array identity participates in callback memoization. "
+    ], [
+        a ds:Property;
+        ds:name "`languageConfig`";
+        ds:summary "Domain vocabulary passed through unchanged.";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `LanguageConfig`. All properties are required and arrays may be empty; object identity participates in callback memoization. "
+    ], [
+        a ds:Property;
+        ds:name "`languageConfig.profileTypes`";
+        ds:summary "Supplies profile-type vocabulary.";
+        ds:propertyType "list of text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `readonly string[]`."
+    ], [
+        a ds:Property;
+        ds:name "`languageConfig.usgStatuses`";
+        ds:summary "Supplies USG-status vocabulary.";
+        ds:propertyType "list of text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `readonly string[]`."
+    ], [
+        a ds:Property;
+        ds:name "`languageConfig.wslStatuses`";
+        ds:summary "Supplies WSL-status vocabulary.";
+        ds:propertyType "list of text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `readonly string[]`."
+    ], [
+        a ds:Property;
+        ds:name "`configureSearchLanguage`";
+        ds:summary "Registers or configures Monaco before mount.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(monaco: Monaco, languageId: string, terms: string[], config: LanguageConfig) => void`. Called synchronously only for non-empty terms; thrown errors are not caught locally. "
+    ].

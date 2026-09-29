@@ -1,0 +1,100 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.progress_bar a ds:Component;
+    ds:name "Progress Bar";
+    ds:summary "Progress Bar shows determinate operation progress with a semantic `progressbar`, a visual fill, and optional percentage and estimated-time labels. It clamps progress to `0`–`100`, rounds it to the nearest integer, and includes the percentage and ETA in `aria-valuetext` when the ETA is enabled.\n\nThe component can stretch its bar to the available width and show a decorative spinner for work in flight. A `null` estimate displays configurable estimating copy; estimates of five seconds or less display configurable almost-done copy; longer estimates are formatted into seconds, minutes, or hours.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.progress_bar_with_eta\n  role: progress assembly\n  edges:\n    - node:\n        uri: global.component.icon\n        role: supplemental activity signal\n        description: Decorative spinner shown while work is actively in flight.\n        relation:\n          cardinality: \"0..1\"\n          condition: loading is true\n    - node:\n        role: indicator and labels\n        edges:\n          - node:\n              semantic: progressbar\n              role: determinate progress indicator\n              description: Reports the rounded and clamped percentage with an accessible name and value text.\n              edges:\n                - node:\n                    role: visual completion indicator\n                    description: Uses an inline percentage width to show completed progress.\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: visible progress value\n              description: Displays the rounded and clamped percentage without duplicating it in the accessibility tree.\n              relation:\n                cardinality: \"0..1\"\n                condition: showPercentage is true\n          - node:\n              role: visible remaining time\n              description: Displays a formatted estimate or configurable estimating or almost-done copy without duplicating it in the accessibility tree.\n              relation:\n                cardinality: \"0..1\"\n                condition: showEta is true\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=53-18&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 72\n\n";
+    ds:usage "### When to use\n\n**Known-length operations**\n\nUse when an operation can report a meaningful completion percentage, such as preparing an export or applying a managed operation.\n\n**Progress with a useful estimate**\n\nUse when remaining time helps the user judge whether to wait, continue other work, or return later. Pass `null` while the estimate is still being calculated.\n\n**Compact status rows**\n\nUse in tables, side panels, and operation details where the percentage and ETA need to remain aligned with a compact progress track.\n\n### When not to use\n\n**Indeterminate loading**\n\nThe operation cannot provide a meaningful percentage.\n\n**Incorrect pattern**: Advancing a synthetic percentage while waiting for an unknown-duration request.\n\n**Remediation strategy**: Use Loading State or a contextual pending indicator until determinate progress is available.\n\n**Completion without ongoing work**\n\nThe operation is already complete and the user primarily needs its final status or result.\n\n**Incorrect pattern**: Leaving a 100% progress bar in a list indefinitely as the only success indication.\n\n**Remediation strategy**: Replace it with the relevant completed status and expose the resulting action or output.\n\n**Multiple unrelated operations in one indicator**\n\nSeveral tasks have independent durations or failure states.\n\n**Incorrect pattern**: Averaging unrelated task percentages into one bar without explaining what completion means.\n\n**Remediation strategy**: Show progress per operation or provide a clearly defined aggregate with separate failure reporting.";
+    ds:guidelines "### Accessibility\n\n- Give each progressbar a specific accessible name. Use `labelledBy` when a visible operation label already exists; otherwise provide `label` rather than relying on the generic default.\n- Keep visible percentage and ETA text hidden from assistive technology because `aria-valuenow` and `aria-valuetext` already report them.\n- Do not use the decorative loading spinner as the only state signal. The semantic progressbar must continue to describe the operation.\n- Announce failures and completion separately; the component exposes progress values but no live-region, error, or completed-state semantics.\n\n### Content\n\n- Keep estimating and almost-done labels concise enough for the fixed ETA column.\n- Ensure the estimate describes the same operation as the percentage. Do not combine independent sources with different update timing.\n- Replace the component with a durable final status after completion when the surrounding workflow remains visible.\n\n### Responsive behavior\n\n- The default track has an `8rem` maximum width; use `fullWidth` when the bar should consume remaining container space.\n- The percentage reserves `2.5rem` and ETA reserves `6rem`. Long ETA copy truncates with an ellipsis, so preserve the full state in the accessible value text.\n- Test narrow table cells and translated labels. The content row does not wrap.\n\n### Keyboard\n\n- Progress Bar with ETA is read-only and contains no focusable controls.\n- Do not add the progressbar or decorative spinner to the tab order.\n- Keep cancellation, retry, or details actions as adjacent semantic controls owned by the surrounding workflow.\n\n### Internationalization\n\n- Supply localized `label`, `estimatingLabel`, and `almostDoneLabel` values; the source defaults are English.\n- The built-in duration formatter uses fixed abbreviated units (`h`, `m`, and `s`) rather than `Intl.DurationFormat` or localized unit strings.\n- Percentage formatting uses an integer followed by `%` and does not use locale-aware percent formatting.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`ProgressBar.progress`";
+        ds:summary "Current completion percentage.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "Rounded to the nearest integer and clamped to `0`–`100`; callers must provide a finite number. "
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.secondsRemaining`";
+        ds:summary "Estimated seconds remaining, or an unresolved estimate. ";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "Accepts `null` to show estimating copy; values at or below five seconds show almost-done copy. "
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.fullWidth`";
+        ds:summary "Removes the progress track's default maximum width. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "The outer wrapper remains full width in either mode. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.loading`";
+        ds:summary "Adds a decorative spinner before the progress content. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "The spinner is `aria-hidden`; determinate progress remains represented by the progressbar. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.label`";
+        ds:summary "Accessible name used when no labelled-by relationship exists. ";
+        ds:propertyType "text";
+        ds:defaultValue "`Progress`";
+        ds:constraints "Ignored when `labelledBy` is provided.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.labelledBy`";
+        ds:summary "ID of an existing visible label for the progressbar. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Suppresses `aria-label`; the referenced element must exist and identify this operation. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.className`";
+        ds:summary "Additional class names applied to the outer wrapper. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Use for placement only; do not obscure the indicator or visible status labels. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.showPercentage`";
+        ds:summary "Controls the visible percentage label.";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:constraints "The semantic current value remains available when the visible label is hidden. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.showEta`";
+        ds:summary "Controls the visible ETA and ETA portion of value text. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:constraints "When false, `aria-valuetext` contains only the percentage. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.estimatingLabel`";
+        ds:summary "Copy displayed while the estimate is unresolved.";
+        ds:propertyType "text";
+        ds:defaultValue "`Estimating...`";
+        ds:constraints "Used only when `secondsRemaining` is `null`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ProgressBar.almostDoneLabel`";
+        ds:summary "Copy displayed when little time remains.";
+        ds:propertyType "text";
+        ds:defaultValue "`Almost done`";
+        ds:constraints "Used when `secondsRemaining` is five seconds or less, including negative input. ";
+        ds:optional "true"
+    ].

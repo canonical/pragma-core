@@ -1,0 +1,110 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.dashboard_page_composition a ds:Pattern;
+    ds:name "Dashboard Page Composition";
+    ds:summary "Dashboard Page Layout is Landscape's recommended route-level composition convention using `PageMain`, `PageHeader`, and `PageContent`. In the conventional composition, one Page Header supplies optional breadcrumb navigation, one semantic page heading, and optional helper and action content, while one Page Content supplies a flex-growing region and an application error boundary around page children.\n\nThe three source components are composed by consumers rather than emitted by one exported wrapper. `PageMain` accepts arbitrary children and does not enforce the recommended header/content anatomy or cardinality. `PageHeader` measures its initial rendered height into the global `--pageheader-height` CSS custom property, and `PageContent` provides fluid or type-constrained medium alignment behavior.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.dashboard_page_layout\n  role: recommended route-level dashboard composition\n  edges:\n    - node:\n        role: dashboard panel shell\n        name: Page Main\n        description: Conventionally contains one Page Header followed by one Page Content, but accepts arbitrary children without enforcing their types or count.\n        styles:\n          layout.display: flex\n          layout.direction: column\n        edges:\n          - node:\n              role: page identity and controls\n              name: Page Header\n              edges:\n                - node:\n                    semantic: navigation\n                    role: breadcrumb navigation\n                    edges:\n                      - node:\n                          semantic: ordered list\n                          role: breadcrumb path\n                          relation:\n                            cardinality: \"1\"\n                    relation:\n                      cardinality: \"0..1\"\n                - node:\n                    semantic: heading\n                    role: semantic page title\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    role: visible title treatment\n                    relation:\n                      cardinality: \"0..1\"\n                - node:\n                    role: title helper content\n                    relation:\n                      cardinality: \"0..1\"\n                      slotName: helperContent\n                - node:\n                    role: page actions\n                    relation:\n                      cardinality: \"0..*\"\n                      slotName: actions\n              relation:\n                cardinality: \"0..*\"\n          - node:\n              role: primary content region\n              name: Page Content\n              styles:\n                layout.display: flex\n                layout.direction: column\n              edges:\n                - node:\n                    role: page error boundary\n                    edges:\n                      - node:\n                          role: page content\n                          relation:\n                            cardinality: \"1\"\n                            slotName: children\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"0..*\"\n        relation:\n          cardinality: \"0..*\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=17-21&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 18\n\n";
+    ds:usage "### When to use\n\n**Compose dashboard routes**\n\nBuild a Landscape dashboard route with the established panel, page identity, actions, and error-isolated content structure.\n\n**Constrain focused content**\n\nUse the medium content variant for forms or prose that should align to a constrained column rather than span the full panel.\n\n**Present broad data views**\n\nUse fluid content for tables and other layouts that need the available panel width, and set `hasTable` when the page’s primary content is tabular.\n\n### When not to use\n\n**Nested page sections**\n\nA section or subsystem is being laid out within an existing page, not at the route level.\n\n**Incorrect pattern**: Using `PageMain`, `PageHeader`, and `PageContent` for a secondary card or collapsible region inside another page.\n\n**Remediation strategy**: Use section-level layout components such as Content Blocks or simple flex containers inside the existing page content, not a nested page shell.\n\n**Modal or side-panel content**\n\nThe content appears in a modal dialog or slide-out panel, not in the main application viewport.\n\n**Incorrect pattern**: Composing `PageHeader` and `PageContent` inside a modal or side panel as if it were a route-level page.\n\n**Remediation strategy**: Use the container’s native header and content anatomy (e.g., Modal’s title and body) rather than wrapping it in dashboard page layout components.\n\n**Decorative headings**\n\nThe page heading is hidden solely for visual suppression without a meaningful visible alternative.\n\n**Incorrect pattern**: Using `hideTitle` to remove the `<h1>` without providing a `visualTitle` or other visible identifier so sighted users cannot see what page they are on.\n\n**Remediation strategy**: Keep the semantic `<h1>` visible, or use `hideTitle` with a coordinated `visualTitle` such as an icon, badge, or established branding treatment that maintains clear page identity for all users.";
+    ds:guidelines "### Accessibility\n\n- Compose exactly one meaningful `PageHeader` for the route, including hidden-title layouts. Each Page Header emits one `<h1>`, but the composition does not enforce how many Page Headers a consumer adds.\n- Breadcrumb navigation has `aria-label=\"Breadcrumbs\"`; current items receive `aria-current=\"page\"` and are not links. Supply one logical current destination and valid linked ancestor paths.\n- `visualTitle` is a `<div>`, not a heading. It cannot replace the semantic role of `title`.\n- `AppErrorBoundary` owns failures from Page Content descendants; do not place essential recovery controls outside the boundary unless they must survive a content failure.\n\n### Content\n\n- Use a stable page title and concise breadcrumb labels that match destination names.\n- Keep helper content secondary to the title and reserve header actions for page-wide commands.\n- Keep breadcrumb labels in route order and avoid duplicating the complete page title as unnecessary helper copy.\n- Use `visualTitle` and `hideTitle` as a coordinated treatment; hidden semantic text and visible text may differ only when that difference remains clear to all users.\n\n### Responsive behavior\n\n- At viewport widths up to 619px, Page Header removes title bottom padding. The source does not reorder breadcrumbs, title, helper content, or controls.\n- Page Main and Page Content use flex columns, `min-width: 0`, and `max-width: 100%` to let descendants shrink within the panel. Descendants remain responsible for their own overflow.\n- Medium-center aligns children centrally. Medium-left caps the inner column at 60rem. Fluid leaves the inner content at the available width.\n- Header controls and visual title have `flex-shrink: 0`; verify long translated titles and action sets at narrow widths.\n\n### Keyboard\n\n- Keep breadcrumbs before page actions in focus order.\n- When a route changes, move focus according to the application’s page-navigation convention, not into layout wrappers.\n- Layout wrappers add no tab stops. Links and controls supplied through breadcrumbs, helper content, actions, and children retain normal DOM order.\n\n### Internationalization\n\n- Externalize page titles, visual titles, breadcrumb labels, helper content, and action labels at the route level.\n- Allow titles and breadcrumb labels to wrap or truncate only through established application patterns; this layout does not add truncation.\n- The navigation label `Breadcrumbs` is hardcoded in source and requires an implementation change for localization.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "PageMain children";
+        ds:summary "Route-level content inside the panel shell.";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "None";
+        ds:constraints "Conventionally compose one Page Header followed by one Page Content. The source does not enforce child types, order, or count.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "PageHeader title";
+        ds:summary "Page identity rendered as that Page Header instance's `<h1>`, visible or off screen.";
+        ds:propertyType "text";
+        ds:defaultValue "None";
+        ds:constraints "Compose one Page Header per route so the result has one page-level `<h1>`; the component cannot prevent sibling headers or headings.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "PageHeader hideTitle";
+        ds:summary " Applies the off-screen utility to the semantic <h1>. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Use only when another visible treatment supplies sighted page identity. ";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "PageHeader breadcrumbs";
+        ds:summary " Ordered breadcrumb records rendered above the title. ";
+        ds:propertyType "list of objects";
+        ds:defaultValue "undefined";
+        ds:constraints "Each entry is a `Breadcrumb`: a non-current item requires `label: string` and `path: string`; a current item requires `current: true` and `label: string`. An empty array renders no navigation.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "PageHeader actions";
+        ds:summary " Page-scoped content rendered in the panel controls region. ";
+        ds:propertyType "list of nodes";
+        ds:defaultValue "undefined";
+        ds:constraints "An empty array renders no controls container. Keep actions few or use an established responsive action composition. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "PageHeader className";
+        ds:summary "Additional class on the Vanilla panel header root.";
+        ds:propertyType "text";
+        ds:defaultValue "undefined";
+        ds:constraints "Preserve panel header layout and semantics.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "PageHeader visualTitle";
+        ds:summary " Visible non-heading title rendered only when hideTitle is truthy. ";
+        ds:propertyType "text";
+        ds:defaultValue "undefined";
+        ds:constraints "It is ignored in normal-title mode and does not replace the semantic <h1>. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "PageHeader helperContent";
+        ds:summary " Content rendered immediately after the visible <h1>. ";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "undefined";
+        ds:constraints "It is not rendered when `hideTitle` is truthy. Supplying it also removes right padding from the header.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "PageContent children";
+        ds:summary " Primary route content wrapped by AppErrorBoundary. ";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "None";
+        ds:constraints "Errors thrown by descendants are handled at this page-content boundary.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "PageContent container";
+        ds:summary "Selects the type-safe content alignment contract.";
+        ds:propertyType "\"fluid\" | \"medium\"";
+        ds:defaultValue "\"fluid”";
+        ds:constraints "Omit or use `\"fluid\"` without `align`; use `\"medium\"` to enable `align`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "PageContent align";
+        ds:summary " Centers medium children or caps a left-aligned medium column at 60rem. ";
+        ds:propertyType "\"center\" | \"left\"";
+        ds:defaultValue "\"center”";
+        ds:constraints "Type-valid only with container=\"medium\". Runtime classes also apply only in medium mode. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "PageContent hasTable";
+        ds:summary " Adds the table-page class, setting the outer content minimum height to zero. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "undefined";
+        ds:constraints "Use for table-led pages that need the panel's table sizing behavior. ";
+        ds:optional "true"
+    ].

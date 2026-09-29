@@ -1,0 +1,72 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: export field reorder
+  uri: apps_landscape.pattern.sortable_list
+  edges:
+    - node:
+        role: instruction and reset block
+        edges:
+          - node:
+              role: instruction text
+            relation:
+              cardinality: "1"
+          - node:
+              # role: reset order
+              uri: global.component.button
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+    - node:
+        # was uri: global.component.modular-table; role: sortable field table
+        uri: global.component.table
+        edges:
+          - node:
+              role: sortable item
+              edges:
+                - node:
+                    role: drag affordance
+                    # Raw decorative Vanilla icon element using the p-icon--drag class;
+                    # not a Canonical Icon component.
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: item label
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # role: group metadata
+                    uri: global.component.chip
+                  relation:
+                    cardinality: "0..1"   # rendered when groupTitle is truthy
+                - node:
+                    role: order controls
+                    edges:
+                      - node:
+                          # role: move down
+                          uri: global.component.button
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          # was uri: global.component.input; role: position input, with
+                          # a11y input.type: number, so the number field is the subject
+                          # that names it
+                          uri: global.component.number_field
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          # role: move up
+                          uri: global.component.button
+                        relation:
+                          cardinality: "1"
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "1"
+    - node:
+        role: drag overlay
+      relation:
+        cardinality: "0..1"   # rendered in a document-body portal while draggingFieldId is set

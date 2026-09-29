@@ -1,0 +1,140 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.tooltip_wrapper a ds:Component;
+    ds:name "TooltipWrapper";
+    ds:summary "The wrapper tooltip is a flexible tooltip designed to support richer content beyond a single line of text. It is best suited for use cases where multiple content types must be supported, such as text, KVPs ([KVPItem (base)](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-eUn6xQeQ6l)), or tables. This type of tooltip is ideal when standard tooltips are too limited, but a modal or larger surface would feel too disruptive. \n\nRelated to [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) and [DataTooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Y1ha3zI_b_) ";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# A notation migration of the previous DSL (the Coda block \"Tooltip.Wrapper\"):\n# structure and bindings kept, values migrated, dangling uri: references\n# repaired. react-ds-global implements one Tooltip — the chip bound in\n# ds:global.component.tooltip — and no wrapper variant.\nnode:\n  uri: global.component.tooltip_wrapper\n  edges:\n    - node:\n        role: surface\n        styles:\n          # Was `color/surface/tooltip`; no symbol declares\n          # color.background.tooltip, so this is the declared background the\n          # surface correspondence lands on. (The live Tooltip reads the\n          # surface channel: [surface.color.background, color.background].)\n          appearance.background: color.background\n          layout.type: flex   # was stack\n          layout.direction: column   # was vertical\n          layout.align: start\n          # Was `spacing.internal.vertical|horizontal: dimension/200` and\n          # `spacing.gap: dimension/100`; the roster's internal keys are per\n          # side, so the two axes become four.\n          spacing.internal.block.start: dimension.200\n          spacing.internal.block.end: dimension.200\n          spacing.internal.inline.start: dimension.200\n          spacing.internal.inline.end: dimension.200\n          spacing.gap: dimension.100\n        edges:\n          - node:\n              role: wrapper-item\n            relation:\n              cardinality: \"0..*\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        # Was `ds:global.subcomponent:TooltipArrow`, which names no subject, so\n        # the position is an anonymous role.\n        role: arrow\n        styles:\n          # Was `color/surface/tooltip`, as above.\n          appearance.background: color.background\n      relation:\n        cardinality: \"0..1\"\n        slotName: arrow";
+    ds:anatomyClassic "\n\n**https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=5481-1792&t=do0LiQ0UCgMwCPbe-1**\n\n1. Container\n\nHolds the tooltip’s content (i.e. short/brief text and an optional icon). Has fixed padding and a max-width., but is also configurable. Houses one or more wrapper items. (should max width apply here?)\n\n1. Wrapper item\n\nFlexible sub-containers that can be swapped to maintain different pre-defined elements (e.g. text blocks, tables, key-value pairs (KVPs), etc.). \n\n1. Arrow (optional)\n\nIndicates the relationship to the trigger. Orientation is configurable and can be removed for cases where it may conflict with the layout or is deemed unnecessary \n\n";
+    ds:usage "When to use\n\n- When tooltip content requires internal structure such as tables, key–value pairs, legends, or media\n- When used in dashboards or data-heavy contexts requiring quick, glanceable detail\n- When flexibility is required without introducing multiple bespoke tooltip variants\n\n\n\nWhen not to use\n\n- When only simple icon or control clarification is needed\n  - Incorrect: A wrapper tooltip is used for a single short label explanation\n  - Remediation: Use a [Standard tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-Y9PpN4FiwA) or [Dense tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-tES05lAnIw) \n\nWhen content must persist or be interactive\n\n  - Incorrect: A wrapper tooltip contains controls or actions\n  - Remediation: Use a [Popover](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-i-62pvfoOF) or [Modal](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-XsokbPLmnc) \n\nWhen only a single short sentence is required\n\n  - Incorrect: A wrapper tooltip is used for minimal text\n  - Remediation: Use a [Standard tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-Y9PpN4FiwA) ";
+    ds:guidelines "- Show with a 400 ms delay after hover or focus\n- Hide with a 400 ms delay after the pointer leaves\n- Cancel display if the pointer exits before the show delay completes\n- If the pointer moves directly from one tooltip trigger to another, show the new tooltip immediately and skip the previous tooltip’s exit animation\n\n### **Transition**\n\n- **Type**: spring\n- **Duration**: 0.4 s\n- **Bounce**: 0.2\n- **Delay**: 0 s";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "***Wrapper tooltip***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "*Wrapper container*";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Position";
+        ds:summary "Preferred placement relative to trigger";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ], [
+        a ds:Property;
+        ds:name "Max width";
+        ds:summary "Optional width override for wrapper tooltip";
+        ds:optional "false";
+        ds:propertyType "number"
+    ], [
+        a ds:Property;
+        ds:name "*Wrapper item*";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Wrapper item (instance swap)";
+        ds:summary "Selects which content block appears in this wrapper row";
+        ds:optional "false";
+        ds:propertyType "element"
+    ], [
+        a ds:Property;
+        ds:name "*Key-value pair* (when selected as wrapper item)";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Value structure";
+        ds:summary "Whether value is single or multi-entry";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ], [
+        a ds:Property;
+        ds:name "Value layout";
+        ds:summary "How value is arranged visually";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ], [
+        a ds:Property;
+        ds:name "Layout";
+        ds:summary "Layout control. Not for users.";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ], [
+        a ds:Property;
+        ds:name "***All variants***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Type";
+        ds:summary "Selects the tooltip variant";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ], [
+        a ds:Property;
+        ds:name "Surrounding UI theme";
+        ds:summary "Sets tooltip theme based on surrounding UI context";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ];
+    ds:hasSubcomponent ds:global.subcomponent.kvp_container, ds:global.subcomponent.kvpitem_base;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip_wrapper;
+        ds:node "$root/surface";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip_wrapper;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip_wrapper;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip_wrapper;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip_wrapper;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip_wrapper;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip_wrapper;
+        ds:node "$root/arrow";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background
+    ].

@@ -1,0 +1,39 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: header and action layout
+  uri: apps_landscape.pattern.responsive_header_actions
+  edges:
+    - node:
+        role: header context
+      relation:
+        cardinality: "0..1"   # rendered when title is provided
+        slotName: title
+    - node:
+        role: action container
+        edges:
+          - node:
+              role: measured visible action group
+              edges:
+                - node:
+                    # role: visible action
+                    uri: global.component.button
+                  relation:
+                    cardinality: "0..*"
+            relation:
+              cardinality: "1"
+          - node:
+              role: collapsed action menu
+              edges:
+                - node:
+                    role: nondestructive menu command
+                  relation:
+                    cardinality: "0..*"
+                - node:
+                    role: destructive menu command
+                  relation:
+                    cardinality: "0..*"
+            relation:
+              cardinality: "0..1"   # rendered when measured or forced collapsed actions exist
+      relation:
+        cardinality: "1"

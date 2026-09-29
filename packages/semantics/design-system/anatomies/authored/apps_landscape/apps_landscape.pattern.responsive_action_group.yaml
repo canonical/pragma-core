@@ -1,0 +1,40 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: responsive action container
+  uri: apps_landscape.pattern.responsive_action_group
+  edges:
+    - node:
+        role: visible action presentation
+        edges:
+          - node:
+              role: visible action
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "0..1"
+    - node:
+        # role: overflow menu
+        uri: global.component.contextual_menu
+        edges:
+          - node:
+              role: collapsed action item
+            relation:
+              cardinality: "0..*"
+          - node:
+              role: nested contextual-menu item
+              edges:
+                - node:
+                    role: nested menu command
+                  relation:
+                    cardinality: "0..*"
+            relation:
+              cardinality: "0..*"   # rendered for each collapsed ContextualMenu recognized by the adapter
+      relation:
+        cardinality: "0..1"   # rendered when one or more eligible actions are collapsed
+    - node:
+        # was uri: global.component.confirmation_modal, which names no subject; the
+        # modal pattern is the nearest subject. role: confirmation dialog
+        uri: global.pattern.modal
+      relation:
+        cardinality: "0..1"   # rendered after a collapsed confirmation action is activated

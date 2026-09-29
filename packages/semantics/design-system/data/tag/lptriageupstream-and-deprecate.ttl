@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.lptriageupstream-and-deprecate a ds:Tag;
+    ds:name "lp:triage:upstream-and-deprecate";
+    ds:category ds:tagcategory.lpupstream;
+    ds:whenToApply "";
+    ds:whenToRemove "".

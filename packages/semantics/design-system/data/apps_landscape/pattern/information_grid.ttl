@@ -1,0 +1,93 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.information_grid a ds:Pattern;
+    ds:name "Information Grid";
+    ds:summary "Information Grid presents read-only labelled values in a CSS container-responsive grid that adapts from four to two columns based on available width. It supports regular, password-masked, and expandable-truncated value variants for compact metadata display.\n\nMain use cases:\n\n- Display read-only attributes of a single entity, profile, or record.  \n- Show numeric zero and distinguish it from empty or missing values through the shared `NoData` state.  \n- Render values that may exceed available space using expandable truncation with outside-click collapse.  \n- Present security-sensitive data with a fixed mask (not a security boundary, but a visual courtesy).";
+    ds:anatomyDsl "```yaml\nnode:\n  uri: ds:apps_landscape.pattern.information_grid\n  role: responsive boundary\n  edges:\n    - node:\n        role: value collection\n        edges:\n          - node:\n              role: grid item\n              edges:\n                - node:\n                    role: value identifier\n                    relation:\n                      cardinality: \"1\"\n                      slotName: label\n                - node:\n                    role: read-only content\n                    description: Renders regular content, a fixed mask, expandable truncation, or the no-data state.\n                    relation:\n                      cardinality: \"1\"\n                      slotName: value\n              relation:\n                cardinality: \"0..*\"\n        relation:\n          cardinality: \"1\"\n```\n\nThe truncated value’s disclosure structure belongs to Expandable Truncation rather than being repeated as a sibling of every item.";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-59&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 33\n\n";
+    ds:usage "### When to use\n\n- Use for read-only attributes of one system, package, profile, repository, or similar record.\n- Compose `InfoGrid.Item` children so labels, values, empty states, and optional spans remain consistent.\n- Use `large` for a value that should occupy two tracks, such as a long identifier or summary.\n- Use `type=\"truncated\"` only when the value can safely open into an overlay and outside-click collapse is sufficient.\n\n### When not to use\n\n**Editable data**\n\nForm controls and validation are needed for user input.\n\n**Incorrect pattern**: Using Info Grid items to display data that the user needs to edit or update.\n\n**Remediation strategy**: Use Formik-controlled form inputs with validation, not Info Grid items.\n\n**Row-wise comparison**\n\nData must be compared across rows, sorted, or displayed as tabular relationships.\n\n**Incorrect pattern**: Rendering multiple Info Grid instances expecting them to form a sortable or comparable tabular display.\n\n**Remediation strategy**: Use a proper table component (`table`, `thead`, `tbody`) or a data grid that supports sorting and comparison.\n\n**Semantic description list**\n\nA programmatic label/value relationship without a visual wrapper is required.\n\n**Incorrect pattern**: Using Info Grid’s sibling `div` structure when the markup needs to be a semantic `<dl>` for accessibility or API contracts.\n\n**Remediation strategy**: Change the implementation to use `<dl>`, `<dt>`, and `<dd>` elements, or provide a separate semantic layout component.\n\n**Password variant as a security boundary**\n\nThe mask is expected to provide authorization or data handling controls.\n\n**Incorrect pattern**: Relying on the fixed mask to prevent unauthorized viewing of secret values.\n\n**Remediation strategy**: Implement proper access controls and data authorization on the server; use the mask only as a visual courtesy for UI consistency.";
+    ds:guidelines "### Accessibility\n\n- Write labels that remain understandable directly before their values in reading order.\n- The current markup is not a `<dl>` and creates no programmatic label/value association. Use surrounding headings and concise labels; change the implementation if stronger semantics are required.\n- `NoData` must remain distinguishable from an intentionally empty string; current regular behavior treats an empty string as missing.\n- The truncated disclosure inherits current gaps from Expandable Truncation: no `aria-expanded`, `aria-controls`, generated relationship, or built-in keyboard collapse.\n\n### Content and internationalization\n\n- Use short noun phrases for labels and consistent formats for dates, counts, units, and identifiers.\n- Labels are visually uppercased through CSS; source strings should use normal casing for reading and translation.\n- The fixed password mask is language-neutral but not configurable. Empty-state and “Show more” copy come from dependencies and are not localized by InfoGrid.\n- The grid itself performs no number, date, unit, or locale formatting.\n\n### Keyboard and interaction\n\n- Regular and password items add no focus targets or keyboard handlers.\n- Truncated items expose the disclosure button only when measured overflow exists. Expansion removes that button; collapse occurs on outside interaction rather than a dedicated keyboard command.\n- Links or controls supplied inside regular values retain their own semantics, but the component adds no grouping or focus management.\n\n### Device and layout\n\n- Responsiveness is based on the outer wrapper’s inline size, not viewport width.\n- Source defines four equal tracks and one container query that switches to two. There is no one-column rule, so narrow hosts can produce cramped two-column content.\n- Every direct grid child receives `min-width: 0`; `large` spans two tracks. Dense mode changes only the gap.\n- Expanded truncated values use absolute positioning and a `1.5rem` host height, with no portal or z-index. Verify clipping and overlap in panels and nested containers.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`InfoGrid.children`";
+        ds:summary "Content rendered by the inner grid.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. `InfoGrid.Item` is the supported composition for consistent item anatomy. "
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid.spaced`";
+        ds:summary "Adds source-defined vertical margins to the outer wrapper. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "It does not change grid tracks or child spacing.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid.dense`";
+        ds:summary "Replaces the default grid gap with the smaller dense gap. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "It does not reduce typography or interactive target sizes. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid.className`";
+        ds:summary "Additional class on the outer query wrapper.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Unlike other inherited attributes, it is not applied to the inner grid. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid` other HTML attributes";
+        ds:summary "Attributes spread onto the inner grid.";
+        ds:propertyType "object";
+        ds:defaultValue "HTML defaults";
+        ds:constraints "TypeScript: `HTMLAttributes<HTMLDivElement>`. Event handlers, ids, ARIA, and data attributes target the inner `div`; `children` is included in this spread. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid.Item.label`";
+        ds:summary "Visible label above the value.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. No `id`, `<label>`, or description-list relationship is generated. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid.Item.value`";
+        ds:summary "Value content.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Required for regular and truncated variants and unavailable for password. Regular values treat only `0` and truthy nodes as present; truncated values additionally require truthiness before mounting the disclosure. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid.Item.type`";
+        ds:summary "Selects the value implementation.";
+        ds:propertyType "choice";
+        ds:defaultValue "`regular`";
+        ds:constraints "TypeScript: `\"regular\" | \"password\" | \"truncated\"`. It may be omitted for regular behavior and is required to select password or truncated. The password variant omits `value`; the truncated variant uses internal expansion state. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid.Item.large`";
+        ds:summary "Makes the item span two grid columns.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "In the two-column layout it occupies the full row; no one-column fallback exists. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`InfoGrid.Item` other HTML attributes";
+        ds:summary "Props applied to the regular item's root `div`. ";
+        ds:propertyType "object";
+        ds:defaultValue "HTML defaults";
+        ds:constraints "TypeScript: `HTMLAttributes<HTMLDivElement>`. A caller `className` is spread after the generated `large` class and can replace it rather than merging. ";
+        ds:optional "true"
+    ].

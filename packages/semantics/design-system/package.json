@@ -1,0 +1,74 @@
+{
+  "name": "@canonical/design-system",
+  "module": "index.ts",
+  "types": "src/index.ts",
+  "type": "module",
+  "license": "LGPL-3.0",
+  "version": "0.3.0",
+  "bin": {
+    "collect-implementations": "./src/collect-implementations.ts"
+  },
+  "scripts": {
+    "check": "bun run check:biome",
+    "check:fix": "bun run check:biome:fix && bun run check:ts",
+    "check:biome": "biome check",
+    "check:biome:fix": "biome check --write",
+    "check:ts": "tsc --noEmit",
+    "test": "bun run test:vitest",
+    "test:vitest": "vitest run",
+    "test:vitest:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "ds:list": "bun src/cli.ts list source.json",
+    "ds:extract": "bun src/cli.ts extract source.json",
+    "ds:transform": "bun src/cli.ts transform source.json",
+    "ds:sync": "bun src/cli.ts sync src/sync/form-roster.target.json",
+    "build": "echo 'No build step: data/ and definitions/ are published as committed'",
+    "generate:coda-types": "openapi-typescript https://coda.io/apis/v1/openapi.json -o src/providers/CodaProvider.types.generated.ts",
+    "ds:anatomies": "bun src/cli.ts anatomies",
+    "sync:coda": "bun run ds:extract && bun run ds:transform"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.14",
+    "@canonical/biome-config": "^0.42.0",
+    "@canonical/typescript-config": "^0.42.0",
+    "@types/bun": "latest",
+    "@types/jsonld": "^1.5.15",
+    "@types/n3": "^1.26.1",
+    "@types/node": "^24.10.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "openapi-typescript": "^7.12.0",
+    "typescript": "^7.0.2",
+    "vite": "^7.2.6",
+    "vite-tsconfig-paths": "^6.1.0",
+    "vitest": "^4.1.9"
+  },
+  "dependencies": {
+    "@canonical/anatomy-dsl": "^0.6.0",
+    "@canonical/token-ontology": "^0.10.1",
+    "ajv": "^8.17.1",
+    "jsonld": "^9.0.0",
+    "n3": "^2.0.1",
+    "tinyglobby": "^0.2.14",
+    "yaml": "^2.7.1"
+  },
+  "overrides": {
+    "@canonical/token-ontology": "^0.10.1"
+  },
+  "files": [
+    "data",
+    "definitions",
+    "skills",
+    "src/collect",
+    "src/graph",
+    "src/serializers",
+    "src/collect-implementations.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canonical/pragma-core"
+  },
+  "bugs": {
+    "url": "https://github.com/canonical/pragma-core/issues"
+  },
+  "homepage": "https://github.com/canonical/pragma-core#readme"
+}

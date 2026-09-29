@@ -1,0 +1,81 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `core:component:BackLink`; the block's own uri is used instead.
+node:
+  uri: apps_lxd.component.back_link
+  styles:
+    # Structural (implicitly invariant)
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.align: center
+    # Themeable
+    # was spacing.gap: spacing/small; no spacing.small symbol is declared
+    typography.font: typography.heading.4   # was typography.size: font/size/heading/4
+  edges:
+    - node:
+        # was uri: core:component:Button
+        uri: global.component.button
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: flex   # was flow
+          layout.direction: row   # was horizontal
+          layout.align: center
+          interaction.cursor: pointer
+          # Themeable
+          # was appearance.variant: link; a variant is a modifier, and Button declares
+          # no `variant` property to pin
+          # was spacing.internal: spacing/dense; no spacing.dense symbol is declared,
+          # and the roster has no all-sides padding key
+          typography.font: typography.heading.4   # was typography.size: font/size/heading/4
+          typography.weight: typography.weight.regular   # was font/weight/normal
+        edges:
+          - node:
+              # was uri: core:element:Icon
+              uri: global.component.icon
+              props:
+                icon: chevron-left            # was appearance.name: chevron-left
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: inline-block     # was layout.display: inline-block
+                size.width: hug
+                size.height: hug
+                # was spacing.margin.right: spacing/xsmall; no spacing.xsmall symbol
+                # is declared
+            relation:
+              cardinality: "1..1"
+              slotName: icon
+          - node:
+              role: back link text
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: inline           # was layout.display: inline
+                # Themeable
+                typography.color: color.text.link
+            relation:
+              cardinality: "1..1"
+              slotName: text
+      relation:
+        cardinality: "1..1"
+        slotName: backButton
+    - node:
+        role: separator
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: inline                 # was layout.display: inline
+          # Themeable
+          typography.color: color.text.muted
+          # was spacing.margin.horizontal: spacing/xsmall; no spacing.xsmall symbol is
+          # declared
+      relation:
+        cardinality: "1..1"
+    - node:
+        role: current title
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: inline                 # was layout.display: inline
+          # Themeable
+          typography.color: color.text                   # was color/text/default
+          typography.weight: typography.weight.regular   # was font/weight/normal
+      relation:
+        cardinality: "1..1"
+        slotName: title

@@ -1,0 +1,25 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.pattern.form_field_help
+  edges:
+    - node:
+        role: field context
+      relation:
+        cardinality: "1"
+    - node:
+        uri: global.component.tooltip
+        edges:
+          - node:
+              uri: global.component.icon
+              props:
+                icon: help    # was name: help
+            relation:
+              cardinality: "1"
+          - node:
+              role: tooltip message
+            relation:
+              cardinality: "1"
+              slotName: message
+      relation:
+        cardinality: "1"

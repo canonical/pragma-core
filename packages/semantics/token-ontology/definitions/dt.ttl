@@ -1,0 +1,332 @@
+###############################################################################
+# dt.ttl — Design Tokens Ontology (T-Box)
+###############################################################################
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ds:   <https://ds.canonical.com/> .
+@prefix w3c-tokens: <https://dt.canonical.com/w3c-tokens/> .
+@prefix dt:   <https://dt.canonical.com/> .
+
+# Ontology Declaration
+dt: a owl:Ontology ;
+    owl:versionInfo "0.1.0" ;
+    owl:imports <https://dt.canonical.com/w3c-tokens/> ;
+    rdfs:label "Design Tokens Ontology" ;
+    skos:definition "OWL ontology for the Canonical design tokens: the spine of token symbols, the views computed over authored token documents, and the transformation relating the source graph to the built graph. Joins the token specification's vocabulary (w3c-tokens:) to the design-system vocabulary (ds:)." .
+
+###############################################################################
+# THE SPINE
+###############################################################################
+
+dt:TokenSymbol
+    a owl:Class ;
+    rdfs:label "Token Symbol" ;
+    skos:definition "A logical token name, reified as one individual per dotted name." ;
+    skos:note "Individuals are minted in this namespace from the name itself, and their names are inherited from authors rather than minted by kind — with one exception: a channel is minted by kind, from the coverage of the family that provisions it, and carries dt:channelOf." ;
+    skos:note "The class shared by the source graph, which reaches it from definitions via dt:symbol, and the built graph, which reaches it from resolved values via dt:forSymbol." ;
+    skos:example "dt:color.foreground.primary" .
+
+dt:channelOf
+    a owl:ObjectProperty ;
+    rdfs:range dt:TokenSymbol ;
+    rdfs:label "channelOf" ;
+    skos:definition "The symbol this channel provisions: the channel carries that symbol's value as the active coordinate selects it." ;
+    skos:note "A symbol carrying it IS a channel, and the property is the whole of what makes one — no class is needed for a shape to target. Channels are minted by the build from modifier-family coverage, never asserted by hand: one dt:modifier.X for every symbol X a local-level family covers, one dt:surface.X for every X the layout-level family covers." ;
+    skos:note "No domain is declared. The range says what the value is, and what may carry the property is settled by constraint rather than by class — the house pattern." ;
+    skos:example "dt:modifier.color.text dt:channelOf dt:color.text" .
+
+###############################################################################
+# VIEWS COMPUTED FROM AUTHORED DOCUMENTS
+###############################################################################
+
+dt:symbol
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Token ;
+    rdfs:range dt:TokenSymbol ;
+    rdfs:label "symbol" ;
+    skos:definition "The logical name the definition defines: the authored name with the reserved $root segment stripped." ;
+    skos:note "Derived from the transcribed documents; adds no information to them." .
+
+dt:aliasOf
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Token ;
+    rdfs:range dt:TokenSymbol ;
+    rdfs:label "aliasOf" ;
+    skos:definition "The immediate reference target of a whole-token alias value, by name, unresolved." ;
+    skos:note "Derived from the transcribed documents; adds no information to them." .
+
+dt:refersTo
+    a owl:ObjectProperty ;
+    rdfs:domain w3c-tokens:Token ;
+    rdfs:range dt:TokenSymbol ;
+    rdfs:label "refersTo" ;
+    skos:definition "A reference target of a JSON-Pointer reference inside the authored value." ;
+    skos:note "The specification's second reference form ($ref, RFC 6901); tool support is mandatory. Distinct from dt:aliasOf, which renders the curly-brace form targeting whole tokens." ;
+    skos:note "Derived from the transcribed documents; adds no information to them." .
+
+dt:tokenType
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Token ;
+    rdfs:range w3c-tokens:TokenType ;
+    rdfs:label "tokenType" ;
+    skos:definition "The type governing the definition: its authored type, or the nearest enclosing group's inherited type." ;
+    skos:note "Derived from the transcribed documents; adds no information to them." .
+
+###############################################################################
+# S2 — THE TRANSFORM
+###############################################################################
+
+## Coordinates
+
+dt:Coordinate
+    a owl:Class ;
+    rdfs:label "Coordinate" ;
+    skos:definition "A value a token's context may take, belonging to one modifier family." ;
+    skos:note "Coordinates are minted in this namespace rather than borrowed, so that a coordinate may exist with no encoding, with no design-system concept, or with several encodings." ;
+    skos:example "dt:coordinate.dark" , "dt:coordinate.constructive" .
+
+dt:family
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:Coordinate ;
+    rdfs:range ds:ModifierFamily ;
+    rdfs:label "family" ;
+    skos:definition "The family the coordinate belongs to." .
+
+dt:concept
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:Coordinate ;
+    rdfs:range ds:Modifier ;
+    rdfs:label "concept" ;
+    skos:definition "The design-system modifier that names the coordinate." ;
+    skos:note "A coordinate the design system has not named carries none." .
+
+ds:exclusive
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain ds:ModifierFamily ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "exclusive" ;
+    skos:definition "Whether at most one of the family's coordinates may hold at a time." ;
+    skos:note "Belongs to the design-system vocabulary; stated here pending its definition there." .
+
+dt:Preference
+    a owl:Class ;
+    rdfs:label "Preference" ;
+    skos:definition "A setting the environment reports, which may determine a coordinate." .
+
+dt:preference.colorScheme
+    a dt:Preference ;
+    rdfs:label "colour scheme" ;
+    skos:definition "The colour scheme the user prefers." .
+
+dt:resolvesBy
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:Coordinate ;
+    rdfs:range dt:Preference ;
+    rdfs:label "resolvesBy" ;
+    skos:definition "The preference consulted to determine which coordinate of the family holds." ;
+    skos:note "If what the preference reports names a coordinate of the same family, that coordinate holds; otherwise the one named by dt:otherwise." .
+
+dt:otherwise
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:Coordinate ;
+    rdfs:range dt:Coordinate ;
+    rdfs:label "otherwise" ;
+    skos:definition "The coordinate of the same family that holds when no preference determines one." ;
+    skos:note "A coordinate carrying neither dt:resolvesBy nor dt:otherwise contributes nothing." .
+
+dt:InteractionState
+    a owl:Class ;
+    rdfs:label "Interaction State" ;
+    skos:definition "A condition of an element determined by the user agent, arising from user interaction, from the element's status, or from document history." ;
+    skos:note "An interaction state is observed rather than chosen: no file describes it, so it has no resolver encoding, and its value is expressed relative to the value the element already has." .
+
+## The encoding bridge
+
+w3c-tokens:ResolverModifier
+    skos:note "Its concept counterpart is ds:ModifierFamily, related via dt:encodes." .
+
+w3c-tokens:ResolverContext
+    skos:note "The coordinate it encodes is related via dt:encodes." .
+
+dt:encodes
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "encodes" ;
+    skos:definition "Relates a resolver entity to what it encodes: a resolver axis encodes a ds:ModifierFamily; a resolver context encodes a dt:Coordinate." ;
+    skos:note "Names may differ across the vocabularies, so the mapping is asserted rather than inferred, with name equality as the customary default." ;
+    skos:note "A family or coordinate may have no encoding, and a resolver entity may encode nothing." ;
+    skos:example "the 'theme' axis encodes the 'mode' family" , "the 'layer2' context encodes the 'surface2' coordinate" .
+
+dt:encodedBy
+    a owl:ObjectProperty ;
+    owl:inverseOf dt:encodes ;
+    rdfs:label "encodedBy" ;
+    skos:definition "The resolver entity that encodes the family or coordinate." .
+
+## Contracts
+
+dt:Contract
+    a owl:Class ;
+    rdfs:label "Contract" ;
+    skos:definition "The authored specification of what one modifier family does to tokens: where it attaches, what it may touch, and how it provisions." ;
+    skos:note "A contract with no fields is legal — a family may be named before its behaviour is specified." .
+
+dt:contract
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain ds:ModifierFamily ;
+    rdfs:range dt:Contract ;
+    rdfs:label "contract" ;
+    skos:definition "The family's contract." .
+
+dt:covers
+    a owl:ObjectProperty ;
+    rdfs:domain ds:ModifierFamily ;
+    rdfs:range dt:TokenSymbol ;
+    rdfs:label "covers" ;
+    skos:definition "A token symbol the family may provision; a symbol not covered is not provisionable." ;
+    skos:note "Toward the source graph, coverage bounds what the family's context files may rebind: observed coverage must be a subset of declared coverage." ;
+    skos:note "Toward the built graph, coverage accounts for the fan-out: a symbol resolves differently under this family's coordinates only if covered." ;
+    skos:note "A coordinate provisioning strictly fewer symbols than its family declares is a diagnostic, not a second declaration." .
+
+## Attachment levels
+
+dt:Level
+    a owl:Class ;
+    rdfs:label "Attachment Level" ;
+    skos:definition "A rung in the containment order of a rendered interface, at which a modifier family is received and inherited by everything beneath it." ;
+    skos:note "An open, ordered set of individuals." .
+
+dt:contains
+    a owl:ObjectProperty , owl:TransitiveProperty ;
+    rdfs:domain dt:Level ;
+    rdfs:range dt:Level ;
+    rdfs:label "contains" ;
+    skos:definition "Relates an outer rung to a rung within it." ;
+    skos:note "Asserted between adjacent rungs; the rest follows by transitivity." ;
+    skos:note "The order carries the consumption semantics between rungs: at a point of use, a family attached at an inner rung takes precedence over one attached at an outer rung for the symbols both cover. Precedence among families sharing a rung is not settled." .
+
+dt:level.shell
+    a dt:Level ;
+    rdfs:label "shell" ;
+    skos:definition "The application frame: set once per product or user preference." ;
+    skos:example "mode" .
+
+dt:level.layout
+    a dt:Level ;
+    rdfs:label "layout" ;
+    skos:definition "Layout and pattern containers, possibly nested." ;
+    skos:example "surface" .
+
+dt:level.local
+    a dt:Level ;
+    rdfs:label "local" ;
+    skos:definition "Individual components." ;
+    skos:example "anticipation" , "criticality" .
+
+dt:level.element
+    a dt:Level ;
+    rdfs:label "element" ;
+    skos:definition "Elements within a component, under the conditions the user agent determines." .
+
+dt:level.shell dt:contains dt:level.layout .
+dt:level.layout dt:contains dt:level.local .
+dt:level.local dt:contains dt:level.element .
+
+dt:level
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:Contract ;
+    rdfs:range dt:Level ;
+    rdfs:label "level" ;
+    skos:definition "The rung at which the contract's family attaches." .
+
+## Provision
+
+dt:Provision
+    a owl:Class ;
+    rdfs:label "Provision" ;
+    skos:definition "The manner in which a family produces values for the symbols it covers." .
+
+dt:provision.selected
+    a dt:Provision ;
+    rdfs:label "selected" ;
+    skos:definition "Values are selected from authored definitions: an active coordinate picks among branches recorded in the source." ;
+    skos:note "Built values under a selected family record the route of definitions consulted." .
+
+dt:provision.derived
+    a dt:Provision ;
+    rdfs:label "derived" ;
+    skos:definition "Values are computed from other resolved values by declared rules." ;
+    skos:note "Built values under a derived family name the symbol they were computed from." .
+
+dt:provision
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:Contract ;
+    rdfs:range dt:Provision ;
+    rdfs:label "provision" ;
+    skos:definition "How the contract's family provisions values." .
+
+## Type discipline
+
+dt:providesType
+    a owl:DatatypeProperty ;
+    rdfs:domain dt:Contract ;
+    rdfs:range xsd:string ;
+    rdfs:label "providesType" ;
+    skos:definition "A token type the family may provision, in the token specification's own type vocabulary; absent, the family may provision no type." ;
+    skos:note "Bounds coverage: every covered symbol's type must be among the provided types." ;
+    skos:example "color" , "dimension" .
+
+###############################################################################
+# S3 — THE BUILT GRAPH
+###############################################################################
+
+dt:ResolvedValue
+    a owl:Class ;
+    rdfs:label "Resolved Value" ;
+    skos:definition "A value a token symbol takes at one position of the permutation space; its identity is the pair (symbol, position)." ;
+    skos:note "Nodes are anonymous: naming one would only re-encode the pair." ;
+    skos:note "Produced by the build from the source graph and the contracts; never asserted by hand." ;
+    skos:note "Originates either by selection — recording the route of definitions consulted, and carrying the value that route produced — or by derivation from another symbol, carrying no value of its own." ;
+    skos:note "A derived value carries exactly the coordinates its own declaration selects, never a product of families: it holds no value, so nothing about it varies with a family the declaration does not name, and its count stays linear in the declarations rather than in the permutation space." .
+
+dt:forSymbol
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:ResolvedValue ;
+    rdfs:range dt:TokenSymbol ;
+    rdfs:label "forSymbol" ;
+    skos:definition "The symbol whose value this is." .
+
+dt:coordinate
+    a owl:ObjectProperty ;
+    rdfs:domain dt:ResolvedValue ;
+    rdfs:range dt:Coordinate ;
+    rdfs:label "coordinate" ;
+    skos:definition "A coordinate of the position the value holds at; a family with no coordinate asserted is undetermined." .
+
+dt:resolvesTo
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:ResolvedValue ;
+    rdfs:range rdf:JSON ;
+    rdfs:label "resolvesTo" ;
+    skos:definition "The concrete, unconditional value, in the token specification's value form, as a JSON literal." ;
+    skos:note "Platform renderings are projections of this value, never part of it." ;
+    skos:note "Carried by a selected value only. A derived value carries none — restating the target's value here would be a second copy free to drift — and the shape forbids it." .
+
+dt:resolutionChain
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:ResolvedValue ;
+    rdfs:range rdf:List ;
+    rdfs:label "resolutionChain" ;
+    skos:definition "The definitions whose values substituted for one another to produce the value, in order: the definition that won for the symbol first, each subsequent one the winner for the name the previous referenced as a whole token, the terminal definition last." ;
+    skos:note "A single-element chain records that no whole-token reference was followed. A definition in the chain may still compose its value from channel references, which dt:refersTo carries." .
+
+dt:derivedFrom
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain dt:ResolvedValue ;
+    rdfs:range dt:TokenSymbol ;
+    rdfs:label "derivedFrom" ;
+    skos:definition "The symbol from whose resolved value the value was computed." ;
+    skos:note "The value is not restated: a consumer follows this to the named symbol and reads its resolved value at whatever position it wants, so the two cannot disagree." .

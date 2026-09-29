@@ -1,0 +1,134 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.code_editor a ds:Component;
+    ds:name "Code Editor";
+    ds:summary "Code Editor is a lazy-loaded form control for editing scripts, configuration, and other language-aware text with Monaco. It combines a required-capable visible label, an optional header-content slot, application-theme selection, Monaco lifecycle hooks, group-level blur handling, and separate error and warning feedback.\n\nThe public `CodeEditor` boundary defers the editor implementation and displays the shared Loading State while that module loads. Monaco has a second Loading State while its own editor surface initializes. The component is keyboard-oriented and has a source-proven minimum editor height of 16rem; it is more substantial than a standard multiline input.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.code_editor\n  edges:\n    - node:\n        uri: ds:apps_landscape.component.loading_state\n        role: module-loading status\n        relation:\n          cardinality: \"0..1\"\n    - node:\n        role: validation form group\n        edges:\n          - node:\n              role: label and supporting controls header\n              edges:\n                - node:\n                    semantic: label\n                    role: code editor label\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    role: supporting header content\n                    relation:\n                      cardinality: \"0..1\"\n                      slotName: headerContent\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: editor control group\n              edges:\n                - node:\n                    uri: global.component.monaco_editor\n                    role: code input\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    role: error validation message\n                    semantic: paragraph\n                    relation:\n                      cardinality: \"0..1\"\n                - node:\n                    role: warning validation message\n                    semantic: paragraph\n                    relation:\n                      cardinality: \"0..1\"\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=17-11&t=JhmpJ2Kptl96X0Fe-4\n\nTable 15\n\n";
+    ds:usage "### When to use\n\n**Structured code entry**\n\nUse when users edit scripts, autoinstall configuration, search expressions, or other structured text that benefits from Monaco’s code-editing behavior.\n\n**Language-aware workflows**\n\nUse when the workflow needs a Monaco language identifier, consumer options, language registration before mount, or access to the mounted editor.\n\n**Form validation**\n\nUse when code entry belongs to a larger form and needs a required marker, negative or caution styling, and group-level blur notification.\n\n### When not to use\n\n**Short plain text**\n\nThe user is entering a simple one-line value or unstructured short note.\n\n**Incorrect pattern**: Loading Monaco and its infrastructure for a single-line input that requires no syntax awareness or language features.\n\n**Remediation strategy**: Use `Input` for short values or `textarea` for short multiline notes. Reserve Code Editor for structured code, configuration, or language-aware workflows.\n\n**Rendered preview**\n\nThe content must be displayed formatted but not edited.\n\n**Incorrect pattern**: Using Code Editor as a read-only, syntax-highlighted code display component.\n\n**Remediation strategy**: Use a code block component with copy support and configurable language highlighting, without the editor’s editing surface and keyboard complexity.\n\n**Touch-primary editing**\n\nThe primary input method is touch (mobile, tablet) and keyboard shortcuts are unavailable or unfamiliar to users.\n\n**Incorrect pattern**: Defaulting to Code Editor on touch devices when a simple textarea meets the functional requirement and provides better touch ergonomics.\n\n**Remediation strategy**: Use `textarea` for touch-primary workflows; Monaco’s keyboard-centric shortcuts and focus behavior are better suited to desktop editing.";
+    ds:guidelines "### Accessibility\n\n- Treat the current fixed label target (`code`) and fixed feedback ids (`code-error-message`, `code-warning-message`) as implementation limitations. The source does not assign a matching unique id or `aria-describedby` to Monaco; consumers must not assume those relationships are complete.\n- Preserve Monaco’s accessible editing mode and built-in keyboard support. Do not intercept editor shortcuts without an equivalent path.\n- Ensure dynamic validation feedback is announced by the form integration; the current paragraphs have no live-region semantics.\n- Do not use syntax color as the only way to communicate errors or warnings.\n- Keep a visible label. `labelClassName` must not remove the only accessible naming cue.\n\n### Content\n\n- Name the expected language or format and provide examples outside the editor when syntax is unfamiliar.\n- Keep error and warning messages specific to a line, token, or corrective action where possible.\n- Do not include the `Error:` or `Warning:` prefix in prop content; the component supplies it.\n- Keep header content secondary to the editing task. It is suitable for concise actions or status, not long instructions.\n\n### Keyboard\n\n- Users must be able to tab into the Monaco surface and continue to the next form control. Document any application shortcut that conflicts with Monaco.\n- `onBlur` represents leaving the editor control group, not every Monaco blur. Focus moving to a control in `headerContent` counts as leaving that group.\n- Do not add tab stops to decorative header content or loading indicators.\n\n### Responsive behavior\n\n- The source sets a 16rem minimum editor height and a flex-column container but defines no breakpoint-specific behavior. Consumers must provide enough width and prevent the editor from causing page-level horizontal overflow.\n- The header is a non-wrapping horizontal flex row in the current SCSS. Keep `headerContent` compact and verify long translated labels at narrow widths.\n- Use a simpler textarea when the available viewport or input method cannot support practical code editing.\n\n### Content and internationalization\n\n- Externalize labels and validation messages. The component adds English `Error:` and `Warning:` prefixes in source, so full localization requires changing that implementation rather than passing translated message bodies alone.\n- Monaco language identifiers are implementation values and must not be presented as localized language names without a separate display label.\n- Expect translated labels and feedback to wrap; do not encode meaning through line position or syntax color.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "Visible text rendered in the label element.";
+        ds:propertyType "text";
+        ds:defaultValue "None";
+        ds:constraints "The current label uses the fixed `htmlFor=\"code\"`; repeated instances do not receive unique associations from this API.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "valule";
+        ds:summary "Controlled Monaco value.";
+        ds:propertyType "text | undefined";
+        ds:defaultValue "None";
+        ds:constraints "Pass changes back through onChange; avoid switching ownership modes during one mount. ";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "className";
+        ds:summary "Additional class on the Monaco editor wrapper.";
+        ds:propertyType "text";
+        ds:defaultValue "undefined";
+        ds:constraints "Does not apply to the outer form group.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "error";
+        ds:summary " Adds error styling and an Error: message. ";
+        ds:propertyType "text | undefined";
+        ds:defaultValue "undefined";
+        ds:constraints "An empty string or undefined renders no error. Error and warning can both render.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "warning";
+        ds:summary " Adds caution styling and a Warning: message. ";
+        ds:propertyType "text | undefined";
+        ds:defaultValue "undefined";
+        ds:constraints "An empty string or undefined renders no warning. When both states are truthy, both form classes and messages are emitted; avoid ambiguous simultaneous feedback.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "labelClassName";
+        ds:summary "Additional class on the visible label.";
+        ds:propertyType "text";
+        ds:defaultValue "undefined";
+        ds:constraints "Use for established label presentation only; do not hide the sole visible label.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "onChange";
+        ds:summary "Receives Monaco value changes.";
+        ds:propertyType "function";
+        ds:defaultValue "undefined";
+        ds:constraints "Monaco can report undefined; consumers must handle it. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "onBlur";
+        ds:summary "Runs when focus leaves the editor control group.";
+        ds:propertyType "function";
+        ds:defaultValue "undefined";
+        ds:constraints "Moving focus within the control group does not call it. Moving to `headerContent` does, because the header is outside that group.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "required";
+        ds:summary "Applies the Vanilla required-label class.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "This is a visual label treatment; validation remains consumer-owned.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "language";
+        ds:summary "Monaco language identifier.";
+        ds:propertyType "text";
+        ds:defaultValue "“shell”";
+        ds:constraints "Register custom languages through the shared Monaco setup or `monacoBeforeMount`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "defaultValue";
+        ds:summary "Initial value forwarded to Monaco.";
+        ds:propertyType "text";
+        ds:defaultValue "undefined";
+        ds:constraints "Intended for Monaco's initial/uncontrolled value contract; do not use it as a second source of truth beside a changing `value`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "headerContent";
+        ds:summary "Supporting content rendered opposite the label.";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "undefined";
+        ds:constraints "Keep controls compact, labelled, and in a logical focus order.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "options";
+        ds:summary " Monaco editor options merged over Landscape defaults. ";
+        ds:propertyType "object";
+        ds:defaultValue "Landscape Monaco defaults";
+        ds:constraints "Consumer values override the default disabled minimap, hidden line highlight, and 8px top/bottom editor padding. For Monaco options type, see Monaco Editor documentation.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "monacoBeforeMount";
+        ds:summary "Runs before Monaco mounts.";
+        ds:propertyType "function";
+        ds:defaultValue "undefined";
+        ds:constraints "Use for language or editor registration that must exist before rendering. Monaco parameter is the Monaco Editor API instance.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "onMount";
+        ds:summary "Receives the mounted editor and Monaco instance.";
+        ds:propertyType "function";
+        ds:defaultValue "undefined";
+        ds:constraints "Consumers own any setup and cleanup introduced through the callback. Parameters are the mounted Editor instance and Monaco API.";
+        ds:optional "true"
+    ].

@@ -1,0 +1,37 @@
+@prefix : <https://anatomy.canonical.com/> .
+@prefix dt: <https://dt.canonical.com/> .
+
+[] a :Specification ;
+    :rootNode [
+        a :NamedNode ;
+        :uri "global.component.input-group" ;
+        :hasEdge [
+            a :Edge ;
+            :edgeSwitch [
+                a :Switch ;
+                :discriminator "props" ;
+                :hasCase [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.component.text-input"
+                    ]
+                ] , [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.component.textarea" ;
+                        :hasStyle
+                            [ a :Style ; :styleKey "size.height" ; :styleValue "auto" ] ,
+                            [ a :Style ; :styleKey "size.min.height" ; :styleValue "dimension.1600" ; :consumes ( dt:dimension.1600 ) ] ,
+                            [ a :Style ; :styleKey "interaction.resize" ; :styleValue "vertical" ]
+                    ]
+                ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "1" ;
+                :slotName "input"
+            ]
+        ]
+    ] .

@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier_family.release a ds:ModifierFamily;
+    ds:name "Release";
+    ds:summary "";
+    ds:tier ds:global;
+    ds:hasModifier ds:global.modifier.stable, ds:global.modifier.beta, ds:global.modifier.alpha, ds:global.modifier.experimental.

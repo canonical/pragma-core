@@ -1,0 +1,21 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.combobox-helper
+  styles:
+    layout.type: flex
+    layout.direction: row   # was horizontal
+    layout.align: center
+    # dropped spacing.gap: spacing/inline/extra-small — no spacing symbol corresponds
+    appearance.background: color.background   # was color/background/default
+  edges:
+    - node:
+        role: icon container
+      relation:
+        cardinality: "0..1"
+        slotName: icon
+    - node:
+        role: helper text
+      relation:
+        cardinality: "1"
+        slotName: default

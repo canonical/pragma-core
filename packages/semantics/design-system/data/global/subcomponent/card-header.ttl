@@ -1,0 +1,61 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.card-header a ds:Subcomponent;
+    ds:name "Card.Header";
+    ds:summary "The card header is a structural sub-component used to provide the primary context for the [Card](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Gm_-gu8fGD). It contains the title and optional subtitles or icons to identify the object being described. Its sole functionality is to offer a consistent anchoring point for identification at the top of the container.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/component/Card/common/Header/styles.css on .ds.card-header, with the\n# parent's own child rules in src/lib/component/Card/styles.css\n# (.ds.card > .card-header).\nnode:\n  uri: global.subcomponent.card-header\n  styles:\n    layout.type: flex\n    layout.direction: row\n    layout.align: center\n    layout.justify: space-between\n    # The card places each section on a fixed row track and spans its single\n    # column; the header is track 2.\n    layout.grid.row: 2\n    layout.grid.column: \"1 / -1\"\n    # --card-header-gap and --card-header-padding-{block,inline} are declared in\n    # :root off --dimension-200.\n    spacing.gap: dimension.200                    # --card-header-gap, between title and actions\n    spacing.internal.block.start: dimension.200   # --card-header-padding-block, a surface inset\n    spacing.internal.block.end: dimension.200     # --card-header-padding-block, a surface inset\n    spacing.internal.inline.start: dimension.200  # --card-header-padding-inline, a surface inset\n    spacing.internal.inline.end: dimension.200    # --card-header-padding-inline, a surface inset\n    # The card collapses the header/content seam: with a content section\n    # directly after it, the header's block-end padding drops to a raw 0, which\n    # the parent writes as unthemable by design.\n  edges:\n    # The implementation renders one container with `children`; the two positions\n    # are what `justify-content: space-between` is for, and they carry no styles\n    # of their own there. The title's `font/weight/semibold` binding is dropped:\n    # neither the header nor its children set a font-weight.\n    - node:\n        role: title\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        role: actions\n      relation:\n        cardinality: \"0..1\"\n        slotName: actions";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:global.component.card;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-header;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ].

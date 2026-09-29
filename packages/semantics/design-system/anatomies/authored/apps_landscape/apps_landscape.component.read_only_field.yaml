@@ -1,0 +1,41 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.read_only_field
+  styles:
+    layout.type: flex        # was layout.display: flex
+    layout.direction: column
+  edges:
+    - node:
+        # semantic: label
+        role: read-only value name
+      relation:
+        cardinality: "1"
+    - node:
+        # role: locked-state explanation
+        uri: global.component.tooltip
+        edges:
+          - node:
+              role: locked value row
+              styles:
+                layout.type: flex   # was layout.display: flex
+                layout.align: center
+                layout.justify: space-between
+              edges:
+                - node:
+                    role: displayed value or no-data fallback
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # role: locked-state indicator
+                    uri: global.component.icon
+                    props:
+                      # was name: lock-locked, Vanilla's glyph name; @canonical/ds-assets
+                      # ships this glyph as `locked`
+                      icon: locked
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"

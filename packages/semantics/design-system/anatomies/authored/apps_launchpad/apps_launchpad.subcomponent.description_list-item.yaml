@@ -1,0 +1,32 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.description_list-item
+  styles:
+    layout.type: flex
+    layout.direction: column   # was vertical
+    # dropped spacing.gap: spacing/block/extra-small — no spacing symbol corresponds
+  edges:
+    - node:
+        role: term
+        styles:
+          typography.font: typography.text.secondary.bold   # was typography/paragraph/small/strong
+          typography.color: color.text.muted   # was color/text/muted
+      relation:
+        cardinality: "1"
+        slotName: name
+    - node:
+        role: separator
+        styles:
+          appearance.background: color.border.muted   # was color/border/low-contrast
+          size.height: 1px
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: description
+        styles:
+          typography.font: typography.text.secondary   # was typography/paragraph/small
+          typography.color: color.text   # was color/text/default
+      relation:
+        cardinality: "1"
+        slotName: default

@@ -1,0 +1,62 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration. The root uri was `ds:global.subcomponent:KVPItem` in
+# the retired colon spelling.
+#
+# The notation carried FOUR trees in one cell — a base item, an `.Inline`
+# variant, a `.Stacked` variant and a `.Meta` variant — under uris
+# (`…:KVPItem.Inline`, `.Stacked`, `.Meta`) that name no ds: subject. One block
+# is one anatomy, so the base tree is the anatomy here, the Meta variant's two
+# extra parts are folded in as optional edges above the pair, and the rest is
+# recorded:
+#   Inline   — the same row, with layout.align: center rather than flex-start.
+#   Stacked  — a column rather than a row, layout.align: flex-start.
+#   Meta     — a heading and a meta-value above, and then the base item repeated
+#              1..* beneath them. That self-reference is left out rather than
+#              encoded as recursion, so the heading and the meta-value here sit
+#              above ONE key/value pair.
+# Either the variants earn their own blocks or they become a switch once someone
+# rules on it; nothing here invents the uris.
+node:
+  uri: global.subcomponent.kvpitem_base
+  styles:
+    layout.type: flex
+    layout.direction: row
+    layout.align: flex-start
+  edges:
+    - node:
+        role: heading
+        styles:
+          # From the Meta variant. `text/secondary/bold` migrates to the
+          # composite it names; the size key admits dimension.* alone, so
+          # typography.font carries the tier.
+          typography.font: typography.text.secondary.bold
+          typography.color: color.text
+      relation:
+        cardinality: "0..1"
+        slotName: header
+    - node:
+        role: meta-value
+        styles:
+          # From the Meta variant.
+          typography.font: typography.text.secondary
+          typography.color: color.text
+      relation:
+        cardinality: "0..1"
+        slotName: headerValue
+    - node:
+        role: key
+        styles:
+          typography.font: typography.text.secondary
+          typography.color: color.text.muted
+      relation:
+        cardinality: "1"
+        slotName: key
+    - node:
+        role: value
+        styles:
+          typography.font: typography.text.secondary
+          typography.color: color.text
+      relation:
+        cardinality: "1"
+        slotName: value

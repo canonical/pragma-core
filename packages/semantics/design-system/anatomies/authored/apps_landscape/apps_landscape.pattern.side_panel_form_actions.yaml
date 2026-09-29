@@ -1,0 +1,47 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: sticky side-panel form command row
+  uri: apps_landscape.pattern.side_panel_form_actions
+  styles:
+    layout.type: flex          # was display: flex
+    layout.position: sticky    # was position: sticky
+    layout.offset.bottom: 0    # was bottom: "0"
+    # was borderTop: "1px solid $colors--theme--border-default" — the block-start
+    # border colour resolves to the declared border colour; the width and style keys
+    # the roster has for it are the all-sides ones
+    appearance.border.top.width: 1px
+    appearance.border.style: solid
+    appearance.border.block.start.color: color.border
+    layout.stack: "var(--z-sticky)"   # was zIndex: "var(--z-sticky)"
+  edges:
+    - node:
+        # role: back
+        uri: global.component.button
+      relation:
+        cardinality: "0..1"   # rendered when hasBackButton is truthy
+    - node:
+        role: action button group
+        styles:
+          layout.type: flex          # was display: flex
+          layout.flex.grow: 1        # was flexGrow: "1"
+          layout.justify: flex-end   # was justifyContent: flex-end
+        edges:
+          - node:
+              # role: cancel
+              uri: global.component.button
+            relation:
+              cardinality: "1"
+          - node:
+              # role: secondary action
+              uri: global.component.button
+            relation:
+              cardinality: "0..1"   # rendered when secondaryActionButtonTitle and secondaryActionButtonSubmit are truthy
+          - node:
+              # was uri: global.component.action_button, which names no subject; an
+              # action button is a Button that carries a loading state. role: submit
+              uri: global.component.button
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"   # rendered when hasActionButtons is true

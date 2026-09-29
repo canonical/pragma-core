@@ -1,0 +1,20 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.icon a ds:Component;
+    ds:name "Icon";
+    ds:summary "Icons function as visual anchors. They are designed to be metaphorically clear and aesthetically consistent, ensuring that when paired with text or some cases standalone users can identify key interactions and system states at a glance. Only Icons which are near universally understood (like delete or edit) can stand on their own,  but even those need accompanying tooltips to explain them. \n\n";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Icon/styles.css on .ds.icon\nnode:\n  uri: global.component.icon\n  styles:\n    layout.type: inline-block\n    layout.verticalAlign: middle\n    # reads --icon-size, a component-local size the package declares as 1em at\n    # :root, then --size-icon-default, which no symbol declares, then the\n    # chain's own 1rem literal. The effective value is the 1em.\n    size.width: 1em\n    size.height: 1em";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2431-9000&t=sOMJn3GdvE3iTgAI-1";
+    ds:usage "## Usage\n\nIcons are intended to supplement information and streamline the user journey. They should never create ambiguity or force a user to guess what an element does. Where meaning is universal, these icons can function as standalone [Button](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8SdtbQUhTr)s that guide users without the need for additional text.\n\n### When to use\n\n- To guide users toward primary actions where space is limited.\n- When a label alone is insufficient to convey meaning.\n- When the user needs to know the condition of a system or process without reading a full sentence.\n- When recognition is a primary objective towards the user through visual patterns rather than reading text.\n\n### When not to use\n\n- When the icon represents a complex or unique action that does not have a universally recognized metaphor\n  - Incorrect: Using a custom \"Star-burst\" icon to represent \"Advanced AI Settings\" without a text label nearby.\n  - Remediation: Always pair non-universal icons with a text label. If available space does not allow for a label, then a tooltip must be used.if available space does not allow for a label, then a tooltip must be used.\n- When icons are added to every single line of text or menu item, creating \"visual noise.\"\n  - Incorrect: A long list of 50 settings where every single line has a generic \"Gear\" icon next to it.\n  - Remediation: Remove the icons and use typography (bolding or headers) to create hierarchy, reserving icons only for high-priority actions.";
+    ds:guidelines "### Accessibility and Size \n\n- **Touch Targets:** Even if the icon is small (e.g., 16px), the interactive hit area should be at least 44x44px to accommodate touch and mouse accuracy.\n- **Color Contrast:** Ensure icons used for information (status) meet a minimum contrast ratio of 3:1 against the background.\n\n\n\n### Concepts\n\n[Question mark vs information icon](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-GnfOU3MM-3/_rui-KPw8GwEbJ-)";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "icon";
+        ds:summary "Describes which icon should be displayed from a preexisting list";
+        ds:propertyType "text";
+        ds:optional "false"
+    ].

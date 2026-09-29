@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.lptriageblocked-reqs-design a ds:Tag;
+    ds:name "lp:triage:blocked-reqs-design";
+    ds:category ds:tagcategory.lpupstream;
+    ds:whenToApply "";
+    ds:whenToRemove "".

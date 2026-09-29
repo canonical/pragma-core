@@ -1,0 +1,116 @@
+---
+# Authored 2026-09-13 from @canonical/lit-ds-prototype src/lib/TieredList/styles.css on .ds.tiered-list
+# and src/lib/TieredList/common/TieredListItem/styles.css on .ds.tiered-list-item
+# The reference corrects the notation it replaces: an item carries one title and
+# one description across an eight-column grid, not a title plus a list of tiers,
+# and the list itself adds a header and a CTA region the notation did not have.
+# TieredListItem is a real element but no ds: subject declares it, so it is a role.
+node:
+  uri: sites_webcomponentsprototype.pattern.tiered_list
+  styles:
+    layout.type: grid
+    layout.grid.columns: subgrid
+    # 1 / -1 below 768px, 2 / -1 from there, and 2 / 8 from 1280px up.
+    layout.grid.column: 2 / 8
+    # dropped the bottom padding: the reference reads --spacing-vertical-xxlarge
+    # (--spacing-vertical-xxxlarge when deep, --spacing-vertical-xlarge when
+    # shallow), none of which any stratum declares, and it writes no literal
+  edges:
+    - node:
+        role: top rule
+        # The stylesheet gives the leading hr no properties of its own.
+      relation:
+        cardinality: "1"
+    - node:
+        role: header
+        styles:
+          layout.type: grid
+          layout.grid.columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr))
+          # dropped the header's bottom padding: --spacing-vertical-xlarge, which no
+          # stratum declares, and the reference writes no literal
+        edges:
+          - node:
+              role: header title
+              styles:
+                typography.size: 2.5rem
+                typography.weight: 180
+                typography.lineHeight: 3rem
+                spacing.external.block.start: 0
+            relation:
+              cardinality: "1"
+          - node:
+              role: header description
+              # Placed at 5 / -1 on the second row when the description runs full
+              # width on desktop, and 1 / -1 at 1035px and below; the base layout
+              # gives it no properties.
+            relation:
+              cardinality: "0..1"
+              slotName: description
+      relation:
+        cardinality: "1"
+    - node:
+        role: body
+        edges:
+          - node:
+              role: tiered list item
+              styles:
+                layout.type: grid
+                layout.grid.columns: repeat(8, 1fr)   # --grid-row-8-cols, a component-local track list
+              edges:
+                - node:
+                    role: item title
+                    styles:
+                      # --item-title-column is component-local: 1 / -1 at 1035px and
+                      # below, or 1 / 5 there when the list runs full width on tablet.
+                      layout.grid.column: 2 / 4
+                  relation:
+                    cardinality: "1"
+                    slotName: item-title
+                - node:
+                    role: item description
+                    styles:
+                      layout.grid.column: 5 / -1   # --item-description-column, component-local
+                  relation:
+                    cardinality: "1"
+                    slotName: item-description
+                - node:
+                    role: item rule
+                    styles:
+                      layout.grid.column: 2 / -1
+                      size.width: 100%
+                      appearance.border.top.width: 1px
+                      # dropped the rule's colour: the reference reads
+                      # --tmp-color-palette-gray-14, a staging variable no stratum
+                      # declares, and the key admits no bare literal
+                      # dropped the rule's block margins: --spacing-vertical-large,
+                      # which no stratum declares, written with no literal
+                  relation:
+                    cardinality: "0..1"
+            relation:
+              cardinality: "1..*"
+              slotName: items
+      relation:
+        cardinality: "1"
+    - node:
+        role: cta region
+        styles:
+          layout.type: grid
+          layout.grid.columns: repeat(8, 1fr)   # --grid-row-8-cols, a component-local track list
+        edges:
+          - node:
+              role: cta block
+              styles:
+                layout.grid.column: 5 / -1
+              edges:
+                - node:
+                    role: call to action content
+                    styles:
+                      layout.type: block
+                      size.width: 100%
+                  relation:
+                    cardinality: "1..*"
+                    slotName: cta
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"

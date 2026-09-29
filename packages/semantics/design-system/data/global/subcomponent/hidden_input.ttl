@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.hidden_input a ds:Subcomponent;
+    ds:name "HiddenInput";
+    ds:summary "The non-visible value-carrying part a host field places in context; it holds a value submitted with the form but shown to no one. Consumed by [HiddenField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-erOCIafN7p) .";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global-form\n# src/lib/subcomponent/HiddenInput/HiddenInput.tsx (`.ds.form-hidden`). The\n# implementation ships no stylesheet, and correctly so: a hidden input is pure\n# markup — an <input type=\"hidden\"> that carries a value into the form and\n# paints nothing — so the anatomy is a single node with no styles and no parts.\nnode:\n  uri: global.subcomponent.hidden_input";
+    ds:anatomyClassic "";
+    ds:usage "The non-visible carrier part a host places in context to hold a value that travels with a submission but is never edited.\n\n\n\n### When to use\n\n- A host must retain a fixed or system-derived value alongside visible entries.\n\n- A value needs to accompany the field's data without inviting interaction.\n\n\n\n### When not to use\n\n- The person should see or change the value — compose **TextInput**.\n\n- The value is purely presentational and not part of the field's data — it belongs in the host's content, not an input part.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition.

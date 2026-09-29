@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier.information a ds:Modifier;
+    ds:name "Information";
+    ds:summary "The information modifier should be used for UI blocks that could consume other criticality modifiers, but in this case simply convey relevant information message to the user. It indicates neutral, informative context, and usually uses a blue hue to enforce its semantic role.  \n  \nThe information modifier is less frequently used than it’s family counterpart because sometimes the default, unmodified UI block is preferred when the purely informational aspect does not need to be explicit. \n\nFor example, a default [Badge](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-eHpgyzRyDl) is used informationally without consuming the information modifier, while a [Notification](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-KVe8I1_VnA) or a status indicator needs more emphasis and uses the modifier tokens.  \n";
+    ds:modifierFamily ds:global.modifier_family.criticality.

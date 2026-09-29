@@ -1,0 +1,43 @@
+@prefix : <https://anatomy.canonical.com/> .
+
+[] a :Specification ;
+    :rootNode [
+        a :NamedNode ;
+        :uri "global.component.async-button" ;
+        :hasEdge [
+            a :Edge ;
+            :edgeSwitch [
+                a :Switch ;
+                :discriminator "internal" ;
+                :hasCase [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.subcomponent.async-button-idle"
+                    ]
+                ] , [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.subcomponent.async-button-loading"
+                    ]
+                ] , [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.subcomponent.async-button-success"
+                    ]
+                ] , [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.subcomponent.async-button-error"
+                    ]
+                ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "1"
+            ]
+        ]
+    ] .

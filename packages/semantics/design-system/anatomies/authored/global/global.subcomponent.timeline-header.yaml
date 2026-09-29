@@ -1,0 +1,21 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration: the Timeline stylesheets carry no header selector, so
+# the structure and bindings are kept as the notation had them.
+node:
+  uri: global.subcomponent.timeline-header
+  styles:
+    layout.type: flex
+    layout.direction: row
+    layout.justify: space-between
+  edges:
+    - node:
+        role: filters
+      relation:
+        cardinality: "0..1"
+        slotName: start
+    - node:
+        role: sorting
+      relation:
+        cardinality: "0..1"
+        slotName: end

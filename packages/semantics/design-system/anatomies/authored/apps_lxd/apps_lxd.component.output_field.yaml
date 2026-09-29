@@ -1,0 +1,41 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `core:component:OutputField`; the block's own uri is used
+# instead. Its three children were `core:element:OutputFieldLabel`, `…Value` and
+# `…HelpText`, none of which names a subject, so each is an anonymous role here.
+node:
+  uri: apps_lxd.component.output_field
+  styles:
+    # Structural (implicitly invariant)
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+  edges:
+    - node:
+        role: output field label      # was uri: core:element:OutputFieldLabel
+        styles:
+          # Themeable
+          typography.color: color.text   # was color/text/label
+          # was typography.size: font/size/small; no fontSize symbol corresponds to the
+          # small text size
+      relation:
+        cardinality: "1..1"
+        slotName: label
+    - node:
+        role: output field value      # was uri: core:element:OutputFieldValue
+        styles:
+          # Themeable
+          typography.color: color.text              # was color/text/primary
+          typography.weight: typography.weight.bold # was font/weight/bold
+      relation:
+        cardinality: "1..1"
+        slotName: default
+    - node:
+        role: output field help text  # was uri: core:element:OutputFieldHelpText
+        styles:
+          # Themeable
+          typography.color: color.text.muted
+          # was typography.size: font/size/small; no fontSize symbol corresponds to the
+          # small text size
+      relation:
+        cardinality: "0..1"
+        slotName: help

@@ -1,0 +1,64 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form src/lib/common/Wrapper/styles.css on .ds.field
+# The field is the Wrapper's chrome: a subgrid whose label row sits above a
+# payload row carrying the description, the control and any error. The control
+# is combobox input — src/lib/subcomponent/ComboboxInput/styles.css on `.ds.form-combobox` — and its own styles
+# live in its own anatomy, not copied here.
+node:
+  uri: global.component.combobox_field
+  styles:
+    layout.type: grid
+    layout.grid.columns: subgrid
+    # reads --form-field-columns, the component-local track placement a caller
+    # overrides to put the field in part of the form grid.
+    layout.grid.column: "1 / -1"
+    layout.align: baseline
+    # The block gap from the label row down to the payload row reads
+    # --form-field-label-gap, which resolves through --space-100 to
+    # --dimension-100; this is the spacing semantic that resolves to it. When a
+    # description LEADS the payload the gap tightens to
+    # --form-field-label-description-gap (--dimension-050), for which no
+    # spacing semantic resolves, so that conditional is not carried.
+    spacing.gap.block: spacing.gap.field.block
+  edges:
+    - node:
+        uri: global.subcomponent.field-label
+        styles:
+          # reads --form-label-columns.
+          layout.grid.column: "1 / -1"
+      relation:
+        cardinality: "1"
+        slotName: label
+    - node:
+        role: payload
+        styles:
+          layout.type: grid
+          layout.grid.columns: subgrid
+          # reads --form-payload-columns.
+          layout.grid.column: "1 / -1"
+          # reads --form-group-gap (--space-100 -> --dimension-100).
+          spacing.gap.block: spacing.gap.field.block
+        edges:
+          - node:
+              uri: global.subcomponent.field-description
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "0..1"
+              slotName: description
+          - node:
+              uri: global.subcomponent.combobox_input
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "1"
+              slotName: default
+          - node:
+              uri: global.subcomponent.field-error
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "0..1"
+              slotName: error
+      relation:
+        cardinality: "1"

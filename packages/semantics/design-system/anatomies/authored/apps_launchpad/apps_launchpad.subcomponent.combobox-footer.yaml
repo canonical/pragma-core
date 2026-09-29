@@ -1,0 +1,18 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.combobox-footer
+  styles:
+    layout.type: flex
+    layout.direction: row   # was horizontal
+    layout.align: center
+    layout.justify: flex-end
+    # dropped spacing.gap: spacing/inline/extra-small — no spacing symbol corresponds
+    # dropped appearance.border: border/style/divider — a single-edge divider has no
+    # roster key for its line style, and the value named no declared colour
+  edges:
+    - node:
+        role: action area
+      relation:
+        cardinality: "1..*"
+        slotName: default

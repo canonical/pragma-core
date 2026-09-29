@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.triagedrejected a ds:Tag;
+    ds:name "triaged:rejected";
+    ds:category ds:tagcategory.documentation-stage;
+    ds:whenToApply "UIBlock proposal was rejected because it was assessed not to be a valuable addition to the design system. ";
+    ds:whenToRemove "".

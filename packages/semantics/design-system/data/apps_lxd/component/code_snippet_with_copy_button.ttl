@@ -1,0 +1,56 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.component.code_snippet_with_copy_button a ds:Component;
+    ds:name "CodeSnippetWithCopyButton";
+    ds:summary "The **CodeSnippetWithCopyButton** component is a CodeSnippet (from `react-components`) with a `CopyToClipboard` component embedded in the code.\n\n\n\n**Primary purpose**\n\nThis component is used to display code content that users are expected to copy and execute elsewhere. It enhances the standard code snippet presentation by embedding copy functionality directly within the formatted code block.\n\n\n\n**Main use cases**\n\n- **Command line instructions**: terminal commands, shell scripts, or CLI instructions that users need to execute in their local environments\n- **Configuration examples**: configuration file snippets, YAML blocks, or JSON structures that users should copy into their project files\n- **Credentials and tokens**: public keys, access tokens, or other sensitive values that need to be copied securely\n- **Documentation code blocks**: code examples or samples in tutorials or documentation that readers should copy and try\n\n\n\n**When to use:**\n\n- ✅ C**ode or commands** that users are expected to run or implement\n- ✅ **Code examples** in documentation or tutorials where users want to copy and experiment\n- ✅ **Configuration snippets** that users need to integrate into their own files or systems\n\n\n\n**When not to use**\n\n- ❌ **Non-executable text content** that doesn't require code formatting or syntax highlighting\n- ❌ **Editable code examples** where users need to modify the content before copying\n- ❌ **Content that rarely gets copied**, where CodeSnippet would be more efficient";
+    ds:anatomyDsl "node:\n  uri: core:component:CodeSnippetWithCopyButton\n  styles:\n    layout.type: stack\n    layout.direction: vertical\n    layout.display: block\n    appearance.background: color/surface/code\n    appearance.radius: shape/rounded/small\n    appearance.border: border/style/code\n    spacing.internal: spacing/none\n    \n  edges:\n    - node:\n        uri: core:element:CodeSnippet\n        styles:\n          layout.type: block\n          layout.display: block\n          size.width: fill\n          appearance.theme: appearance/code/blocks\n          typography.family: font/family/mono\n          \n      relation:\n        cardinality: \"1..1\"\n        slotName: default\n        \n      edges:\n        - node:\n            role: command container\n            styles:\n              layout.type: flow\n              layout.direction: horizontal\n              layout.align: center\n              layout.justify: space-between\n              size.width: fill\n              spacing.internal: spacing/small\n              appearance.background: color/surface/code/block\n              \n          relation:\n            cardinality: \"1..1\"\n            slotName: code\n            \n          edges:\n            - node:\n                role: code text display\n                styles:\n                  layout.display: inline-block\n                  layout.flex: 1\n                  layout.overflow: hidden\n                  text.truncate: true\n                  text.wrap: nowrap\n                  typography.family: font/family/mono\n                  typography.size: font/size/code\n                  typography.color: color/text/code\n                  appearance.background: transparent\n                  \n              relation:\n                cardinality: \"1..1\"\n                slotName: content\n                \n            - node:\n                uri: core:component:CopyToClipboard\n                styles:\n                  layout.display: inline-block\n                  layout.flex: none\n                  layout.align.self: center\n                  spacing.margin.left: spacing/small\n                  \n              relation:\n                cardinality: \"1..1\"\n                slotName: action";
+    ds:anatomyClassic "\n\n\n\nIn this modal, we use it twice: for the identity trust token and for the command line.  \n";
+    ds:usage "### **General description**\n\nThe **CodeSnippetWithCopyButton** component provides a formatted display for executable code and commands with integrated copy functionality. It combines syntax highlighting, proper code formatting, and one-click copying to streamline the process of sharing technical instructions, configuration examples, and executable commands. The component ensures accurate code presentation while eliminating copy-paste errors common with manual text selection.\n\n\n\n**When to use:**\n\n- ✅ C**ode or commands** that users are expected to run or implement\n- ✅ **Code examples** in documentation or tutorials where users want to copy and experiment\n- ✅ **Configuration snippets** that users need to integrate into their own files or systems\n\n\n\n**When not to use**\n\n- ❌ **Non-executable text content** that doesn't require code formatting or syntax highlighting\n- ❌ **Editable code examples** where users need to modify the content before copying\n- ❌ **Content that rarely gets copied**, where CodeSnippet would be more efficient";
+    ds:guidelines "";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "code";
+        ds:summary "The source code or command text to display";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "className";
+        ds:summary "Additional CSS class names to apply to the component wrapper";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "`undefined`"
+    ], [
+        a ds:Property;
+        ds:name "appearance";
+        ds:summary "Visual styling variant that determines the code block's presentation format";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "`linuxPrompt`";
+        ds:constraints "Must be `linuxPrompt` (terminal/command line styling) or `numbered` (code with line numbers) or `url` (code block with border styling) or `windowsPrompt` "
+    ], [
+        a ds:Property;
+        ds:name "title";
+        ds:summary "Header text displayed above the code block to provide context or label the code content";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "`undefined`"
+    ], [
+        a ds:Property;
+        ds:name "tooltipMessage";
+        ds:summary "Text to display in the copy button's tooltip on hover";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "`Copy`"
+    ], [
+        a ds:Property;
+        ds:name "onCopyButtonClick";
+        ds:summary "Callback function that executes after the copy button is successfully clicked";
+        ds:propertyType "function";
+        ds:optional "true";
+        ds:defaultValue "`undefined`";
+        ds:constraints "Must be a function with signature `() => void` (no parameters, no return value)"
+    ].

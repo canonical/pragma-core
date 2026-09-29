@@ -1,0 +1,80 @@
+---
+# TODO implementation: no reference in @canonical/lit-ds-prototype
+# No subcomponent subject exists in this tier, so the nav, its items, the content
+# region and its panels are roles rather than the retired vanilla.* uris.
+node:
+  uri: sites_webcomponentsprototype.component.tabs
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    size.width: fill
+  edges:
+    - node:
+        role: tab nav
+        styles:
+          layout.type: flex   # was flow
+          layout.direction: row   # was horizontal
+          layout.align: end
+          spacing.gap: 0   # was spacing/none
+          # dropped appearance.border.bottom: border/style/divider — a single-edge
+          # divider has no roster key for its line style, and the value named no
+          # declared colour
+          layout.overflow.inline: auto
+          size.width: fill
+        edges:
+          - node:
+              role: tab nav item
+              styles:
+                layout.type: flex   # was flow
+                layout.direction: row   # was horizontal
+                layout.align: center
+                # dropped spacing.padding.horizontal: spacing/medium and
+                # spacing.padding.vertical: spacing/small — no spacing symbol corresponds
+                # dropped typography.size: font/size/medium — no dimension symbol corresponds
+                typography.weight: typography.weight.regular   # was font/weight/regular
+                typography.color: color.text.link   # was color/text/link
+                typography.decoration: none
+                appearance.background: transparent   # was color/surface/transparent
+                # dropped appearance.border.bottom: border/style/none — no roster key
+                # for a single-edge line style
+                interaction.cursor: pointer
+                typography.whiteSpace: nowrap
+              edges:
+                - node:
+                    role: tab label text
+                    styles:
+                      # dropped typography.size: font/size/medium — no dimension symbol corresponds
+                      typography.color: color.text.link   # was color/text/link
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "2..*"
+      relation:
+        cardinality: "1"
+        slotName: nav
+    - node:
+        role: tab content
+        styles:
+          layout.type: flex   # was stack
+          layout.direction: column   # was vertical
+          size.width: fill
+        edges:
+          - node:
+              role: tab panel
+              styles:
+                layout.type: flex   # was stack
+                layout.direction: column   # was vertical
+                # dropped spacing.internal: spacing/large — no spacing symbol corresponds
+              edges:
+                - node:
+                    role: panel content
+                    styles:
+                      layout.type: block
+                  relation:
+                    cardinality: "1"
+                    slotName: default
+            relation:
+              cardinality: "2..*"
+      relation:
+        cardinality: "1"
+        slotName: content

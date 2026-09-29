@@ -1,0 +1,37 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.tooltip
+  styles:
+    layout.type: contents
+  edges:
+    - node:
+        role: trigger
+        edges:
+          - node:
+              role: trigger element
+            relation:
+              cardinality: "1"
+              slotName: default
+      relation:
+        cardinality: "1"
+        slotName: trigger
+    - node:
+        role: popup
+        styles:
+          layout.type: block
+          layout.position: absolute
+          appearance.background: color.background.contrasted   # was color/background/inverted
+          appearance.border.style: none
+          appearance.radius: dimension.radius.small   # was radius/small
+          # dropped appearance.shadow: shadow/overlay/default — box-shadow has no roster key
+          typography.color: color.text.contrasted   # was color/text/inverted
+          typography.font: typography.text.tertiary   # was typography/paragraph/extra-small
+        edges:
+          - node:
+              role: content
+            relation:
+              cardinality: "1"
+              slotName: default
+      relation:
+        cardinality: "0..1"

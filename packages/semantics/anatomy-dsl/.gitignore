@@ -1,0 +1,19 @@
+# AI tool config
+.claude
+.gemini
+
+# Planning and working sessions
+session/
+
+# Build output
+dist/
+
+# Dependencies
+node_modules/
+
+# sem: vendored base vocabularies and the closure cache, written by
+# `sem check` when it resolves sem.toml's [dependencies]
+.sem/
+
+# Lockfile
+bun.lock

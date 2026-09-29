@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.edge a ds:Tag;
+    ds:name "edge";
+    ds:category ds:tagcategory.channel;
+    ds:whenToApply "Early stage, expect breaking changes";
+    ds:whenToRemove "".

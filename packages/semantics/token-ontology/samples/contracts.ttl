@@ -1,0 +1,116 @@
+###############################################################################
+# Non-normative sample instances: contracts and coordinates for three families.
+# References only ds: individuals that exist in the design-system data.
+###############################################################################
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ds:  <https://ds.canonical.com/> .
+@prefix dt:  <https://dt.canonical.com/> .
+
+## mode — the widest family
+
+ds:global.modifier_family.mode
+    ds:exclusive true ;
+    dt:contract  dt:contract.mode ;
+    dt:covers    dt:color.foreground.primary , dt:color.background ,
+                 dt:color.text , dt:color.border .   # abridged: full coverage is generated
+
+dt:contract.mode
+    a dt:Contract ;
+    dt:level        dt:level.shell ;
+    dt:provision    dt:provision.selected ;
+    dt:providesType "color" .
+
+dt:coordinate.mode.light
+    a dt:Coordinate ;
+    dt:family  ds:global.modifier_family.mode ;
+    dt:concept ds:global.modifier.light .
+
+dt:coordinate.mode.dark
+    a dt:Coordinate ;
+    dt:family  ds:global.modifier_family.mode ;
+    dt:concept ds:global.modifier.dark .
+
+## anticipation — a narrow family, its whole coverage
+
+ds:global.modifier_family.anticipation
+    ds:exclusive true ;
+    dt:contract  dt:contract.anticipation ;
+    dt:covers    dt:color.border , dt:color.focusRing ,
+                 dt:color.foreground.ghost , dt:color.foreground.primary ,
+                 dt:color.icon , dt:color.text .
+
+dt:contract.anticipation
+    a dt:Contract ;
+    dt:level        dt:level.local ;
+    dt:provision    dt:provision.selected ;
+    dt:providesType "color" .
+
+dt:coordinate.anticipation.constructive
+    a dt:Coordinate ;
+    dt:family  ds:global.modifier_family.anticipation ;
+    dt:concept ds:global.modifier.constructive .
+
+## surface — a coordinate the design system has not named
+
+ds:global.modifier_family.surface
+    ds:exclusive true ;
+    dt:contract  dt:contract.surface .
+
+dt:contract.surface
+    a dt:Contract ;
+    dt:level        dt:level.layout ;
+    dt:provision    dt:provision.selected ;
+    dt:providesType "color" .
+
+dt:coordinate.surface.contrasted
+    a dt:Coordinate ;
+    dt:family ds:global.modifier_family.surface .
+    # no dt:concept — the design system has no modifier for it; the position is stated regardless
+
+## The three shapes an indeterminate coordinate takes
+
+dt:coordinate.anticipation.none
+    a dt:Coordinate ;
+    dt:family ds:global.modifier_family.anticipation .
+    # inert — neither property; the family contributes nothing
+
+dt:coordinate.typography.none
+    a dt:Coordinate ;
+    dt:family ds:global.modifier_family.typography ;
+    dt:otherwise dt:coordinate.typography.global .
+    # constant — a fallback with no preference
+
+dt:coordinate.mode.none
+    a dt:Coordinate ;
+    dt:family     ds:global.modifier_family.mode ;
+    dt:resolvesBy dt:preference.colorScheme ;
+    dt:otherwise  dt:coordinate.mode.light .
+    # environmental — this is what "system" is
+
+## Symbol scope, in the anatomy vocabulary
+#
+# dt:appliesTo was retired (J, AT.13). The question it stored — which style
+# keys admit this symbol — is answered at read time by the anatomy registry,
+# which declares the admitted namespace per key, so there is no second copy to
+# drift. Against the symbol's LABEL, because the prefix is a dotted name and a
+# symbol's IRI string is not:
+#
+#   SELECT ?key WHERE {
+#     dt:color.text rdfs:label ?label .
+#     ?key anatomy:tokenNamespace ?ns .
+#     FILTER(STRSTARTS(?label, ?ns))
+#   }
+#
+# returns anatomy:key.typography.color for dt:color.text.
+
+## Channels — symbols the build mints from coverage
+
+dt:modifier.color.text
+    a dt:TokenSymbol ;
+    dt:channelOf dt:color.text ;
+    rdfs:label "modifier.color.text" .
+    # minted because a local-level family (anticipation, above) covers dt:color.text;
+    # its values live in s3 at each coordinate the platform provisions, and nowhere
+    # at the neutral position, where the channel is unset

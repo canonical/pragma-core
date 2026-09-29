@@ -1,0 +1,238 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.file_upload_field a ds:Component;
+    ds:name "FileUploadField";
+    ds:summary "A form control for attaching one or more files, by selecting them or dragging them onto a drop area, framed with a label and optional guidance. Selected files are listed with their details and can be removed before submission.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global-form src/lib/common/Wrapper/styles.css on .ds.field\n# The field is the Wrapper's chrome: a subgrid whose label row sits above a\n# payload row carrying the description, the control and any error. The control\n# is file upload input — src/lib/subcomponent/FileUploadInput/styles.css on `.ds.input.file-upload` — and its own styles\n# live in its own anatomy, not copied here.\nnode:\n  uri: global.component.file_upload_field\n  styles:\n    layout.type: grid\n    layout.grid.columns: subgrid\n    # reads --form-field-columns, the component-local track placement a caller\n    # overrides to put the field in part of the form grid.\n    layout.grid.column: \"1 / -1\"\n    layout.align: baseline\n    # The block gap from the label row down to the payload row reads\n    # --form-field-label-gap, which resolves through --space-100 to\n    # --dimension-100; this is the spacing semantic that resolves to it. When a\n    # description LEADS the payload the gap tightens to\n    # --form-field-label-description-gap (--dimension-050), for which no\n    # spacing semantic resolves, so that conditional is not carried.\n    spacing.gap.block: spacing.gap.field.block\n  edges:\n    - node:\n        uri: global.subcomponent.field-label\n        styles:\n          # reads --form-label-columns.\n          layout.grid.column: \"1 / -1\"\n      relation:\n        cardinality: \"1\"\n        slotName: label\n    - node:\n        role: payload\n        styles:\n          layout.type: grid\n          layout.grid.columns: subgrid\n          # reads --form-payload-columns.\n          layout.grid.column: \"1 / -1\"\n          # reads --form-group-gap (--space-100 -> --dimension-100).\n          spacing.gap.block: spacing.gap.field.block\n        edges:\n          - node:\n              uri: global.subcomponent.field-description\n              styles:\n                layout.grid.column: \"1 / -1\"\n            relation:\n              cardinality: \"0..1\"\n              slotName: description\n          - node:\n              uri: global.subcomponent.file_upload_input\n              styles:\n                layout.grid.column: \"1 / -1\"\n            relation:\n              cardinality: \"1\"\n              slotName: default\n          - node:\n              uri: global.subcomponent.field-error\n              styles:\n                layout.grid.column: \"1 / -1\"\n            relation:\n              cardinality: \"0..1\"\n              slotName: error\n      relation:\n        cardinality: \"1\"";
+    ds:anatomyClassic "";
+    ds:usage "A labelled control for attaching one or more files within a form.\n\n### When to use\n- One or more files need to be attached as part of a submission, whether by selecting them or dragging them onto a drop area.\n- Chosen files benefit from being listed with their details and removable before the form is committed.\n\n### When not to use\n- A short, free-form value is wanted rather than a file — use **Text**.\n- A reference or location pointing to an external resource is collected rather than the resource itself — use **Text**.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.file_upload_field;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.gap.field.block
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root";
+        anatomy:styleKey "typography.weight";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.weight.regular
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root/required marker";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root/optional hint";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.file_upload_field;
+        ds:node "$root/payload";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.gap.field.block
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-description;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.border.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.medium
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.radius";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.radius.small
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "hover";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input.hover
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.focusRing
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "invalid";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border.error
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "appearance.border.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.medium
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "appearance.radius";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.radius.small
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file preview";
+        anatomy:styleKey "size.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.400
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file preview";
+        anatomy:styleKey "size.height";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.400
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file preview";
+        anatomy:styleKey "appearance.radius";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.radius.small
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file size";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file remove";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file remove";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "hover";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-error;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-error;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.text.error
+    ].

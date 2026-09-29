@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.specialadoption-docs a ds:Tag;
+    ds:name "special:adoption-docs";
+    ds:category ds:tagcategory.documentation-stage;
+    ds:whenToApply "";
+    ds:whenToRemove "".

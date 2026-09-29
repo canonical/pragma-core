@@ -1,0 +1,35 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.card-image a ds:Subcomponent;
+    ds:name "Card.Image";
+    ds:summary "The card image is a full-width visual element that spans the horizontal extent of the [Card](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Gm_-gu8fGD) container. It is used to provide high-impact visual context or to represent the primary subject of sequentially to reflect the true architecturesequentially to reflect the true architecturesequentially to reflect the true architecturethe card, such as a product photo or a hero graphic. Its sole functionality is to reinforce the narrative of the card through large-scale media.\n\n";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/component/Card/common/Image/styles.css on .ds.card-image, with the\n# parent's own child rules in src/lib/component/Card/styles.css\n# (.ds.card > .card-image, and the divider on a non-last section).\nnode:\n  uri: global.subcomponent.card-image\n  styles:\n    layout.type: block\n    layout.grid.row: 1\n    layout.grid.column: \"1 / -1\"\n    size.width: 100%\n    size.height: auto\n    # Media stays full bleed: the image section pads nothing.\n    # An image that is not the card's last section draws the divider below it.\n    # The roster has no block-end colour key, so the bottom key carries it.\n    appearance.border.bottom.color: color.border.muted\n    appearance.border.style: solid\n    # `object.fit: cover` is dropped: the implementation sets no object-fit, and\n    # the roster's key is layout.objectFit.";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "url";
+        ds:propertyType "url";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "alt";
+        ds:summary "Alt text for the image";
+        ds:propertyType "text";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:global.component.card;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-image;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.bottom.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border.muted
+    ].

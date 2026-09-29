@@ -1,0 +1,41 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.expandable_radio_group
+  edges:
+    - node:
+        # semantic: p
+        role: group label
+      relation:
+        cardinality: "1"
+    - node:
+        role: options container
+        edges:
+          - node:
+              role: radio option block
+              edges:
+                - node:
+                    # was uri: global.component.radio; no radio component subject
+                    # exists, and the radio control is a subcomponent
+                    uri: global.subcomponent.radio_input
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # semantic: p
+                    role: option help
+                    styles:
+                      typography.color: color.text.muted   # was $colors--theme--text-muted
+                      # was spacing.margin.left: $sp-x-large; no spacing symbol
+                      # corresponds to Vanilla's x-large step
+                  relation:
+                    cardinality: "0..1"   # rendered when the option help is truthy
+                - node:
+                    # was uri: ds:apps_landscape.layout.indent, which names no subject
+                    role: option expansion
+                  relation:
+                    cardinality: "0..1"   # rendered when the option value loosely equals the Formik field value
+                    slotName: expansion
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "1"

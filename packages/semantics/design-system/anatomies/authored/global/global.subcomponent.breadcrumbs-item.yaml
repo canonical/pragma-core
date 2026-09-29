@@ -1,0 +1,42 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/component/Breadcrumbs/common/Item/styles.css on .ds.breadcrumbs-item
+# and its child selectors (> .link, > .separator, and the .current / .disabled
+# item classes).
+node:
+  uri: global.subcomponent.breadcrumbs-item
+  styles:
+    layout.type: flex
+    layout.direction: row
+    layout.align: center
+    layout.listStyle: none
+  edges:
+    - node:
+        role: link
+        styles:
+          typography.color: color.text.link
+          typography.decoration: none
+          typography.decoration@hover: underline
+          # A `.disabled` item is not a link: the class, not :disabled, is what
+          # the implementation selects on, and it is the disabled state.
+          typography.color@disabled: color.text.disabled
+          interaction.cursor@disabled: not-allowed
+          appearance.outline.width@focus: dimension.stroke.thickness.large
+          appearance.outline.style@focus: solid
+          appearance.outline.color@focus: color.text.link
+          appearance.outline.offset@focus: dimension.025
+          # A `.current` item keeps color.text and `cursor: default` — the trail's
+          # own position, which is a variant rather than one of the five states,
+          # so it is recorded here and not bound.
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        role: separator
+        styles:
+          typography.color: color.text
+          # The separator is hidden on the first item of the trail.
+          spacing.external.inline.start: dimension.100   # --breadcrumbs-item-separator-margin
+          spacing.external.inline.end: dimension.100     # --breadcrumbs-item-separator-margin
+      relation:
+        cardinality: "0..1"

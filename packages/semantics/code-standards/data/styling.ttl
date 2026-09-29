@@ -1,0 +1,165 @@
+@prefix cs: <http://pragma.canonical.com/codestandards#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Styling Category
+cs:styling a cs:Category ;
+    rdfs:label "Styling"@en ;
+    rdfs:comment "Standards for implementing design system styling patterns"@en ;
+    cs:slug "styling" .
+
+cs:styling.tokens.types a cs:CodeStandard ;
+    rdfs:label "Three tiers of design tokens"@en ;
+    cs:hasCategory cs:styling ;
+    cs:description """Design tokens follow a strict hierarchy:
+      - Primitive tokens: Raw values that form the foundation of the design system
+      - Semantic tokens: Map semantic concepts to primitive token values
+      - Component tokens: Map component properties to semantic token values
+    """ ;
+    cs:do [
+        cs:description "Define semantic tokens that map to primitive tokens." ;
+        cs:code """
+{
+  "color": {
+    "background": {
+      "default": {
+        "$type": "color",
+        "$value": "{color.neutral.100}"
+      }
+    }
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Skip the semantic layer by mapping component tokens directly to primitives." ;
+        cs:code """
+{
+  "button": {
+    "padding": {
+      "vertical": {
+        "$type": "dimension",
+        "$value": "{spacing.unit}"  # Should reference semantic token like {spacing.vertical.medium}
+      }
+    }
+  }
+}
+    """
+    ] .
+
+# Design Token Creation Standard
+cs:styling.tokens.creation a cs:CodeStandard ;
+    rdfs:label "Tokenize every design decision"@en ;
+    cs:hasCategory cs:styling ;
+    cs:description """Design tokens must be created for all design decisions in a component. See cs:css.properties.values for how these tokens are used in CSS implementation.""" ;
+    cs:do [
+        cs:description "Create component tokens that reference semantic tokens for design decisions." ;
+        cs:code """
+{
+  "button": {
+    "background": {
+      "$type": "color",
+        "$value": "{color.background.primary}"
+    }
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use raw values for design decisions." ;
+        cs:code """
+{
+  "button": {
+    "background": {
+      "$type": "color",
+        "$value": "#0066CC"  # Should reference semantic token like {color.background.primary}
+    }
+  }
+}
+    """
+    ] .
+
+# Theme Definition Standard
+cs:styling.themes.definition a cs:CodeStandard ;
+    rdfs:label "Themes as semantic token sets"@en ;
+    cs:hasCategory cs:styling ;
+    cs:description """Themes are collections of semantic tokens that provide consistent styling across components. See cs:css.themes.activation for implementation details.""" ;
+    cs:do [
+        cs:description "Define a theme as a complete set of semantic tokens." ;
+        cs:code """
+{
+  "theme": {
+    "canonical": {
+      "color": {
+        "background": {
+          "default": {
+            "$type": "color",
+        "$value": "{color.neutral.100}"
+          }
+        }
+      }
+    }
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Mix implementation details into theme definitions." ;
+        cs:code """
+{
+  "theme": {
+    "canonical": {
+      "class": "canonical",     // Bad: CSS implementation detail
+      "container": "div",       // Bad: HTML implementation detail
+    }
+  }
+}
+    """
+    ] .
+
+# Token Scoping Standard
+cs:styling.tokens.scoping a cs:CodeStandard ;
+    rdfs:label "Scope tokens to their tier"@en ;
+    cs:hasCategory cs:styling ;
+    cs:description """Design tokens must be scoped according to their type:
+- Primitive tokens: Global scope (system-wide base values)
+- Semantic tokens: Theme scope (theme-specific bindings to primitive tokens)
+- Component tokens: Component scope (bindings to semantic tokens)
+""" ;
+    cs:do [
+        cs:description "Define primitive tokens in global scope." ;
+        cs:code """
+{
+  "color": {
+    "neutral": {
+      "100": {
+        "$type": "color",
+        "$value": "#FFFFFF"
+      }
+    }
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Define primitive tokens in theme scope." ;
+        cs:code """
+{
+  "theme": {
+    "canonical": {
+      "color": {
+        "neutral": {
+          "100": {
+            "$type": "color",
+        "$value": "#FFFFFF"  # Should be defined in global scope
+          }
+        }
+      }
+    }
+  }
+}
+    """
+    ] .
+

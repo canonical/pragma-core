@@ -1,0 +1,46 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: typed safeguard for consequential action
+  uri: apps_landscape.pattern.typed_confirmation_modal
+  edges:
+    - node:
+        # was uri: global.component.confirmation_modal, which names no subject; the
+        # modal pattern is the nearest subject
+        uri: global.pattern.modal
+        edges:
+          - node:
+              # semantic: form
+              role: confirmation form
+              edges:
+                - node:
+                    role: consequence content
+                  relation:
+                    cardinality: "1"
+                    slotName: children
+                - node:
+                    role: phrase instruction
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # was uri: global.component.input; role: confirmation text — free
+                    # text, so the text field is the subject that names it
+                    uri: global.component.text_field
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: modal-owned action row
+              edges:
+                - node:
+                    # was uri: global.component.action_button, which names no subject;
+                    # an action button is a Button that carries a loading state.
+                    # role: confirm
+                    uri: global.component.button
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"   # rendered when isOpen is true

@@ -1,0 +1,56 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form
+# src/lib/subcomponent/Field/Label/styles.css on .ds.field-label and its child
+# selectors ([data-required]::after, > .optional), with the tokens it reads from
+# src/index.css. The stylesheet corrects the notation's single "optionality
+# indicator": the required marker and the "(optional)" hint are two different
+# elements with two different colours.
+node:
+  uri: global.subcomponent.field-label
+  styles:
+    # Field labels take the regular paragraph weight, not bold, per design
+    # review: --form-label-font-weight reads the text-primary composite's
+    # font-weight facet, which is typography.weight.regular in the apps, docs
+    # and global contexts, and falls back to `normal`. That is a rank the
+    # composite resolves to rather than a name the CSS spells: the variable it
+    # reads, --typography-text-primary-font-weight, is an S4 variable that
+    # declares no symbol of its own.
+    typography.weight: [typography.weight.regular, normal]
+    typography.color: color.text
+    # No side padding by default — the label aligns to the field edge, not to the
+    # input's inner padding. padding-inline reads --form-label-padding-inline,
+    # which no stratum declares, falling back to 0.
+    spacing.internal.inline.start: 0
+    spacing.internal.inline.end: 0
+    # A choices fieldset renders its label as a <legend>, and a `.danger` field
+    # recolours THAT legend (and its required marker) to --form-error-color:
+    # a validation variant scoped to the legend, not one of the five states, and
+    # its first rank is the modifier text channel with color.text.error behind it.
+  edges:
+    - node:
+        role: label text
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        role: required marker
+        styles:
+          # Drawn as [data-required]::after, never as label text, so it stays out
+          # of the accessible name — the required state is announced from
+          # aria-required on the input. The glyph (--form-required-marker, "*")
+          # and the gap after it (--form-required-marker-gap, 0.25ch) are
+          # themeable content and a margin, and no roster key takes `content`.
+          # The colour reads --form-required-marker-color first, which no stratum
+          # declares, and falls through to the label colour.
+          typography.color: color.text
+          spacing.external.inline.end: 0.25ch
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: optional hint
+        styles:
+          # The "(optional)" suffix is muted: visually subordinate to the label,
+          # which now carries the regular weight too.
+          typography.color: color.text.muted
+      relation:
+        cardinality: "0..1"

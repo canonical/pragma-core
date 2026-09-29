@@ -1,0 +1,12 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Icon/styles.css on .ds.icon
+node:
+  uri: global.component.icon
+  styles:
+    layout.type: inline-block
+    layout.verticalAlign: middle
+    # reads --icon-size, a component-local size the package declares as 1em at
+    # :root, then --size-icon-default, which no symbol declares, then the
+    # chain's own 1rem literal. The effective value is the 1em.
+    size.width: 1em
+    size.height: 1em

@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.pagination a ds:Component;
+    ds:name "Pagination";
+    ds:summary "Pagination is a navigational component that allows users to move between pages of content. It provides controls for navigating to the previous or next page, as well as optionally jumping directly to a specific numbered page. This component is best suited for content-heavy sites where information is divided across multiple pages, such as blog posts, articles, tutorials, or search results. For paginating tabular data, use the Table pagination component instead.\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "### When to use\n\n- Content is divided across multiple pages and requires navigation controls\n- Users may need to jump to a specific page within the content\n- Users are likely to return to a previously visited page\n- The total number of items or pages is known and finite\n- Content consumption benefits from clear boundaries between pages\n\n### When not to use\n\n- Paginating tabular data; use the Table pagination component instead\n- Guided flows or multi-step processes; use step navigation (“Back” and “Next” buttons) instead\n- Exploratory interfaces where users browse without a specific target; consider infinite scrolling\n- Single-page content that does not require division";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition.

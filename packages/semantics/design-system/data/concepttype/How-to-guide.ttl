@@ -1,0 +1,7 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:concepttype.How-to-guide a ds:ConceptType;
+    ds:name "How to guide";
+    ds:summary "*How-to guides are* ***directions*** *that guide the reader through a problem or towards a result. How-to guides are* ***goal-oriented****.*\n\nA how-to guide helps the user get something done, correctly and safely; it guides the user’s *action*.".

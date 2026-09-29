@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_workplaceengineering.subcomponent.multi_select_input a ds:Subcomponent;
+    ds:name "MultiSelectInput";
+    ds:summary "\n\nA MultiSelect input that allows selection (and selection clearing) over a group of options.\n\n\n\nThis is proposed within Workplace tier first as none of the current React form components support the combobox behavior shown in the design mock above.\n\nWe could adapt the [Launchpad Combobox component](https://ds-svelte-global.canonical.com/?path=/story/components-combobox--in-a-popover). \n\n\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps_workplaceengineering.

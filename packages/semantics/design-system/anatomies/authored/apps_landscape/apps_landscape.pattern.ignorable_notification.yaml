@@ -1,0 +1,53 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.pattern.ignorable_notification
+  edges:
+    - node:
+        # was uri: global.component.notification, which names no subject; the
+        # notification block lives in the apps tier. role: dismissible initial message
+        uri: apps.component.notification
+        edges:
+          - node:
+              role: notification content
+            relation:
+              cardinality: "0..1"
+              slotName: children
+          - node:
+              role: confirmation trigger
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"
+    - node:
+        # was uri: global.component.confirmation_modal, which names no subject; the
+        # modal pattern is the nearest subject. role: dismissal confirmation;
+        # name: Ignorable Notification Modal
+        uri: global.pattern.modal
+        edges:
+          - node:
+              # semantic: paragraph
+              role: repeated notification message
+              edges:
+                - node:
+                    role: repeated notification content
+                  relation:
+                    cardinality: "0..1"
+                    slotName: children
+            relation:
+              cardinality: "1"
+          - node:
+              # was uri: global.component.checkbox; role: persistent suppression choice
+              uri: global.component.checkbox_field
+            relation:
+              cardinality: "1"
+          - node:
+              role: cancel action
+            relation:
+              cardinality: "1"
+          - node:
+              role: confirm dismissal action
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"

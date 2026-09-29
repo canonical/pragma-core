@@ -1,0 +1,387 @@
+@prefix anatomy: <https://anatomy.canonical.com/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix graphql: <https://pragma.canonical.com/graphql#> .
+# The two graphs this one is read beside. `dt:` is the token graph
+# (@canonical/token-ontology): a style value's symbols are dt:TokenSymbol
+# individuals, and anatomy:consumes names them. `ds:` is the design system
+# graph (canonical/design-system), whose ds:TokenBinding record reuses
+# anatomy:styleKey and anatomy:styleState — which is why neither carries an
+# rdfs:domain any more.
+@prefix dt:      <https://dt.canonical.com/> .
+@prefix ds:      <https://ds.canonical.com/> .
+
+# ═══════════════════════════════════════════════════════════════
+# ONTOLOGY DECLARATION
+# ═══════════════════════════════════════════════════════════════
+
+<https://anatomy.canonical.com/> a owl:Ontology ;
+    owl:versionInfo "0.4.0" ;
+    rdfs:label "Anatomy DSL Ontology" ;
+    rdfs:comment "Compliant with OWL DL profile" ;
+    skos:definition """Meta-model for the Anatomy DSL — a YAML-based language
+    for describing design system component structure.
+
+    Models anatomy files as trees of nodes connected by reified edges.
+    Inspired by the Relay GraphQL connection pattern.
+
+    Consolidates WD404 (core), WD404.1 (addendum 1), projections
+    (addendum 2): fragment-style bindings of nodes and relations to
+    graph data, prop pinning (addendum 3): fixed prop values on
+    referenced components, and interaction states (addendum 4):
+    state-scoped style values.
+
+    OUT OF SCOPE (matching the DSL itself):
+    - Prop surface definition — names, types, and optionality of a
+      component's props live in the design system ontology. Pinned prop
+      VALUES are in scope as of addendum 3.
+    - State MACHINES — transitions, triggers, and interaction logic.
+      Appearance PER interaction state is in scope as of addendum 4
+      (styleState); structural state variation remains the Switch
+      construct's job.
+    - Modifier descriptions (only token references)
+
+    Validation shapes defined in shapes.ttl.""" .
+
+# ═══════════════════════════════════════════════════════════════
+# CORE CLASSES
+# ═══════════════════════════════════════════════════════════════
+
+anatomy:Specification a owl:Class ;
+    rdfs:label "Specification" ;
+    skos:definition "Root of an anatomy file." .
+
+anatomy:Node a owl:Class ;
+    rdfs:label "Node" ;
+    skos:definition "Position in the anatomy tree." .
+
+anatomy:NamedNode a owl:Class ;
+    rdfs:subClassOf anatomy:Node ;
+    rdfs:label "Named Node" ;
+    skos:definition "Design system entity instantiable by consumers." .
+
+anatomy:AnonymousNode a owl:Class ;
+    rdfs:subClassOf anatomy:Node ;
+    rdfs:label "Anonymous Node" ;
+    skos:definition "Structural element without design system identity." .
+
+anatomy:Edge a owl:Class ;
+    rdfs:label "Edge" ;
+    skos:definition "Reified parent-child relationship in the anatomy tree." .
+
+anatomy:Relation a owl:Class ;
+    rdfs:label "Relation" ;
+    skos:definition "Metadata qualifying a parent-child relationship." .
+
+anatomy:Style a owl:Class ;
+    rdfs:label "Style" ;
+    skos:definition "A single style declaration binding a property key to a value." .
+
+anatomy:Projection a owl:Class ;
+    rdfs:label "Projection" ;
+    skos:definition """Fragment-style binding to graph data, after the Relay
+    colocation pattern. On a node it declares a type condition (like a
+    fragment's 'on') and/or the field the node renders; on a relation it
+    declares the traversal that populates the slot.""" .
+
+anatomy:Prop a owl:Class ;
+    rdfs:label "Prop" ;
+    skos:definition """A pinned property value: the anatomy fixes one prop of
+    the referenced component at this tree position (e.g. the icon component's
+    'icon' prop pinned to 'chevron-down' for an intrinsic chevron). References
+    a property defined in the design system ontology — the DSL never defines
+    the prop surface itself. Whether the pinned prop exists on the component,
+    and whether the value is admissible, is validated by consumers holding
+    the design system graph.""" .
+
+# ═══════════════════════════════════════════════════════════════
+# SWITCH CONSTRUCT
+# ═══════════════════════════════════════════════════════════════
+
+anatomy:Switch a owl:Class ;
+    rdfs:label "Switch" ;
+    skos:definition "Polymorphic position admitting several alternatives." .
+
+anatomy:SwitchCase a owl:Class ;
+    rdfs:label "Switch Case" ;
+    skos:definition "One alternative within a Switch." .
+
+# ═══════════════════════════════════════════════════════════════
+# THE STYLE-KEY REGISTRY
+# ═══════════════════════════════════════════════════════════════
+#
+# The individuals live in registry.ttl, projected from the roster in
+# style-keys.yaml by `bun run generate:registry`; the same roster closes
+# anatomy:styleKey's sh:in in shapes.ttl. The vocabulary was open until
+# 0.4.0 — "about 14 keys" documented against 39 the corpus used — and an
+# open roster is what admitted `background.color` on a component whose
+# stylesheet says `background-color`.
+
+anatomy:StyleKey a owl:Class ;
+    rdfs:label "Style Key" ;
+    skos:definition """One canonical style key: a platform-agnostic property
+    the anatomy may bind. The roster was measured, not designed: it is the
+    right-hand column of a table whose left-hand column was every CSS property
+    the reference implementations bind, so a key exists because an
+    implementation binds the property, never because the vocabulary looked
+    incomplete. registry.ttl states where that measurement lives.""" ;
+    skos:example "appearance.background" ,
+                 "spacing.internal.inline.start" ,
+                 "typography.color" .
+
+anatomy:valueKind a owl:DatatypeProperty ;
+    rdfs:label "value kind" ;
+    rdfs:domain anatomy:StyleKey ;
+    rdfs:range xsd:string ;
+    skos:definition """What the key admits: "token" (a symbol, or a list of
+    symbols ending at most in one primitive), "primitive" (a literal the
+    implementation writes as it stands), or "either". Measured from the
+    reference declarations mapped onto the key when the roster was taken —
+    all reading a var() is token, none is primitive, mixed is either. An
+    "either" key compiles to an sh:or in StyleShape: it carries
+    anatomy:consumes, or it carries a primitive styleValue.""" ;
+    skos:example "token" , "primitive" , "either" .
+
+anatomy:tokenNamespace a owl:DatatypeProperty ;
+    rdfs:label "token namespace" ;
+    rdfs:domain anatomy:StyleKey ;
+    rdfs:range xsd:string ;
+    skos:definition """A dotted prefix, ending in a dot, whose symbols the key
+    admits — matched against a symbol's dotted NAME with STRSTARTS, never
+    against its IRI. Multi-valued, and a key whose base namespace is `N.`
+    carries `N.`, `modifier.N.` and `surface.N.`: a channel of a symbol in
+    `N.` is exactly what the anatomy consumes where the implementation reads
+    the channel, so without the channel spellings every channel binding in
+    the corpus would be a namespace violation. It is the single declaration of
+    which symbols a key admits, and the inverse question — which keys admit
+    this symbol — is the query over it (dt:appliesTo is retired).""" ;
+    skos:example "color." , "modifier.color." , "spacing." .
+
+# ═══════════════════════════════════════════════════════════════
+# OBJECT PROPERTIES
+# ═══════════════════════════════════════════════════════════════
+
+anatomy:rootNode a owl:ObjectProperty ;
+    rdfs:label "root node" ;
+    rdfs:domain anatomy:Specification ;
+    rdfs:range anatomy:NamedNode ;
+    skos:definition "Top-level node of an anatomy specification." .
+
+anatomy:hasEdge a owl:ObjectProperty ;
+    rdfs:label "has edge" ;
+    rdfs:domain anatomy:Node ;
+    rdfs:range anatomy:Edge ;
+    skos:definition "Connects a node to a child relationship." .
+
+anatomy:hasRelation a owl:ObjectProperty ;
+    rdfs:label "has relation" ;
+    rdfs:domain anatomy:Edge ;
+    rdfs:range anatomy:Relation ;
+    skos:definition "Relation qualifying this edge." .
+
+anatomy:edgeTarget a owl:ObjectProperty ;
+    rdfs:label "edge target" ;
+    rdfs:domain anatomy:Edge ;
+    rdfs:range anatomy:Node ;
+    skos:definition "Child node this edge connects to." .
+
+anatomy:edgeSwitch a owl:ObjectProperty ;
+    rdfs:label "edge switch" ;
+    rdfs:domain anatomy:Edge ;
+    rdfs:range anatomy:Switch ;
+    skos:definition "Polymorphic switch this edge connects to." .
+
+anatomy:hasCase a owl:ObjectProperty ;
+    rdfs:label "has case" ;
+    rdfs:domain anatomy:Switch ;
+    rdfs:range anatomy:SwitchCase ;
+    skos:definition "An alternative within this switch." .
+
+anatomy:caseNode a owl:ObjectProperty ;
+    rdfs:label "case node" ;
+    rdfs:domain anatomy:SwitchCase ;
+    rdfs:range anatomy:Node ;
+    skos:definition "Node this case resolves to." .
+
+anatomy:hasStyle a owl:ObjectProperty ;
+    rdfs:label "has style" ;
+    rdfs:domain anatomy:Node ;
+    rdfs:range anatomy:Style ;
+    skos:definition "Attaches a style declaration to a node." .
+
+anatomy:hasProjection a owl:ObjectProperty ;
+    rdfs:label "has projection" ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( anatomy:Node anatomy:Relation ) ] ;
+    rdfs:range anatomy:Projection ;
+    skos:definition "Attaches a graph-data projection to a node or relation." .
+
+anatomy:hasProp a owl:ObjectProperty ;
+    rdfs:label "has prop" ;
+    rdfs:domain anatomy:NamedNode ;
+    rdfs:range anatomy:Prop ;
+    skos:definition "Attaches a pinned prop value to a named node. Named nodes only: anonymous nodes have no prop surface to pin." .
+
+anatomy:consumes a owl:ObjectProperty ;
+    rdfs:label "consumes" ;
+    rdfs:domain anatomy:Style ;
+    rdfs:range rdf:List ;
+    skos:definition """The token symbols this style binding consumes, as an
+    ordered rdf:List whose elements are dt:TokenSymbol individuals in FALLBACK
+    ORDER: rdf:first is the primary symbol, and each rest is what the
+    implementation falls back to when the one before it is undefined. It is
+    the RDF form of the authored value — a one-to-one transcription of the
+    implementation's `var(a, var(b, …))` chain — and the reason the list and
+    not a single symbol is that the fallback is a per-slot choice: a
+    component's background and its text fall back differently, so no rule
+    declared once on a symbol can carry it.
+
+    A slot consumes a CHANNEL by name where the implementation reads the
+    channel (`modifier.color.text`) and the semantic token by name where it
+    reads the token; nothing is inferred from the spelling. A terminal
+    literal the chain ends in (`currentColor`, `0`, `1em`) is NOT an element
+    here — it resolves against nothing by design — and is carried in
+    anatomy:styleValue, which keeps the authored spelling verbatim as
+    evidence. Whether a key carries this at all is anatomy:valueKind's
+    business, and whether a symbol RESOLVES is the consumer's: a name no
+    stratum declares is kept as consumed with a register row.""" ;
+    skos:example "( dt:modifier.color.text dt:color.text )" .
+
+# ═══════════════════════════════════════════════════════════════
+# DATATYPE PROPERTIES
+# ═══════════════════════════════════════════════════════════════
+
+anatomy:uri a owl:DatatypeProperty ;
+    rdfs:label "uri" ;
+    # `uri` is the structural primary key of every node in a GraphQL projection
+    # of this ontology (one absolute IRI per entity), so an ontology property of
+    # the same name collides with it. The projection names this one
+    # `anatomyUri`; the RDF term is unchanged and every SPARQL query keeps
+    # working. See canonical/pragma-adrs session/B (ruling R-4: a collision is
+    # an error, never a silent rename).
+    graphql:name "anatomyUri" ;
+    rdfs:domain anatomy:NamedNode ;
+    rdfs:range xsd:string ;
+    skos:definition "Unique identifier for a named node within the design system." ;
+    skos:example "global.component.button" ,
+                 "global.subcomponent.accordion-item" ,
+                 "global.subcomponent.card_header" .
+
+anatomy:role a owl:DatatypeProperty ;
+    rdfs:label "role" ;
+    rdfs:domain anatomy:AnonymousNode ;
+    rdfs:range xsd:string ;
+    skos:definition "Human-readable purpose of an anonymous node." ;
+    skos:example "content wrapper" ,
+                 "spacer element" ,
+                 "icon container" .
+
+anatomy:discriminator a owl:DatatypeProperty ;
+    rdfs:label "discriminator" ;
+    rdfs:domain anatomy:Switch ;
+    rdfs:range xsd:string ;
+    skos:definition "What determines which case applies." ;
+    skos:example "props" , "internal" , "override" .
+
+anatomy:cardinality a owl:DatatypeProperty ;
+    rdfs:label "cardinality" ;
+    rdfs:domain anatomy:Relation ;
+    rdfs:range xsd:string ;
+    skos:definition "Instance count constraint on the child." ;
+    skos:example "1" , "0..1" , "0..*" , "1..*" , "2..5" .
+
+anatomy:slotName a owl:DatatypeProperty ;
+    rdfs:label "slot name" ;
+    rdfs:domain anatomy:Relation ;
+    rdfs:range xsd:string ;
+    skos:definition "Named slot in the parent that this child maps to." ;
+    skos:example "default" , "header" , "footer" , "icon" .
+
+anatomy:styleKey a owl:DatatypeProperty ;
+    rdfs:label "style key" ;
+    # No rdfs:domain, deliberately. design-system's ds:TokenBinding record
+    # (one per consumed symbol per rank) carries the key and the state of the
+    # tuple it was derived from, so a domain of anatomy:Style would type every
+    # record an anatomy:Style. The constraint that a tuple carries exactly one
+    # key lives in shapes.ttl, where it belongs. Stays an
+    # owl:DatatypeProperty: pragma asserts every term a lookup selects is a
+    # declared datatype or object property.
+    rdfs:range xsd:string ;
+    skos:definition "Platform-agnostic style property identifier." ;
+    skos:example "layout.type" ,
+                 "spacing.internal.inline.start" ,
+                 "appearance.background" ,
+                 "typography.weight" .
+
+anatomy:styleValue a owl:DatatypeProperty ;
+    rdfs:label "style value" ;
+    rdfs:domain anatomy:Style ;
+    rdfs:range xsd:string ;
+    skos:definition """The AUTHORED SPELLING of the value, verbatim: a scalar
+    as written, a sequence in its flow form. It is the evidence of what the
+    reference says, and it is kept even where anatomy:consumes carries the
+    same symbols in a form a query can walk — the terminal literal of a
+    fallback chain lives only here, because a literal is not a symbol.
+
+    A value is a symbol, a primitive, or a sequence whose elements are
+    symbols with at most one primitive and only as the last element. The
+    slash-delimited path and the trailing '?' marker are RETIRED: an element
+    that resolves nowhere is a register row and a comment, not a sigil.""" ;
+    skos:example "flow" ,
+                 "dimension.100" ,
+                 "[modifier.color.text, color.text]" ,
+                 "[modifier.color.icon, modifier.color.text, currentColor]" .
+
+anatomy:styleState a owl:DatatypeProperty ;
+    rdfs:label "style state" ;
+    # No rdfs:domain, for the reason anatomy:styleKey gives.
+    rdfs:range xsd:string ;
+    skos:definition """Interaction state this style value applies in. Absent
+    means the default state. Closed vocabulary (hover, active, focus,
+    disabled, selected, expanded, indeterminate, invalid), governed by
+    registry — 'active' subsumes Material's 'pressed' and Spectrum's 'down';
+    'focus' maps to CSS :focus-visible (Spectrum's 'key-focus'); 'expanded'
+    is a disclosure's open state ([open], aria-expanded); 'indeterminate' is
+    a mixed checkbox or progress bar; 'invalid' is a failed validation
+    (:invalid, aria-invalid). States re-value style channels only: they never
+    add structure (that is the Switch construct) and never define transitions
+    or interaction logic (state machines stay out of scope). Authored as an
+    @state suffix on the style key.""" ;
+    skos:example "hover" , "active" , "focus" , "disabled" , "selected" ,
+                 "expanded" , "indeterminate" , "invalid" .
+
+anatomy:projectionType a owl:DatatypeProperty ;
+    rdfs:label "projection type" ;
+    rdfs:domain anatomy:Projection ;
+    rdfs:range xsd:string ;
+    skos:definition "GraphQL type condition, like a Relay fragment's 'on'. On a root node it establishes the data context for the tree; on a child it narrows the traversed entity's type, like an inline fragment." ;
+    skos:example "Component" ,
+                 "OntologyClass" ,
+                 "Pattern" .
+
+anatomy:propName a owl:DatatypeProperty ;
+    rdfs:label "prop name" ;
+    rdfs:domain anatomy:Prop ;
+    rdfs:range xsd:string ;
+    skos:definition "Name of the pinned prop, as defined on the referenced component in the design system ontology." ;
+    skos:example "icon" .
+
+anatomy:propValue a owl:DatatypeProperty ;
+    rdfs:label "prop value" ;
+    rdfs:domain anatomy:Prop ;
+    rdfs:range xsd:string ;
+    skos:definition "The fixed value the anatomy pins the prop to." ;
+    skos:example "chevron-down" ,
+                 "checkmark" ,
+                 "spinner" .
+
+anatomy:projectionField a owl:DatatypeProperty ;
+    rdfs:label "projection field" ;
+    rdfs:domain anatomy:Projection ;
+    rdfs:range xsd:string ;
+    skos:definition "Dot-delimited GraphQL field path relative to the enclosing data context. On a node: the field the node renders. On a relation: the traversal populating the slot. Names the field only, never an unwrapping path like edges/node — whether a plural field is a connection or a plain list is a provider mechanism discovered from the schema. The relation's cardinality maps onto the field's shape: upper bound to multiplicity, lower bound to nullability." ;
+    skos:example "_meta.title" ,
+                 "summary" ,
+                 "documentationStages" .

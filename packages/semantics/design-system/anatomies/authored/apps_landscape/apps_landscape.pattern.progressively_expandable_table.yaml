@@ -1,0 +1,50 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `ds:apps_landscape.pattern.expandable_table`, which names no
+# subject; the block's own uri is used instead.
+node:
+  # role: progressively expandable table
+  # Composes a loaded table subset with count and disclosure controls.
+  uri: apps_landscape.pattern.progressively_expandable_table
+  edges:
+    - node:
+        # name: Title
+        # Renders a string as a styled paragraph or renders a supplied React element
+        # unchanged.
+        role: table introduction
+      relation:
+        cardinality: "0..1"   # rendered when title is a string or a valid React element
+        slotName: title
+    - node:
+        # was uri: global.component.modular-table; role: tabular data region;
+        # name: Modular Table. Renders the supplied columns and currently loaded rows.
+        uri: global.component.table
+      relation:
+        cardinality: "1"
+    - node:
+        # name: Expandable Table Footer
+        # Presents an optional secondary action, result count, and one disclosure action.
+        role: count and disclosure assembly
+        edges:
+          - node:
+              # name: Additional action
+              # Renders caller-supplied footer content before the count and disclosure
+              # group.
+              role: secondary command
+            relation:
+              cardinality: "0..1"   # rendered when additionalCta is provided
+              slotName: additionalCta
+          - node:
+              # name: Result count
+              # Reports the displayed count against the effective total.
+              role: static collection summary
+            relation:
+              cardinality: "0..1"   # rendered when the effective total is greater than zero
+          - node:
+              # role: more-results command; name: Disclosure action
+              # Requests more rows or a transition to all rows.
+              uri: global.component.button
+            relation:
+              cardinality: "0..1"   # rendered when itemCount is less than the effective total
+      relation:
+        cardinality: "1"

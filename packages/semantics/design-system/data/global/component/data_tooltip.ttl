@@ -1,0 +1,231 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.data_tooltip a ds:Component;
+    ds:name "DataTooltip";
+    ds:summary "The data tooltip is a tooltip designed specifically for data visualisation. \n\nIts primary purpose is to reveal values when users interact with charts, graphs, maps, or other data-driven elements. \n\nIt is used for displaying metrics on hover, clarifying data points that cannot be fully shown in the visual itself. \n\nThis variant helps users interpret information accurately without cluttering the interface with labels that are always visible.\n\nRelated to [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) and [TooltipWrapper](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-69TNyYt7M9) ";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# A notation migration of the previous DSL (the Coda block \"Tooltip.Data\"):\n# structure and bindings kept, values migrated, dangling uri: references\n# repaired. react-ds-global implements one Tooltip — the chip bound in\n# ds:global.component.tooltip — and no data variant.\nnode:\n  uri: global.component.data_tooltip\n  edges:\n    - node:\n        role: surface\n        styles:\n          # Was `color/surface/tooltip`; no symbol declares\n          # color.background.tooltip, so this is the declared background the\n          # surface correspondence lands on. (The live Tooltip reads the\n          # surface channel: [surface.color.background, color.background].)\n          appearance.background: color.background\n          # Was `size.max.width: size/tooltip/data/max` — dropped, since no\n          # dimension symbol corresponds to it.\n          layout.type: flex   # was stack\n          layout.direction: column   # was vertical\n          layout.align: start\n          # Was `spacing.internal.vertical|horizontal: dimension/100`; the\n          # roster's keys are per side, so the two axes become four.\n          spacing.internal.block.start: dimension.100\n          spacing.internal.block.end: dimension.100\n          spacing.internal.inline.start: dimension.100\n          spacing.internal.inline.end: dimension.100\n        edges:\n          - node:\n              # Was `ds:global.subcomponent:TooltipHeading`, which names no\n              # subject, so the position is an anonymous role.\n              role: heading\n              styles:\n                # Was `typography.color: color/text/onTooltip` — dropped, since\n                # no symbol declares color.text.onTooltip.\n                # Was `typography.size: text/secondary/strong`; the declared\n                # counterpart is the bold text-secondary composite, which\n                # binds typography.font.\n                typography.font: typography.text.secondary.bold\n            relation:\n              cardinality: \"0..1\"\n              slotName: heading\n          - node:\n              # Was `ds:global.subcomponent:ChartLegend`; the real subject is\n              # global.subcomponent.chart_legend.\n              uri: global.subcomponent.chart_legend\n            relation:\n              cardinality: \"1\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        # Was `ds:global.subcomponent:TooltipArrow`, which names no subject, so\n        # the position is an anonymous role.\n        role: arrow\n        styles:\n          # Was `color/surface/tooltip`, as above.\n          appearance.background: color.background\n      relation:\n        cardinality: \"0..1\"\n        slotName: arrow";
+    ds:anatomyClassic "**Data**\n\n**https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4226-3427&t=w0be1UjrfjZ1CrvI-1**\n\n1. Container\n\nAs above.\n\n1. Text\n\nDisplays the data label and value (e.g. Ubuntu Server - 40%)\n\n1. Cursor-follow behaviour \n\nTooltip tracks pointer position with pre-defined offsets.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4520-95247&t=2fO23I8WsyT0YVJ1-4";
+    ds:usage "When to use\n\n- When inspecting individual data points in charts or visualisations\n- When users move quickly between adjacent data points\n- When content is structured as short label–value pairs (e.g. “OS: Ubuntu 24.04”, “CPU usage: 72%”), optionally with colour indicators to match visual elements such as charts\n\n\n\nWhen not to use\n\n- When used outside of data visualisation contexts\n  - Incorrect: A data tooltip is used to explain a form field\n  - Remediation: Use a [Standard tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-Y9PpN4FiwA)\n\nWhen explaining UI controls or icons\n\n  - Incorrect: A data tooltip is attached to a settings icon\n  - Remediation: Use a [Standard tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-Y9PpN4FiwA) \n\nWhen information must persist beyond hover\n\n  - Incorrect: A data tooltip contains important information users must reference continuously\n  - Remediation: Use a persistent component such as [Popover](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-i-62pvfoOF) or inline content";
+    ds:guidelines "### Animation\n\n- Show with a 400 ms delay after hover or focus\n- Hide with a 400 ms delay after the pointer leaves\n- Cancel display if the pointer exits before the show delay completes\n- If the pointer moves directly from one tooltip trigger to another, show the new tooltip immediately and skip the previous tooltip’s exit animation\n\n### **Transition**\n\n- **Type**: spring\n- **Duration**: 0.4 s\n- **Bounce**: 0.2\n- **Delay**: 0 s\n\n\n\nSpecific for data tooltip:\n\n- Cursor-follow behaviour; follows the cursor while open.\n- Cursor-follow placement direction: **Right**\n- Horizontal offset from cursor: **16 px**\n- Vertical offset from cursor: **8 px**\n\n### Motion feel\n\n- Preset: **Snappy**\n- Bounce profile: **No-bounce**";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "***Data tooltip***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Show header";
+        ds:summary "Shows legend header";
+        ds:optional "true";
+        ds:propertyType "boolean"
+    ], [
+        a ds:Property;
+        ds:name "Indicator";
+        ds:summary "Shows colour marker matching chart encoding";
+        ds:optional "true";
+        ds:propertyType "boolean"
+    ], [
+        a ds:Property;
+        ds:name "Show cursor";
+        ds:summary "Tooltip follows cursor instead of anchoring to trigger";
+        ds:optional "false";
+        ds:propertyType "boolean"
+    ], [
+        a ds:Property;
+        ds:name "*Cursor animation* *(framer)*";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "cursorFollow.position";
+        ds:summary "Cursor-follow placement direction";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ], [
+        a ds:Property;
+        ds:name "cursorFollow.offsetX";
+        ds:summary "Horizontal offset from cursor";
+        ds:optional "false";
+        ds:propertyType "number"
+    ], [
+        a ds:Property;
+        ds:name "cursorFollow.offsetY";
+        ds:summary "Vertical offset from cursor";
+        ds:optional "false";
+        ds:propertyType "number"
+    ], [
+        a ds:Property;
+        ds:name "Motion feel";
+        ds:summary "High-level motion tuning preset";
+        ds:optional "true";
+        ds:propertyType "choice"
+    ], [
+        a ds:Property;
+        ds:name "***All variants***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Type";
+        ds:summary "Selects the tooltip variant";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ], [
+        a ds:Property;
+        ds:name "Surrounding UI theme";
+        ds:summary "Sets tooltip theme based on surrounding UI context";
+        ds:optional "false";
+        ds:propertyType "choice"
+    ];
+    ds:inheritsFrom ds:global.component.tooltip;
+    ds:hasSubcomponent ds:global.subcomponent.chart_legend, ds:global.subcomponent.chart_legend_item;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-04-22T00:00:00.000+02:00"
+    ];
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.data_tooltip;
+        ds:node "$root/surface";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.data_tooltip;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.data_tooltip;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.data_tooltip;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.data_tooltip;
+        ds:node "$root/surface";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.data_tooltip;
+        ds:node "$root/surface/heading";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary.bold
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend;
+        ds:node "$root/heading";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary.bold
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend;
+        ds:node "$root/heading";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root/label";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root/label";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root/value";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root/value";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.chart_legend_item;
+        ds:node "$root/divider";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.palette.gray.180
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.data_tooltip;
+        ds:node "$root/arrow";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background
+    ].

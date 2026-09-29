@@ -1,0 +1,33 @@
+[package]
+name = "anatomy-dsl"
+version = "0.4.0"
+description = "Anatomy DSL ontology (anatomy:): component structure, graph-data bindings (projections), pinned prop values, the token seam (anatomy:consumes) and the style-key registry."
+
+# R39, no implicit dependencies: exactly the prefix set the corpus declares.
+# `anatomy:` is this package's own namespace, everything else is below.
+# Written as design-system/sem.toml writes them — the base vocabularies
+# vendored and resolved from the sem binary, offline.
+[dependencies]
+rdf  = "1.2"
+rdfs = "1.1"
+owl  = "2.0"
+sh   = "2.1"
+xsd  = "1.1"
+skos = "1.0"
+
+# The token graph, for `dt:`. Every element of anatomy:consumes is a
+# dt:TokenSymbol, definitions/registry.ttl's tokenNamespace declares which of
+# them a key admits, and the examples are validated against the strata this
+# package pins as a devDependency.
+#
+# PRE-MERGE: the npm dependency is a `file:` link to J-1's worktree until
+# @canonical/token-ontology 0.11.0 — the first release with channel symbols —
+# publishes. This declaration names the published version the link stands in
+# for.
+token-ontology = { package = "@canonical/token-ontology", version = "0.11" }
+
+# NOT declared: `ds:`, which definitions/{ontology,shapes}.ttl bind so a
+# reader can see the other end of the styleKey/styleState reuse. No triple
+# here uses the prefix, and design-system is this package's consumer rather
+# than its dependency — declaring it would invert the direction of the
+# programme's one seam. Add it the moment a triple here needs it.

@@ -1,0 +1,51 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.search_help_popup a ds:Component;
+    ds:name "Search Help Popup";
+    ds:summary "Conditionally mounts a controlled Canonical modal titled `Search help`, with fixed Landscape structured-search guidance and a two-column reference table supplied by the caller. Term cells render only strings as code; description cells render only strings or valid React elements.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.search_help_popup\n  edges:\n    - node:\n        uri: global.component.modal\n        role: search help dialog\n        edges:\n          - node:\n              semantic: paragraph\n              role: grammar guidance\n              relation:\n                cardinality: \"1\"\n          - node:\n              uri: global.component.modular_table\n              role: terms reference\n              edges:\n                - node:\n                    role: Term column\n                    edges:\n                      - node:\n                          semantic: code\n                          role: term value\n                          relation:\n                            cardinality: \"0..1\"\n                            condition: row term is a string\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    role: Description column\n                    edges:\n                      - node:\n                          semantic: span\n                          role: description value\n                          relation:\n                            cardinality: \"0..1\"\n                            condition: row description is a string or valid React element\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    role: data row\n                    relation:\n                      cardinality: \"0..*\"\n                      slotName: data\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..1\"\n          condition: open is true";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=26-3&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 50\n\n";
+    ds:usage "### When to use\n\n**Explain structured search**\n\nUse when the search surface implements the fixed grammar described by the modal and needs an in-context term reference.\n\n**Document dynamic terms**\n\nSupply the exact terms supported by that search surface and concise string or React-element descriptions.\n\n### When not to use\n\n**Explain simple text search**\n\nWhen users only enter unrestricted text without structured grammar.\n\n**Incorrect pattern**: Showing this modal for a basic text input that has no terms or grammar structure.\n\n**Remediation strategy**: Use a concise field description or inline help text for simple search fields.\n\n**Teach a multi-step task**\n\nWhen you need to provide broader educational content beyond syntax reference.\n\n**Incorrect pattern**: Using this popup to explain workflows, features, or multi-step processes beyond search term definitions.\n\n**Remediation strategy**: Use dedicated documentation, onboarding tours, or contextual help sections for workflows beyond search syntax.\n\n**Different query grammar**\n\nWhen your search uses a different grammar than the fixed Landscape syntax.\n\n**Incorrect pattern**: Reusing this component where OR, implicit AND, NOT, or quoting semantics differ from Landscape’s grammar.\n\n**Remediation strategy**: Build a custom modal or help component whose grammar text matches your actual query language, or adjust the backend to use the Landscape fixed grammar.";
+    ds:guidelines "### Accessibility\n\n- Dialog semantics, focus containment, close control, Escape handling, and focus restoration are delegated to Canonical `Modal`; this wrapper adds no focus code.\n- Open it from a clearly named trigger. The direct component API does not receive or retain the trigger element.\n- Column headers are fixed to `Term` and `Description`; string terms use semantic `code`, and descriptions remain text content inside a muted `span`.\n- Invalid row value types silently render empty cells, so validate data before presentation.\n\n### Content\n\n- The paragraph states: OR matches any condition; otherwise all conditions must match; NOT negates a condition; values containing spaces or non-ASCII characters require quotes.\n- Use exact accepted term spelling and concise descriptions. React elements are appropriate for safe inline markup or links; arbitrary objects are not rendered.\n- Title, column headers, and grammar guidance are fixed rather than supplied by props.\n\n### Internationalization\n\n- `data` content is caller-provided and can be localized.\n- `Search help`, `Term`, `Description`, and the complete grammar paragraph are hard-coded in English and expose no translation props.\n- The fixed grammar explicitly references non-ASCII values but performs no parsing, normalization, or locale handling itself.\n\n### Device\n\n- The modal-scoped table width is fixed at `60rem`, and the Term column is `30%` wide. No local media query, responsive width, or overflow wrapper is defined.\n- Narrow-screen containment and scrolling therefore depend on Canonical Modal/ModularTable behavior or surrounding global styles and require verification by consumers.\n\n### Keyboard\n\n- This wrapper adds no keyboard handlers. Modal dismissal and focus behavior are inherited from Canonical Modal.\n- Interactive React elements supplied in descriptions retain their own tab stops; keep their order logical within the table.\n\n### Implementation limitations\n\n- Both `useMemo` calls are inside the `open &&` render branch. Toggling `open` changes whether hooks execute, which violates React’s hook-order rule and should be corrected in source before treating repeated open/close behavior as robust.\n- Both memo dependency lists are empty. The table therefore retains the `data` reference captured by the first render that executes the open branch instead of tracking later prop changes.\n- There is no dedicated component test covering modal toggling, data replacement, focus behavior, or narrow-screen overflow.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`open`";
+        ds:summary "Controls conditional mounting of the complete modal. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "`false` returns no modal subtree; the component stores no open state. "
+    ], [
+        a ds:Property;
+        ds:name "`onClose`";
+        ds:summary "Is passed to Canonical `Modal` as its close callback. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. The caller must set `open` to false. Focus return and Escape and close-control behavior depend on Canonical Modal. "
+    ], [
+        a ds:Property;
+        ds:name "`data`";
+        ds:summary "Supplies rows to `ModularTable`.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `Record<string, unknown>[]`. The first open render memoizes the array with an empty dependency list, so later replacements are not reflected reliably. "
+    ], [
+        a ds:Property;
+        ds:name "`data[].term`";
+        ds:summary "Supplies a term cell value.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `unknown`. Only strings render, using semantic `code`; other values produce an empty cell. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`data[].description`";
+        ds:summary "Supplies a description cell value.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `unknown`. Only strings or valid React elements render, wrapped in muted text; other values produce an empty cell. ";
+        ds:optional "true"
+    ].

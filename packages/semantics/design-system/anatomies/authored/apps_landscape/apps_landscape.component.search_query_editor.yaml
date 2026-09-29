@@ -1,0 +1,37 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: structured search query field
+  uri: apps_landscape.component.search_query_editor
+  edges:
+    - node:
+        role: editor loading state
+      relation:
+        cardinality: "0..1"   # rendered when the lazy CodeEditorInner or Monaco editor is loading
+    - node:
+        role: field header
+        edges:
+          - node:
+              # semantic: label
+              role: field label
+            relation:
+              cardinality: "1"
+          - node:
+              role: supporting header content
+            relation:
+              cardinality: "0..1"
+              slotName: headerContent
+      relation:
+        cardinality: "1"
+    - node:
+        role: Monaco query input
+      relation:
+        cardinality: "1"
+    - node:
+        role: error message
+      relation:
+        cardinality: "0..1"   # rendered when error is truthy
+    - node:
+        role: warning message
+      relation:
+        cardinality: "0..1"   # rendered when warning is truthy

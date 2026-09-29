@@ -1,0 +1,51 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration. The root uri was `ds:global.subcomponent:ChartLegendItem`
+# in the retired colon spelling; the notation's markdown fence and title line are
+# dropped.
+node:
+  uri: global.subcomponent.chart_legend_item
+  styles:
+    layout.type: flex
+    layout.direction: row
+    layout.align: center
+    # `spacing.internal.vertical` is not a roster key: it becomes the two block
+    # sides. Both it and the gap carry dimension.100, which the spacing keys now
+    # admit; no spacing symbol resolves to 8px in every context, so the dimension
+    # is bound and the role it plays is named on the line.
+    spacing.internal.block.start: dimension.100   # a surface inset
+    spacing.internal.block.end: dimension.100     # a surface inset
+    spacing.gap: dimension.100                    # the inline gap between marks
+  edges:
+    - node:
+        role: marker
+        styles:
+          appearance.background: color.text
+      relation:
+        cardinality: "1"
+        slotName: icon
+    - node:
+        role: label
+        styles:
+          # `text/secondary/root` migrates to the composite it names; the size
+          # key admits dimension.* alone, so typography.font carries the tier.
+          typography.font: typography.text.secondary
+          typography.color: color.text
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        role: value
+        styles:
+          typography.font: typography.text.secondary
+          typography.color: color.text
+      relation:
+        cardinality: "0..1"
+        slotName: value
+    - node:
+        role: divider
+        styles:
+          appearance.background: color.palette.gray.180
+      relation:
+        cardinality: "0..1"
+        slotName: separator

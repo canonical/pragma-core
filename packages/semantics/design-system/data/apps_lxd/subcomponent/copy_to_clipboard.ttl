@@ -1,0 +1,41 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.subcomponent.copy_to_clipboard a ds:Subcomponent;
+    ds:name "CopyToClipboard";
+    ds:summary "The **CopyToClipboard** component provides a user-friendly way to copy text values to the clipboard with a single click. It combines content display with an integrated copy button, offering immediate visual feedback. It can have a custom tooltip message, if not it will say “Copy” on hover.\n\nThe icon is copy-to-clipboard. After copied, the icon changes to task-outstanding.\n\n\n\n**Primary purpose**\n\nThis component serves as a reusable interface element that displays content alongside a copy button, eliminating the need for users to manually select and copy text. It's designed to improve user experience when working with read-only values that are frequently copied to other applications or contexts.\n\n\n\n**Main use cases**\n\n- **Code snippets**: command lines, configuration snippets, or code samples\n- **Credentials and tokens**: public keys, access tokens, or other sensitive values that need to be copied securely\n- **System identifiers**: ids, names and other system-generated identifiers\n\n\n\n**When to use**\n\n- ✅ **Read-only content** that users frequently need to copy elsewhere\n- ✅ **Long or complex strings** that are difficult to select manually\n- ✅ **System-generated values** like UUIDs, hashes, or auto-generated names\n- ✅ **Technical data** such as IP addresses, ports, or configuration values\n\n\n\n**When not to use**\n\n- ❌ Editable input fields (use standard form inputs instead)\n- ❌ Very short, easily selectable text where the copy button adds unnecessary complexity\n- ❌ Content that rarely gets copied, where the copy button would be unused\n\n  \n";
+    ds:anatomyDsl "---\nnode:\n  uri: global.component.copy-button\n  edges:\n    - node:\n        role: button wrapper\n      edges:\n        - node:\n            uri: global.component.icon\n          relation:\n            cardinality: \"1\"\n            slotName: icon\n        - node:\n            role: label text\n          relation:\n            cardinality: \"0..1\"\n            slotName: label\n      relation:\n        cardinality: \"1\"";
+    ds:anatomyClassic "In those two examples, the CopyToClipboard button is embedded in a code snippet. It is used to copy the identity trust token.\n\n\n\n\n\n\n\n\n\nOnce clicked, the icon changes:  \n";
+    ds:usage "### **General Description**\n\nThe **CopyToClipboard** component provides users with a convenient way to copy text content to their clipboard through a dedicated copy button. It combines content display with integrated copy functionality, offering immediate visual and accessibility feedback to confirm successful copy operations. The component automatically handles clipboard API availability and provides graceful fallbacks for unsupported environments.\n\n\n\n**When to use**\n\n- ✅ **Read-only content** that users frequently need to copy elsewhere\n- ✅ **Long or complex strings** that are difficult to select manually\n- ✅ **System-generated values** like UUIDs, hashes, or auto-generated names\n- ✅ **Technical data** such as IP addresses, ports, or configuration values\n\n\n\n**When not to use**\n\n- ❌ Editable input fields (use standard form inputs instead)\n- ❌ Very short, easily selectable text where the copy button adds unnecessary complexity\n- ❌ Content that rarely gets copied, where the copy button would be unused";
+    ds:guidelines "### Accessibility\n\nThe component provides dynamic [aria-label](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) attributes that communicate the current state to assistive technologies. The label changes from \"Copy to clipboard\" to \"Copied to clipboard\" to provide clear feedback about the action's success.\n\nThe copy button is fully keyboard accessible through the underlying Button component from `@canonical/react-components`, ensuring proper focus indicators and keyboard interaction patterns are maintained.\n\nVisual state changes use meaningful icons ([copy-to-clipboard](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) for default state, `task-outstanding` for success) that convey action completion through visual cues, supplemented by the changing aria-label for non-visual users.\n\n\n\n### **Device Specification**\n\nThe component gracefully handles devices or browsers where [navigator.clipboard](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) is undefined by falling back to displaying only the children content without the copy functionality.\n\nUses the modern `[navigator.clipboard.writeText()](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html)` API with proper error handling for browsers that support it, while providing fallback behavior for unsupported environments.\n\n### Content specification\n\n- **Concise:** Long content is automatically truncated using the `u-truncate` CSS class, ensuring the layout remains stable regardless of content length while maintaining the copy button's visibility.";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The text content that will be copied to the clipboard when the copy button is clicked. ";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The content to display alongside the copy button. This can be text, other components, or any renderable React elements that represent what the user sees before copying.";
+        ds:propertyType "node";
+        ds:optional "true";
+        ds:defaultValue "undefined"
+    ], [
+        a ds:Property;
+        ds:name "tooltipMessage";
+        ds:summary "Custom text to display in the tooltip that appears when hovering over the copy button.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "\"Copy\""
+    ], [
+        a ds:Property;
+        ds:name "onCopyButtonClick";
+        ds:summary "Callback function that executes after a successful copy operation.";
+        ds:propertyType "function";
+        ds:optional "true";
+        ds:defaultValue "undefined";
+        ds:constraints "Must be a function with no parameters and no return value `() => void`"
+    ].

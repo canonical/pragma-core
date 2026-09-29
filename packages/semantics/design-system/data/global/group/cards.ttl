@@ -1,0 +1,17 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.group.cards a ds:Group;
+    ds:name "Cards";
+    ds:summary "";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-04-08T00:00:00.000+02:00"
+    ].

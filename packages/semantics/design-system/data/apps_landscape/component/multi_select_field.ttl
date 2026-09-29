@@ -1,0 +1,323 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.multi_select_field a ds:Component;
+    ds:name "Multi-Select Field";
+    ds:summary "Wraps Canonical `MultiSelect` in Landscape form-field presentation: optional outer label and help, error or caution styling, persistent feedback, a composed dropdown footer, wrapper refs, and observed open/close callbacks. Selection remains controlled by the inherited `MultiSelectProps` contract; the wrapper does not store selected items.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.multi_select_field\n  edges:\n    - node:\n        role: field wrapper\n        edges:\n          - node:\n              semantic: label\n              role: outer field label\n              relation:\n                cardinality: \"0..1\"\n                condition: label is non-empty\n          - node:\n              semantic: paragraph\n              role: help text\n              relation:\n                cardinality: \"0..1\"\n                condition: help is truthy\n                slotName: help\n          - node:\n              uri: global.component.multi_select\n              role: controlled selection control\n              edges:\n                - node:\n                    role: dropdown footer\n                    relation:\n                      cardinality: \"0..1\"\n                      condition: dropdownFooter or error is truthy\n                      slotName: dropdownFooter\n              relation:\n                cardinality: \"1\"\n          - node:\n              semantic: paragraph\n              role: persistent error message\n              relation:\n                cardinality: \"0..1\"\n                condition: error is truthy\n                slotName: error\n          - node:\n              semantic: paragraph\n              role: persistent warning message\n              relation:\n                cardinality: \"0..1\"\n                condition: warning is truthy\n                slotName: warning\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-76&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 39\n\n";
+    ds:usage "### When to use\n\n**Searchable multiple choice**\n\nUse when Canonical `MultiSelect` is the appropriate multiple-choice interaction and the field also needs Landscape label, help, feedback, or lifecycle integration.\n\n**Complete form-field treatment**\n\nUse when Canonical MultiSelect needs label, help, warning, validation, footer, or open/close callbacks.\n\n### When not to use\n\n**Small visible set**\n\nChoosing between a small number of options all visible at once.\n\n**Incorrect pattern**: Using Multi-Select Field’s portalled dropdown menu when fewer than five options exist and a checkbox group would make all choices easier to compare.\n\n**Remediation strategy**: Use Canonical CheckboxGroup or a simpler checkbox list; reserve Multi-Select Field for larger or dynamically growing option sets.\n\n**Single selection**\n\nChoosing exactly one item from a list.\n\n**Incorrect pattern**: Using Multi-Select Field when only one choice is allowed; the control inherits Canonical MultiSelect’s multiple-choice semantics.\n\n**Remediation strategy**: Use a Select component, RadioGroup, or Combobox—all designed for single selection.\n\n**Lifecycle as authoritative state**\n\nUsing open/close callbacks to control menu state.\n\n**Incorrect pattern**: Treating `onOpen` and `onClose` as controlled open-state props, expecting them to drive whether the menu shows or hides.\n\n**Remediation strategy**: Understand that `onOpen` and `onClose` are observation-only callbacks that watch `aria-expanded` for side effects; they do not control the menu state. Selection and item state are controlled through the inherited `MultiSelectProps` contract.";
+    ds:guidelines "### Accessibility\n\n- Combobox/listbox roles, option state, focus management, and the accessible label are delegated to Canonical `MultiSelect`.\n- The outer label is visual markup without `htmlFor`; the same `label` string is passed to MultiSelect for its own labeling behavior.\n- Help, persistent error, and warning paragraphs are not assigned ids or connected with `aria-describedby` by this wrapper.\n- Error content is passed to MultiSelect and rendered both in the dropdown footer and below the control; verify the underlying component does not cause duplicate announcements.\n- Disabled state is passed programmatically, and a fully disabled field also supplies every item as disabled.\n\n### Content\n\n- Use concise option labels and put selection constraints in `help` or directly relevant `dropdownFooter` content.\n- `warning`, `help`, and footer content are arbitrary React nodes; `error` is a string. Keep feedback brief and avoid nested form workflows inside the portalled menu.\n- The wrapper contains no internal visible strings.\n\n### Internationalization\n\n- All wrapper-visible content is caller-provided and can be localized.\n- The component performs no string formatting, pluralization, or direction-aware layout of its own; option behavior remains with Canonical MultiSelect.\n\n### Keyboard and device\n\n- The wrapper adds no keyboard handlers or focus targets; all option navigation, selection, dismissal, and chip behavior is delegated to Canonical MultiSelect.\n- The menu is portalled, which is why lifecycle callbacks observe `aria-expanded` rather than wrapper focus. Verify portal positioning and focus return in side panels, small viewports, and zoomed layouts.\n- The only local styles target error and caution backgrounds/borders across default, hover, and expanded states; no media queries or width rules are defined here.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`items`";
+        ds:summary "Supplies the available options.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `MultiSelectItem[]`. When `disabled` is true, this array also replaces `disabledItems`. "
+    ], [
+        a ds:Property;
+        ds:name "`items[].label`";
+        ds:summary "Supplies an option's visible label.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`."
+    ], [
+        a ds:Property;
+        ds:name "`items[].value`";
+        ds:summary "Supplies an option's submitted identity.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string | number`."
+    ], [
+        a ds:Property;
+        ds:name "`items[].group`";
+        ds:summary "Assigns an option to a group.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`selectedItems`";
+        ds:summary "Supplies the caller-owned selected options.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `MultiSelectItem[]`. The wrapper stores no selected-item state. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`disabledItems`";
+        ds:summary "Supplies individually disabled options while the field is enabled. ";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `MultiSelectItem[]`. Ignored in favor of all `items` when `disabled` is true. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`disabled`";
+        ds:summary "Disables the control.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. A true value also disables every item. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`error`";
+        ds:summary "Applies error styling and displays validation feedback. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. A truthy value is forwarded and rendered in both the dropdown footer and persistent feedback. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`help`";
+        ds:summary "Renders persistent help before the control.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Truthiness controls rendering; the wrapper adds no `aria-describedby` relationship. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`helpClassName`";
+        ds:summary "Supplies Canonical MultiSelect help classes.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. The wrapper consumes `help`, so this has no wrapper-owned help target. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`label`";
+        ds:summary "Renders the outer label and labels Canonical MultiSelect. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. The outer label has no `htmlFor`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`listSelected`";
+        ds:summary "Selects Canonical MultiSelect's selected-item listing behavior. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. Forwarded unchanged. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onDeselectItem`";
+        ds:summary "Handles deselection of one option.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(item: MultiSelectItem) => void`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onItemsUpdate`";
+        ds:summary "Handles changes to the selected option array.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(items: MultiSelectItem[]) => void`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onSelectItem`";
+        ds:summary "Handles selection of one option.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(item: MultiSelectItem) => void`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`placeholder`";
+        ds:summary "Supplies placeholder text for the control.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`required`";
+        ds:summary "Adds required visual treatment to the outer label.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. It is not forwarded to Canonical MultiSelect. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`renderItem`";
+        ds:summary "Customizes option rendering.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(item: MultiSelectItem) => ReactNode`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`dropdownHeader`";
+        ds:summary "Supplies content at the start of the dropdown.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`dropdownFooter`";
+        ds:summary "Supplies content at the end of the dropdown.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. With an error, it follows the dropdown error copy inside a validation wrapper. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`footerClassName`";
+        ds:summary "Adds classes to the dropdown footer.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`inputClassName`";
+        ds:summary "Adds classes to the Canonical MultiSelect input.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`dropdownClassName`";
+        ds:summary "Adds classes to the dropdown.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`emptyState`";
+        ds:summary "Supplies custom empty-state content.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`emptyMessage`";
+        ds:summary "Supplies the empty-state message.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`showDropdownFooter`";
+        ds:summary "Controls Canonical MultiSelect footer visibility.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`variant`";
+        ds:summary "Selects the Canonical MultiSelect trigger variant.";
+        ds:propertyType "choice";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `\"condensed\" | \"search\"`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`scrollOverflow`";
+        ds:summary "Controls dropdown overflow behavior.";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:constraints "TypeScript: `boolean`. Forwarded values override the wrapper fallback. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`isSortedAlphabetically`";
+        ds:summary "Controls alphabetical option sorting.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`hasSelectedItemsFirst`";
+        ds:summary "Controls whether selected options appear first.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`id`";
+        ds:summary "Supplies the Canonical MultiSelect identifier.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onSearchChange`";
+        ds:summary "Handles search-text changes.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(value: string) => void`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onOpen`";
+        ds:summary "Notifies when observed `aria-expanded` becomes `\"true\"`. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. A `MutationObserver` watches the first descendant with `[aria-expanded]`; no initial callback fires. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onClose`";
+        ds:summary "Notifies when observed `aria-expanded` changes away from `\"true\"`. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Observation depends on Canonical MultiSelect's rendered control. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`searchButtonType`";
+        ds:summary "Selects the search trigger's native button type. ";
+        ds:propertyType "choice";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `\"submit\" | \"button\"`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`className`";
+        ds:summary "Adds classes to the root wrapper.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Local validation and state classes remain applied. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`innerRef`";
+        ds:summary "Receives the root wrapper node.";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `Ref<HTMLDivElement>`. Supports callback and mutable object refs; the implementation does not explicitly write `null` on unmount. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`labelClassName`";
+        ds:summary "Adds classes to the outer label.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Has no effect when `label` is absent. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`warning`";
+        ds:summary "Applies caution styling and renders feedback below the control. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. It is not forwarded or included in the dropdown footer. ";
+        ds:optional "true"
+    ].

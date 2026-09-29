@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier.loading a ds:Modifier;
+    ds:name "Loading";
+    ds:summary "";
+    ds:modifierFamily ds:global.modifier_family._other.

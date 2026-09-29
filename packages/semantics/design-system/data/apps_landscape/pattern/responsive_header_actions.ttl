@@ -1,0 +1,83 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.responsive_header_actions a ds:Pattern;
+    ds:name "Responsive Header Actions";
+    ds:summary "Responsive Header Actions renders title content beside a segmented action group, measures buttons against container width, and collapses actions that do not fit into an overflow menu. Destructive actions receive negative styling and are separated from nondestructive actions within the menu.\n\nMain use cases:\n\n- Adapting a heading row's action set to fit available measured container space without relying on viewport breakpoints.  \n- Partitioning commands into nondestructive (standard) and destructive (negative) buckets with consistent menu styling.  \n- Explicitly collapsing specific actions to the menu when more than one action is marked `collapsed: true`.  \n- Handling title semantics and heading context separately from action management.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.responsive_header_actions\n  role: header and action layout\n  edges:\n    - node:\n        role: header context\n        relation:\n          cardinality: \"0..1\"\n          condition: Rendered when title is provided.\n          slotName: title\n    - node:\n        role: action container\n        edges:\n          - node:\n              role: measured visible action group\n              edges:\n                - node:\n                    uri: global.component.button\n                    role: visible action\n                    relation:\n                      cardinality: \"0..*\"\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: collapsed action menu\n              edges:\n                - node:\n                    role: nondestructive menu command\n                    relation:\n                      cardinality: \"0..*\"\n                - node:\n                    role: destructive menu command\n                    relation:\n                      cardinality: \"0..*\"\n              relation:\n                cardinality: \"0..1\"\n                condition: Rendered when measured or forced collapsed actions exist.\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-94&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 48\n\n";
+    ds:usage "### When to use\n\n- Use for two or more labelled actions sharing a page or detail heading row.\n- Put nondestructive actions in intended priority order, then destructive actions in their own bucket.\n- Set `excluded` only for actions that should be absent from both visible and menu presentations.\n- Use `collapsed` consistently on at least two lower-priority actions when explicit menu placement is intended; one flag alone does not force collapse.\n\n### When not to use\n\n**Single command or row-level actions**\n\nA heading row with only one action button, or a layout where actions belong to individual rows rather than a shared header.\n\n**Incorrect pattern**: Using Responsive Header Actions to manage a single “Delete” button or to display table row actions alongside a table heading.\n\n**Remediation strategy**: Render a single button directly in the header without Responsive Header Actions. For row-level actions, use a table action column or row context menu; do not couple them to the header.\n\n**Placement as a proxy for importance**\n\nA design that relies on visible versus collapsed placement to communicate action priority or significance to users.\n\n**Incorrect pattern**: Placing high-priority actions first expecting them to always remain visible, and assuming users will understand that collapsed placement means low priority.\n\n**Remediation strategy**: Use action labels and icon choice to convey importance. Placement can change with measurement; do not make priority semantics depend on visibility state. Consider a separate importance indicator if ordering is critical.\n\n**Duplicate action labels**\n\nA header action set where two or more actions have the same label text.\n\n**Incorrect pattern**: Creating two actions with the label “Edit” and relying on icon or context to distinguish them.\n\n**Remediation strategy**: Ensure every action label is unique and stable. Labels serve as React keys and part of the action-identity comparison. Use distinct, verb-led labels instead: “Edit settings”, “Edit description”, etc.";
+    ds:guidelines "### Accessibility\n\n- Every action always includes visible label text; keep icons supplementary.\n- The menu toggle is disabled only when every included action is disabled, not merely every collapsed action. Mixed visible/collapsed sets can therefore leave a menu enabled even if all links inside it are disabled.\n- `ActionsMenu` supplies contextual-menu semantics; verify its focus return and keyboard behavior when actions move between presentations.\n- The component adds no heading or landmark semantics to `title`.\n\n### Content\n\n- Use concise, unique, verb-led labels. “More actions” and “Actions” are hardcoded English and not configurable.\n- Reserve the destructive bucket for genuinely destructive/high-impact commands because the collapsed presentation changes icon and text treatment.\n- Place higher-priority actions earlier; overflow is determined independently for each rendered child but source order is preserved within buckets.\n\n### Internationalization / globalization\n\n- Action labels and title content can be supplied by consumers, but toggle labels cannot currently be translated through props.\n- Measurement depends on rendered width, so longer translations naturally collapse earlier. Test translated labels and browser zoom.\n- No direction-specific helper exists; right-edge measurement and right-aligned layout need RTL verification.\n\n### Device\n\n- A `ResizeObserver` watches the action row’s grandparent container. There is no viewport breakpoint.\n- Root wrapping is enabled only when zero actions remain visible; partially collapsed sets stay on one nowrap row.\n- Buttons use `min-width: max-content`, so labels do not shrink before overflow partitioning.\n\n### Keyboard\n\n- Visible buttons and the conditional menu toggle follow DOM/source order.\n- When a resize moves the focused action between visible and collapsed markup, this component provides no focus preservation.\n- Use the inherited button/menu keyboard behavior; no custom key handlers are implemented here.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`actions`";
+        ds:summary "Commands partitioned by consequence.";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `{ destructive?: Action[]; nondestructive?: Action[] }`, where `Action` is `Omit<ButtonProps, \"children\" | \"hasIcon\"> & { icon: string; label: string; collapsed?: boolean; excluded?: boolean }`. Missing buckets become empty arrays; nondestructive actions precede destructive actions. "
+    ], [
+        a ds:Property;
+        ds:name "`actions.nondestructive`";
+        ds:summary "Nondestructive commands in display priority order.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "`[]`";
+        ds:constraints "TypeScript: `Action[]`. Excluded actions are removed before layout and remaining actions precede destructive actions. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`actions.destructive`";
+        ds:summary "Destructive commands shown after nondestructive commands. ";
+        ds:propertyType "list of objects";
+        ds:defaultValue "`[]`";
+        ds:constraints "TypeScript: `Action[]`. Collapsed presentation appends `--negative` to the icon name and uses negative treatment. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`title`";
+        ds:summary "Caller content before the actions.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Rendered unchanged; consumers own heading level and semantics. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`Action.icon`";
+        ds:summary "Canonical icon name.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Visible actions use the name directly; collapsed destructive actions append `--negative`. "
+    ], [
+        a ds:Property;
+        ds:name "`Action.label`";
+        ds:summary "Visible and accessible text and React key.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Must be unique and stable within the action set."
+    ], [
+        a ds:Property;
+        ds:name "`Action.collapsed`";
+        ds:summary "Participates in explicit menu placement.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "Forced placement applies only when more than one included action has this set to true; otherwise normal measurement applies. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`Action.excluded`";
+        ds:summary "Removes the action before layout calculations.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "Excluded actions do not affect the forced-collapse count or toggle disabled state. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`Action` inherited props";
+        ds:summary "Canonical button behavior such as click, disabled, appearance, and ARIA props. ";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `Omit<ButtonProps, \"children\" | \"hasIcon\">`. `collapsed` and `excluded` are stripped from visible buttons; menu adaptation is owned by `ActionsMenu`. Partition equality ignores callbacks and these props, so replacements retaining label, icon, and disabled can keep stale values. ";
+        ds:optional "true"
+    ].

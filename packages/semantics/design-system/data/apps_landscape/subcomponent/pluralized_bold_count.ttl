@@ -1,0 +1,36 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.subcomponent.pluralized_bold_count a ds:Subcomponent;
+    ds:name "Pluralized Bold Count";
+    ds:summary "Renders a locale-formatted count in a semantic `strong` element followed by the noun in its singular or plural form. The singular form is used only when the count is exactly `1`; every other value, including `0` and negative numbers, uses the plural form.\n\nMain use cases:\n\n- Emphasizing how many records a confirmation or destructive action will affect.  \n- Summarizing a selection count inside a sentence in a side panel or modal.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.subcomponent.pluralized_bold_count\n  edges:\n    - node:\n        uri: global.element.strong\n        role: locale-formatted count\n        relation:\n          cardinality: \"1\"\n    - node:\n        role: pluralized noun\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-79&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 42\n\n";
+    ds:usage "### When to use\n\n**Quantified confirmation copy**\n\nUse inside a sentence when the reader must notice how many items an action covers, such as a removal or upgrade confirmation.\n\n**Inline selection summaries**\n\nUse to report a current selection or result count without breaking the surrounding sentence into a separate label.\n\n### When not to use\n\n**Standalone metric display**\n\nA metric that stands on its own rather than inside a sentence.\n\n**Incorrect pattern**: Placing this subcomponent alone in a card or statistic tile so the bold count carries meaning that only the missing sentence provides.\n\n**Remediation strategy**: Use a labelled statistic or information-grid element that pairs the value with its own visible label.\n\n**Approximate or truncated counts**\n\nA count that represents a capped or estimated total rather than an exact one.\n\n**Incorrect pattern**: Passing a clamped value such as `Math.min(total, 100)` so the sentence states an exact number that the data does not support.\n\n**Remediation strategy**: Call the `pluralize` helper from `@/utils/_helpers` with the `limited` count type, which renders the `100+` form, and apply emphasis in the surrounding copy.\n\n**Irregular or non-English plurals**\n\nA noun whose plural is not formed by appending `s`, or copy that must be translated.\n\n**Incorrect pattern**: Relying on the default plural for a noun such as `policy` or `person`, which yields `policys` and `persons`.\n\n**Remediation strategy**: Pass the correct form explicitly through `plural`, and move the whole sentence into a translation layer when locale-specific plural categories are required.\n\n**Zero-count empty states**\n\nA surface where the absence of items should change the message rather than the number in it.\n\n**Incorrect pattern**: Rendering `0 instances` inside otherwise unchanged action copy when no work can be performed.\n\n**Remediation strategy**: Branch on the empty case in the consumer and render a dedicated empty state or disable the action.";
+    ds:guidelines "### Accessibility\n\n- The count uses semantic `strong`, so it is announced as part of the sentence rather than as a separate element.\n- The subcomponent adds no role, label, or live region. Wrap it in the consumer’s own live region when the count updates in response to user action.\n- Keep the sentence readable without the emphasis, because bold weight alone conveys no status or selection state.\n\n### Content\n\n- Write the surrounding sentence so the emphasized number reads naturally in place, for example `You are about to remove 12 instances.`\n- Pass the bare noun without an article or trailing punctuation; the subcomponent renders exactly one space between the count and the noun.\n- Do not pre-format `count` as a string. Number formatting is applied internally and a pre-formatted value would break plural selection.\n\n### Internationalization\n\n- `toLocaleString()` is called without arguments, so grouping separators follow the runtime locale rather than an application-controlled one.\n- Plural selection is a binary `count === 1` check and does not implement locale plural categories such as zero, one, two, few, many, and other.\n- Both nouns are consumer-supplied. The subcomponent contains no translatable copy of its own.\n\n### Keyboard and device\n\n- This subcomponent renders inline text with no focus target and no keyboard interaction.\n- It applies no layout styles. Wrapping and truncation are the responsibility of the surrounding text container.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`count`";
+        ds:summary "Supplies the bold quantity and selects the noun form. ";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Formatted with `toLocaleString()`; singular is selected only when the value is exactly `1`. "
+    ], [
+        a ds:Property;
+        ds:name "`singular`";
+        ds:summary "Supplies the noun used when `count` is exactly `1`. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Also seeds the default plural form. "
+    ], [
+        a ds:Property;
+        ds:name "`plural`";
+        ds:summary "Supplies the noun used for every other count.";
+        ds:propertyType "text";
+        ds:defaultValue "`${singular}s`";
+        ds:constraints "TypeScript: `string`. Supply it when the plural is not the singular plus `s`. ";
+        ds:optional "true"
+    ].

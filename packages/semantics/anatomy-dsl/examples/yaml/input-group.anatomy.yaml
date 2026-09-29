@@ -1,0 +1,21 @@
+---
+# Derived against @canonical/react-ds-global-form 0.37.0,
+# dist/esm/lib/TextArea/styles.css. `size.min.height` is a token-kind key:
+# every value the reference binds there reads a var(), so the registry admits
+# no bare primitive on it and the shape requires anatomy:consumes.
+node:
+  uri: global.component.input-group
+  edges:
+    - switch:
+        on: props
+        cases:
+          - uri: global.component.text-input
+          - node:
+              uri: global.component.textarea
+              styles:
+                size.height: auto
+                size.min.height: dimension.1600
+                interaction.resize: vertical
+      relation:
+        cardinality: "1"
+        slotName: input

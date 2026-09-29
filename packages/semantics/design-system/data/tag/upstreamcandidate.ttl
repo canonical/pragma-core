@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.upstreamcandidate a ds:Tag;
+    ds:name "upstream:candidate";
+    ds:category ds:tagcategory.review-status;
+    ds:whenToApply "";
+    ds:whenToRemove "".

@@ -1,0 +1,87 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form
+# src/lib/subcomponent/SelectInput/styles.css on .ds.input.select, together with
+# the shared `.ds.input.chrome` rule in src/index.css, which the component's own
+# class list (`ds input select chrome`) puts on this same element. A native
+# <select>: the element itself is the text-bearing leaf and the options are its
+# own children.
+node:
+  uri: global.subcomponent.select_input
+  styles:
+    layout.type: block
+    layout.boxSizing: border-box
+    size.width: 100%
+    appearance.native: none
+    # The chevron is DRAWN, not masked: a <select> is a replaced element with no
+    # ::before to mask, and a background-image SVG cannot be recoloured, so two
+    # diagonally-striped linear-gradients butted together form the chevron
+    # stroke, coloured by --select-caret-color (color.icon, then currentColor)
+    # and sized by --select-caret-half (0.4em per half). The roster minted these
+    # three primitive keys for exactly this case, so the literals are
+    # transcribed; the two component-local variables stay in them, because that
+    # is what the implementation writes.
+    appearance.background.image: "linear-gradient(45deg, transparent 42%, var(--select-caret-color) 42%, var(--select-caret-color) 58%, transparent 58%), linear-gradient(135deg, transparent 42%, var(--select-caret-color) 42%, var(--select-caret-color) 58%, transparent 58%)"
+    appearance.background.position: "right calc(var(--form-input-padding-inline) + var(--select-caret-half)) center, right var(--form-input-padding-inline) center"
+    appearance.background.repeat: no-repeat
+    appearance.background.size: var(--select-caret-half) var(--select-caret-half)
+    # The element carries the inline padding itself (the chrome supplies only the
+    # block padding): the start side reads --form-input-padding-inline, then
+    # --component-padding-inline, neither declared, and the end side is a calc()
+    # over it leaving room for the chevron.
+    # ── the shared input chrome (src/index.css, `.ds.input.chrome`) ──────────
+    appearance.border.width: dimension.stroke.thickness.medium
+    appearance.border.style: solid
+    # The base theme is bottom-border-only: `border-color` is set from
+    # --form-input-border-color, and then the top, right and left colours are
+    # overridden to `transparent` (--form-input-border-color-{top,right,left}),
+    # so only the bottom edge paints. The four-side key therefore takes the
+    # literal the three overridden sides end at, and the bottom key the token
+    # the fourth falls through to.
+    appearance.border.color: transparent
+    appearance.border.bottom.color: color.border
+    # A `.danger` field — a failed validation — repaints the bottom border alone,
+    # through --form-input-border-color-bottom.
+    appearance.border.bottom.color@invalid: color.border.error
+    appearance.radius: dimension.radius.small
+    appearance.background: color.foreground.input
+    typography.color: color.text
+    # The font-family, font-size and line-height facets of the text-primary
+    # composite are read (--typography-text-primary-font-family, and its
+    # font-size and line-height through --form-input-font-size and
+    # --form-input-line-height), so the composite is bound once: typography.size
+    # admits dimension.* alone.
+    typography.font: typography.text.primary
+    motion.property: border-color, box-shadow
+    # The hover fill reads --hover--color-foreground-input first, a computed state
+    # variable that no stratum declares as a symbol.
+    appearance.background@hover: color.foreground.input.hover
+    # Focus lights all four edges and drops the user-agent outline for a ring of
+    # its own.
+    appearance.border.color@focus: color.focusRing
+    appearance.outline.style@focus: none
+    # A disabled control keeps its border BOX so its height still matches an
+    # enabled one, and drops only the paint.
+    appearance.background@disabled: color.foreground.input.disabled
+    appearance.border.color@disabled: transparent
+    interaction.cursor@disabled: not-allowed
+    # Not bound, and why:
+    # - height reads --form-input-height, a calc() over --space-baseline, which
+    #   no stratum declares;
+    # - padding-block reads --form-input-padding-block, then
+    #   --component-padding-block, neither of which is declared. A density scope
+    #   re-derives the INLINE padding (--form-input-padding-inline, from
+    #   --density-padding-inline then --space-200) and never padding-block;
+    # - the focus ring and the disabled text colour are a box-shadow at
+    #   --form-focus-ring-color and a read of --disabled--color-text: no roster
+    #   key takes a box-shadow, and the computed state variable is not a symbol;
+    # - the transition duration reads --motion-duration-fast, undeclared;
+    # - a `.danger` field lights the focus ring at color.focusRing.error, which
+    #   needs the compound of invalid and focus that this version of the
+    #   notation reserves. Its bottom border is bound above.
+  edges:
+    - node:
+        role: option
+        # The <option> children carry no rule of their own in the stylesheet.
+      relation:
+        cardinality: "1..*"
+        slotName: default

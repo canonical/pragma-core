@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.needsdocumentation a ds:Tag;
+    ds:name "needs:documentation";
+    ds:category ds:tagcategory.documentation-stage;
+    ds:whenToApply "Base definition is complete but other fields are missing (i.e. needs variant guidelines, properties definitions) and pending review";
+    ds:whenToRemove "".

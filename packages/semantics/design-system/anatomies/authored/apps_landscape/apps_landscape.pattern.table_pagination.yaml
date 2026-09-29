@@ -1,0 +1,38 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: pagination family
+  uri: apps_landscape.pattern.table_pagination
+  edges:
+    - node:
+        role: pagination status
+      relation:
+        cardinality: "0..1"   # rendered according to the selected variant's count/page rules
+    - node:
+        role: pagination controls
+        edges:
+          - node:
+              role: page-size control
+            relation:
+              cardinality: "0..1"   # rendered by multi-page offset pagination or when the token pageSizeControl is supplied
+          - node:
+              role: sequential navigation
+              edges:
+                - node:
+                    # role: previous page
+                    uri: global.component.button
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: direct page input
+                  relation:
+                    cardinality: "0..1"   # rendered only by multi-page offset pagination
+                - node:
+                    # role: next page
+                    uri: global.component.button
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"   # rendered when the selected variant determines navigation is available

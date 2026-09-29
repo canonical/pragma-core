@@ -1,0 +1,60 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.combobox
+  styles:
+    layout.type: flex
+    layout.direction: column   # was vertical
+    # dropped spacing.gap: spacing/block/small — no spacing symbol corresponds
+    appearance.background: color.background   # was color/background/default
+    appearance.border.style: solid   # was border/style/container
+    appearance.radius: dimension.radius.medium   # was radius/medium
+    # dropped appearance.shadow: shadow/overlay/default — box-shadow has no roster key
+  edges:
+    - node:
+        uri: apps_launchpad.subcomponent.combobox-search
+      relation:
+        cardinality: "1"
+        slotName: search
+    - node:
+        role: option list
+        styles:
+          layout.type: flex
+          layout.direction: column   # was vertical
+          size.max.height: 350px
+          layout.overflow.block: auto
+        edges:
+          # The list shows one of three things at a time: the loading state, the
+          # empty state, or the groups of options.
+          - switch:
+              on: internal
+              cases:
+                - uri: apps_launchpad.subcomponent.combobox-loading
+                - uri: apps_launchpad.subcomponent.combobox-no_results
+                - node:
+                    uri: apps_launchpad.subcomponent.combobox-group
+                    edges:
+                      - switch:
+                          on: props
+                          cases:
+                            - uri: apps_launchpad.subcomponent.combobox-checkbox_option
+                            - uri: apps_launchpad.subcomponent.combobox-radio_option
+                        relation:
+                          cardinality: "1..*"
+                          slotName: default
+            relation:
+              cardinality: "0..*"
+              slotName: default
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        uri: apps_launchpad.subcomponent.combobox-helper
+      relation:
+        cardinality: "0..1"
+        slotName: helper
+    - node:
+        uri: apps_launchpad.subcomponent.combobox-footer
+      relation:
+        cardinality: "0..1"
+        slotName: footer

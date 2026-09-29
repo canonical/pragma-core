@@ -1,0 +1,59 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `core:component:DocLink`; the block's own uri is used instead.
+node:
+  uri: apps_lxd.component.doc_link
+  styles:
+    layout.type: inline
+    # was layout.display: inline-block; layout.type already carries the display type
+    interaction.cursor: pointer
+    # was interaction.target: _blank and link.rel: "noopener noreferrer"; neither is a
+    # style, and no roster key takes them
+    typography.decoration: underline      # was text/decoration/link
+    typography.color: color.text.link
+    # was appearance.focus: focus/ring/link; the declared focus-ring colour is the
+    # nearest symbol, and the roster carries it on the outline colour in the focus state
+    appearance.outline.color@focus: color.focusRing
+    # was interaction.hover.color: color/text/link/hover; no color.text.link.hover
+    # symbol is declared
+  edges:
+    - node:
+        role: link content wrapper
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: flex   # was flow
+          layout.direction: row   # was horizontal
+          layout.align: center
+          layout.wrap: nowrap
+          # Themeable
+          # was spacing.gap: spacing/xs; no spacing.xs symbol is declared
+        edges:
+          - node:
+              role: link content
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: inline      # was layout.display: inline
+                layout.flex.grow: 1      # was layout.flex: 1
+                # Themeable
+                # was typography.inherit: true; no roster key takes an inherit flag
+            relation:
+              cardinality: "1..1"
+              slotName: children
+          - node:
+              # was uri: core:element:Icon
+              uri: global.component.icon
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: inline      # was layout.display: inline
+                layout.flex.grow: 0      # was layout.flex: none
+                layout.flex.shrink: 0    # was layout.flex: none
+                # was size.width and size.height: size/icon/small; no dimension symbol
+                # corresponds to a small icon
+                # Themeable
+                typography.color: color.icon   # was appearance.color: color/icon/external
+            relation:
+              cardinality: "0..1"
+              slotName: icon
+      relation:
+        cardinality: "1..1"
+        slotName: default

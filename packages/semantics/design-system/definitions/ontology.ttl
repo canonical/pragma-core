@@ -1,0 +1,690 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix ds:    <https://ds.canonical.com/> .
+
+# Ontology Declaration
+ds: a owl:Ontology ;
+    owl:versionInfo "3.0.0" ;
+    rdfs:label "Design System Ontology" ;
+    skos:definition "OWL ontology for UI design system based on schema diagram" .
+
+###############################################################################
+# METADATA PROPERTIES
+###############################################################################
+
+ds:acceptanceCriteria
+    a owl:AnnotationProperty ;
+    rdfs:label "acceptanceCriteria" ;
+    skos:definition "Acceptance criteria that must be met for this property" ;
+    rdfs:domain rdf:Property ;
+    rdfs:range xsd:string .
+
+ds:completionGuidance
+    a owl:AnnotationProperty ;
+    rdfs:label "completionGuidance" ;
+    skos:definition "Completion guidance for this property. This will be shown in an interface for the contributors." ;
+    rdfs:domain rdf:Property ;
+    rdfs:range xsd:string .
+
+###############################################################################
+# DATATYPES
+###############################################################################
+
+ds:SemverString
+    a rdfs:Datatype ;
+    owl:onDatatype xsd:string ;
+    owl:withRestrictions (
+        [ xsd:pattern "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$" ]
+    ) ;
+    skos:definition "Semantic version string following semver specification (MAJOR.MINOR.PATCH)" .
+
+###############################################################################
+# 1. CORE CLASSES
+###############################################################################
+
+ds:Entity
+    a owl:Class ;
+    rdfs:label "Entity" ;
+    skos:definition "Abstract root class for all design system entities. Provides common properties (name, summary) inherited by all classes." .
+
+ds:UIElement
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "UI Element" ;
+    skos:definition "Base class for all visual and interactive design system elements" .
+
+ds:UIBlock
+    a owl:Class ;
+    rdfs:subClassOf ds:UIElement ;
+    rdfs:label "UI Block" ;
+    skos:definition "A category of visual or abstract entity that fulfills a particular role in composing user interfaces" .
+
+###############################################################################
+# 2. UI BLOCK SUBCLASSES
+###############################################################################
+
+ds:Component
+    a owl:Class ;
+    rdfs:subClassOf ds:UIBlock ;
+    rdfs:label "Component" ;
+    skos:definition "An implementable piece of user interface defined by its appearance and behaviour" .
+
+ds:Pattern
+    a owl:Class ;
+    rdfs:subClassOf ds:UIBlock ;
+    rdfs:label "Pattern" ;
+    skos:definition "A reusable solution to a recurring user problem in a specific context" .
+
+ds:Layout
+    a owl:Class ;
+    rdfs:subClassOf ds:UIBlock ;
+    rdfs:label "Layout" ;
+    skos:definition "Layouts are an opinionated division of space to navigate a domain of information." .
+
+ds:Subcomponent
+    a owl:Class ;
+    rdfs:subClassOf ds:UIBlock ;
+    rdfs:label "Subcomponent" ;
+    skos:definition "A named part of a Component that has design-system identity but is typically not used independently outside its parent" .
+
+ds:Group
+    a owl:Class ;
+    rdfs:subClassOf ds:UIBlock ;
+    rdfs:label "Group" ;
+    skos:definition "A set of sibling UIBlocks documented and used together as a collective unit, where the collection itself carries design-system identity distinct from its members (e.g. a coherent icon set, a family of related chips). Distinct from a Layout (which arranges space) and a Pattern (a single situated solution): a Group's identity is the collection." .
+
+###############################################################################
+# 3. OTHER CORE CLASSES
+###############################################################################
+
+ds:Modifier
+    a owl:Class ;
+    rdfs:subClassOf ds:UIElement ;
+    rdfs:label "Modifier" ;
+    skos:definition "A named variant value within a ModifierFamily that alters the appearance or behaviour of a UIBlock (e.g. 'primary', 'secondary' within the 'importance' family)" .
+
+ds:ModifierFamily
+    a owl:Class ;
+    rdfs:subClassOf ds:UIElement ;
+    rdfs:label "Modifier Family" ;
+    skos:definition "A grouping of related modifiers that can be applied to UI Blocks" .
+
+ds:Property
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Property" ;
+    skos:definition "A configurable property of a UI Block" .
+
+ds:Tier
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Tier" ;
+    skos:definition "A scope level in the design system hierarchy that determines where UIBlocks are intended to be used (e.g. global, apps, site)" .
+
+ds:ImplementationObject
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Implementation Object" ;
+    skos:definition "Platform-specific implementation of a UI Block" .
+
+ds:ImplementationLibrary
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Implementation Library" ;
+    skos:definition "A code library or package that provides platform-specific implementations of UIBlocks" .
+
+ds:Tag
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Tag" ;
+    skos:definition "A controlled-vocabulary label applied to a UIBlock. Tags are grouped into facets by their category (e.g. 'documentation stage', 'review status', 'channel', 'implementation status'). The category-typed views over this vocabulary are tracked as future work; for now a Tag carries its name, category, and apply/remove guidance." .
+
+ds:TagCategory
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Tag Category" ;
+    skos:definition "A facet that groups related Tags (e.g. 'documentation stage', 'review status', 'channel', 'implementation status')." .
+
+ds:ChangeLogEntry
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Change Log Entry" ;
+    skos:definition "A single dated record of a change to a UIBlock, with a timestamp, the change description, an owner, an optional GitHub link, and a change type." .
+
+ds:Concept
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Concept" ;
+    skos:definition "A standalone piece of design-system documentation not bound to a single UIBlock — a cross-cutting guide, disambiguation, foundation, or decision (e.g. 'Foundations: Grid', 'Disambiguation: Badge/Chip/Tag'). Carries a long-form Markdown body (content), an optional short summary, a concept type, and a tier." .
+
+ds:ConceptType
+    a owl:Class ;
+    rdfs:subClassOf ds:Entity ;
+    rdfs:label "Concept Type" ;
+    skos:definition "A controlled-vocabulary classification of a Concept (e.g. 'Decision guide', 'Foundation', 'Disambiguation')." .
+
+###############################################################################
+# 4. PROPERTIES - Entity Base Properties
+###############################################################################
+
+ds:name
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Entity ;
+    rdfs:range xsd:string ;
+    rdfs:label "name" ;
+    skos:definition "A human-readable text for the entity. The primary identifier, used for referencing and display purposes." ;
+    ds:acceptanceCriteria "Must be a concise, descriptive name that clearly identifies the entity. Should be unique within the design system and avoid generic terms like 'button' or 'input' without context." ;
+    ds:completionGuidance "Provide a clear and descriptive name for the entity that accurately reflects its purpose and functionality within the design system." .
+
+ds:summary
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Entity ;
+    rdfs:range xsd:string ;
+    rdfs:label "summary" ;
+    skos:definition "A comprehensive paragraph of text that states the singular purpose of the entity." ;
+    ds:acceptanceCriteria "Concise paragraph (3-5 sentences) that clearly describes the purpose of the entity, lists at least 2-3 use cases, and is written in a clear and accessible way. Enables readers to quickly determine if this is the right component for their needs." ;
+    ds:completionGuidance "Write an introduction that gives a quick overview of the entity. Start with the primary purpose and list all the main use cases. Make sure to include information that can help users decide if this is the right element they need." .
+
+ds:version
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:Entity ;
+    rdfs:range ds:SemverString ;
+    rdfs:label "version" ;
+    skos:definition "Semantic version of the entity following semver specification" ;
+    ds:acceptanceCriteria "Must follow semantic versioning format: MAJOR.MINOR.PATCH with optional pre-release and build metadata" ;
+    ds:completionGuidance "Provide a semantic version number following the MAJOR.MINOR.PATCH format (e.g., 1.0.0, 2.1.3). Include optional pre-release identifiers (e.g., 1.0.0-alpha) and build metadata (e.g., 1.0.0+build.123456789)." .
+
+ds:decisionLog
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Entity ;
+    rdfs:range xsd:string ;
+    rdfs:label "decisionLog" ;
+    skos:definition "Log of decisions with [date][author][content]" ;
+    ds:acceptanceCriteria "[date] Contains the date of the decision made, [author] Links to the decision maker, [content] Contains the reasons of change, is clear on what the change is" ;
+    ds:completionGuidance "Document any decisions made regarding the entity, including the date of the decision, the author responsible for the decision, and a clear explanation of the change or decision made. This log helps maintain a history of changes and the rationale behind them." .
+
+###############################################################################
+# 5. PROPERTIES - UIBlock Specific
+###############################################################################
+
+ds:tier
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:Tier ;
+    rdfs:label "tier" ;
+    skos:definition "The tier to which the UI block belongs to" ;
+    ds:acceptanceCriteria "Has to be mandatory and singular. Must be one of the predefined tier values (core, global, global_form, apps, site, etc.)." ;
+    ds:completionGuidance "Assign the UI block to a specific tier within the design system. Choose from predefined tier values such as core, global, global_form, apps, site, etc. This property is mandatory and should have only one value." .
+
+ds:figmaLink
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "figmaLink" ;
+    skos:definition "Link to the Figma design file for this UI block" ;
+    ds:acceptanceCriteria "Must be a valid URL pointing to the Figma design file for this UI block. The URL should be accessible and correctly formatted." .
+
+ds:anatomyClassic
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range xsd:string ;
+    rdfs:label "anatomyClassic" ;
+    skos:definition "DEPRECATED. Legacy anatomy field (free-form text). Superseded by ds:anatomyDsl." ;
+    ds:acceptanceCriteria "Identifies all significant UI block parts and their relationships. Parts are decomposed only to the level where they are meaningful and reusable (e.g., if a component is made of other published components, reference those components instead of redescribing them). Each part is assigned a descriptive name, visual slot and description of its role in the overall component structure. Relationships between parts are documented: cardinality (1, 0..1, 1..*) and nesting (which parts are contained within others). Includes visual annotations or diagrams showing the anatomical structure. Both visual representation and text list align and describe the same parts. No orphaned or unnamed parts—every element in the anatomy is accounted for" .
+
+ds:anatomyDsl
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range xsd:string ;
+    rdfs:label "anatomyDsl" ;
+    skos:definition "YAML specification of component structure using the Anatomy DSL. Describes nodes (named/anonymous), edges with cardinality, slots, and CTI-inspired styles." ;
+    ds:acceptanceCriteria "Must be valid YAML conforming to the Anatomy DSL specification. Root node must be named (have uri). See skills/anatomy-author/SKILL.md for format." .
+
+ds:usage
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range xsd:string ;
+    rdfs:label "usage" ;
+    skos:definition "Free-text (Markdown) usage documentation for the UI block. Subsumes the former whenToUse/whenNotToUse: a usage entry describes the contexts where the component is most appropriate ('When to use'), the contexts where it is NOT appropriate and what to use instead ('When not to use'), and a general description, typically as Markdown sub-sections." ;
+    ds:acceptanceCriteria "Should include a general description and clear When-to-use / When-not-to-use guidance. Each scenario should be distinct; when discouraging a use, name the component to use instead. All variants should be considered. Examples should be drawn from real-world, released usage." ;
+    ds:completionGuidance "Document when and when not to use the component, with a short general description. Cover all use cases and anti-patterns distinctly, name the alternative component for discouraged uses, and draw examples from real released usage." .
+
+ds:guidelines
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range xsd:string ;
+    rdfs:label "guidelines" ;
+    skos:definition "Detailed specification for correctly using and implementing the UI block." ;
+    ds:acceptanceCriteria "These guidelines should contain the best practices for accessibility, responsiveness, content handling, localization, animation and keyboard interaction of this UI block. They should be comprehensive and cover all important aspects of using and implementing the component correctly." ;
+    ds:completionGuidance "Provide detailed guidelines for correctly using and implementing the UI block. Include best practices for accessibility, responsiveness, content handling, localization, animation, and keyboard interaction. Ensure that the guidelines are comprehensive and cover all important aspects of using and implementing the component correctly." .
+
+ds:content
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Concept ;
+    rdfs:range xsd:string ;
+    rdfs:label "content" ;
+    skos:definition "The long-form Markdown body of a Concept — the full documentation text (sections, prose, tables, links). Stored as a plain string literal; the content is Markdown." ;
+    ds:acceptanceCriteria "Should be a self-contained Markdown document that fully explains the concept, with clear sections and concrete examples. May reference UIBlocks and other concepts by name or link." ;
+    ds:completionGuidance "Write the concept as a complete Markdown document: open with what it is and why it matters, then cover the guidance in structured sections with concrete, real-world examples." .
+
+ds:knownEdgeCases
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Concept ;
+    rdfs:range xsd:string ;
+    rdfs:label "known edge cases" ;
+    skos:definition "Free-text notes on edge cases, caveats, or open questions for the Concept." .
+
+###############################################################################
+# 6. PROPERTIES - Relationships
+###############################################################################
+
+ds:hasModifierFamily
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:ModifierFamily ;
+    rdfs:label "hasModifierFamily" ;
+    skos:definition "Links a UI Block to applicable modifier families" .
+
+ds:hasProperty
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:Property ;
+    rdfs:label "hasProperty" ;
+    skos:definition "Links a UI Block to its configurable properties" .
+
+ds:documentationStage
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:Tag ;
+    rdfs:label "documentationStage" ;
+    skos:definition "Links a UI Block to the documentation-stage Tag(s) applied to it (e.g. needs:documentation). One facet of the wider Tag vocabulary; the other tag facets are tracked as future work." .
+
+ds:changeLog
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:ChangeLogEntry ;
+    rdfs:label "changeLog" ;
+    skos:definition "Links a UI Block to its dated change log entries." .
+
+ds:inheritsFrom
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:UIBlock ;
+    owl:inverseOf ds:specializedBy ;
+    rdfs:label "inheritsFrom" ;
+    skos:definition "The UI Block this block inherits from / specialises (e.g. a Data tooltip inherits from Tooltip). Distinct from subcomponent containment: inheritance is an is-a-specialisation relationship." ;
+    ds:acceptanceCriteria "Must reference a valid ds:UIBlock that this block specialises, and must follow the rules of inheritance (to be specified in full later). One such rule: the inheriting block's name is the parent block's name with a prefix applied (e.g. Tooltip -> DataTooltip, Button -> DropdownButton). Should not be cyclic." .
+
+ds:specializedBy
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:UIBlock ;
+    owl:inverseOf ds:inheritsFrom ;
+    rdfs:label "specializedBy" ;
+    skos:definition "The UI Blocks that inherit from / specialise this block (inverse of ds:inheritsFrom). E.g. Tooltip is specialised by DataTooltip." .
+
+ds:variantOf
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:UIBlock ;
+    owl:inverseOf ds:hasVariant ;
+    rdfs:label "variantOf" ;
+    skos:definition "The base UI Block this block is a variant of, by the '+' naming convention (e.g. Tooltip+Dense is a variant of Tooltip). Distinct from ds:inheritsFrom: a variant is a modifier-style derivative rather than a prefixed specialisation." .
+
+ds:hasVariant
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:UIBlock ;
+    owl:inverseOf ds:variantOf ;
+    rdfs:label "hasVariant" ;
+    skos:definition "The variants of this UI Block (inverse of ds:variantOf). E.g. Tooltip has variant Tooltip+Dense." .
+
+ds:modifierFamily
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:Modifier ;
+    rdfs:range ds:ModifierFamily ;
+    rdfs:label "modifierFamily" ;
+    skos:definition "The modifier family to which this modifier belongs" .
+
+ds:hasModifier
+    a owl:ObjectProperty ;
+    rdfs:domain ds:ModifierFamily ;
+    rdfs:range ds:Modifier ;
+    owl:inverseOf ds:modifierFamily ;
+    rdfs:label "hasModifier" ;
+    skos:definition "Modifiers belonging to this modifier family" .
+
+###############################################################################
+# 7. PROPERTIES - Class-Specific
+###############################################################################
+
+# Subcomponent
+
+ds:standalone
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:Subcomponent ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "standalone" ;
+    skos:definition "Whether this subcomponent can be used independently outside its parent component" ;
+    ds:acceptanceCriteria "Must be true or false. When true, the subcomponent may appear in UIs without its parent." .
+
+ds:parentComponent
+    a owl:ObjectProperty ;
+    rdfs:domain ds:Subcomponent ;
+    rdfs:range ds:Component ;
+    rdfs:label "parentComponent" ;
+    skos:definition "The component to which this subcomponent structurally belongs" ;
+    ds:acceptanceCriteria "Must reference a valid ds:Component instance" .
+
+ds:hasSubcomponent
+    a owl:ObjectProperty ;
+    rdfs:domain ds:Component ;
+    rdfs:range ds:Subcomponent ;
+    owl:inverseOf ds:parentComponent ;
+    rdfs:label "hasSubcomponent" ;
+    skos:definition "Subcomponents that are structural parts of this component" ;
+    ds:acceptanceCriteria "Inverse of ds:parentComponent. Each referenced entity must be a ds:Subcomponent." .
+
+# Layout
+
+ds:grid
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Layout ;
+    rdfs:range xsd:string ;
+    rdfs:label "grid" ;
+    skos:definition "CSS grid template definition for this layout" ;
+    ds:acceptanceCriteria "Must be a valid CSS grid-template value or shorthand" .
+
+ds:domain
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Layout ;
+    rdfs:range xsd:string ;
+    rdfs:label "domain" ;
+    skos:definition "The information domain this layout is designed to navigate" ;
+    ds:acceptanceCriteria "Should describe the category of content the layout organises (e.g. documentation, dashboard, settings)" .
+
+ds:gridAreas
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Layout ;
+    rdfs:range xsd:string ;
+    rdfs:label "gridAreas" ;
+    skos:definition "Named CSS grid areas defined by this layout" ;
+    ds:acceptanceCriteria "Must be valid CSS grid-area names matching the grid template" .
+
+ds:category
+    a owl:ObjectProperty ;
+    rdfs:domain ds:Tag ;
+    rdfs:range ds:TagCategory ;
+    rdfs:label "category" ;
+    skos:definition "The category (facet) a Tag belongs to, e.g. documentation stage, review status, channel, implementation status" .
+
+ds:conceptType
+    a owl:ObjectProperty ;
+    rdfs:domain ds:Concept ;
+    rdfs:range ds:ConceptType ;
+    rdfs:label "conceptType" ;
+    skos:definition "The controlled-vocabulary type a Concept belongs to, e.g. Decision guide, Foundation, Disambiguation" .
+
+ds:whenToApply
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Tag ;
+    rdfs:range xsd:string ;
+    rdfs:label "whenToApply" ;
+    skos:definition "Guidance on the conditions under which this tag should be applied to a UI Block" .
+
+ds:whenToRemove
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Tag ;
+    rdfs:range xsd:string ;
+    rdfs:label "whenToRemove" ;
+    skos:definition "Guidance on the conditions under which this tag should be removed from a UI Block" .
+
+ds:timestamp
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ChangeLogEntry ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "timestamp" ;
+    skos:definition "The date and time at which the change was recorded" ;
+    ds:acceptanceCriteria "Must be a valid ISO-8601 dateTime" .
+
+ds:change
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ChangeLogEntry ;
+    rdfs:range xsd:string ;
+    rdfs:label "change" ;
+    skos:definition "Human-readable description of what changed" .
+
+ds:owner
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ChangeLogEntry ;
+    rdfs:range xsd:string ;
+    rdfs:label "owner" ;
+    skos:definition "The person responsible for the change" .
+
+ds:githubLink
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ChangeLogEntry ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "githubLink" ;
+    skos:definition "Optional link to a GitHub issue, PR or discussion for this change" .
+
+ds:changeType
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ChangeLogEntry ;
+    rdfs:range xsd:string ;
+    rdfs:label "changeType" ;
+    skos:definition "The category of change (e.g. change, addition, deprecation)" .
+
+ds:targetDevices
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Layout ;
+    rdfs:range xsd:string ;
+    rdfs:label "targetDevices" ;
+    skos:definition "Device form factors this layout targets" ;
+    ds:acceptanceCriteria "Comma-separated list of device categories (e.g. desktop, tablet, mobile)" .
+
+# Property
+
+ds:propertyType
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Property ;
+    rdfs:range xsd:string ;
+    rdfs:label "propertyType" ;
+    skos:definition "The data type of this configurable property (e.g. text, choice, boolean, node)" ;
+    ds:acceptanceCriteria "Must be one of the recognised type values used across the design system" .
+
+ds:optional
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:Property ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "optional" ;
+    skos:definition "Whether this property is optional when configuring the UI Block" ;
+    ds:acceptanceCriteria "Must be true or false" .
+
+ds:defaultValue
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Property ;
+    rdfs:range xsd:string ;
+    rdfs:label "defaultValue" ;
+    skos:definition "The default value for this property when not explicitly set by the consumer" ;
+    ds:acceptanceCriteria "Must be a valid value for the property's type" .
+
+ds:constraints
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:Property ;
+    rdfs:range xsd:string ;
+    rdfs:label "constraints" ;
+    skos:definition "Constraints on valid values for this property. For choice types, lists allowed values (e.g. '[primary, secondary, tertiary]'). For numbers, specifies ranges. For objects, describes required structure." ;
+    ds:acceptanceCriteria "Should describe the valid value space for this property. Format varies by property type." .
+
+# Implementation Object
+
+ds:implementsBlock
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:ImplementationObject ;
+    rdfs:range ds:UIBlock ;
+    rdfs:label "implementsBlock" ;
+    skos:definition "The UIBlock that this implementation realises in code" ;
+    ds:acceptanceCriteria "Must reference a valid ds:UIBlock instance" .
+
+ds:implementationVersion
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:ImplementationObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "implementationVersion" ;
+    skos:definition "Version of this specific implementation, independent of the UIBlock version" ;
+    ds:acceptanceCriteria "Should follow semver format" .
+
+ds:library
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:ImplementationObject ;
+    rdfs:range ds:ImplementationLibrary ;
+    rdfs:label "library" ;
+    skos:definition "The implementation library that contains this implementation" ;
+    ds:acceptanceCriteria "Must reference a valid ds:ImplementationLibrary instance" .
+
+ds:headLink
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ImplementationObject ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "headLink" ;
+    skos:definition "URL to the latest/HEAD version of this implementation in source control" ;
+    ds:acceptanceCriteria "Must be a valid URL" .
+
+ds:versionedLink
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ImplementationObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "versionedLink" ;
+    skos:definition "URL to a specific tagged version of this implementation in source control" ;
+    ds:acceptanceCriteria "Must be a valid URL including version tag" .
+
+ds:importStatement
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain ds:ImplementationObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "importStatement" ;
+    skos:definition "The statement a consumer pastes to bring this implementation into a file, naming the published package (e.g. 'import { Button } from \"@canonical/react-ds-global\";'). Derived from the name the library's public entry point actually exports the implementation's source file under, not from the file name." ;
+    ds:acceptanceCriteria "Must be a complete import statement naming the published package specifier and an export the package really provides. ABSENT rather than guessed when the implementation is not reachable by name from the library's entry point — a subcomponent published only as a property of its parent (Breadcrumbs.Item) or an internal file carries none." .
+
+ds:isDraft
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ImplementationObject ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "isDraft" ;
+    skos:definition "Whether this implementation is in draft state and not yet ready for production use" ;
+    ds:acceptanceCriteria "Must be true or false" .
+
+# Implementation Library
+
+ds:libraryName
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ImplementationLibrary ;
+    rdfs:range xsd:string ;
+    rdfs:label "libraryName" ;
+    skos:definition "The package or library name as published (e.g. npm package name)" ;
+    ds:acceptanceCriteria "Must match the published package identifier" .
+
+ds:platform
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ImplementationLibrary ;
+    rdfs:range xsd:string ;
+    rdfs:label "platform" ;
+    skos:definition "The platform or technology this library targets (e.g. React, Web Components, Flutter)" ;
+    ds:acceptanceCriteria "Should be a recognised platform name" .
+
+ds:link
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ImplementationLibrary ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "link" ;
+    skos:definition "URL to the library's main artifact or repository" ;
+    ds:acceptanceCriteria "Must be a valid URL" .
+
+ds:documentation
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:ImplementationLibrary ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "documentation" ;
+    skos:definition "Documentation link if different from main artifact" ;
+    ds:acceptanceCriteria "Must be a valid URL" .
+
+ds:libraryTier
+    a owl:ObjectProperty ;
+    rdfs:domain ds:ImplementationLibrary ;
+    rdfs:range ds:Tier ;
+    rdfs:label "libraryTier" ;
+    skos:definition "The design system tier that this library implements" ;
+    ds:acceptanceCriteria "Must reference a valid ds:Tier instance" .
+
+###############################################################################
+# 8. THE ANATOMY-TOKEN SEAM
+#
+# ADR J §6.1 and §6.3. An anatomy's style tuple names the symbols it consumes
+# in fallback order; that list lives in the anatomy graph, on the tuple, as
+# anatomy:consumes. What a QUERY can reach is the reified per-component
+# relation below: one ds:TokenBinding record per (block x viaBlock x node x
+# styleKey x styleState x rank), whose ds:consumesSymbol is the rank-th member
+# of the tuple's list.
+#
+# The records are DERIVED — src/transform/tokenBindings.ts is their only
+# writer, run as a post-step of the transform beside materializeInverses. They
+# are never hand-asserted, never ingested from Coda (the two Coda projections
+# are outside source.json by AT.16), and no parsed anatomy tree is written to
+# the graph: the ds:anatomyDsl literal ships, and a consumer that wants the
+# tree parses it with @canonical/anatomy-dsl.
+#
+# This programme's whole vocabulary addition on the design-system side is
+# ds:consumesSymbol. anatomy:styleKey and anatomy:styleState are REUSED from
+# the anatomy vocabulary — anatomy-dsl 0.4.0 drops their rdfs:domain for
+# exactly this — rather than minted as ds: twins.
+###############################################################################
+
+ds:TokenBinding
+    a owl:Class ;
+    rdfs:label "Token Binding" ;
+    skos:definition "One symbol a UIBlock consumes, at one node of one tree, for one style key, in one interaction state, at one rank of the fallback order. A record is a blank node in the block's own per-instance file; its identity is the six-tuple (block, viaBlock, node, styleKey, styleState, rank) and ds:consumesSymbol is functionally determined by it." ;
+    ds:acceptanceCriteria "Derived by deriveTokenBindings from the block's ds:anatomyDsl literal and the transitive closure of its uri: references. Never hand-asserted." .
+
+ds:hasTokenBinding
+    a owl:ObjectProperty ;
+    rdfs:domain ds:UIBlock ;
+    rdfs:range ds:TokenBinding ;
+    rdfs:label "hasTokenBinding" ;
+    skos:definition "A token binding of this block: one record per consumed symbol per rank, over the block's own anatomy tree and the trees of every block its anatomy references." ;
+    ds:acceptanceCriteria "Derived; one record per identity tuple, so a subcomponent referenced twice yields one record and not two." .
+
+ds:consumesSymbol
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain ds:TokenBinding ;
+    rdfs:range <https://dt.canonical.com/TokenSymbol> ;
+    rdfs:label "consumesSymbol" ;
+    skos:definition "The dt:TokenSymbol this record consumes: the rank-th member of the style tuple's anatomy:consumes list. Exactly one per record, and determined by the record's six-tuple identity." ;
+    ds:acceptanceCriteria "Must name a symbol declared in S1 or minted into S2, unless anatomies/register.yaml admits the element under X1, X2, X5, X7 or X15." .
+
+ds:viaBlock
+    a owl:ObjectProperty ;
+    rdfs:domain ds:TokenBinding ;
+    rdfs:range ds:UIBlock ;
+    rdfs:label "viaBlock" ;
+    skos:definition "The tree the binding was reached through: the record's own block for an own-tree binding, the referenced block for an inherited one. Equal to the subject in the own-tree case, so an inherited binding is FILTER(?viaBlock != ?block) with no special case." ;
+    ds:acceptanceCriteria "Part of the record's identity, not an attribute: a block's own root binding and one inherited from a subcomponent's root share node, key, state and rank." .
+
+ds:node
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:TokenBinding ;
+    rdfs:range xsd:string ;
+    rdfs:label "node" ;
+    skos:definition "The node's TREE PATH in the viaBlock's tree, not its role: \"$root\", then one step per edge descended, joined by \"/\". A node edge's step is the child's uri, or its role where it has no uri; a switch edge's step is case[<name>]; a step whose name recurs among its siblings carries a 1-based ordinal in brackets." ;
+    ds:acceptanceCriteria "A role alone would collide: global.pattern.table_of_contents binds role 'link' at three depths with identical styles." .
+
+ds:rank
+    a owl:DatatypeProperty ;
+    rdfs:domain ds:TokenBinding ;
+    rdfs:range xsd:integer ;
+    rdfs:label "rank" ;
+    skos:definition "The symbol's 1-based position in the style tuple's fallback order; 1 is the primary. A value's terminal primitive is not a symbol and carries no record, so ranks count symbols only." ;
+    ds:acceptanceCriteria "Must be a positive integer no greater than the length of the tuple's anatomy:consumes list." .

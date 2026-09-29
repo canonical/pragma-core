@@ -1,0 +1,47 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.card-thumbnail a ds:Subcomponent;
+    ds:name "Card.Thumbnail";
+    ds:summary "Displays a small thumbnail image within a card, typically used alongside content for logo/icon representation.";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# Notation-only migration: the structure and the bindings are kept, the values\n# are migrated off the retired slash notation.\nnode:\n  uri: global.subcomponent.card-thumbnail\n  # Every spacing binding below is a ROLE match, not a value match: the retired\n  # value each line names is not a symbol in any namespace a spacing key admits,\n  # so the symbol says what the space IS for and the old value stays on the line.\n  styles:\n    layout.type: flex\n    layout.direction: row\n    layout.align: flex-start\n    # `spacing.internal: spacing/medium` is not a roster key and spacing/medium\n    # names no symbol; the four sides take the surface inset, which is what a\n    # padded card section reads elsewhere in the component.\n    spacing.internal.block.start: spacing.inset.surface.block\n    spacing.internal.block.end: spacing.inset.surface.block\n    spacing.internal.inline.start: spacing.inset.surface.inline\n    spacing.internal.inline.end: spacing.inset.surface.inline\n  edges:\n    - node:\n        role: image\n        styles:\n          size.width: 4rem\n          size.height: 4rem\n          layout.flex.shrink: 0\n          layout.objectFit: contain\n      relation:\n        cardinality: \"1\"\n    - node:\n        role: content\n      relation:\n        cardinality: \"0..1\"\n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:parentComponent ds:global.component.card;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-thumbnail;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.inset.surface.block
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-thumbnail;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.inset.surface.block
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-thumbnail;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.inset.surface.inline
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.card-thumbnail;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.inset.surface.inline
+    ].

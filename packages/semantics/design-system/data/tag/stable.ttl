@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.stable a ds:Tag;
+    ds:name "stable";
+    ds:category ds:tagcategory.channel;
+    ds:whenToApply "Production ready, fully vetted";
+    ds:whenToRemove "".

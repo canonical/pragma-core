@@ -1,0 +1,17 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.badge
+  styles:
+    layout.type: inline-block
+    # dropped spacing.internal: spacing/inline/extra-extra-small — no spacing symbol corresponds
+    # dropped appearance.background: color/background/neutral/default — no colour symbol corresponds
+    appearance.radius: dimension.radius.full   # was radius/full
+    typography.font: typography.text.tertiary.bold   # was typography/paragraph/extra-small/strong
+    typography.color: color.text.contrasted   # was color/text/reversed
+  edges:
+    - node:
+        role: value text
+      relation:
+        cardinality: "1"
+        slotName: value

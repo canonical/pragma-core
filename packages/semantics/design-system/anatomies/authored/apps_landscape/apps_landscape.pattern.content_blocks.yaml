@@ -1,0 +1,46 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: section stack and spacing context
+  uri: apps_landscape.pattern.content_blocks
+  styles:
+    layout.type: flex        # was layout.display: flex
+    layout.direction: column
+  edges:
+    - node:
+        # semantic: section; name: Content Block Item
+        role: content block item
+        edges:
+          - node:
+              role: section-specific notification
+            relation:
+              cardinality: "0..1"
+              slotName: notification
+          - node:
+              role: section introduction
+              edges:
+                - node:
+                    # semantic: heading
+                    role: section title
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    # semantic: paragraph
+                    role: supporting description
+                  relation:
+                    cardinality: "0..1"
+                    slotName: description
+                - node:
+                    role: section action
+                  relation:
+                    cardinality: "0..1"
+                    slotName: action
+            relation:
+              cardinality: "0..1"
+          - node:
+              role: section body
+            relation:
+              cardinality: "1"
+              slotName: children
+      relation:
+        cardinality: "0..*"

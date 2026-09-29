@@ -1,0 +1,74 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `core:component:CodeSnippetWithCopyButton`; the block's own uri
+# is used instead. The retired file also carried `edges:` on two EDGES rather than on
+# their nodes; each nested subtree is re-parented onto the node it belongs to.
+node:
+  uri: apps_lxd.component.code_snippet_with_copy_button
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    # was layout.display: block; layout.type already carries the display type
+    appearance.background: color.background     # was color/surface/code
+    appearance.radius: dimension.radius.small   # was shape/rounded/small
+    # was appearance.border: border/style/code; no border symbol corresponds, and with
+    # no reference stylesheet there is nothing to split into width, colour and style
+    # was spacing.internal: spacing/none; the roster has no all-sides padding key
+  edges:
+    - node:
+        # was uri: core:element:CodeSnippet
+        uri: global.component.code_snippet
+        styles:
+          layout.type: block
+          # was layout.display: block; layout.type already carries the display type
+          size.width: fill
+          # was appearance.theme: appearance/code/blocks; no roster key takes a theme
+          typography.fontFamily: typography.fontFamily.monospace   # was font/family/mono
+        edges:
+          - node:
+              role: command container
+              styles:
+                layout.type: flex   # was flow
+                layout.direction: row   # was horizontal
+                layout.align: center
+                layout.justify: space-between
+                size.width: fill
+                # was spacing.internal: spacing/small; no spacing.small symbol is
+                # declared, and the roster has no all-sides padding key
+                appearance.background: color.background   # was color/surface/code/block
+              edges:
+                - node:
+                    role: code text display
+                    styles:
+                      layout.type: inline-block      # was layout.display: inline-block
+                      layout.flex.grow: 1            # was layout.flex: 1
+                      layout.overflow: hidden
+                      typography.overflow: ellipsis  # was text.truncate: true
+                      typography.wrap: nowrap        # was text.wrap: nowrap
+                      typography.fontFamily: typography.fontFamily.monospace   # was font/family/mono
+                      # was typography.size: font/size/code; no fontSize symbol
+                      # corresponds to the code size
+                      typography.color: color.text   # was color/text/code
+                      appearance.background: transparent
+                  relation:
+                    cardinality: "1..1"
+                    slotName: content
+                - node:
+                    # was uri: core:component:CopyToClipboard
+                    uri: apps_lxd.subcomponent.copy_to_clipboard
+                    styles:
+                      layout.type: inline-block      # was layout.display: inline-block
+                      layout.flex.grow: 0            # was layout.flex: none
+                      layout.flex.shrink: 0          # was layout.flex: none
+                      layout.alignSelf: center       # was layout.align.self: center
+                      # was spacing.margin.left: spacing/small; no spacing.small symbol
+                      # is declared
+                  relation:
+                    cardinality: "1..1"
+                    slotName: action
+            relation:
+              cardinality: "1..1"
+              slotName: code
+      relation:
+        cardinality: "1..1"
+        slotName: default

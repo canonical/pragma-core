@@ -1,0 +1,68 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form
+# src/lib/subcomponent/RangeInput/styles.css on .ds.range (with its
+# ::-webkit-slider-runnable-track / ::-moz-range-track and
+# ::-webkit-slider-thumb / ::-moz-range-thumb) and on .ds.range-output. The
+# component renders a FRAGMENT — the slider and its live <output> readout are
+# siblings, with no wrapper element between them — so the root of this anatomy
+# is the subcomponent itself and carries no styles: `@implements` sits on the
+# component, and the .ds.range declarations belong to the slider child below.
+node:
+  uri: global.subcomponent.range_input
+  edges:
+    - node:
+        role: track
+        styles:
+          appearance.native: none
+          size.width: 100%
+          # The element box is as tall as the THUMB, so neither the thumb nor its
+          # focus ring is ever clipped in a flex row; the visible bar is painted
+          # by the track pseudo-elements and centred within this box.
+          size.height: dimension.200
+          appearance.background: transparent
+          appearance.border.style: none
+          appearance.outline.style: none
+          interaction.cursor: pointer
+          interaction.cursor@disabled: not-allowed
+        edges:
+          - node:
+              role: bar
+              styles:
+                # The vendor track pseudo-element keeps a user-agent border even
+                # after `appearance: none`, so the flat bar is painted here, 8px
+                # tall, in both the WebKit and the Firefox spelling.
+                size.height: dimension.100
+                appearance.background: color.foreground.slider.track
+                appearance.background@disabled: color.foreground.slider.track.disabled
+                appearance.border.style: none
+                appearance.radius: dimension.radius.small
+            relation:
+              cardinality: "1"
+          - node:
+              role: thumb
+              styles:
+                size.width: dimension.200
+                size.height: dimension.200
+                appearance.radius: 50%
+                appearance.background: color.foreground.slider.progress
+                appearance.background@disabled: color.foreground.slider.progress.disabled
+                appearance.border.style: none
+                interaction.cursor: pointer
+                # margin-top re-centres the 16px thumb on the 8px bar as a calc()
+                # over the two dimension tokens, and the focus ring is a
+                # box-shadow at color.focusRing: neither has a roster key.
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        role: value readout
+        styles:
+          layout.type: block
+          typography.align: center
+          typography.color: color.text.muted
+          # Font-size, line-height and the baseline nudges come from the `.p`
+          # class on the <output>, not from this rule.
+      relation:
+        cardinality: "1"

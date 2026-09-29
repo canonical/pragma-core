@@ -1,0 +1,18 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.checkbox_input
+  styles:
+    layout.type: inline-block
+    # dropped size.width/size.height: size/extra-small — no dimension symbol corresponds
+    appearance.border.style: solid   # was border/style/default
+    appearance.background: color.background   # was color/background/default
+    appearance.radius: dimension.radius.small   # was radius/small
+  edges:
+    - node:
+        role: marker
+        styles:
+          appearance.background: color.background   # was color/background/default
+      relation:
+        cardinality: "0..1"
+        slotName: marker

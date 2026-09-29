@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.beta a ds:Tag;
+    ds:name "beta";
+    ds:category ds:tagcategory.channel;
+    ds:whenToApply "Mostly stable, minor changes ok";
+    ds:whenToRemove "".

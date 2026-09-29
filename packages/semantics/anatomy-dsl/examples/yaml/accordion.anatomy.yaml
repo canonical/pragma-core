@@ -1,0 +1,50 @@
+---
+# Derived against @canonical/react-ds-global 0.37.0,
+# dist/esm/lib/component/Accordion/styles.css on `.ds.accordion`.
+node:
+  uri: global.component.accordion
+  styles:
+    layout.type: grid
+    appearance.border.width: dimension.stroke.thickness.medium
+    appearance.border.style: solid
+    appearance.border.color: color.border.muted
+    appearance.radius: dimension.radius.medium
+  edges:
+    - node:
+        uri: global.subcomponent.accordion-item
+        edges:
+          - node:
+              uri: global.subcomponent.accordion-item_header
+              styles:
+                layout.type: flex
+                layout.align: center
+                interaction.cursor: pointer
+                # The header follows the surface it sits on, and falls back to
+                # the plain container background where no surface provides one.
+                appearance.background: [surface.color.background, color.background.container]
+                typography.color: [modifier.color.text, color.text]
+                typography.weight: typography.weight.semiBold
+                spacing.internal.inline.start: spacing.inset.surface.inline
+                spacing.internal.inline.end: spacing.inset.surface.inline
+                spacing.internal.block.start: spacing.inset.strip.block
+                spacing.internal.block.end: spacing.inset.strip.block
+                motion.property: background-color
+                motion.duration: 150ms
+                motion.easing: ease
+            relation:
+              cardinality: "1"
+              slotName: header
+          - node:
+              uri: global.subcomponent.accordion-item_content
+              styles:
+                layout.type: block
+                layout.overflow: hidden
+                spacing.internal.inline.start: spacing.inset.continuation.inline
+                spacing.internal.inline.end: spacing.inset.continuation.inline
+                spacing.internal.block.end: spacing.inset.surface.block
+                typography.color: [modifier.color.text, color.text]
+            relation:
+              cardinality: "1"
+              slotName: default
+      relation:
+        cardinality: "1..*"

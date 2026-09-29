@@ -1,0 +1,6 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tagcategory.documentation-stage a ds:TagCategory;
+    ds:name "documentation stage".

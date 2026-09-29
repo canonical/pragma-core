@@ -1,0 +1,28 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.announcement a ds:Component;
+    ds:name "Announcement";
+    ds:summary "An announcement is a persistent, high-visibility UI block used to communicate time-sensitive or critical contextual information directly within a page. These are not triggered by specific system or user events, instead they are non-transient call-outs used for broad organizational updates, compliance warnings, or upcoming deadlines.\n\n";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# A notation migration of the previous DSL: structure and bindings kept, values\n# migrated.\nnode:\n  uri: global.component.announcement\n  styles:\n    layout.type: flex   # was flow\n    layout.direction: row   # was horizontal\n    layout.align: center\n    layout.justify: center\n    size.width: fill\n    # Was `spacing.internal: spacing/medium` — the key is not in the roster (a\n    # padding is bound per side) and no declared spacing semantic corresponds\n    # to spacing/medium, so the binding is dropped.\n    # Was `color/surface/announcement`; no symbol declares\n    # color.background.announcement, so this is the declared background the\n    # surface correspondence lands on.\n    appearance.background: color.background\n  edges:\n    - node:\n        role: message\n        styles:\n          # Was `typography.size: font/size/small` — dropped, since\n          # typography.size admits dimension.* only and no dimension symbol\n          # corresponds to font/size/small.\n          # Was `typography.color: color/text/on-announcement` — dropped, since\n          # no symbol declares color.text.onAnnouncement.\n          typography.align: center\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=6716-1731&t=SzJR7XNUj9T63OWi-1\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4508-81683&t=2fO23I8WsyT0YVJ1-4\n\n";
+    ds:usage "### When to use\n\n- When high-priority systemic updates are required to be visible to all users visiting a specific page or dashboard (e.g., maintenance windows or version deprecations).\n- When actionable deadlines must be highlighted to ensure compliance or task completion within a specific timeframe.\n- When contextual information needs to be anchored to a page to provide persistent awareness of a change in state or policy.\n\n### When not to use\n\n- When a transient response is required following a specific user action or a background system trigger.\n  - Incorrect: Using an Announcement to confirm that a file has been successfully uploaded.\n  - Remediation: Use a [NotificationToast](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-j1ObcSRMxi) message or [Notification](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-KVe8I1_VnA) component to provide immediate, temporary feedback for a single event.\n- When the information is non-critical and does not require the user’s immediate attention or action.\n  - Incorrect: Placing a permanent \"Welcome to the new dashboard\" banner that remains after the user's first visit.\n  - Remediation: Use an [Notification](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-KVe8I1_VnA) or a [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) for static, non-urgent supplemental details.\n- The information is specific to a single data entry or a specific line item within a list.\n  - Incorrect: An announcement at the top of a table stating that \"Row 4 has an error.\"\n  - Remediation: Use an  Inline status indicator or an error state within the specific component to maintain local context.\n\n";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-03-20T00:00:00.000+01:00";
+        ds:change "splitting announcement from notification";
+        ds:changeType "decision"
+    ];
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.announcement;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background
+    ].

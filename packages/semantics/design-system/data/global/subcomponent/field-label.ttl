@@ -1,0 +1,46 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.field-label a ds:Subcomponent;
+    ds:name "Field.Label";
+    ds:summary "The naming part of a form field, consumed by Field: it states what the field is asking for and signals whether the entry is optional. It is never used alone — it derives its association from the field that hosts it.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global-form\n# src/lib/subcomponent/Field/Label/styles.css on .ds.field-label and its child\n# selectors ([data-required]::after, > .optional), with the tokens it reads from\n# src/index.css. The stylesheet corrects the notation's single \"optionality\n# indicator\": the required marker and the \"(optional)\" hint are two different\n# elements with two different colours.\nnode:\n  uri: global.subcomponent.field-label\n  styles:\n    # Field labels take the regular paragraph weight, not bold, per design\n    # review: --form-label-font-weight reads the text-primary composite's\n    # font-weight facet, which is typography.weight.regular in the apps, docs\n    # and global contexts, and falls back to `normal`. That is a rank the\n    # composite resolves to rather than a name the CSS spells: the variable it\n    # reads, --typography-text-primary-font-weight, is an S4 variable that\n    # declares no symbol of its own.\n    typography.weight: [typography.weight.regular, normal]\n    typography.color: color.text\n    # No side padding by default — the label aligns to the field edge, not to the\n    # input's inner padding. padding-inline reads --form-label-padding-inline,\n    # which no stratum declares, falling back to 0.\n    spacing.internal.inline.start: 0\n    spacing.internal.inline.end: 0\n    # A choices fieldset renders its label as a <legend>, and a `.danger` field\n    # recolours THAT legend (and its required marker) to --form-error-color:\n    # a validation variant scoped to the legend, not one of the five states, and\n    # its first rank is the modifier text channel with color.text.error behind it.\n  edges:\n    - node:\n        role: label text\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        role: required marker\n        styles:\n          # Drawn as [data-required]::after, never as label text, so it stays out\n          # of the accessible name — the required state is announced from\n          # aria-required on the input. The glyph (--form-required-marker, \"*\")\n          # and the gap after it (--form-required-marker-gap, 0.25ch) are\n          # themeable content and a margin, and no roster key takes `content`.\n          # The colour reads --form-required-marker-color first, which no stratum\n          # declares, and falls through to the label colour.\n          typography.color: color.text\n          spacing.external.inline.end: 0.25ch\n      relation:\n        cardinality: \"0..1\"\n    - node:\n        role: optional hint\n        styles:\n          # The \"(optional)\" suffix is muted: visually subordinate to the label,\n          # which now carries the regular weight too.\n          typography.color: color.text.muted\n      relation:\n        cardinality: \"0..1\"";
+    ds:anatomyClassic "";
+    ds:usage "The naming chrome part a field composes to announce what the input collects.\n\n\n\n### When to use\n\n- A field must state, in a few words, the meaning of the value it gathers.\n\n- Every field that takes input needs a persistent name people can read at a glance.\n\n\n\n### When not to use\n\n- Supplementary guidance, format hints, or constraints accompany the name — compose [Field.Description](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-EtN3NdpDS2) .\n\n- The text is body content unrelated to a field's value — use a standalone text part, not this chrome.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root";
+        anatomy:styleKey "typography.weight";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.weight.regular
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root/required marker";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root/optional hint";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ].

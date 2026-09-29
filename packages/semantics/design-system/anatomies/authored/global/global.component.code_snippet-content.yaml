@@ -1,0 +1,46 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# A notation migration of the previous DSL: structure and bindings kept, values
+# migrated. The previous root uri said
+# `global.subcomponent.code_snippet-content`; the block is a component,
+# ds:global.component.code_snippet-content.
+node:
+  uri: global.component.code_snippet-content
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    layout.overflow: hidden
+  edges:
+    - node:
+        role: scroll area
+        styles:
+          layout.overflow: scroll
+          # Was `layout.display: block`, which is not a roster key.
+          layout.type: block
+        edges:
+          - node:
+              role: code block
+              styles:
+                # Was `typography.size: font/size/code` — dropped, since
+                # typography.size admits dimension.* only and no dimension
+                # symbol corresponds to font/size/code.
+                # Was `typography.color: color/text/code` — dropped, since no
+                # symbol declares color.text.code.
+                # Was `spacing.internal: spacing/medium` — dropped: the key is
+                # not in the roster and no declared spacing semantic
+                # corresponds to spacing/medium.
+                # Was `layout.display: block`, which is not a roster key.
+                layout.type: block
+            relation:
+              cardinality: "1"
+              slotName: default
+      relation:
+        cardinality: "1"
+    - node:
+        # Was `uri: global.component.copy_to_clipboard`, which names no
+        # subject — the only copy_to_clipboard in the graph is the app-tier
+        # apps_lxd.subcomponent.copy_to_clipboard, which a global anatomy may
+        # not reference — so the position is an anonymous role.
+        role: copy to clipboard action
+      relation:
+        cardinality: "1"

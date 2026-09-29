@@ -1,0 +1,22 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `ds:apps_landscape.subcomponent.select_all_results`, which names
+# no subject; the block's own uri is used instead.
+node:
+  # role: prompt row
+  uri: apps_landscape.subcomponent.select_all_results_prompt
+  edges:
+    - node:
+        # role: visual indicator
+        uri: global.component.icon
+      relation:
+        cardinality: "1"
+    - node:
+        role: selection status
+      relation:
+        cardinality: "1"
+    - node:
+        # role: selection expansion
+        uri: global.component.button
+      relation:
+        cardinality: "1"

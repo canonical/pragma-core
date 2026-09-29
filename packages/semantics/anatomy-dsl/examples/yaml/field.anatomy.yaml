@@ -1,0 +1,13 @@
+---
+node:
+  uri: global.component.field
+  edges:
+    - switch:
+        on: props
+        cases:
+          - uri: global.component.checkbox
+          - uri: global.component.radio
+          - uri: global.component.text-input
+      relation:
+        cardinality: "1"
+        slotName: input

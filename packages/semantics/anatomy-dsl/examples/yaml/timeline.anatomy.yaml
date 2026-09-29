@@ -1,0 +1,11 @@
+---
+node:
+  uri: global.component.timeline
+  edges:
+    - switch:
+        on: override
+        cases:
+          - uri: global.subcomponent.timeline-event
+          - uri: $custom
+      relation:
+        cardinality: "1..*"

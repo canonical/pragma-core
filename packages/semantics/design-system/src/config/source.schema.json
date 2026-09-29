@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "source.schema.json",
+  "title": "Design System Source Config",
+  "type": "object",
+  "required": ["document", "provider"],
+  "properties": {
+    "document": {
+      "type": "string",
+      "description": "Coda document ID"
+    },
+    "provider": {
+      "type": "string",
+      "enum": ["coda"],
+      "description": "Data provider (currently only 'coda' supported)"
+    },
+    "allowUnboundSymbols": {
+      "type": "boolean",
+      "default": false,
+      "description": "Suppress the token-binding guard's unresolved-symbol finding, and nothing else (ADR J §8.2). A local, temporary edit for the window inside the Coda write in which the anatomies are migrated but anatomies/register.yaml is not yet regenerated. Never committed: a test asserts the shipped source.json does not set it."
+    },
+    "extract": {
+      "type": "object",
+      "required": ["output", "tables"],
+      "properties": {
+        "output": {
+          "type": "string",
+          "description": "Output path for extracted JSON"
+        },
+        "tables": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "minProperties": 1,
+          "description": "Map of output name to table ID"
+        }
+      }
+    },
+    "transform": {
+      "type": "object",
+      "required": ["format", "outputDir", "atomicity", "tables"],
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["ttl", "json-ld"],
+          "description": "Output format"
+        },
+        "outputDir": {
+          "type": "string",
+          "description": "Output directory for transformed files"
+        },
+        "atomicity": {
+          "type": "string",
+          "enum": ["class", "instance"],
+          "description": "Output granularity: one file per class or per instance"
+        },
+        "cleanupExtract": {
+          "type": "boolean",
+          "default": false,
+          "description": "Delete extract output after transform"
+        },
+        "tables": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/tableTransform"
+          },
+          "description": "Transform configuration per table"
+        },
+        "references": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/reference"
+          },
+          "description": "Reference tables for resolving relations"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "tableTransform": {
+      "type": "object",
+      "required": ["@context", "class", "uriTemplate"],
+      "properties": {
+        "@context": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "JSON-LD context mapping column names to predicates"
+        },
+        "class": {
+          "type": "string",
+          "description": "RDF class URI"
+        },
+        "uriTemplate": {
+          "type": "string",
+          "description": "URI template with {ColumnName} placeholders"
+        },
+        "classProperties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": { "type": "string" },
+            "description": "Column→predicate literal mappings for this class"
+          },
+          "description": "Additional literal column→predicate mappings applied only when the resolved class matches the key (prefixed form, e.g. 'ds:Layout')"
+        },
+        "rowFilter": {
+          "type": "object",
+          "description": "Optional include-filter: emit only rows matching every condition. Absent → emit every row.",
+          "properties": {
+            "nameIn": {
+              "type": "object",
+              "required": ["column", "values"],
+              "properties": {
+                "column": { "type": "string" },
+                "values": { "type": "array", "items": { "type": "string" } }
+              },
+              "description": "Keep only rows whose column equals one of these values (case-insensitive)"
+            },
+            "nonEmpty": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["column"],
+                "properties": {
+                  "column": { "type": "string" },
+                  "minLength": { "type": "number" }
+                }
+              },
+              "description": "Keep only rows whose named column(s) are non-empty (trimmed length ≥ minLength, default 1)"
+            }
+          }
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "required": ["uriTemplate"],
+      "properties": {
+        "uriTemplate": {
+          "type": "string",
+          "description": "URI template for referenced instances"
+        },
+        "keyColumn": {
+          "type": "string",
+          "description": "Column to use as key (default: Name)"
+        }
+      }
+    }
+  }
+}

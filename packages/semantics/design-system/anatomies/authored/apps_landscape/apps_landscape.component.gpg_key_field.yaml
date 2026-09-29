@@ -1,0 +1,15 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.gpg_key_field
+  edges:
+    - node:
+        # was uri: global.component.checkbox; role: keep current key
+        uri: global.component.checkbox_field
+      relation:
+        cardinality: "0..1"   # rendered when an existing key is present
+    - node:
+        # was uri: global.component.textarea; role: GPG key input
+        uri: global.component.textarea_field
+      relation:
+        cardinality: "0..1"   # rendered when there is no existing key or keep current is false

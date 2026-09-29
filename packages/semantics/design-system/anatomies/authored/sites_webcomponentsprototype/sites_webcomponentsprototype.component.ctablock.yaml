@@ -1,0 +1,28 @@
+---
+# Authored 2026-09-13 from @canonical/lit-ds-prototype src/lib/CTABlock/styles.css on .ds.cta-block
+# The reference corrects the notation it replaces: the block is a flat wrapping row
+# of action links with no inner container, title or body, and its actions come from
+# the primary / secondaries / link props rather than from a slot. The host is
+# `display: contents`, so the row below is the whole component.
+node:
+  uri: sites_webcomponentsprototype.component.ctablock
+  styles:
+    layout.type: flex
+    layout.wrap: wrap
+    layout.align: center
+    spacing.gap: 0.5rem   # --spacing-small, which no stratum declares; the literal is the reference's own fallback
+  edges:
+    # Each action is a `ds-link`, which no ds: subject declares, so the three
+    # positions are roles. They are filled from props, so they carry no slot name.
+    - node:
+        role: primary action link
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: secondary action link
+      relation:
+        cardinality: "0..*"
+    - node:
+        role: plain action link
+      relation:
+        cardinality: "0..1"

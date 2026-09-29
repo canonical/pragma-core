@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.triagedbacklog a ds:Tag;
+    ds:name "triaged:backlog";
+    ds:category ds:tagcategory.documentation-stage;
+    ds:whenToApply "UIBlock inclusion to the DS is postponed";
+    ds:whenToRemove "".

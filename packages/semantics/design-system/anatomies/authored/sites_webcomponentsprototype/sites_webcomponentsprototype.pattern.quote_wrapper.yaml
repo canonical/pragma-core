@@ -1,0 +1,78 @@
+---
+# TODO implementation: no reference in @canonical/lit-ds-prototype
+# No subcomponent subject exists in this tier, so the quote and citation parts are
+# roles rather than the retired vanilla.* uris.
+node:
+  uri: sites_webcomponentsprototype.pattern.quote_wrapper
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    size.width: fill
+    # dropped spacing.internal: spacing/large and spacing.padding.vertical: spacing/x-large
+    # — no spacing symbol corresponds
+  edges:
+    - node:
+        role: quote
+        styles:
+          layout.type: flex   # was stack
+          layout.direction: column   # was vertical
+          # dropped spacing.gap: spacing/medium and spacing.padding.left: spacing/large
+          # — no spacing symbol corresponds
+          # dropped appearance.border.left: border/style/accent — the roster has no
+          # inline-start line-style key, and the value named no declared colour
+        edges:
+          - node:
+              role: quotation text
+              styles:
+                # dropped typography.size: font/size/large — no dimension symbol corresponds
+                typography.weight: typography.weight.light   # was font/weight/light
+                typography.color: color.text   # was color/text/default
+                # dropped typography.style: italic — the roster has no font-style key
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+        slotName: quote
+    - node:
+        role: citation
+        styles:
+          layout.type: flex   # was flow
+          layout.direction: row   # was horizontal
+          layout.align: center
+          # dropped spacing.gap: spacing/medium — no spacing symbol corresponds
+        edges:
+          - node:
+              role: citation image
+              styles:
+                # dropped size.width/size.height: size/avatar/medium — no dimension symbol corresponds
+                appearance.radius: dimension.radius.full   # was shape/rounded/full
+                layout.objectFit: cover
+            relation:
+              cardinality: "0..1"
+              slotName: image
+          - node:
+              role: citation text
+              styles:
+                layout.type: flex   # was stack
+                layout.direction: column   # was vertical
+                # dropped spacing.gap: spacing/xx-small — no spacing symbol corresponds
+              edges:
+                - node:
+                    role: citation name
+                    styles:
+                      typography.weight: typography.weight.bold   # was font/weight/bold
+                      typography.color: color.text   # was color/text/default
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: citation role and organisation
+                    styles:
+                      typography.color: color.text.muted   # was color/text/muted
+                  relation:
+                    cardinality: "0..1"
+            relation:
+              cardinality: "1"
+              slotName: text
+      relation:
+        cardinality: "0..1"
+        slotName: citation

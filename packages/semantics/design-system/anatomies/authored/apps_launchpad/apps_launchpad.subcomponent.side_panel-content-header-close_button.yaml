@@ -1,0 +1,9 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.side_panel-content-header-close_button
+  edges:
+    - node:
+        role: close icon
+      relation:
+        cardinality: "1"

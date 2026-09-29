@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_juju.pattern.single_select_multi_layered a ds:Pattern;
+    ds:name "Single select , multi-layered";
+    ds:summary "Single select in a multi-layered experience\n\nThere are multiple points where in Juju you’re required to specify a version of a model/controller/charm. Those come in multiple major, minor, patch versions or channels, tracks, risks, revisions. This results in unreasonably long lists where another layer of grouping/dropdowns could help reduce the number of items a users is exposed to when trying to find the specific version of thing they need. I would suggest the ability to create nested layer or groups for these cases, where we could present users with a grouping of major version, i. e. Juju 3, under which we could then further group all minor versions, i.e. 3.1.X, under which the users could finally have the ability to see the list of specific versions, without needing to dig through the list of path versions that doesn’t interest them. \n\nhttps://www.figma.com/design/Rs1v3IS0oY2RK4CU4yo4Ly/25.10-JAAS-model-management---Juju?node-id=1028-97057&t=L2pdIMYBm1sntzHC-11\n\nhttps://www.figma.com/design/Rs1v3IS0oY2RK4CU4yo4Ly/25.10-JAAS-model-management---Juju?node-id=1023-94964&t=L2pdIMYBm1sntzHC-11\n\nhttps://www.figma.com/design/Rs1v3IS0oY2RK4CU4yo4Ly/25.10-JAAS-model-management---Juju?node-id=1104-80714&t=L2pdIMYBm1sntzHC-11";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps_juju.

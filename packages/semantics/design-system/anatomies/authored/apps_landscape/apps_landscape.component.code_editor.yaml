@@ -1,0 +1,50 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.code_editor
+  edges:
+    - node:
+        # role: module-loading status
+        uri: apps_landscape.component.loading_state
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: validation form group
+        edges:
+          - node:
+              role: label and supporting controls header
+              edges:
+                - node:
+                    # semantic: label
+                    role: code editor label
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: supporting header content
+                  relation:
+                    cardinality: "0..1"
+                    slotName: headerContent
+            relation:
+              cardinality: "1"
+          - node:
+              role: editor control group
+              edges:
+                - node:
+                    # was uri: global.component.monaco_editor, which names no subject
+                    role: code input
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # semantic: paragraph
+                    role: error validation message
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    # semantic: paragraph
+                    role: warning validation message
+                  relation:
+                    cardinality: "0..1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"

@@ -1,0 +1,12 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.subcomponent.inline_cell_input
+  edges:
+    - node:
+        # was uri: global.component.input with attributes type: text, autocomplete:
+        # off; role: inline editor. The text field is the subject that names a text
+        # input, and neither attribute is a property it declares, so neither is pinned.
+        uri: global.component.text_field
+      relation:
+        cardinality: "1"

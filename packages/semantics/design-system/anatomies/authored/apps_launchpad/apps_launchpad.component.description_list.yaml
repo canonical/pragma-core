@@ -1,0 +1,14 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.description_list
+  styles:
+    layout.type: grid
+    # dropped spacing.row-gap: spacing/block/extra-small and
+    # spacing.column-gap: spacing/inline/extra-small — no spacing symbol corresponds
+  edges:
+    - node:
+        uri: apps_launchpad.subcomponent.description_list-item
+      relation:
+        cardinality: "0..*"
+        slotName: default

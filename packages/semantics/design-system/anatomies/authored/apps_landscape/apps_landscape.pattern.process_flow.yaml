@@ -1,0 +1,67 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.pattern.process_flow
+  edges:
+    - node:
+        role: start boundary marker
+      relation:
+        cardinality: "1"
+    - node:
+        role: initial sequence connector
+      relation:
+        cardinality: "1"
+    - node:
+        role: process card group
+        edges:
+          - node:
+              # role: process step
+              uri: global.component.card
+              edges:
+                - node:
+                    role: step header
+                    styles:
+                      layout.type: flex   # was layout.display: flex
+                      layout.align: center
+                    edges:
+                      - node:
+                          # role: step icon
+                          uri: global.component.icon
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          # semantic: paragraph
+                          role: step heading
+                        relation:
+                          cardinality: "1"
+                          slotName: header
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: step body
+                    edges:
+                      - node:
+                          # semantic: paragraph
+                          role: step description
+                        relation:
+                          cardinality: "1"
+                          slotName: description
+                      - node:
+                          role: supporting step content
+                        relation:
+                          cardinality: "0..1"
+                          slotName: children
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: trailing sequence connector
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..*"
+    - node:
+        role: end boundary marker
+      relation:
+        cardinality: "1"

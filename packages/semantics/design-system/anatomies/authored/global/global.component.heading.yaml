@@ -1,0 +1,56 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# (a Heading folder exists in react-ds-global but ships stories only — no
+# styles.css — so this is a notation migration of the previous DSL, structure
+# and bindings kept, values migrated.)
+node:
+  uri: global.component.heading
+  styles:
+    typography.weight: typography.weight.bold
+    # Was `color/text/heading`; no symbol declares color.text.heading, and
+    # substituting the plain color.text would assert something the previous
+    # notation did not, so the binding is dropped.
+  edges:
+    # The level is a prop, and each level is a different presentation of the
+    # same one child.
+    - switch:
+        on: props
+        cases:
+          - node:
+              role: h1
+              styles:
+                # Was `font/size/heading/1`. The declared heading tier is a
+                # typography composite, so it binds typography.font; no
+                # dimension symbol names the tier's own font-size member.
+                typography.font: typography.heading.1
+                # Was `spacing.margin.bottom: spacing/heading/1` — neither the
+                # key nor the value exists (the roster's key is
+                # spacing.external.block.end, and no spacing semantic
+                # corresponds to spacing/heading/1), so it is dropped.
+          - node:
+              role: h2
+              styles:
+                # Was `font/size/heading/2`; `spacing/heading/2` dropped as above.
+                typography.font: typography.heading.2
+          - node:
+              role: h3
+              styles:
+                # Was `font/size/heading/3`; `spacing/heading/3` dropped as above.
+                typography.font: typography.heading.3
+          - node:
+              role: h4
+              styles:
+                # Was `font/size/heading/4`; `spacing/heading/4` dropped as above.
+                typography.font: typography.heading.4
+          - node:
+              role: h5
+              styles:
+                # Was `font/size/heading/5`; `spacing/heading/5` dropped as above.
+                typography.font: typography.heading.5
+          - node:
+              role: h6
+              styles:
+                # Was `font/size/heading/6`; `spacing/heading/6` dropped as above.
+                typography.font: typography.heading.6
+      relation:
+        cardinality: "1"

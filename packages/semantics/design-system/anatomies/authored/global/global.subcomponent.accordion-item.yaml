@@ -1,0 +1,129 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/component/Accordion/common/Item/styles.css on .ds.accordion-item and
+# its child selectors (> .header, > .header > .heading, > .header > .chevron,
+# > .content). The item is a native <details>/<summary>.
+node:
+  uri: global.subcomponent.accordion-item
+  styles:
+    # The divider that ends each item. The roster has no block-end colour key, so
+    # the bottom key carries the border-block-end the implementation writes; its
+    # width, dimension.stroke.thickness.medium, has no one-edge key.
+    appearance.border.bottom.color: color.border.muted
+    appearance.border.style: solid
+    # `border-inline` is declared as an extension point whose colour
+    # (--accordion-item-border-inline-color) is deliberately left undefined, so no
+    # inline border renders and nothing is bound for it; the roster carries no
+    # inline-side width or colour key either.
+    # layout.type/layout.direction are dropped: the item is a <details> and the
+    # stylesheet declares no display for it.
+  edges:
+    - node:
+        role: header tab
+        styles:
+          layout.type: flex
+          layout.direction: row
+          layout.align: center
+          layout.listStyle: none
+          interaction.cursor: pointer
+          spacing.gap: dimension.200                    # --accordion-item-header-gap, between chevron and heading
+          spacing.internal.block.start: dimension.100   # --accordion-item-header-padding-block
+          spacing.internal.block.end: dimension.100     # --accordion-item-header-padding-block
+          spacing.internal.inline.start: dimension.200  # --accordion-item-header-padding-inline, a surface inset
+          spacing.internal.inline.end: dimension.200    # --accordion-item-header-padding-inline, a surface inset
+          typography.color: color.text
+          # The ghost surface channel is read on the element so it steps with
+          # .surface nesting, then the flat ghost token.
+          appearance.background: [surface.color.foreground.ghost, color.foreground.ghost]
+          # The hover/active reads prefer --surface-color-foreground-ghost-hover
+          # and -active, which no stratum declares (the surface family mints only
+          # the base ghost channel), so only the flat state tokens are written.
+          appearance.background@hover: color.foreground.ghost.hover
+          appearance.background@active: color.foreground.ghost.active
+          # A STOPGAP in the stylesheet re-points those two per surface depth —
+          # color.foreground.ghost.layer2.hover/.active on a layer-2 surface and
+          # the layer3 pair on a layer-3 one — until the surfaces modifier ships
+          # hover and active channels. Surface depth is a context selector, not a
+          # node, so the layered pairs are recorded rather than bound.
+          # Whichever element sits directly above the item's block-end divider
+          # subtracts the divider thickness from its own block-end padding, so
+          # the item's border-box height stays a baseline multiple: collapsed,
+          # that is the header; expanded, the content panel. Both are calc()s and
+          # neither is bound.
+        edges:
+          - node:
+              role: chevron
+              styles:
+                layout.flex.shrink: 0
+                size.width: dimension.200
+                size.height: dimension.200
+                motion.property: transform
+                # The chevron points right while the item is closed (the down
+                # glyph rotated -90deg) and down once it is open. `[open]` is
+                # the expanded state, but the difference between the two faces
+                # is a transform and no roster key takes one, so the expanded
+                # face carries no binding.
+                # The rotation transition reads --motion-duration-fast and
+                # --motion-easing-standard, which no stratum declares, and the
+                # chain has no literal to fall back to, so neither is bound.
+              edges:
+                - node:
+                    # drawn as ::before
+                    role: chevron glyph
+                    styles:
+                      layout.type: block
+                      size.width: 100%
+                      size.height: 100%
+                      # Masked, so what the glyph binds is its colour and its
+                      # size: chevron-down.svg is applied as a mask over the
+                      # fixed chevron box and the icon token paints through it.
+                      # No roster key takes a mask.
+                      appearance.background: color.icon
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: heading
+              styles:
+                layout.flex.grow: 1
+                layout.flex.shrink: 1
+                layout.flex.basis: 0%
+                size.min.width: 0
+                # All five facets of the text-primary composite are read
+                # (--typography-text-primary-font-{family,size,weight},
+                # -line-height, -letter-spacing), so the composite is bound once.
+                typography.font: typography.text.primary
+                # Every heading element except <h6> is normalised down to that
+                # tier with `font: inherit` and `margin: 0`; an <h6> keeps the
+                # heading-6 tier from @canonical/styles-typography. Those are
+                # rules on the consumer's own element inside the slot, not on a
+                # node of this tree.
+            relation:
+              cardinality: "1"
+              slotName: heading
+              # The consumer supplies the heading through the `heading` prop, so
+              # the slot is named for it; `children` go to the content panel,
+              # which is the default slot.
+      relation:
+        cardinality: "1"
+        slotName: header
+    - node:
+        role: content panel
+        styles:
+          typography.color: color.text
+          spacing.internal.block.start: dimension.100  # --accordion-item-content-padding-block
+          spacing.internal.block.end: dimension.100    # --accordion-item-content-padding-block
+          spacing.internal.inline.end: dimension.200   # --accordion-item-content-padding-inline, a surface inset
+          # padding-inline-start is --accordion-item-content-indent, a calc() over
+          # the header's inline padding, the chevron size and the header gap, so
+          # the panel's text aligns under the heading. A calc is not a symbol and
+          # is not bound.
+          # Inside a density scope the panel's block padding is re-derived from
+          # --density-space-md and the header takes the shared control seat, so
+          # both paddings become calc() over --control-seat-* and
+          # --density-line-height-effective. A density or context selector is not
+          # a node, and none of those names is declared.
+      relation:
+        cardinality: "1"
+        slotName: default

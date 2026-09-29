@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier.modal a ds:Modifier;
+    ds:name "Modal";
+    ds:summary "";
+    ds:modifierFamily ds:global.modifier_family.surface.

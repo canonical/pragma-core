@@ -1,0 +1,279 @@
+name: Sync Coda data
+
+on:
+  workflow_call:
+    inputs:
+      trigger:
+        description: "Trigger label for commit message (e.g. Scheduled, Manual)"
+        required: true
+        type: string
+      allow_shrink:
+        description: "Bypass the fail-closed content-loss guards for an intentional large deletion"
+        required: false
+        default: false
+        type: boolean
+      allow_malformed_rows:
+        description: "Sync anyway despite upstream rows whose uri is present but malformed"
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    # Deployable from main only; holds SUPERHUMAN_DOCS_API_KEY and the sync App's credentials, so
+    # no pull request branch can read them.
+    environment: sync
+    defaults:
+      run:
+        # design-system was absorbed into this folder; every relative path below is inside it.
+        working-directory: packages/semantics/design-system
+    # contents: write — push the regenerated data/ back to the branch.
+    # Without this the default GITHUB_TOKEN is read-only and `git push` fails
+    # with "Write access to repository not granted" (HTTP 403).
+    # issues: write — open/annotate an issue when a fail-closed guard blocks
+    # the sync so the failure is visible outside the Actions tab.
+    permissions:
+      contents: write
+      issues: write
+    env:
+      # Escape hatch consumed by the transform delta guards
+      # (src/transform/deltaGuards.ts) and the content-loss script
+      # (src/scripts/checkDataDeletion.ts).
+      SYNC_ALLOW_SHRINK: ${{ inputs.allow_shrink && '1' || '0' }}
+      # Separate escape hatch for the malformed-row guard
+      # (src/transform/deltaGuards.ts): allowing an intentional mass deletion
+      # must not also wave through rows the source is losing by accident.
+      SYNC_ALLOW_MALFORMED_ROWS: ${{ inputs.allow_malformed_rows && '1' || '0' }}
+    steps:
+      # A GitHub App token, not GITHUB_TOKEN: GitHub starts no workflow for a push or a pull
+      # request made with the workflow's own token, so pr.yml would never run on the sync
+      # pull request and auto-merge would wait forever.
+      - name: Mint the sync App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.SYNC_APP_CLIENT_ID }}
+          private-key: ${{ secrets.SYNC_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          # Persist the App token so the later `git push` is authenticated as the App.
+          persist-credentials: true
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version-file: .bun-version
+
+      - run: bun install
+
+      # The transform's guard admits a registered exception (a cell still in the
+      # retired notation, a dangling reference) through anatomies/register.yaml,
+      # which is generated and never committed — so it is regenerated from the
+      # committed corpus BEFORE the transform runs, or the guard would refuse the
+      # sync over exceptions the corpus already admits. The run after the build
+      # regenerates it and the census over the new data.
+      - name: Regenerate the register from the committed corpus
+        run: bun src/cli.ts anatomies validate --write-register
+
+      # Fail-closed layers 1+2: the transform aborts (leaving data/ untouched)
+      # on a table missing from the extract, a table that yields zero
+      # subjects, an upstream row whose uri is present but malformed, or a
+      # large shrink vs the committed dataset.
+      - name: Regenerate data from Coda
+        run: |
+          set -o pipefail
+          bun run sync:coda 2>&1 | tee /tmp/sync-build.log
+        env:
+          CODA_API_KEY: ${{ secrets.SUPERHUMAN_DOCS_API_KEY }}
+
+      # Fail-closed on a finding, as the deletion guard is: an unregistered symbol
+      # or an unparseable anatomy stops the sync. It is NOT gated on the diff — the
+      # document is the editing surface, so a census that moved is the ordinary case
+      # and the regeneration is what keeps it current. The run also rewrites
+      # `anatomies/register.yaml`, which is not committed and so is neither staged
+      # nor diffed.
+      - name: Validate the anatomies and regenerate the census
+        run: bun src/cli.ts anatomies validate --write-register
+
+      # Detected BEFORE the staging below: once `git add` has run, only
+      # `git diff --cached` sees anything. `--exit-code` is deliberately not used —
+      # a diff here is a success path, not a failure.
+      - name: Detect a census diff
+        id: census-diff
+        run: |
+          git diff --quiet -- anatomies/census.json \
+            || echo "diff=true" >> $GITHUB_OUTPUT
+
+      # Fail-closed layer 3: final safety net on the actual git diff. Refuses
+      # to commit when the regeneration LOSES committed content — deletions
+      # that nothing added back — per the net-loss thresholds in
+      # src/scripts/evaluateDataDeletion.ts. Content rewritten in place
+      # (large deletions with comparable additions) is allowed through.
+      - name: Check deletion threshold
+        run: |
+          set -o pipefail
+          git add data/ anatomies/census.json
+          bun src/scripts/checkDataDeletion.ts data/ 2>&1 | tee /tmp/deletion-guard.log
+
+      # A pull request, not a push to main: main requires one, and pr.yml tests the sync before
+      # it lands. It merges itself (squash) once the required checks are green.
+      - name: Open the sync pull request and let it merge itself
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          TITLE: "chore(design-system): sync data from Coda [${{ inputs.trigger }}]"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ anatomies/census.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            branch="chore/sync-coda-$(date -u +%Y%m%d-%H%M%S)"
+            git switch -c "$branch"
+            git commit -m "$TITLE"
+            git push origin "$branch"
+            gh pr create --base main --head "$branch" --title "$TITLE" \
+              --body "Regenerated \`packages/semantics/design-system/data/\` and \`anatomies/census.json\` from Coda. The fail-closed guards passed. This pull request merges itself when the required checks are green. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            gh pr merge "$branch" --auto --squash
+          fi
+
+      # The daily commit is unreviewed, so a census that moved is announced rather
+      # than gated. Its own step and not the failure step's: that one is guarded
+      # `if: failure()`, and this is a success path — the validation exits 0, the
+      # widened `git add` stages the census, and the commit lands. Reusing it would
+      # file a routine census diff as a blocked sync, or append it to a real one.
+      # `continue-on-error` so it can never gate.
+      - name: Open an issue on a census diff
+        if: steps.census-diff.outputs.diff == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "The daily pull sync regenerated \`anatomies/census.json\`, in a pull request that merges itself without review."
+            echo
+            echo "- Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "- Trigger: ${{ inputs.trigger }}"
+            echo
+            echo "### What moved"
+            echo '```'
+            git show --stat --format= HEAD -- anatomies/census.json
+            echo '```'
+            echo
+            echo "This is the ordinary case: the Coda document is the editing surface for anatomies, so an edit there moves the counts and the register categories. It is announced because nobody reviewed it — check that each new exception is one you would have accepted, and write its rationale."
+          } > /tmp/census-issue.md
+          gh issue create \
+            --title "Anatomy census changed in the daily sync (run ${{ github.run_id }})" \
+            --body-file /tmp/census-issue.md
+
+      # Name WHICH guard tripped, in the job summary rather than only in the
+      # log. Diagnosing a blocked sync means knowing the cause, and reading it
+      # out of 40 tailed log lines is how 23 consecutive runs of the same
+      # failure came to be read as a threshold problem. Runs only on failure,
+      # so an ordinary sync stays as quiet as before.
+      - name: Name the failing guard
+        if: failure()
+        run: |
+          logs=$(cat /tmp/sync-build.log /tmp/deletion-guard.log 2>/dev/null || true)
+          match() { grep -qF "$1" <<< "$logs"; }
+          excerpt() { grep -F "$1" -m 1 -A "$2" <<< "$logs" || true; }
+
+          # Most specific cause first: a malformed row is the *reason* a later
+          # guard might also complain, so it must win the label.
+          if match "Malformed upstream row"; then
+            icon="🧩"
+            cause="Malformed upstream rows"
+            advice="One or more rows have a \`uri\` that is present but malformed (a blank or dangling reference leaves empty dot-separated segments, e.g. \`ds:global..\`). Those rows cannot be emitted as valid Turtle, so their subjects are missing from \`data/\`. Fix the \`uri\` of each row named below in the source document. This is a defect at the source, not a threshold to raise."
+            detail=$(excerpt "Malformed upstream row" 6)
+          elif match "Untypable upstream row"; then
+            icon="🏷️"
+            cause="Untypable upstream rows"
+            advice="One or more rows have a name but no resolvable \`type\`, so they cannot be emitted and their subjects are missing from \`data/\`. A row with a name is a thing the document says exists — fill in the type of each row named below in the source document. Rows with no name at all are not affected: they are excluded by the table's row filter and are never a failure."
+            detail=$(excerpt "Untypable upstream row" 6)
+          elif match "missing expected table"; then
+            icon="📥"
+            cause="A configured table is missing from the extract"
+            advice="The extract did not return a table that \`source.json\` configures. Check the Coda API token and the table ids in \`source.json\`."
+            detail=$(excerpt "missing expected table" 2)
+          elif match "produced rows but zero subjects"; then
+            icon="📥"
+            cause="A table produced rows but no subjects"
+            advice="Every row of the named table failed URI or class resolution, which points at a broken mapping or a malformed extract payload."
+            detail=$(excerpt "produced rows but zero subjects" 2)
+          elif match "Refusing to overwrite committed data"; then
+            icon="📉"
+            cause="The regenerated dataset would shrink"
+            advice="The staged dataset is materially smaller than the committed one. If the shrink is intentional (e.g. a planned cleanup in Coda), re-run the manual sync workflow with \`allow_shrink\` enabled; otherwise investigate the extract before re-running."
+            detail=$(excerpt "Refusing to overwrite committed data" 8)
+          elif match "Deletion guard FAILED"; then
+            icon="📉"
+            cause="The commit would lose committed content"
+            advice="The staged diff deletes more of \`data/\` than it adds back, beyond the net-loss allowance. Content rewritten in place is allowed through, so this is a genuine loss. If it is intentional, re-run the manual sync workflow with \`allow_shrink\` enabled."
+            detail=$(excerpt "Deletion guard FAILED" 6)
+          else
+            icon="❓"
+            cause="Unrecognised failure"
+            advice="No fail-closed guard message was found in the logs, so the run failed somewhere else (install, network, git push). Read the step logs."
+            detail=$(tail -n 20 <<< "$logs")
+          fi
+
+          {
+            echo "## ${icon} Coda sync blocked: ${cause}"
+            echo
+            echo "\`data/\` on the default branch was left untouched."
+            echo
+            echo "${advice}"
+            echo
+            echo '```'
+            echo "${detail}"
+            echo '```'
+          } > /tmp/guard-summary.md
+          cat /tmp/guard-summary.md >> "$GITHUB_STEP_SUMMARY"
+          echo "SYNC_FAILURE_CAUSE=${cause}" >> "$GITHUB_ENV"
+
+      # Blank rows are routine — Coda creates one whenever someone clicks into
+      # the last row of a grid — so they must never fail the sync. But they
+      # must not be invisible either: unseen blanks are untidied blanks, and
+      # they used to surface only as an unexplained deletion count in a guard.
+      # Success-only, and silent when the document is clean.
+      - name: Note blank rows in the summary
+        if: success()
+        run: |
+          line=$(grep -F "Rows excluded by a row filter" -m 1 /tmp/sync-build.log 2>/dev/null || true)
+          if [ -n "$line" ]; then
+            {
+              echo "## 🧹 Blank rows in the source document"
+              echo
+              echo "$line"
+              echo
+              echo "Nothing is wrong and nothing was lost. Deleting these rows in the source document is optional tidying."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Open issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            # Lead with the cause: the title and first line should say what to
+            # fix without anyone opening the Actions tab.
+            cat /tmp/guard-summary.md 2>/dev/null || echo "A Coda pull sync was blocked before committing, so \`data/\` on the default branch was left untouched."
+            echo
+            echo "- Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "- Trigger: ${{ inputs.trigger }}"
+            echo
+            echo "### Full guard output"
+            echo '```'
+            tail -n 40 /tmp/sync-build.log /tmp/deletion-guard.log 2>/dev/null || echo "(no logs captured)"
+            echo '```'
+          } > /tmp/issue-body.md
+          title="Coda sync blocked: ${SYNC_FAILURE_CAUSE:-fail-closed guard tripped}"
+          existing=$(gh issue list --state open --search 'Coda sync blocked in:title' --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/issue-body.md
+          else
+            gh issue create --title "$title" --body-file /tmp/issue-body.md
+          fi

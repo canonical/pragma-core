@@ -1,0 +1,53 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.timeline-content a ds:Subcomponent;
+    ds:name "Timeline.Content";
+    ds:summary "The timeline the timeline content is the main canvas that contains the  used to display the detailed information of the occurrence. This is to differentiate it from the header (filter bar) and footer (potential comment section). It typically includes the timestamp, the actor responsible, and a description of the action. Its sole functionality is to communicate the substance of the event to the user in a readable format. \n\n";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/pattern/Timeline/common/Content/styles.css on .ds.timeline-content.\n# TODO implementation: the expansion-indicator edge below has no reference in\n# @canonical/react-ds-global; it is kept from the notation, which the stylesheet\n# does not contradict.\n# The notation's \"TODO: Timeline axis/line connecting events needs DSL\n# representation\" is resolved rather than carried: the line IS implemented, as\n# the ::before of .ds.timeline-event, and it is a node of that subcomponent's\n# anatomy.\nnode:\n  uri: global.subcomponent.timeline-content\n  styles:\n    layout.type: flex\n    layout.direction: column\n  edges:\n    - switch:\n        on: override\n        cases:\n          - uri: global.subcomponent.timeline-event\n          - uri: $custom\n      relation:\n        cardinality: \"0..*\"\n        # The events arrive as `children`; the notation's \"populated via items\n        # prop\" is dropped — Content's props carry no `items`.\n        slotName: default\n    - node:\n        uri: global.subcomponent.timeline-expansion_indicator\n      relation:\n        cardinality: \"0..1\"\n        slotName: expansion-indicator";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:global.pattern.timeline;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.foreground.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/connecting line";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border
+    ].

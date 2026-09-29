@@ -1,0 +1,24 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Accordion/styles.css on .ds.accordion
+node:
+  uri: global.component.accordion
+  styles:
+    layout.type: flex
+    layout.direction: column
+    # Inert outside a grid: the accordion is a full-width block, never a cell.
+    layout.grid.column: "1 / -1"
+    # Read on the element, not at :root, so the surface channel steps with
+    # `.surface` nesting; outside any surface it falls back to the base.
+    appearance.background: [surface.color.background, color.background]
+    appearance.radius: dimension.radius.small
+    # Clips the item corners to the accordion radius.
+    layout.overflow: hidden
+    # The retired `appearance.border: color-border-$root` is dropped: per the
+    # Figma anatomy the accordion has no outer frame — only the per-item
+    # dividers, which Accordion.Item carries.
+  edges:
+    - node:
+        uri: global.subcomponent.accordion-item
+      relation:
+        cardinality: "1..*"
+        slotName: default

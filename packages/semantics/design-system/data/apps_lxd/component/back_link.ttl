@@ -1,0 +1,31 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.component.back_link a ds:Component;
+    ds:name "BackLink";
+    ds:summary "The **BackLink** component is a navigational breadcrumb element that provides users with contextual back navigation within a multi-step workflow. It displays a clickable back link with a left-pointing chevron icon, followed by the current page or step title, creating a clear visual hierarchy of \"← Previous Context / Current Context\".\n\n\n\n**Primary purpose**\n\nThis component enables intuitive backward navigation while maintaining context awareness, helping users understand their current location within a multi-step process and providing an easy path to return to the previous state.\n\n\n\n**Main use cases**\n\n- **Multi-Step modal navigation**: Navigate between steps in complex modal workflows like volume creation, instance migration, or storage configuration, where users need to move back and forth between different configuration stages\n- **Hierarchical form flows**: Provide navigation within nested form sections, such as permission group management where users drill down into specific configuration areas and need clear paths back to parent forms\n- **Wizard-style workflows**: Enable step-by-step process navigation in creation wizards (custom ISO upload, volume setup) where users may need to revisit previous steps to modify selections\n\n\n\n**Key features**\n\n- **Visual hierarchy**: Uses chevron-left icon and breadcrumb-style text formatting to clearly indicate navigation direction and current context\n- **Contextual labeling**: Displays both the previous context (back link text) and current context (title) for clear orientation\n- **Click handler integration**: Accepts custom onClick functions to handle state changes, modal navigation, or route transitions\n\n";
+    ds:anatomyDsl "node:\n  uri: core:component:BackLink\n  styles:\n    # Structural (implicitly invariant)\n    layout.type: flow\n    layout.direction: horizontal\n    layout.align: center\n    \n    # Themeable\n    spacing.gap: spacing/small\n    typography.size: font/size/heading/4\n    \n  edges:\n    - node:\n        uri: core:component:Button\n        styles:\n          # Structural (implicitly invariant)\n          layout.type: flow\n          layout.direction: horizontal\n          layout.align: center\n          interaction.cursor: pointer\n          \n          # Themeable\n          appearance.variant: link\n          spacing.internal: spacing/dense\n          typography.size: font/size/heading/4\n          typography.weight: font/weight/normal\n          \n        edges:\n          - node:\n              uri: core:element:Icon\n              styles:\n                # Structural (implicitly invariant)\n                layout.display: inline-block\n                size.width: hug\n                size.height: hug\n                \n                # Themeable\n                appearance.name: chevron-left\n                spacing.margin.right: spacing/xsmall\n                \n            relation:\n              cardinality: \"1..1\"\n              slotName: icon\n              \n          - node:\n              role: back link text\n              styles:\n                # Structural (implicitly invariant)\n                layout.display: inline\n                \n                # Themeable\n                typography.color: color/text/link\n                \n            relation:\n              cardinality: \"1..1\"\n              slotName: text\n              \n      relation:\n        cardinality: \"1..1\"\n        slotName: backButton\n        \n    - node:\n        role: separator\n        styles:\n          # Structural (implicitly invariant)\n          layout.display: inline\n          \n          # Themeable\n          typography.color: color/text/muted\n          spacing.margin.horizontal: spacing/xsmall\n          \n      relation:\n        cardinality: \"1..1\"\n        \n    - node:\n        role: current title\n        styles:\n          # Structural (implicitly invariant)\n          layout.display: inline\n          \n          # Themeable\n          typography.color: color/text/default\n          typography.weight: font/weight/normal\n          \n      relation:\n        cardinality: \"1..1\"\n        slotName: title";
+    ds:anatomyClassic "\n\n\n\n";
+    ds:usage "Use the **BackLink** component when you need to provide backward navigation within contained workflows where users need to understand their current position relative to a previous state and maintain context across state transitions.";
+    ds:guidelines "";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "link";
+        ds:summary "Text displayed in the clickable back navigation link, typically describing the previous context or step";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "title";
+        ds:summary "Current context or page title displayed after the back link separator, can be text or complex JSX elements";
+        ds:propertyType "node";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "onClick";
+        ds:summary "Callback function executed when the back link button is clicked, typically handles navigation or state changes";
+        ds:propertyType "function";
+        ds:optional "false"
+    ].

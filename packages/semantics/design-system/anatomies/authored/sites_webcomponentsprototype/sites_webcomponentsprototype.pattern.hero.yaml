@@ -1,0 +1,77 @@
+---
+# Authored 2026-09-13 from @canonical/lit-ds-prototype src/lib/Hero/styles.css on .ds.hero
+# The reference corrects the notation it replaces: the headline and the description
+# are props, not slots; there is no signpost or subtitle; the media column holds one
+# <img> rather than an image/video switch; and `cta` is the component's only slot.
+node:
+  uri: sites_webcomponentsprototype.pattern.hero
+  styles:
+    layout.type: grid
+    layout.grid.column: 1 / -1
+    # Two equal columns from 620px up when the hero is stacked or has no media,
+    # and from 1120px up otherwise; the host supplies a subgrid below that.
+    layout.grid.columns: 1fr 1fr
+    spacing.internal.block.start: 1.5rem
+    spacing.internal.block.end: 4rem
+    spacing.gap: 2rem
+  edges:
+    - node:
+        role: content column
+        styles:
+          layout.grid.column: 1
+          # With no media the column is `display: contents` and the header and body
+          # take columns 1 and 2 themselves.
+        edges:
+          - node:
+              role: header
+              # The stylesheet gives the header no properties of its own in the base
+              # layout; it is only placed in column 1 when the content column
+              # collapses to `display: contents`.
+              edges:
+                - node:
+                    role: headline
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: body
+              edges:
+                - node:
+                    role: description paragraph
+                  relation:
+                    cardinality: "0..1"
+                - switch:
+                    on: override
+                    cases:
+                      - uri: global.component.button
+                      - uri: $custom
+                  relation:
+                    cardinality: "0..*"
+                    slotName: cta
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+    - node:
+        role: media column
+        styles:
+          layout.grid.column: 2
+          spacing.external.block.start: 0
+          spacing.external.block.end: 0
+          spacing.external.inline.start: 0
+          spacing.external.inline.end: 0
+          layout.overflow: hidden
+          # Hidden entirely with no media; centred and spanning both columns when
+          # the hero is stacked.
+        edges:
+          - node:
+              role: media image
+              styles:
+                size.max.width: 100%
+                size.height: auto
+                layout.type: block
+            relation:
+              cardinality: "0..1"
+      relation:
+        cardinality: "1"

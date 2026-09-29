@@ -1,0 +1,14 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.pattern.drawer a ds:Pattern;
+    ds:name "Drawer";
+    ds:summary "";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasSubcomponent ds:apps.subcomponent.drawer-content, ds:apps.subcomponent.drawer-footer, ds:apps.subcomponent.drawer-header.

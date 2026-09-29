@@ -1,0 +1,27 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.pattern.notification_center a ds:Pattern;
+    ds:name "NotificationCenter";
+    ds:summary "";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needstriage;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "datetimeFormat";
+        ds:summary "Represents variation along the X axis, refer to variant_guidelines for usage details.";
+        ds:propertyType "choice";
+        ds:defaultValue "normal";
+        ds:constraints "[normal, inverted]";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "avatarType";
+        ds:propertyType "choice";
+        ds:optional "false"
+    ].

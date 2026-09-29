@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.side_panel-content-footer a ds:Subcomponent;
+    ds:name "SidePanel.Content.Footer";
+    ds:summary "SidePanel.Content.Footer is the action row region for side panel controls.\n\nMain use cases:\n\n- Place confirm/cancel actions in a predictable location.\n- Preserve consistent action alignment across side panel variants.\n- Support variable action count with wrapping behavior.";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.subcomponent.side-panel-content_footer\n  styles:\n    layout.type: flow\n    layout.direction: horizontal\n    layout.justify: end\n    layout.wrap: true\n    spacing.gap: spacing/inline/m\n  edges:\n    - node:\n        role: action items\n      relation:\n        cardinality: \"1..*\"";
+    ds:anatomyClassic "";
+    ds:usage "## When to use\n\nUse it as the primary action container for side panel outcomes.";
+    ds:guidelines "";
+    ds:tier ds:apps_launchpad;
+    ds:parentComponent ds:apps_launchpad.subcomponent.side_panel-content.

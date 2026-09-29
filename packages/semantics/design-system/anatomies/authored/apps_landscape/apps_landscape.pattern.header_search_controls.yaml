@@ -1,0 +1,53 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.pattern.header_search_controls
+  edges:
+    - node:
+        role: Formik-backed search header
+        edges:
+          - node:
+              # semantic: form
+              role: search form
+              edges:
+                - node:
+                    # was uri: global.component.search_box; role: controlled query input
+                    uri: global.component.search_field
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: adjacent actions
+            relation:
+              cardinality: "0..1"   # rendered when actions is a valid React element
+              slotName: actions
+      relation:
+        cardinality: "0..1"   # rendered when the HeaderWithSearch variant is used
+    - node:
+        role: search with description button
+        edges:
+          - node:
+              # semantic: form
+              role: search form
+              edges:
+                - node:
+                    # was uri: global.component.search_box; role: controlled query input
+                    uri: global.component.search_field
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              # role: help action
+              uri: global.component.button
+              edges:
+                - node:
+                    # role: help icon
+                    uri: global.component.icon
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"   # rendered when the SearchBoxWithDescriptionButton variant is used

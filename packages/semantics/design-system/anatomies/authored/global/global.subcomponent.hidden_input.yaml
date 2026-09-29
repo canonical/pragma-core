@@ -1,0 +1,8 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form
+# src/lib/subcomponent/HiddenInput/HiddenInput.tsx (`.ds.form-hidden`). The
+# implementation ships no stylesheet, and correctly so: a hidden input is pure
+# markup — an <input type="hidden"> that carries a value into the form and
+# paints nothing — so the anatomy is a single node with no styles and no parts.
+node:
+  uri: global.subcomponent.hidden_input

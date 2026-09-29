@@ -1,0 +1,32 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/pattern/Timeline/styles.css on .ds.timeline.
+node:
+  uri: global.pattern.timeline
+  styles:
+    layout.type: flex
+    layout.direction: column
+  edges:
+    - node:
+        uri: global.subcomponent.timeline-header
+      relation:
+        cardinality: "0..1"
+        slotName: header
+    # Timeline's own types.ts documents three edges — header [0], content [1]
+    # and footer [2] — and marks the header and the footer NOT IMPLEMENTED. The
+    # header keeps its edge because the block exists; no edge is written for the
+    # footer, because `global.subcomponent.timeline-footer` names no ds: subject.
+    # The content is referenced by uri alone: the event switch and the expansion
+    # indicator live in its own anatomy, not inlined here. The notation's second,
+    # exploratory tree — a props switch between
+    # `timeline-content-dateTimeLeading` and `timeline-content-dateTimeTrailing`,
+    # with a `props/variant` discriminator and `with:` maps — is dropped: neither
+    # uri names a ds: subject, and both the qualified discriminator and `with:`
+    # are retired notation.
+    - node:
+        uri: global.subcomponent.timeline-content
+      relation:
+        cardinality: "1"
+        # The content arrives as `children`, so the slot is the default one; the
+        # notation called it `content`.
+        slotName: default

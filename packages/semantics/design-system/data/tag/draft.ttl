@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.draft a ds:Tag;
+    ds:name "draft";
+    ds:category ds:tagcategory.concept-status;
+    ds:whenToApply "This tag signals that the concept documentation is in draft format, and more refinement is needed from both content and copy perspective";
+    ds:whenToRemove "".

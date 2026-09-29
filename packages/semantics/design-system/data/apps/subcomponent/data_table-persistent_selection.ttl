@@ -1,0 +1,52 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.data_table-persistent_selection a ds:Subcomponent;
+    ds:name "DataTable.PersistentSelection";
+    ds:summary "The persistent selection panel is a floating panel that shows the current selection in persistent selection mode. It displays selected items by their human-readable unique ID and provides an expanded view for reviewing the full selection with all columns visible. The panel only appears when the table uses persistent selection mode.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3340-7087&t=8RN2Hpk8UX3gMX3u-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4815-84027&t=2fO23I8WsyT0YVJ1-4";
+    ds:usage "The persistent selection panel supports workflows where users need to build up a selection of items across multiple table pages before performing a bulk action. Without it, users would lose their selection every time they navigate to a different page, sort, or filter. The panel makes the current selection visible and manageable at all times.\n\nIn enterprise applications, users often work with large datasets where the items they need to act on are not conveniently grouped on a single page. For example, a system administrator managing a fleet of machines may need to select specific instances across several pages to reassign them to a different team, apply a configuration change, or schedule maintenance. The persistent selection panel lets them browse through pages, pick items as they go, and review the full selection before committing to the action. Without persistent selection, this workflow would require the user to memorize or manually track which items they need, then act on them one page at a time.\n\n## When to use\n\n- Users need to select items across multiple table pages before performing a bulk action.\n- The dataset is large enough that relevant items are spread across different pages.\n- Users need to review and adjust their selection before committing to an action.\n\n## When not to use\n\n- All selectable items fit on a single table page. Simple selection is sufficient in this case.\n- The table does not support row selection at all.\n- Bulk actions are not a feature of the table.\n\n## Large selections\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3486-78504&t=2PBanDq6QA2yNcI2-4\n\nFor tables with hundreds of thousands of items, users could potentially select a very large number. It would be impractical to show all of them in the compact panel. After a certain threshold, a warning message appears when the user scrolls to the bottom of the panel, telling them that the selection is too large to show inline and that they should use the expand function to view the full selection.\n\nIf there are performance concerns related to the number of selected items or frontend pagination of the selection, a hard limit on the number of items a user can select may need to be considered.";
+    ds:guidelines "# Interactions\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3486-78505&t=2PBanDq6QA2yNcI2-4\n\n## Opening the panel\n\nSelecting the persistent selection button in the action bar opens the dark panel labeled “Current selection:” that shows the list of selected items.\n\n## Item display and ordering\n\nEach item in the panel shows its human-readable unique ID, usually the value from the first column (the name column). Each item has an “X” button to remove it individually from the selection. This per-row deselect behavior is the same in both the floating and expanded views.\n\nThe panel shows selected items in the order they were selected, with the most recently selected item on top.\n\n## Panel growth and scrolling\n\nAs the user selects more items, the panel grows in size until it reaches a maximum height. After that, the panel content becomes scrollable.\n\n## https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3579-69949&t=2PBanDq6QA2yNcI2-4\n\n\n\n## Expanded (popped out) view\n\nBefore performing a bulk action, a user might want to inspect their selection more closely, for example using the supporting information in other columns. Sometimes they might not remember the full picture of their selection based on the name column alone.\n\nTo support this, the action bar and persistent selection panel can be “popped out” into an expanded view that shows the selection as a full table with all columns visible. The transition between the floating action bar and the expanded view is animated. The smaller floating action bar visually transforms into the expanded modal-style selection and action bar in a seamless transition.\n\nThere are two ways to close the expanded view:\n\n1. **Collapse button** - selecting the decrease/collapse icon at the top right of the expanded panel returns it to the floating version. The same animated transition plays in reverse.\n2. **Persistent selection button** - selecting the persistent selection button closes the popped-out state entirely, returning to the floating version and also closing the panel.\n\nThe expanded view has a maximum height. Once reached, the table body becomes scrollable. The table cannot show more than 50 items per page. If there are more than 50 items in the selection, a simplified pagination control appears, allowing the user to page through the selection (for example, “of 4 pages” with forward/back navigation arrows).\n\n\n\nA prototype of the rough interaction of the collapse and expand of the panel can be found here: {\"Name\":\"Expand Action Bar Prototype\",\"Image\":{\"type\":\"imageurlref\",\"url\":\"https://s3-alpha.figma.com/thumbnails/a3563251-6cd3-4486-9b57-4f3321524cee?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWCUPSYUQSX%2F20260913%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260913T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=3650d3a4870da1fa8819f4d6937d23d3875fb853ff14d7b78cb5e46beffc638f\",\"outline\":true},\"Url\":{\"type\":\"urlref\",\"url\":\"https://www.figma.com/make/4V5OfFCOm2lYDgYnMVKxTl/Expand-Action-Bar-Prototype?t=hWsBoH4yq28uty6g-1\",\"name\":\"\"},\"Modified\":{\"type\":\"dt\",\"input\":\"5/21/2026 3:52:33 PM\",\"epoch\":1779371553.337,\"formatted\":\"5/21/2026\"},\"ModifiedBy\":{\"type\":\"obj\",\"value\":{\"Handle\":\"Maximilian Blazek\",\"Avatar\":{\"type\":\"imageurlref\",\"url\":\"https://s3-alpha.figma.com/profile/534b2668-e456-4568-98c9-60d645790fdc\",\"outline\":true}}},\"Label\":\"2356039340008127983\",\"CommentsCount\":0}\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3579-72617&t=2PBanDq6QA2yNcI2-4\n\n## Deselecting items\n\nUsers can deselect individual items by selecting the “X” button on each row in either the floating panel or the expanded view.\n\nSelecting the main deselect (X) button in the action bar deselects everything. If the expanded view is open, the modal closes, and the floating bar is also hidden since nothing remains selected.\n\nAfter the user deselects everything through the main deselect button, a toast notification appears with a message such as “Deselected everything by accident?” with an undo option. This toast disappears after 10 seconds. Proper accessibility needs to be provided for this toast.\n\n## Tooltips\n\nAll interactive selection elements have tooltips on hover:\n\nTable 6\n\n";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "unique-identifier-field";
+        ds:summary "The column or field used to identify each selected item in the panel. Usually the first column (the name column). The panel displays this value as the human-readable label for each selected item.";
+        ds:propertyType "text";
+        ds:constraints "Inherited from the data table.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "max-selection-count";
+        ds:summary "A hard limit on the number of items a user can select. Use when there are performance concerns related to the number of selected items or frontend pagination of the selection.";
+        ds:propertyType "number";
+        ds:constraints "Inherited from the data table. Must be a positive integer.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "max-items-per-page";
+        ds:summary "The maximum number of selected items shown per page in the expanded view before simplified pagination controls appear.";
+        ds:propertyType "number";
+        ds:constraints "Must be a positive integer.";
+        ds:optional "true";
+        ds:defaultValue "50"
+    ], [
+        a ds:Property;
+        ds:name "undo-toast-duration";
+        ds:summary "How long the undo toast remains visible after the user deselects all items through the main deselect button.";
+        ds:propertyType "number";
+        ds:constraints "Must be a positive integer, in seconds.";
+        ds:optional "true";
+        ds:defaultValue "10"
+    ], [
+        a ds:Property;
+        ds:name "large-selection-threshold";
+        ds:summary "The number of selected items after which a warning message appears at the bottom of the compact panel, advising the user to use the expanded view. When not set, no threshold warning is shown.";
+        ds:propertyType "number";
+        ds:constraints "Must be a positive integer.";
+        ds:optional "true"
+    ];
+    ds:parentComponent ds:apps.pattern.datatable.

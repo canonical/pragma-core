@@ -1,0 +1,6 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:sites a ds:Tier;
+    ds:name "Sites".

@@ -1,0 +1,19 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/component/Tile/common/Header/styles.css on .ds.tile-header.
+node:
+  uri: global.subcomponent.tile-header
+  styles:
+    layout.type: flex
+    layout.direction: row
+    layout.align: center
+    spacing.gap: dimension.100                    # --tile-header-gap, the inline gap between marks
+    spacing.internal.block.start: dimension.100   # --tile-header-padding-block
+    spacing.internal.block.end: dimension.100     # --tile-header-padding-block
+    spacing.internal.inline.start: dimension.200  # --tile-header-padding-inline, a surface inset
+    spacing.internal.inline.end: dimension.200    # --tile-header-padding-inline, a surface inset
+    # The header reads --typography-weight-semibold, which no stratum declares —
+    # the declared spelling is --typography-weight-semiBold
+    # (typography.weight.semiBold) — so only the literal the chain falls back to
+    # is written.
+    typography.weight: 600

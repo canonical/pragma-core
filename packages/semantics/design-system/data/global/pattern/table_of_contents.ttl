@@ -1,0 +1,94 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.pattern.table_of_contents a ds:Pattern;
+    ds:name "TableOfContents";
+    ds:summary "";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# Notation-only migration. Non-recursive by design: it represents up to three\n# heading levels (h2 -> h3 -> h4), each level explicit, and nesting beyond h4 is\n# not supported.\n#\n# One repair: the heading it referenced,\n# `global.subcomponent.table_of_contents-heading`, names no ds: subject, so the\n# position becomes a role node.\nnode:\n  uri: global.pattern.table_of_contents\n  # Every spacing binding below is a ROLE match, not a value match: the retired\n  # value each line names is not a symbol in any namespace a spacing key admits,\n  # so the symbol says what the space IS for and the old value stays on the line.\n  styles:\n    layout.type: flex\n    layout.direction: column\n    # `spacing/x-small` names no symbol; the tightest declared block gap carries\n    # it here and on the nav list.\n    spacing.gap: spacing.gap.field.block   # was spacing/x-small\n  edges:\n    - node:\n        role: heading\n      relation:\n        cardinality: \"0..1\"\n    - node:\n        role: nav list\n        styles:\n          layout.type: flex\n          layout.direction: column\n          spacing.gap: spacing.gap.field.block   # was spacing/x-small\n        edges:\n          - node:\n              role: level-1 entry   # h2\n              styles:\n                layout.type: flex\n                layout.direction: column\n              edges:\n                - node:\n                    role: link\n                    styles:\n                      # `font/size/small` names no symbol; the secondary text\n                      # tier is the smaller ramp, and the size key admits\n                      # dimension.* alone, so typography.font carries the tier.\n                      typography.font: typography.text.secondary\n                      typography.color: color.text.link\n                      interaction.cursor: pointer\n                  relation:\n                    cardinality: \"1\"\n                - node:\n                    role: level-2 entry   # h3\n                    styles:\n                      layout.type: flex\n                      layout.direction: column\n                      # `spacing/medium` names no symbol; the indent of a\n                      # continued level is what spacing.inset.continuation.inline\n                      # is for.\n                      spacing.external.left: spacing.inset.continuation.inline   # was spacing/medium\n                    edges:\n                      - node:\n                          role: link\n                          styles:\n                            typography.font: typography.text.secondary\n                            typography.color: color.text.link\n                            interaction.cursor: pointer\n                        relation:\n                          cardinality: \"1\"\n                      - node:\n                          role: level-3 entry   # h4\n                          styles:\n                            spacing.external.left: spacing.inset.continuation.inline   # was spacing/medium\n                          edges:\n                            - node:\n                                role: link\n                                styles:\n                                  typography.font: typography.text.secondary\n                                  typography.color: color.text.link\n                                  interaction.cursor: pointer\n                              relation:\n                                cardinality: \"1\"\n                        relation:\n                          cardinality: \"0..*\"\n                  relation:\n                    cardinality: \"0..*\"\n            relation:\n              cardinality: \"1..*\"\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.gap.field.block
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.gap.field.block
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list/level-1 entry/link";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list/level-1 entry/link";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.link
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list/level-1 entry/level-2 entry";
+        anatomy:styleKey "spacing.external.left";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.inset.continuation.inline
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list/level-1 entry/level-2 entry/link";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list/level-1 entry/level-2 entry/link";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.link
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list/level-1 entry/level-2 entry/level-3 entry";
+        anatomy:styleKey "spacing.external.left";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:spacing.inset.continuation.inline
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list/level-1 entry/level-2 entry/level-3 entry/link";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.pattern.table_of_contents;
+        ds:node "$root/nav list/level-1 entry/level-2 entry/level-3 entry/link";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.link
+    ].

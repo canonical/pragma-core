@@ -1,0 +1,20 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/subcomponent/Spinner/styles.css on .ds.spinner.
+node:
+  uri: global.subcomponent.spinner
+  styles:
+    layout.type: inline-block
+    layout.verticalAlign: middle
+    # The size cascade is --spinner-size (a per-instance override) then
+    # --icon-size (the shared icon convention) then 1em, so the spinner tracks
+    # the container font-size. Neither variable is declared, so the literal the
+    # chain falls back to is written.
+    size.width: 1em
+    size.height: 1em
+    # The rotation is a keyframe animation at --spinner-duration (1s fallback,
+    # linear, infinite); no roster key takes an animation, and no ratified motion
+    # token is that long.
+  # The icon edge the notation carried is dropped: the implementation renders the
+  # `spinner` glyph itself, as an <svg> with a <use> reference to
+  # spinner.svg#spinner, rather than composing global.component.icon.

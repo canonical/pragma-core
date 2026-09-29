@@ -1,0 +1,20 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.dropdown_button a ds:Component;
+    ds:name "DropdownButton";
+    ds:summary "A Dropdown Button is a specialized button that includes a persistent chevron icon to indicate nested functionality. Unlike standard [Button](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8SdtbQUhTr)s that execute a single, immediate action, the Dropdown Button reveals a [ContextualMenu](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-riXODq1wpR) of options or controls. This visual cue ensures users understand that an interaction will expand the interface to provide further choices rather than triggering an instantaneous system change.  \n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3155-10498&t=xywvHwUKZ8RRCYSo-1\n\nStyling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4457-109017&t=2fO23I8WsyT0YVJ1-4";
+    ds:usage "### When to use\n\n- When action-oriented menus are required to group related commands that do not fit within the primary page layout.\n- When visual cues for expansion are necessary to immediately signal that interacting with the element will reveal a list of options rather than executing a singular action.\n- When performing a filtering action and a button is needed to reveal a list of criteria or view options that update a page's content.\n\n### When not to use\n\n- When the button is intended to perform one specific, immediate task without further user input.\n  - Incorrect: Using a dropdown button for a “Save” or “Delete” action that does not contain sub-options.\n  - Remediation: Use a standard [Button](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8SdtbQUhTr) component to avoid misleading the user into expecting a menu.\n- When the primary goal is to move the user to different high-level pages within the application.\n  - Incorrect: Housing the main site navigation inside a single Dropdown Button.\n  - Remediation: Use a [Navigation](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-nkDiZdUMkV) pattern or [Breadcrumbs](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-BXVe6mKJMd) to provide a clear and persistent sense of location and movement.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:inheritsFrom ds:global.component.button;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-05-01T00:00:00.000+02:00";
+        ds:change "A new componenent dedicated to triggering filters will be developed, and then we will replace the filtering capacity of this component. The filter-specific one should include an active state, and other filter-related features";
+        ds:changeType "decision"
+    ].

@@ -1,0 +1,49 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.loading_state
+  edges:
+    - node:
+        role: contained-mode outer wrapper
+        styles:
+          size.height: 100vh   # applied when centerOnScreen is truthy
+          # was spacing.padding: 1rem when centerOnScreen is truthy; the roster has no
+          # all-sides padding key
+        edges:
+          - node:
+              # semantic: status
+              role: contained loading status
+              edges:
+                - node:
+                    role: centered status content
+                    edges:
+                      - node:
+                          role: accessible loading label
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          # role: indeterminate spinner
+                          uri: global.component.icon
+                        relation:
+                          cardinality: "1"
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"   # rendered when inline is falsy
+    - node:
+        # semantic: status
+        role: inline loading status
+        edges:
+          - node:
+              role: accessible loading label
+            relation:
+              cardinality: "1"
+          - node:
+              # role: indeterminate spinner
+              uri: global.component.icon
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"   # rendered when inline is truthy

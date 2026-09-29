@@ -1,0 +1,14 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.side_panel-content a ds:Subcomponent;
+    ds:name "SidePanel.Content";
+    ds:summary "";
+    ds:anatomyDsl "", "---  \nnode:  \n  uri: apps.subcomponent.side_panel-content  \n  styles:  \n    layout.flex: 1  \n    spacing.internal.block: spacing/small            # --dimension-200  \n  edges:  \n    - node:  \n        role: content  \n      relation:  \n        cardinality: \"1\"  \n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:parentComponent ds:apps.pattern.side_panel.

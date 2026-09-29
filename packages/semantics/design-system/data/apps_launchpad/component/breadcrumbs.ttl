@@ -1,0 +1,19 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.breadcrumbs a ds:Component;
+    ds:name "Breadcrumbs";
+    ds:summary "The **Breadcrumbs** component is a navigation aid that helps users to keep track of their location within a website or application.\n\n**Main Use Cases:**\n\n- **Navigation:** Provide a clear path back to the homepage.\n- **Hierarchy:** Show the user their current location in the hierarchy of the website.\n\n";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.breadcrumbs\n  styles:\n    layout.type: flow\n    layout.direction: horizontal\n    layout.align: center\n    spacing.internal: spacing/inline/small\n  edges:\n    - node:\n        role: collapsed items container\n        styles:\n          appearance.background: color/background/neutral/default\n          appearance.border: border/style/solid\n        edges:\n           - node:\n               role: menu trigger\n               styles:\n                 typography.content: \"...\"\n           - node:\n               role: collapsed menu list\n               edges:\n                 - node:\n                     role: breadcrumb link\n                   relation:\n                     cardinality: \"1..*\"\n                     slotName: default\n      relation:\n        cardinality: \"0..1\"\n        slotName: collapsedItems\n    - node:\n        role: expanded items container\n        edges:\n          - node:\n              role: breadcrumb link\n            relation:\n              cardinality: \"1..*\"\n              slotName: default\n          - node:\n              role: separator\n              styles:\n                 typography.content: \"/\"\n            relation:\n              cardinality: \"0..*\"\n              slotName: separator\n      relation:\n        cardinality: \"1\"\n        slotName: expandedItems";
+    ds:anatomyClassic "The Breadcrumbs is composed of a main container, a list of links, and optional separators.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the breadcrumbs.\n2. **Breadcrumb Link:** A single link in the breadcrumb trail.\n3. **Separator:** A visual separator between the breadcrumb links.\n4. **Collapsed Items Container:** A container for collapsed items, used when there are too many breadcrumbs to display.\n\n";
+    ds:usage "### 1. General Description\n\nThe Breadcrumbs is used to provide a secondary navigation system that helps users to understand the structure of the website.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Hierarchical navigation:** Use when your website has a clear hierarchical navigation structure.\n- **Deeply nested pages:** Use on pages that are deeply nested within the website.\n\n2.2 When Not to Use\n\n- **Flat navigation:** Do not use on websites with a flat navigation structure.";
+    ds:guidelines "### Accessibility\n\n- **ARIA attributes:** Use the `aria-label=\"breadcrumb\"` attribute to identify the breadcrumb navigation.\n- **Current page:** Use the `aria-current=\"page\"` attribute to identify the current page.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "items";
+        ds:summary "The list of breadcrumb items.";
+        ds:propertyType "list of nodes";
+        ds:optional "false"
+    ].
