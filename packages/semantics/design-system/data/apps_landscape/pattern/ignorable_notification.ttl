@@ -1,0 +1,60 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.ignorable_notification a ds:Pattern;
+    ds:name "Ignorable Notification";
+    ds:summary "Ignorable Notification is a confirmation pattern around Canonical `Notification`. Dismissing the visible notification opens a `ConfirmationModal` instead of hiding it immediately. The modal repeats the message, provides a consumer-labelled checkbox for persistent suppression, and delegates confirmed hiding to the parent through `hide`.\n\nPersistence is local to the current browser storage: confirming with the checkbox selected writes the exact string `\"true\"` under `storageKey`. On later renders, that value suppresses the notification. Closing or cancelling the modal leaves the notification visible and resets the modal's local checkbox state.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.ignorable_notification\n  edges:\n    - node:\n        uri: global.component.notification\n        role: dismissible initial message\n        edges:\n          - node:\n              role: notification content\n              relation:\n                cardinality: \"0..1\"\n                slotName: children\n          - node:\n              role: confirmation trigger\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..1\"\n    - node:\n        uri: global.component.confirmation_modal\n        role: dismissal confirmation\n        name: Ignorable Notification Modal\n        edges:\n          - node:\n              semantic: paragraph\n              role: repeated notification message\n              edges:\n                - node:\n                    role: repeated notification content\n                    relation:\n                      cardinality: \"0..1\"\n                      slotName: children\n              relation:\n                cardinality: \"1\"\n          - node:\n              uri: global.component.checkbox\n              role: persistent suppression choice\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: cancel action\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: confirm dismissal action\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-58&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 32\n\n";
+    ds:usage "### When to use\n\n**Dismiss recurring guidance**\n\nLet users hide noncritical, recurring guidance and optionally prevent it from appearing again in the same browser storage.\n\n**Confirm persistent dismissal**\n\nRequire an explicit confirmation before a notification is hidden or permanently ignored.\n\n**Parent-owned visibility**\n\nUse when the parent already owns the transient notification state and can provide a `hide` callback after confirmation.\n\n### When not to use\n\n**Critical or mandatory warnings**\n\nInformation is required to prevent harm or data loss.\n\n**Incorrect pattern**: Offering permanent suppression through this component for critical warnings or required safety information.\n\n**Remediation strategy**: Use a standard non-dismissible notification, or require server-side acknowledgement that cannot be locally suppressed.\n\n**Account-wide preferences**\n\nThe choice must follow the user across browsers or devices.\n\n**Incorrect pattern**: Storing the suppression choice only in browser local storage when it must be synchronized across the user’s account.\n\n**Remediation strategy**: Use a server-backed user preference setting so the choice persists and syncs across browsers and devices.\n\n**Immediate dismissal**\n\nClosing should take effect immediately without confirmation or a persistence choice.\n\n**Incorrect pattern**: Using this component when a simple dismissible notification with no follow-up confirmation would be more appropriate.\n\n**Remediation strategy**: Use Canonical Notification directly for transient messages that do not require confirmation or persistent suppression.\n\n**Sensitive preferences**\n\nSecurity-sensitive consent, policy acknowledgement, or auditable account settings are involved.\n\n**Incorrect pattern**: Storing security-sensitive choices or audit-required acknowledgements only in browser local storage.\n\n**Remediation strategy**: Implement server-backed consent tracking or use authenticated, auditable account-preference endpoints for sensitive choices.";
+    ds:guidelines "### Accessibility\n\n- Give the modal a purpose-specific title, the confirm and cancel controls explicit outcome labels, and the persistence checkbox a complete label.\n- The Notification’s close control is supplied by Canonical Notification because this wrapper always provides `onDismiss`.\n- Confirmation Modal owns dialog focus behavior. Supply `focusRef` when the default initial focus is not appropriate, and ensure focus returns to a logical element after confirmed removal.\n- Do not rely on the repeated message alone as the modal’s accessible name; provide `modalProps.title`.\n- Checkbox help and validation content must remain associated through the inherited Checkbox Input API.\n\n### Content\n\n- Explain what is being dismissed and whether checking the option prevents future display.\n- Use confirm and cancel labels that state the outcome rather than generic “Yes” and “No”.\n- The same children appear in the notification and modal. Write concise inline content that makes sense in both contexts.\n- State that suppression applies to this browser when users might expect an account-wide preference.\n\n### Responsive behavior\n\n- This wrapper adds no CSS or breakpoint behavior; Notification and Confirmation Modal own their responsive presentation.\n- Keep repeated copy, checkbox labels, and action labels short enough to wrap within the Canonical modal without horizontal scrolling.\n- Portal rendering and outside-click behavior are inherited modal choices, not notification variants.\n\n### Keyboard\n\n- The dismiss control, checkbox, cancel, and confirm actions must all be keyboard operable.\n- Closing without confirmation must reset the checkbox and leave the notification visible.\n- Confirming closes the modal before calling `hide`; checked confirmation then writes persistence. Do not attach competing keyboard handlers to those actions.\n\n### Internationalization\n\n- Externalize notification content, title, actions, modal title, button labels, checkbox label, help, and validation messages.\n- Do not rely on the source defaults for confirm or checkbox labels; both defaults are undefined.\n- Allow translated labels to wrap. The fixed stored value `\"true\"` and `storageKey` are implementation data and must not be localized.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`IgnorableNotification.hide`";
+        ds:summary "Parent callback invoked after the user confirms dismissal. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(event: MouseEvent<HTMLElement>) => void`. It runs for every confirmation, whether or not persistence is checked. The wrapper does not itself remove transient parent state. "
+    ], [
+        a ds:Property;
+        ds:name "`IgnorableNotification.storageKey`";
+        ds:summary "Browser local-storage key controlling persistent suppression. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Must be stable and unique to one notification purpose. Only the exact stored string `\"true\"` suppresses rendering. "
+    ], [
+        a ds:Property;
+        ds:name "`IgnorableNotification.children`";
+        ds:summary "Optional notification message, repeated inside the modal's structurally required paragraph. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Keep it valid both as Notification content and as a descendant of `<p>`; block-level children can create invalid modal markup. Omitting it leaves an empty paragraph whenever the modal is open. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`IgnorableNotification.modalProps`";
+        ds:summary "Configures the grouped confirmation modal and persistence checkbox. ";
+        ds:propertyType "object";
+        ds:defaultValue "`{ confirmButtonLabel: undefined }`";
+        ds:constraints "TypeScript: `Omit<ComponentProps<typeof IgnorableModal>, \"children\" | \"hideModal\" | \"hideNotification\" | \"ignore\">`. The wrapper reserves modal content, close, and confirm behavior. Includes nested `checkboxProps`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`IgnorableNotification.modalProps.checkboxProps` ";
+        ds:summary "Forwards label, id, help, validation, class, inline, and native checkbox presentation props. ";
+        ds:propertyType "object";
+        ds:defaultValue "`{ label: undefined }`";
+        ds:constraints "TypeScript: `Omit<ComponentProps<typeof CheckboxInput>, \"checked\" | \"onChange\">`. The grouped modal owns checked state and changes. Supply a clear `label`; the source default is undefined. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`IgnorableNotification` inherited Notification props ";
+        ds:summary "Forwards `actions`, `borderless`, `className`, `inline`, `messageElement`, `severity`, `timeout`, `timestamp`, `title`, `titleElement`, and supported `<div>` props. ";
+        ds:propertyType "object";
+        ds:defaultValue "Canonical Notification defaults";
+        ds:constraints "TypeScript: `Omit<ComponentProps<typeof Notification>, \"onDismiss\">`. Deprecated `close`, `status`, and `type` remain unavailable. ";
+        ds:optional "true"
+    ].

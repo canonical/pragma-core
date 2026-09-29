@@ -1,0 +1,178 @@
+###############################################################################
+# dt.shapes.ttl — SHACL shapes for the Design Tokens Ontology
+# Cardinality and structural constraints for the terms defined in dt.ttl and
+# w3c-tokens.ttl.
+###############################################################################
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ds:  <https://ds.canonical.com/> .
+@prefix dt:  <https://dt.canonical.com/> .
+@prefix w3c-tokens: <https://dt.canonical.com/w3c-tokens/> .
+
+dt:FileShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:File ;
+    sh:property [ sh:path w3c-tokens:path ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:schema ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+dt:TokenShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:Token ;
+    sh:property [ sh:path w3c-tokens:name ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:pattern "^([^${}.][^{}.]*)(\\.[^${}.][^{}.]*)*(\\.\\$root)?$|^\\$root$" ] ;
+    sh:property [ sh:path w3c-tokens:inFile ; sh:minCount 1 ; sh:maxCount 1 ; sh:class w3c-tokens:File ] ;
+    sh:property [ sh:path w3c-tokens:value ; sh:maxCount 1 ] ;
+    sh:property [ sh:path w3c-tokens:ref ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:xone ( [ sh:property [ sh:path w3c-tokens:value ; sh:minCount 1 ] ]
+              [ sh:property [ sh:path w3c-tokens:ref ; sh:minCount 1 ] ] ) ;
+    sh:property [ sh:path dt:symbol ; sh:minCount 1 ; sh:maxCount 1 ; sh:class dt:TokenSymbol ] ;
+    sh:property [ sh:path w3c-tokens:type ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:description ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:extensions ; sh:maxCount 1 ] ;
+    sh:property [ sh:path w3c-tokens:deprecated ; sh:maxCount 1 ] ;
+    sh:property [ sh:path dt:aliasOf ; sh:maxCount 1 ; sh:class dt:TokenSymbol ] ;
+    sh:property [ sh:path dt:refersTo ; sh:class dt:TokenSymbol ] .
+
+dt:GroupShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:Group ;
+    sh:property [ sh:path w3c-tokens:name ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:pattern "^([^${}.][^{}.]*)(\\.[^${}.][^{}.]*)*$" ] ;
+    sh:property [ sh:path w3c-tokens:inFile ; sh:minCount 1 ; sh:maxCount 1 ; sh:class w3c-tokens:File ] ;
+    sh:property [ sh:path w3c-tokens:type ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:description ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:extensions ; sh:maxCount 1 ] ;
+    sh:property [ sh:path w3c-tokens:deprecated ; sh:maxCount 1 ] ;
+    sh:property [ sh:path w3c-tokens:extends ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+dt:ResolverShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:Resolver ;
+    sh:property [ sh:path w3c-tokens:version ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:resolutionOrder ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path ( w3c-tokens:resolutionOrder [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+                  sh:or ( [ sh:class w3c-tokens:TokenSet ] [ sh:class w3c-tokens:ResolverModifier ] ) ] ;
+    sh:property [ sh:path w3c-tokens:set ; sh:class w3c-tokens:TokenSet ] ;
+    sh:property [ sh:path w3c-tokens:modifier ; sh:class w3c-tokens:ResolverModifier ] ;
+    sh:property [ sh:path w3c-tokens:name ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:description ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:schema ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:defs ; sh:maxCount 1 ] .
+
+dt:TokenSetShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:TokenSet ;
+    sh:property [ sh:path w3c-tokens:includes ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path ( w3c-tokens:includes [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+                  sh:or ( [ sh:class w3c-tokens:File ] [ sh:class w3c-tokens:InlineSource ] [ sh:class w3c-tokens:TokenSet ] ) ] ;
+    sh:property [ sh:path w3c-tokens:name ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:description ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:extensions ; sh:maxCount 1 ] .
+
+dt:ResolverModifierShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:ResolverModifier ;
+    sh:property [ sh:path w3c-tokens:context ; sh:minCount 2 ; sh:class w3c-tokens:ResolverContext ] ;
+    sh:property [ sh:path w3c-tokens:default ; sh:maxCount 1 ; sh:class w3c-tokens:ResolverContext ] ;
+    sh:property [ sh:path dt:encodes ; sh:maxCount 1 ; sh:class ds:ModifierFamily ] ;
+    sh:property [ sh:path w3c-tokens:name ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:description ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:extensions ; sh:maxCount 1 ] .
+
+dt:ResolverContextShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:ResolverContext ;
+    sh:property [ sh:path w3c-tokens:name ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:includes ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path ( w3c-tokens:includes [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+                  sh:or ( [ sh:class w3c-tokens:File ] [ sh:class w3c-tokens:InlineSource ] [ sh:class w3c-tokens:TokenSet ] ) ] ;
+    sh:property [ sh:path dt:encodes ; sh:maxCount 1 ; sh:class dt:Coordinate ] .
+
+dt:InlineSourceShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:InlineSource ;
+    sh:property [ sh:path w3c-tokens:tokens ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+dt:ModifierFamilyShape
+    a sh:NodeShape ;
+    sh:targetClass ds:ModifierFamily ;
+    sh:property [ sh:path dt:contract ; sh:maxCount 1 ; sh:class dt:Contract ] ;
+    sh:property [ sh:path ds:exclusive ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+    sh:property [ sh:path dt:covers ; sh:class dt:TokenSymbol ] ;
+    sh:property [ sh:path dt:encodedBy ; sh:class w3c-tokens:ResolverModifier ] .
+
+dt:CoordinateShape
+    a sh:NodeShape ;
+    sh:targetClass dt:Coordinate ;
+    sh:property [ sh:path dt:family ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ds:ModifierFamily ] ;
+    sh:property [ sh:path dt:concept ; sh:maxCount 1 ; sh:class ds:Modifier ] ;
+    sh:property [ sh:path dt:resolvesBy ; sh:maxCount 1 ; sh:class dt:Preference ] ;
+    sh:property [ sh:path dt:otherwise ; sh:maxCount 1 ; sh:class dt:Coordinate ] .
+
+dt:ContractShape
+    a sh:NodeShape ;
+    sh:targetClass dt:Contract ;
+    sh:property [ sh:path dt:level ; sh:maxCount 1 ; sh:class dt:Level ] ;
+    sh:property [ sh:path dt:provision ; sh:maxCount 1 ; sh:class dt:Provision ] ;
+    sh:property [ sh:path dt:providesType ; sh:datatype xsd:string ] .
+
+dt:SubValueShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:SubValue ;
+    sh:property [ sh:path w3c-tokens:slotName ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:slotType ; sh:maxCount 1 ; sh:class w3c-tokens:TokenType ] ;
+    sh:property [ sh:path w3c-tokens:slotOptional ; sh:maxCount 1 ; sh:datatype xsd:boolean ] .
+
+dt:ColorSpaceShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:ColorSpace ;
+    sh:property [ sh:path w3c-tokens:channel ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+dt:WeightKeywordShape
+    a sh:NodeShape ;
+    sh:targetClass w3c-tokens:WeightKeyword ;
+    sh:property [ sh:path w3c-tokens:keyword ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path w3c-tokens:weight ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ] .
+
+dt: sh:declare
+    [ sh:prefix "dt" ; sh:namespace "https://dt.canonical.com/"^^xsd:anyURI ] ,
+    [ sh:prefix "w3c-tokens" ; sh:namespace "https://dt.canonical.com/w3c-tokens/"^^xsd:anyURI ] ,
+    [ sh:prefix "ds" ; sh:namespace "https://ds.canonical.com/"^^xsd:anyURI ] .
+
+dt:ResolvedValueShape
+    a sh:NodeShape ;
+    sh:targetClass dt:ResolvedValue ;
+    sh:property [ sh:path dt:forSymbol ; sh:minCount 1 ; sh:maxCount 1 ; sh:class dt:TokenSymbol ] ;
+    sh:property [ sh:path dt:coordinate ; sh:class dt:Coordinate ] ;
+    sh:property [ sh:path dt:resolvesTo ; sh:maxCount 1 ] ;
+    sh:property [ sh:path dt:resolutionChain ; sh:maxCount 1 ] ;
+    sh:property [ sh:path ( dt:resolutionChain [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+                  sh:class w3c-tokens:Token ] ;
+    sh:property [ sh:path dt:derivedFrom ; sh:maxCount 1 ; sh:class dt:TokenSymbol ] ;
+    # A value ORIGINATES one of two ways, and the way decides whether it holds a
+    # value of its own. Selected: the route of definitions consulted, and the
+    # value that route produced. Derived: the symbol it was computed from, and
+    # NO value — the value is that symbol's, read at whatever position the
+    # consumer asks for, so a derived routing cannot drift from its target.
+    # sh:maxCount 0 on dt:resolvesTo in the derived branch is what makes the
+    # duplication FORBIDDEN rather than merely absent. The branches exclude
+    # each other in both directions, so a node carrying all three fails.
+    sh:xone (
+        [ sh:property [ sh:path dt:resolutionChain ; sh:minCount 1 ] ;
+          sh:property [ sh:path dt:resolvesTo ; sh:minCount 1 ] ;
+          sh:property [ sh:path dt:derivedFrom ; sh:maxCount 0 ] ]
+        [ sh:property [ sh:path dt:derivedFrom ; sh:minCount 1 ] ;
+          sh:property [ sh:path dt:resolvesTo ; sh:maxCount 0 ] ;
+          sh:property [ sh:path dt:resolutionChain ; sh:maxCount 0 ] ]
+    ) .
+
+dt:OneCoordinatePerExclusiveFamilyShape
+    a sh:NodeShape ;
+    sh:targetClass dt:ResolvedValue ;
+    sh:sparql [
+        sh:message "A resolved value asserts two coordinates of one exclusive family." ;
+        sh:prefixes dt: ;
+        sh:select """SELECT $this WHERE { $this dt:coordinate ?c1 , ?c2 . ?c1 dt:family ?f . ?c2 dt:family ?f . ?f ds:exclusive true . FILTER (?c1 != ?c2) }"""
+    ] .

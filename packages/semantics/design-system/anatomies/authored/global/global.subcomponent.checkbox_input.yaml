@@ -1,0 +1,78 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form
+# src/lib/subcomponent/CheckboxInput/styles.css on .ds.form-checkbox and its
+# ::before glyph. A native <input type="checkbox"> with the design-system
+# selection chrome; it carries no label — the host supplies it.
+node:
+  uri: global.subcomponent.checkbox_input
+  styles:
+    appearance.native: none
+    layout.boxSizing: border-box
+    # Positioning context for the masked checkmark/minus glyph.
+    layout.position: relative
+    # margin-inline reads --form-label-padding-inline, which no stratum declares,
+    # falling back to 0: the control aligns to the field edge, not to the input's
+    # inner padding.
+    spacing.external.inline.start: 0
+    spacing.external.inline.end: 0
+    # A 16px control: a fixed element size, deliberately NOT a baseline multiple.
+    size.width: dimension.200
+    size.height: dimension.200
+    appearance.border.width: dimension.stroke.thickness.medium
+    appearance.border.style: solid
+    appearance.border.color: color.border
+    appearance.radius: dimension.radius.small
+    # The unselected fill reads the surface channel so the control adapts to
+    # OnSurface stepping, then the flat token.
+    appearance.background: [surface.color.foreground.checkbox.unselected, color.foreground.checkbox.unselected]
+    appearance.background@hover: color.foreground.checkbox.unselected.hover
+    # The selected fill and border read --surface-color-foreground-checkbox-selected
+    # first, which no stratum declares (the surface family mints channels for the
+    # checkmark and the unselected fill only), so the flat token is written.
+    appearance.background@selected: color.foreground.checkbox.selected
+    appearance.border.color@selected: color.foreground.checkbox.selected
+    # A mixed box paints exactly as a selected one; only the glyph differs.
+    appearance.background@indeterminate: color.foreground.checkbox.selected
+    appearance.border.color@indeterminate: color.foreground.checkbox.selected
+    appearance.border.color@focus: color.focusRing
+    appearance.outline.style@focus: none
+    appearance.border.color@disabled: color.border.disabled
+    appearance.background@disabled: color.foreground.checkbox.unselected.disabled
+    interaction.cursor: pointer
+    interaction.cursor@disabled: not-allowed
+    motion.property: background-color, border-color
+    # Not bound, and why:
+    # - the transition duration reads --motion-duration-fast, undeclared;
+    # - the focus ring is a box-shadow at color.focusRing, which no roster key
+    #   takes;
+    # - the compound faces the stylesheet paints — a hovered selected box
+    #   (--hover--color-foreground-checkbox-selected, a computed state variable
+    #   that is not a symbol) and a disabled selected box
+    #   (color.foreground.checkbox.selected.disabled) — need a compound state,
+    #   which this version of the notation reserves.
+  edges:
+    - node:
+        # drawn as ::before
+        role: selection glyph
+        styles:
+          layout.position: absolute
+          # `inset: 0` stretches the glyph over the whole box.
+          layout.offset.top: 0
+          layout.offset.right: 0
+          layout.offset.bottom: 0
+          layout.offset.left: 0
+          # One pseudo-element draws both marks: `:checked` masks
+          # checkmark.svg onto this box and `:indeterminate` masks minus.svg
+          # onto it, which is why the node is the selection glyph rather than
+          # the check mark alone. Both faces take the same paint; only the mask
+          # differs, and no roster key takes a mask.
+          # The mark is a mask with `background-color` behind it, because a
+          # background-image SVG cannot be recoloured and would ignore the
+          # theme. No roster key takes a mask. Deliberately, the paint arrives
+          # only WITH the mask: an unmasked background-color would fill the whole
+          # box in the unselected state.
+          appearance.background@selected: [surface.color.foreground.checkbox.checkmark, color.foreground.checkbox.checkmark]
+          appearance.background@indeterminate: [surface.color.foreground.checkbox.checkmark, color.foreground.checkbox.checkmark]
+          appearance.background@disabled: color.foreground.checkbox.checkmark.disabled
+      relation:
+        cardinality: "1"

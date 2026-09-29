@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.pattern.form_login a ds:Pattern;
+    ds:name "FormLogin";
+    ds:summary "To document the login form as a DS pattern.  \nThe work done so far: [https://www.figma.com/design/bAe7ONHLn3WJBiPLiTudui/25.10-User-Registration---Identity?node-id=212-15282&t=8FZE7TjZd1UbgIaB-1](https://www.figma.com/design/bAe7ONHLn3WJBiPLiTudui/25.10-User-Registration---Identity?node-id=212-15282&t=8FZE7TjZd1UbgIaB-1)\n\nTo move the content in here, and the visuals in [https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4270-704&t=pOWv0N54d7lgIhg3-1](https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4270-704&t=pOWv0N54d7lgIhg3-1) \n\n\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global.

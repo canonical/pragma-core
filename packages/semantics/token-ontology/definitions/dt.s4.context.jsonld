@@ -1,0 +1,73 @@
+{
+  "_comment": [
+    "The JSON projection of dt.s4.ttl. The VOCABULARY is the source of truth;",
+    "this context is how the build's artifact serialises it, so one file reads",
+    "as JSON for the language server and as RDF for the graph server.",
+    "",
+    "Keys are named for the vocabulary. A key with no term in dt.s4.ttl, or a",
+    "term with no key here, is a defect in one file or the other.",
+    "",
+    "Per platform: @base and the platform prefix change per catalogue."
+  ],
+  "@context": {
+    "@version": 1.1,
+    "@base": "https://dt.canonical.com/s4/web/",
+    "dt": "https://dt.canonical.com/",
+    "dt-web": "https://dt.canonical.com/platform/web/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "type": "@type",
+    "Variable": "dt:Variable",
+    "Declaration": "dt:Declaration",
+    "Condition": "dt:Condition",
+
+    "variables": { "@id": "@graph", "@container": "@id" },
+
+    "ofSymbol": {
+      "@id": "dt:ofSymbol",
+      "@type": "@id",
+      "@context": { "@base": "https://dt.canonical.com/" }
+    },
+    "tier": {
+      "@id": "dt:tier",
+      "@type": "@vocab",
+      "@context": { "@vocab": "https://dt.canonical.com/tier." }
+    },
+    "visibility": {
+      "@id": "dt:visibility",
+      "@type": "@vocab",
+      "@context": { "@vocab": "https://dt.canonical.com/visibility." }
+    },
+    "declarations": { "@id": "dt:declaredAt", "@container": "@set" },
+
+    "under": { "@id": "dt:under", "@type": "@id" },
+    "emits": { "@id": "dt:emits" },
+    "at": { "@id": "dt:at" },
+    "references": {
+      "@id": "dt:references",
+      "@type": "@id",
+      "@container": "@list"
+    },
+    "alsoAt": {
+      "@id": "dt:alsoAt",
+      "@type": "@id",
+      "@container": "@set",
+      "@context": { "@base": "https://dt.canonical.com/" }
+    },
+    "computedFrom": { "@id": "dt:computedFrom", "@type": "@id" },
+    "derives": {
+      "@id": "dt:derives",
+      "@type": "@vocab",
+      "@context": { "@vocab": "https://dt.canonical.com/derivation." }
+    },
+
+    "selectsCoordinate": {
+      "@id": "dt:selectsCoordinate",
+      "@type": "@id",
+      "@container": "@set",
+      "@context": { "@base": "https://dt.canonical.com/" }
+    },
+    "selector": { "@id": "dt-web:selector" },
+    "atRules": { "@id": "dt-web:inAtRule", "@container": "@list" }
+  }
+}

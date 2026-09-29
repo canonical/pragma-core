@@ -1,0 +1,33 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # semantic: fieldset
+  uri: apps_landscape.component.checkbox_group
+  styles:
+    layout.overflow: visible
+  edges:
+    - node:
+        # semantic: legend
+        role: group label
+      relation:
+        cardinality: "1"
+    - node:
+        # semantic: p
+        role: error message
+      relation:
+        cardinality: "0..1"   # rendered when error is truthy
+    - node:
+        # semantic: p
+        role: help text
+      relation:
+        cardinality: "0..1"   # rendered when help is truthy
+    - node:
+        role: options container
+        edges:
+          - node:
+              # was uri: global.component.checkbox; role: checkbox option
+              uri: global.component.checkbox_field
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "1"

@@ -1,0 +1,40 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Breadcrumbs/styles.css on .ds.breadcrumbs
+# The root <nav> carries no declaration of its own; every style below sits on
+# the `.list` <ol> the component renders inside it.
+node:
+  uri: global.component.breadcrumbs
+  edges:
+    - node:
+        role: list
+        styles:
+          layout.type: flex
+          layout.direction: row
+          layout.wrap: wrap
+          layout.align: center
+          # Reset of the <ol> defaults.
+          spacing.external.block.start: 0
+          spacing.external.block.end: 0
+          spacing.external.inline.start: 0
+          spacing.external.inline.end: 0
+          spacing.internal.block.start: 0
+          spacing.internal.block.end: 0
+          spacing.internal.inline.start: 0
+          spacing.internal.inline.end: 0
+          layout.listStyle: none
+          spacing.gap.block: dimension.050   # row-gap reads --dimension-050 direct: 4px between wrapped rows
+        edges:
+          # Each item may be replaced per item by a consumer-supplied component
+          # (BreadcrumbItem.Component) — kept from the previous notation, and
+          # the reference confirms it.
+          - switch:
+              on: override
+              cases:
+                - uri: global.subcomponent.breadcrumbs-item
+                - uri: $custom
+            relation:
+              cardinality: "1..*"
+              slotName: default
+      relation:
+        cardinality: "1"
+        slotName: default

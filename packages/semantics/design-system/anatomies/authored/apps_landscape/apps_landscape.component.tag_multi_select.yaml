@@ -1,0 +1,80 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: Landscape instance-tag field
+  uri: apps_landscape.component.tag_multi_select
+  edges:
+    - node:
+        # semantic: label
+        role: field label
+      relation:
+        cardinality: "1"
+    - node:
+        role: owning search and filter wrapper
+        edges:
+          - node:
+              role: search container
+              edges:
+                - node:
+                    # role: selected tag
+                    uri: global.component.chip
+                  relation:
+                    cardinality: "0..*"
+                - node:
+                    # was uri: global.component.input; role: search or create tag — a
+                    # free-text search, so the search field is the subject that names it
+                    uri: global.component.search_field
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: validation message
+                  relation:
+                    cardinality: "0..1"   # rendered when inputError is truthy
+                - node:
+                    role: overflow info
+                  relation:
+                    cardinality: "0..1"   # rendered when overflowingChipsAmount is greater than zero and the dropdown is closed
+            relation:
+              cardinality: "1"
+          - node:
+              role: loading state
+            relation:
+              cardinality: "0..1"   # rendered when the dropdown is open and the tag query is pending
+          - node:
+              role: dropdown panel
+              edges:
+                - node:
+                    role: create prompt
+                  relation:
+                    cardinality: "0..1"   # rendered when inputText is non-empty
+                - node:
+                    role: matching tag list
+                    edges:
+                      - node:
+                          # semantic: p
+                          role: tag list heading
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          # semantic: ul
+                          role: tag results
+                          edges:
+                            - node:
+                                # semantic: li
+                                role: tag result
+                                edges:
+                                  - node:
+                                      # role: select existing tag
+                                      uri: global.component.button
+                                    relation:
+                                      cardinality: "1"
+                              relation:
+                                cardinality: "1..*"
+                        relation:
+                          cardinality: "1"
+                  relation:
+                    cardinality: "0..1"   # rendered when filteredTags contains at least one tag
+            relation:
+              cardinality: "0..1"   # rendered when the dropdown is open and the tag query is not pending
+      relation:
+        cardinality: "1"

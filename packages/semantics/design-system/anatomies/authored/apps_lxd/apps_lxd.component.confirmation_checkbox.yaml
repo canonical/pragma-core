@@ -1,0 +1,30 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `lxd.component.ConfirmationCheckbox`; the block's own uri is
+# used instead.
+node:
+  uri: apps_lxd.component.confirmation_checkbox
+  styles:
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.align: start
+    # was layout.float: left; the roster has no float key
+  edges:
+    - node:
+        role: wrapper container
+        styles:
+          layout.type: inline      # was layout.display: inline
+          # was layout.float: left; the roster has no float key
+        edges:
+          - node:
+              # was uri: canonical:component:CheckboxInput
+              uri: global.subcomponent.checkbox_input
+              styles:
+                layout.type: inline   # was layout.display: inline
+                # was interaction.tabindex: -1, form.type: checkbox and
+                # form.controlled: true; none is a style, and no roster key takes them
+            relation:
+              cardinality: "1..1"
+              slotName: default
+      relation:
+        cardinality: "1..1"

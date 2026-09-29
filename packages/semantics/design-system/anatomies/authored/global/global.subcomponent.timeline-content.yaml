@@ -1,0 +1,31 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/pattern/Timeline/common/Content/styles.css on .ds.timeline-content.
+# TODO implementation: the expansion-indicator edge below has no reference in
+# @canonical/react-ds-global; it is kept from the notation, which the stylesheet
+# does not contradict.
+# The notation's "TODO: Timeline axis/line connecting events needs DSL
+# representation" is resolved rather than carried: the line IS implemented, as
+# the ::before of .ds.timeline-event, and it is a node of that subcomponent's
+# anatomy.
+node:
+  uri: global.subcomponent.timeline-content
+  styles:
+    layout.type: flex
+    layout.direction: column
+  edges:
+    - switch:
+        on: override
+        cases:
+          - uri: global.subcomponent.timeline-event
+          - uri: $custom
+      relation:
+        cardinality: "0..*"
+        # The events arrive as `children`; the notation's "populated via items
+        # prop" is dropped — Content's props carry no `items`.
+        slotName: default
+    - node:
+        uri: global.subcomponent.timeline-expansion_indicator
+      relation:
+        cardinality: "0..1"
+        slotName: expansion-indicator

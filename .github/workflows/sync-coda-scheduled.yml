@@ -1,0 +1,24 @@
+name: Sync Coda data (scheduled)
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # Daily at 06:00 UTC
+
+# Reusable-workflow permissions are capped by the caller, so the write grants
+# must be declared here too (not only in sync-coda.yml).
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sync:
+    uses: ./.github/workflows/sync-coda.yml
+    with:
+      trigger: Scheduled
+      # Scheduled runs never bypass the fail-closed guards; use the manual
+      # workflow's allow_shrink input for intentional large deletions.
+      allow_shrink: false
+      # Malformed upstream rows always fail a scheduled run: they mean the
+      # source document has lost a subject's identity, which is a defect to
+      # fix at the source, never something to sync past unattended.
+      allow_malformed_rows: false

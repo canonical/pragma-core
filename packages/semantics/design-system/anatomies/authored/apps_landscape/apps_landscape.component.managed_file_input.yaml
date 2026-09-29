@@ -1,0 +1,41 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.managed_file_input
+  edges:
+    - node:
+        # was uri: global.component.input with attributes type: file, multiple: false;
+        # the typed field component is the subject that names a file input, and neither
+        # attribute is a property it declares, so neither is pinned
+        uri: global.component.file_upload_field
+      relation:
+        cardinality: "0..1"   # rendered when value is null
+    - node:
+        role: selected file state
+        edges:
+          - node:
+              # semantic: label
+              role: selected-state label
+            relation:
+              cardinality: "0..1"   # rendered when label is truthy
+          - node:
+              # semantic: p
+              role: help text
+            relation:
+              cardinality: "0..1"   # rendered when help is truthy
+          - node:
+              role: filename
+            relation:
+              cardinality: "1"
+          - node:
+              # role: remove file
+              uri: global.component.button
+            relation:
+              cardinality: "1"
+          - node:
+              # semantic: p
+              role: validation message
+            relation:
+              cardinality: "0..1"   # rendered when error is truthy
+      relation:
+        cardinality: "0..1"   # rendered when value is a File

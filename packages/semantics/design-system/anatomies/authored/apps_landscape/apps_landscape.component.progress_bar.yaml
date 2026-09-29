@@ -1,0 +1,44 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `ds:apps_landscape.component.progress_bar_with_eta`, which names
+# no subject; the block's own uri is used instead.
+node:
+  # role: progress assembly
+  uri: apps_landscape.component.progress_bar
+  edges:
+    - node:
+        # role: supplemental activity signal — decorative spinner shown while work is
+        # actively in flight.
+        uri: global.component.icon
+      relation:
+        cardinality: "0..1"   # rendered when loading is true
+    - node:
+        role: indicator and labels
+        edges:
+          - node:
+              # semantic: progressbar
+              role: determinate progress indicator
+              # Reports the rounded and clamped percentage with an accessible name and
+              # value text.
+              edges:
+                - node:
+                    role: visual completion indicator
+                    # Uses an inline percentage width to show completed progress.
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: visible progress value
+              # Displays the rounded and clamped percentage without duplicating it in
+              # the accessibility tree.
+            relation:
+              cardinality: "0..1"   # rendered when showPercentage is true
+          - node:
+              role: visible remaining time
+              # Displays a formatted estimate or configurable estimating or almost-done
+              # copy without duplicating it in the accessibility tree.
+            relation:
+              cardinality: "0..1"   # rendered when showEta is true
+      relation:
+        cardinality: "1"

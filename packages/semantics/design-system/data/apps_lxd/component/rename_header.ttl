@@ -1,0 +1,76 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.component.rename_header a ds:Component;
+    ds:name "RenameHeader";
+    ds:summary "The **RenameHeader** component is a specialized header that combines breadcrumb navigation with inline renaming functionality. It provides users with contextual navigation while enabling direct editing of the current resource name through a toggle-based interface that transforms between display and edit modes.\n\n\n\n**Primary purpose**\n\nThis component serves as a page header that shows navigation hierarchy through breadcrumbs while offering seamless inline editing capabilities for the current resource name, eliminating the need for separate editing pages or modals.";
+    ds:anatomyDsl "node:\n  uri: core:component:RenameHeader\n  styles:\n    # Structural (implicitly invariant)\n    layout.type: flow\n    layout.direction: horizontal\n    layout.align: center\n    layout.justify: space-between\n    layout.role: banner\n    \n    # Themeable\n    appearance.background: color/surface/header\n    appearance.border.bottom: border/style/header\n    spacing.internal: spacing/header/internal\n    spacing.external: spacing/header/external\n    \n  edges:\n    - node:\n        role: screen reader title\n        styles:\n          # Structural (implicitly invariant)\n          layout.display: none\n          accessibility.screen-reader: visible\n          \n          # Themeable\n          typography.size: font/size/heading/1\n          typography.weight: font/weight/bold\n          \n      relation:\n        cardinality: \"1..1\"\n        \n    - node:\n        uri: core:element:HeaderTitle\n        styles:\n          # Structural (implicitly invariant)\n          layout.type: stack\n          layout.direction: vertical\n          layout.flex: 1\n          \n        edges:\n          - node:\n              uri: core:component:Breadcrumbs\n              styles:\n                # Structural (implicitly invariant)\n                layout.type: flow\n                layout.direction: horizontal\n                layout.align: center\n                \n                # Themeable\n                spacing.gap: spacing/breadcrumb/gap\n                typography.size: font/size/heading/4\n                \n              edges:\n                - node:\n                    uri: core:element:BreadcrumbItem\n                    styles:\n                      # Structural (implicitly invariant)\n                      layout.display: inline\n                      interaction.cursor: pointer\n                      \n                      # Themeable\n                      typography.color: color/text/breadcrumb\n                      typography.weight: font/weight/normal\n                      appearance.text-decoration: text/decoration/link\n                      appearance.text-decoration:hover: text/decoration/underline\n                      \n                  relation:\n                    cardinality: \"1..*\"\n                    slotName: parentItems\n                    \n                - node:\n                    role: current item container\n                    styles:\n                      # Structural (implicitly invariant)\n                      layout.display: inline\n                      \n                    edges:\n                      - node:\n                          uri: core:element:EditableText\n                          styles:\n                            # Structural (implicitly invariant)\n                            layout.display: inline\n                            interaction.cursor: pointer\n                            typography.overflow: ellipsis\n                            typography.whitespace: nowrap\n                            \n                            # Themeable\n                            typography.color: color/text/current\n                            typography.weight: font/weight/semibold\n                            spacing.internal: spacing/text/clickable\n                            \n                          relation:\n                            cardinality: \"1..1\"\n                            \n                        - node:\n                            uri: core:component:RenameForm\n                            styles:\n                              # Structural (implicitly invariant)\n                              layout.type: flow\n                              layout.direction: horizontal\n                              layout.align: center\n                              layout.display: none\n                              layout.display:editing: flex\n                              \n                              # Themeable\n                              spacing.gap: spacing/form/inline\n                              \n                            edges:\n                              - node:\n                                  uri: core:element:Input\n                                  styles:\n                                    # Structural (implicitly invariant)\n                                    interaction.focus: auto\n                                    interaction.validation: true\n                                    \n                                    # Themeable\n                                    size.width: size/input/name\n                                    appearance.border: border/style/input\n                                    appearance.border:error: border/style/error\n                                    spacing.internal: spacing/input/internal\n                                    \n                                relation:\n                                  cardinality: \"1..1\"\n                                  slotName: input\n                                  \n                              - node:\n                                  role: action buttons\n                                  styles:\n                                    # Structural (implicitly invariant)\n                                    layout.type: flow\n                                    layout.direction: horizontal\n                                    \n                                    # Themeable\n                                    spacing.gap: spacing/button/group\n                                    \n                                  edges:\n                                    - node:\n                                        uri: core:element:Button\n                                        styles:\n                                          # Themeable\n                                          appearance.variant: base\n                                          \n                                      relation:\n                                        cardinality: \"1..1\"\n                                        slotName: cancel\n                                        \n                                    - node:\n                                        uri: core:element:ActionButton\n                                        styles:\n                                          # Themeable\n                                          appearance.variant: positive\n                                          interaction.loading: conditional\n                                          \n                                      relation:\n                                        cardinality: \"1..1\"\n                                        slotName: save\n                                        \n                                relation:\n                                  cardinality: \"1..1\"\n                                  \n                            relation:\n                              cardinality: \"0..1\"\n                              \n                      relation:\n                        cardinality: \"1..1\"\n                        \n                  relation:\n                    cardinality: \"1..1\"\n                    slotName: currentItem\n                    \n            relation:\n              cardinality: \"1..1\"\n              slotName: navigation\n              \n          - node:\n              uri: core:element:Chip\n              styles:\n                # Structural (implicitly invariant)\n                layout.display: inline-block\n                \n                # Themeable\n                appearance.variant: related\n                spacing.external: spacing/chip/related\n                \n            relation:\n              cardinality: \"0..1\"\n              slotName: relatedChip\n              \n          - node:\n              role: center controls\n              styles:\n                # Structural (implicitly invariant)\n                layout.type: flow\n                layout.direction: horizontal\n                layout.align: center\n                layout.display: none\n                layout.display:not-editing: flex\n                \n                # Themeable\n                spacing.gap: spacing/controls/center\n                \n            relation:\n              cardinality: \"0..1\"\n              slotName: centerControls\n              \n      relation:\n        cardinality: \"1..1\"\n        slotName: title\n        \n    - node:\n        role: side controls\n        styles:\n          # Structural (implicitly invariant)\n          layout.type: flow\n          layout.direction: horizontal\n          layout.align: center\n          layout.display: none\n          layout.display:loaded-not-editing: flex\n          \n          # Themeable\n          spacing.gap: spacing/controls/side\n          \n      relation:\n        cardinality: \"0..1\"\n        slotName: controls";
+    ds:anatomyClassic "\n\n\n\non hover when renaming is disabled\n\n";
+    ds:usage "### **When to use**\n\n✅ When you need to provide contextual navigation and immediate editing access for named resources in hierarchical interfaces where rename operations are frequent and should feel lightweight.\n\n\n\n### **When not to use**\n\n❌  Headers for pages where the primary content identifier should not be editable or where editing is rare and requires extensive workflows.\n\n❌ Interfaces where users need to rename multiple objects simultaneously or where renaming is part of larger batch operations.\n\n❌  Renaming operations that require additional validation, approval steps, dependency checks, or impact analysis before completion.";
+    ds:guidelines "";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "name";
+        ds:summary "The current name/title of the resource being displayed and potentially renamed. This appears in the breadcrumb as the final item and serves as the default value when entering edit mode";
+        ds:propertyType "text";
+        ds:constraints "Must be a non-empty string. Should follow the application's naming conventions for the specific resource type";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "parentItems";
+        ds:summary "Array of React elements representing the hierarchical breadcrumb path leading to the current resource. Each item typically contains links or text showing the navigation hierarchy";
+        ds:propertyType "list of nodes";
+        ds:constraints "Must be a non-empty array. Each element should represent a clickable or non-clickable breadcrumb item";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "isLoaded";
+        ds:summary "Indicates whether the page content has finished loading. Controls the visibility of the controls area to prevent layout shifts during loading states";
+        ds:propertyType "boolean";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "relatedChip";
+        ds:summary "Optional chip or badge element displayed alongside the breadcrumb navigation to show additional context about the current resource (e.g., status, type, or relationship indicators)";
+        ds:propertyType "node";
+        ds:constraints "Accepts any ReactNode, typically small informational components like chips or badges";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "titleClassName";
+        ds:summary "Additional CSS class names to apply to the title container for custom styling or layout adjustments";
+        ds:propertyType "text";
+        ds:constraints "Must be valid CSS class names";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "centerControls";
+        ds:summary "Content displayed in the center area of the header when not in rename mode, typically used for contextual actions or status information";
+        ds:propertyType "node";
+        ds:constraints "Accepts any ReactNode. Hidden during rename operations to avoid layout conflicts";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "controls";
+        ds:summary "Primary action controls displayed on the right side of the header when not in rename mode, typically containing main page actions like edit, delete, or settings buttons";
+        ds:propertyType "node";
+        ds:constraints "Accepts any ReactNode. Only displayed when isLoaded is true and not in rename mode";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "renameDisabledReason";
+        ds:summary "When provided, disables the rename functionality and shows this message as a tooltip explanation for why renaming is not available (e.g., \"Insufficient permissions\" or \"Resource is read-only\")";
+        ds:propertyType "text";
+        ds:constraints "Should be a clear, user-friendly explanation. When undefined, renaming is enabled";
+        ds:optional "true";
+        ds:defaultValue "undefined (renaming enabled)"
+    ], [
+        a ds:Property;
+        ds:name "formik";
+        ds:summary "Formik form management object that handles the rename operation state, validation, and submission. Must conform to the RenameHeaderValues interface with name and isRenaming fields";
+        ds:propertyType "object";
+        ds:constraints "Must be FormikProps<RenameHeaderValues> object. Required for rename functionality to work. Values must include: name (string), isRenaming (boolean)";
+        ds:optional "true"
+    ].

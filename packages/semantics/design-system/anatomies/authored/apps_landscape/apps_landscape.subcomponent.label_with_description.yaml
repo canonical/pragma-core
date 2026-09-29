@@ -1,0 +1,27 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.subcomponent.label_with_description
+  edges:
+    - node:
+        # semantic: paragraph
+        role: primary option or item text
+      relation:
+        cardinality: "1"
+        slotName: label
+    - node:
+        # semantic: small
+        role: supporting content
+        edges:
+          - node:
+              role: explanatory description
+            relation:
+              cardinality: "0..1"
+              slotName: description
+          - node:
+              # semantic: link
+              role: external supporting resource
+            relation:
+              cardinality: "0..1"
+      relation:
+        cardinality: "1"

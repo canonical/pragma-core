@@ -1,0 +1,14 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.timeline-expansion_indicator a ds:Subcomponent;
+    ds:name "Timeline.ExpansionIndicator";
+    ds:summary "The timeline expansion indicator is an element at the base of the component used for summary information or pagination. It can include links to view more history, load older events, or show a final status of a process. Its sole functionality is to provide a clear conclusion to the chronological list or an entry point to extended data.";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# Notation-only migration. The root uri is corrected: the notation carried\n# `global.subcomponent.timeline-footer`, which is not this block's name and names\n# no ds: subject.\nnode:\n  uri: global.subcomponent.timeline-expansion_indicator\n  edges:\n    - node:\n        role: content\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2653-21122&t=6a9B5L28GbEGD8q7-11";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:parentComponent ds:global.pattern.timeline.

@@ -1,0 +1,80 @@
+---
+# Derived against @canonical/react-ds-global 0.37.0,
+# dist/esm/lib/component/Card/styles.css on `.ds.card`. The Card is not a
+# surface: it sets no background of its own, so no appearance.background is
+# bound — the container's shows through, which is what the reference says.
+node:
+  uri: global.component.card
+  styles:
+    layout.type: grid
+    # A row subgrid spanning the parent's four section tracks. A grid line
+    # pair holds a slash, so it is a quoted primitive and never a symbol.
+    layout.grid.column: "span 1"
+    layout.grid.row: span 4
+    layout.overflow: hidden
+    appearance.border.width: dimension.stroke.thickness.medium
+    appearance.border.style: solid
+    appearance.border.color: color.border.muted
+    appearance.radius: dimension.radius.medium
+  edges:
+    - node:
+        uri: global.subcomponent.card-header
+        styles:
+          layout.grid.column: "1 / -1"
+          spacing.internal.inline.start: spacing.inset.surface.inline
+          spacing.internal.inline.end: spacing.inset.surface.inline
+          spacing.internal.block.start: spacing.inset.surface.block
+          typography.weight: typography.weight.semiBold
+          typography.color: [modifier.color.text, color.text]
+      relation:
+        cardinality: "0..1"
+        slotName: header
+    - node:
+        uri: global.subcomponent.card-media
+        styles:
+          layout.grid.column: "1 / -1"
+          layout.type: block
+          size.width: 100%
+          size.max.height: dimension.1600
+          layout.objectFit: cover
+      relation:
+        cardinality: "0..1"
+        slotName: media
+    - node:
+        uri: global.subcomponent.card-body
+        styles:
+          layout.grid.column: "1 / -1"
+          layout.type: grid
+          spacing.gap: spacing.gap.group.block
+          spacing.internal.inline.start: spacing.inset.surface.inline
+          spacing.internal.inline.end: spacing.inset.surface.inline
+          spacing.internal.block.end: spacing.inset.surface.block
+          typography.color: [modifier.color.text, color.text]
+          typography.size: dimension.size.fontSize.200
+        edges:
+          - node:
+              role: content wrapper
+              styles:
+                layout.type: block
+                spacing.external.block.end: spacing.gap.field.block
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+        slotName: body
+    - node:
+        uri: global.subcomponent.card-footer
+        styles:
+          layout.grid.column: "1 / -1"
+          layout.type: flex
+          layout.justify: space-between
+          # The card frame provides the outer border; a section that is not
+          # last draws a divider between itself and the next.
+          appearance.border.block.start.color: color.border.muted
+          spacing.internal.inline.start: spacing.inset.surface.inline
+          spacing.internal.inline.end: spacing.inset.surface.inline
+          typography.size: dimension.size.fontSize.200
+          typography.color: color.text.muted
+      relation:
+        cardinality: "0..1"
+        slotName: footer

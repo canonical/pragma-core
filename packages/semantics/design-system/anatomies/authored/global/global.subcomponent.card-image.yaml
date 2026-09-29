@@ -1,0 +1,20 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/component/Card/common/Image/styles.css on .ds.card-image, with the
+# parent's own child rules in src/lib/component/Card/styles.css
+# (.ds.card > .card-image, and the divider on a non-last section).
+node:
+  uri: global.subcomponent.card-image
+  styles:
+    layout.type: block
+    layout.grid.row: 1
+    layout.grid.column: "1 / -1"
+    size.width: 100%
+    size.height: auto
+    # Media stays full bleed: the image section pads nothing.
+    # An image that is not the card's last section draws the divider below it.
+    # The roster has no block-end colour key, so the bottom key carries it.
+    appearance.border.bottom.color: color.border.muted
+    appearance.border.style: solid
+    # `object.fit: cover` is dropped: the implementation sets no object-fit, and
+    # the roster's key is layout.objectFit.

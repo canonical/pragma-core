@@ -1,0 +1,31 @@
+{
+  "name": "@canonical/code-standards",
+  "version": "0.1.5",
+  "description": "Code standards ontology and documentation generator",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step yet' && exit 0",
+    "check": "biome check && tsc --noEmit",
+    "check:fix": "biome check --write",
+    "check:ts": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "docs": "bun src/scripts/generate-docs.ts",
+    "docs:check": "bun run docs && git diff --exit-code docs/"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
+    "@canonical/biome-config": "^0.42.0",
+    "@canonical/typescript-config": "^0.42.0",
+    "@types/bun": "latest",
+    "typescript": "^7.0.2",
+    "vitest": "^4.0.18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canonical/pragma-core"
+  },
+  "bugs": {
+    "url": "https://github.com/canonical/pragma-core/issues"
+  },
+  "homepage": "https://github.com/canonical/pragma-core#readme"
+}

@@ -1,0 +1,119 @@
+###############################################################################
+# Non-normative sample instances: resolved values of the built graph.
+# Values and routes as produced by the live build.
+###############################################################################
+
+@base <https://dt.canonical.com/file/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ds:  <https://ds.canonical.com/> .
+@prefix w3c-tokens: <https://dt.canonical.com/w3c-tokens/> .
+@prefix dt:  <https://dt.canonical.com/> .
+
+## Files
+
+<global/semantic/color/light.tokens.json>
+    a w3c-tokens:File ; w3c-tokens:path "global/semantic/color/light.tokens.json" .
+<global/semantic/color/dark.tokens.json>
+    a w3c-tokens:File ; w3c-tokens:path "global/semantic/color/dark.tokens.json" .
+<global/semantic/modifier/anticipation/constructive.tokens.json>
+    a w3c-tokens:File ; w3c-tokens:path "global/semantic/modifier/anticipation/constructive.tokens.json" .
+<global/primitive/color.tokens.json>
+    a w3c-tokens:File ; w3c-tokens:path "global/primitive/color.tokens.json" .
+
+## Contexts and the coordinates they encode
+
+dt:context.theme.dark
+    a w3c-tokens:ResolverContext ; w3c-tokens:name "dark" ;
+    dt:encodes dt:coordinate.mode.dark .
+
+dt:context.anticipation.constructive
+    a w3c-tokens:ResolverContext ; w3c-tokens:name "constructive" ;
+    dt:encodes dt:coordinate.anticipation.constructive .
+
+## Definitions
+
+<global/semantic/color/light.tokens.json#color.background.logo>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.background.logo" ;
+    w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
+    w3c-tokens:value "\"{color.brand.primary}\""^^rdf:JSON ;
+    dt:symbol dt:color.background.logo ;
+    dt:aliasOf dt:color.brand.primary .
+
+<global/semantic/color/light.tokens.json#color.brand.primary>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.brand.primary" ;
+    w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
+    w3c-tokens:value "\"{color.palette.orange.398}\""^^rdf:JSON ;
+    dt:symbol dt:color.brand.primary ;
+    dt:aliasOf dt:color.palette.orange.398 .
+
+<global/primitive/color.tokens.json#color.palette.orange.398>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.orange.398" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    w3c-tokens:value """{"colorSpace":"oklch","components":[0.5494,0.1746,37.97],"alpha":1}"""^^rdf:JSON ;
+    dt:symbol dt:color.palette.orange.398 .
+
+<global/semantic/modifier/anticipation/constructive.tokens.json#color.foreground.primary>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.foreground.primary" ;
+    w3c-tokens:inFile <global/semantic/modifier/anticipation/constructive.tokens.json> ;
+    w3c-tokens:value "\"{color.foreground.primary.constructive.$root}\""^^rdf:JSON ;
+    dt:symbol dt:color.foreground.primary ;
+    dt:aliasOf dt:color.foreground.primary.constructive .
+
+<global/semantic/color/light.tokens.json#color.foreground.primary.constructive.$root>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.foreground.primary.constructive.$root" ;
+    w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
+    dt:symbol dt:color.foreground.primary.constructive ;
+    dt:aliasOf dt:color.palette.green.520 .
+
+<global/semantic/color/dark.tokens.json#color.foreground.primary.constructive.$root>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.foreground.primary.constructive.$root" ;
+    w3c-tokens:inFile <global/semantic/color/dark.tokens.json> ;
+    dt:symbol dt:color.foreground.primary.constructive ;
+    dt:aliasOf dt:color.palette.green.520 .
+
+<global/primitive/color.tokens.json#color.palette.green.520>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.green.520" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    w3c-tokens:value """{"colorSpace":"oklch","components":[0.551,0.1575,144.01],"alpha":1}"""^^rdf:JSON ;
+    dt:symbol dt:color.palette.green.520 .
+
+## Resolved values
+
+# (logo × {}) — a pure alias route
+[] a dt:ResolvedValue ;
+    dt:forSymbol dt:color.background.logo ;
+    dt:resolvesTo """{"colorSpace":"oklch","components":[0.5494,0.1746,37.97],"alpha":1}"""^^rdf:JSON ;
+    dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.background.logo>
+                         <global/semantic/color/light.tokens.json#color.brand.primary>
+                         <global/primitive/color.tokens.json#color.palette.orange.398> ) .
+
+# (orange.398 × {}) — a direct value: a route of length one
+[] a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.orange.398 ;
+    dt:resolvesTo """{"colorSpace":"oklch","components":[0.5494,0.1746,37.97],"alpha":1}"""^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.orange.398> ) .
+
+# (primary × {constructive}) — the light branch wins hop two
+[] a dt:ResolvedValue ;
+    dt:forSymbol dt:color.foreground.primary ;
+    dt:coordinate dt:coordinate.anticipation.constructive ;
+    dt:resolvesTo """{"colorSpace":"oklch","components":[0.551,0.1575,144.01],"alpha":1}"""^^rdf:JSON ;
+    dt:resolutionChain ( <global/semantic/modifier/anticipation/constructive.tokens.json#color.foreground.primary>
+                         <global/semantic/color/light.tokens.json#color.foreground.primary.constructive.$root>
+                         <global/primitive/color.tokens.json#color.palette.green.520> ) .
+
+# (primary × {dark, constructive}) — same green, the dark branch wins hop two
+[] a dt:ResolvedValue ;
+    dt:forSymbol dt:color.foreground.primary ;
+    dt:coordinate dt:coordinate.mode.dark , dt:coordinate.anticipation.constructive ;
+    dt:resolvesTo """{"colorSpace":"oklch","components":[0.551,0.1575,144.01],"alpha":1}"""^^rdf:JSON ;
+    dt:resolutionChain ( <global/semantic/modifier/anticipation/constructive.tokens.json#color.foreground.primary>
+                         <global/semantic/color/dark.tokens.json#color.foreground.primary.constructive.$root>
+                         <global/primitive/color.tokens.json#color.palette.green.520> ) .

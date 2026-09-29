@@ -1,0 +1,77 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/pattern/Modal/common/Header/styles.css on .ds.modal-header and its
+# child selectors (::after, > .title, > .close).
+node:
+  uri: global.subcomponent.modal-header
+  styles:
+    layout.type: flex
+    layout.direction: row
+    layout.align: center
+    layout.justify: space-between
+    # Never shrink: only the content pane gives way.
+    layout.flex.grow: 0
+    layout.flex.shrink: 0
+    layout.flex.basis: auto
+    # Positions the inset rule below.
+    layout.position: relative
+    # The inline padding --modal-padding-inline is shared with the content and
+    # the footer, so title, rules, content and actions align on the same two
+    # edges.
+    spacing.gap: dimension.200                    # --modal-header-gap, the inline gap between title and dismiss
+    spacing.internal.block.start: dimension.200   # --modal-header-padding-block, a surface inset
+    spacing.internal.block.end: dimension.200     # --modal-header-padding-block, a surface inset
+    spacing.internal.inline.start: dimension.300  # --modal-padding-inline, a surface inset
+    spacing.internal.inline.end: dimension.300    # --modal-padding-inline, a surface inset
+  edges:
+    - node:
+        role: title
+        styles:
+          layout.flex.grow: 1
+          layout.flex.shrink: 1
+          layout.flex.basis: 0%
+          # Only the composite's font-size facet is read
+          # (--typography-text-primary-font-size); typography.size admits
+          # dimension.* alone, so the composite carries it here.
+          typography.font: typography.text.primary
+          typography.weight: typography.weight.semiBold
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        uri: global.component.button
+        props:
+          icon: close
+        styles:
+          layout.flex.grow: 0
+          layout.flex.shrink: 0
+          layout.flex.basis: auto
+          # The dismiss control equalises Button's own inline padding through the
+          # component's custom-property API — --button-padding-inline-start and
+          # -end both to dimension.100 — because Button tightens the start side
+          # when it carries an icon and an icon-only button then reads lopsided.
+          # The dimension is what the override writes, and writing the action
+          # inset role instead would assert the very padding it exists to change.
+          spacing.internal.inline.start: dimension.100  # --button-padding-inline-start
+          spacing.internal.inline.end: dimension.100    # --button-padding-inline-end
+          # The implementation also sets importance="tertiary" on this Button.
+          # That is not pinned: `importance` is a modifier family Button
+          # consumes (ds:hasModifierFamily), not one of its ds:hasProperty
+          # names, and a pin asserts a prop value.
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: divider rule
+        styles:
+          layout.position: absolute
+          # Inset to the header's own inline padding so it aligns with the
+          # title, the content and the actions. inset-block-end is a raw 0,
+          # which the block-axis offset keys take a token only for.
+          layout.offset.inline.start: dimension.300
+          size.block: dimension.stroke.thickness.medium
+          appearance.background: color.border.muted
+          # The first of the two rules bounding the content. Drawn as ::after
+          # rather than a border so it can be inset to the header's inline
+          # padding and align with the title, the content and the actions.
+      relation:
+        cardinality: "1"

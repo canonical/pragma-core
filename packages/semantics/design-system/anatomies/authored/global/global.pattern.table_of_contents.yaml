@@ -1,0 +1,89 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration. Non-recursive by design: it represents up to three
+# heading levels (h2 -> h3 -> h4), each level explicit, and nesting beyond h4 is
+# not supported.
+#
+# One repair: the heading it referenced,
+# `global.subcomponent.table_of_contents-heading`, names no ds: subject, so the
+# position becomes a role node.
+node:
+  uri: global.pattern.table_of_contents
+  # Every spacing binding below is a ROLE match, not a value match: the retired
+  # value each line names is not a symbol in any namespace a spacing key admits,
+  # so the symbol says what the space IS for and the old value stays on the line.
+  styles:
+    layout.type: flex
+    layout.direction: column
+    # `spacing/x-small` names no symbol; the tightest declared block gap carries
+    # it here and on the nav list.
+    spacing.gap: spacing.gap.field.block   # was spacing/x-small
+  edges:
+    - node:
+        role: heading
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: nav list
+        styles:
+          layout.type: flex
+          layout.direction: column
+          spacing.gap: spacing.gap.field.block   # was spacing/x-small
+        edges:
+          - node:
+              role: level-1 entry   # h2
+              styles:
+                layout.type: flex
+                layout.direction: column
+              edges:
+                - node:
+                    role: link
+                    styles:
+                      # `font/size/small` names no symbol; the secondary text
+                      # tier is the smaller ramp, and the size key admits
+                      # dimension.* alone, so typography.font carries the tier.
+                      typography.font: typography.text.secondary
+                      typography.color: color.text.link
+                      interaction.cursor: pointer
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: level-2 entry   # h3
+                    styles:
+                      layout.type: flex
+                      layout.direction: column
+                      # `spacing/medium` names no symbol; the indent of a
+                      # continued level is what spacing.inset.continuation.inline
+                      # is for.
+                      spacing.external.left: spacing.inset.continuation.inline   # was spacing/medium
+                    edges:
+                      - node:
+                          role: link
+                          styles:
+                            typography.font: typography.text.secondary
+                            typography.color: color.text.link
+                            interaction.cursor: pointer
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          role: level-3 entry   # h4
+                          styles:
+                            spacing.external.left: spacing.inset.continuation.inline   # was spacing/medium
+                          edges:
+                            - node:
+                                role: link
+                                styles:
+                                  typography.font: typography.text.secondary
+                                  typography.color: color.text.link
+                                  interaction.cursor: pointer
+                              relation:
+                                cardinality: "1"
+                        relation:
+                          cardinality: "0..*"
+                  relation:
+                    cardinality: "0..*"
+            relation:
+              cardinality: "1..*"
+      relation:
+        cardinality: "1"
+        slotName: default

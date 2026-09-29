@@ -1,0 +1,59 @@
+---
+# Derived against @canonical/react-ds-global 0.37.0,
+# dist/esm/lib/component/Button/styles.css on `.ds.button`, and the worked
+# case of ADR J §3.6. Every list is the reference's own var() chain in order:
+# the slot reads the channel where the implementation reads the channel, and
+# the semantic token where it reads the token — nothing is inferred.
+node:
+  uri: global.component.button
+  styles:
+    layout.type: inline-flex
+    layout.align: center
+    interaction.cursor: pointer
+    interaction.cursor@disabled: not-allowed
+    appearance.radius: dimension.radius.medium
+    appearance.border.width: dimension.stroke.thickness.medium
+    appearance.border.style: solid
+    # The primary foreground fills the background, through the channel that
+    # importance provides it on.
+    appearance.background: [modifier.color.foreground.primary, color.foreground.primary]
+    appearance.background@hover: color.foreground.primary.hover
+    appearance.background@active: color.foreground.primary.active
+    appearance.background@disabled: color.foreground.primary.disabled
+    # The border colour reads the channel first, then a highlighted border
+    # that itself falls back to the plain one: three ranks, and the whole
+    # chain is what an implementation regenerated from this has to write.
+    appearance.border.color: [modifier.color.border, color.border.highlighted, color.border]
+    appearance.border.color@disabled: color.border.disabled
+    typography.color: [modifier.color.text, color.text]
+    typography.color@disabled: color.text.disabled
+    typography.weight: typography.weight.medium
+    typography.size: dimension.size.fontSize.200
+    spacing.gap: spacing.gap.mark.inline
+    spacing.internal.inline.start: spacing.inset.action.inline
+    spacing.internal.inline.end: spacing.inset.action.inline
+    appearance.outline.width@focus: [dimension.stroke.thickness.large, 2px]
+    appearance.outline.style@focus: solid
+    # The focus ring ends in a literal: currentColor is what the chain falls
+    # back to on the page, and dropping it would lose the information.
+    appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing, currentColor]
+    appearance.outline.offset@focus: dimension.025
+  edges:
+    - node:
+        uri: global.component.icon
+        styles:
+          # Two channels, then currentColor: the icon follows the icon
+          # channel, then the text channel, then the colour it inherits.
+          typography.color: [modifier.color.icon, modifier.color.text, currentColor]
+          typography.color@disabled: color.icon.disabled
+      relation:
+        cardinality: "0..1"
+        slotName: icon
+    - node:
+        role: label text
+        styles:
+          typography.color: [modifier.color.text, color.text]
+          typography.color@disabled: color.text.disabled
+      relation:
+        cardinality: "1"
+        slotName: label

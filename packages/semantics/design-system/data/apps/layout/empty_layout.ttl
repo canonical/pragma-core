@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.layout.empty_layout a ds:Layout;
+    ds:name "EmptyLayout";
+    ds:summary "";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition.

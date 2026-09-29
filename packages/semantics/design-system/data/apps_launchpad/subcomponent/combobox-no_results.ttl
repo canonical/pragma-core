@@ -1,0 +1,20 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.combobox-no_results a ds:Subcomponent;
+    ds:name "Combobox.NoResults";
+    ds:summary "The **Combobox NoResults** is a subcomponent of the Combobox that is displayed when there are no matching results for the user’s search query.\n\n**Main Use Cases:**\n\n- **Feedback:** Provide feedback to the user that their search query did not match any results.\n- **Guidance:** Offer guidance on what to do next, such as trying a different search query.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.subcomponent.combobox.no-results\n  styles:\n    layout.display: flex\n    typography.size: typography/paragraph/default\n    typography.style: italic\n    typography.color: color/text/muted\n  edges:\n    - node:\n        role: message\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "The Combobox NoResults is composed of a main container and a message.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the no-results message.\n2. **Message:** The text that is displayed to the user.";
+    ds:usage "### 1. General Description\n\nThe Combobox NoResults is used to provide a clear and helpful message to the user when their search query does not yield any results.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Searchable Combobox:** Use in a Combobox that has a search functionality.\n\n2.2 When Not to Use\n\n- **Non-searchable Combobox:** Do not use in a Combobox that does not have a search functionality.";
+    ds:guidelines "### Content Specification\n\n- **Helpful message:** Provide a helpful message that explains why there are no results.\n- **Actionable:** If possible, provide an actionable suggestion, such as trying a different search term.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The content of the no-results message, usually text.";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.combobox.

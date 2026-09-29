@@ -1,0 +1,57 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.pattern.delivery_scheduling
+  edges:
+    - node:
+        # role: delivery time
+        uri: apps_landscape.component.expandable_radio_group
+        edges:
+          - node:
+              # was uri: global.component.radio; role: as soon as possible option
+              uri: global.subcomponent.radio_input
+            relation:
+              cardinality: "1"
+          - node:
+              # was uri: global.component.radio; role: scheduled option
+              uri: global.subcomponent.radio_input
+              edges:
+                - node:
+                    # was uri: global.component.input with attributes type:
+                    # datetime-local; role: deliver after. The date-and-time field is
+                    # the subject that names it, and `type` is not a property it
+                    # declares, so nothing is pinned.
+                    uri: global.component.date_time_field
+                  relation:
+                    cardinality: "0..1"   # rendered when the scheduled option is selected
+                    slotName: expansion
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+    - node:
+        # role: randomization
+        uri: apps_landscape.component.expandable_radio_group
+        edges:
+          - node:
+              # was uri: global.component.radio; role: yes option
+              uri: global.subcomponent.radio_input
+              edges:
+                - node:
+                    # was uri: global.component.input with attributes type: number,
+                    # inputMode: numeric, min: 0, unit: minutes; role: delivery delay
+                    # window. The number field is the subject that names it, and none
+                    # of the four attributes is a property it declares.
+                    uri: global.component.number_field
+                  relation:
+                    cardinality: "0..1"   # rendered when the yes option is selected
+                    slotName: expansion
+            relation:
+              cardinality: "1"
+          - node:
+              # was uri: global.component.radio; role: no option
+              uri: global.subcomponent.radio_input
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"

@@ -1,0 +1,14 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.side_panel-header a ds:Subcomponent;
+    ds:name "SidePanel.Header";
+    ds:summary "";
+    ds:anatomyDsl "", "---  \nnode:  \n  uri: apps.subcomponent.side_panel-header  \n  styles:  \n    layout.type: flow  \n    layout.direction: horizontal  \n    layout.align: center  \n    spacing.gap: spacing/small                       # --dimension-200  \n    spacing.internal.block: spacing/small            # --dimension-200  \n    # Sticky to the panel's top: never scrolls with the content  \n  edges:  \n    - node:  \n        role: title heading  \n        styles:  \n          typography.size: text/heading/4            # --typography-heading-4-*  \n          layout.flex: 1  \n      relation:  \n        cardinality: \"1\"  \n        slotName: default  \n    - node:  \n        uri: global.component.button  \n        props:  \n          icon: close  \n          importance: tertiary  \n      relation:  \n        cardinality: \"0..1\"      # hidden when the panel is not dismissible  \n        slotName: dismiss";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:parentComponent ds:apps.pattern.side_panel.

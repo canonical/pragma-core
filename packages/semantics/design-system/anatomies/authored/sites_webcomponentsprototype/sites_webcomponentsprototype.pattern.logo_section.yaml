@@ -1,0 +1,84 @@
+---
+# Authored 2026-09-13 from @canonical/lit-ds-prototype src/lib/LogoSection/styles.css on .ds.logo-section
+# The reference corrects the notation it replaces: the heading is a two-column
+# auto-fit grid of title and description (both props, each optionally an anchor)
+# plus a CTA slot, and the logos are a single slotted block rather than a grid of
+# fixed cells. In `minimal` mode only the logo block renders.
+node:
+  uri: sites_webcomponentsprototype.pattern.logo_section
+  styles:
+    layout.type: grid
+    layout.grid.column: 1 / -1
+  edges:
+    - node:
+        role: top rule
+        # The stylesheet gives the leading hr no properties of its own.
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: heading
+        styles:
+          layout.type: grid
+          layout.grid.columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr))
+          layout.align: baseline
+          spacing.external.block.end: 2rem
+        edges:
+          - node:
+              role: title
+              styles:
+                typography.variant.caps: all-small-caps
+              edges:
+                - node:
+                    role: title link
+                    styles:
+                      typography.decoration: none
+                      typography.decoration@hover: underline
+                      # dropped the link colour: the reference reads
+                      # --tmp-color-text-link-default, a staging variable no stratum
+                      # declares, and it writes no literal
+                  relation:
+                    cardinality: "0..1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: description
+              edges:
+                - node:
+                    role: description link
+                    styles:
+                      typography.decoration: none
+                      typography.decoration@hover: underline
+                      # dropped the link colour, as above
+                  relation:
+                    cardinality: "0..1"
+            relation:
+              cardinality: "0..1"
+          - node:
+              role: call to action content
+            relation:
+              cardinality: "0..1"
+              slotName: cta
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: logo block
+        styles:
+          typography.lineHeight: 0
+          # --logo-offset, a component-local 1rem
+          spacing.internal.block.start: 1rem
+          spacing.internal.block.end: 1rem
+        edges:
+          - node:
+              role: logo
+              styles:
+                size.height: 6.5rem   # --logo-size, a component-local value
+                size.width: auto
+                spacing.external.inline.end: 2rem   # --logo-gap, a component-local value
+                # The logo pulls back over the block's own padding.
+                spacing.external.block.start: -1rem
+                spacing.external.block.end: -1rem
+            relation:
+              cardinality: "1..*"
+              slotName: logos
+      relation:
+        cardinality: "1"

@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.rich_text_field a ds:Component;
+    ds:name "RichTextField";
+    ds:summary "Reference: [https://github.com/canonical/design-system/discussions/35](https://github.com/canonical/design-system/discussions/35)";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition.

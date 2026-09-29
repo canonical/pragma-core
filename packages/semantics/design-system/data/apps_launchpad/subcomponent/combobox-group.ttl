@@ -1,0 +1,26 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.combobox-group a ds:Subcomponent;
+    ds:name "Combobox.Group";
+    ds:summary "The **Combobox Group** is a subcomponent of the Combobox that allows for grouping of options under a common label.\n\n**Main Use Cases:**\n\n- **Categorization:** Group related options together to improve scannability.\n- **Hierarchy:** Create a visual hierarchy within the list of options.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.subcomponent.combobox.group\n  styles:\n    layout.display: flex\n    layout.direction: vertical\n    appearance.border: border/style/none\n  edges:\n    - node:\n        role: group legend\n        styles:\n          typography.size: typography/paragraph/default/small-caps\n          typography.color: color/text/muted\n      relation:\n        cardinality: \"0..1\"\n        slotName: groupTitle\n    - node:\n        role: option list\n      relation:\n        cardinality: \"1..*\"\n        slotName: default";
+    ds:anatomyClassic "The Combobox Group is composed of a main container, an optional group legend, and a list of options.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the group.\n2. **Group Legend:** The label for the group of options.\n3. **Option List:** The list of options within the group.";
+    ds:usage "### 1. General Description\n\nThe Combobox Group is used to organize a long list of options into smaller, more manageable groups. This can help users to find the option they are looking for more quickly.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Long lists:** Use when you have a long list of options that can be logically grouped.\n- **Categorization:** Use to categorize options and improve scannability.\n\n2.2 When Not to Use\n\n- **Short lists:** Do not use for short lists of options that do not need to be grouped.";
+    ds:guidelines "### Content Specification\n\n- **Group labels:** Use short and descriptive labels for the groups.\n- **Order:** Order the groups in a logical way.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The label for the group.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The list of options within the group.";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.combobox.

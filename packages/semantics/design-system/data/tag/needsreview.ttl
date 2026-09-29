@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.needsreview a ds:Tag;
+    ds:name "needs:review";
+    ds:category ds:tagcategory.review-status;
+    ds:whenToApply "Current documentation stage complete; needs review to move to next stage";
+    ds:whenToRemove "".

@@ -1,0 +1,30 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.subcomponent.bold_substring a ds:Subcomponent;
+    ds:name "Bold Substring";
+    ds:summary "Renders a plain string and wraps its first case-insensitive substring match in a semantic `strong` element. Matching is computed from lowercased copies, while all rendered text preserves the casing and character sequence supplied in `text`.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.subcomponent.bold_substring\n  edges:\n    - node:\n        role: plain text result\n        relation:\n          cardinality: \"0..1\"\n          condition: substring is empty or no case-insensitive match exists\n    - node:\n        role: matched text result\n        edges:\n          - node:\n              role: leading text\n              relation:\n                cardinality: \"0..1\"\n                condition: the first match starts after index zero\n          - node:\n              uri: global.element.strong\n              role: first matching substring\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: trailing text\n              relation:\n                cardinality: \"0..1\"\n                condition: characters follow the first match\n        relation:\n          cardinality: \"0..1\"\n          condition: substring is non-empty and found";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=17-7&t=JhmpJ2Kptl96X0Fe-4\n\nTable 13\n\n";
+    ds:usage "### When to use\n\n**Search suggestions**\n\nUse to emphasize the first query match in a plain-text suggestion or result label.\n\n**Compact result labels**\n\nUse when one occurrence is enough to show why a compact label matched a case-insensitive query.\n\n### When not to use\n\n**All-match highlighting**\n\nEvery occurrence in the text must be emphasized, not just the first.\n\n**Incorrect pattern**: Rendering every substring occurrence with `BoldSubstring`, but only the first match receives wrapping.\n\n**Remediation strategy**: Use a dedicated highlighting component that walks the string and wraps all occurrences, or implement custom logic to mark each match position before rendering.\n\n**Rich or untrusted markup**\n\nThe input must support React components, HTML entities, or runtime-generated content.\n\n**Incorrect pattern**: Passing JSX, HTML markup, or untrusted strings to `text` or `substring`, expecting them to render as rich content.\n\n**Remediation strategy**: Use a dedicated rich-text or markup renderer; `BoldSubstring` accepts only plain strings and renders them safely as text nodes.\n\n**Locale-aware search**\n\nThe search must respect locale-specific collation, combining marks, or Unicode normalization rules.\n\n**Incorrect pattern**: Relying on case-insensitive matching to work correctly for accented characters or non-ASCII scripts without normalization.\n\n**Remediation strategy**: Normalize both strings with `String.prototype.normalize()` before passing them, or use a dedicated i18n-aware search library.\n\n**Unicode case-fold position changes**\n\nExact match position must be preserved when a character’s lowercased form has a different UTF-16 length.\n\n**Incorrect pattern**: Passing strings where lowercasing changes code-unit count (e.g., some German or Greek characters) and expecting the highlighted slice to align perfectly with the original text.\n\n**Remediation strategy**: Pre-normalize or validate that substring positions remain stable after case folding, or use a locale-aware collation library designed for your target scripts.";
+    ds:guidelines "### Accessibility\n\n- The matched branch uses semantic `strong`; the component adds no label, live region, role, or hidden announcement.\n- Keep the complete phrase meaningful without visual weight because the emphasis does not communicate selection, status, or an action.\n- The unmatched branch returns a text node with no additional wrapper or semantics.\n\n### Content\n\n- Pass the exact display label as `text`; the component preserves that source string in both matched and unmatched branches.\n- Pass the literal query fragment to `substring`. Metacharacters have no special meaning because matching is not regular-expression based.\n- Only the first occurrence is highlighted, including when the same substring appears again later in the label.\n\n### Internationalization\n\n- Both strings are consumer-provided; the component contains no visible copy to translate.\n- Case matching depends on JavaScript lowercase conversion and does not provide locale selection, accent folding, or Unicode normalization.\n- Lowercase conversion can expand or otherwise change a Unicode sequence. Because the resulting index is reused against the original string, matching is not position-safe for every Unicode case mapping.\n\n### Keyboard and device\n\n- This subcomponent adds no focus target or keyboard interaction.\n- It applies no layout styles. Wrapping, truncation, and narrow-width behavior belong to the owning text container.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "text";
+        ds:summary "Complete plain-text value to search and render.";
+        ds:propertyType "text";
+        ds:defaultValue "None";
+        ds:constraints "The rendered slices come from this value, so casing and spacing are preserved.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "substring";
+        ds:summary "Query used to find the emphasized slice.";
+        ds:propertyType "text";
+        ds:defaultValue "None";
+        ds:constraints "Matching is case-insensitive; only the first occurrence is wrapped; an empty or unmatched value returns `text` directly.";
+        ds:optional "false"
+    ].

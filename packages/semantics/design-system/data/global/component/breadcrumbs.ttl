@@ -1,0 +1,104 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.breadcrumbs a ds:Component;
+    ds:name "Breadcrumbs";
+    ds:summary "Breadcrumbs are a navigational aid that shows users their current location within a product’s information hierarchy. They provide a clear path from the root of the information architecture (IA) to the current page, allowing users to quickly understand where they are and easily navigate back to previous levels in the IA. Breadcrumbs should reflect the IA, not the user's path they took to arrive at the current page. They work best in websites or applications with multiple levels of hierarchy and are particularly useful when users might arrive at deep pages through search or external links.\n\n";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Breadcrumbs/styles.css on .ds.breadcrumbs\n# The root <nav> carries no declaration of its own; every style below sits on\n# the `.list` <ol> the component renders inside it.\nnode:\n  uri: global.component.breadcrumbs\n  edges:\n    - node:\n        role: list\n        styles:\n          layout.type: flex\n          layout.direction: row\n          layout.wrap: wrap\n          layout.align: center\n          # Reset of the <ol> defaults.\n          spacing.external.block.start: 0\n          spacing.external.block.end: 0\n          spacing.external.inline.start: 0\n          spacing.external.inline.end: 0\n          spacing.internal.block.start: 0\n          spacing.internal.block.end: 0\n          spacing.internal.inline.start: 0\n          spacing.internal.inline.end: 0\n          layout.listStyle: none\n          spacing.gap.block: dimension.050   # row-gap reads --dimension-050 direct: 4px between wrapped rows\n        edges:\n          # Each item may be replaced per item by a consumer-supplied component\n          # (BreadcrumbItem.Component) — kept from the previous notation, and\n          # the reference confirms it.\n          - switch:\n              on: override\n              cases:\n                - uri: global.subcomponent.breadcrumbs-item\n                - uri: $custom\n            relation:\n              cardinality: \"1..*\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2121-7411&t=ZjF1qUMIhrKHbBRE-1\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2481-2182&t=ZjF1qUMIhrKHbBRE-1";
+    ds:usage "Breadcrumbs are used to represent the hierarchical structure of content within an application or website, helping users understand where they are in the information architecture (IA). They provide a visual trail of the user's current location and offer quick navigation to other levels in the IA. \n\nBreadcrumbs reflect the site's structure, not the path a user took to arrive at the current page. They show where you are in the hierarchy, not how you got there.\n\nThey are most effective in applications or websites with substantial content organized hierarchically across two or more levels.  The more complex your information architecture, the more valuable breadcrumbs become for helping users maintain context and navigate efficiently.\n\n### When to use\n\n- In applications or websites with multiple levels of hierarchical content structure\n- To help users understand their current location within a deep information architecture\n- To provide quick navigation back to higher levels in the IA\n- When the relationship between pages follows a clear parent-child hierarchy\n- As a secondary navigation aid to complement your primary navigation\n\n### When not to use\n\n- On websites or applications with only a single level of hierarchy.\n  - Incorrect: Displaying a breadcrumb that only shows \"Home\" on every page of a single-page application.\n  - Remediation: Remove the component entirely, as the global navigation or page header is sufficient for navigation.\n- On the root of your site or app (as there are no higher levels to navigate to).\n  - Incorrect: Placing a breadcrumb on the home screen where there are no parent levels to navigate back to.\n  - Remediation: Omit the component entirely.\n- As a replacement for primary navigation. \n  -  Incorrect: Removing the [Navigation](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-_D-3DMJEui) (side navigation or top navigation) and forcing users to rely on breadcrumbs to find their way around the site.\n  - Remediation: Use the right [Navigation](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-nkDiZdUMkV) pattern for primary orientation. Breadcrumbs are always secondary and should enrich, not replace, your main navigation.\n- To track a user's browsing history or the path they took through your application.\n  - Incorrect: Showing a path like \"Home > Search > Profile > Search\" based on the user's back-and-forth browsing behavior.\n  - Remediation: Use the browser's back button or a dedicated \"Back to results\" link to handle session-based movement.\n- As a progress indicator for multi-step processes.\n  - Incorrect: Using Breadcrumbs to show steps 1, 2, and 3 of a checkout or registration form.\n  - Remediation: Use a component able to represent progress to clearly communicate the sequence and status of a multi-step task.\n\n";
+    ds:guidelines "- use current page breadcrumb item as the last level of hierarchy, indicating the current location in the navigation structure\n- use parent page breadcrumb items for the higher levels of navigation from the current location in the navigation structure  \n\n\nOverflow\n\n- Ideally breadcrumbs should be used in the design in a way where they do not overflow. But if they do for some reason overflow they should overflow in the following way: A 4px vertical distance. The slash should always be at the start of the second line (and not at the end of the first line).  \n  \n\n\n\n\n# Accessibility\n\n## **How it works**\n\nIt establishes a landmark on the page which assists the user in understanding where they currently are and which pages exist in the current page’s hierarchical order.\n\nIt comprises a set of links structured using an ordered list. A `nav` element using `aria-label=\"Breadcrumbs\"` identifies the structure as a breadcrumb trail and makes it a navigation landmark so that it is easy to locate. It can be navigated via keyboard using the `Tab` key.\n\nTo prevent screen reader announcement of the visual separators between links, they are added via CSS. The separators are part of the visual presentation that signifies the breadcrumb trail, which is already semantically represented by the `nav` element.\n\n## **Considerations**\n\nThis component strives to follow [WCAG 2.2 (level AA) guidelines](https://www.w3.org/TR/WCAG22/), and care must be taken to ensure this effort is maintained when the component is implemented across other projects. This section offers advice to that effect:\n\n- The breadcrumb text should reflect the page title accurately and concisely.\n- The breadcrumb should remain in the same relative order and location on each web page.\n- The breadcrumb indicating the current page should be visually distinct from the preceding breadcrumbs.\n- If the breadcrumb reflecting the current page is a link, it should have an `aria-current=\"page\"` attribute.\n\n## **Resources**\n\n- [WAI-ARIA practices: Breadcrumbs](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/)\n- [WAI-ARIA practices: Breadcrumb example](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/examples/breadcrumb/)\n- Guidelines:\n  - [2.4.4: Link Purpose (in Context)](https://www.w3.org/TR/WCAG22/#link-purpose-in-context)\n  - [3.2.3: Consistent Navigation](https://www.w3.org/TR/WCAG22/#consistent-navigation)";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:hasSubcomponent ds:global.subcomponent.breadcrumbs-item;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-01-19T00:00:00.000+01:00";
+        ds:change "We discussed whether the Breadcrumbs is a Component or a Pattern (etc...).\nWe decided for it being a Component because there is a usual way to do it (i.e. non-opinionated)";
+        ds:changeType "change"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-07-06T00:00:00.000+02:00";
+        ds:change "Overflow behaviour with ellipsis could be considered as a refinement for this component";
+        ds:changeType "decision"
+    ];
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.breadcrumbs;
+        ds:node "$root/list";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.050
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.link
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "appearance.outline.width";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.large
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "appearance.outline.color";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.link
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "appearance.outline.offset";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.025
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/separator";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/separator";
+        anatomy:styleKey "spacing.external.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/separator";
+        anatomy:styleKey "spacing.external.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ].

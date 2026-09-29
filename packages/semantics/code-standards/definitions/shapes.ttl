@@ -1,0 +1,36 @@
+@prefix cs:   <http://pragma.canonical.com/codestandards#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+
+# ═══════════════════════════════════════════════════════════════
+# SHACL SHAPES FOR THE CODE STANDARDS ONTOLOGY
+# ═══════════════════════════════════════════════════════════════
+#
+# Semantic definitions live in CodeStandard.ttl; constraints live here.
+#
+# Why this file exists at all: the vendored @sem/quality shape pack targets
+# `owl:Class` and `owl:*Property` — schema terms. It can never see an INSTANCE,
+# which is why 130 of 145 code standards sat without a display label for months
+# without a single check firing. Instance-level constraints need instance-level
+# shapes, and this is the repo's first.
+#
+# Severity is deliberately sh:Warning for now. Promote to the default
+# (sh:Violation) once the backfill has settled and `[gates]` in sem.toml is
+# ready to block on it — adding a required property is a disruptive change, so
+# it is measured before it is enforced.
+# ═══════════════════════════════════════════════════════════════
+
+cs:CodeStandardShape a sh:NodeShape ;
+    sh:targetClass cs:CodeStandard ;
+    rdfs:label "Code Standard Shape"@en ;
+    rdfs:comment "Every code standard must be displayable: it carries exactly one human-readable label per language, tagged. Identity remains the subject IRI — this constrains presentation, never addressing."@en ;
+
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype rdf:langString ;
+        sh:uniqueLang true ;
+        sh:severity sh:Warning ;
+        sh:message "A code standard must carry an rdfs:label with a language tag (for example \"Pure Functions by Default\"@en). The label is a display title only; the subject IRI remains the identifier." ;
+    ] .

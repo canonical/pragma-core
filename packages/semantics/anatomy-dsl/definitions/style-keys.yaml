@@ -1,0 +1,406 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# style-keys.yaml — the style-key roster
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# The style keys an anatomy may bind, and what each one admits as a value.
+# This is the DSL's own vocabulary, held as committed data: it is the single
+# source `bun run generate` projects the graph forms from —
+# `definitions/registry.ttl`, `src/registry.generated.ts`, and the closed
+# `sh:in` of `anatomy:styleKey` plus the `valueKind` `sh:or` in
+# `definitions/shapes.ttl` — and CI regenerates all four and diffs them, so
+# an edit here that is not reflected in the graph is a red bar.
+#
+# ───────────────────────────────────────────────────────────────────────────
+# PROVENANCE — this roster was measured, not designed
+# ───────────────────────────────────────────────────────────────────────────
+#
+# The 111 keys below are the right-hand column of a table whose left-hand
+# column was every CSS property bound on a component selector across the 89
+# published component stylesheets of the reference packages named in
+# `provenance.packages`, at the exact versions stated, measured on
+# 2026-09-10. A key exists because an implementation binds the property,
+# never because the vocabulary looked incomplete — and `valueKind` below is
+# that measurement's reading of what the property carries, not an opinion
+# about it.
+#
+# THE MEASUREMENT ITSELF NO LONGER LIVES HERE. The property census and the
+# CSS reader that fed it moved to `canonical/design-system`, where the
+# reference stylesheets are already an input and the only consumer lives;
+# this package is a YAML/Turtle meta-model and reads no CSS at all. So a
+# re-measurement — a reference version bumped, a component added — happens
+# there and arrives here as a reviewed edit to this file. In this
+# repository's history, `git log -- src/census.ts src/stylesheet.ts` reaches
+# the code that took the measurement.
+#
+# ───────────────────────────────────────────────────────────────────────────
+# HOW A KEY IS WRITTEN
+# ───────────────────────────────────────────────────────────────────────────
+#
+#   valueKind:  what the key admits — `token` (a symbol, or a fallback list
+#               of symbols ending in at most one primitive), `primitive` (a
+#               literal the implementation writes as it stands), or `either`.
+#               As measured: a key whose every reference value read a
+#               `var()` is `token`, one where a literal appeared too is
+#               `either`, one that took no symbol at all is `primitive`.
+#   namespace:  the dotted prefix whose symbols the key admits, ending in a
+#               dot. Required on a `token` or `either` key and forbidden on
+#               a `primitive` one — the generator fails on either mismatch.
+#               It is projected into the three spellings a channel binding
+#               needs: `N.`, `modifier.N.` and `surface.N.`, because a
+#               channel of a symbol in `N.` is what the anatomy consumes
+#               where the implementation reads the channel.
+#               A key that admits symbols from more than one namespace
+#               states them as a LIST — `[spacing., dimension.]` — and each
+#               one is projected into its own three spellings, grouped by
+#               namespace and in the order written here. One namespace and
+#               a one-element list mean the same thing; the scalar form is
+#               the ordinary one, and the list says a key really does draw
+#               on two populations.
+#   why:        required on a `primitive` key whose reference values read a
+#               `var()` anyway — a component-local count, an asset — and
+#               emitted as the key's `rdfs:comment`, so the exception is
+#               stated and not silent. Forbidden on a key that takes a token.
+#
+# `spacing.*` keys admit `spacing.` and, for now, `dimension.` too: the
+# reference binds `dimension.*` there throughout, and until semantic spacing
+# lands the roster admits both rather than leaving every real binding out
+# with a comment in its place. The second namespace is temporary and is
+# marked as such below.
+#
+# `motion.` is declared as a namespace though no stratum publishes one yet,
+# so a `motion.duration.fast` binding is admitted where a symbol declares it
+# — and where none does, the binding is not written: the `#` comment on the
+# line is the record (`# reads --motion-duration-fast; no symbol declares
+# it`). `shadow.` is NOT declared, for the same reason in reverse — nothing
+# names it — so no shadow key is in the roster.
+# ═══════════════════════════════════════════════════════════════════════════
+
+version: 1
+
+# Where the roster came from. `keys` is asserted against the roster's own
+# length by the generator, so the stated number cannot drift from the data,
+# and the whole block is rendered into `registry.ttl`'s header, where a
+# reader of the graph form meets it too.
+provenance:
+  keys: 111
+  stylesheets: 89
+  measured: "2026-09-10"
+  measurement: canonical/design-system
+  packages:
+    - "@canonical/react-ds-global@0.37.0"
+    - "@canonical/react-ds-global-form@0.37.0"
+    - "@canonical/lit-ds-prototype@0.37.0"
+    - "@canonical/react-ds-app-launchpad@0.37.0"
+
+# Placeholder segments. A value that satisfies the symbol grammar but carries
+# one of these is a placeholder rather than a symbol: `dimension.radius.sth`
+# parses and is then rejected on this second test, so the list is data and
+# never a rule in the parser.
+placeholders:
+  - sth
+  - tbd
+  - xxx
+  - todo
+
+# ───────────────────────────────────────────────────────────────────────────
+# THE ROSTER
+# ───────────────────────────────────────────────────────────────────────────
+keys:
+  appearance.background:
+    valueKind: either
+    namespace: color.
+  appearance.background.image:
+    valueKind: primitive
+    why: "a url() or a gradient is an asset or a function, never a symbol"
+  appearance.background.position:
+    valueKind: primitive
+    why: "a background position is geometry; --select-caret-half is a component-local size"
+  appearance.background.repeat:
+    valueKind: primitive
+  appearance.background.size:
+    valueKind: primitive
+    why: "a background size is geometry; --select-caret-half is a component-local size"
+  appearance.border.block.start.color:
+    valueKind: token
+    namespace: color.
+  appearance.border.bottom.color:
+    valueKind: token
+    namespace: color.
+  appearance.border.color:
+    valueKind: either
+    namespace: color.
+  appearance.border.inline.end.color:
+    valueKind: token
+    namespace: color.
+  appearance.border.style:
+    valueKind: primitive
+    why: "a line style is a keyword vocabulary; the var() slots the reference splits into here are component-local"
+  appearance.border.top.width:
+    valueKind: either
+    namespace: dimension.
+  appearance.border.width:
+    valueKind: either
+    namespace: dimension.
+  appearance.native:
+    valueKind: primitive
+  appearance.opacity:
+    valueKind: primitive
+    why: "an opacity is a number the implementation writes; --form-input-opacity-disabled is component-local"
+  appearance.outline.color:
+    valueKind: either
+    namespace: color.
+  appearance.outline.offset:
+    valueKind: either
+    namespace: dimension.
+  appearance.outline.style:
+    valueKind: primitive
+  appearance.outline.width:
+    valueKind: either
+    namespace: dimension.
+  appearance.radius:
+    valueKind: either
+    namespace: dimension.
+  appearance.visibility:
+    valueKind: primitive
+
+  interaction.cursor:
+    valueKind: primitive
+  interaction.pointerEvents:
+    valueKind: primitive
+  interaction.resize:
+    valueKind: primitive
+  interaction.select:
+    valueKind: primitive
+
+  layout.align:
+    valueKind: primitive
+  layout.alignContent:
+    valueKind: primitive
+  layout.alignSelf:
+    valueKind: primitive
+  layout.boxSizing:
+    valueKind: primitive
+  layout.container:
+    valueKind: primitive
+  layout.direction:
+    valueKind: primitive
+  layout.flex.basis:
+    valueKind: either
+    namespace: dimension.
+  layout.flex.grow:
+    valueKind: primitive
+  layout.flex.shrink:
+    valueKind: primitive
+  layout.grid.area:
+    valueKind: primitive
+  layout.grid.autoFlow:
+    valueKind: primitive
+  layout.grid.autoRows:
+    valueKind: primitive
+  layout.grid.column:
+    valueKind: primitive
+    why: "a track line or span is structure; --card-span and --form-field-columns are component-local counts, not symbols"
+  layout.grid.columns:
+    valueKind: primitive
+    why: "a track list is structure; --choices-columns is a component-local count"
+  layout.grid.row:
+    valueKind: primitive
+  layout.grid.rows:
+    valueKind: primitive
+  layout.justify:
+    valueKind: primitive
+  layout.listStyle:
+    valueKind: primitive
+  layout.objectFit:
+    valueKind: primitive
+  layout.offset.block.end:
+    valueKind: token
+    namespace: dimension.
+  layout.offset.block.start:
+    valueKind: token
+    namespace: dimension.
+  layout.offset.bottom:
+    valueKind: either
+    namespace: dimension.
+  layout.offset.inline.start:
+    valueKind: token
+    namespace: dimension.
+  layout.offset.left:
+    valueKind: either
+    namespace: dimension.
+  layout.offset.right:
+    valueKind: either
+    namespace: dimension.
+  layout.offset.top:
+    valueKind: either
+    namespace: dimension.
+  layout.order:
+    valueKind: primitive
+  layout.overflow:
+    valueKind: primitive
+  layout.overflow.block:
+    valueKind: primitive
+  layout.overflow.inline:
+    valueKind: primitive
+  layout.overscroll:
+    valueKind: primitive
+  layout.position:
+    valueKind: primitive
+  layout.stack:
+    valueKind: primitive
+    why: "stacking order is structure; --z-index-overlay is a component-local scale, not a symbol"
+  layout.table.collapse:
+    valueKind: primitive
+  layout.table.layout:
+    valueKind: primitive
+  layout.table.spacing:
+    valueKind: primitive
+  layout.type:
+    valueKind: primitive
+  layout.verticalAlign:
+    valueKind: primitive
+  layout.wrap:
+    valueKind: primitive
+
+  motion.duration:
+    valueKind: either
+    namespace: motion.
+  motion.easing:
+    valueKind: either
+    namespace: motion.
+  motion.property:
+    valueKind: primitive
+
+  size.block:
+    valueKind: either
+    namespace: dimension.
+  size.height:
+    valueKind: either
+    namespace: dimension.
+  size.inline:
+    valueKind: token
+    namespace: dimension.
+  size.max.block:
+    valueKind: token
+    namespace: dimension.
+  size.max.height:
+    valueKind: either
+    namespace: dimension.
+  size.max.width:
+    valueKind: either
+    namespace: dimension.
+  size.min.block:
+    valueKind: token
+    namespace: dimension.
+  size.min.height:
+    valueKind: token
+    namespace: dimension.
+  size.min.width:
+    valueKind: either
+    namespace: dimension.
+  size.width:
+    valueKind: either
+    namespace: dimension.
+
+  # dimension. is admitted temporarily — the implementations read
+  # `--dimension-*` directly for padding and gaps, and the semantic spacing
+  # namespace is still thin (twelve symbols). Remove `dimension.` here once
+  # semantic spacing lands (ADR J ledger, row G1).
+  spacing.external.block.end:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.external.block.start:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.external.bottom:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.external.inline.end:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.external.inline.start:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.external.left:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.external.right:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.external.top:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.gap:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.gap.block:
+    valueKind: token
+    namespace: [spacing., dimension.]
+  spacing.gap.inline:
+    valueKind: token
+    namespace: [spacing., dimension.]
+  spacing.internal.block.end:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.internal.block.start:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.internal.bottom:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.internal.inline.end:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.internal.inline.start:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.internal.left:
+    valueKind: either
+    namespace: [spacing., dimension.]
+  spacing.internal.top:
+    valueKind: either
+    namespace: [spacing., dimension.]
+
+  typography.align:
+    valueKind: primitive
+  typography.color:
+    valueKind: either
+    namespace: color.
+  typography.decoration:
+    valueKind: primitive
+  typography.decoration.offset:
+    valueKind: token
+    namespace: dimension.
+  typography.decoration.thickness:
+    valueKind: either
+    namespace: dimension.
+  typography.direction:
+    valueKind: primitive
+  typography.font:
+    valueKind: either
+    namespace: typography.
+  typography.fontFamily:
+    valueKind: either
+    namespace: typography.
+  typography.letterSpacing:
+    valueKind: either
+    namespace: dimension.
+  typography.lineHeight:
+    valueKind: either
+    namespace: typography.
+  typography.overflow:
+    valueKind: primitive
+  typography.size:
+    valueKind: either
+    namespace: dimension.
+  typography.variant.caps:
+    valueKind: primitive
+  typography.variant.numeric:
+    valueKind: primitive
+  typography.weight:
+    valueKind: either
+    namespace: typography.
+  typography.whiteSpace:
+    valueKind: primitive
+  typography.wrap:
+    valueKind: primitive

@@ -1,0 +1,56 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.subcomponent.select_all_results_prompt a ds:Subcomponent;
+    ds:name "Select All Results Prompt";
+    ds:summary "Select All Results Prompt is an informational row that lets a user extend a partial selection to the entire result set. It reports the current selection with an information icon and offers a link-style button labelled `Select all {totalCount} {plural}.` that calls `onClick`. It owns no selection state, scope, or visibility.\n\nMain use cases:\n\n- Extending a page-level selection to every row matching the current search and filters.  \n- Confirming how many items are selected before a bulk action is chosen.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.subcomponent.select_all_results\n  role: prompt row\n  edges:\n    - node:\n        uri: global.component.icon\n        role: visual indicator\n        relation:\n          cardinality: \"1\"\n    - node:\n        role: selection status\n        relation:\n          cardinality: \"1\"\n    - node:\n        uri: global.component.button\n        role: selection expansion\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=26-5&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 52\n\n";
+    ds:usage "### When to use\n\n- Render after the parent has selected a visible subset and can identify the complete active result scope.\n- Keep `count`, `totalCount`, nouns, and `onClick` aligned with the same search/filter snapshot.\n- Replace the row after activation with updated selection feedback; this component does not acknowledge completion.\n\n### When not to use\n\n**Nothing left to extend**\n\nEvery result in the active scope is already selected, or no selectable results exist.\n\n**Incorrect pattern**: Leaving the row mounted so it offers `Select all 0 instances.` or repeats an action the user has already taken.\n\n**Remediation strategy**: Unmount the row in the parent once `count` reaches `totalCount` or `totalCount` is zero; the component is always rendered and has no internal visibility rule.\n\n**Unknown or unstable total**\n\nThe full result count is still loading, estimated, or capped by the API.\n\n**Incorrect pattern**: Passing a placeholder or partial `totalCount` so the button promises a number the request will not actually select.\n\n**Remediation strategy**: Withhold the row until the exact total is resolved, and show a loading state in the meantime.\n\n**Destructive bulk action**\n\nThe follow-up action deletes, archives, or otherwise cannot be undone.\n\n**Incorrect pattern**: Wiring `onClick` straight to the destructive request so a single link click applies it to every result.\n\n**Remediation strategy**: Keep this row for selection only and route the destructive step through Typed Confirmation Modal so the user confirms the scope explicitly.\n\n**Sole indication of scope**\n\nThe user cannot otherwise tell which search or filter “all” refers to.\n\n**Incorrect pattern**: Relying on the button label alone to communicate the active filters, which it never names.\n\n**Remediation strategy**: Keep the active filters visible alongside the row, for example with Table Filter Chips.\n\n**Mismatched selection scope**\n\n`count` and `totalCount` are derived from different queries or pages.\n\n**Incorrect pattern**: Passing a selection count carried over from a previous filter while `totalCount` reflects the current one, producing a row that misstates both numbers.\n\n**Remediation strategy**: Recompute both values from the same search and filter snapshot, and clear the selection when the scope changes.";
+    ds:guidelines "### Accessibility\n\n- Keep status and action adjacent so the button’s purpose is understandable in reading order.\n- Do not rely on the icon; source does not explicitly hide or label it, and it conveys no scope detail.\n- The status is not an `aria-live` region. Announce the completed selection through the parent when users need immediate confirmation.\n- Add loading/disabled behavior in the parent flow to prevent repeated asynchronous selection requests; this component exposes no such prop.\n\n### Content\n\n- Supply concrete nouns that read naturally after a number. The plural should also read correctly in “Select all N {plural}.”\n- Explain the active filter/search scope nearby when “all” could mean all records globally.\n- Visible templates, punctuation, and word order are hardcoded English.\n\n### Internationalization / globalization\n\n- The status `count` is locale-formatted through `Number.toLocaleString()`, while action `totalCount` is interpolated without locale formatting. The component does not accept preformatted values or a formatter.\n- The helper supports only supplied singular/plural forms, not locale plural categories or translated sentence order.\n- A localizable implementation needs configurable status/action messages and number formatting rather than noun props alone.\n\n### Device\n\n- Source adds no flex, wrapping, spacing, or breakpoint styles. Verify natural inline wrapping and adjacent touch targets in the host layout.\n- Long nouns and large totals can wrap independently because the icon, status span, and button are separate inline content.\n\n### Keyboard\n\n- Canonical `Button` supplies native button keyboard activation and follows the status in DOM order.\n- If activation removes this row, move or retain focus deliberately in the parent; the component has no focus management.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`count`";
+        ds:summary "Current selected count used in status copy.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "Formatted with `toLocaleString()` by `pluralize(..., \"exact\")`; there is no runtime range validation, so callers must keep it nonnegative and below the total while shown. "
+    ], [
+        a ds:Property;
+        ds:name "`itemName`";
+        ds:summary "Supplies nouns used by status and action copy.";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `{ plural: string; singular: string }`. Status selects the exact singular or plural; the action always uses `plural`. "
+    ], [
+        a ds:Property;
+        ds:name "`itemName.singular`";
+        ds:summary "Noun used when the current selected count is one.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Used only by the status copy through exact pluralization. "
+    ], [
+        a ds:Property;
+        ds:name "`itemName.plural`";
+        ds:summary "Noun used for plural status and select-all copy.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "The action always uses this value regardless of `totalCount`. "
+    ], [
+        a ds:Property;
+        ds:name "`onClick`";
+        ds:summary "Handles the select-all button.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. No arguments, awaiting, disabled state, error handling, or duplicate-activation prevention are provided. "
+    ], [
+        a ds:Property;
+        ds:name "`totalCount`";
+        ds:summary "Total interpolated directly into the action label.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "Unlike `count`, it does not pass through `toLocaleString()`. There is no equality or scope check; the component still renders when `totalCount <= count`. "
+    ].

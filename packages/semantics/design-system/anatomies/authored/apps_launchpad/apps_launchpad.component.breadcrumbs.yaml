@@ -1,0 +1,51 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.breadcrumbs
+  styles:
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.align: center
+    # dropped spacing.internal: spacing/inline/small — no spacing symbol corresponds
+  edges:
+    - node:
+        role: collapsed items container
+        styles:
+          # dropped appearance.background: color/background/neutral/default — no colour symbol corresponds
+          appearance.border.style: solid
+        edges:
+          - node:
+              role: menu trigger
+              # dropped typography.content: "..." — the roster has no content key
+            relation:
+              cardinality: "1"
+          - node:
+              role: collapsed menu list
+              edges:
+                - node:
+                    role: breadcrumb link
+                  relation:
+                    cardinality: "1..*"
+                    slotName: default
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"
+        slotName: collapsedItems
+    - node:
+        role: expanded items container
+        edges:
+          - node:
+              role: breadcrumb link
+            relation:
+              cardinality: "1..*"
+              slotName: default
+          - node:
+              role: separator
+              # dropped typography.content: "/" — the roster has no content key
+            relation:
+              cardinality: "0..*"
+              slotName: separator
+      relation:
+        cardinality: "1"
+        slotName: expandedItems

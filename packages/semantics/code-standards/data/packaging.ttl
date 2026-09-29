@@ -1,0 +1,755 @@
+@prefix cs: <http://pragma.canonical.com/codestandards#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Packaging Category
+cs:packaging a cs:Category ;
+    rdfs:label "Packaging"@en ;
+    rdfs:comment "Standards for structuring TypeScript/JavaScript packages — archetype classification, folder layout, export shape, barrel files, and file naming"@en ;
+    cs:slug "packaging" .
+
+# Application Package Structure
+cs:packaging.application.structure a cs:CodeStandard ;
+    rdfs:label "Applications organize by domain"@en ;
+    cs:hasCategory cs:packaging ;
+    cs:description "Application packages (CLIs, servers, MCP tools, build scripts, workers) execute behavior through entry points. They are not imported as dependencies by other packages. Their internal code must be organized around execution domains (commands, routes, tools, operations) rather than library conventions like `src/lib/` or barrel re-exports. Each domain folder must have its own barrel file (`index.ts`) that defines the domain's internal API — sibling domains import through the barrel, never from individual files." ;
+    cs:do [
+        cs:description "Recognise an application package by its `package.json` signals — `bin` field, `private: true`, no `main`/`exports`" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "name": "@scope/my-cli",
+  "private": true,
+  "bin": { "my-cli": "./dist/index.js" }
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Organize code around execution domains. Each domain folder gets its own barrel (`index.ts`) that exposes the domain's internal API to sibling domains" ;
+        cs:code """
+packages/my-cli/
+├── src/
+│   ├── commands/              # CLI command handlers
+│   │   ├── build.ts
+│   │   ├── deploy.ts
+│   │   └── index.ts           # Barrel: exports all commands
+│   ├── operations/            # Shared internal logic across commands
+│   │   ├── resolveConfig.ts
+│   │   ├── runValidation.ts
+│   │   └── index.ts           # Barrel: exports shared operations
+│   ├── utils/                 # Internal helpers
+│   │   ├── formatOutput.ts
+│   │   └── index.ts           # Barrel: exports utilities
+│   └── index.ts               # Entry point (bootstraps CLI)
+└── package.json
+    """
+    ] ;
+    cs:do [
+        cs:description "Import from sibling domains through their barrel, not from individual files" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/commands/deploy.ts
+import { resolveConfig, runValidation } from "../operations/index.js";
+import { formatOutput } from "../utils/index.js";
+    """
+    ] ;
+    cs:do [
+        cs:description "Use domain-appropriate folder names that reflect what the code does — `commands/`, `tools/`, `routes/`, `operations/`, `handlers/`" ;
+        cs:code """
+packages/my-mcp/
+├── src/
+│   ├── tools/                 # MCP tool handlers
+│   │   ├── query.ts
+│   │   ├── mutate.ts
+│   │   └── index.ts           # Barrel: exports tool handlers
+│   ├── operations/            # Shared internal logic
+│   │   ├── executeQuery.ts
+│   │   └── index.ts           # Barrel: exports shared operations
+│   └── index.ts               # MCP server entry point
+└── package.json
+    """
+    ] ;
+    cs:do [
+        cs:description "For **hybrid** packages (primarily application but exporting a small reusable surface), isolate the exported surface in `src/lib/` following library rules while keeping the rest as application structure" ;
+        cs:code """
+packages/my-mcp/
+├── src/
+│   ├── lib/                   # Only the reusable exported surface
+│   │   ├── types.ts
+│   │   └── index.ts           # Barrel: public API for external consumers
+│   ├── tools/                 # MCP tool handlers (not exported)
+│   │   ├── query.ts
+│   │   ├── mutate.ts
+│   │   └── index.ts           # Barrel: exports tool handlers
+│   ├── operations/            # Shared internal logic
+│   │   ├── executeQuery.ts
+│   │   └── index.ts           # Barrel: exports shared operations
+│   └── index.ts               # MCP server entry point
+└── package.json
+    """
+    ] ;
+    cs:dont [
+        cs:description "Apply library structure (`src/lib/`, barrel re-exports) to application packages" ;
+        cs:code """
+// Bad: CLI tool forced into library layout
+packages/my-cli/
+├── src/
+│   ├── lib/               # Wrong: this is a CLI, not a library
+│   │   ├── commands/
+│   │   └── index.ts       # Barrel re-export — nobody imports this
+│   └── index.ts
+    """
+    ] ;
+    cs:dont [
+        cs:description "Create a `src/lib/` folder for internal shared operations. Use domain-appropriate names instead" ;
+        cs:code """
+// Bad: "lib" implies external consumption
+packages/my-cli/
+├── src/
+│   ├── lib/
+│   │   └── resolveConfig.ts   # Only used internally
+
+// Good: "operations" or "shared" makes intent clear
+packages/my-cli/
+├── src/
+│   ├── operations/
+│   │   └── resolveConfig.ts   # Internal shared logic
+    """
+    ] ;
+    cs:dont [
+        cs:description "Import directly from files inside a sibling domain — always go through the domain barrel" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: reaching into a sibling domain's internals
+import { resolveConfig } from "../operations/resolveConfig.js";
+import { formatOutput } from "../utils/formatOutput.js";
+
+// Good: import through the domain barrel
+import { resolveConfig } from "../operations/index.js";
+import { formatOutput } from "../utils/index.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Omit barrels from domain folders" ;
+        cs:code """
+// Bad: no barrels — every consumer imports individual files
+packages/my-cli/
+├── src/
+│   ├── commands/
+│   │   ├── build.ts
+│   │   └── deploy.ts       # No index.ts — siblings must know file names
+│   ├── operations/
+│   │   ├── resolveConfig.ts
+│   │   └── runValidation.ts # No index.ts — fragile cross-domain imports
+    """
+    ] ;
+    cs:dont [
+        cs:description "Default to library structure just because the package lives in a monorepo" ;
+        cs:code """
+// Bad: reflexively adding lib/ to a build script package
+packages/build-tools/
+├── src/
+│   ├── lib/               # This is a build script, not a library
+│   │   └── runBuild.ts
+│   └── index.ts
+    """
+    ] .
+
+# Library Package Structure
+cs:packaging.library.structure a cs:CodeStandard ;
+    rdfs:label "Libraries export from src/lib"@en ;
+    cs:hasCategory cs:packaging ;
+    cs:description "Library packages export reusable code (components, utilities, hooks, types) for consumption by other packages. They must organize their exportable code in a `src/lib/` folder and re-export through a root barrel. This convention ensures consistency across the monorepo and clearly separates public API code from non-exported concerns like storybook configuration or test utilities. Each domain folder within `lib/` must have its own barrel (`index.ts`)." ;
+    cs:do [
+        cs:description "Recognise a library package by its `package.json` signals — `main`/`exports` field, publishable, no `bin`" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "name": "@scope/design-system",
+  "main": "./dist/index.js",
+  "exports": { ".": "./dist/index.js" }
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Place all reusable/exportable code in `src/lib/`, with a barrel in each domain folder" ;
+        cs:code """
+packages/my-package/
+├── src/
+│   ├── lib/
+│   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Button.tests.tsx
+│   │   │   ├── types.ts
+│   │   │   └── index.ts       # Barrel: exports Button public API
+│   │   ├── hooks/
+│   │   │   ├── useToggle.ts
+│   │   │   └── index.ts       # Barrel: exports hooks
+│   │   ├── types/
+│   │   │   └── index.ts       # Barrel: exports shared types
+│   │   └── index.ts           # Barrel: lib public API
+│   ├── storybook/             # Storybook-specific files (not exported)
+│   └── index.ts               # Re-exports from lib
+└── package.json
+    """
+    ] ;
+    cs:do [
+        cs:description "Re-export from the lib folder in the package entry point" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/index.ts
+export * from "./lib/index.js";
+    """
+    ] ;
+    cs:do [
+        cs:description "Use the lib barrel to compose the package's public API from domain barrels" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/lib/index.ts
+export * from "./Button/index.js";
+export * from "./hooks/index.js";
+export type * from "./types/index.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use alternative folder names like `ui`, `components`, or `utils` for exportable code at the package level" ;
+        cs:code """
+// Bad: Using 'ui' instead of 'lib'
+packages/my-package/
+├── src/
+│   ├── ui/              # Wrong: should be 'lib'
+│   │   └── Button/
+│   └── index.ts
+    """
+    ] ;
+    cs:dont [
+        cs:description "Mix exportable and non-exportable code at the same level" ;
+        cs:code """
+// Bad: Mixing concerns
+packages/my-package/
+├── src/
+│   ├── Button/          # Component mixed with...
+│   ├── storybook/       # ...non-exportable storybook config
+│   └── test-utils/      # ...and test utilities
+    """
+    ] ;
+    cs:dont [
+        cs:description "Create deeply nested lib-like structures; keep lib at the top level of src" ;
+        cs:code """
+// Bad: Nested lib folders
+packages/my-package/
+├── src/
+│   ├── features/
+│   │   └── lib/         # Wrong: lib should be at src level
+    """
+    ] ;
+    cs:dont [
+        cs:description "Omit barrels from domain folders within lib" ;
+        cs:code """
+// Bad: no barrels — consumers must know individual file paths
+packages/my-package/
+├── src/
+│   ├── lib/
+│   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   └── types.ts    # No index.ts — fragile imports
+│   │   ├── hooks/
+│   │   │   └── useToggle.ts # No index.ts
+│   │   └── index.ts
+    """
+    ] .
+
+# Export Shape Standard
+cs:packaging.export.shape a cs:CodeStandard ;
+    rdfs:label "Default or uniform named exports"@en ;
+    cs:hasCategory cs:packaging ;
+    cs:description "Files must use either a single default export or multiple named exports. When using multiple named exports, all exports must have the same type or shape." ;
+    cs:do [
+        cs:description "Use a single default export for files implementing a single component or function" ;
+        cs:language "typescript" ;
+        cs:code """
+// ComponentName.tsx
+export default ComponentName;
+    """
+    ] ;
+    cs:do [
+        cs:description "Name atomic function files after the function they export" ;
+        cs:language "typescript" ;
+        cs:code """
+// assignElement.ts
+export default function assignElement(target: Element, source: Partial<Element>) {
+  // ...
+}
+
+// formatCurrency.ts
+export default function formatCurrency(value: number) {
+  // ...
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Use multiple named exports for files providing a public API or a collection of related items, and ensure all exports have the same type" ;
+        cs:language "typescript" ;
+        cs:code """
+// index.ts
+export { ComponentA, ComponentB };
+
+// types.ts
+export type TypeA = { ... };
+export type TypeB = { ... };
+
+// Consistent export shape:
+export const myFuncA = (value: string) => {};
+export const myFuncB = (value: string) => {};
+export const myFuncC = (value: string) => {};
+    """
+    ] ;
+    cs:dont [
+        cs:description "Mix default and unrelated named exports in a way that confuses the file's purpose" ;
+        cs:language "typescript" ;
+        cs:code """
+export default ComponentName;
+export const helper = () => {};
+    """
+    ] ;
+    cs:dont [
+        cs:description "Name an atomic function file with a name that doesn't match its exported function" ;
+        cs:language "typescript" ;
+        cs:code """
+// helpers.ts — wrong: generic name instead of function name
+export default function assignElement(target: Element, source: Partial<Element>) {
+  // ...
+}
+
+// utils.ts — wrong: generic name instead of function name
+export default function formatCurrency(value: number) {
+  // ...
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Provide multiple unrelated exports from a file meant for a single domain" ;
+        cs:language "typescript" ;
+        cs:code """
+export default debounce;
+export const throttle = () => {};
+export const logger = () => {};
+    """
+    ] ;
+    cs:dont [
+        cs:description "Export objects of different types or shapes from the same file" ;
+        cs:language "typescript" ;
+        cs:code """
+export const transformer = (value: string) => {};
+export const reducer = (map: string[]) => {};
+class ABC {}
+export { ABC };
+    """
+    ] .
+
+# Barrel File Standard
+cs:packaging.export.barrel a cs:CodeStandard ;
+    rdfs:label "Barrels define the API surface"@en ;
+    cs:hasCategory cs:packaging ;
+    cs:description "Every domain folder must have a barrel file (`index.ts`) that defines its API surface. In library packages, barrels define the public API for external consumers. In application packages, barrels define the internal API between sibling domains. Within a domain, implementation files import from siblings directly; cross-domain imports always go through the barrel." ;
+    cs:do [
+        cs:description "Use a barrel at the package entry point to define the public API (library packages)" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/index.ts
+export { Button } from "./components/Button.js";
+export type { ButtonProps } from "./components/Button.types.js";
+    """
+    ] ;
+    cs:do [
+        cs:description "Use a barrel at each domain folder to define the domain's API (application packages)" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/operations/index.ts
+export { resolveConfig } from "./resolveConfig.js";
+export { runValidation } from "./runValidation.js";
+    """
+    ] ;
+    cs:do [
+        cs:description "Import internal implementation code within a domain from the owning file directly" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/build/buildTheme.ts — same domain, import the file
+import { computeDeltas } from "./computeDeltas.js";
+import { recoverPrimitiveRef } from "./recoverPrimitiveRef.js";
+    """
+    ] ;
+    cs:do [
+        cs:description "Import cross-domain code through the sibling domain's barrel" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/commands/deploy.ts — different domain, import through barrel
+import { resolveConfig } from "../operations/index.js";
+    """
+    ] ;
+    cs:do [
+        cs:description "Keep compatibility barrels thin and documented as public facades" ;
+        cs:language "typescript" ;
+        cs:code """
+/** Public compatibility surface. */
+export { computeDeltas } from "./computeDeltas.js";
+export { formatDelta } from "./formatDelta.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Route internal same-domain code through its own barrel" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: internal implementation depends on its own barrel
+// src/build/applyTheme.ts
+import { computeDeltas, recoverPrimitiveRef } from "./index.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Import cross-domain code by reaching into individual files" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: bypassing the domain barrel
+import { resolveConfig } from "../operations/resolveConfig.js";
+
+// Good: through the barrel
+import { resolveConfig } from "../operations/index.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Hide domain ownership behind convenience barrels" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: types appear to belong to context.ts instead of their owning domains
+import type { Artifact, CSSNode, OverlayToken } from "./context.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Omit the barrel from a domain folder" ;
+        cs:code """
+// Bad: no index.ts — consumers must know internal file names
+src/operations/
+├── resolveConfig.ts
+└── runValidation.ts
+    """
+    ] .
+
+# Export Declaration Location
+cs:packaging.export.declaration a cs:CodeStandard ;
+    rdfs:label "Export at the declaration"@en ;
+    cs:hasCategory cs:packaging ;
+    cs:description "Exports must be declared on the definition itself (e.g. `export default function` or `export const`), not gathered at the end of the file. When a wrapper (HOC, decorator, middleware) is applied, declare the unwrapped binding with `const`, then export the wrapped result as default on a separate line." ;
+    cs:do [
+        cs:description "Declare the export directly on the function or class definition" ;
+        cs:language "typescript" ;
+        cs:code """
+// formatCurrency.ts
+export default function formatCurrency(value: number): string {
+  return `$${value.toFixed(2)}`;
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Declare the export directly on a named constant" ;
+        cs:language "typescript" ;
+        cs:code """
+// MAX_RETRIES.ts
+export const MAX_RETRIES = 3;
+    """
+    ] ;
+    cs:do [
+        cs:description "When a wrapper is involved, declare the raw binding with `const`, then export the wrapped result as default" ;
+        cs:language "typescript" ;
+        cs:code """
+// UserProfile.tsx
+const UserProfile = ({ user }: UserProfileProps) => {
+  return <div>{user.name}</div>;
+};
+
+export default memo(UserProfile);
+    """
+    ] ;
+    cs:do [
+        cs:description "Apply the same pattern for higher-order functions and middleware" ;
+        cs:language "typescript" ;
+        cs:code """
+// connectDatabase.ts
+const connectDatabase = (config: DbConfig): Connection => {
+  return new Connection(config);
+};
+
+export default withRetry(connectDatabase);
+    """
+    ] ;
+    cs:dont [
+        cs:description "Define a symbol and then export it at the end of the file" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: export is separated from definition
+function formatCurrency(value: number): string {
+  return `$${value.toFixed(2)}`;
+}
+
+export default formatCurrency;
+    """
+    ] ;
+    cs:dont [
+        cs:description "Gather multiple exports at the bottom of the file" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: exports collected at the end
+const helperA = () => {};
+const helperB = () => {};
+
+export { helperA, helperB };
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use `export default` on the raw binding when a wrapper is needed" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: exports the unwrapped version, then wraps elsewhere
+export default function UserProfile({ user }: UserProfileProps) {
+  return <div>{user.name}</div>;
+}
+
+// consumer.ts — has to wrap it themselves
+import UserProfile from "./UserProfile.js";
+const Memoized = memo(UserProfile);
+    """
+    ] .
+
+# Single Export File Naming Standard
+cs:packaging.naming.single_export_file a cs:CodeStandard ;
+    rdfs:label "Filename matches the export"@en ;
+    cs:hasCategory cs:packaging ;
+    cs:description "Files that contain a single export must be named after that export. This applies to functions, classes, types, constants, and any other single-export module. The file name must match the exported identifier exactly, preserving its casing (camelCase for functions/variables, PascalCase for classes/types/components)." ;
+    cs:do [
+        cs:description "Name files after the single function they export" ;
+        cs:language "typescript" ;
+        cs:code """
+// isAccepted.ts
+export const isAccepted = (status: string): boolean => {
+  return status === "accepted";
+};
+
+// formatCurrency.ts
+export default function formatCurrency(value: number): string {
+  return `$${value.toFixed(2)}`;
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Name files after the single type or interface they export" ;
+        cs:language "typescript" ;
+        cs:code """
+// ConnectionConfig.ts
+export interface ConnectionConfig {
+  host: string;
+  port: number;
+}
+
+// UserRole.ts
+export type UserRole = "admin" | "editor" | "viewer";
+    """
+    ] ;
+    cs:do [
+        cs:description "Name files after the single class they export" ;
+        cs:language "typescript" ;
+        cs:code """
+// EventEmitter.ts
+export class EventEmitter {
+  // ...
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Name files after the single constant they export" ;
+        cs:language "typescript" ;
+        cs:code """
+// DEFAULT_TIMEOUT.ts
+export const DEFAULT_TIMEOUT = 5000;
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use generic names like `helpers.ts`, `utils.ts`, or `types.ts` for files with a single export" ;
+        cs:language "typescript" ;
+        cs:code """
+// helpers.ts — wrong: should be isAccepted.ts
+export const isAccepted = (status: string): boolean => {
+  return status === "accepted";
+};
+
+// utils.ts — wrong: should be formatCurrency.ts
+export default function formatCurrency(value: number): string {
+  return `$${value.toFixed(2)}`;
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use names that describe the domain instead of the export" ;
+        cs:language "typescript" ;
+        cs:code """
+// validation.ts — wrong: should be isAccepted.ts
+export const isAccepted = (status: string): boolean => {
+  return status === "accepted";
+};
+
+// network.ts — wrong: should be ConnectionConfig.ts
+export interface ConnectionConfig {
+  host: string;
+  port: number;
+}
+    """
+    ] .
+
+# Intra-Package Cross-Domain Imports
+cs:packaging.import.cross_domain a cs:CodeStandard ;
+    rdfs:label "Subpath imports for applications only"@en ;
+    cs:hasCategory cs:packaging ;
+    cs:description """How intra-package cross-domain imports are written depends on the package archetype: **applications may use `#` subpath imports; distributable packages must not.**
+
+Application packages (not published — a build system such as Vite resolves and inlines module specifiers at build time, so no `#` alias survives into any shipped artifact) use Node.js subpath imports (the `imports` field in `package.json`) with the `#` prefix convention. Each `#` alias points directly to the domain's barrel file — no wildcard splats, no path suffixes, no extension mapping. Subpath imports are the official Node.js mechanism, work natively with Node, Bun, vitest, and tsc, and require no plugins. TypeScript resolves them when `resolvePackageJsonImports` is enabled (on by default with `moduleResolution` set to `node16`, `nodenext`, or `bundler`).
+
+Distributable packages (published and consumed as dependencies) must not use `#` subpath imports. A published package must remain consumable when built with plain `tsc` — `tsc`-only builds are the north star for distributable packages — and `tsc` never rewrites module specifiers: a `#` alias in source is emitted verbatim into `dist`, leaking the package's private `imports` map into its public contract and forcing resolve configuration onto every consumer. Mismatched resolve conditions then break downstream builds — e.g. Vite/Vitest activating the `development` condition, which points at unpublished `src`. Distributable packages use ordinary relative imports with `.js` extensions (NodeNext) instead, still through the sibling domain's barrel.
+
+In both archetypes the alternatives stay off the table: with `moduleResolution: "nodenext"` (or `"node16"`), bare specifiers like `error/index.js` are treated as package names, not path-relative imports, and the `paths` compiler option is a manual alias table — brittle and verbose.""" ;
+    cs:do [
+        cs:description "In an application package, map each `#` alias directly to the domain barrel in `package.json` — no wildcards, no path suffixes" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "imports": {
+    "#config": "./src/config/index.ts",
+    "#error": "./src/error/index.ts",
+    "#pipeline": "./src/pipeline/index.ts",
+    "#package-manager": "./src/package-manager/index.ts",
+    "#constants": "./src/constants.ts"
+  }
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "In an application package, import cross-domain modules using the `#` alias — clean, no path suffixes" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/pipeline/runPipeline.ts
+import { PragmaError } from "#error";
+import { resolveConfig } from "#config";
+    """
+    ] ;
+    cs:do [
+        cs:description "In a distributable package, import cross-domain modules with ordinary relative paths and `.js` extensions (NodeNext), still through the sibling domain's barrel" ;
+        cs:language "typescript" ;
+        cs:code """
+// src/pipeline/runPipeline.ts — published package: no # aliases
+import { PragmaError } from "../error/index.js";
+import { resolveConfig } from "../config/index.js";
+    """
+    ] ;
+    cs:do [
+        cs:description """Use `moduleResolution: "nodenext"` (or `"node16"` / `"bundler"`) in `tsconfig.json` so TypeScript resolves subpath imports via `resolvePackageJsonImports` (enabled by default with these settings)""" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext"
+  }
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "In an application package, use conditional subpath imports when you need different resolutions for different environments" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "imports": {
+    "#db": {
+      "development": "./src/db/mock.ts",
+      "default": "./src/db/real.ts"
+    }
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use `#` subpath imports in a distributable package — `tsc` never rewrites module specifiers, so the alias is emitted verbatim into `dist`, leaking the private `imports` map into the package's public contract" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: src/pipeline/runPipeline.ts in a *published* package
+import { PragmaError } from "#error";
+
+// tsc emits "#error" verbatim into dist/. Every consumer must now resolve
+// the private alias itself, and a bundler/test-runner that activates the
+// "development" condition (e.g. Vite/Vitest) resolves it to unpublished
+// src/ and the downstream build breaks.
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use wildcard splats or path suffixes in `#` aliases — point directly to the barrel instead" ;
+        cs:language "json" ;
+        cs:code """
+// Bad: wildcard mapping forces consumers to know internal file structure
+{
+  "imports": {
+    "#config/*": "./src/config/*",
+    "#error/*": "./src/error/*"
+  }
+}
+
+// Bad: path suffix leaks barrel structure into every import site
+import { PragmaError } from "#error/index.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use bare specifiers without the `#` prefix for intra-package imports — they resolve as package names under `nodenext`" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: "error/index.js" resolves as the npm package "error", not ./src/error/
+import { PragmaError } from "error/index.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use `paths` in `tsconfig.json` as a substitute for subpath imports — it's a manual alias table that doesn't participate in Node.js resolution" ;
+        cs:language "json" ;
+        cs:code """
+// Bad: brittle, verbose, requires a bundler or ts-patch to work at runtime
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@error/*": ["src/error/*"],
+      "@config/*": ["src/config/*"],
+      "@pipeline/*": ["src/pipeline/*"]
+    }
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Reach across domains into individual files — cross-domain imports go through the domain's barrel: behind the `#` alias in an application, via a relative path to the barrel in a distributable package" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: bypasses the barrel, couples to internal file structure
+import { PragmaError } from "../../error/PragmaError.js";
+
+// Good (application): the alias points at the barrel
+import { PragmaError } from "#error";
+
+// Good (distributable package): relative path to the barrel
+import { PragmaError } from "../error/index.js";
+    """
+    ] ;
+    cs:dont [
+        cs:description "Import specific files through the `#` alias — go through the barrel instead" ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: bypasses the barrel, couples to internal file structure
+import { readConfig } from "#config/readConfig.js";
+
+// Good: import through the barrel
+import { readConfig } from "#config";
+    """
+    ] .

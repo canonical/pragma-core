@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.table a ds:Component;
+    ds:name "Table";
+    ds:summary "";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps_launchpad.

@@ -1,0 +1,26 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.side_panel-content
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    # dropped spacing.gap: spacing/block/m, spacing.internal.block: spacing/block/l
+    # and spacing.internal.inline: spacing/inline/l — no spacing symbol corresponds
+    appearance.background: color.background   # was color/background/default
+  edges:
+    - node:
+        uri: apps_launchpad.subcomponent.side_panel-content-header
+      relation:
+        cardinality: "1"
+        slotName: header
+    - node:
+        uri: apps_launchpad.subcomponent.side_panel-content-body
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        uri: apps_launchpad.subcomponent.side_panel-content-footer
+      relation:
+        cardinality: "0..1"
+        slotName: footer

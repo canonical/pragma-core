@@ -1,0 +1,216 @@
+{
+  "$comment": [
+    "The committed lift fixture (ADR J §4.1, §8.2). Both TypeScript repositories assert against it, so anatomy-dsl and design-system lift identically and cannot drift apart without a failing test.",
+    "`values` is the value lift this package implements: `liftSymbols(value)` over what the YAML parser holds for a style value — a scalar or a sequence of scalars — returning the symbols in fallback order. A primitive is not a symbol: it resolves against nothing by design, so it is never lifted.",
+    "`rejections` is the retired notation, with the rule each breaks. Every one throws an AnatomyValueError naming the value and the rule.",
+    "`names` is the CSS-name lift of §5.1 step 5d, which design-system implements because it needs S4 to run: a custom-property name to the dotted symbol it lifts to, or null where it names no symbol in any stratum and is kept as consumed with a register row (AT.09). It is DATA here, not an implementation — this package ships it so the two repositories agree on the expected pairs."
+  ],
+  "values": [
+    { "case": "a symbol", "value": "color.text", "symbols": ["color.text"] },
+    {
+      "case": "a camelCase segment is the symbol's own spelling, not renamed",
+      "value": "color.focusRing",
+      "symbols": ["color.focusRing"]
+    },
+    {
+      "case": "a numeric segment",
+      "value": "dimension.100",
+      "symbols": ["dimension.100"]
+    },
+    {
+      "case": "a deep camelCase symbol",
+      "value": "typography.weight.semiBold",
+      "symbols": ["typography.weight.semiBold"]
+    },
+    {
+      "case": "a channel symbol, consumed by name where the implementation reads the channel",
+      "value": "modifier.color.text",
+      "symbols": ["modifier.color.text"]
+    },
+    {
+      "case": "the surface channel spelling",
+      "value": "surface.color.background",
+      "symbols": ["surface.color.background"]
+    },
+    {
+      "case": "the programme's central binding: a channel then the semantic token",
+      "value": ["modifier.color.text", "color.text"],
+      "symbols": ["modifier.color.text", "color.text"]
+    },
+    {
+      "case": "three ranks, in the reference's own order",
+      "value": ["modifier.color.border", "color.border.highlighted", "color.border"],
+      "symbols": [
+        "modifier.color.border",
+        "color.border.highlighted",
+        "color.border"
+      ]
+    },
+    {
+      "case": "a terminal literal is kept in the value and lifted from none of it",
+      "value": ["modifier.color.icon", "modifier.color.text", "currentColor"],
+      "symbols": ["modifier.color.icon", "modifier.color.text"]
+    },
+    {
+      "case": "a dimension tail",
+      "value": ["dimension.stroke.thickness.large", "2px"],
+      "symbols": ["dimension.stroke.thickness.large"]
+    },
+    {
+      "case": "a bare keyword, for a key the registry says takes a primitive",
+      "value": "flow",
+      "symbols": []
+    },
+    {
+      "case": "a hyphenated CSS keyword, which the reference uses throughout",
+      "value": "not-allowed",
+      "symbols": []
+    },
+    { "case": "a number", "value": "1.6", "symbols": [] },
+    { "case": "a percentage", "value": "0%", "symbols": [] },
+    { "case": "a colour", "value": "#ccc", "symbols": [] },
+    {
+      "case": "a literal holding a slash between spaces: the slash ban is on symbol spellings, never on literals",
+      "value": "1 / -1",
+      "symbols": []
+    },
+    {
+      "case": "a literal a bare YAML would read as an alias",
+      "value": "*",
+      "symbols": []
+    },
+    {
+      "case": "an undeclared name is still a symbol by grammar: whether it resolves is the register's question, not the parser's",
+      "value": ["modifier.surface", "color.foreground.primary"],
+      "symbols": ["modifier.surface", "color.foreground.primary"]
+    },
+    {
+      "case": "a computed state variable, kept as consumed under the hover.X spelling",
+      "value": ["hover.color.foreground.secondary", "color.foreground.secondary.hover"],
+      "symbols": [
+        "hover.color.foreground.secondary",
+        "color.foreground.secondary.hover"
+      ]
+    }
+  ],
+  "rejections": [
+    { "case": "a slash path", "value": "spacing/medium", "rule": "slashPath" },
+    {
+      "case": "a slash path with a camelCase-bearing segment",
+      "value": "color/focus-ring",
+      "rule": "slashPath"
+    },
+    {
+      "case": "a slash path inside a sequence",
+      "value": ["modifier/color/foreground", "color/foreground/primary"],
+      "rule": "slashPath"
+    },
+    {
+      "case": "the retired optional marker on a slash path",
+      "value": "color/surface/button?",
+      "rule": "slashPath"
+    },
+    {
+      "case": "the retired optional marker on a dotted symbol",
+      "value": "color.surface.button?",
+      "rule": "marker"
+    },
+    { "case": "the reserved root segment", "value": "$root", "rule": "root" },
+    {
+      "case": "the reserved root segment inside a dotted name",
+      "value": "color.$root.text",
+      "rule": "root"
+    },
+    {
+      "case": "a bare root segment",
+      "value": "color.root.text",
+      "rule": "root"
+    },
+    {
+      "case": "a primitive before the end: the sequence is the fallback order and a literal is what the chain ends in",
+      "value": ["2px", "dimension.stroke.thickness.large"],
+      "rule": "primitiveNotLast"
+    },
+    {
+      "case": "a primitive in the middle",
+      "value": ["modifier.color.text", "currentColor", "color.text"],
+      "rule": "primitiveNotLast"
+    },
+    {
+      "case": "a one-element sequence: a fallback order needs two",
+      "value": ["color.text"],
+      "rule": "singleton"
+    },
+    { "case": "an empty sequence", "value": [], "rule": "empty" },
+    { "case": "an empty scalar", "value": "", "rule": "empty" }
+  ],
+  "names": [
+    {
+      "case": "a plain semantic token",
+      "variable": "--color-text",
+      "symbol": "color.text"
+    },
+    {
+      "case": "camelCase is restored from the kebab spelling S4 emits",
+      "variable": "--color-focus-ring",
+      "symbol": "color.focusRing"
+    },
+    {
+      "case": "the drift spelling S4 also emits for the same symbol",
+      "variable": "--color-focusRing",
+      "symbol": "color.focusRing"
+    },
+    {
+      "case": "a modifier channel",
+      "variable": "--modifier-color-text",
+      "symbol": "modifier.color.text"
+    },
+    {
+      "case": "a surface channel",
+      "variable": "--surface-color-background",
+      "symbol": "surface.color.background"
+    },
+    {
+      "case": "a channel with no base symbol: kept as consumed, register row X7",
+      "variable": "--modifier-surface",
+      "symbol": "modifier.surface",
+      "resolves": false
+    },
+    {
+      "case": "a state variant of a channel: register row X5",
+      "variable": "--modifier-surface-hover",
+      "symbol": "modifier.surface.hover",
+      "resolves": false
+    },
+    {
+      "case": "a computed state variable: the double dash lifts to a dot, register row X15",
+      "variable": "--hover--color-foreground-secondary",
+      "symbol": "hover.color.foreground.secondary",
+      "resolves": false
+    },
+    {
+      "case": "a component-local variable is followed through its :root definition and replaced by what it consumes",
+      "variable": "--button-color-text",
+      "symbol": "color.text",
+      "via": "--button-color-text: var(--color-text)"
+    },
+    {
+      "case": "a component-local variable whose definition is itself a chain",
+      "variable": "--button-color-background",
+      "symbol": "modifier.color.foreground.primary",
+      "via": "--button-color-background: var(--modifier-color-foreground-primary, var(--color-foreground-primary))"
+    },
+    {
+      "case": "an undeclared name: kept as consumed with a comment, register row X1",
+      "variable": "--motion-duration-fast",
+      "symbol": "motion.duration.fast",
+      "resolves": false
+    },
+    {
+      "case": "a composite typography slot no stratum declares",
+      "variable": "--typography-text-secondary-font-size",
+      "symbol": "typography.text.secondary.fontSize",
+      "resolves": false
+    }
+  ]
+}

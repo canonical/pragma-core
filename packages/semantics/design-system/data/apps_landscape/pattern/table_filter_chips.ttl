@@ -1,0 +1,174 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.table_filter_chips a ds:Pattern;
+    ds:name "Table Filter Chips";
+    ds:summary "A Landscape component family that displays active URL-backed or local filter selections as dismissible Canonical Chips with overflow disclosure. `TableFilterChips` reads and writes URL parameters via `usePageParams`; `SidePanelTableFilterChips` accepts descriptors directly for controlled state.\n\nMain use cases:\n\n- Place next to Landscape tables whose active filters are tracked in URL parameters.  \n- Use the base export for side-panel or modal workflows with custom filter descriptors.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.table_filter_chips\n  role: filter summary row\n  edges:\n    - node:\n        role: wrapping chip container\n        edges:\n          - node:\n              uri: global.component.button\n              role: bulk removal\n              relation:\n                cardinality: \"1\"\n          - node:\n              uri: global.component.chip\n              role: active filter value\n              relation:\n                cardinality: \"2..*\"\n          - node:\n              uri: global.component.button\n              role: collapse command\n              relation:\n                cardinality: \"0..1\"\n                condition: Rendered while the chip container is expanded.\n        relation:\n          cardinality: \"0..1\"\n          condition: Rendered when more than one chip is active.\n    - node:\n        uri: global.component.chip\n        role: sole active filter value\n        relation:\n          cardinality: \"0..1\"\n          condition: Rendered instead of the wrapping container when exactly one chip is active.\n    - node:\n        uri: global.component.button\n        role: expansion command\n        relation:\n          cardinality: \"0..1\"\n          condition: Rendered while collapsed when one or more chips wrap below the first row.";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=26-9&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 68\n\n";
+    ds:usage "### When to use\n\n- Place after controls and near the result set whose active URL parameters it summarizes.\n- Restrict `filtersToDisplay` to filters available in the current surface.\n- Provide option maps when stored values need human-readable labels. For `availabilityZones`, the prop must be defined even when raw-value fallback is desired; an empty array enables fallback.\n- Use the base export for local/side-panel state only when descriptor callbacks fully own removal and clearing.\n\n### When not to use\n\n**Unsupported filter parameters or generic tag collections**\n\nFiltering by custom, app-specific, or unsupported page parameters outside the fixed vocabulary.\n\n**Incorrect pattern**: Rendering TableFilterChips with unlisted filter keys or treating it as a general-purpose tag display component.\n\n**Remediation strategy**: Implement a custom filter-chip display component for non-standard parameters, or restrict `filtersToDisplay` to the supported set: `query`, `status`, `os`, `upgrades`, `availabilityZones`, `accessGroups`, `tags`, `fromDate`, `toDate`, `passRateFrom`, `passRateTo`, `type`, `wsl`, `contractExpiryDays`.\n\n**Omitted multi-value option arrays**\n\nMulti-value filters whose option maps are not supplied.\n\n**Incorrect pattern**: Omitting `accessGroupOptions`, `tagOptions`, `upgradesOptions`, or `wslOptions` expecting raw fallback values to render as chips.\n\n**Remediation strategy**: Supply option maps for multi-value filters, or omit the filter key from `filtersToDisplay`. Empty option arrays enable raw-value fallback; omitted arrays suppress the filter entirely.\n\n**Unstable or non-unique label-value pairs**\n\nUsing dynamic or non-unique label/item combinations as React keys.\n\n**Incorrect pattern**: Deriving option labels from dynamic content or using non-unique values in the internal chips array.\n\n**Remediation strategy**: Ensure every label and item combination is stable across renders and unique within the filter descriptor set. Flattened chips use the “{label}: {item}” pair as their React key.";
+    ds:guidelines "### Accessibility\n\n- Chip visible values contain label and item, but Canonical’s dismiss control is exposed as “Dismiss” in tests; verify repeated dismiss buttons provide sufficient accessible context in the target dependency version.\n- Clear-all, `+N`, and “Show less” are native-button-based controls. `+N` has no expanded-state attribute or explicit description.\n- The chip region has no landmark, list semantics, status role, or live announcement after removal.\n\n### Content\n\n- Fixed labels include “Availability z.” and two separate “To” labels. Confirm these are understandable in each filter set.\n- Do not expose internal codes; supply option maps according to the scalar/multi-value behavior above.\n- All component-owned labels and quoted query formatting are hardcoded English.\n\n### Internationalization / globalization\n\n- No message, label, list formatter, date formatter, number formatter, or plural rules are configurable.\n- Pass rates use `${number}%`; dates and option labels are rendered as supplied.\n- Overflow count is `+N` with an unformatted number. Long translations can alter wrapping and therefore hidden count.\n\n### Device\n\n- Multiple chips flex-wrap; collapsed state clips to `$sp-x-large` height. Measurement counts only `.p-chip` elements below the first chip’s row, not clear-all or show-less controls.\n- Recalculation runs after flattened-filter changes and on `window.resize`, not via `ResizeObserver`. Container-only width changes may leave stale overflow state.\n- If no chips wrap, calculation forces collapsed state and sets hidden count to zero.\n\n### Keyboard\n\n- Use inherited button/chip keyboard behavior. Source adds no custom key handling or focus management.\n- When dismissing a chip or clearing all removes the focused control, the component does not choose the next focus target.\n- Expanding inserts “Show less” after the chips; collapsing removes it without explicit focus return.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`TableFilterChips.filtersToDisplay`";
+        ds:summary "Selects supported parameters eligible for chips.";
+        ds:propertyType "choice";
+        ds:defaultValue "`accessGroups`, `availabilityZones`, `os`, `fromDate`, `status`, `tags`, `toDate`, `type` ";
+        ds:constraints "TypeScript: `FilterKey[]`, where `FilterKey` is `keyof FilterType`. Output follows implementation order, not array order. `TableFilterChipsProps` and `FilterKey` are not exported from the public barrel; consumers of `FilterKey` currently deep-import the internal types module. `query` is split on commas, nonempty segments display in single quotes, and removal deletes the first exact segment. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.onChange`";
+        ds:summary "Runs after each remove/clear update is requested.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Receives no value and may run before consumers observe updated URL state. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.accessGroupOptions`";
+        ds:summary "Maps access-group values.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Because this is multi-value, omission produces no access-group chips. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.availabilityZonesOptions` ";
+        ds:summary "Enables and maps availability-zone values.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. The entire descriptor is omitted when undefined; an empty array enables raw fallback. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.contractExpiryOptions`";
+        ds:summary "Maps the scalar contract-expiry value.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Scalar lookup falls back to the raw value. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.osOptions`";
+        ds:summary "Maps the scalar OS value.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Scalar lookup falls back to the raw value. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.statusOptions`";
+        ds:summary "Maps the scalar status value.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Scalar lookup falls back to the raw value. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.typeOptions`";
+        ds:summary "Maps the scalar type value.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Scalar lookup falls back to the raw value. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.tagOptions`";
+        ds:summary "Maps multi-value tags.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Omission produces no tag chips; unknown values fall back only when an array is supplied. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.upgradesOptions`";
+        ds:summary "Maps multi-value upgrades.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Omission produces no upgrade chips; unknown values fall back only when an array is supplied. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TableFilterChips.wslOptions`";
+        ds:summary "Maps multi-value WSL values.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Omission produces no WSL chips; unknown values fall back only when an array is supplied. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters`";
+        ds:summary "Supplies ordered descriptors flattened into chips.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(SingleFilter | MultiFilter)[]`, where `SingleFilter` is `{ label: string; clear: () => void; item: string | undefined; multiple?: false }` and `MultiFilter` is `{ label: string; clear: () => void; multiple: true; remove: (value: string) => void; items: { label: string; value: string }[] }`. Falsy single `item` values are filtered out. The barrel aliases `TableFilterChipsBase` to `SidePanelTableFilterChips`; descriptor and prop interfaces are local. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters[].label` ";
+        ds:summary "Labels every chip produced by the descriptor.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Shared by `SingleFilter` and `MultiFilter`; flattened chip text is `${label}: ${item}`. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters[].clear` ";
+        ds:summary "Clears the complete source descriptor.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Shared by `SingleFilter` and `MultiFilter`; the default aggregate clear invokes it once per original descriptor. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters[].multiple` ";
+        ds:summary "Selects the single- or multi-value descriptor contract. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `false | true`; optional and restricted to `false` for `SingleFilter`, required as `true` for `MultiFilter`. A falsy or omitted value selects the single descriptor path. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters[].item` ";
+        ds:summary "Supplies one active value for a single descriptor.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string | undefined`. Present only on `SingleFilter`; falsy values are removed before rendering. Dates supplied by the URL adapter display as raw strings. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters[].items` ";
+        ds:summary "Supplies active values for a multi descriptor.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `{ label: string; value: string }[]`. Present only on `MultiFilter`; each entry becomes one chip. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters[].items[].label` ";
+        ds:summary "Supplies a multi-value chip's displayed item text. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`."
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters[].items[].value` ";
+        ds:summary "Supplies the value passed to the descriptor remover. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`."
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.filters[].remove` ";
+        ds:summary "Removes one value from a multi descriptor.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(value: string) => void`. Present only on `MultiFilter`. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTableFilterChips.clearAll`";
+        ds:summary "Clears all original filter descriptors.";
+        ds:propertyType "callback";
+        ds:defaultValue "Loop over `filters` once and call each descriptor's `clear` ";
+        ds:constraints "TypeScript: `() => void`. The default invokes every original descriptor's `clear` once, not each flattened item's remover. Pass-rate defaults (`0` from and `100` to) produce no URL-adapter chips. ";
+        ds:optional "true"
+    ].

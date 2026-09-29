@@ -1,0 +1,33 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps.pattern.side_panel
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    layout.position: fixed
+    size.height: fill
+    # was spacing.internal.horizontal: spacing/medium (--dimension-300); the
+    # roster's inline padding is per side, so the one axis becomes two
+    spacing.internal.inline.start: dimension.300
+    spacing.internal.inline.end: dimension.300
+    appearance.background: surface.color.background   # was color/surface/default
+    appearance.radius: dimension.radius.medium        # was radius/medium
+    # was interaction.transition.duration: motion/duration/medium (slide-in/out); no
+    # stratum declares motion.duration.medium
+  edges:
+    - node:
+        uri: apps.subcomponent.side_panel-header
+      relation:
+        cardinality: "0..1"      # without a header, the panel needs an aria-label
+        slotName: header
+    - node:
+        uri: apps.subcomponent.side_panel-content
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        uri: apps.subcomponent.side_panel-footer
+      relation:
+        cardinality: "0..1"
+        slotName: footer

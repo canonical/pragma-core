@@ -1,0 +1,80 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `core:component:TabLinks`; the block's own uri is used instead.
+node:
+  uri: apps_lxd.component.tab_links
+  styles:
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    # was layout.role: navigation; an ARIA landmark is not a style, and no roster key
+    # takes one
+    appearance.background: color.background   # was color/surface/navigation
+    # was spacing.external: spacing/medium; no spacing.medium symbol is declared, and
+    # the roster has no all-sides margin key
+  edges:
+    - node:
+        # was uri: core:component:Tabs
+        uri: global.component.tabs
+        styles:
+          layout.type: flex   # was flow
+          layout.direction: row   # was horizontal
+          layout.align: start
+          layout.wrap: nowrap    # was layout.wrap: false
+          # was appearance.border.bottom: border/style/tab-navigation; no border symbol
+          # corresponds, and the roster has no block-end border width or style key
+          spacing.gap: 0         # was spacing/none
+        edges:
+          - node:
+              role: tab link     # was uri: core:element:TabLink, which names no subject
+              styles:
+                layout.type: flex   # was flow
+                layout.direction: row   # was horizontal
+                layout.align: center
+                layout.justify: center
+                interaction.cursor: pointer
+                # was interaction.focusable: true; not a style, and no roster key takes it
+
+                appearance.background: color.background   # was color/surface/tab/default
+                # was appearance.background:active/:hover/:focus —
+                # color/surface/tab/{active,hover,focus}; no tab surface symbol is
+                # declared, so the three state values are dropped rather than collapsed
+                # onto the same background as the default state
+
+                # was appearance.border.bottom: border/style/none and
+                # appearance.border.bottom:active: border/style/tab/active; the roster
+                # has no block-end border width or style key, and no border symbol
+                # corresponds
+
+                # was spacing.internal: spacing/tab/internal; no spacing.tab symbol is
+                # declared, and the roster has no all-sides padding key
+                typography.color: color.text   # was color/text/tab/default
+                # was typography.color:active: color/text/tab/active; no tab text symbol
+                # is declared
+                # was typography.size: font/size/navigation; no fontSize symbol
+                # corresponds to the navigation size
+                typography.weight: typography.weight.medium            # was font/weight/medium
+                typography.weight@active: typography.weight.semiBold   # was font/weight/semibold
+
+                motion.property: "background, border, color"   # was interaction.transition.property
+                # was interaction.transition.duration: transition/duration/fast; no
+                # stratum declares motion.duration.fast
+                motion.easing: ease    # was interaction.transition.timing: ease
+              edges:
+                - node:
+                    role: tab label
+                    styles:
+                      layout.type: block            # was layout.display: block
+                      typography.overflow: ellipsis
+                      typography.whiteSpace: nowrap # was typography.whitespace: nowrap
+                      typography.color: inherit
+                      typography.size: inherit
+                      typography.weight: inherit
+                  relation:
+                    cardinality: "1..1"
+                    slotName: default
+            relation:
+              cardinality: "1..*"
+              slotName: default
+      relation:
+        cardinality: "1..1"
+        slotName: default

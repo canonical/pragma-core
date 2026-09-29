@@ -1,0 +1,60 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.pattern.table_filter
+  edges:
+    - node:
+        role: selected filter variant
+        edges:
+          - node:
+              # role: filter disclosure
+              uri: global.component.contextual_menu
+              edges:
+                - node:
+                    role: toggle label
+                  relation:
+                    cardinality: "1"
+                    slotName: label
+                - node:
+                    role: filter body
+                    edges:
+                      - node:
+                          # semantic: form
+                          role: option search
+                        relation:
+                          cardinality: "0..1"   # rendered when type is single or multiple and onSearch is provided
+                      - node:
+                          # semantic: list
+                          role: option list
+                          edges:
+                            - node:
+                                # semantic: listitem
+                                role: option
+                              relation:
+                                cardinality: "0..*"
+                        relation:
+                          cardinality: "0..1"   # rendered when type is single or multiple
+                      - node:
+                          role: multiple-selection footer
+                        relation:
+                          cardinality: "0..1"   # rendered when type is multiple
+                      - node:
+                          role: custom filter content
+                        relation:
+                          cardinality: "0..1"   # rendered when type is custom
+                          slotName: customComponent
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "0..1"   # rendered when inline is false
+          - node:
+              role: inline filter body
+              edges:
+                - node:
+                    role: selected variant content
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "0..1"   # rendered when inline is true
+      relation:
+        cardinality: "1"

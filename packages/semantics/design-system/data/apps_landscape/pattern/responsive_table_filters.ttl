@@ -1,0 +1,61 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.responsive_table_filters a ds:Pattern;
+    ds:name "Responsive Table Filters";
+    ds:summary "Chooses one of two render trees from a shared breakpoint map: an inline row of the supplied filter elements at or above the configured width, or a Canonical contextual menu below it or when forced collapsed. In collapsed mode, elements whose component type has a non-empty function `name` become directional nested disclosures; other elements render directly in the menu.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.responsive_table_filters\n  edges:\n    - node:\n        role: responsive filter wrapper\n        edges:\n          - node:\n              role: inline presentation\n              edges:\n                - node:\n                    semantic: span\n                    role: inline filter item wrapper\n                    edges:\n                      - node:\n                          role: supplied filter\n                          relation:\n                            cardinality: \"1\"\n                            slotName: filters\n                    relation:\n                      cardinality: \"0..*\"\n              relation:\n                cardinality: \"0..1\"\n                condition: viewport is at least collapseFrom and isCollapsed is false\n          - node:\n              uri: global.component.contextual_menu\n              role: collapsed presentation\n              edges:\n                - node:\n                    role: menu toggle content\n                    relation:\n                      cardinality: \"1\"\n                      slotName: menuLabel\n                - node:\n                    role: collapsed menu container\n                    edges:\n                      - node:\n                          uri: ds:apps_landscape.subcomponent.nested_dropdown_item\n                          role: named component filter\n                          relation:\n                            cardinality: \"0..*\"\n                            condition: supplied element has a truthy node.type.name\n                      - node:\n                          role: direct menu content\n                          relation:\n                            cardinality: \"0..*\"\n                            condition: supplied element does not have a truthy node.type.name\n                            slotName: filters\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"0..1\"\n                condition: viewport is below collapseFrom or isCollapsed is true\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=26-2&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 49\n\n";
+    ds:usage "### When to use\n\n**Adapt table filters to viewport width**\n\nUse when the same ordered filter elements should be top-level controls above a threshold and menu content below it.\n\n**Collapse filters on demand**\n\nUse `isCollapsed` when a surrounding layout needs the compact presentation at every viewport width.\n\n### When not to use\n\n**Render unrelated table actions**\n\nWhen you need to include sorting, export, or destructive controls alongside filters.\n\n**Incorrect pattern**: Putting all control types—filters, sorts, exports, destructive actions—into the same responsive disclosure.\n\n**Remediation strategy**: Keep sorting, export, and destructive actions in separate control regions outside this filter-specific pattern.\n\n**Hide essential form content**\n\nWhen controls are essential, not temporary optional filters.\n\n**Incorrect pattern**: Using responsive filters to hide required form fields based on viewport width.\n\n**Remediation strategy**: Use a normal responsive form layout with a predictable breakpoint strategy for controls that users must access.\n\n**Components without stable runtime names**\n\nWhen component types are anonymous or name-mangled.\n\n**Incorrect pattern**: Supplying components with no truthy `node.type.name` and expecting nested disclosure adaptation.\n\n**Remediation strategy**: Ensure all components have stable `displayName` or `name` properties, or render simple elements directly alongside named filter components.";
+    ds:guidelines "### Accessibility\n\n- The outer disclosure and menu semantics are delegated to Canonical `ContextualMenu`; the default toggle has visible `Filters` text plus a filter icon.\n- Custom `menuLabel` content must provide an accessible name for the complete group.\n- Named child components must expose meaningful `label` content because `ResponsiveDropdownItem` uses that prop for its trigger.\n- Nested triggers do not add `aria-expanded`, `aria-haspopup`, or `aria-controls`; the wrapper adds no menu-item roles or focus management.\n\n### Device\n\n- `useMediaQuery` selects exactly one render branch; switching across the threshold unmounts one presentation and mounts the other, so local child state and focus are not preserved.\n- The wrapper itself is a no-wrap flex row with a shared spacing gap; collapsed menu contents form a vertical flex column.\n- Choose `collapseFrom` from available header width. The default `md` threshold is 768px.\n- The default right alignment is intended for a right-edge table header, but there is no nested-panel collision detection in `ResponsiveDropdownItem`.\n\n### Keyboard\n\n- Outer menu keyboard behavior is delegated to Canonical `ContextualMenu`; nested disclosure activation comes from native buttons.\n- This wrapper adds no Escape handling, Arrow key navigation, focus transfer, or focus restoration across responsive branch changes.\n- It does not pass `onMenuClose` to nested items, so interactions inside a nested filter do not explicitly request that the outer contextual menu close.\n\n### Content and internationalization\n\n- Filter content and custom menu labels are caller-provided.\n- The default visible label `Filters` is hard-coded in English; localization requires passing `menuLabel`.\n\n";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`filters`";
+        ds:summary "Supplies the ordered elements used by both render branches. ";
+        ds:propertyType "list of nodes";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactElement<FilterProps, JSXElementConstructor<{ name: string }>>[]`. Inline mode wraps each element in a `span`; collapsed mode adapts elements with a truthy `node.type.name` and renders others directly. Array indexes are used as wrapper keys. "
+    ], [
+        a ds:Property;
+        ds:name "`collapseFrom`";
+        ds:summary "Selects the minimum width for inline mode.";
+        ds:propertyType "choice";
+        ds:defaultValue "`md`";
+        ds:constraints "Builds `(min-width: Npx)` from the shared map: `xs` 460, `sm` 620, `md` 768, `lg` 1036, `xl` 1280, and `xxl` 1400. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`menuLabel`";
+        ds:summary "Replaces the complete collapsed-menu toggle content. ";
+        ds:propertyType "node";
+        ds:defaultValue "Filter icon plus `Filters` text";
+        ds:constraints "TypeScript: `ReactNode`. Include an accessible text label; icon-only content is permitted by the type but is not named by this wrapper. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`className`";
+        ds:summary "Adds classes to the outer wrapper.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Local flex and no-wrap styles remain applied.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`menuPosition`";
+        ds:summary "Sets both the outer menu position and every nested disclosure position. ";
+        ds:propertyType "choice";
+        ds:defaultValue "`right`";
+        ds:constraints "`right` places nested panels leftward; `left` places them rightward; `center` delegates horizontal panel placement to contextual-menu styling. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`isCollapsed`";
+        ds:summary "Forces collapsed mode even when the media query matches. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Cannot force inline mode below `collapseFrom`. ";
+        ds:optional "true"
+    ].

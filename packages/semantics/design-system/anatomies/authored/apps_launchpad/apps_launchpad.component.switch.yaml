@@ -1,0 +1,22 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.switch
+  styles:
+    layout.type: inline-block
+    # dropped size.width: size/large and size.height: size/extra-small — no dimension symbol corresponds
+    # The old value is carried across as the declared border colour it names.
+    # A derivation from an implementation would more likely read
+    # color.foreground.switch.unselected, which the strata do declare.
+    appearance.background: color.border.highlighted   # was color/border/high-contrast
+    appearance.radius: dimension.radius.full   # was radius/full
+  edges:
+    - node:
+        role: knob
+        styles:
+          # dropped size.width/size.height: size/extra-small — no dimension symbol corresponds
+          appearance.background: color.background   # was color/background/default
+          appearance.radius: dimension.radius.full   # was radius/full
+      relation:
+        cardinality: "1"
+        slotName: knob

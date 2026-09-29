@@ -1,0 +1,13 @@
+---
+node:
+  uri: global.component.async-button
+  edges:
+    - switch:
+        on: internal
+        cases:
+          - uri: global.subcomponent.async-button-idle
+          - uri: global.subcomponent.async-button-loading
+          - uri: global.subcomponent.async-button-success
+          - uri: global.subcomponent.async-button-error
+      relation:
+        cardinality: "1"

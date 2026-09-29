@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier.destructive a ds:Modifier;
+    ds:name "Destructive";
+    ds:summary "";
+    ds:modifierFamily ds:global.modifier_family.anticipation.

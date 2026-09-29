@@ -1,0 +1,28 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Tile/styles.css on .ds.tile
+# The Tile always provides a surface — it adds `.surface`, so the channel is
+# established on this element and steps when tiles nest — and paints that
+# background so it stands out on the page. It shares the Card radius, has no
+# border of its own, and is a static container: no cursor, hover or focus
+# affordance, so the previous notation's `interaction.cursor: pointer` is
+# dropped as contradicted by the reference.
+node:
+  uri: global.component.tile
+  styles:
+    layout.type: flex
+    layout.direction: column
+    appearance.background: [surface.color.background, color.background]
+    appearance.radius: dimension.radius.medium
+    # Clips section corners (full-bleed content) to the tile radius.
+    layout.overflow: hidden
+  edges:
+    - node:
+        uri: global.subcomponent.tile-header
+      relation:
+        cardinality: "0..1"
+        slotName: header
+    - node:
+        uri: global.subcomponent.tile-content
+      relation:
+        cardinality: "1"
+        slotName: default

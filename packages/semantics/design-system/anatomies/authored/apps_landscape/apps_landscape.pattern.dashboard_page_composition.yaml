@@ -1,0 +1,74 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `ds:apps_landscape.pattern.dashboard_page_layout`, which names
+# no subject; the block's own uri is used instead.
+node:
+  # role: recommended route-level dashboard composition
+  uri: apps_landscape.pattern.dashboard_page_composition
+  edges:
+    - node:
+        # role: dashboard panel shell; name: Page Main
+        # Conventionally contains one Page Header followed by one Page Content, but
+        # accepts arbitrary children without enforcing their types or count.
+        role: dashboard panel shell
+        styles:
+          layout.type: flex        # was layout.display: flex
+          layout.direction: column
+        edges:
+          - node:
+              # name: Page Header
+              role: page identity and controls
+              edges:
+                - node:
+                    # semantic: navigation
+                    role: breadcrumb navigation
+                    edges:
+                      - node:
+                          # semantic: ordered list
+                          role: breadcrumb path
+                        relation:
+                          cardinality: "1"
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    # semantic: heading
+                    role: semantic page title
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: visible title treatment
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    role: title helper content
+                  relation:
+                    cardinality: "0..1"
+                    slotName: helperContent
+                - node:
+                    role: page actions
+                  relation:
+                    cardinality: "0..*"
+                    slotName: actions
+            relation:
+              cardinality: "0..*"
+          - node:
+              # name: Page Content
+              role: primary content region
+              styles:
+                layout.type: flex        # was layout.display: flex
+                layout.direction: column
+              edges:
+                - node:
+                    role: page error boundary
+                    edges:
+                      - node:
+                          role: page content
+                        relation:
+                          cardinality: "1"
+                          slotName: children
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "0..*"

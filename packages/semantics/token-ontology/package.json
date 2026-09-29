@@ -1,0 +1,67 @@
+{
+  "name": "@canonical/token-ontology",
+  "description": "Semantic model of the Canonical design tokens: authored dt: ontology (definitions) and generated strata data, with TypeScript build scripts.",
+  "version": "0.10.1",
+  "type": "module",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "src/index.ts",
+    "src/populate.ts",
+    "src/catalogue.ts",
+    "definitions",
+    "data",
+    "S4.DESIGN.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": {
+    "email": "webteam@canonical.com",
+    "name": "Canonical Webteam"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canonical/pragma-core"
+  },
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/canonical/pragma-core/issues"
+  },
+  "homepage": "https://github.com/canonical/pragma-core#readme",
+  "scripts": {
+    "build": "echo 'No build needed'",
+    "build:all": "bun run build",
+    "check": "bun run check:biome && bun run check:ts",
+    "check:fix": "bun run check:biome:fix && bun run check:ts",
+    "check:biome": "biome check",
+    "check:biome:fix": "biome check --write",
+    "check:ts": "tsc --noEmit",
+    "test": "vitest run",
+    "populate": "bun run src/populate.ts",
+    "catalogue": "bun run src/catalogue.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@canonical/biome-config": "^0.42.0",
+    "@canonical/design-tokens": "^0.10.0",
+    "@canonical/typescript-config": "^0.42.0",
+    "@types/n3": "^1.26.3",
+    "@types/node": "^26.4.1",
+    "n3": "^2.7.11",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  },
+  "dependencies": {},
+  "engines": {
+    "bun": ">=1.3",
+    "node": ">=22"
+  },
+  "keywords": [
+    "design-tokens",
+    "ontology",
+    "rdf",
+    "turtle",
+    "dtcg"
+  ]
+}

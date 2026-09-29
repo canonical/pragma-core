@@ -1,0 +1,70 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.content_blocks a ds:Pattern;
+    ds:name "Content Blocks";
+    ds:summary "Content Blocks is a compound layout pattern for separating a form or detail view into vertically stacked semantic sections. `Blocks` provides the stack and a shared heading-spacing mode; each `Blocks.Item` renders a `<section>` containing optional notification content, an optional heading group, and required section content.\n\nItems after the first receive a low-contrast top divider. When the group is placed directly in Vanilla panel content, the first item removes its normal top padding. The pattern organizes related content within one task or view; it does not create navigation between destinations.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.content_blocks\n  role: section stack and spacing context\n  styles:\n    layout.display: flex\n    layout.direction: column\n  edges:\n    - node:\n        semantic: section\n        role: content block item\n        name: Content Block Item\n        edges:\n          - node:\n              role: section-specific notification\n              relation:\n                cardinality: \"0..1\"\n                slotName: notification\n          - node:\n              role: section introduction\n              edges:\n                - node:\n                    semantic: heading\n                    role: section title\n                    relation:\n                      cardinality: \"0..1\"\n                - node:\n                    semantic: paragraph\n                    role: supporting description\n                    relation:\n                      cardinality: \"0..1\"\n                      slotName: description\n                - node:\n                    role: section action\n                    relation:\n                      cardinality: \"0..1\"\n                      slotName: action\n              relation:\n                cardinality: \"0..1\"\n          - node:\n              role: section body\n              relation:\n                cardinality: \"1\"\n                slotName: children\n        relation:\n          cardinality: \"0..*\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=17-19&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 16\n\n";
+    ds:usage "### When to use\n\n**Section long forms**\n\nGroup related form controls into sections that users can scan by purpose. Use notifications and actions only when they belong to one section.\n\n**Structure detail views**\n\nSeparate related groups of record information while keeping a consistent heading rhythm.\n\n**Compose reusable section blocks**\n\nUse `Blocks.Item` in extracted child components when each child still participates in one parent `Blocks` stack and spacing context.\n\n### When not to use\n\n**Single undivided region**\n\nThe page contains only one short section or self-contained content area.\n\n**Incorrect pattern**: Wrapping a single content region in `Blocks` with one `Blocks.Item` to obtain spacing or section styling.\n\n**Remediation strategy**: Render the content directly; use Blocks only when multiple sections benefit from the divider, spacing context, and heading rhythm.\n\n**Unrelated navigation**\n\nThe groups represent distinct destinations or navigation branches, not sections within one task.\n\n**Incorrect pattern**: Using `Blocks` with items that function as tab panels or separate pages, each activatable as a distinct route.\n\n**Remediation strategy**: Use a tab, navigation, or multi-page component; Blocks is for sectioning related content within one unified page, not for navigation between destinations.\n\n**Arbitrary child collections**\n\nThe container exists to arrange generic children without semantic section structure.\n\n**Incorrect pattern**: Using `Blocks` as a generic vertical stack component for any flex-column layout or list of items.\n\n**Remediation strategy**: Use a generic flex column or wrapper; `Blocks` semantics and dividers are designed specifically for `Blocks.Item` sections that benefit from consistent heading treatment and visual separation.";
+    ds:guidelines "### Accessibility\n\n- Keep each generated `<h4>` in a logical page heading hierarchy. Do not choose Content Blocks solely to obtain heading styling when level four is semantically wrong.\n- A `Blocks.Item` without `title`, `description`, or `action` has a semantic `<section>` but no built-in accessible name. Ensure its surrounding context makes the region meaningful, or provide a titled structure elsewhere.\n- Give action controls accessible names that describe their section-scoped effect. DOM order is notification, title, description, action, then body.\n- Do not depend on the divider as the only indication that a new conceptual group begins; headings and content must communicate grouping.\n\n### Content\n\n- Use parallel, concise titles across sibling items.\n- Put essential instructions near the affected control rather than only in the section description.\n- Keep notifications specific to the section. Page-wide failures and notices belong outside the item stack.\n- Use an action label that states its effect; do not rely on the section title to make a generic label such as “Change” unambiguous.\n\n### Responsive behavior\n\n- The container remains a vertical flex stack at all widths; the source defines no responsive breakpoint or alternate item layout.\n- Heading children use normal block flow, so title, description, and action retain source order. Consumer-supplied action content must manage its own width and wrapping.\n- Long body content must provide its own overflow behavior; Blocks does not clip or scroll descendants.\n\n### Keyboard\n\n- Blocks and items add no focus targets or keyboard handlers. Focusable notification, action, and body descendants participate in normal DOM order.\n- Do not reposition actions visually ahead of notification or heading content in a way that conflicts with keyboard order.\n\n### Internationalization\n\n- Externalize titles, descriptions, notifications, and action labels at their owning feature.\n- Allow translated headings and descriptions to wrap. The title is a string, while description/action slots can carry richer localized markup.\n- Do not use capitalization alone to convey hierarchy; the current small-caps title presentation is visual.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "Children rendered inside the vertical Blocks container.";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "None";
+        ds:constraints "Use `Blocks.Item` children so section semantics, dividers, and spacing remain consistent.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "spaced";
+        ds:summary " Selects the larger bottom margin for every descendant item heading group. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Distributed through BlocksSpacedContext; nested or independently rendered items read the nearest provider. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Blocks.Item children";
+        ds:summary "Primary section body.";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "None";
+        ds:constraints "Rendered after all optional item anatomy and must remain understandable if no heading group is present.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Blocks.Item title";
+        ds:summary " Section name rendered as an <h4>. ";
+        ds:propertyType "text";
+        ds:defaultValue "undefined";
+        ds:constraints "String-only; keep it concise and maintain a logical page heading hierarchy.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Blocks.Item description";
+        ds:summary " Supporting content rendered in a paragraph below the title position. ";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "undefined";
+        ds:constraints "Keep to phrasing and simple inline content valid inside `<p>`; complex block descendants would create invalid HTML.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Blocks.Item action";
+        ds:summary " Section-scoped content rendered after title and description in the heading group. ";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "undefined";
+        ds:constraints "The source does not provide action layout or responsive overflow handling; consumers own accessible control markup.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "Blocks.Item notification";
+        ds:summary " Section-specific content rendered before the heading group. ";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "undefined";
+        ds:constraints "Prefer a notification/status presentation; do not duplicate a page-wide message in each item.";
+        ds:optional "true"
+    ].

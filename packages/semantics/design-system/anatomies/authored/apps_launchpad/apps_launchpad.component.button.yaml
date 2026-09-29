@@ -1,0 +1,49 @@
+---
+# TODO implementation: the only Button stylesheet in @canonical/react-ds-app-launchpad
+# is the markdown-editor toolbar button, which this anatomy does not describe
+node:
+  uri: apps_launchpad.component.button
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: row   # was horizontal
+    layout.align: center
+    # dropped spacing.internal: spacing/inline/small — no spacing symbol corresponds
+    # dropped appearance.background: color/background/neutral/default — no colour symbol corresponds
+    appearance.border.style: solid
+    appearance.radius: dimension.radius.medium   # was radius/medium
+    typography.font: typography.text.primary   # was typography/paragraph/default
+  edges:
+    - node:
+        role: content container
+        styles:
+          layout.type: grid
+          layout.direction: row   # was horizontal
+          spacing.gap: spacing.gap.mark.inline   # was spacing/inline/icon
+        edges:
+          - node:
+              role: icon container
+            relation:
+              cardinality: "0..1"
+              slotName: iconLeft
+          - node:
+              role: label text
+            relation:
+              cardinality: "1"
+              slotName: default
+          - node:
+              role: icon container
+            relation:
+              cardinality: "0..1"
+              slotName: iconRight
+      relation:
+        cardinality: "1"
+    - node:
+        role: loader container
+        edges:
+          - node:
+              uri: apps_launchpad.component.spinner
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"
+        slotName: loader

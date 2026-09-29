@@ -1,0 +1,205 @@
+###############################################################################
+# dt.s4.ttl — S4, the platform catalogue (T-Box)
+#
+# One catalogue per platform: s4.web.ttl, later s4.figma.ttl, s4.flutter.ttl.
+# The platform is the identity of the FILE, so no shared term carries a
+# platform key.
+#
+# The catalogue records every declaration a platform ships. It is recorded
+# rather than derived because it is the only stratum a consumer can QUERY for
+# "what can I use, and how" — a profile answers that by running a generator,
+# and a generator cannot be queried.
+#
+# The build's JSON artifact is a PROJECTION of this vocabulary
+# (dt.s4.context.jsonld), not its source.
+#
+# Rulings, alternatives and evidence: S4.DESIGN.md.
+###############################################################################
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ds:   <https://ds.canonical.com/> .
+@prefix w3c-tokens: <https://dt.canonical.com/w3c-tokens/> .
+@prefix dt:   <https://dt.canonical.com/> .
+@prefix dt-web: <https://dt.canonical.com/platform/web/> .
+
+###############################################################################
+# THE SHARED CORE
+#
+# Closed: these terms mean the same on every platform and no platform may
+# redefine them. A platform extends on ANY class, in its own namespace
+# (dt-web:, dt-figma:). The boundary is namespacing, not placement — Figma
+# carries codeSyntax, scopes and key on the VARIABLE, so a placement rule
+# would have been contradicted by the first platform added.
+###############################################################################
+
+dt:Variable
+    a owl:Class ;
+    rdfs:label "Variable" ;
+    skos:definition "A named value the platform emits, reified as one individual per emitted name." ;
+    skos:note "Minted from the name, as dt:TokenSymbol is. Catalogues carry a per-platform base, so two platforms cannot collide even where names coincide." ;
+    skos:note "A variable need not correspond to any symbol. On the web, 74 are internal machinery, 187 are slots of a typography composite, and 204 are legacy twins of another variable. Those with no symbol reach the built graph by following dt:references until a variable with one is found." ;
+    skos:example "<--modifier-color-text> · <--disabled--color-text> · <--color-focusRing>" .
+
+dt:Declaration
+    a owl:Class ;
+    rdfs:label "Declaration" ;
+    skos:definition "One variable given one value under one condition." ;
+    skos:note "Individuals are ANONYMOUS — identity is the pair (variable x condition), verified unique across all 1,904 web declarations — but the class is named so shapes can target it, as dt:ResolvedValue is." ;
+    skos:note "Minting from output location was rejected: an inserted line would rename every declaration below it." .
+
+dt:Condition
+    a owl:Class ;
+    rdfs:label "Condition" ;
+    skos:definition "The circumstance under which declarations apply." ;
+    skos:note "Minted and SHARED: 1,904 web declarations reference 31 conditions, so a condition is stated once and pointed at." ;
+    skos:note "Minted from a SANITISED SLUG of the platform's expression, not from the expression itself: CSS selectors contain spaces, parentheses and asterisks, which an IRI cannot carry. The verbatim form lives on the platform's namespaced property. Slugs must be unique within a catalogue; a collision is a build failure." ;
+    skos:note "A condition may exist that no declaration reaches — the web emits `.light`, which sets only `color-scheme`." .
+
+### identity — the bridge key
+
+dt:ofSymbol
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Variable ; rdfs:range dt:TokenSymbol ;
+    rdfs:label "of symbol" ;
+    skos:definition "The symbol this variable is the platform's name for." ;
+    skos:note "THE BRIDGE. A variable with a symbol joins the built graph at (this symbol x the position of each declaration), and the position is the condition's coordinates plus any dt:alsoAt. The join is stated as a key rather than a pointer because resolved values are anonymous by ruling and cannot be referenced across documents." ;
+    skos:note "Absent for a variable that is no symbol's name: a channel, a computed state, a composite's slot. Such a variable reaches the graph only by dt:references." ;
+    skos:note "Distinct from dt:forSymbol, which states what a resolved value IS. This states what a platform name STANDS FOR, and the two meet in the join." .
+
+### the variable's own facts
+
+dt:declaredAt
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Variable ; rdfs:range dt:Declaration ;
+    rdfs:label "declared at" ;
+    skos:definition "One occurrence of this variable being given a value." ;
+    skos:note "A variable has as many as the platform emits; --delta-hover-color-foreground-primary has three." .
+
+dt:tier
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Variable ; rdfs:range dt:Tier ;
+    rdfs:label "tier" ;
+    skos:definition "Whether this variable is primitive, semantic or derived." .
+
+dt:visibility
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Variable ; rdfs:range dt:Visibility ;
+    rdfs:label "visibility" ;
+    skos:definition "Whether consumers may reference this variable directly." ;
+    skos:note "NOT derivable: nothing in the shape of --surface-color-text distinguishes machinery from API. The emitter decides. 878 public, 74 internal on the web; the 204 legacy twins are unclassified today and must be classified by the producer." .
+
+### the declaration's facts
+
+dt:under
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Declaration ; rdfs:range dt:Condition ;
+    rdfs:label "under" ;
+    skos:definition "The condition under which this declaration applies." .
+
+dt:emits
+    a owl:DatatypeProperty ;
+    rdfs:domain dt:Declaration ; rdfs:range xsd:string ;
+    rdfs:label "emits" ;
+    skos:definition "The declared value, verbatim as shipped." ;
+    skos:note "Printing every dt:emits under its condition reproduces the platform's output — the only completeness proof this stratum can offer." ;
+    skos:note "Structure INSIDE the value is parsed from this string, never asserted beside it, with two exceptions that a query needs and cannot parse: which variables it names (dt:references) and which extra position it holds (dt:alsoAt)." ;
+    skos:example "\"var(--color-text-success)\" · \"light-dark(var(--color-palette-black), var(--color-palette-white))\" · \"oklch(59% 0.22 25)\"" .
+
+dt:references
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Declaration ; rdfs:range rdf:List ;
+    rdfs:label "references" ;
+    skos:definition "The variables this declaration's value names, in the order written." ;
+    skos:note "Empty for a TERMINAL declaration — a literal, or a light-dark() of two literals. 746 of the 1,904 web declarations are terminal; 1,158 reference." ;
+    skos:note "Asserted rather than parsed because a query cannot read `var(--x)` out of a string, and closure — every variable named is in this catalogue — must be a query. Order is the platform's argument order and carries no meaning the platform does not give it." .
+
+dt:alsoAt
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Declaration ; rdfs:range dt:Coordinate ;
+    rdfs:label "also at" ;
+    skos:definition "A position this declaration holds in addition to its condition's." ;
+    skos:note "Exists for one reason: a value can carry several positions in one line, and a query cannot see that. On the web, light-dark() puts a light value and a dark value in one declaration under :root; the dark half is dt:alsoAt dt:coordinate.mode.dark. 261 web declarations carry it." .
+
+dt:computedFrom
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Declaration ; rdfs:range dt:Variable ;
+    rdfs:label "computed from" ;
+    skos:definition "The variable this declaration's value was semantically derived from, when a rule produced it." ;
+    skos:note "Not a parse of dt:emits and not the first reference: --disabled--color-text computes from --color-text, while the first variable its value names is --modifier-color-text. The emitter knows the semantic source; a reader of the string does not." ;
+    skos:note "Per DECLARATION: --modifier-color-text has 17 declarations across 8 distinct sources, and the build's artifact today records one of them for all 17 — a defect the producer must fix to populate this." .
+
+dt:derives
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Declaration ; rdfs:range dt:Derivation ;
+    rdfs:label "derives" ;
+    skos:definition "The rule by which a computed declaration was produced." ;
+    skos:note "Absent for a declaration that is not computed. An editor's provenance line names the rule, not only the source." .
+
+dt:at
+    a owl:DatatypeProperty ;
+    rdfs:domain dt:Declaration ; rdfs:range xsd:string ;
+    rdfs:label "at" ;
+    skos:definition "Where this declaration was emitted, in the platform's own addressing." ;
+    skos:note "Not the question dt:ofSymbol answers. That leads to where a symbol was AUTHORED; this says where a line was EMITTED — and for a variable with no symbol it is the only location there is. Regeneration also needs it: one condition spans three output files." ;
+    skos:example "\"modifiers.theme.css:432\"" .
+
+### the condition's facts
+
+dt:selectsCoordinate
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Condition ; rdfs:range dt:Coordinate ;
+    rdfs:label "selects coordinate" ;
+    skos:definition "The coordinate this condition selects, when it selects one." ;
+    skos:note "Recorded rather than derived, though 30 of 31 web conditions could be derived by name or by inverting the surface table. Recording keeps the catalogue answerable without the generator, and covers the one genuine judgement: whether the dark media query selects mode.dark or mode.indeterminate." ;
+    skos:note "Absent where nothing is selected. That covers two different facts the vocabulary does not yet distinguish: :root and the universal rule select the DEFAULT position, which S3 holds; the four product contexts select a position S2 has no family for. 1,697 web declarations sit under conditions selecting nothing; 582 of those are product contexts." ;
+    skos:note "The term that makes platforms comparable: a Figma mode and a CSS class point at the same coordinate individual." .
+
+###############################################################################
+# PLATFORM-SPECIFIC — the web
+#
+# In dt-web:, on whichever class needs them. Invisible to cross-platform
+# queries by construction.
+###############################################################################
+
+dt-web:selector
+    a owl:DatatypeProperty ;
+    rdfs:domain dt:Condition ; rdfs:range xsd:string ;
+    rdfs:label "selector" ;
+    skos:definition "The CSS selector, as written." ;
+    skos:example "\".success\" · \".surface .surface\" · \":root:not(.light)\" · \"*\"" .
+
+dt-web:inAtRule
+    a owl:ObjectProperty ;
+    rdfs:domain dt:Condition ; rdfs:range rdf:List ;
+    rdfs:label "in at-rule" ;
+    skos:definition "The CSS at-rules enclosing the selector, outermost first." ;
+    skos:note "Ordered because at-rules nest — the dark-preference deltas sit inside a media query inside a layer." ;
+    skos:example "( \"@layer ds.modifiers\" \"@media (prefers-color-scheme: dark)\" )" .
+
+###############################################################################
+# INDIVIDUALS
+###############################################################################
+
+dt:Tier a owl:Class ; rdfs:label "Tier" ;
+    skos:definition "How far a variable sits from a raw value." .
+dt:tier.primitive a dt:Tier ; skos:definition "A raw value, referencing nothing." .
+dt:tier.semantic  a dt:Tier ; skos:definition "A named role, referencing a primitive or another semantic." .
+dt:tier.derived   a dt:Tier ; skos:definition "Computed from another variable at render time." .
+
+dt:Visibility a owl:Class ; rdfs:label "Visibility" ;
+    skos:definition "Whether a variable is part of the offered surface." .
+dt:visibility.public   a dt:Visibility ; skos:definition "Consumers may reference this directly." .
+dt:visibility.internal a dt:Visibility ; skos:definition "Machinery: read by other declarations, never written by a consumer." .
+
+dt:Derivation a owl:Class ; rdfs:label "Derivation" ;
+    skos:definition "A rule producing a value from another value. The six the web emits today; open to more." .
+dt:derivation.hover            a dt:Derivation ; skos:definition "Lightness shifted by the hover delta." .
+dt:derivation.active           a dt:Derivation ; skos:definition "Lightness shifted by the active delta." .
+dt:derivation.disabled         a dt:Derivation ; skos:definition "Mixed 34% into the background." .
+dt:derivation.delta            a dt:Derivation ; skos:definition "A lightness offset consumed by hover and active." .
+dt:derivation.channel-modifier a dt:Derivation ; skos:definition "The local-rung channel a modifier family writes." .
+dt:derivation.channel-surface  a dt:Derivation ; skos:definition "The layout-rung channel the surface family writes." .

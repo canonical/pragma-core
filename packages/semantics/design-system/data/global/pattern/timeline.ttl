@@ -1,0 +1,132 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.pattern.timeline a ds:Pattern;
+    ds:name "Timeline ";
+    ds:summary "The timeline component establish a clear order of operations**.** It is a structural UI block used to represent a chronological list of events, actions, or milestones in a vertical sequence. It serves as a visual narrative, allowing users to track progress, audit history, or understand the relationship between time and specific activities at a glance. Each event can include a dateTime, actor, description, and other custom content. It also includes an optional header for users to filter or sort the events.\n\n";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/pattern/Timeline/styles.css on .ds.timeline.\nnode:\n  uri: global.pattern.timeline\n  styles:\n    layout.type: flex\n    layout.direction: column\n  edges:\n    - node:\n        uri: global.subcomponent.timeline-header\n      relation:\n        cardinality: \"0..1\"\n        slotName: header\n    # Timeline's own types.ts documents three edges — header [0], content [1]\n    # and footer [2] — and marks the header and the footer NOT IMPLEMENTED. The\n    # header keeps its edge because the block exists; no edge is written for the\n    # footer, because `global.subcomponent.timeline-footer` names no ds: subject.\n    # The content is referenced by uri alone: the event switch and the expansion\n    # indicator live in its own anatomy, not inlined here. The notation's second,\n    # exploratory tree — a props switch between\n    # `timeline-content-dateTimeLeading` and `timeline-content-dateTimeTrailing`,\n    # with a `props/variant` discriminator and `with:` maps — is dropped: neither\n    # uri names a ds: subject, and both the qualified discriminator and `with:`\n    # are retired notation.\n    - node:\n        uri: global.subcomponent.timeline-content\n      relation:\n        cardinality: \"1\"\n        # The content arrives as `children`, so the slot is the default one; the\n        # notation called it `content`.\n        slotName: default";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2336-9710&t=6a9B5L28GbEGD8q7-11";
+    ds:usage "The Timeline component is intended to provide a visual narrative of events over time. It helps users orient themselves within a process by establishing a clear relationship between specific moments and the actions that occurred during them.\n\n### When to use\n\n- When users need a chronological sequence of events to understand order and progression.\n- When users need to see a history of modifications to an object.\n- When users need to track events by different actors or entities over time.\n- When users need to understand key milestones or interactions in a process.\n- When it’s useful to filter, sort, or expand/collapse events to manage long timelines.\n\n### When not to use\n\n- When the relationship between items is based on \"Parent-Child\" logic rather than \"Before-After\" logic.\n  - Incorrect: Representing a folder structure or a nested comment thread as a linear timeline.\n  - Remediation: Use other patterns with indentation and structuring to better represent nesting and depth.\n- For large datasets where individual events are too numerous to display on a timeline meaningfully.\n  - Incorrect: Using a timeline to list all thousands of machines created by a user.\n  - Remediation: Use a table to allow for better filtering and sorting.\n- When the sequence of events is not important, a simple list or a table may be clearer.\n  - Incorrect: Using a timeline to list a directory of employees just because they joined at different times.\n  - Remediation: Use a table to allow for easier data scanning and better sorting.\n- When the events have non-linear relationships – network-like or branching.\n  - Incorrect: Using a timeline to represent the full history of a git tree.\n  - Remediation: Use a flow diagram to preserve information about diverging and converging points.\n\n### Alternative layout\n\nBy default, the DateTime is in a trailing position, and the property `dateTimePosition` has value `Trailing`. When `dateTimePosition` is set to `Leading`, the Timeline component uses an alternative layout, and DateTime is placed in a leading position.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2814-3631&t=335Uo9XV6GCUXWug-11\n\n### Filters and sorting\n\nBy default, the header is included with both filtering and sorting enabled. The header can be hidden entirely, and each control can also be hidden individually. The default sort order displays the earliest event first, but it can be set to display the latest first. The Sort button label indicates the current sort order.\n\n### Collapsing methods of long Timelines\n\nThere are three options for handling long timelines.\n\n1. Default: Hide events from the bottom of the timeline\n\nThe Timeline displays the top *{x}* events on load, with *{x}* set to 60 by default. The Expansion indicator is included at the bottom of the Timeline.\n\n1. Hide events from the middle\n\nThe Timeline displays the top *{x/2} and bottom {x/2}* events on load, with *{x}* set to 60 by default. The Expansion indicator is included in the middle of the Timeline.\n\n1. Do not hide events\n\nThe Timeline displays all events at all times.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2822-27017&t=335Uo9XV6GCUXWug-11\n\n### DateTime formats\n\nThe Timeline supports a primary and secondary dateTime format. By default, the primary format displays the date and time in the user’s local system format, while the secondary format shows relative time. The primary format is used on load, and clicking the dateTime toggles between the two formats for all dateTime in the Timeline. Hovering over the dateTime displays a tooltip showing the alternate format. Both formats are configurable by the DS consumer.\n\n### Marker style combinations\n\nDifferent combinations of marker styles can serve different use cases. In some cases, alternating marker styles helps avoid repetitive elements, while in other cases, using a consistent marker style in all events if preferred. The component provides 7 predefined marker style combinations, and also allows overriding the marker style on an individual event.\n\n1. All sizes: for any sequence of consecutive events from the same actor, use a large marker for the first event, displaying the actor’s profile picture, initials, or a generic user icon, depending on availability. Within the remaining events, for each sequence of consecutive events of the same type, use a medium marker for the first event to show the event type icon, and use small markers for the rest.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2830-27432&t=335Uo9XV6GCUXWug-11\n\n1. Large and medium: for any number of consecutive events from the same actor, use a large marker for the first event, displaying the actor’s profile picture, initials, or a user icon, depending on availability. For the remaining events, use a medium marker with an icon indicating the event type.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2835-34843&t=335Uo9XV6GCUXWug-11\n\n1. Large and small: For any number of consecutive events from the same actor, use a large marker for the first event, displaying the actor’s profile picture, initials, or a user icon, depending on availability. For the remaining events, use a small marker.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2835-35424&t=335Uo9XV6GCUXWug-11\n\n1. Medium and small: For any number of consecutive events from the same actor, use a medium marker for the first event, displaying the actor’s profile picture, initials, or a user icon, depending on availability. For the remaining events, use a small marker.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2835-36283&t=335Uo9XV6GCUXWug-11\n\n1. Large: Use large markers consistently in all events, with graphic elements defined individually.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2835-36552&t=335Uo9XV6GCUXWug-11\n\n1. Medium: Use large markers consistently in all events, with graphic elements defined individually.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2835-106774&t=335Uo9XV6GCUXWug-11\n\n1. Small: Use large markers consistently in all events, with graphic elements defined individually.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2835-115567&t=335Uo9XV6GCUXWug-11\n\n";
+    ds:guidelines "**Time Formatting**\n\nAlways use a consistent time format that complies with the copy guide (e.g., Relative like \"2 hours ago\" vs. Absolute like \"Oct 24, 2023, 10:00 AM\"). For global products, ensure the timezone is clear if the timing is critical.\n\n**Visual Continuity**\n\nThe line connecting the nodes should be solid for completed events and can be dashed or greyed out for future/planned events to indicate status.\n\n";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "Show controls";
+        ds:summary "Defines whether the control bar is displayed.";
+        ds:propertyType "boolean";
+        ds:defaultValue "False";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Show actor filter";
+        ds:summary "Defines whether the Actor filter is displayed.";
+        ds:propertyType "boolean";
+        ds:defaultValue "False";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Show event filter";
+        ds:summary "Defines whether the Event filter is displayed.";
+        ds:propertyType "boolean";
+        ds:defaultValue "False";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Show sorting";
+        ds:summary "Defines whether the Sort button is displayed to allow changing sorting order.";
+        ds:propertyType "boolean";
+        ds:defaultValue "False";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "DateTime position";
+        ds:summary "Defines the Timeline layout – where the dateTime is placed.";
+        ds:propertyType "choice";
+        ds:defaultValue "Leading";
+        ds:optional "false";
+        ds:constraints "Leading, Trailing"
+    ], [
+        a ds:Property;
+        ds:name "Marker combination";
+        ds:summary "Single-choice: Defines which how Marker styles are used by the events.";
+        ds:propertyType "choice";
+        ds:defaultValue "Small";
+        ds:optional "false";
+        ds:constraints "All sizes, Large and medium, Large and small, Medium and small, Large, Medium, Small"
+    ], [
+        a ds:Property;
+        ds:name "Collapsing method";
+        ds:summary "Single-choice: Defines whether the Timeline collapses when it exceeds a certain number of events, and specifies how it is collapsed.";
+        ds:propertyType "choice";
+        ds:defaultValue "Bottom";
+        ds:optional "false";
+        ds:constraints "None, Middle, Bottom"
+    ], [
+        a ds:Property;
+        ds:name "user";
+        ds:propertyType "object";
+        ds:optional "false";
+        ds:constraints "the user should contain the name, email, role, and profile picture"
+    ];
+    ds:hasSubcomponent ds:global.subcomponent.timeline-event, ds:global.subcomponent.timeline-expansion_indicator, ds:global.subcomponent.timeline-content, ds:global.subcomponent.timeline-header;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-01-15T14:00:00.000+01:00";
+        ds:change "added innitial description for the timeline UI blocl";
+        ds:changeType "change"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-01-16T00:00:00.000+01:00";
+        ds:change "updated description, usage";
+        ds:changeType "change"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-03-03T00:00:00.000+01:00";
+        ds:change "updated usage and properties";
+        ds:changeType "change"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-03-12T17:30:00.000+01:00";
+        ds:change "updated usage";
+        ds:changeType "change"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-03-13T00:00:00.000+01:00";
+        ds:change "updated anatomy_dsl";
+        ds:changeType "change"
+    ];
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.foreground.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/marker";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.timeline-event;
+        ds:node "$root/connecting line";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border
+    ].

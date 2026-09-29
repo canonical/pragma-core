@@ -1,0 +1,20 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration. Two repairs: the root uri was
+# `ds:global.component:KeyValuePair` — the wrong type segment, the wrong block
+# and the retired colon spelling; and the item reference is spelled as the
+# subject that does exist, global.subcomponent.kvpitem_base. The notation's
+# markdown fence and title line are dropped.
+node:
+  uri: global.subcomponent.kvp_container
+  styles:
+    layout.type: flex
+    layout.direction: column
+    layout.align: flex-start
+    spacing.gap: dimension.100   # the block gap between fields
+  edges:
+    - node:
+        uri: global.subcomponent.kvpitem_base
+      relation:
+        cardinality: "1..*"
+        slotName: default

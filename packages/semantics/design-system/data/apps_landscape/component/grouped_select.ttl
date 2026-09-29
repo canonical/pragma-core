@@ -1,0 +1,137 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.grouped_select a ds:Component;
+    ds:name "Grouped Select";
+    ds:summary "Renders a controlled native `select` whose options are organized in native `optgroup` elements. The DOM value combines the group label and option value for selection, while `onChange` reports the selected option value and group label as separate strings from `data-*` attributes.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.grouped_select\n  edges:\n    - node:\n        role: field wrapper\n        edges:\n          - node:\n              semantic: label\n              role: field label\n              relation:\n                cardinality: \"0..1\"\n                condition: label is non-empty\n          - node:\n              semantic: select\n              role: grouped selection control\n              edges:\n                - node:\n                    semantic: option\n                    role: empty option\n                    relation:\n                      cardinality: \"0..1\"\n                      condition: emptyOption.enabled is true\n                - node:\n                    semantic: optgroup\n                    role: option group\n                    edges:\n                      - node:\n                          semantic: option\n                          role: grouped option\n                          relation:\n                            cardinality: \"0..*\"\n                    relation:\n                      cardinality: \"0..*\"\n              relation:\n                cardinality: \"1\"\n          - node:\n              semantic: paragraph\n              role: validation message\n              edges:\n                - node:\n                    semantic: strong\n                    role: error prefix\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    role: error content\n                    relation:\n                      cardinality: \"1\"\n                      slotName: error\n              relation:\n                cardinality: \"0..1\"\n                condition: error is truthy\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-56&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 30\n\n";
+    ds:usage "### When to use\n\n**Categorized options**\n\nUse when a native platform picker is appropriate and category labels materially improve scanning.\n\n**Separate group and value**\n\nUse when the caller stores both the selected `optGroup` string and option `value` and can update both after every change.\n\n### When not to use\n\n**Searchable long list**\n\nUsers need filtering or autocomplete across many options.\n\n**Incorrect pattern**: Using a native select with many ungrouped or poorly categorized options and no search.\n\n**Remediation strategy**: Use a search-powered select component or autocomplete input that allows users to filter options as they type.\n\n**Group is decorative**\n\nCategories do not help users choose and labels would repeat option text.\n\n**Incorrect pattern**: Adding option groups that do not materially improve scanning or that duplicate information already visible in option labels.\n\n**Remediation strategy**: Use a flat select without groups if categories are not providing genuine cognitive benefit.\n\n**Values containing the compound delimiter**\n\nGroup or option values containing `/` make the compound DOM value ambiguous to tools or form serialization.\n\n**Incorrect pattern**: Storing group or option values that include `/`, then relying on the compound `${group}/${option}` DOM value for serialization or parsing.\n\n**Remediation strategy**: Sanitize group and option values to exclude `/`, or use a different serialization approach that does not concatenate them into a single field value.";
+    ds:guidelines "### Accessibility\n\n- Retain native label, select, optgroup, and option semantics.\n- A truthy `error` sets `aria-invalid=\"true\"` and `aria-errormessage=\"pull-pocket-validation-message\"`; without an error, `aria-errormessage` is omitted.\n- The validation id is hard-coded, so do not render multiple errored instances on one page without first fixing the source to generate unique ids.\n- `required` is visual only. Consumers needing native required semantics must not assume this component sets `required` on the `select`.\n- `hidden` applies only to the select, not its label or feedback. Do not use it as a complete field-visibility mechanism.\n\n### Content\n\n- Use concise, distinct group labels and parallel option labels that remain understandable in native pickers.\n- Give an enabled empty option an explicit prompt such as `Select a pocket`; the implementation otherwise renders a blank first option.\n- The component hard-codes the English `Error:` prefix; it has no translation prop.\n\n### Internationalization\n\n- Group, option, label, empty-option, and error content are caller-provided and can be localized.\n- The `Error:` prefix is internal English text. Localizing it requires an API or source change.\n- Compound values include the displayed `optGroup` string, so translating group labels can also change the submitted DOM value.\n\n### Keyboard and device\n\n- Keyboard navigation, focus, and mobile picker presentation are native `select` behavior; the component adds no custom key handlers or focus movement.\n- Long labels receive no local truncation or wrapping treatment and may be constrained by the platform picker.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`groupedOptions`";
+        ds:summary "Defines the native groups and their options.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `groupedOption[]`, where `groupedOption` is `{ options: SelectOption[]; optGroup: string }` and `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. Empty arrays are accepted; `disabled` is not forwarded. "
+    ], [
+        a ds:Property;
+        ds:name "`name`";
+        ds:summary "Sets the native field name and supplies the fallback id source. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "The derived id replaces underscores and whitespace with hyphens, splits one camel-case boundary at a time, and lowercases the result. "
+    ], [
+        a ds:Property;
+        ds:name "`group`";
+        ds:summary "Controlled selected group label.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Used only when `option` is non-empty to build the DOM value `${group}/${option}`. "
+    ], [
+        a ds:Property;
+        ds:name "`option`";
+        ds:summary "Controlled selected option value.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "An empty string forces the select value to `\"\"`; callers must provide a matching option for non-empty values. "
+    ], [
+        a ds:Property;
+        ds:name "`onChange`";
+        ds:summary "Reports the selected option value first and group label second. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `(newOption: string, newGroup: string) => void`. Values come from the selected option's `data-value` and `data-group`; missing data becomes `\"\"`. The component does not update controlled state. "
+    ], [
+        a ds:Property;
+        ds:name "`id`";
+        ds:summary "Overrides the derived select id and label target.";
+        ds:propertyType "text";
+        ds:defaultValue "Derived from `name`";
+        ds:constraints "Use a page-unique id.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`label`";
+        ds:summary "Renders the native field label.";
+        ds:propertyType "text";
+        ds:defaultValue "`\"\"`";
+        ds:constraints "An empty string omits the label entirely.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`emptyOption`";
+        ds:summary "Optionally inserts an empty first option.";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `{ enabled: boolean; label?: string }`. `enabled: false` renders nothing; an omitted label renders an empty option label. The empty option is not automatically disabled for required fields. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`error`";
+        ds:summary "Applies invalid styling, `aria-invalid`, and renders error content after `Error:`. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `ReactNode`. Truthiness controls the error state. Every errored instance uses the fixed id `pull-pocket-validation-message`, so multiple instances create duplicate ids. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onBlur`";
+        ds:summary "Forwards the native select blur event.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `FocusEventHandler<HTMLSelectElement>`. No internal touched state is maintained. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`disabled`";
+        ds:summary "Sets the native select's disabled state.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "Omission is treated as false and does not alter the controlled value. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`hidden`";
+        ds:summary "Sets the native `hidden` attribute on the select only. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "Omission is treated as false. The outer wrapper, optional label, and error message remain in the DOM and may remain visible. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`required`";
+        ds:summary "Adds `is-required` to the visible label.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "Omission is treated as false. It does not set the native select's `required` attribute and does not disable or remove the empty option. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`className`";
+        ds:summary "Adds classes to the native select.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Does not style the wrapper or label.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`labelClassName`";
+        ds:summary "Adds classes to the label.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Has no effect when `label` is empty.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`wrapperClassName`";
+        ds:summary "Adds classes to the root validation wrapper.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "—";
+        ds:optional "true"
+    ].

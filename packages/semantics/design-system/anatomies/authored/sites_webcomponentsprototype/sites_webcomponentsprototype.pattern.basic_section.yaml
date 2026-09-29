@@ -1,0 +1,103 @@
+---
+# Authored 2026-09-13 from @canonical/lit-ds-prototype src/lib/BasicSection/styles.css on .ds.basic-section
+# The reference corrects the notation it replaces: the section is a one- or
+# two-column grid holding a leading rule, a header of label plus title, and a
+# content column of subtitle plus list blocks. The title and subtitle are props,
+# there is no CTA position, and the content blocks are ds-list elements.
+node:
+  uri: sites_webcomponentsprototype.pattern.basic_section
+  styles:
+    layout.type: grid
+    layout.grid.column: 1 / -1
+    # --columns is component-local: 1 by default, 2 from 1120px up, and 2 from
+    # 620px up when the section is split on medium.
+    layout.grid.columns: repeat(1, 1fr)
+    # dropped the bottom padding: the reference reads --spacing-vertical-xxlarge
+    # (--spacing-vertical-xxxlarge when deep, --spacing-vertical-xlarge when
+    # shallow), none of which any stratum declares, and it writes no literal
+  edges:
+    - node:
+        role: top rule
+        styles:
+          size.width: 100%
+          layout.grid.column: 1 / -1
+          # The topRule prop selects the line: `highlighted` is a 4px top border,
+          # `muted` a 1px one, `none` removes the rule, and the default class
+          # matches no rule at all. Both colours are literals the reference writes
+          # in place (black, lightgray) on a key that admits no bare literal.
+      relation:
+        cardinality: "1"
+    - node:
+        role: header
+        # The stylesheet gives .header no properties of its own.
+        edges:
+          - node:
+              role: label
+              styles:
+                spacing.external.block.start: 0
+                spacing.external.block.end: 0
+                spacing.external.inline.start: 0
+                spacing.external.inline.end: 0
+                typography.weight: 550
+                typography.variant.caps: all-small-caps
+                typography.letterSpacing: 0.05em
+                typography.size: 1rem
+            relation:
+              cardinality: "0..1"
+          - node:
+              role: title
+              styles:
+                typography.size: 2.5rem
+                typography.lineHeight: 3rem
+                spacing.external.block.start: 0
+                spacing.external.block.end: 0.95rem
+                spacing.internal.block.start: 0.55rem
+                typography.weight: 180
+              edges:
+                - node:
+                    role: title link
+                    styles:
+                      typography.decoration: none
+                      typography.decoration@hover: underline
+                      typography.decoration.thickness@hover: 2px
+                  relation:
+                    cardinality: "0..1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+    - node:
+        role: content column
+        # The stylesheet gives .content no properties of its own.
+        edges:
+          # The subtitle's heading level is a prop, and the stylesheet gives the two
+          # levels different type.
+          - switch:
+              on: props
+              cases:
+                - node:
+                    role: subtitle at heading 4
+                    styles:
+                      typography.size: 1.5rem
+                      typography.lineHeight: 2rem
+                      spacing.external.block.start: 0
+                      spacing.external.block.end: 1.05rem
+                      spacing.internal.block.start: 0.45rem
+                      typography.weight: 275
+                - node:
+                    role: subtitle at heading 5
+                    styles:
+                      typography.size: 1rem
+                      typography.lineHeight: 1.5rem
+                      spacing.external.block.start: 0
+                      spacing.external.block.end: 1.125rem
+                      spacing.internal.block.start: 0.375rem
+                      typography.weight: 550
+            relation:
+              cardinality: "0..1"
+          - node:
+              uri: sites_webcomponentsprototype.component.list
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "1"

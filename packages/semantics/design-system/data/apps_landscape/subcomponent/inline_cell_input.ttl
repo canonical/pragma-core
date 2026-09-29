@@ -1,0 +1,36 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.subcomponent.inline_cell_input a ds:Subcomponent;
+    ds:name "Inline Cell Input";
+    ds:summary "Inline Cell Input wraps Canonical Input with a local string draft. It initializes that draft once from the required `value` prop, updates only local state while typing, and calls the required promise-returning `onChange` callback with the current draft whenever the input blurs.\n\nIt is used for compact table-cell editing where persistence belongs to the parent. Despite the callback name, `onChange` is a blur-commit callback rather than a native change event; the component does not await it, expose pending/success/failure state, or resynchronize the draft when the prop changes later.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.subcomponent.inline_cell_input\n  edges:\n    - node:\n        uri: global.component.input\n        role: inline editor\n        attributes:\n          type: text\n          autocomplete: off\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-60&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 34\n\n";
+    ds:usage "### When to use\n\n**Compact table edits**\n\nUse for a short text value that can be edited directly within a data cell.\n\n**Commit on exit**\n\nUse when changes should be submitted after the user leaves the field rather than on every keystroke.\n\n**Parent-owned validation and persistence**\n\nUse when the owning table can provide inherited Input error/help/label props and handle the commit promise outside the component.\n\n### When not to use\n\n**Explicit review required**\n\nEdits need Save and Cancel actions or confirmation before persistence.\n\n**Incorrect pattern**: Using Inline Cell Input and expecting to capture user confirmation or provide a separate Save/Cancel button pair.\n\n**Remediation strategy**: Use a modal form or side-panel edit component with explicit Save and Cancel actions.\n\n**Complex or destructive values**\n\nThe field needs support for multiline, structured, security-sensitive, or destructive edits.\n\n**Incorrect pattern**: Attempting to edit multiline text, JSON objects, or security-sensitive values in a single-line cell input.\n\n**Remediation strategy**: Use a dedicated form component or modal for complex edits, or implement a specialized input that validates and confirms destructive operations.\n\n**Externally replaceable values**\n\nThe displayed value must immediately track later prop changes, server refreshes, row reuse, or reset actions.\n\n**Incorrect pattern**: Expecting the local draft to resynchronize when the `value` prop changes after the component has mounted.\n\n**Remediation strategy**: Remount the component with a stable key when external values change, or use a different controlled input contract that responds to prop updates.\n\n**Visible save lifecycle**\n\nUsers need to see saving, saved, conflict, retry, or failed states.\n\n**Incorrect pattern**: Using Inline Cell Input and expecting it to display loading spinners, success indicators, or error states during or after commit.\n\n**Remediation strategy**: Implement a separate status indicator or use a form component that renders mutation state, or add custom state management around the commit promise.";
+    ds:guidelines "### Accessibility\n\n- Provide an accessible label. Current table consumers pass a label plus `u-off-screen`; the wrapper does not infer a name from the table header.\n- Error, required, help, disabled, and described-by behavior are inherited from Canonical Input through forwarded props; no additional ARIA is added locally.\n- A rejected commit promise has no local error announcement or focus restoration. The parent must surface failure without silently losing the user’s context.\n\n### Content\n\n- Use for concise values that remain understandable without a separate form layout.\n- Make saved, saving, and failed states clear in the owning table when persistence is not immediate.\n- Localize labels, placeholders, help, and errors at the call site. The component has no source-owned visible strings.\n\n### Internationalization\n\n- The draft accepts arbitrary strings; any locale-specific parsing or normalization belongs to the parent commit handler.\n- Ensure translated hidden labels remain unique enough to identify the row/field context when table headers alone are insufficient.\n\n### Keyboard navigation\n\n- Tabbing away commits the value; do not intercept Tab or strand focus in the cell.\n- Pointer-induced blur also commits. Pressing Enter has no local save behavior, and Escape does not revert the draft.\n- The component adds no keyboard handler, pending lock, or focus movement.\n\n### Device and layout\n\n- Width, density, wrapping, and touch target come from Canonical Input plus forwarded classes; there is no local stylesheet.\n- Keep a usable width in horizontally constrained tables and do not rely on hover to communicate editability or commit state.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`InlineCellInput.value`";
+        ds:summary "Initial value used by `useState`.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Read on initial mount only; later prop changes do not replace the draft. Local `value` is always passed to Input. "
+    ], [
+        a ds:Property;
+        ds:name "`InlineCellInput.onChange`";
+        ds:summary "Commit callback invoked on blur with the current draft. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(value: string) => Promise<void> | Promise<FormikErrors<unknown>>`. The component does not await, catch, inspect Formik errors, or suppress unchanged commits. "
+    ], [
+        a ds:Property;
+        ds:name "`InlineCellInput` remaining Input props";
+        ds:summary "Forwarded to Canonical Input. Common consumers pass `label`, `labelClassName`, `className`, `wrapperClassName`, `placeholder`, Formik `name`, and `error`. ";
+        ds:propertyType "object";
+        ds:defaultValue "Canonical Input defaults; local initial `type`/autocomplete values as above ";
+        ds:constraints "TypeScript: `Omit<InputProps, \"onBlur\" | \"onChange\">`. Consumers may supply any supported subset. Spread occurs after local `type=\"text\"` and `autoComplete=\"off\"`, so inherited props can override those initial values. ";
+        ds:optional "true"
+    ].

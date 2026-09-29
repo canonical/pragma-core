@@ -1,0 +1,92 @@
+---
+# TODO implementation: no reference in @canonical/lit-ds-prototype
+# No subcomponent subject exists in this tier, so the item and its parts are roles
+# rather than the retired vanilla.* uris.
+node:
+  uri: sites_webcomponentsprototype.pattern.equal_heights
+  styles:
+    layout.type: grid
+    layout.direction: row   # was horizontal
+    layout.wrap: wrap
+    layout.align: stretch   # was layout.align-items: stretch
+    size.width: fill
+    # dropped spacing.gap: spacing/large — no spacing symbol corresponds
+  edges:
+    - node:
+        role: equal-heights item
+        styles:
+          layout.type: flex   # was stack
+          layout.direction: column   # was vertical
+          layout.flex.grow: 1
+          # dropped size.min.width: size/equal-heights/item-min — no dimension symbol corresponds
+          size.height: fill
+          # dropped spacing.gap: spacing/medium — no spacing symbol corresponds
+        edges:
+          - node:
+              role: item media
+              styles:
+                layout.type: block
+                size.width: fill
+                # dropped size.height: size/equal-heights/media — no dimension symbol corresponds
+                layout.objectFit: cover
+                # dropped appearance.radius: shape/rounded/top — the roster has no
+                # per-corner radius key, and no dimension symbol corresponds
+                layout.flex.shrink: 0
+            relation:
+              cardinality: "0..1"
+              slotName: media
+          - node:
+              role: item content
+              styles:
+                layout.type: flex   # was stack
+                layout.direction: column   # was vertical
+                layout.flex.grow: 1
+                # dropped spacing.gap: spacing/small and spacing.internal: spacing/medium
+                # — no spacing symbol corresponds
+              edges:
+                - node:
+                    role: content title
+                    styles:
+                      typography.font: typography.heading.4   # was typography.size: font/size/heading/4
+                      typography.weight: typography.weight.bold   # was font/weight/bold
+                      typography.color: color.text   # was color/text/default
+                  relation:
+                    cardinality: "0..1"
+                    slotName: title
+                - node:
+                    role: content body
+                    styles:
+                      # dropped typography.size: font/size/medium — no dimension symbol corresponds
+                      typography.color: color.text.muted   # was color/text/muted
+                      layout.flex.grow: 1
+                  relation:
+                    cardinality: "0..1"
+                    slotName: body
+            relation:
+              cardinality: "1"
+              slotName: content
+          - node:
+              role: item footer
+              styles:
+                layout.type: flex   # was flow
+                layout.direction: row   # was horizontal
+                layout.align: center
+                layout.wrap: wrap
+                # dropped spacing.gap: spacing/small and spacing.internal: spacing/medium
+                # — no spacing symbol corresponds
+                spacing.external.top: auto
+                # dropped appearance.border.top: border/style/divider — the value named
+                # no width or colour a symbol declares
+              edges:
+                - node:
+                    role: footer content
+                    styles:
+                      layout.type: block
+                  relation:
+                    cardinality: "1"
+                    slotName: default
+            relation:
+              cardinality: "0..1"
+              slotName: footer
+      relation:
+        cardinality: "2..*"

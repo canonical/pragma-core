@@ -1,0 +1,27 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/pattern/Modal/common/Content/styles.css on .ds.modal-content.
+node:
+  uri: global.subcomponent.modal-content
+  styles:
+    # Takes the space the header and footer leave.
+    layout.flex.grow: 1
+    layout.flex.shrink: 1
+    layout.flex.basis: auto
+    # Scrollbars only when needed — this is the modal's only scroller.
+    layout.overflow: auto
+    # The inline padding --modal-padding-inline is shared with the header and
+    # the footer, so the three sections align.
+    spacing.internal.block.start: dimension.300   # --modal-content-padding-block, a surface inset
+    spacing.internal.block.end: dimension.300     # --modal-content-padding-block, a surface inset
+    spacing.internal.inline.start: dimension.300  # --modal-padding-inline, a surface inset
+    spacing.internal.inline.end: dimension.300    # --modal-padding-inline, a surface inset
+    # `min-block-size: 0` lets the pane shrink instead of pushing the dialog past
+    # its max block size; size.min.block takes a token only, so the literal the
+    # implementation writes is not bound.
+  edges:
+    - node:
+        role: content
+      relation:
+        cardinality: "1"
+        slotName: default

@@ -1,0 +1,20 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.combobox-footer a ds:Subcomponent;
+    ds:name "Combobox.Footer";
+    ds:summary "The **Combobox Footer** is a subcomponent of the Combobox that provides a dedicated area for actions, such as “Apply” or “Cancel” buttons.\n\n**Main Use Cases:**\n\n- **Actions:** Provide a clear and consistent location for primary and secondary actions.\n- **Information:** Display additional information, such as the number of selected items.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.subcomponent.combobox.footer\n  styles:\n    layout.display: flex\n    layout.direction: horizontal\n    layout.align: center\n    layout.justify: flex-end\n    spacing.gap: spacing/inline/extra-small\n    appearance.border: border/style/divider\n  edges:\n    - node:\n        role: action area\n      relation:\n        cardinality: \"1..*\"\n        slotName: default";
+    ds:anatomyClassic "The Combobox Footer is composed of a main container and an action area.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the footer.\n2. **Action Area:** The area where the action buttons are placed.";
+    ds:usage "### 1. General Description\n\nThe Combobox Footer is used to provide a consistent location for actions within a Combobox. It is particularly useful when the Combobox has a multi-select functionality.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Multi-select:** Use when the Combobox allows for multiple selections.\n- **Actions:** Use when you need to provide actions, such as “Apply” or “Cancel”.\n\n2.2 When Not to Use\n\n- **Single-select:** Do not use when the Combobox only allows for a single selection.";
+    ds:guidelines "### Content Specification\n\n- **Button labels:** Use clear and concise labels for the action buttons.\n- **Order:** Place the primary action on the right and the secondary action on the left.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The content of the footer, usually action buttons.";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.combobox.

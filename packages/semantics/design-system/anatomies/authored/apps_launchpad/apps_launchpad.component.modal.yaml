@@ -1,0 +1,25 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.modal
+  styles:
+    layout.position: fixed
+    appearance.border.width: dimension.stroke.thickness.medium   # was border/width/default
+    appearance.border.color: color.border.highlighted   # was color/border/high-contrast
+    # dropped appearance.backdrop.color: color/background/overlay — the roster has no backdrop key
+    motion.property: display, opacity, overlay
+    # dropped interaction.transition.duration: transition/duration/fast — no motion symbol is declared
+  edges:
+    - node:
+        role: trigger
+      relation:
+        cardinality: "0..1"
+        slotName: trigger
+    - switch:
+        on: override
+        cases:
+          - uri: apps_launchpad.subcomponent.modal-content
+          - uri: $custom
+      relation:
+        cardinality: "0..1"
+        slotName: children

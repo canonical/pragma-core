@@ -1,0 +1,7 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.side_panel-content-body
+  styles:
+    typography.font: typography.text.primary   # was typography.style: paragraph/default
+    typography.color: color.text   # was color/text/default

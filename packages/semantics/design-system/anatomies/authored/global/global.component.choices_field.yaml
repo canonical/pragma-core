@@ -1,0 +1,117 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form src/lib/common/Wrapper/styles.css on .ds.field
+# and src/lib/component/ChoicesField/styles.css on .ds.form-choices
+# The field chrome is the shared Wrapper's; the payload holds one fieldset of
+# options, each a control beside its own label. The control is a radio or a
+# checkbox depending on the `type` prop — a genuine prop switch — and each
+# control's own styles live in its own anatomy. The three layouts the fieldset
+# offers (inline wrapping by default, `.stacked` one per line, `.columns` a
+# grid of --choices-columns equal columns) change layout only, never the tree,
+# so the default is what is bound here.
+node:
+  uri: global.component.choices_field
+  styles:
+    layout.type: grid
+    layout.grid.columns: subgrid
+    # reads --form-field-columns.
+    layout.grid.column: "1 / -1"
+    layout.align: baseline
+    # reads --form-field-label-gap (--space-100 -> --dimension-100).
+    spacing.gap.block: spacing.gap.field.block
+  edges:
+    - node:
+        uri: global.subcomponent.field-label
+        styles:
+          layout.grid.column: "1 / -1"
+      relation:
+        cardinality: "1"
+        slotName: label
+    - node:
+        role: payload
+        styles:
+          layout.type: grid
+          layout.grid.columns: subgrid
+          layout.grid.column: "1 / -1"
+          # reads --form-group-gap (--space-100 -> --dimension-100).
+          spacing.gap.block: spacing.gap.field.block
+        edges:
+          - node:
+              uri: global.subcomponent.field-description
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "0..1"
+              slotName: description
+          - node:
+              role: choices group
+              styles:
+                layout.type: flex
+                layout.wrap: wrap
+                layout.grid.column: "1 / -1"
+                appearance.border.style: none
+                spacing.internal.block.start: 0
+                spacing.internal.block.end: 0
+                spacing.external.block.start: 0
+                spacing.external.block.end: 0
+                spacing.external.inline.start: 0
+                spacing.external.inline.end: 0
+                # The fieldset's own inline padding reads
+                # --form-input-padding-inline (--component-padding-inline ->
+                # --space-200 -> --dimension-200, 16px).
+                spacing.internal.inline.start: dimension.200
+                spacing.internal.inline.end: dimension.200
+                # The row gap between wrapped options reads --form-group-gap,
+                # the block gap between fields; the column gap reads
+                # --container-gap-loose (--space-300 -> --dimension-300, 24px),
+                # which no spacing role states.
+                spacing.gap.block: spacing.gap.field.block
+                spacing.gap.inline: dimension.300
+              edges:
+                - node:
+                    role: option
+                    styles:
+                      layout.type: flex
+                      layout.align: center
+                      # reads --space-100 (-> --dimension-100): the gap between
+                      # the mark and its label.
+                      spacing.gap: spacing.gap.mark.inline
+                      interaction.cursor: pointer
+                      interaction.cursor@disabled: not-allowed
+                    edges:
+                      - switch:
+                          on: props
+                          cases:
+                            - uri: global.subcomponent.radio_input
+                            - uri: global.subcomponent.checkbox_input
+                        relation:
+                          cardinality: "1"
+                          slotName: default
+                      - node:
+                          role: option label
+                          styles:
+                            spacing.internal.block.start: 0
+                            spacing.internal.block.end: 0
+                            spacing.internal.inline.start: 0
+                            spacing.internal.inline.end: 0
+                            # The reference reads
+                            # --form-label-color-disabled first, which no
+                            # symbol declares.
+                            typography.color@disabled: color.text.disabled
+                        relation:
+                          cardinality: "1"
+                          slotName: label
+                  relation:
+                    cardinality: "2..*"
+                    slotName: default
+            relation:
+              cardinality: "1"
+              slotName: default
+          - node:
+              uri: global.subcomponent.field-error
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "0..1"
+              slotName: error
+      relation:
+        cardinality: "1"

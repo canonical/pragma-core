@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.pattern.action_bar a ds:Pattern;
+    ds:name "ActionBar";
+    ds:summary "**Definition**\n\nAn action bar is a pattern that groups a set of controls directly related to the entire current view or a selected object within the view (e.g. a table, a side panel). The controls in an action bar can be task-oriented (examples) or otherwise (examples). Action bars reduce cognitive load by combining related actions in a predictable, easily accessible manner and in order of importance. \n\nFor the sake of simplicity, sort, group, toggle, search and filter actions have been excluded from the scope of action bars.\n\n\n\n**How is an action bar different from a button group?**\n\nA button group is a structural variation of the broader action bar pattern. Other structural variations are menu group, icon button group and overdrive menu. All variations are detailed below in the ‘Action Bar Types’ section.\n\n\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdocumentation.

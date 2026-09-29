@@ -1,0 +1,21 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.layout.content_layout a ds:Layout;
+    ds:name "ContentLayout";
+    ds:summary "";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-02-16T00:00:00.000+01:00";
+        ds:change "renamed from ViewContentLayout";
+        ds:changeType "change"
+    ];
+    ds:grid " repeat(  \n     auto-fit,   \n     minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr)  \n       minmax(100px, 1fr)                                     \n  );  ";
+    ds:domain "the content of the view".

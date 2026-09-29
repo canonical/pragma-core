@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.file_tree-node a ds:Subcomponent;
+    ds:name "FileTree.Node";
+    ds:summary "";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:parentComponent ds:apps.component.file_tree.

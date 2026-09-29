@@ -1,0 +1,31 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration. Three repairs: the root uri was
+# `ds:global.component:ChartLegend` — the wrong type segment, the wrong block and
+# the retired colon spelling; the heading it referenced,
+# `ds:global.subcomponent:ChartLegendHeading`, names no ds: subject, so the
+# position becomes a role node; and the item reference is spelled as the subject
+# that does exist, global.subcomponent.chart_legend_item. The notation's markdown
+# fence and title line are dropped.
+node:
+  uri: global.subcomponent.chart_legend
+  styles:
+    layout.type: flex
+    layout.direction: column
+    layout.align: flex-start
+  edges:
+    - node:
+        role: heading
+        styles:
+          # `text/secondary/bold` migrates to the composite it names; the size
+          # key admits dimension.* alone, so typography.font carries the tier.
+          typography.font: typography.text.secondary.bold
+          typography.color: color.text
+      relation:
+        cardinality: "0..1"
+        slotName: header
+    - node:
+        uri: global.subcomponent.chart_legend_item
+      relation:
+        cardinality: "1..*"
+        slotName: default

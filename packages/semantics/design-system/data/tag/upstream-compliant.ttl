@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.upstream-compliant a ds:Tag;
+    ds:name "upstream-compliant";
+    ds:category ds:tagcategory.lpupstream;
+    ds:whenToApply "Tag to be used by Launchpad in cycle 26.10 to mark components that should be upstreamed";
+    ds:whenToRemove "".

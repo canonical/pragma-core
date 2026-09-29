@@ -1,0 +1,45 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.code_snippet a ds:Component;
+    ds:name "CodeSnippet";
+    ds:summary "The code snippet component displays multi-line or complex code, commands, and technical content that requires distinct visual treatment from surrounding content. This covers full code files, terminal commands, and their output. It supports showing code in multiple languages and different versions of a product or library. For single-line code, use the [InlineCode](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-SbanhxEvMc) component's inline variant instead.";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# A notation migration of the previous DSL: structure and bindings kept, values\n# migrated. (react-ds-global ships InlineCode, which is the separate\n# ds:global.component.inline_code block, not this one.)\nnode:\n  uri: global.component.code_snippet\n  styles:\n    layout.type: flex   # was stack\n    layout.direction: column   # was vertical\n    # Was `color/surface/code`; no symbol declares color.background.code, so\n    # this is the declared background the surface correspondence lands on.\n    appearance.background: color.background\n    # Was `appearance.radius: radius/code` — dropped, since no symbol declares\n    # dimension.radius.code.\n    # Was `appearance.border: border/style/code` — dropped: the roster splits a\n    # border into colour, width and style keys, and no symbol declares a\n    # border/style/code counterpart for any of them.\n  edges:\n    - node:\n        # Was `global.subcomponent.code_snippet-header`, which names no\n        # subject; the block is a component, ds:global.component.code_snippet-header.\n        uri: global.component.code_snippet-header\n      relation:\n        cardinality: \"0..1\"\n        slotName: header\n    - node:\n        # Was `global.subcomponent.code_snippet-content`, likewise a component.\n        uri: global.component.code_snippet-content\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3150-3250&t=xywvHwUKZ8RRCYSo-1";
+    ds:usage "Use code snippet to display complex or lengthy code, commands, and technical content that benefits from features such as syntax highlighting, line numbers, and language or version selection. Always provide surrounding context that explains how the displayed code is relevant to the reader or the page content.\n\nKeep titles short and descriptive of the type of code the reader can expect in the content area.\n\n### **When to use**\n\n- The code is multi-line and benefits from syntax highlighting or correct indentation.\n- The content needs to be presented in multiple languages.\n- The content needs to be presented across different versions of a product or library, such as a command with different syntax between versions.\n- Line numbers would help the reader navigate or reference the code.\n- You need to display a full code file.\n\n### **When not to use**\n\n- For inline code references within running text. \n  - Incorrect: Inserting a multi-line code snippet block in the middle of a paragraph to highlight a single variable like `const user`.\n  - Remediation: Use the [InlineCode](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-SbanhxEvMc) component’s inline variant instead.\n- For log output or simple pre-formatted text. \n  - Incorrect: Wrapping a server access log in a code snippet component.\n  - Remediation: Use the [InlineCode](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-SbanhxEvMc) component’s code block variant instead.\n- As a code editor. Code snippet is read-only and should not be made editable. As of now the design system does not provide a code editor.\n\n";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasSubcomponent ds:global.component.code_snippet-content, ds:global.component.code_snippet-header;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-03-21T00:00:00.000+01:00";
+        ds:change "added minimal documentation based on previous work session with design team";
+        ds:changeType "change"
+    ];
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.code_snippet;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.code_snippet-header;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.code_snippet-header;
+        ds:node "$root/filename";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ].

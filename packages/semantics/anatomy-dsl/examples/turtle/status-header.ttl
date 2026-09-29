@@ -1,0 +1,95 @@
+@prefix : <https://anatomy.canonical.com/> .
+@prefix dt: <https://dt.canonical.com/> .
+
+[] a :Specification ;
+    :rootNode [
+        a :NamedNode ;
+        :uri "global.subcomponent.status-header" ;
+        :hasProjection [ a :Projection ; :projectionType "Component" ] ;
+        :hasStyle
+            [ a :Style ; :styleKey "layout.type" ; :styleValue "flex" ] ,
+            [ a :Style ; :styleKey "layout.align" ; :styleValue "center" ] ,
+            [ a :Style ; :styleKey "spacing.gap" ; :styleValue "spacing.gap.mark.inline" ; :consumes ( dt:spacing.gap.mark.inline ) ] ;
+        :hasEdge [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.subcomponent.status-header-title" ;
+                :hasProjection [ a :Projection ; :projectionField "_meta.title" ] ;
+                :hasProp
+                    [ a :Prop ; :propName "truncate" ; :propValue "true" ] ;
+                :hasStyle
+                    [ a :Style ; :styleKey "typography.weight" ; :styleValue "typography.weight.semiBold" ; :consumes ( dt:typography.weight.semiBold ) ] ,
+                    [ a :Style ; :styleKey "typography.overflow" ; :styleValue "ellipsis" ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "1" ;
+                :slotName "title"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeSwitch [
+                a :Switch ;
+                :discriminator "internal" ;
+                :hasCase [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.component.icon" ;
+                        :hasProp
+                            [ a :Prop ; :propName "icon" ; :propValue "spinner" ]
+                    ]
+                ] , [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.component.icon" ;
+                        :hasProp
+                            [ a :Prop ; :propName "icon" ; :propValue "checkmark" ]
+                    ]
+                ] , [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.component.icon" ;
+                        :hasProp
+                            [ a :Prop ; :propName "icon" ; :propValue "error" ]
+                    ]
+                ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..1" ;
+                :slotName "status"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.component.icon" ;
+                :hasProp
+                    [ a :Prop ; :propName "icon" ; :propValue "chevron-down" ] ;
+                :hasStyle
+                    [ a :Style ; :styleKey "size.width" ; :styleValue "dimension.200" ; :consumes ( dt:dimension.200 ) ] ,
+                    [ a :Style ; :styleKey "size.height" ; :styleValue "dimension.200" ; :consumes ( dt:dimension.200 ) ] ,
+                    [ a :Style ; :styleKey "typography.color" ; :styleValue "[modifier.color.icon, color.icon.muted]" ; :consumes ( dt:modifier.color.icon dt:color.icon.muted ) ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "1" ;
+                :slotName "expand-indicator"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.component.icon"
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..1" ;
+                :slotName "leading-icon"
+            ]
+        ]
+    ] .

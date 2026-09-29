@@ -1,0 +1,178 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.accordion-item a ds:Subcomponent;
+    ds:name "Accordion.Item";
+    ds:summary "The accordion item is a collapsible content panel that belongs to a parent [Accordion](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-FfEcibePe1)  component. It consists of a clickable header and a hidden content body, allowing users to toggle the visibility of information within a restricted space.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/component/Accordion/common/Item/styles.css on .ds.accordion-item and\n# its child selectors (> .header, > .header > .heading, > .header > .chevron,\n# > .content). The item is a native <details>/<summary>.\nnode:\n  uri: global.subcomponent.accordion-item\n  styles:\n    # The divider that ends each item. The roster has no block-end colour key, so\n    # the bottom key carries the border-block-end the implementation writes; its\n    # width, dimension.stroke.thickness.medium, has no one-edge key.\n    appearance.border.bottom.color: color.border.muted\n    appearance.border.style: solid\n    # `border-inline` is declared as an extension point whose colour\n    # (--accordion-item-border-inline-color) is deliberately left undefined, so no\n    # inline border renders and nothing is bound for it; the roster carries no\n    # inline-side width or colour key either.\n    # layout.type/layout.direction are dropped: the item is a <details> and the\n    # stylesheet declares no display for it.\n  edges:\n    - node:\n        role: header tab\n        styles:\n          layout.type: flex\n          layout.direction: row\n          layout.align: center\n          layout.listStyle: none\n          interaction.cursor: pointer\n          spacing.gap: dimension.200                    # --accordion-item-header-gap, between chevron and heading\n          spacing.internal.block.start: dimension.100   # --accordion-item-header-padding-block\n          spacing.internal.block.end: dimension.100     # --accordion-item-header-padding-block\n          spacing.internal.inline.start: dimension.200  # --accordion-item-header-padding-inline, a surface inset\n          spacing.internal.inline.end: dimension.200    # --accordion-item-header-padding-inline, a surface inset\n          typography.color: color.text\n          # The ghost surface channel is read on the element so it steps with\n          # .surface nesting, then the flat ghost token.\n          appearance.background: [surface.color.foreground.ghost, color.foreground.ghost]\n          # The hover/active reads prefer --surface-color-foreground-ghost-hover\n          # and -active, which no stratum declares (the surface family mints only\n          # the base ghost channel), so only the flat state tokens are written.\n          appearance.background@hover: color.foreground.ghost.hover\n          appearance.background@active: color.foreground.ghost.active\n          # A STOPGAP in the stylesheet re-points those two per surface depth —\n          # color.foreground.ghost.layer2.hover/.active on a layer-2 surface and\n          # the layer3 pair on a layer-3 one — until the surfaces modifier ships\n          # hover and active channels. Surface depth is a context selector, not a\n          # node, so the layered pairs are recorded rather than bound.\n          # Whichever element sits directly above the item's block-end divider\n          # subtracts the divider thickness from its own block-end padding, so\n          # the item's border-box height stays a baseline multiple: collapsed,\n          # that is the header; expanded, the content panel. Both are calc()s and\n          # neither is bound.\n        edges:\n          - node:\n              role: chevron\n              styles:\n                layout.flex.shrink: 0\n                size.width: dimension.200\n                size.height: dimension.200\n                motion.property: transform\n                # The chevron points right while the item is closed (the down\n                # glyph rotated -90deg) and down once it is open. `[open]` is\n                # the expanded state, but the difference between the two faces\n                # is a transform and no roster key takes one, so the expanded\n                # face carries no binding.\n                # The rotation transition reads --motion-duration-fast and\n                # --motion-easing-standard, which no stratum declares, and the\n                # chain has no literal to fall back to, so neither is bound.\n              edges:\n                - node:\n                    # drawn as ::before\n                    role: chevron glyph\n                    styles:\n                      layout.type: block\n                      size.width: 100%\n                      size.height: 100%\n                      # Masked, so what the glyph binds is its colour and its\n                      # size: chevron-down.svg is applied as a mask over the\n                      # fixed chevron box and the icon token paints through it.\n                      # No roster key takes a mask.\n                      appearance.background: color.icon\n                  relation:\n                    cardinality: \"1\"\n            relation:\n              cardinality: \"1\"\n          - node:\n              role: heading\n              styles:\n                layout.flex.grow: 1\n                layout.flex.shrink: 1\n                layout.flex.basis: 0%\n                size.min.width: 0\n                # All five facets of the text-primary composite are read\n                # (--typography-text-primary-font-{family,size,weight},\n                # -line-height, -letter-spacing), so the composite is bound once.\n                typography.font: typography.text.primary\n                # Every heading element except <h6> is normalised down to that\n                # tier with `font: inherit` and `margin: 0`; an <h6> keeps the\n                # heading-6 tier from @canonical/styles-typography. Those are\n                # rules on the consumer's own element inside the slot, not on a\n                # node of this tree.\n            relation:\n              cardinality: \"1\"\n              slotName: heading\n              # The consumer supplies the heading through the `heading` prop, so\n              # the slot is named for it; `children` go to the content panel,\n              # which is the default slot.\n      relation:\n        cardinality: \"1\"\n        slotName: header\n    - node:\n        role: content panel\n        styles:\n          typography.color: color.text\n          spacing.internal.block.start: dimension.100  # --accordion-item-content-padding-block\n          spacing.internal.block.end: dimension.100    # --accordion-item-content-padding-block\n          spacing.internal.inline.end: dimension.200   # --accordion-item-content-padding-inline, a surface inset\n          # padding-inline-start is --accordion-item-content-indent, a calc() over\n          # the header's inline padding, the chevron size and the header gap, so\n          # the panel's text aligns under the heading. A calc is not a symbol and\n          # is not bound.\n          # Inside a density scope the panel's block padding is re-derived from\n          # --density-space-md and the header takes the shared control seat, so\n          # both paddings become calc() over --control-seat-* and\n          # --density-line-height-effective. A density or context selector is not\n          # a node, and none of those names is declared.\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "The accordion item is intended to reduce visual noise and page length by keeping details hidden until requested. Use only as part of the Accordion.  \n";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "heading";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:propertyType "text";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:global.component.accordion;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.bottom.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:surface.color.foreground.ghost
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.foreground.ghost
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "hover";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.ghost.hover
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "active";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.ghost.active
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab/chevron";
+        anatomy:styleKey "size.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab/chevron";
+        anatomy:styleKey "size.height";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab/chevron/chevron glyph";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.icon
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/header tab/heading";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/content panel";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/content panel";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/content panel";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.accordion-item;
+        ds:node "$root/content panel";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ].

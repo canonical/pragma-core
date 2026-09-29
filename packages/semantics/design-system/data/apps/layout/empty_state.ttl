@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.layout.empty_state a ds:Layout;
+    ds:name "EmptyState";
+    ds:summary "Empty states are temporary app layouts used when there is no data to display to the user. They can be encountered at page level, section level or component level. They can be encountered the first time a user interacts with a feature that has not yet been configured,  when a search action does not return any results, or when data has been deleted or is unavailable.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "\n\n1. **Icon:** a visual clue that enforces the message.  \n2. **Heading:** a short descriptioon of the current state\n3. **Description:** further explanation regarding the reason of the empty state and what the user can do to resolve it.\n4. **Actions:** the primary action should be the one helping the user resolve the empty state. A secondary action is allowed that would offer additional guidance.\n\n";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition.

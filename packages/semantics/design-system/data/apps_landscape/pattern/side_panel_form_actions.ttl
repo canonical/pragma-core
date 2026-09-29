@@ -1,0 +1,126 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.side_panel_form_actions a ds:Pattern;
+    ds:name "Side Panel Form Actions";
+    ds:summary "Sticky footer pattern for side-panel forms, rendering Back, Cancel, optional secondary, and primary action buttons. The primary button uses native form submission by default or a click callback when `onSubmit` is supplied. Handles async loading states and delegates panel dismissal to `useSidePanel`.\n\nMain use cases:\n\n- Provide consistent form action layout across create/edit/delete side-panel workflows  \n- Manage async submission states with loading feedback on the primary button  \n- Support multi-step workflows with Back button navigation  \n- Enable alternative actions like save-and-continue or destructive confirmations";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.side_panel_form_actions\n  role: sticky side-panel form command row\n  styles:\n    display: flex\n    position: sticky\n    bottom: \"0\"\n    borderTop: \"1px solid $colors--theme--border-default\"\n    zIndex: \"var(--z-sticky)\"\n  edges:\n    - node:\n        uri: global.component.button\n        role: back\n        relation:\n          cardinality: \"0..1\"\n          condition: hasBackButton is truthy\n    - node:\n        role: action button group\n        styles:\n          display: flex\n          flexGrow: \"1\"\n          justifyContent: flex-end\n        edges:\n          - node:\n              uri: global.component.button\n              role: cancel\n              relation:\n                cardinality: \"1\"\n          - node:\n              uri: global.component.button\n              role: secondary action\n              relation:\n                cardinality: \"0..1\"\n                condition: secondaryActionButtonTitle and secondaryActionButtonSubmit are truthy\n          - node:\n              uri: global.component.action_button\n              role: submit\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..1\"\n          condition: hasActionButtons is true";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=26-6&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 53\n\n";
+    ds:usage "### When to use\n\n**Side-panel forms**\n\nUse to keep Back, Cancel, optional secondary, and primary submit actions consistent across side-panel workflows.\n\n**Async submission**\n\nUse when a consumer controls a primary loading state and needs the primary action disabled while it is true.\n\n### When not to use\n\n**Page-level forms**\n\nWhen the form layout is not inside a side panel or the dismissal semantics differ.\n\n**Incorrect pattern**: Using this component to anchor a multi-step form on a full page or modal where form state should persist across navigation.\n\n**Remediation strategy**: Build a dedicated footer or action bar for your page layout, or use native HTML form submission with your own button controls.\n\n**Single immediate command**\n\nWhen the interaction requires only one action button.\n\n**Incorrect pattern**: Rendering a full action bar with Cancel, Back, and submit buttons when only one simple action is needed.\n\n**Remediation strategy**: Render a single Button component directly in your layout instead of wrapping it in this full-featured action bar.\n\n**Generic page footer**\n\nWhen you need a reusable footer but not the side-panel dismissal semantics.\n\n**Incorrect pattern**: Reusing the sticky negative-margin styling for a generic footer without a side-panel context or the expected close behavior.\n\n**Remediation strategy**: Build a simpler footer component or use Vanilla Framework’s footer utilities that don’t assume panel-specific layout and interaction patterns.";
+    ds:guidelines "### Accessibility\n\n- Back and Cancel have fixed visible labels. Consumers must provide a meaningful primary name and secondary content.\n- Loading semantics and announcements are delegated to Canonical `ActionButton`; local tests do not assert them.\n- This component does not restore focus when a panel closes. Focus return is a side-panel/provider responsibility and must be verified in the consuming workflow.\n- Keep callback buttons as native type-button controls and retain form submission only when the component is inside the intended form.\n\n### Content\n\n- Name submit actions with a specific verb such as Add profile, Save changes, or Remove target.\n- Keep one visually primary action and use negative appearance only when the action is destructive.\n\n### Keyboard and device\n\n- DOM/tab order is Back, Cancel, secondary, primary. Back sits outside the right-aligned action group.\n- Without `onSubmit`, the primary control is `type=\"submit\"`; it can participate in native form submission only when it belongs to a surrounding form. This component renders no form, supplies no `form` attribute, and implements no Enter-key handler.\n- With `onSubmit`, the primary control is `type=\"button\"` and invokes the supplied callback from its click path; the component does not establish Enter-key submission for that variant.\n- Local styles do not set `flex-wrap`, gaps, overflow, or breakpoints. Long translated labels and four-button variants can overflow on narrow panels; wrapping is an upstream requirement, not current behavior.\n\n### State and async behavior\n\n- The component owns no local state or effect.\n- `submitButtonLoading` is fully controlled and only affects the primary action.\n- Async callbacks are accepted by type but no rejection handling, notification, panel closure, or state reset occurs locally.\n- Back, Cancel, and secondary remain enabled during submit loading unless consumers explicitly disable applicable controls.\n\n### Content and internationalization\n\n- “Back” and “Cancel” are hardcoded English and cannot be replaced through props.\n- Primary and secondary content are consumer supplied. `submitButtonText` accepts only a string; secondary content accepts `ReactNode`.\n- No pluralization or dynamic status copy is generated locally.\n\n### Device / layout\n\n- Root background uses `$colors--theme--background-default` and switches to `$colors--theme--background-alt` under global `.is-dark`.\n- The top border uses `$colors--theme--border-default`; spacing uses `$sp-unit`, `$spv--x-large`; sticky stacking uses `var(--z-sticky)`.\n- No local mobile behavior exists. Suitability depends on the containing side-panel width and Canonical button sizing.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`submitButtonText`";
+        ds:summary "Visible primary-action content.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "No local fallback. Omitting both text and ARIA label can leave an unnamed action depending on ActionButton loading behavior. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`submitButtonAriaLabel`";
+        ds:summary "Sets the primary ActionButton `aria-label`. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "An ARIA label overrides the visible-text accessible name. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`submitButtonAppearance`";
+        ds:summary "Forwards ActionButton appearance.";
+        ds:propertyType "choice";
+        ds:defaultValue "`positive`";
+        ds:constraints "Choose intent in the consumer.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`submitButtonDisabled`";
+        ds:summary "Consumer-controlled primary disabled state.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "Combined with loading using logical OR.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`submitButtonLoading`";
+        ds:summary "Forwards ActionButton loading and disables the primary action. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Component does not start or clear loading itself.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`hasBackButton`";
+        ds:summary "Renders Back before the action group.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "No local guard requires `onBackButtonPress`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onBackButtonPress`";
+        ds:summary "Handles Back activation.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. The button remains rendered but inert when omitted. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onCancel`";
+        ds:summary "Overrides default cancellation.";
+        ds:propertyType "callback";
+        ds:defaultValue "`closeSidePanel`";
+        ds:constraints "TypeScript: `() => void`. When omitted, Cancel calls `useSidePanel().closeSidePanel`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`cancelButtonDisabled`";
+        ds:summary "Disables Cancel.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Independent from submit loading.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`secondaryActionButtonTitle`";
+        ds:summary "Secondary button content.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Must be truthy together with `secondaryActionButtonSubmit` to render. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`secondaryActionButtonSubmit`";
+        ds:summary "Handles secondary action activation.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(event: SyntheticEvent) => Promise<void> | void`. The promise is not awaited or caught by this component. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`secondaryActionButtonDisabled`";
+        ds:summary "Disables the secondary action.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "Has no loading presentation.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`hasActionButtons`";
+        ds:summary "Controls the complete Cancel, secondary, and primary group. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:constraints "Back can remain visible when false.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onSubmit`";
+        ds:summary "Changes primary type to `button` and handles activation. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(event: SyntheticEvent) => Promise<void> | void`. Without it, native form submission is used. ";
+        ds:optional "true"
+    ].

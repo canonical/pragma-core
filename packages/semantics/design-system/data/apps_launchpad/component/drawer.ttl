@@ -1,0 +1,40 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.drawer a ds:Component;
+    ds:name "Drawer";
+    ds:summary "SidePanel is a dialog UI block that slides in from the right edge of the viewport. It keeps the underlying page visible and allows users to inspect or edit information in context without navigating away.\n\nMain use cases:\n\n- Showing details of a selected list item alongside the list.\n- Editing or configuring an item without losing place in a workflow.\n- Temporarily displaying extended information that should not fully replace the current page.";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.component.side-panel\n  styles:\n    layout.position: fixed\n    layout.side: inline-end\n    size.height: 100vh\n    appearance.shadow: \"0 0 32px 0 rgba(0,0,0,0.2)\"\n    appearance.backdrop.color: transparent\n    appearance.border: none\n    interaction.transition.property:\n      - display\n      - transform\n      - overlay\n    interaction.transition.transform.closed: translateX(100%)\n    interaction.transition.transform.open: translateX(0)\n  edges:\n    - node:\n        role: trigger snippet\n      relation:\n        cardinality: \"0..1\"\n        slotName: trigger\n    - switch:\n        on: override\n        cases:\n          - uri: app-launchpad.subcomponent.side-panel-content\n          - uri: $custom\n      relation:\n        cardinality: \"0..1\"\n        slotName: children";
+    ds:anatomyClassic "";
+    ds:usage "Modal provides a native dialog-based overlay with two composition paths: declarative trigger/command wiring and imperative instance control. In practice, teams can build either structured confirmation dialogs or fully custom content while preserving consistent open, close, and dismissal behavior.\n\n## When to use\n\nUse SidePanel for adjacent workflows where users benefit from keeping the main page in view.\n\n## When not to use\n\n### **Lightweight contextual actions**\n\n**Incorrect pattern**: using a blocking dialog for quick contextual choices that should not interrupt page interaction.  \n**Remediation strategy**: use a non-modal surface for quick, in-context choices.\n\n### **Fully replacing page navigation**\n\n**Incorrect pattern**: using a side panel as a secondary page destination with independent navigation context.  \n**Remediation strategy**: route to a dedicated page instead.";
+    ds:guidelines "## **Trigger and dialog relationship**\n\nEnsure trigger props are applied to an interactive control so assistive technologies can identify side panel intent and ownership.\n\n## **Explicit close controls**\n\nProvide at least one visible close action inside the side panel content, especially when light dismissal is disabled.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "trigger";
+        ds:summary "Snippet that renders the trigger element used to open the side panel.";
+        ds:propertyType "Snippet";
+        ds:constraints "Receives commandfor, command show-modal, aria-haspopup dialog, and optional onclick fallback when invoker commands are unsupported.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "Snippet that renders side panel content.";
+        ds:propertyType "Snippet";
+        ds:constraints "Receives commandfor and close callback. Can use SidePanel.Content or custom markup.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "closeOnOutsideClick";
+        ds:summary "Whether a light dismissal is enabled.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "true"
+    ], [
+        a ds:Property;
+        ds:name "Dialog passthrough attributes";
+        ds:summary "Forwarded HTML dialog attributes.";
+        ds:optional "true"
+    ];
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.side_panel-content.

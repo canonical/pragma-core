@@ -1,0 +1,60 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.log a ds:Component;
+    ds:name "Log";
+    ds:summary "Log is a structured, scrollable table for displaying sequential log entries with line numbers, timestamps, and message content. Use it to surface build output, deployment pipelines, system events, or any append-style stream of timestamped text. The component handles timestamp formatting (UTC, local, or explicit timezone), optional line-level linking via URL fragment targeting, line wrapping control.";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.component.log\n  styles:\n    layout.display: block\n    layout.overflow: auto\n    appearance.background.color: \"color/background/alt\"\n    spacing.padding.inline.end: \"dimension/spacing/inline/m\"\n    spacing.padding.block.end: \"dimension/spacing/block/xxxl\"\n  edges:\n    - node:\n        uri: app-launchpad.subcomponent.log-line\n      relation:\n        cardinality: \"0..n\"\n        slotName: children";
+    ds:anatomyClassic "https://www.figma.com/design/GhfdIhG3Pgkx9ipapvBQho/26.04-Build-farm---Launchpad?node-id=4158-31481&m=dev";
+    ds:usage "### When to use\n\nUse Log when rendering a sequential, ordered stream of events where line number, timestamp, and message content must be scannable together.";
+    ds:guidelines "## Table semantics\n\nLog renders as a `<table>` with a visually hidden `<thead>` containing column headers (Line, Timestamp, Content). This ensures assistive technologies can announce column context for each cell. Provide a `caption` prop when multiple logs appear on the same page or when the surrounding context does not already label the log.\n\n## Timestamp formatting\n\nThe default formatter outputs `YYYY-MM-DD HH:mm:ss.SSS` and is driven by `Intl.DateTimeFormat`. Pass `timeZone=\"local\"` to display times in the user’s browser timezone, or an explicit IANA timezone string for deterministic SSR output. For non-standard formats (e.g. Unix epoch, relative time), supply a `timestampFormatter` object instead; `timeZone` is ignored when a custom formatter is present.\n\n## Content\n\nLog line content is rendered with `white-space: pre` by default to preserve indentation and spacing in program output. Be intentional about `wrapLines` wrapping, as it can break the visual alignment of the program output, decreasing the readability.\n\nAvoid truncating or summarizing log content. The log is designed for verbatim output; users rely on exact text to diagnose issues.\n\n";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "One or more `Log.Line` entries to render inside the log table.";
+        ds:propertyType "Snippet";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "hideTimestamps";
+        ds:summary "When true, the timestamp column is removed from all lines.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ], [
+        a ds:Property;
+        ds:name "wrapLines";
+        ds:summary "When true, long lines wrap onto multiple visual rows instead of scrolling horizontally.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ], [
+        a ds:Property;
+        ds:name "timeZone";
+        ds:summary "Timezone used by the default timestamp formatter.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "`\"UTC\"`";
+        ds:constraints "Accepts `\"UTC\"`, `\"local\"`, or any IANA timezone string (e.g. `\"Europe/Warsaw\"`). Invalid values fall back to UTC. Ignored when `timestampFormatter` is set. In SSR, `\"local\"` resolves to the server runtime timezone and may differ from the browser during hydration."
+    ], [
+        a ds:Property;
+        ds:name "timestampFormatter";
+        ds:summary "Custom formatter used instead of the built-in timestamp formatting.";
+        ds:propertyType "object";
+        ds:optional "true";
+        ds:constraints "`{ format: (date: Date) => string }`\n\nWhen provided, `timeZone` must not be set. The formatter is responsible for all timezone handling."
+    ], [
+        a ds:Property;
+        ds:name "caption";
+        ds:summary "Accessible caption for the log table. Not visually displayed.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "HTML table attributes";
+        ds:summary "Forwarded HTML <table> attributes.";
+        ds:optional "true"
+    ];
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.log-line.

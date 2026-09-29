@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.side_panel-content-body a ds:Subcomponent;
+    ds:name "SidePanel.Content.Body";
+    ds:summary "SidePanel.Content.Body is the main narrative region inside side panel content. It carries explanatory text, form fields, or other core task UI.\n\nMain use cases:\n\n- Present decision context and consequences.\n- Host primary interaction controls such as form elements.";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.subcomponent.side-panel-content_body\n  styles:\n    typography.style: \"paragraph/default\"\n    typography.color: \"color/text/default\"";
+    ds:anatomyClassic "";
+    ds:usage "## When to use\n\nUse it for the main informational or interactive payload of the side panel.";
+    ds:guidelines "";
+    ds:tier ds:apps_launchpad;
+    ds:parentComponent ds:apps_launchpad.subcomponent.side_panel-content.

@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.allgood a ds:Tag;
+    ds:name "all_good";
+    ds:category ds:tagcategory.concept-status;
+    ds:whenToApply "This tag signals that the concept documentation is finalized and stable.";
+    ds:whenToRemove "".

@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devsveltein-progress a ds:Tag;
+    ds:name "dev:svelte:in-progress";
+    ds:category ds:tagcategory.implementation-status;
+    ds:whenToApply "Implementation in progress in Svelte";
+    ds:whenToRemove "".

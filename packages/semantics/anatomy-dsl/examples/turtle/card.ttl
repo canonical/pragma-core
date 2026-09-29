@@ -1,0 +1,107 @@
+@prefix : <https://anatomy.canonical.com/> .
+@prefix dt: <https://dt.canonical.com/> .
+
+[] a :Specification ;
+    :rootNode [
+        a :NamedNode ;
+        :uri "global.component.card" ;
+        :hasStyle
+            [ a :Style ; :styleKey "layout.type" ; :styleValue "grid" ] ,
+            [ a :Style ; :styleKey "layout.grid.column" ; :styleValue "span 1" ] ,
+            [ a :Style ; :styleKey "layout.grid.row" ; :styleValue "span 4" ] ,
+            [ a :Style ; :styleKey "layout.overflow" ; :styleValue "hidden" ] ,
+            [ a :Style ; :styleKey "appearance.border.width" ; :styleValue "dimension.stroke.thickness.medium" ; :consumes ( dt:dimension.stroke.thickness.medium ) ] ,
+            [ a :Style ; :styleKey "appearance.border.style" ; :styleValue "solid" ] ,
+            [ a :Style ; :styleKey "appearance.border.color" ; :styleValue "color.border.muted" ; :consumes ( dt:color.border.muted ) ] ,
+            [ a :Style ; :styleKey "appearance.radius" ; :styleValue "dimension.radius.medium" ; :consumes ( dt:dimension.radius.medium ) ] ;
+        :hasEdge [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.subcomponent.card-header" ;
+                :hasStyle
+                    [ a :Style ; :styleKey "layout.grid.column" ; :styleValue "1 / -1" ] ,
+                    [ a :Style ; :styleKey "spacing.internal.inline.start" ; :styleValue "spacing.inset.surface.inline" ; :consumes ( dt:spacing.inset.surface.inline ) ] ,
+                    [ a :Style ; :styleKey "spacing.internal.inline.end" ; :styleValue "spacing.inset.surface.inline" ; :consumes ( dt:spacing.inset.surface.inline ) ] ,
+                    [ a :Style ; :styleKey "spacing.internal.block.start" ; :styleValue "spacing.inset.surface.block" ; :consumes ( dt:spacing.inset.surface.block ) ] ,
+                    [ a :Style ; :styleKey "typography.weight" ; :styleValue "typography.weight.semiBold" ; :consumes ( dt:typography.weight.semiBold ) ] ,
+                    [ a :Style ; :styleKey "typography.color" ; :styleValue "[modifier.color.text, color.text]" ; :consumes ( dt:modifier.color.text dt:color.text ) ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..1" ;
+                :slotName "header"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.subcomponent.card-media" ;
+                :hasStyle
+                    [ a :Style ; :styleKey "layout.grid.column" ; :styleValue "1 / -1" ] ,
+                    [ a :Style ; :styleKey "layout.type" ; :styleValue "block" ] ,
+                    [ a :Style ; :styleKey "size.width" ; :styleValue "100%" ] ,
+                    [ a :Style ; :styleKey "size.max.height" ; :styleValue "dimension.1600" ; :consumes ( dt:dimension.1600 ) ] ,
+                    [ a :Style ; :styleKey "layout.objectFit" ; :styleValue "cover" ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..1" ;
+                :slotName "media"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.subcomponent.card-body" ;
+                :hasStyle
+                    [ a :Style ; :styleKey "layout.grid.column" ; :styleValue "1 / -1" ] ,
+                    [ a :Style ; :styleKey "layout.type" ; :styleValue "grid" ] ,
+                    [ a :Style ; :styleKey "spacing.gap" ; :styleValue "spacing.gap.group.block" ; :consumes ( dt:spacing.gap.group.block ) ] ,
+                    [ a :Style ; :styleKey "spacing.internal.inline.start" ; :styleValue "spacing.inset.surface.inline" ; :consumes ( dt:spacing.inset.surface.inline ) ] ,
+                    [ a :Style ; :styleKey "spacing.internal.inline.end" ; :styleValue "spacing.inset.surface.inline" ; :consumes ( dt:spacing.inset.surface.inline ) ] ,
+                    [ a :Style ; :styleKey "spacing.internal.block.end" ; :styleValue "spacing.inset.surface.block" ; :consumes ( dt:spacing.inset.surface.block ) ] ,
+                    [ a :Style ; :styleKey "typography.color" ; :styleValue "[modifier.color.text, color.text]" ; :consumes ( dt:modifier.color.text dt:color.text ) ] ,
+                    [ a :Style ; :styleKey "typography.size" ; :styleValue "dimension.size.fontSize.200" ; :consumes ( dt:dimension.size.fontSize.200 ) ] ;
+                :hasEdge [
+                    a :Edge ;
+                    :edgeTarget [
+                        a :AnonymousNode ;
+                        :role "content wrapper" ;
+                        :hasStyle
+                            [ a :Style ; :styleKey "layout.type" ; :styleValue "block" ] ,
+                            [ a :Style ; :styleKey "spacing.external.block.end" ; :styleValue "spacing.gap.field.block" ; :consumes ( dt:spacing.gap.field.block ) ]
+                    ] ;
+                    :hasRelation [
+                        a :Relation ;
+                        :cardinality "1"
+                    ]
+                ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "1" ;
+                :slotName "body"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.subcomponent.card-footer" ;
+                :hasStyle
+                    [ a :Style ; :styleKey "layout.grid.column" ; :styleValue "1 / -1" ] ,
+                    [ a :Style ; :styleKey "layout.type" ; :styleValue "flex" ] ,
+                    [ a :Style ; :styleKey "layout.justify" ; :styleValue "space-between" ] ,
+                    [ a :Style ; :styleKey "appearance.border.block.start.color" ; :styleValue "color.border.muted" ; :consumes ( dt:color.border.muted ) ] ,
+                    [ a :Style ; :styleKey "spacing.internal.inline.start" ; :styleValue "spacing.inset.surface.inline" ; :consumes ( dt:spacing.inset.surface.inline ) ] ,
+                    [ a :Style ; :styleKey "spacing.internal.inline.end" ; :styleValue "spacing.inset.surface.inline" ; :consumes ( dt:spacing.inset.surface.inline ) ] ,
+                    [ a :Style ; :styleKey "typography.size" ; :styleValue "dimension.size.fontSize.200" ; :consumes ( dt:dimension.size.fontSize.200 ) ] ,
+                    [ a :Style ; :styleKey "typography.color" ; :styleValue "color.text.muted" ; :consumes ( dt:color.text.muted ) ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..1" ;
+                :slotName "footer"
+            ]
+        ]
+    ] .

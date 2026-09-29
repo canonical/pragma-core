@@ -1,0 +1,61 @@
+---
+# Authored 2026-09-13 from @canonical/lit-ds-prototype src/lib/CTASection/styles.css on .ds.cta-section
+# The reference corrects the notation it replaces: the section carries a leading
+# rule, one h2 heading (a prop, not a slot), description blocks, and a CTA block —
+# there is no header/body/cta structure and no per-item grid.
+node:
+  uri: sites_webcomponentsprototype.pattern.ctasection
+  styles:
+    layout.grid.column: 1 / -1
+    # --spacing-deep, which no stratum declares; the literal is the reference's own
+    # fallback, set on both block edges by `padding-block`.
+    spacing.internal.block.start: 3.5rem
+    spacing.internal.block.end: 3.5rem
+  edges:
+    - node:
+        role: leading rule
+        styles:
+          appearance.border.top.width: 1px
+          # dropped the rule's colour: the reference reads --color-border-default,
+          # which no stratum declares, and the key admits no bare literal
+          layout.grid.column: 1 / -1
+          spacing.external.block.start: 0
+          spacing.external.block.end: 0
+          spacing.external.inline.start: 0
+          spacing.external.inline.end: 0
+      relation:
+        cardinality: "1"
+    - node:
+        role: content container
+        styles:
+          # The `100` layout, which is the default. The `25/75` layout replaces this
+          # container with a twelve-column grid row whose content sits at
+          # `3 / span 9`; its column gap reads --spacing-gap, which no stratum
+          # declares, and spacing.gap.inline admits no bare literal.
+          size.max.width: 80rem   # --grid-max-width, which no stratum declares
+          spacing.external.inline.start: auto
+          spacing.external.inline.end: auto
+          spacing.internal.inline.start: 1.5rem   # --spacing-horizontal-large, undeclared
+          spacing.internal.inline.end: 1.5rem   # --spacing-horizontal-large, undeclared
+        edges:
+          - node:
+              role: section heading
+              styles:
+                typography.size: 1.75rem   # --font-size-heading-2, which no stratum declares
+                typography.weight: 300   # --font-weight-heading, which no stratum declares
+                typography.lineHeight: 1.2   # --line-height-heading, which no stratum declares
+                spacing.external.block.start: 0
+                spacing.external.block.end: 1rem   # --spacing-medium, which no stratum declares
+            relation:
+              cardinality: "1"
+          - node:
+              role: description block
+              # The stylesheet gives .description no properties of its own.
+            relation:
+              cardinality: "0..*"
+          - node:
+              uri: sites_webcomponentsprototype.component.ctablock
+            relation:
+              cardinality: "0..1"
+      relation:
+        cardinality: "1"

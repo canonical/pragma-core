@@ -1,0 +1,106 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.header_search_controls a ds:Pattern;
+    ds:name "Header Search Controls";
+    ds:summary "Defines two related search-header compositions around Canonical `SearchBox`: a Formik-backed header that either owns URL search synchronization or delegates trimmed queries to `onSearch`, and a fully controlled search box with an adjacent Help button. Both submit on the form or Search action and opt into refocusing the search input after reset.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.header_search_controls\n  edges:\n    - node:\n        role: Formik-backed search header\n        edges:\n          - node:\n              semantic: form\n              role: search form\n              edges:\n                - node:\n                    uri: global.component.search_box\n                    role: controlled query input\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: adjacent actions\n              relation:\n                cardinality: \"0..1\"\n                slotName: actions\n                condition: actions is a valid React element\n        relation:\n          cardinality: \"0..1\"\n          condition: HeaderWithSearch variant is used\n    - node:\n        role: search with description button\n        edges:\n          - node:\n              semantic: form\n              role: search form\n              edges:\n                - node:\n                    uri: global.component.search_box\n                    role: controlled query input\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n          - node:\n              uri: global.component.button\n              role: help action\n              edges:\n                - node:\n                    uri: global.component.icon\n                    role: help icon\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..1\"\n          condition: SearchBoxWithDescriptionButton variant is used";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-57&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 31\n\n";
+    ds:usage "### When to use\n\n**Searchable list header**\n\nUse `HeaderWithSearch` where a header search should initialize from page parameters and write trimmed submissions back through `setPageParams`, or where a caller owns an equivalent controlled query.\n\n**Search with related action**\n\nUse the `actions` slot for one valid React element that composes related controls, or use `SearchBoxWithDescriptionButton` when the only adjacent control is query help.\n\n### When not to use\n\n**Advanced filtering**\n\nMany filters must be displayed alongside search.\n\n**Incorrect pattern**: Adding multiple filter controls directly to the header component or overloading it with filtering options.\n\n**Remediation strategy**: Use the established filter pattern component or place advanced filters in a separate collapsible panel below the header.\n\n**Instant local filtering**\n\nResults should update on every keystroke without an explicit search action.\n\n**Incorrect pattern**: Using this component and expecting results to update automatically as the user types, without an explicit search button click or Enter key.\n\n**Remediation strategy**: Use a different search composition that submits on every change, or implement real-time filtering at the parent level with a debounced handler.\n\n**Arbitrary help labeling**\n\nThe accessible help name must vary by context.\n\n**Incorrect pattern**: Using the description-button variant and expecting the Help button to have a dynamic accessible name based on context.\n\n**Remediation strategy**: Use the `actions` slot with a custom labeled button component, or implement a separate context-specific help trigger outside the search header.";
+    ds:guidelines "### Accessibility\n\n- Both variants rely on Canonical `SearchBox` for the searchbox and Search/Clear button semantics; neither wrapper adds a search landmark or visible label.\n- Supply an accessible SearchBox name through supported SearchBox props or surrounding context; placeholder text alone is not a durable label.\n- The description button is a native `type=\"button\"` with fixed `aria-label=\"Help\"` and a help icon. A more specific accessible name requires changing the component API.\n- Both variants set `shouldRefocusAfterReset`, so clearing through the SearchBox is expected to return focus to the input.\n\n### Content\n\n- `HeaderWithSearch` trims leading and trailing whitespace before either callback or URL update; `SearchBoxWithDescriptionButton` does not trim because its callback receives no value.\n- Use concise localized placeholder and accessible-label content through SearchBox props.\n- The only internal visible/accessibility copy is the description button’s English accessible name `Help`.\n\n### Internationalization\n\n- Query values, placeholders, and adjacent action content are caller-owned and may be localized.\n- The description button’s accessible name is hard-coded in English and cannot be translated through props.\n\n### Keyboard and device\n\n- Enter submits each enclosing form; the Search and Clear controls retain Canonical SearchBox keyboard behavior. No custom key handlers are added.\n- Both compositions wire their callback to the enclosing form submission and the SearchBox search action. Verify Canonical’s event behavior in the installed version and make callbacks idempotent because one Search activation may reach both handlers.\n- `HeaderWithSearch` places the search before `actions` in DOM and tab order. The row has no local wrapping rule: search starts with a `30rem` basis and may shrink, while the action wrapper grows and cannot shrink.\n- `SearchBoxWithDescriptionButton` is a flex row with a `30rem` basis and `15rem` minimum width; its search container may shrink to zero and the Help button remains adjacent. Neither source defines a media query.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`HeaderWithSearch.onSearch`";
+        ds:summary "Selects caller-owned mode and receives trimmed submitted text or `\"\"` on clear. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type in caller-owned union member: `(searchText: string) => void`; otherwise `never`. Omission selects URL-backed mode. Requires `searchText` and excludes `afterSearch`. The caller must update controlled state. One Search action may invoke it twice. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`HeaderWithSearch.searchText`";
+        ds:summary "Controlled query for caller-owned mode.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Exact type in caller-owned union member: `string`; otherwise `never`. Required with `onSearch`; forbidden in URL-backed variants, where the current page-param `search` initializes Formik. Formik reinitializes when it changes. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`HeaderWithSearch.afterSearch`";
+        ds:summary "Runs after a URL-backed non-clear submission updates page params. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type in the post-submit union member: `() => void`; otherwise `never`. Excludes `onSearch` and `searchText`; not called on clear or in caller-owned mode. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`HeaderWithSearch.actions`";
+        ds:summary "Supplies adjacent header content.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `ReactNode`. The wrapper grows and does not shrink. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`HeaderWithSearch.autocomplete`";
+        ds:summary "Sets the search input autocomplete mode.";
+        ds:propertyType "choice";
+        ds:defaultValue "`\"off\"`";
+        ds:constraints "Exact type: `\"on\" | \"off\" | undefined`. This spelling is passed explicitly to Canonical SearchBox. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`HeaderWithSearch.remaining SearchBoxProps` ";
+        ds:summary "Forwards Canonical SearchBox props except wrapper-owned controlled value, search/change/clear handlers, reset-refocus flag, and ref. ";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "Exact contract: `Omit<SearchBoxProps, \"onSearch\" | \"externallyControlled\" | \"shouldRefocusAfterReset\" | \"value\" | \"onClear\" | \"onChange\" | \"ref\">`. Inherited props use their Canonical defaults; explicitly destructured wrapper props are removed before forwarding. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`HeaderWithSearch.className`";
+        ds:summary "Adds a class to the header row.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Inherited from the remaining `SearchBoxProps` contract and destructured for the root; the local container class is always retained. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`SearchBoxWithDescriptionButton.inputValue` ";
+        ds:summary "Sets the displayed search value.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "The component stores no input state."
+    ], [
+        a ds:Property;
+        ds:name "`SearchBoxWithDescriptionButton.onInputChange` ";
+        ds:summary "Receives each SearchBox value change.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `(inputValue: string) => void`. The caller must update `inputValue`. "
+    ], [
+        a ds:Property;
+        ds:name "`SearchBoxWithDescriptionButton.onSearchClick` ";
+        ds:summary "Runs on form submission and the SearchBox search action. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `() => void`. Receives no query argument; the caller reads its own state. Input is not trimmed here. Because both event paths call it, one Search action may invoke it twice. "
+    ], [
+        a ds:Property;
+        ds:name "`SearchBoxWithDescriptionButton.onDescriptionClick` ";
+        ds:summary "Runs when the adjacent Help button is activated.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `() => void`. The component does not open or own a popup. "
+    ], [
+        a ds:Property;
+        ds:name "`SearchBoxWithDescriptionButton.onClear`";
+        ds:summary "Is forwarded to SearchBox clear handling.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `() => void`. When omitted, this component provides no state-clearing fallback; the caller still owns `inputValue`. ";
+        ds:optional "true"
+    ].

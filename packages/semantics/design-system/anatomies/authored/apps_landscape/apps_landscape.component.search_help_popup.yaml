@@ -1,0 +1,47 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.search_help_popup
+  edges:
+    - node:
+        # was uri: global.component.modal; role: search help dialog
+        uri: global.pattern.modal
+        edges:
+          - node:
+              # semantic: paragraph
+              role: grammar guidance
+            relation:
+              cardinality: "1"
+          - node:
+              # was uri: global.component.modular_table; role: terms reference
+              uri: global.component.table
+              edges:
+                - node:
+                    role: Term column
+                    edges:
+                      - node:
+                          # semantic: code
+                          role: term value
+                        relation:
+                          cardinality: "0..1"   # rendered when the row term is a string
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: Description column
+                    edges:
+                      - node:
+                          # semantic: span
+                          role: description value
+                        relation:
+                          cardinality: "0..1"   # rendered when the row description is a string or valid React element
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: data row
+                  relation:
+                    cardinality: "0..*"
+                    slotName: data
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"   # rendered when open is true

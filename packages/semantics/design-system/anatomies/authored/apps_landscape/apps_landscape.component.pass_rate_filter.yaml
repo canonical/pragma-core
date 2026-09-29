@@ -1,0 +1,56 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.component.pass_rate_filter
+  edges:
+    - node:
+        # role: custom filter disclosure
+        uri: apps_landscape.pattern.table_filter
+        edges:
+          - node:
+              role: Pass rate toggle label
+              edges:
+                - node:
+                    # role: active-bound count
+                    uri: global.component.badge
+                  relation:
+                    cardinality: "0..1"   # rendered when passRateFrom is greater than 0 or passRateTo is less than 100
+            relation:
+              cardinality: "1"
+          - node:
+              # semantic: form
+              role: pass-rate range form
+              edges:
+                - node:
+                    # was uri: global.component.input; role: minimum pass rate — a
+                    # percentage, so the number field is the subject that names it
+                    uri: global.component.number_field
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: minimum percent suffix
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # was uri: global.component.input; role: maximum pass rate
+                    uri: global.component.number_field
+                  relation:
+                    cardinality: "1"
+                - node:
+                    role: maximum percent suffix
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # role: reset action
+                    uri: global.component.button
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # role: apply action
+                    uri: global.component.button
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"

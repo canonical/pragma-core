@@ -1,0 +1,20 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.side_panel-content-header
+  styles:
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.align: start
+    typography.font: typography.heading.4   # was typography.style: heading/h4
+  edges:
+    - node:
+        role: heading content
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        uri: apps_launchpad.subcomponent.side_panel-content-header-close_button
+      relation:
+        cardinality: "0..1"
+        slotName: actions

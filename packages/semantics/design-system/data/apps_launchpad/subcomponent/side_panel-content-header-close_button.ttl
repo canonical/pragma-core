@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.side_panel-content-header-close_button a ds:Subcomponent;
+    ds:name "SidePanel.Content.Header.CloseButton";
+    ds:summary "SidePanel.Content.Header.CloseButton is the specialized dismiss control for modal headers. It is a button-based close action with predefined visual and icon behavior.\n\nMain use cases:\n\n- Provide a standard dismiss affordance in the header.\n- Keep close action visually consistent across side panel instances.";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.subcomponent.side-panel-content_header-close-button\n  edges:\n    - node:\n        role: close icon\n      relation:\n        cardinality: \"1\"";
+    ds:anatomyClassic "";
+    ds:usage "## When to use\n\nUse it for explicit side panel dismissal from the header region.\n\n## When not to use\n\n### Reusing as generic action button\n\n**Incorrect pattern**: Using close button for non-dismiss actions, e.g., to confirm, delete, or save actions.  \n**Remediation strategy**: Use regular action buttons in Footer for non-dismiss semantics.";
+    ds:guidelines "";
+    ds:tier ds:apps_launchpad;
+    ds:parentComponent ds:apps_launchpad.subcomponent.side_panel-content-header.

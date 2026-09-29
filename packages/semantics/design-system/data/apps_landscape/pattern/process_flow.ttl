@@ -1,0 +1,52 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.process_flow a ds:Pattern;
+    ds:name "Process Flow";
+    ds:summary "Process Flow is a read-only explanatory pattern for a linear sequence. It always renders hardcoded Start and End markers, an initial vertical connector, and one Canonical Card plus trailing connector for each entry in the ordered `cards` array. Each card contains an icon, optional heading content, optional description content, and an optional child-content region.\n\nThe pattern communicates intended order, such as the operations that a confirmation will trigger. It does not model current, completed, failed, selectable, or branching steps and does not expose interaction callbacks.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.process_flow\n  edges:\n    - node:\n        role: start boundary marker\n        relation:\n          cardinality: \"1\"\n    - node:\n        role: initial sequence connector\n        relation:\n          cardinality: \"1\"\n    - node:\n        role: process card group\n        edges:\n          - node:\n              uri: global.component.card\n              role: process step\n              edges:\n                - node:\n                    role: step header\n                    styles:\n                      layout.display: flex\n                      layout.align: center\n                    edges:\n                      - node:\n                          uri: global.component.icon\n                          role: step icon\n                          relation:\n                            cardinality: \"1\"\n                      - node:\n                          semantic: paragraph\n                          role: step heading\n                          relation:\n                            cardinality: \"1\"\n                            slotName: header\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    role: step body\n                    edges:\n                      - node:\n                          semantic: paragraph\n                          role: step description\n                          relation:\n                            cardinality: \"1\"\n                            slotName: description\n                      - node:\n                          role: supporting step content\n                          relation:\n                            cardinality: \"0..1\"\n                            slotName: children\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: trailing sequence connector\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..*\"\n    - node:\n        role: end boundary marker\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-80&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 43\n\n";
+    ds:usage "### When to use\n\n**Explain a fixed workflow**\n\nShow the ordered stages an operation will perform from start to end when those stages do not have live status.\n\n**Preview configured processing**\n\nSummarize a small set of configured steps and compact supporting values before confirmation or submission.\n\n### When not to use\n\n**Track live progress**\n\nA workflow where steps have current status, completion state, or failure information that must be displayed.\n\n**Incorrect pattern**: Using Process Flow to show the status of currently running operations or past events that succeeded, failed, or remain pending.\n\n**Remediation strategy**: Use a progress stepper component with step state, a timeline for historical events, or a status tracker that distinguishes completed, active, and failed steps.\n\n**Represent branching logic**\n\nA process that includes conditional paths, multiple possible routes, or decisions that branch the sequence.\n\n**Incorrect pattern**: Flattening a branching workflow into Process Flow’s linear card sequence to avoid building a diagram component.\n\n**Remediation strategy**: Use a process diagram or flowchart component designed for conditional branches. Process Flow supports only a single linear sequence.\n\n**Build a wizard or stepper**\n\nA multi-step form or navigation flow where users move between steps, make choices, or need to return to earlier stages.\n\n**Incorrect pattern**: Rendering Process Flow cards as if they were interactive steps and adding buttons or links to navigate between them.\n\n**Remediation strategy**: Use a form wizard or stepper component that provides active-step semantics, navigation callbacks, and state. Cards in Process Flow are not selectable.\n\n**Show an unbounded sequence**\n\nA workflow with an unknown, very long, or dynamically growing number of steps—such as operation logs or event streams.\n\n**Incorrect pattern**: Passing a large or indefinitely expanding `cards` array to Process Flow and expecting scrolling or virtualization.\n\n**Remediation strategy**: Use a scrollable list, data table, or activity log component designed for many items. Process Flow is sized for short, scannable explanations.";
+    ds:guidelines "### Accessibility\n\n- Repeat every icon’s meaning in the step heading or description. The source does not mark icons decorative or provide a separate accessible label.\n- Present cards in the same DOM order as the process sequence; array order is the only ordering contract.\n- The source uses visual `<div>` markers and Cards rather than an ordered list, and Start/End connectors have no semantic relationship. Do not assume assistive technology receives explicit sequence or step-count semantics.\n- Provide meaningful `header` content for every card even though the prop is optional; an icon-only step is not a sufficient accessible identity.\n- Connectors and bordered markers must not be the only way the prose communicates order.\n\n### Content\n\n- Begin step headings with consistent nouns or verbs.\n- Keep descriptions short enough to compare across the sequence.\n- Use child content for compact values that qualify the step, not for a second full section.\n- Do not state current status in a component that has no status model.\n- Start and End are fixed source strings; card copy should read naturally between those boundaries.\n\n### Responsive behavior\n\n- The source is always a single vertical flow and defines no media query or alternate wide-screen arrangement.\n- Card headers use a horizontal flex row with centered alignment; body content is indented by the source spacing setting. Long headings and child content must wrap within the containing Card.\n- The connector has fixed 1.5rem height; no density or compact mode is available.\n- Verify rich child content at narrow side-panel widths because Process Flow itself provides no overflow handling.\n\n### Keyboard\n\n- If child content is interactive, its focus order must follow the visual top-to-bottom sequence.\n- Start, End, connectors, icons, and Cards are not interactive and must not gain tab stops.\n- Prefer noninteractive child content. If controls are necessary, label them independently and do not imply that the whole card is actionable.\n\n### Internationalization\n\n- Externalize card headers, descriptions, and child content at the owning feature.\n- `Start` and `End` are hardcoded English and cannot be localized through the public API.\n- Allow translated headings and descriptions to wrap. Do not rely on equal card heights or English text length.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`cards`";
+        ds:summary "Supplies the ordered process entries rendered between Start and End. ";
+        ds:propertyType "list of objects";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `FlowCardProps[]`. Array order defines DOM and visual order; an empty array renders Start, one connector, and End. "
+    ], [
+        a ds:Property;
+        ds:name "`cards[].iconName`";
+        ds:summary "Supplies the name forwarded to Canonical `Icon`. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Use a valid installed icon name whose meaning is repeated in text. "
+    ], [
+        a ds:Property;
+        ds:name "`cards[].description`";
+        ds:summary "Supplies muted description content inside an always-rendered paragraph. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Absent content leaves an empty paragraph structure. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`cards[].header`";
+        ds:summary "Supplies strong heading content inside the header paragraph. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Absent content leaves the icon without a visible heading. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`cards[].children`";
+        ds:summary "Supplies supporting content below the description.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. The region renders only for truthy content; keep it compact and avoid implying card selection. ";
+        ds:optional "true"
+    ].

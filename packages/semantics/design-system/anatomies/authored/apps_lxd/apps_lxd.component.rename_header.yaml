@@ -1,0 +1,213 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `core:component:RenameHeader`; the block's own uri is used
+# instead. The retired file's "current item container" subtree was malformed YAML — the
+# EditableText node carried its own `relation:` and the RenameForm node hung off that
+# node's mapping as a nested sequence — so the two are written here as the two children
+# the tree plainly meant them to be.
+node:
+  uri: apps_lxd.component.rename_header
+  styles:
+    # Structural (implicitly invariant)
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.align: center
+    layout.justify: space-between
+    # was layout.role: banner; an ARIA landmark is not a style, and no roster key takes one
+    # Themeable
+    appearance.background: color.background   # was color/surface/header
+    # was appearance.border.bottom: border/style/header; no border symbol corresponds,
+    # and the roster has no block-end border width or style key
+    # was spacing.internal: spacing/header/internal; no spacing.header symbol is
+    # declared, and the roster has no all-sides padding key
+    # was spacing.external: spacing/header/external; same
+  edges:
+    - node:
+        role: screen reader title
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: none   # was layout.display: none
+          # was accessibility.screen-reader: visible; not a style, and no roster key
+          # takes it
+          # Themeable
+          typography.font: typography.heading.1       # was typography.size: font/size/heading/1
+          typography.weight: typography.weight.bold   # was font/weight/bold
+      relation:
+        cardinality: "1..1"
+    - node:
+        role: header title   # was uri: core:element:HeaderTitle, which names no subject
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: flex   # was stack
+          layout.direction: column   # was vertical
+          layout.flex.grow: 1   # was layout.flex: 1
+        edges:
+          - node:
+              # was uri: core:component:Breadcrumbs
+              uri: global.component.breadcrumbs
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: flex   # was flow
+                layout.direction: row   # was horizontal
+                layout.align: center
+                # Themeable
+                # was spacing.gap: spacing/breadcrumb/gap; no spacing.breadcrumb symbol
+                # is declared
+                typography.font: typography.heading.4   # was typography.size: font/size/heading/4
+              edges:
+                - node:
+                    # was uri: core:element:BreadcrumbItem
+                    uri: global.subcomponent.breadcrumbs-item
+                    styles:
+                      # Structural (implicitly invariant)
+                      layout.type: inline   # was layout.display: inline
+                      interaction.cursor: pointer
+                      # Themeable
+                      typography.color: color.text                   # was color/text/breadcrumb
+                      typography.weight: typography.weight.regular   # was font/weight/normal
+                      typography.decoration: underline               # was appearance.text-decoration: text/decoration/link
+                      typography.decoration@hover: underline         # was appearance.text-decoration:hover: text/decoration/underline
+                  relation:
+                    cardinality: "1..*"
+                    slotName: parentItems
+                - node:
+                    role: current item container
+                    styles:
+                      # Structural (implicitly invariant)
+                      layout.type: inline   # was layout.display: inline
+                    edges:
+                      - node:
+                          role: editable text   # was uri: core:element:EditableText
+                          styles:
+                            # Structural (implicitly invariant)
+                            layout.type: inline             # was layout.display: inline
+                            interaction.cursor: pointer
+                            typography.overflow: ellipsis
+                            typography.whiteSpace: nowrap   # was typography.whitespace: nowrap
+                            # Themeable
+                            typography.color: color.text                    # was color/text/current
+                            typography.weight: typography.weight.semiBold   # was font/weight/semibold
+                            # was spacing.internal: spacing/text/clickable; no
+                            # spacing.text symbol is declared, and the roster has no
+                            # all-sides padding key
+                        relation:
+                          cardinality: "1..1"
+                      - node:
+                          role: rename form   # was uri: core:component:RenameForm
+                          styles:
+                            # Structural (implicitly invariant)
+                            layout.type: flex   # was flow
+                            layout.direction: row   # was horizontal
+                            layout.align: center
+                            # was layout.display: none with layout.display:editing:
+                            # flex; hidden-until-editing changes what exists, so it is
+                            # a switch rather than a state, and `editing` is not in the
+                            # closed state vocabulary
+                            # Themeable
+                            # was spacing.gap: spacing/form/inline; no spacing.form
+                            # symbol is declared
+                          edges:
+                            - node:
+                                # was uri: core:element:Input
+                                uri: global.component.text_field
+                                # was interaction.focus: auto and
+                                # interaction.validation: true; neither is a style
+                                # was size.width: size/input/name; no dimension symbol
+                                # corresponds
+                                # was appearance.border: border/style/input and
+                                # appearance.border:error: border/style/error; no
+                                # border symbol corresponds, and `error` is not in the
+                                # closed state vocabulary
+                                # was spacing.internal: spacing/input/internal; no
+                                # spacing.input symbol is declared
+                              relation:
+                                cardinality: "1..1"
+                                slotName: input
+                            - node:
+                                role: action buttons
+                                styles:
+                                  # Structural (implicitly invariant)
+                                  layout.type: flex   # was flow
+                                  layout.direction: row   # was horizontal
+                                  # Themeable
+                                  # was spacing.gap: spacing/button/group; no
+                                  # spacing.button symbol is declared
+                                edges:
+                                  - node:
+                                      # was uri: core:element:Button
+                                      uri: global.component.button
+                                      # was appearance.variant: base; a variant is a
+                                      # modifier, and Button declares no `variant`
+                                      # property to pin
+                                    relation:
+                                      cardinality: "1..1"
+                                      slotName: cancel
+                                  - node:
+                                      # was uri: core:element:ActionButton, which names
+                                      # no subject; an action button is a Button that
+                                      # carries a loading state
+                                      uri: global.component.button
+                                      # was appearance.variant: positive and
+                                      # interaction.loading: conditional; neither is a
+                                      # style Button declares a property for
+                                    relation:
+                                      cardinality: "1..1"
+                                      slotName: save
+                              relation:
+                                cardinality: "1..1"
+                        relation:
+                          cardinality: "0..1"
+                  relation:
+                    cardinality: "1..1"
+                    slotName: currentItem
+            relation:
+              cardinality: "1..1"
+              slotName: navigation
+          - node:
+              # was uri: core:element:Chip
+              uri: global.component.chip
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: inline-block   # was layout.display: inline-block
+                # Themeable
+                # was appearance.variant: related; a variant is a modifier
+                # was spacing.external: spacing/chip/related; no spacing.chip symbol is
+                # declared, and the roster has no all-sides margin key
+            relation:
+              cardinality: "0..1"
+              slotName: relatedChip
+          - node:
+              role: center controls
+              styles:
+                # Structural (implicitly invariant)
+                layout.type: flex   # was flow
+                layout.direction: row   # was horizontal
+                layout.align: center
+                # was layout.display: none with layout.display:not-editing: flex;
+                # hidden-unless-editing changes what exists, so it is a switch rather
+                # than a state, and `not-editing` is not in the closed state vocabulary
+                # Themeable
+                # was spacing.gap: spacing/controls/center; no spacing.controls symbol
+                # is declared
+            relation:
+              cardinality: "0..1"
+              slotName: centerControls
+      relation:
+        cardinality: "1..1"
+        slotName: title
+    - node:
+        role: side controls
+        styles:
+          # Structural (implicitly invariant)
+          layout.type: flex   # was flow
+          layout.direction: row   # was horizontal
+          layout.align: center
+          # was layout.display: none with layout.display:loaded-not-editing: flex;
+          # hidden until loaded and not editing changes what exists, so it is a switch
+          # rather than a state, and `loaded-not-editing` is not in the closed state
+          # vocabulary
+          # Themeable
+          # was spacing.gap: spacing/controls/side; no spacing.controls symbol is declared
+      relation:
+        cardinality: "0..1"
+        slotName: controls

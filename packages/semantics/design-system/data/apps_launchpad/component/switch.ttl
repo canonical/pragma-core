@@ -1,0 +1,27 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.switch a ds:Component;
+    ds:name "Switch";
+    ds:summary "The **Switch** component is a form element that allows users to toggle between two states, such as on and off.\n\n**Main Use Cases:**\n\n- **Settings:** Used in settings pages to allow users to enable or disable a feature.\n- **Forms:** Used in forms to allow users to make a binary choice.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.switch\n  styles:\n    layout.display: inline-block\n    size.width: size/large\n    size.height: size/extra-small\n    appearance.background: color/border/high-contrast\n    appearance.radius: radius/full\n  edges:\n    - node:\n        role: knob\n        styles:\n          size.width: size/extra-small\n          size.height: size/extra-small\n          appearance.background: color/background/default\n          appearance.radius: radius/full\n      relation:\n        cardinality: \"1\"\n        slotName: knob";
+    ds:anatomyClassic "The Switch is composed of a main container and a knob.\n\n1. **Container:** The outermost wrapper that defines the shape and size of the switch.\n2. **Knob:** The movable part of the switch that indicates the current state.\n\nhttps://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2066-48&m=dev";
+    ds:usage "### dges:  \n    - node:  \n        role: prefix  \n      relation:  \n        cardinality: \"0..1\"  \n        slotName: prefix  \n    - node:  \n        role: value  \n      relation:  \n        cardinality: \"1\"  \n        slotName: default  \n    - node:  \n        role: suffix  \n      relation:  \n        cardinality: \"0..1\"  \n        slotName: suffix1. General Description\n\nThe Switch is used when you need to allow users to make a binary choice. It is a visually appealing alternative to a checkbox.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Binary choice:** Use when you need to allow users to make a binary choice.\n- **On/Off:** Use for on/off switches.\n\n2.2 When Not to Use\n\n- **Multiple options:** Do not use for multiple options. Use Radio buttons or a Select instead.";
+    ds:guidelines "### Accessibility\n\n- **Label:** Always provide a label for the switch to improve accessibility.\n- **ARIA attributes:** Use the appropriate ARIA attributes to make the switch accessible.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "checked";
+        ds:summary "Whether the switch is checked or not.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Whether the switch is disabled or not. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:optional "true"
+    ].

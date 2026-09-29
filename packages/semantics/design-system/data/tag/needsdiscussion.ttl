@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.needsdiscussion a ds:Tag;
+    ds:name "needs:discussion";
+    ds:category ds:tagcategory.review-status;
+    ds:whenToApply "Async review stalled or consensus not found, escalate to weekly meeting. Owner should add it to agenda";
+    ds:whenToRemove "".

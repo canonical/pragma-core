@@ -1,0 +1,77 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.heading a ds:Component;
+    ds:name "Heading";
+    ds:summary "The heading component is used to signify the hierarchical structure of a page serving as titles for different segments of the page such as entire page, section or blocks (when applicable). It breaks up content into easily consumable parts, helping users scan the interface and understand the relationship between different blocks of information, relying on hierarchy. \n\n";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# (a Heading folder exists in react-ds-global but ships stories only — no\n# styles.css — so this is a notation migration of the previous DSL, structure\n# and bindings kept, values migrated.)\nnode:\n  uri: global.component.heading\n  styles:\n    typography.weight: typography.weight.bold\n    # Was `color/text/heading`; no symbol declares color.text.heading, and\n    # substituting the plain color.text would assert something the previous\n    # notation did not, so the binding is dropped.\n  edges:\n    # The level is a prop, and each level is a different presentation of the\n    # same one child.\n    - switch:\n        on: props\n        cases:\n          - node:\n              role: h1\n              styles:\n                # Was `font/size/heading/1`. The declared heading tier is a\n                # typography composite, so it binds typography.font; no\n                # dimension symbol names the tier's own font-size member.\n                typography.font: typography.heading.1\n                # Was `spacing.margin.bottom: spacing/heading/1` — neither the\n                # key nor the value exists (the roster's key is\n                # spacing.external.block.end, and no spacing semantic\n                # corresponds to spacing/heading/1), so it is dropped.\n          - node:\n              role: h2\n              styles:\n                # Was `font/size/heading/2`; `spacing/heading/2` dropped as above.\n                typography.font: typography.heading.2\n          - node:\n              role: h3\n              styles:\n                # Was `font/size/heading/3`; `spacing/heading/3` dropped as above.\n                typography.font: typography.heading.3\n          - node:\n              role: h4\n              styles:\n                # Was `font/size/heading/4`; `spacing/heading/4` dropped as above.\n                typography.font: typography.heading.4\n          - node:\n              role: h5\n              styles:\n                # Was `font/size/heading/5`; `spacing/heading/5` dropped as above.\n                typography.font: typography.heading.5\n          - node:\n              role: h6\n              styles:\n                # Was `font/size/heading/6`; `spacing/heading/6` dropped as above.\n                typography.font: typography.heading.6\n      relation:\n        cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2431-9178&t=sOMJn3GdvE3iTgAI-1";
+    ds:usage "Headings are intended to create an \"outline\" of the page. They should lead the user from the most general information to the most specific.\n\n### When to use\n\n- To facilitate scanning and to provide a logical flow to the user's experience.\n- When a page contains multiple topics, to differentiate between a \"Parent\" topic and a \"Child\" sub-topic.\n- When a UI block, such as a Card, contains a significant amount of data or a specific task.\n- When presenting documentation or long articles. Headings act as anchors, allowing the user to jump to the section most relevant to them. \n\n### When not to use\n\n- When you want a piece of text to be \"big and bold\" but it doesn't actually introduce a new section.\n  - Incorrect: Using an `H2` for a callout or a quote in the middle of a paragraph just to make it stand out. \n  - Remediation: Use the component that describes the best the semantic function you are representing. \n- When the text is descriptive or instructional rather than a concise title.\n  - Incorrect: An `H2` that says: \"Please make sure to fill out all the fields below before you click the submit button at the bottom.\"\n  - Remediation: Use a paragraph for descriptions, and keep the heading brief (e.g., \"Form Instructions\").\n- When the text belongs to a quote.\n  - Incorrect: Using `H2` to style a testimonial just to achieve a specific font size or weight.\n  - Remediation: Use a [Quote](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-HaEe2D1XRN) with its intended tokens.\n\n";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "importance";
+        ds:propertyType "number";
+        ds:constraints "1 to 6";
+        ds:optional "false"
+    ];
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.heading;
+        ds:node "$root";
+        anatomy:styleKey "typography.weight";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.weight.bold
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.heading;
+        ds:node "$root/case[h1]";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.heading.1
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.heading;
+        ds:node "$root/case[h2]";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.heading.2
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.heading;
+        ds:node "$root/case[h3]";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.heading.3
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.heading;
+        ds:node "$root/case[h4]";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.heading.4
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.heading;
+        ds:node "$root/case[h5]";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.heading.5
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.heading;
+        ds:node "$root/case[h6]";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.heading.6
+    ].

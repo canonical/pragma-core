@@ -1,0 +1,61 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.subcomponent.nested_dropdown_item a ds:Subcomponent;
+    ds:name "Nested Dropdown Item";
+    ds:summary "Renders a native button that toggles an adjacent nested panel to the left or right of a contextual-menu item. Valid non-fragment element content is cloned with `inline: true`; outside interaction closes only the nested panel, while any click that bubbles through the open panel optionally asks the owning menu to close.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.subcomponent.nested_dropdown_item\n  edges:\n    - node:\n        uri: global.component.button\n        role: directional trigger\n        edges:\n          - node:\n              role: label\n              relation:\n                cardinality: \"0..1\"\n                condition: label or el.props.label resolves to content\n                slotName: label\n          - node:\n              uri: global.component.icon\n              role: directional chevron\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"1\"\n    - node:\n        role: nested panel\n        edges:\n          - node:\n              role: inline filter or action content\n              relation:\n                cardinality: \"1\"\n                slotName: el\n        relation:\n          cardinality: \"0..1\"\n          condition: trigger is open";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-77&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 40\n\n";
+    ds:usage "### When to use\n\n**Nested menu filters**\n\nUse inside a contextual menu when a compact filter can render correctly after receiving `inline: true` and benefits from an adjacent panel.\n\n**Grouped secondary actions**\n\nUse for a small set of secondary controls when any click in the panel may close the owning menu through `onMenuClose`.\n\n### When not to use\n\n**Standalone disclosure**\n\nUsing nested menus outside a contextual-menu surface.\n\n**Incorrect pattern**: Placing Nested Dropdown Item in a dialog or regular content area, expecting it to behave as a standalone disclosure or accordion.\n\n**Remediation strategy**: Use a dedicated disclosure, accordion, or popover component; Nested Dropdown Item is designed specifically for contextual-menu integration.\n\n**Deep navigation**\n\nCreating multiple nested menu levels or site navigation with progressive disclosure.\n\n**Incorrect pattern**: Nesting Nested Dropdown Items within each other or using them to build multi-level site navigation hierarchies.\n\n**Remediation strategy**: Avoid deep nesting; site navigation should use breadcrumbs or a navigation tree. If nesting is unavoidable, limit depth to one or two levels and verify focus management.\n\n**Complex workflows**\n\nPlacing long forms or multi-step tasks in the nested panel.\n\n**Incorrect pattern**: Rendering a multi-field form, stepper, or extended task inside the adjacent panel, expecting it to remain open for extended user interaction.\n\n**Remediation strategy**: Use a side panel or modal for complex workflows; the nested panel is lightweight and the owning menu may close unexpectedly from outside clicks.\n\n**Interactive panel regions that must stay open**\n\nRequiring intermediate user actions inside the panel without closing the parent menu.\n\n**Incorrect pattern**: Passing `onMenuClose` and expecting it to fire only on “select” or “submit” clicks, not every click bubbling through the panel.\n\n**Remediation strategy**: If clicks must not close the owning menu, omit `onMenuClose` or build a custom handler that checks the click target; the current implementation calls the callback for all bubbling clicks.";
+    ds:guidelines "### Accessibility\n\n- The trigger is a native `type=\"button\"` and forwards disabled semantics through Canonical `Button`.\n- Provide meaningful `label` content or a content element with a meaningful `label` prop. The implementation permits an otherwise icon-only chevron button with no explicit accessible name.\n- The trigger does not set `aria-expanded`, `aria-haspopup`, `aria-controls`, menu roles, or roving-tabindex behavior. Open state is represented visually and by conditional panel mounting only.\n- Icons have no local hidden-text treatment; they must remain supplementary to the trigger label.\n\n### Interaction\n\n- Each trigger activation toggles local `isOpen`; there is no controlled open prop or imperative close API.\n- `useOnClickOutside` closes the nested panel when interaction occurs outside the root and does not notify `onMenuClose`.\n- Any click bubbling through the panel calls `onMenuClose` when supplied. The nested panel itself remains mounted until the owning tree unmounts it or a later outside/trigger interaction closes it.\n- The open trigger receives the active theme background in normal and hover states.\n\n### Content and layout\n\n- Keep labels concise; the trigger has a `12rem` minimum width, full width, left-aligned content, and no local wrapping or truncation rule.\n- Choose `left` when space is available to the trigger’s right and `right` when space is available to its left. The names describe alignment classes, not the side on which the panel appears.\n- The panel is top-aligned and depends on the contextual-menu dropdown class for its remaining presentation. There is no collision detection or viewport auto-adjustment.\n- Visible content is caller-provided; this component contains no translatable text.\n\n### Keyboard\n\n- Enter and Space activation come from the native button. Nested controls retain their own keyboard behavior.\n- The component adds no Arrow key navigation, Escape handler, focus transfer into the panel, or focus return on close.\n- `onMenuClose` is wired through a click event only; keyboard interactions that do not synthesize a click will not notify it.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`el`";
+        ds:summary "Supplies the nested panel content.";
+        ds:propertyType "element";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactElement<FilterProps, JSXElementConstructor<{ name: string }>> | ReactNode`. Valid non-fragment elements are cloned with `inline: true`; other nodes pass through unchanged. "
+    ], [
+        a ds:Property;
+        ds:name "`label`";
+        ds:summary "Supplies trigger content before label inference.";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Falsy values fall back to `el.props.label`; if neither resolves, the button has no text label. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`disabled`";
+        ds:summary "Disables the native trigger button.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "TypeScript: `boolean`. A disabled trigger cannot toggle the panel. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`onMenuClose`";
+        ds:summary "Notifies the owning menu from the panel click handler. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Runs for every click that bubbles to the open content container; outside clicks do not call it. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`className`";
+        ds:summary "Adds classes to the root wrapper.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Local root and alignment classes remain applied. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`position`";
+        ds:summary "Selects alignment and directional icon arrangement.";
+        ds:propertyType "choice";
+        ds:defaultValue "`left`";
+        ds:constraints "TypeScript: `\"left\" | \"center\" | \"right\"`. The names select source alignment classes; `left` places the panel to the trigger's right and `right` places it to the trigger's left. ";
+        ds:optional "true"
+    ].

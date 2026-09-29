@@ -1,0 +1,65 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/pattern/Modal/styles.css on .ds.modal, which IS the <dialog> element:
+# the stylesheet's own mapping note is explicit that the backdrop is ::backdrop
+# (painted by the native top layer, with no DOM node) and that the former
+# "dialog container" wrapper is the dialog itself, so the sections hang directly
+# off the root here.
+node:
+  uri: global.pattern.modal
+  styles:
+    # Declared only on [open], because a closed <dialog> is display: none by
+    # user-agent rule and an unconditional display would leave it visible.
+    layout.type: flex
+    layout.direction: column
+    # The content pane is the only scroller.
+    layout.overflow: hidden
+    # Padding stays on the header, content and footer, never here, so a click
+    # landing on the dialog box itself can only be a backdrop click.
+    spacing.internal.block.start: 0
+    spacing.internal.block.end: 0
+    spacing.internal.inline.start: 0
+    spacing.internal.inline.end: 0
+    # The token layer defines a `.modal` surface, matched by the component's own
+    # `ds modal` class, so the dialog paints at base surface depth even when
+    # opened from a nested .surface. The background channel is always emitted
+    # there and is read bare; the text channel is emitted only on
+    # polarity-inverting surfaces, so it falls through to the ambient page text.
+    appearance.background: surface.color.background
+    typography.color: [surface.color.text, color.text]
+    # The user-agent stylesheet gives <dialog> a medium solid border, so `none`
+    # is written explicitly rather than left undeclared.
+    appearance.border.style: none
+    appearance.radius: dimension.radius.medium
+    # `max-block-size: 80vh` — bound on the max-height key, the roster's nearest
+    # (size.max.block takes a token only). `inline-size` is a clamp() over
+    # --modal-min-inline-size (50ch) and --modal-max-inline-size (80vw), which
+    # design-tokens has no size/modal token for; size.inline takes a token only,
+    # so the clamp is not bound.
+    size.max.height: 80vh
+  edges:
+    - node:
+        role: backdrop
+        styles:
+          # ::backdrop, not a DOM node: it has no surface channel to read, so the
+          # backdrop colour is a component token of its own. The
+          # backdrop-filter blur reads --modal-backdrop-blur (0) and no roster
+          # key takes a filter.
+          appearance.background: color.backdrop
+      relation:
+        cardinality: "1"
+    - node:
+        uri: global.subcomponent.modal-header
+      relation:
+        cardinality: "0..1"
+        slotName: header
+    - node:
+        uri: global.subcomponent.modal-content
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        uri: global.subcomponent.modal-footer
+      relation:
+        cardinality: "0..1"
+        slotName: footer

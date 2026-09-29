@@ -1,0 +1,54 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+#
+# REPAIR. The retired `ds:anatomyDsl` cell held no anatomy at all: it carried a Turtle
+# block (`@prefix ds:` … `ds:global.component.theme_switcher a ds:Component ; ds:name
+# "Theme switcher" ; ds:description … ; ds:tier ds:global ; ds:whenToUse … ;
+# ds:whenNotToUse … ; ds:guidelines … .`) — block metadata pasted into the anatomy
+# cell, on the wrong subject, with markdown-style trailing double spaces. Nothing in it
+# was a node, a relation or a style, so nothing could be migrated.
+#
+# The tree below is recovered by hand from the block's own `ds:anatomyClassic`, which
+# names the parts in prose — "Container", "Toggle / Button", "Icon (light)" (a sun,
+# the light theme), "Icon (dark)" (a moon, the dark theme, which "may replace or
+# animate from the light icon"), "Focus indicator", "Label (optional)" — and from the
+# cell's own description, "typically represented with sun and moon visuals".
+node:
+  uri: apps_anbox.component.theme_switcher
+  styles:
+    # From the classic anatomy's "Container": the clickable area wraps the whole
+    # control and defines the hit area, so the root is the interactive element.
+    layout.type: inline-flex
+    layout.align: center
+    interaction.cursor: pointer
+    interaction.cursor@disabled: not-allowed
+    # From the classic anatomy's "Focus indicator", which it requires to be visible in
+    # both themes. The symbol is the declared focus-ring colour; no reference
+    # stylesheet says what width or offset the tier draws it at.
+    appearance.outline.color@focus: color.focusRing
+  edges:
+    # "Icon (light)" and "Icon (dark)" are one position, not two siblings: the classic
+    # anatomy says the dark icon "may replace or animate from the light icon", so the
+    # control shows the glyph for the theme it is in. The choice is the component's
+    # own, hence `internal`.
+    - switch:
+        on: internal
+        cases:
+          - node:
+              uri: global.component.icon
+              props:
+                icon: light-theme
+          - node:
+              uri: global.component.icon
+              props:
+                icon: dark-theme
+      relation:
+        cardinality: "1"
+        slotName: icon
+    # "Label (optional)" — "Can be visible or accessible-only", so the anatomy leaves
+    # the text to the consumer and says only that the position exists.
+    - node:
+        role: theme label
+      relation:
+        cardinality: "0..1"
+        slotName: label

@@ -1,0 +1,19 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/group/KeyboardKeys/styles.css on .ds.keyboard-keys.
+node:
+  uri: global.group.keyboard_keys
+  styles:
+    layout.type: inline-flex
+    layout.align: center
+    # The two sizes are distinct and neither matches a spacing role in every
+    # context, so each key binds the dimension the CSS reads.
+    spacing.gap: dimension.025                      # --keyboard-keys-gap, 2px between adjacent keys in a chord
+    spacing.external.inline.start: dimension.050    # --keyboard-keys-margin-inline
+    spacing.external.inline.end: dimension.050      # --keyboard-keys-margin-inline
+  edges:
+    - node:
+        uri: global.component.keyboard_key
+      relation:
+        cardinality: "2..*"     # a chord needs at least two keys
+        slotName: default

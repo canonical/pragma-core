@@ -1,0 +1,84 @@
+@prefix : <https://anatomy.canonical.com/> .
+@prefix dt: <https://dt.canonical.com/> .
+
+[] a :Specification ;
+    :rootNode [
+        a :NamedNode ;
+        :uri "global.component.entity-card" ;
+        :hasProjection [ a :Projection ; :projectionType "Component" ] ;
+        :hasStyle
+            [ a :Style ; :styleKey "layout.type" ; :styleValue "grid" ] ,
+            [ a :Style ; :styleKey "spacing.gap" ; :styleValue "spacing.gap.group.block" ; :consumes ( dt:spacing.gap.group.block ) ] ,
+            [ a :Style ; :styleKey "appearance.background" ; :styleValue "[surface.color.background, color.background.container]" ; :consumes ( dt:surface.color.background dt:color.background.container ) ] ,
+            [ a :Style ; :styleKey "appearance.radius" ; :styleValue "dimension.radius.medium" ; :consumes ( dt:dimension.radius.medium ) ] ;
+        :hasEdge [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.subcomponent.entity-card-header" ;
+                :hasProjection [ a :Projection ; :projectionField "_meta.title" ] ;
+                :hasStyle
+                    [ a :Style ; :styleKey "typography.size" ; :styleValue "dimension.size.fontSize.400" ; :consumes ( dt:dimension.size.fontSize.400 ) ] ,
+                    [ a :Style ; :styleKey "typography.weight" ; :styleValue "typography.weight.semiBold" ; :consumes ( dt:typography.weight.semiBold ) ] ,
+                    [ a :Style ; :styleKey "typography.color" ; :styleValue "[modifier.color.text, color.text]" ; :consumes ( dt:modifier.color.text dt:color.text ) ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "1" ;
+                :slotName "header"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeTarget [
+                a :AnonymousNode ;
+                :role "summary text" ;
+                :hasProjection [ a :Projection ; :projectionField "summary" ] ;
+                :hasStyle
+                    [ a :Style ; :styleKey "typography.color" ; :styleValue "color.text.muted" ; :consumes ( dt:color.text.muted ) ] ,
+                    [ a :Style ; :styleKey "typography.size" ; :styleValue "dimension.size.fontSize.200" ; :consumes ( dt:dimension.size.fontSize.200 ) ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..1"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.component.chip" ;
+                :hasProjection [ a :Projection ; :projectionField "_meta.title" ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..*" ;
+                :slotName "tags" ;
+                :hasProjection [ a :Projection ; :projectionField "documentationStages" ]
+            ]
+        ] , [
+            a :Edge ;
+            :edgeSwitch [
+                a :Switch ;
+                :discriminator "internal" ;
+                :hasCase [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.subcomponent.entity-card-variant" ;
+                        :hasProjection [ a :Projection ; :projectionType "Component" ; :projectionField "_meta.title" ]
+                    ]
+                ] , [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.subcomponent.entity-card-pattern" ;
+                        :hasProjection [ a :Projection ; :projectionType "Pattern" ; :projectionField "_meta.title" ]
+                    ]
+                ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..*" ;
+                :hasProjection [ a :Projection ; :projectionField "variants" ]
+            ]
+        ]
+    ] .

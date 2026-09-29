@@ -1,0 +1,46 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.modal a ds:Component;
+    ds:name "Modal";
+    ds:summary "Modal is a blocking overlay UI block for focused tasks that should temporarily interrupt interaction with the underlying page. It supports declarative trigger wiring, custom content composition, and imperative open/close methods.\n\n";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.component.modal\n  styles:\n    layout.position: fixed\n    appearance.border.width: \"border/width/default\"\n    appearance.border.color: \"color/border/high-contrast\"\n    appearance.backdrop.color: \"color/background/overlay\"\n    interaction.transition.property:\n      - display\n      - opacity\n      - overlay\n    interaction.transition.duration: \"transition/duration/fast\"\n  edges:\n    - node:\n        role: trigger\n      relation:\n        cardinality: \"0..1\"\n        slotName: trigger\n\n    - switch:\n        on: override\n        cases:\n          - uri: app-launchpad.subcomponent.modal-content\n          - uri: $custom\n      relation:\n        cardinality: \"0..1\"\n        slotName: children";
+    ds:anatomyClassic "https://www.figma.com/design/RAXanbc6H7Ti9C4CG2sBQx/25.10-Merge-Proposal-page--new----Launchpad?node-id=5041-478772&m=dev";
+    ds:usage "Modal provides a native dialog-based overlay with two composition paths: declarative trigger/command wiring and imperative instance control. In practice, teams can build either structured confirmation dialogs or fully custom content while preserving consistent open, close, and dismissal behavior.\n\n## When to use\n\nUse Modal when the interaction should take focus and block background interaction until the user makes a decision or completes a task.\n\n## When not to use\n\n### **Lightweight contextual actions**\n\n**Incorrect pattern**: using a blocking dialog for quick contextual choices that should not interrupt page interaction.  \n**Remediation strategy**: use a non-modal surface for quick, in-context choices.\n\n### **Persistent side-docked workflows**\n\n**Incorrect pattern**: using Modal when the expected behavior is a side-attached, panel-style layout.  \n**Remediation strategy**: use a dedicated side panel component that composes modal mechanics but preserves panel ergonomics.";
+    ds:guidelines "## **Trigger and dialog relationship**\n\nEnsure trigger props are applied to an interactive control so assistive technologies can identify dialog intent and ownership.\n\n## **Explicit close controls**\n\nProvide at least one visible close action inside the modal content, especially when light dismissal is disabled.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "trigger";
+        ds:summary "Snippet that renders the trigger element used to open the dialog.";
+        ds:propertyType "Snippet";
+        ds:constraints "Receives commandfor, command show-modal, aria-haspopup dialog, and optional onclick fallback when invoker commands are unsupported.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "Snippet that renders modal content.";
+        ds:propertyType "Snippet";
+        ds:constraints "Receives commandfor and close callback. Can use Modal.Content or custom markup.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "closeOnOutsideClick";
+        ds:summary "Whether a light dismissal is enabled.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "true"
+    ], [
+        a ds:Property;
+        ds:name "Dialog passthrough attributes";
+        ds:summary "Forwarded HTML dialog attributes.";
+        ds:optional "true"
+    ];
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.modal-content;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-06-19T00:00:00.000+02:00";
+        ds:change "Modal.Content renamed to Modal\nModal.Content.Body renamed to Modal.Content\nModal renamed to ModalProvider to separate consumption pattern from markup/component\nAfter thoses changes are made the component should be checked for token parity with the global tier and can be upstreamed.";
+        ds:changeType "change"
+    ].

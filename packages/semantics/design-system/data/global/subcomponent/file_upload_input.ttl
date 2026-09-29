@@ -1,0 +1,166 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.file_upload_input a ds:Subcomponent;
+    ds:name "FileUploadInput";
+    ds:summary "The file-attaching part a host field places in context: a drop area the user clicks or drags files onto, paired with a list of the chosen files. Consumed by controls such as FileUploadField.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global-form\n# src/lib/subcomponent/FileUploadInput/styles.css on .ds.input.file-upload and\n# its child selectors (> .drop-zone, its hidden native input, > .file-list and\n# the five parts of a .file-item), with the tokens it reads from src/index.css.\n# The stylesheet corrects the notation: the file items live in a list container,\n# not directly under the root.\nnode:\n  uri: global.subcomponent.file_upload_input\n  styles:\n    layout.type: flex\n    layout.direction: column\n    # The gap reads --form-group-gap, then --space-100 (and --density-space-sm\n    # inside a density scope): none of the three is declared.\n  edges:\n    - node:\n        role: drop area\n        styles:\n          layout.type: flex\n          layout.align: center\n          layout.justify: center\n          layout.boxSizing: border-box\n          appearance.border.width: dimension.stroke.thickness.medium\n          appearance.border.style: dashed\n          appearance.border.color: color.border\n          appearance.radius: dimension.radius.small\n          appearance.background: color.foreground.input\n          typography.color: color.text.muted\n          interaction.cursor: pointer\n          motion.property: border-color, background-color\n          # The hover fill reads --hover--color-foreground-input first, a computed\n          # state variable that no stratum declares as a symbol.\n          appearance.background@hover: color.foreground.input.hover\n          appearance.border.color@focus: color.focusRing\n          # A `.danger` field — a failed validation — repaints the dashed border.\n          appearance.border.color@invalid: color.border.error\n          appearance.outline.style@focus: none\n          appearance.background@disabled: color.foreground.input.disabled\n          interaction.cursor@disabled: not-allowed\n          # Not bound, and why:\n          # - min-height is a calc() over dimension.400 (128px), and the padding\n          #   a calc() that subtracts the border thickness from\n          #   --form-input-padding-block so the total stays on the baseline grid;\n          # - the inline padding reads --form-input-padding-inline, then\n          #   --component-padding-inline: neither is declared;\n          # - the focus ring is a box-shadow at --form-focus-ring-color, and the\n          #   disabled text colour reads the computed --disabled--color-text;\n          # - the transition duration reads --motion-duration-fast, undeclared;\n          # - `.drag-over` takes the focus border and the hover fill, which is a\n          #   variant rather than one of the states.\n        edges:\n          - node:\n              role: native file input\n              styles:\n                # Visually hidden but kept in the accessibility tree: the drop\n                # area is the affordance, the input is the control.\n                layout.position: absolute\n                size.width: 1px\n                size.height: 1px\n                layout.overflow: hidden\n                typography.whiteSpace: nowrap\n                appearance.border.width: 0\n            relation:\n              cardinality: \"1\"\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        role: file list\n        styles:\n          layout.listStyle: none\n          layout.type: flex\n          layout.direction: column\n          spacing.internal.block.start: 0\n          spacing.internal.block.end: 0\n          spacing.internal.inline.start: 0\n          spacing.internal.inline.end: 0\n          # `margin: 0` zeroes all four sides of the list.\n          spacing.external.block.start: 0\n          spacing.external.block.end: 0\n          spacing.external.inline.start: 0\n          spacing.external.inline.end: 0\n          # The gap reads --form-group-gap, undeclared, as the root's does.\n        edges:\n          - node:\n              role: file item\n              styles:\n                layout.type: flex\n                layout.align: baseline\n                layout.boxSizing: border-box\n                appearance.border.width: dimension.stroke.thickness.medium\n                appearance.border.style: solid\n                appearance.border.color: color.border\n                appearance.radius: dimension.radius.small\n                appearance.background: color.foreground.input\n                spacing.internal.block.start: 0\n                spacing.internal.block.end: 0\n                # The gap reads --form-field-inline-gap and the inline padding\n                # --form-input-padding-inline, and the height\n                # --form-input-height: none of their chains resolves.\n              edges:\n                - node:\n                    role: file preview\n                    styles:\n                      size.width: dimension.400\n                      size.height: dimension.400\n                      layout.objectFit: cover\n                      appearance.radius: dimension.radius.small\n                      layout.flex.shrink: 0\n                  relation:\n                    cardinality: \"0..1\"\n                - node:\n                    role: file name\n                    styles:\n                      layout.flex.grow: 1\n                      layout.flex.shrink: 1\n                      layout.flex.basis: 0%\n                      size.min.width: 0\n                      layout.overflow: hidden\n                      typography.overflow: ellipsis\n                      typography.whiteSpace: nowrap\n                  relation:\n                    cardinality: \"1\"\n                - node:\n                    role: file size\n                    styles:\n                      typography.color: color.text.muted\n                      typography.whiteSpace: nowrap\n                  relation:\n                    cardinality: \"1\"\n                - node:\n                    role: file remove\n                    styles:\n                      appearance.native: none\n                      appearance.border.style: none\n                      appearance.background: none\n                      typography.color: color.text.muted\n                      typography.color@hover: color.text\n                      interaction.cursor: pointer\n                      interaction.cursor@disabled: not-allowed\n                      appearance.opacity@disabled: 0.5\n                      # Its padding (0 0.25rem) is a literal pair the stylesheet\n                      # writes.\n                      spacing.internal.block.start: 0\n                      spacing.internal.block.end: 0\n                      spacing.internal.inline.start: 0.25rem\n                      spacing.internal.inline.end: 0.25rem\n                  relation:\n                    cardinality: \"1\"\n            relation:\n              cardinality: \"0..*\"\n      relation:\n        cardinality: \"0..1\"";
+    ds:anatomyClassic "";
+    ds:usage "The document-attachment entry part a host places in context when the value is a supplied file rather than typed content.\n\n### When to use\n- A host needs a person to attach one or more existing documents, images, or assets.\n- The value is a binary artefact that cannot be expressed as typed text.\n\n### When not to use\n- The value is prose the person writes directly — compose **TextInput** or **TextareaInput**.\n- The value is a choice from a fixed set — compose **SelectInput**.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.border.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.medium
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.radius";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.radius.small
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "hover";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input.hover
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.focusRing
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "invalid";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border.error
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "appearance.border.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.medium
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "appearance.radius";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.radius.small
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file preview";
+        anatomy:styleKey "size.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.400
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file preview";
+        anatomy:styleKey "size.height";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.400
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file preview";
+        anatomy:styleKey "appearance.radius";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.radius.small
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file size";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file remove";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/file remove";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "hover";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ].

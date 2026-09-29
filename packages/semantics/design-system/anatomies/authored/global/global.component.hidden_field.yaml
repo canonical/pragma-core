@@ -1,0 +1,15 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# HiddenField renders through InvisibleWrapper — no label, description or error
+# chrome, and neither it nor HiddenInput ships a stylesheet — so this is a
+# notation migration: structure kept, the dangling uri: repaired.
+node:
+  uri: global.component.hidden_field
+  edges:
+    - node:
+        # Was `global.subcomponent.hidden-input`, which names no subject; the
+        # real subject is global.subcomponent.hidden_input.
+        uri: global.subcomponent.hidden_input
+      relation:
+        cardinality: "1"
+        slotName: default

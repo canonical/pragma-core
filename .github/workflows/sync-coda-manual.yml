@@ -1,0 +1,29 @@
+name: Sync Coda data (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      allow_shrink:
+        description: "Allow a large shrink/deletion of data/ (intentional mass deletion in Coda). Bypasses the fail-closed loss guards."
+        required: false
+        default: false
+        type: boolean
+      allow_malformed_rows:
+        description: "Sync anyway despite upstream rows whose uri is present but malformed (their subjects will be missing from data/)."
+        required: false
+        default: false
+        type: boolean
+
+# Reusable-workflow permissions are capped by the caller, so the write grants
+# must be declared here too (not only in sync-coda.yml).
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sync:
+    uses: ./.github/workflows/sync-coda.yml
+    with:
+      trigger: Manual
+      allow_shrink: ${{ inputs.allow_shrink }}
+      allow_malformed_rows: ${{ inputs.allow_malformed_rows }}

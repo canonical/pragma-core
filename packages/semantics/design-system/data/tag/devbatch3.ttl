@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devbatch3 a ds:Tag;
+    ds:name "dev:batch3";
+    ds:category ds:tagcategory.implementation-status;
+    ds:whenToApply "";
+    ds:whenToRemove "".

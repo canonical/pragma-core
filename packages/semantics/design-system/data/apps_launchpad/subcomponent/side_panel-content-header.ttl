@@ -1,0 +1,14 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.side_panel-content-header a ds:Subcomponent;
+    ds:name "SidePanel.Content.Header";
+    ds:summary "SidePanel.Content.Header is the top section of side panel content. It establishes dialog intent and can include a trailing close control.\n\nMain use cases:\n\n- Display concise side panel title text.\n- Pair title with a dismiss control.";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.subcomponent.side-panel-content_header\n  styles:\n    layout.type: flow\n    layout.direction: horizontal\n    layout.align: start\n    typography.style: \"heading/h4\"\n  edges:\n    - node:\n        role: heading content\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        uri: app-launchpad.subcomponent.side-panel-content_header-close-button\n      relation:\n        cardinality: \"0..1\"\n        slotName: actions";
+    ds:anatomyClassic "";
+    ds:usage "Header is used inside SidePanel.Content to provide title context, optionally with a close button aligned to the end.\n\n## When to use\n\nUse it to present side panel purpose immediately.\n\n## When not to use\n\n### Placing primary actions in header\n\n**Incorrect pattern**: Treating header as main action row.  \n**Remediation strategy**: Move main actions to Footer and keep header for context and dismiss affordance.\n\n### Long body text in header\n\n**Incorrect pattern**: Using header for paragraphs and explanatory copy.  \n**Remediation strategy**: Keep explanatory content in Body and keep header concise.";
+    ds:guidelines "## Provide a clear heading\n\nUse short, descriptive title text for quick context establishment.";
+    ds:tier ds:apps_launchpad;
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.side_panel-content-header-close_button;
+    ds:parentComponent ds:apps_launchpad.subcomponent.side_panel-content.

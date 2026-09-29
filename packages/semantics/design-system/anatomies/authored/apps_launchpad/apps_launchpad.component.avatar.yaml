@@ -1,0 +1,32 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.avatar
+  styles:
+    layout.type: inline-grid
+    layout.align: center
+    layout.justify: center
+    # dropped size.width/size.height: size/medium — no dimension symbol corresponds
+    appearance.background: color.background.layer2   # was color/background/alt
+    # border/style/default split: only the line style has a roster key; the old
+    # value named no colour or width a symbol declares
+    appearance.border.style: solid
+    typography.font: typography.text.primary.bold   # was typography/paragraph/default/strong
+  edges:
+    - switch:
+        on: props
+        cases:
+          - node:
+              role: image
+              styles:
+                size.width: 100%
+                size.height: 100%
+          - node:
+              role: initials
+              # dropped typography.transform: uppercase — the roster has no
+              # text-transform key
+          - node:
+              role: fallback icon
+      relation:
+        cardinality: "1"
+        slotName: default

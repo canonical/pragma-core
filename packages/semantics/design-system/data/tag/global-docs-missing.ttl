@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.global-docs-missing a ds:Tag;
+    ds:name "global-docs-missing";
+    ds:category ds:tagcategory.lpupstream;
+    ds:whenToApply "";
+    ds:whenToRemove "".

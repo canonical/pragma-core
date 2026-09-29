@@ -1,0 +1,15 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.subcomponent.pluralized_bold_count
+  edges:
+    - node:
+        # was uri: global.element.strong, which names no subject — the graph has no
+        # element tier
+        role: locale-formatted count
+      relation:
+        cardinality: "1"
+    - node:
+        role: pluralized noun
+      relation:
+        cardinality: "1"

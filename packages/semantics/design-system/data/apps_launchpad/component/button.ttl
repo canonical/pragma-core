@@ -1,0 +1,39 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.button a ds:Component;
+    ds:name "Button";
+    ds:summary "The **Button** component is an interactive element that allows users to trigger an action.\n\n**Main Use Cases:**\n\n- **Actions:** Trigger an action, such as submitting a form or opening a dialog.\n- **Navigation:** Navigate to a different page or view.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.button\n  styles:\n    layout.type: stack\n    layout.direction: horizontal\n    layout.align: center\n    spacing.internal: spacing/inline/small\n    appearance.background: color/background/neutral/default\n    appearance.border: border/style/solid\n    appearance.radius: radius/medium\n    typography.size: typography/paragraph/default\n  edges:\n    - node: \n        role: content container\n        styles:\n          layout.type: grid\n          layout.direction: horizontal\n          spacing.gap: spacing/inline/icon\n        edges:\n          - node:\n              role: icon container\n            relation:\n              cardinality: \"0..1\"\n              slotName: iconLeft\n          - node:\n              role: label text\n            relation:\n              cardinality: \"1\"\n              slotName: default\n          - node:\n              role: icon container\n            relation:\n              cardinality: \"0..1\"\n              slotName: iconRight\n      relation:\n        cardinality: \"1\"\n    - node:\n        role: loader container\n        edges:\n          - uri: app-launchpad.component.spinner\n            relation:\n              cardinality: \"1\"\n      relation:\n        cardinality: \"0..1\"\n        slotName: loader";
+    ds:anatomyClassic "https://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2066-8&m=dev";
+    ds:usage "### 1. General Description\n\nThe Button is a versatile component that can be used for a wide variety of actions. It is important to use the correct variant of the button to communicate the importance of the action.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Actions:** Use for any action that the user can take.\n- **Navigation:** Use for navigation to a different page or view.\n\n2.2 When Not to Use\n\n- **Non-interactive elements:** Do not use for non-interactive elements. Use a Chip or a Badge instead.";
+    ds:guidelines "### Accessibility\n\n- **Label:** Always provide a clear and descriptive label for the button.\n- **Focus state:** Provide a clear focus state for the button.\n\n### Content Specification\n\n- **Verb-first:** Use a verb-first approach for the button label.\n- **Concise:** Keep the button label concise.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The label for the button.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "variant";
+        ds:summary "The variant of the button.";
+        ds:propertyType "choice";
+        ds:optional "true";
+        ds:defaultValue "secondary";
+        ds:constraints "primary, secondary, tertiary, danger"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Whether the button is disabled or not.";
+        ds:propertyType "boolean";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "loading";
+        ds:summary "Whether the button is in a loading state or not.";
+        ds:propertyType "boolean";
+        ds:optional "true"
+    ].

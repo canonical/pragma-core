@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.wpeinital-implementation a ds:Tag;
+    ds:name "wpe:inital-implementation";
+    ds:category ds:tagcategory.implementation-status;
+    ds:whenToApply "";
+    ds:whenToRemove "".

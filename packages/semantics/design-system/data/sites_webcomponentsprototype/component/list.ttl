@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:sites_webcomponentsprototype.component.list a ds:Component;
+    ds:name "List";
+    ds:summary "**Lists** is a versatile component providing seven distinct variants for presenting sequential or grouped content. The variant is selected via a prop, making it a single polymorphic component.\n\nTable 1";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:sites_webcomponentsprototype.

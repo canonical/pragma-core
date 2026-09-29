@@ -1,0 +1,47 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.component.doc_link a ds:Component;
+    ds:name "DocLink";
+    ds:summary "The **DocLink** component provides a specialized interface for creating links to external documentation pages with consistent behavior and security practices. It automatically constructs URLs by combining a base documentation URL with specific page paths, ensuring all documentation links follow the same pattern while opening in new tabs to preserve user context.\n\n\n\n**Primary purpose**\n\nThis component serves as a standardized solution for linking to external documentation from within the application interface. It eliminates the need to manually construct full documentation URLs and ensures consistent link behavior, security attributes, and visual indicators across all documentation references in the application.\n\n\n\n**Main use cases**\n\n- **Empty state**: there are no entities created yet, so use **DocLink** to show the user how to create an entity\n-  In **HelpLink**: component used mainly in headers to display a title followed by a help icon. The help icon is wrapper into a **DocLink** component.\n- **In the main navigation menu** to link documentation\n- **In input’s help text in forms**\n- **In notifications**\n\n\n\n**When to use**\n\n- ✅ **External documentation references** that need to open in separate tabs to preserve user context\n- ✅ **Consistent documentation URL patterns** where you need to append paths to a base documentation URL\n- ✅ **Visual consistency requirements** for external documentation links across the application\n- ✅ **Dynamic documentation URLs** where the base URL might change based on configuration or environment\n\n\n\n**When not to use**\n\n- ❌ **Internal application navigation** where you need to stay within the same tab or window (use standard router links instead)\n- ❌ **Non-documentation external links** such as social media, external tools, or general websites (use standard anchor elements instead)\n- ❌ **Download links** or file references that don't represent browsable documentation\n- ❌ **Same-page anchor links** or internal section navigation within the current page\n- ❌ **Links that require custom click handling** or complex interaction behavior beyond simple navigation";
+    ds:anatomyDsl "node:\n  uri: core:component:DocLink\n  styles:\n    layout.type: inline\n    layout.display: inline-block\n    interaction.cursor: pointer\n    interaction.target: _blank\n    link.rel: \"noopener noreferrer\"\n    typography.decoration: text/decoration/link\n    typography.color: color/text/link\n    appearance.focus: focus/ring/link\n    interaction.hover.color: color/text/link/hover\n    \n  edges:\n    - node:\n        role: link content wrapper\n        styles:\n          # Structural (implicitly invariant)\n          layout.type: flow\n          layout.direction: horizontal\n          layout.align: center\n          layout.wrap: nowrap\n          \n          # Themeable\n          spacing.gap: spacing/xs\n          \n      relation:\n        cardinality: \"1..1\"\n        slotName: default\n        \n      edges:\n        - node:\n            role: link content\n            styles:\n              # Structural (implicitly invariant)\n              layout.display: inline\n              layout.flex: 1\n              \n              # Themeable\n              typography.inherit: true\n              \n          relation:\n            cardinality: \"1..1\"\n            slotName: children\n            \n        - node:\n            uri: core:element:Icon\n            styles:\n              # Structural (implicitly invariant)\n              layout.display: inline\n              layout.flex: none\n              size.width: size/icon/small\n              size.height: size/icon/small\n              \n              # Themeable\n              appearance.color: color/icon/external\n              \n          relation:\n            cardinality: \"0..1\"\n            slotName: icon";
+    ds:anatomyClassic "Empty state\n\n\n\n\n\nHelpLink\n\n\n\n\n\nMain navigation bar (Documentation)\n\n\n\n\n\nInput help text\n\n\n\nNotification\n\n";
+    ds:usage "### **General description**\n\nThe **DocLink** component provides a standardized interface for creating secure external links to documentation pages. It automatically constructs URLs by combining a configurable base documentation URL with specific page paths, while ensuring all links open in new tabs with proper security attributes. The component offers optional visual indicators for external links and maintains consistent behavior across all documentation references in the application.";
+    ds:guidelines "";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "docPath";
+        ds:summary "The relative path to append to the base documentation URL obtained from the docs context. This path will be combined with the base URL to create the complete documentation link.";
+        ds:propertyType "text";
+        ds:constraints "Must be a valid string representing a URL path (e.g., \"/guides/getting-started\", \"/api/endpoints\")";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The content to display as the clickable link text or elements.";
+        ds:propertyType "node";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "hasExternalIcon";
+        ds:summary "Controls whether to display an external link icon alongside the link content to visually indicate that the link opens in a new tab and leads to external documentation.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "`false`"
+    ], [
+        a ds:Property;
+        ds:name "className";
+        ds:summary "Additional CSS class names to apply to the anchor element";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "`undefined`"
+    ], [
+        a ds:Property;
+        ds:name "title";
+        ds:summary "Tooltip text that appears when users hover over the link";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "`undefined`"
+    ].

@@ -1,0 +1,23 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.view.network_topology a ds:View;
+    ds:name "NetworkTopology";
+    ds:summary "Visualize entities as chips in a network topology with connecting lines between them. Creates a view like in an actual physical network for virtual network resources.\n\nEntities can be network interfaces, virtual network definitions, computers, virtual machines, and instances.\n\nIdeally used in combination with entities shown as rich chips that clearly show entities with their respective icon. On hovering an entity, standardized tooltips display more information about the entity.\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "**When to use**\n\nTo display entities connected to a virtual or physical network\n\n**When not to use**\n\nTo visualize non-networking-related entity connections.";
+    ds:guidelines "";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:optional "false"
+    ];
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-02-11T00:00:00.000+01:00";
+        ds:change "Adding description";
+        ds:changeType "change";
+        ds:githubLink "https://github.com/canonical/lxd-ui/blob/main/src/pages/networks/NetworkTopology.tsx"
+    ].

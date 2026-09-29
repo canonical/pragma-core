@@ -1,0 +1,65 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.data_table-settings_menu a ds:Subcomponent;
+    ds:name "DataTable.SettingsMenu";
+    ds:summary "Almost all configurable aspects of the table are available through the table settings menu. This menu provides a centralized interface accessed through a settings wheel (gear) icon button in the table header for column reordering, column pinning, column visibility, and resetting user customizations. It also links to a keyboard shortcuts reference modal.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3350-3178&t=8RN2Hpk8UX3gMX3u-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3350-3916&t=8RN2Hpk8UX3gMX3u-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4820-93903&t=2fO23I8WsyT0YVJ1-4";
+    ds:usage "The settings menu gives users control over how the table is structured and displayed. It is enabled by default on every data table. It is the central place for adjusting column order, visibility, and pinning without leaving the table context. If any of these customization features are enabled on the table, the settings menu must be present to provide access to them. The settings menu is only hidden when the designer has actively disabled all customization features, making the table fully static.\n\nFor example, a network operations team may want to pin a status column and hide columns irrelevant to their role, while a capacity planning team viewing the same table may prioritize different columns entirely.\n\n## When to use\n\n- The table has enough columns that users benefit from hiding, reordering, or pinning them.\n- Different users or roles interact with the same table but care about different columns.\n- The table is a core part of the user’s daily workflow and they are likely to customize it over time.\n\n## When not to use\n\n- The designer has disabled all customization features (column reordering, pinning, and visibility). Only then can the settings menu be hidden.\n- The table is temporary or shown briefly, such as in a modal or a summary view, where customization adds no value.";
+    ds:guidelines "# Interactions\n\n## Button states\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3579-76790&t=2PBanDq6QA2yNcI2-4\n\n- **Hover** - the gear icon displays a hover effect. A tooltip appears (for example, “Open table settings”).\n- **Select** - selecting the gear icon opens the settings dropdown menu.\n\n## Column reordering through drag-and-drop\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3579-78680&t=2PBanDq6QA2yNcI2-4\n\n\n\nUsers can reorder columns by dragging items in the settings menu. The first item corresponds to the first table column, the second to the second column, and so on.\n\n### Starting a drag\n\nThe user initiates a drag from the **drag handle area** on the left side of a menu item. When dragging begins:\n\n- The item being reordered receives a **3px focus outline** (border-primary color) and stays in its original position throughout the drag. This prevents items from shifting around during the interaction, which could lead to accidental misplacement.\n- A **“ghost item”** appears directly over the original item. The ghost has a gray background with opacity and a blue secondary border.\n\n### During the drag\n\n- The ghost item follows the cursor as the user drags up or down.\n- A **3px-wide drop zone indicator line** (border-primary color) appears between items, showing where the item will land if the user releases.\n- The original item retains its focus outline so the user always knows which item is being moved.\n\n### Drop zone change logic\n\nThe drop position updates based on a **halfway-point rule**: the drop zone shifts past an item once the upper or lower edge of the ghost item crosses the vertical midpoint of the item currently being dragged over. For example, if the ghost item’s bottom edge has not yet crossed the midpoint of a given row, the drop zone remains above that row. Once it crosses, the drop zone moves below it.\n\n### Completing the drop\n\nWhen the user releases, the item moves to the position indicated by the drop zone line. The reorder **is animated**.\n\n### \n\n## Column reordering through keyboard\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3579-78937&t=2PBanDq6QA2yNcI2-4\n\nTo reorder columns using the keyboard:\n\n1. Focus a column item in the settings menu.\n2. Press **Shift + Arrow Up** or **Shift + Arrow Down** to move the item.\n\nThe move happens immediately on key press, is animated, and the item remains focused after moving.\n\n## Column pinning toggle\n\nSelecting the **pin icon** on a menu item pins the corresponding column. Refer to the column pinning section for full pinning behavior.\n\n## Column visibility toggle\n\nSelecting the **eye (show/hide) icon** on a menu item toggles the corresponding column between visible and hidden.\n\n## Tooltips\n\nEvery interactive element in the settings menu and the settings button itself displays a tooltip on hover:\n\nTable 2\n\n## Reset table settings\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3579-78939&t=2PBanDq6QA2yNcI2-4\n\nThe “Reset table settings” action link at the bottom of the menu resets all user-made table customizations to their defaults. This includes column resizing, column reordering, column pinning, column visibility, and any other saved preferences.\n\nThese table settings are persisted in **browser cross-session storage**. Resetting clears everything written to that storage.\n\nA **confirmation modal** is shown after selecting the link. The table is only reset if the user confirms.\n\n## Keyboard shortcuts modal\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3579-79945&t=2PBanDq6QA2yNcI2-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3579-81019&t=2PBanDq6QA2yNcI2-4\n\nThe “Table keyboard shortcuts” action link at the bottom of the menu opens a **modal dialog** titled “Table keyboard shortcuts”. The modal has a two-column layout with “Command” and “Shortcut” headers.\n\n### General navigation\n\nTable 3\n\n### While a header cell is focused\n\nTable 4\n\n### While a table settings item is focused\n\nTable 5";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "settings-menu";
+        ds:summary "Whether the settings gear icon and menu are shown in the header row.";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:constraints "Inherited from the data table. Only set to false when all column customization features are disabled.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "grouping-columns";
+        ds:summary "The set of columns that support grouping. Columns in this list display a \"Group by\" button in the settings menu.";
+        ds:propertyType "list of text";
+        ds:constraints "Inherited from the data table. Each value must reference an enumerated-value column.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "reorderable-columns";
+        ds:summary "Whether columns can be reordered through drag-and-drop or keyboard in the settings menu. When false, drag handles are hidden.";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "pinnable-columns";
+        ds:summary "Whether the pin icon is available on column items in the settings menu. When false, pin icons are hidden.";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "hideable-columns";
+        ds:summary "Whether the eye (visibility) icon is available on column items in the settings menu. When false, visibility icons are hidden.";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "reset-enabled";
+        ds:summary "Whether the \"Reset table settings\" action link is shown at the bottom of the menu. Resetting clears all user customizations persisted in browser storage.";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "keyboard-shortcuts-enabled";
+        ds:summary "Whether the \"Table keyboard shortcuts\" action link is shown at the bottom of the menu.";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:apps.pattern.datatable.

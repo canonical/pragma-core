@@ -1,0 +1,86 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.gpg_key_field a ds:Component;
+    ds:name "GPG Key Field";
+    ds:summary "GPG Key Field is a controlled edit-form composition for GPG key text. Without an `existingKey`, it renders a Canonical Textarea for a new value. With an `existingKey`, it first renders a “keep current” CheckboxInput and mounts the replacement Textarea only when `keepCurrentKey` is false.\n\nThe component does not display, parse, validate, upload, or otherwise inspect the existing or replacement key. The `existingKey` object is used only as a truthy presence signal; value, error, touched state, and persistence remain the parent form’s responsibility.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.gpg_key_field\n  edges:\n    - node:\n        uri: global.component.checkbox\n        role: keep current key\n        relation:\n          cardinality: \"0..1\"\n          condition: existing key is present\n    - node:\n        uri: global.component.textarea\n        role: GPG key input\n        relation:\n          cardinality: \"0..1\"\n          condition: no existing key or keep current is false";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-55&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 29\n\n";
+    ds:usage "### When to use\n\n**Create with a key**\n\nUse when a form accepts a pasted GPG public key for a new resource.\n\n**Optional key replacement**\n\nUse when editing a resource should retain its existing key unless the user explicitly replaces it.\n\n**Parent-controlled validation**\n\nUse when the parent form already owns key parsing/validation and can pass a string error to the textarea.\n\n### When not to use\n\n**Key generation or upload**\n\nUsers need to generate keys, inspect keyrings, or upload a key file.\n\n**Incorrect pattern**: Rendering the field to allow users to create or import external key material.\n\n**Remediation strategy**: Use a dedicated key management form or upload component that handles generation and keyrings.\n\n**Secret key material**\n\nUsers must not accidentally enter private keys or passphrases in this public-key field.\n\n**Incorrect pattern**: Labeling the field generically without clarifying that only public keys are accepted.\n\n**Remediation strategy**: Always label the field as “GPG public key” or “verification key” and document that private key material is not accepted.\n\n**Existing-key inspection**\n\nUsers need to see a fingerprint, owner, expiry, algorithm, or the current armored text.\n\n**Incorrect pattern**: Expecting the component to read or display properties from the `existingKey` object.\n\n**Remediation strategy**: Add a separate read-only display component that renders fingerprint, owner, and other key metadata before or after the edit control.\n\n**Automatic validation or persistence**\n\nBuilt-in GPG validation, file handling, API calls, or confirmation is required.\n\n**Incorrect pattern**: Relying on the component to validate armor, upload to an API, or handle persistence automatically.\n\n**Remediation strategy**: Implement validation, persistence, and API handling in the parent form or a custom validation layer outside the component.";
+    ds:guidelines "### Accessibility\n\n- Keep explicit labels on both controls and associate parse errors with the textarea.\n- The source preserves explicit Canonical control labels and places the replacement input immediately after the checkbox in reading and tab order.\n- Reveal/hide is driven by the native checkbox change. The component does not move focus or announce that a Textarea was inserted/removed.\n- Error association and announcement are inherited from Canonical Textarea; there is no local id or ARIA wiring.\n\n### Content and security\n\n- Say GPG public key where ambiguity with private key material is possible.\n- Never echo secret key material in errors, logs, or notifications.\n- Validate armor, fingerprint, expiry, and permitted key type in the parent/client and on a trusted backend; this component performs no checks.\n- The default source label says only “GPG key”. Consumers that accept only public or verification keys should override it, as the mirror edit form does with “Verification GPG key”.\n\n### Internationalization\n\n- The two default labels are hardcoded English but injectable. Pass translated `keepCurrentLabel` and `textareaLabel` in localized surfaces.\n- Error strings originate in the parent and must be localized there.\n- Armored key text itself must not be translated or typographically transformed.\n\n### Keyboard navigation\n\n- Support Space on the retain checkbox and normal keyboard editing in the textarea.\n- The component adds no custom keyboard handling. Tabbing follows checkbox then conditional Textarea when it is present.\n\n### Device and layout\n\n- Layout, textarea size, wrapping, and overflow are entirely inherited from Canonical components and the surrounding form; there is no local stylesheet.\n- Verify long armored lines at narrow widths and avoid exposing content through unintended horizontal page overflow.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "existingKey";
+        ds:summary "Truthy presence selects existing-key mode.";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `GpgKey`. No properties are read and the current key is not displayed. ";
+        ds:optional "Yes"
+    ], [
+        a ds:Property;
+        ds:name "keepCurrentKey";
+        ds:summary "Controls the CheckboxInput and whether replacement Textarea is mounted in existing-key mode. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "Ignored for rendering when `existingKey` is absent. ";
+        ds:optional "No"
+    ], [
+        a ds:Property;
+        ds:name "gpgKeyValue";
+        ds:summary "Controlled textarea value.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "`undefined` is normalized to `\"\"`; the component keeps no local draft. ";
+        ds:optional "Yes"
+    ], [
+        a ds:Property;
+        ds:name "gpgKeyError";
+        ds:summary "Passed to Textarea's `error` prop.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "Not rendered while the textarea is unmounted.";
+        ds:optional "Yes"
+    ], [
+        a ds:Property;
+        ds:name "keepCurrentLabel";
+        ds:summary "Visible checkbox label.";
+        ds:propertyType "text";
+        ds:defaultValue "`\"Keep current GPG key\"`";
+        ds:constraints "Used only in existing-key mode.";
+        ds:optional "Yes"
+    ], [
+        a ds:Property;
+        ds:name "textareaLabel";
+        ds:summary "Visible Textarea label in new and replacement modes. ";
+        ds:propertyType "text";
+        ds:defaultValue "`\"GPG key\"`";
+        ds:constraints "Keep terminology explicit about public or verification keys where needed. ";
+        ds:optional "Yes"
+    ], [
+        a ds:Property;
+        ds:name "onKeepCurrentChange";
+        ds:summary "Called with the checkbox's next checked value.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `(checked: boolean) => void`. The parent must update `keepCurrentKey`; no event object is exposed. ";
+        ds:optional "No"
+    ], [
+        a ds:Property;
+        ds:name "onGpgKeyChange";
+        ds:summary "Called with the Textarea's next string value.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `(value: string) => void`. The parent must update `gpgKeyValue`; no event object is exposed. ";
+        ds:optional "No"
+    ], [
+        a ds:Property;
+        ds:name "onGpgKeyBlur";
+        ds:summary "Passed as the Textarea blur callback.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `() => void`. No event object is exposed. Common consumer use is marking the parent Formik field touched. ";
+        ds:optional "Yes"
+    ].

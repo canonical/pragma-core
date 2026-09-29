@@ -1,3 +1,8 @@
 # pragma-core. The shared lint configuration is co-owned by the teams whose
 # packages in pragma-web extend it, exactly as in canonical/pragma.
 /configs/biome/               @canonical/launchpad-ui  @canonical/workplace-engineering-ui  @canonical/pragma
+
+# The Coda sync's pull requests merge themselves when green (sync-coda.yml): the paths it
+# rewrites have no owner, so no review is waited for.
+/packages/semantics/design-system/data/
+/packages/semantics/design-system/anatomies/census.json

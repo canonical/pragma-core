@@ -1,0 +1,29 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.tag a ds:Component;
+    ds:name "Tag";
+    ds:summary "The label component is a compact, non-interactive visual element used to categorize content or indicate a status. Its primary role is metadata visualization. While it has similar visual properties to the [Chip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-N-fnT7n4mU), it is purely informational and does not trigger actions or allow for removal.";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# A notation migration of the previous DSL: structure and bindings kept, values\n# migrated. The previous root uri said `global.component.label`, which names no\n# block; the block this anatomy belongs to is Tag.\nnode:\n  uri: global.component.tag\n  styles:\n    layout.type: inline\n    # Was `typography.size: font/size/label` — dropped, since typography.size\n    # admits dimension.* only and no dimension symbol corresponds to\n    # font/size/label.\n    typography.weight: typography.weight.medium\n  edges:\n    - node:\n        role: icon\n      relation:\n        cardinality: \"0..1\"\n        slotName: icon\n    - node:\n        role: content\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2877-15897&t=ZeOhPBVqjN81UglM-1\n\nStyling  \nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4327-100398&t=mrOkyDfhQY9JZwMz-1";
+    ds:usage "The label is intended to serve as an indicator of meta data or status. It provides a visual shortcut for users to identify the state or classification of an item without requiring any direct interaction with the element itself.\n\n### When to use\n\n- When you need to surface high-priority metadata that helps users scan and differentiate items within a larger set.\n- When an object undergoes a lifecycle (e.g., a ticket moving from \"Open\" to \"Resolved\"). Labels provide an immediate visual cue of the current state.\n- When items need to be grouped by type or department (e.g., \"HR,\" \"Finance,\" or \"Legal\") to help users find relevant information quickly.\n- When a specific, non-actionable characteristic needs to be called out, such as \"New\" on a product card or \"Required\" next to a form field.\n- When using a color-coded system to indicate urgency or importance levels, such as \"Critical,\" \"High,\" or \"Low\" in a task list, that is not a filter.\n\n### When not to use\n\n- When the user expects to click the element to filter a list or navigate to a category page.\n  - Incorrect: A user clicks a \"Marketing\" label expecting to see all marketing posts, but nothing happens.\n  - Remediation: Use a [Chip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-N-fnT7n4mU) component which supports click events and hover states.\n- When the metadata is temporary or user-defined and needs to be removable.\n  - Incorrect: A search results page where \"Applied Filters\" are displayed as labels with no \"X\" or delete functionality.\n  - Remediation: Use a [Chip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-N-fnT7n4mU) with an integrated \"Remove\" action.\n- When the information being displayed is a long sentence or requires multiple lines.\n  - Incorrect: A label containing the text: \"This item was approved by the manager yesterday.\"\n  - Remediation: Use a [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) or helper text to keep the interface clean and avoid breaking the label's compact \"pill\" shape.\n- When the element is used as the primary trigger for a process.\n  - Incorrect: A \"Submit\" button styled as a label to save space.\n  - Remediation: Use a [Button](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8SdtbQUhTr) component to ensure the user perceives it as an interactive CTA.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:propertyType "text";
+        ds:optional "false"
+    ];
+    ds:hasModifierFamily ds:global.modifier_family.anticipation, ds:global.modifier_family.importance, ds:global.modifier_family.criticality;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tag;
+        ds:node "$root";
+        anatomy:styleKey "typography.weight";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.weight.medium
+    ].

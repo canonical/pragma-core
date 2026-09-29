@@ -1,0 +1,33 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.combobox-radio_option a ds:Subcomponent;
+    ds:name "Combobox.RadioOption";
+    ds:summary "The **Combobox RadioOption** is a subcomponent of the Combobox that represents an option that can be selected with a radio button. It is used for single-select Comboboxes where the selection needs to be visually represented.\n\n**Main Use Cases:**\n\n- **Single-select:** Allow users to select a single option from a list.\n- **Visual selection:** Provide a clear visual indication of the selected option.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.subcomponent.combobox.radio-option\n  styles:\n    layout.display: grid\n    appearance.background: color/background/default\n    spacing.padding: spacing/inline/medium\n  edges:\n    - node:\n        role: label text\n      relation:\n        cardinality: \"1\"\n        slotName: text\n    - node:\n        role: option icon\n      relation:\n        cardinality: \"0..1\"\n        slotName: icon\n    - node:\n        role: secondary text\n      relation:\n        cardinality: \"0..1\"\n        slotName: secondaryText\n    - node:\n        role: trailing text\n      relation:\n        cardinality: \"0..1\"\n        slotName: trailingText\n    - node:\n        uri: app-launchpad.component.radio\n      relation:\n        cardinality: \"1\"\n        slotName: checked";
+    ds:anatomyClassic "The Combobox RadioOption is composed of a main container, a radio button, a label, and optional icons and secondary text.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the option.\n2. **Radio Button:** The radio button that indicates whether the option is selected or not.\n3. **Label Text:** The primary text for the option.\n4. **Option Icon:** An optional icon to visually represent the option.\n5. **Secondary Text:** Optional text to provide additional information about the option.\n6. **Trailing Text:** Optional text that is displayed at the end of the option.";
+    ds:usage "### 1. General Description\n\nThe Combobox RadioOption is used to represent a selectable option in a single-select Combobox. It is an alternative to a simple option when a more explicit visual representation of the selection is needed.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Single-select Combobox:** Use as the option type in a single-select Combobox.\n- **Visual clarity:** Use when you want to make the selection more visually apparent.\n\n2.2 When Not to Use\n\n- **Multi-select Combobox:** Do not use in a multi-select Combobox. Use a CheckboxOption instead.";
+    ds:guidelines "### Content Specification\n\n- **Labels:** Use clear and concise labels for the options.\n- **Secondary text:** Use secondary text to provide additional information, but keep it short.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The value of the option.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The label for the option.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "checked";
+        ds:summary "Whether the option is selected or not.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.combobox.

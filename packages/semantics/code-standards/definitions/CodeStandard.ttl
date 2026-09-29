@@ -1,0 +1,98 @@
+@prefix cs: <http://pragma.canonical.com/codestandards#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# Ontology Declaration
+cs: a owl:Ontology ;
+    rdfs:label "Code Standards Ontology"@en ;
+    rdfs:comment "An ontology for describing software development code standards and best practices. The canonical public identifier for a standard is its compact prefixed IRI (for example `cs:code.function.purity`), using dot-separated hierarchy segments and snake_case for multi-word local-name segments. `rdfs:label` carries the human-readable display title and never participates in identity."@en ;
+    owl:versionInfo "2.1.0" .
+
+# Classes
+cs:CodeStandard a owl:Class ;
+                rdfs:label "Code Standard"@en ;
+                rdfs:comment "A coding standard or best practice guideline for software development"@en .
+
+cs:Category a owl:Class ;
+            rdfs:label "Category"@en ;
+            rdfs:comment "A category for grouping related code standards (e.g., testing, components, react, typescript)"@en ;
+            rdfs:subClassOf skos:Concept .
+
+cs:Example a owl:Class ;
+           rdfs:label "Example"@en ;
+           rdfs:comment "A single do or don't example with a description, optional language tag, and optional code block"@en .
+
+# Datatype properties
+
+# DEPRECATED in 2.1.0 — superseded by rdfs:label.
+#
+# `cs:name` was a bespoke reinvention of a property every RDF consumer already
+# understands. It cost a `label_properties` override in sem.toml, it was
+# invisible to the quality shape pack (which knows only rdfs:label and
+# skos:prefLabel), and — because it was asserted on only 15 of 145 standards —
+# any consumer that addressed standards BY it could reach almost none of them.
+# That is exactly what happened: a downstream CLI declared it as a lookup key
+# and 130 standards became unaddressable, in direct contradiction of this
+# ontology's own rule that the display title never participates in identity.
+#
+# Retained as a deprecated term rather than deleted: removal is the expensive
+# direction, and a reader who meets `cs:name` in an older graph needs to be
+# told what replaced it.
+cs:name a owl:DatatypeProperty ;
+    rdfs:label "name"@en ;
+    rdfs:comment "DEPRECATED (2.1.0): use rdfs:label. An optional human-readable display title for a code standard. This is not an identifier and must not duplicate the canonical role of the subject IRI."@en ;
+    rdfs:subPropertyOf rdfs:label ;
+    owl:deprecated true ;
+    rdfs:domain cs:CodeStandard ;
+    rdfs:range xsd:string .
+
+cs:slug a owl:DatatypeProperty ;
+    rdfs:label "slug"@en ;
+    rdfs:comment "A short identifier for the category or standard, used for domain annotation."@en ;
+    rdfs:domain cs:Category ;
+    rdfs:range xsd:string .
+
+# Object Properties
+cs:hasCategory a owl:ObjectProperty ;
+               rdfs:label "has category"@en ;
+               rdfs:comment "Associates a code standard with its category"@en ;
+               rdfs:domain cs:CodeStandard ;
+               rdfs:range cs:Category .
+
+cs:extends a owl:ObjectProperty ;
+              rdfs:label "extends"@en ;
+              rdfs:comment "Associates a code standard with another standard that it extends or adds further context to"@en ;
+              rdfs:domain cs:CodeStandard ;
+              rdfs:range cs:CodeStandard .
+
+cs:do a owl:ObjectProperty ;
+      rdfs:label "do"@en ;
+      rdfs:comment "A positive example showing what should be done"@en ;
+      rdfs:domain cs:CodeStandard ;
+      rdfs:range cs:Example .
+
+cs:dont a owl:ObjectProperty ;
+        rdfs:label "don't"@en ;
+        rdfs:comment "A negative example showing what should not be done"@en ;
+        rdfs:domain cs:CodeStandard ;
+        rdfs:range cs:Example .
+
+cs:description a owl:DatatypeProperty ;
+               rdfs:label "description"@en ;
+               rdfs:comment "A general description of the code standard or example"@en ;
+               rdfs:range xsd:string .
+
+cs:language a owl:DatatypeProperty ;
+            rdfs:label "language"@en ;
+            rdfs:comment "The programming language of the example code block (e.g., 'typescript', 'rust', 'css', 'bash', 'svg', 'turtle')"@en ;
+            rdfs:domain cs:Example ;
+            rdfs:range xsd:string .
+
+cs:code a owl:DatatypeProperty ;
+        rdfs:label "code"@en ;
+        rdfs:comment "The code content of the example"@en ;
+        rdfs:domain cs:Example ;
+        rdfs:range xsd:string .

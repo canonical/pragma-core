@@ -1,0 +1,31 @@
+---
+# Authored 2026-09-14 from @canonical/react-ds-global-form
+# src/lib/subcomponent/Field/Error/styles.css on .ds.field-error, with the
+# tokens it reads from src/index.css. The Error is the Field's common
+# validation message: one `<p role="alert">` the Wrapper renders below the
+# control, sharing the label's edge alignment.
+node:
+  uri: global.subcomponent.field-error
+  styles:
+    # --form-error-color is var(--modifier-color-text, var(--color-text-error)):
+    # the text channel first, so a caller recolouring the field recolours its
+    # error with it, and the error text semantic behind it. Per design review
+    # the validation colour is confined to this message and the input's bottom
+    # border, so the error carries the signal in its own text.
+    typography.color: [modifier.color.text, color.text.error]
+    # No type binding: the rule sets only `color` and `padding-inline`.
+    # index.css declares --form-error-font-size on the PRIMARY ramp, but
+    # nothing in the package consumes that variable — the message is a <p>
+    # carrying the `.p` class, so its type comes from the baseline typography
+    # engine, not from this rule. Same shape as the description.
+    # Aligned to the field edge like the label, not to the input's inner
+    # padding: padding-inline reads --form-label-padding-inline, which no
+    # stratum declares, falling back to 0.
+    spacing.internal.inline.start: 0
+    spacing.internal.inline.end: 0
+  edges:
+    - node:
+        role: error text
+      relation:
+        cardinality: "1"
+        slotName: default

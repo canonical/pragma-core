@@ -1,0 +1,62 @@
+@prefix : <https://anatomy.canonical.com/> .
+@prefix dt: <https://dt.canonical.com/> .
+
+[] a :Specification ;
+    :rootNode [
+        a :NamedNode ;
+        :uri "global.component.button" ;
+        :hasStyle
+            [ a :Style ; :styleKey "layout.type" ; :styleValue "inline-flex" ] ,
+            [ a :Style ; :styleKey "layout.align" ; :styleValue "center" ] ,
+            [ a :Style ; :styleKey "interaction.cursor" ; :styleValue "pointer" ] ,
+            [ a :Style ; :styleKey "interaction.cursor" ; :styleState "disabled" ; :styleValue "not-allowed" ] ,
+            [ a :Style ; :styleKey "appearance.radius" ; :styleValue "dimension.radius.medium" ; :consumes ( dt:dimension.radius.medium ) ] ,
+            [ a :Style ; :styleKey "appearance.border.width" ; :styleValue "dimension.stroke.thickness.medium" ; :consumes ( dt:dimension.stroke.thickness.medium ) ] ,
+            [ a :Style ; :styleKey "appearance.border.style" ; :styleValue "solid" ] ,
+            [ a :Style ; :styleKey "appearance.background" ; :styleValue "[modifier.color.foreground.primary, color.foreground.primary]" ; :consumes ( dt:modifier.color.foreground.primary dt:color.foreground.primary ) ] ,
+            [ a :Style ; :styleKey "appearance.background" ; :styleState "hover" ; :styleValue "color.foreground.primary.hover" ; :consumes ( dt:color.foreground.primary.hover ) ] ,
+            [ a :Style ; :styleKey "appearance.background" ; :styleState "active" ; :styleValue "color.foreground.primary.active" ; :consumes ( dt:color.foreground.primary.active ) ] ,
+            [ a :Style ; :styleKey "appearance.background" ; :styleState "disabled" ; :styleValue "color.foreground.primary.disabled" ; :consumes ( dt:color.foreground.primary.disabled ) ] ,
+            [ a :Style ; :styleKey "appearance.border.color" ; :styleValue "[modifier.color.border, color.border.highlighted, color.border]" ; :consumes ( dt:modifier.color.border dt:color.border.highlighted dt:color.border ) ] ,
+            [ a :Style ; :styleKey "appearance.border.color" ; :styleState "disabled" ; :styleValue "color.border.disabled" ; :consumes ( dt:color.border.disabled ) ] ,
+            [ a :Style ; :styleKey "typography.color" ; :styleValue "[modifier.color.text, color.text]" ; :consumes ( dt:modifier.color.text dt:color.text ) ] ,
+            [ a :Style ; :styleKey "typography.color" ; :styleState "disabled" ; :styleValue "color.text.disabled" ; :consumes ( dt:color.text.disabled ) ] ,
+            [ a :Style ; :styleKey "typography.weight" ; :styleValue "typography.weight.medium" ; :consumes ( dt:typography.weight.medium ) ] ,
+            [ a :Style ; :styleKey "typography.size" ; :styleValue "dimension.size.fontSize.200" ; :consumes ( dt:dimension.size.fontSize.200 ) ] ,
+            [ a :Style ; :styleKey "spacing.gap" ; :styleValue "spacing.gap.mark.inline" ; :consumes ( dt:spacing.gap.mark.inline ) ] ,
+            [ a :Style ; :styleKey "spacing.internal.inline.start" ; :styleValue "spacing.inset.action.inline" ; :consumes ( dt:spacing.inset.action.inline ) ] ,
+            [ a :Style ; :styleKey "spacing.internal.inline.end" ; :styleValue "spacing.inset.action.inline" ; :consumes ( dt:spacing.inset.action.inline ) ] ,
+            [ a :Style ; :styleKey "appearance.outline.width" ; :styleState "focus" ; :styleValue "[dimension.stroke.thickness.large, 2px]" ; :consumes ( dt:dimension.stroke.thickness.large ) ] ,
+            [ a :Style ; :styleKey "appearance.outline.style" ; :styleState "focus" ; :styleValue "solid" ] ,
+            [ a :Style ; :styleKey "appearance.outline.color" ; :styleState "focus" ; :styleValue "[modifier.color.focusRing, color.focusRing, currentColor]" ; :consumes ( dt:modifier.color.focusRing dt:color.focusRing ) ] ,
+            [ a :Style ; :styleKey "appearance.outline.offset" ; :styleState "focus" ; :styleValue "dimension.025" ; :consumes ( dt:dimension.025 ) ] ;
+        :hasEdge [
+            a :Edge ;
+            :edgeTarget [
+                a :NamedNode ;
+                :uri "global.component.icon" ;
+                :hasStyle
+                    [ a :Style ; :styleKey "typography.color" ; :styleValue "[modifier.color.icon, modifier.color.text, currentColor]" ; :consumes ( dt:modifier.color.icon dt:modifier.color.text ) ] ,
+                    [ a :Style ; :styleKey "typography.color" ; :styleState "disabled" ; :styleValue "color.icon.disabled" ; :consumes ( dt:color.icon.disabled ) ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "0..1" ;
+                :slotName "icon"
+            ]
+        ] , [
+            a :Edge ;
+            :edgeTarget [
+                a :AnonymousNode ;
+                :role "label text" ;
+                :hasStyle
+                    [ a :Style ; :styleKey "typography.color" ; :styleValue "[modifier.color.text, color.text]" ; :consumes ( dt:modifier.color.text dt:color.text ) ] ,
+                    [ a :Style ; :styleKey "typography.color" ; :styleState "disabled" ; :styleValue "color.text.disabled" ; :consumes ( dt:color.text.disabled ) ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "1" ;
+                :slotName "label"
+            ]
+        ]
+    ] .

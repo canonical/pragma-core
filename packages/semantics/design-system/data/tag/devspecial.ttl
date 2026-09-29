@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devspecial a ds:Tag;
+    ds:name "dev:special";
+    ds:category ds:tagcategory.implementation-status;
+    ds:whenToApply "A label for components that require an exceptional approach to implementation - for instance headings not requiring a component but native tags. If you see this label, read the changelog to understand why the label was applied.";
+    ds:whenToRemove "".

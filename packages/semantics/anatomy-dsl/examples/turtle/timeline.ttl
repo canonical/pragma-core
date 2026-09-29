@@ -1,0 +1,31 @@
+@prefix : <https://anatomy.canonical.com/> .
+
+[] a :Specification ;
+    :rootNode [
+        a :NamedNode ;
+        :uri "global.component.timeline" ;
+        :hasEdge [
+            a :Edge ;
+            :edgeSwitch [
+                a :Switch ;
+                :discriminator "override" ;
+                :hasCase [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "global.subcomponent.timeline-event"
+                    ]
+                ] , [
+                    a :SwitchCase ;
+                    :caseNode [
+                        a :NamedNode ;
+                        :uri "$custom"
+                    ]
+                ]
+            ] ;
+            :hasRelation [
+                a :Relation ;
+                :cardinality "1..*"
+            ]
+        ]
+    ] .

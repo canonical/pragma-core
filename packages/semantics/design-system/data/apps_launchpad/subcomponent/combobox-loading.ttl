@@ -1,0 +1,21 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.combobox-loading a ds:Subcomponent;
+    ds:name "Combobox.Loading";
+    ds:summary "The **Combobox Loading** is a subcomponent of the Combobox that is displayed when the options are being loaded asynchronously.\n\n**Main Use Cases:**\n\n- **Feedback:** Provide feedback to the user that the options are being loaded.\n- **Prevent interaction:** Prevent the user from interacting with the Combobox while the options are loading.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "The Combobox Loading is composed of a main container, a spinner, and optional loading text.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the loading indicator.\n2. **Spinner:** A visual indicator that the options are being loaded.\n3. **Loading Text:** Optional text to provide additional information, such as “Loading…”.";
+    ds:usage "### 1. General Description\n\nThe Combobox Loading is used to provide a clear and consistent loading state for a Combobox. It is particularly useful when the options are fetched from a remote server.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Asynchronous loading:** Use when the options are loaded asynchronously.\n\n2.2 When Not to Use\n\n- **Synchronous loading:** Do not use when the options are loaded synchronously.";
+    ds:guidelines "### Content Specification\n\n- **Loading text:** Use a short and descriptive loading text.\n- **Consistency:** Use a consistent loading indicator across the application.\n\n";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "Optional text to be displayed next to the spinner.";
+        ds:propertyType "node";
+        ds:defaultValue "'Loading...'";
+        ds:optional "true"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.combobox.

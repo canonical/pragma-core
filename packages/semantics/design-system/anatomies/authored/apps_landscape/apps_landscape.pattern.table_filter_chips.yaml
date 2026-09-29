@@ -1,0 +1,36 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  # role: filter summary row
+  uri: apps_landscape.pattern.table_filter_chips
+  edges:
+    - node:
+        role: wrapping chip container
+        edges:
+          - node:
+              # role: bulk removal
+              uri: global.component.button
+            relation:
+              cardinality: "1"
+          - node:
+              # role: active filter value
+              uri: global.component.chip
+            relation:
+              cardinality: "2..*"
+          - node:
+              # role: collapse command
+              uri: global.component.button
+            relation:
+              cardinality: "0..1"   # rendered while the chip container is expanded
+      relation:
+        cardinality: "0..1"   # rendered when more than one chip is active
+    - node:
+        # role: sole active filter value
+        uri: global.component.chip
+      relation:
+        cardinality: "0..1"   # rendered instead of the wrapping container when exactly one chip is active
+    - node:
+        # role: expansion command
+        uri: global.component.button
+      relation:
+        cardinality: "0..1"   # rendered while collapsed when one or more chips wrap below the first row

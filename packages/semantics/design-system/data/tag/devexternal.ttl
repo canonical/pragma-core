@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devexternal a ds:Tag;
+    ds:name "dev:external";
+    ds:category ds:tagcategory.implementation-status;
+    ds:whenToApply "For components that dont require implementation as they use external libraries";
+    ds:whenToRemove "".

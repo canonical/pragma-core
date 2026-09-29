@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier_family.mode a ds:ModifierFamily;
+    ds:name "Mode";
+    ds:summary "";
+    ds:tier ds:global;
+    ds:hasModifier ds:global.modifier.dark, ds:global.modifier.light.

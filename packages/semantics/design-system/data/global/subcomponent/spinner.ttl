@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.spinner a ds:Subcomponent;
+    ds:name "Spinner";
+    ds:summary "A looping activity indicator built from the spinner icon (the Canonical “circle of friends”), rotating continuously to signal that work is in progress.\n\nThe Spinner is a single element: the spinner icon rotated continuously by a motion animation. It has no text of its own — labeling is the responsibility of the consumer (e.g. Button, Combobox.Loading).\n\n";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/subcomponent/Spinner/styles.css on .ds.spinner.\nnode:\n  uri: global.subcomponent.spinner\n  styles:\n    layout.type: inline-block\n    layout.verticalAlign: middle\n    # The size cascade is --spinner-size (a per-instance override) then\n    # --icon-size (the shared icon convention) then 1em, so the spinner tracks\n    # the container font-size. Neither variable is declared, so the literal the\n    # chain falls back to is written.\n    size.width: 1em\n    size.height: 1em\n    # The rotation is a keyframe animation at --spinner-duration (1s fallback,\n    # linear, infinite); no roster key takes an animation, and no ratified motion\n    # token is that long.\n  # The icon edge the notation carried is dropped: the implementation renders the\n  # `spinner` glyph itself, as an <svg> with a <use> reference to\n  # spinner.svg#spinner, rather than composing global.component.icon.";
+    ds:anatomyClassic "";
+    ds:usage "### When to use\n\n- **Indeterminate waits:** an action is in progress and its duration is unknown (button submitting, options loading).\n\n### When not to use\n\n- **Determinate progress:** use a progress bar when completion  \ncan be measured.";
+    ds:guidelines "- **Motion:** rotates via a motion token; honours `prefers-reduced-motion`.\n- **Accessibility:** decorative by default; the  \nsurrounding control owns the accessible status text.\n\n";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition.

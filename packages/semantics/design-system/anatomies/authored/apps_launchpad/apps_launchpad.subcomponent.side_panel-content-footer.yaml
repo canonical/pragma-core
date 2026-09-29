@@ -1,0 +1,15 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.side_panel-content-footer
+  styles:
+    layout.type: flex   # was flow
+    layout.direction: row   # was horizontal
+    layout.justify: end
+    layout.wrap: wrap   # was layout.wrap: true
+    # dropped spacing.gap: spacing/inline/m — no spacing symbol corresponds
+  edges:
+    - node:
+        role: action items
+      relation:
+        cardinality: "1..*"

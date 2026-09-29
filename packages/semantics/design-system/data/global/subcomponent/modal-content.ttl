@@ -1,0 +1,47 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.modal-content a ds:Subcomponent;
+    ds:name "Modal.Content";
+    ds:summary "";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/pattern/Modal/common/Content/styles.css on .ds.modal-content.\nnode:\n  uri: global.subcomponent.modal-content\n  styles:\n    # Takes the space the header and footer leave.\n    layout.flex.grow: 1\n    layout.flex.shrink: 1\n    layout.flex.basis: auto\n    # Scrollbars only when needed — this is the modal's only scroller.\n    layout.overflow: auto\n    # The inline padding --modal-padding-inline is shared with the header and\n    # the footer, so the three sections align.\n    spacing.internal.block.start: dimension.300   # --modal-content-padding-block, a surface inset\n    spacing.internal.block.end: dimension.300     # --modal-content-padding-block, a surface inset\n    spacing.internal.inline.start: dimension.300  # --modal-padding-inline, a surface inset\n    spacing.internal.inline.end: dimension.300    # --modal-padding-inline, a surface inset\n    # `min-block-size: 0` lets the pane shrink instead of pushing the dialog past\n    # its max block size; size.min.block takes a token only, so the literal the\n    # implementation writes is not bound.\n  edges:\n    - node:\n        role: content\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:parentComponent ds:global.pattern.modal;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.modal-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.300
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.modal-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.300
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.modal-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.300
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.modal-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.300
+    ].

@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier_family._color_luminosity a ds:ModifierFamily;
+    ds:name "(Color luminosity)";
+    ds:summary "";
+    ds:tier ds:global.

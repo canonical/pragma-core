@@ -1,0 +1,13 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Notation-only migration. The root uri is corrected: the notation carried
+# `global.subcomponent.timeline-footer`, which is not this block's name and names
+# no ds: subject.
+node:
+  uri: global.subcomponent.timeline-expansion_indicator
+  edges:
+    - node:
+        role: content
+      relation:
+        cardinality: "1"
+        slotName: default

@@ -1,0 +1,46 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.read_only_field a ds:Component;
+    ds:name "Read-Only Field";
+    ds:summary "Read-Only Field presents an immutable value in a form-like vertical field layout. It always renders a label element, a Canonical Tooltip wrapper positioned bottom-left with `followMouse`, a full-width locked-value row, and a lock icon. A truthy string is shown as the value; every falsy value falls back to the shared `NoData` text (`---`).\n\nThis is display markup, not a native input with `readOnly` or `disabled`. The optional tooltip can explain why the value cannot be changed, but the current trigger and follow-pointer behavior do not establish an equivalent persistent explanation for keyboard or touch users.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.read_only_field\n  styles:\n    layout.display: flex\n    layout.direction: column\n  edges:\n    - node:\n        semantic: label\n        role: read-only value name\n        relation:\n          cardinality: \"1\"\n    - node:\n        uri: global.component.tooltip\n        role: locked-state explanation\n        edges:\n          - node:\n              role: locked value row\n              styles:\n                layout.display: flex\n                layout.align: center\n                layout.justify: space-between\n              edges:\n                - node:\n                    role: displayed value or no-data fallback\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    uri: global.component.icon\n                    role: locked-state indicator\n                    name: lock-locked\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-81&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 45\n\n";
+    ds:usage "### When to use\n\n**Immutable form context**\n\nUse when an immutable string value belongs among editable fields in a form or review workflow and should retain field-like alignment.\n\n**Explain locked state**\n\nUse when a short explanation helps users understand why editing is unavailable.\n\n**Show absent immutable data**\n\nUse when the shared `---` no-data convention accurately represents a missing string in the surrounding form context.\n\n### When not to use\n\n**Temporarily unavailable input**\n\nA form field where editing will later become available to the user after permission is granted or a prerequisite is satisfied.\n\n**Incorrect pattern**: Rendering a disabled `Input` component temporarily while data is loading or permissions are being checked, and then showing Read-Only Field instead.\n\n**Remediation strategy**: Use a native `Input` with `disabled` attribute, or use a state-driven component that shows either editable or locked presentation based on permission/loading state. Read-Only Field signals permanent immutability.\n\n**General detail display**\n\nA view showing arbitrary metadata or summary information outside a form context—such as in a detail panel or summary card.\n\n**Incorrect pattern**: Using Read-Only Field to display structured data like account status, creation date, or author information alongside editable fields in a non-form layout.\n\n**Remediation strategy**: Use a definition list (`<dl>`), data table, or information grid component. Read-Only Field is designed for form-like vertical layouts where field-level alignment matters.\n\n**Selectable or copy-critical values**\n\nA value that users need to select, copy, or reveal—especially if truncation, structured/non-string content, or a dedicated copy action is necessary.\n\n**Incorrect pattern**: Rendering a long API key, token, or sensitive string in Read-Only Field and expecting users to be able to select and copy it easily.\n\n**Remediation strategy**: Use a dedicated reveal/copy component, code display component, or data cell with selection and copy affordances. Read-Only Field provides none of these contracts.\n\n**Required explanation on touch or keyboard**\n\nA scenario where the reason for immutability must be discoverable without hover or a mouse pointer.\n\n**Incorrect pattern**: Relying on `tooltipMessage` as the only way to explain why a field is locked, especially in a touch interface or for keyboard-only navigation.\n\n**Remediation strategy**: Provide the explanation in persistent text before or after the field (not just in a tooltip). Use `tooltipMessage` only as supplementary, and ensure the workflow remains complete and clear without hovering.";
+    ds:guidelines "### Accessibility\n\n- Treat this as text display, not a native form control. The `<label>` has no `htmlFor`, and the value row has no labelled-by relationship.\n- The lock icon has no source-provided `aria-hidden` or accessible label. Ensure the visible context communicates immutability without depending on the icon.\n- Do not depend on the `followMouse` tooltip; keyboard and touch users need the same explanation in persistent text when it is necessary to understand or complete the task.\n- The literal required asterisk has no hidden explanation and no `aria-required` semantics. Do not assume it communicates a required contract to assistive technology.\n- The `---` fallback must be understood from surrounding context; the shared NoData component adds no expanded accessible phrase.\n\n### Content\n\n- Explain why the value is locked and, when useful, where it can be changed.\n- Use concise labels parallel to neighboring editable fields.\n- Distinguish a missing value from an intentionally empty string before passing data; both become `---` under the current truthiness check.\n- Do not pass formatted React content, links, or controls as the value; the public type is string-only.\n\n### Keyboard\n\n- The component defines no keyboard handlers and should not itself add a tab stop.\n- Verify the installed Tooltip behavior before relying on keyboard discovery; this wrapper supplies no explicit focusable trigger.\n- Put any required action, such as navigating to where the value can be changed, in a separate labelled control rather than inside the locked row.\n\n### Responsive behavior\n\n- The field and locked row use flex layout at every width. The value and icon are spaced apart, and the row is full width.\n- Source defines no overflow, truncation, word-break, or responsive breakpoint. Long unbroken values can compete with the lock icon; callers must avoid unsuitable content or provide a different display pattern.\n- The Tooltip trigger wrapper is forced to full width, while the tooltip is positioned bottom-left and follows pointer movement.\n\n### Internationalization\n\n- Externalize `label` and `tooltipMessage` at the owning feature.\n- Allow translated labels and explanations to wrap in surrounding layout; no truncation is provided.\n- The required marker and no-data text are fixed source output rather than localizable props. `NoData` currently renders `---`.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`label`";
+        ds:summary "Supplies text for the always-rendered label element. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. The label has no `htmlFor` and does not programmatically label a control. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`value`";
+        ds:summary "Supplies the immutable value displayed in the locked row. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Every falsy value, including `\"\"`, renders shared `NoData` text `---`; whitespace-only strings remain visible. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`tooltipMessage`";
+        ds:summary "Supplies the message passed to Canonical Tooltip.";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. The Tooltip renders even when this prop is absent and uses `followMouse`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`required`";
+        ds:summary "Prefixes the label with the literal text `*` . ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. Adds no native `required`, `aria-required`, validation, or explanatory legend. ";
+        ds:optional "true"
+    ].

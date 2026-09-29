@@ -1,0 +1,102 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Button/styles.css on .ds.button
+# Every list is the reference's own var() chain, in order. The button reads the
+# modifier CHANNEL generically — it knows no particular importance class — so
+# the channel is consumed by name wherever the implementation reads it.
+node:
+  uri: global.component.button
+  styles:
+    layout.position: relative
+    layout.type: inline-flex
+    layout.align: center
+    layout.justify: center
+    interaction.cursor: pointer
+    interaction.cursor@disabled: not-allowed
+    appearance.border.style: solid
+    appearance.border.width: dimension.stroke.thickness.medium
+    # The primary foreground fills the background, through the channel that
+    # importance provides it on.
+    # reads --modifier-surface first; no symbol declares it.
+    appearance.background: [modifier.color.foreground.primary, color.foreground.primary]
+    # reads --modifier-surface-hover / -active / -disabled first; no symbol
+    # declares any of the three.
+    appearance.background@hover: color.foreground.primary.hover
+    appearance.background@active: color.foreground.primary.active
+    appearance.background@disabled: color.foreground.primary.disabled
+    # The border is always present at the nominal width and colour-mixed to
+    # transparent when the importance hides it; --modifier-outline is the 0/1
+    # flag that does the mixing, and no symbol declares it.
+    appearance.border.color: [modifier.color.border, color.border.highlighted, color.border]
+    # reads --modifier-color-border-disabled first; no symbol declares it.
+    appearance.border.color@disabled: color.border.highlighted.disabled
+    typography.color: [modifier.color.text, color.text]
+    # reads --modifier-color-text-disabled first; no symbol declares it.
+    typography.color@disabled: color.text.disabled
+    typography.weight: typography.weight.medium
+    # The label is the text-secondary tier (14px). The implementation reads
+    # --typography-text-secondary-font-size, whose member carries no symbol of
+    # its own and resolves to --dimension-size-font-size-300 in every context.
+    typography.size: dimension.size.fontSize.300
+    typography.font: typography.text.secondary
+    typography.align: center
+    typography.decoration: none
+    spacing.gap: dimension.100   # --button-gap, between the icon and the label
+    # 16px each side, the action inset the button plays. A leading icon tightens
+    # the start side to --dimension-100, which is a conditional the anatomy does
+    # not carry.
+    spacing.internal.inline.start: dimension.200  # --button-padding-inline-start
+    spacing.internal.inline.end: dimension.200    # --button-padding-inline-end
+    motion.property: "background-color, color, border-color"
+    # The transition reads --motion-duration-fast and --motion-easing-standard;
+    # both bindings are dropped because no symbol declares either name and
+    # neither var() carries a literal fallback.
+    # reads --focus-outline-width first; no symbol declares it, so the chain's
+    # own literal is what is left.
+    appearance.outline.width@focus: 2px
+    appearance.outline.style@focus: solid
+    appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing, currentColor]
+    # reads --focus-outline-offset first; no symbol declares it.
+    appearance.outline.offset@focus: 2px
+    # The `.link` variant (transparent chrome, underlined link text) is the
+    # separate ButtonLink block (ds:global.component.button_link), not a case
+    # of this tree.
+  edges:
+    - node:
+        role: icon
+        styles:
+          layout.type: inline-flex
+          layout.align: center
+          layout.alignSelf: center
+          layout.justify: center
+          layout.flex.shrink: 0
+          # reads --icon-size, a component-local size declared as 1em at :root.
+          size.width: 1em
+          size.height: 1em
+          # The icon has its own colour channel, distinct from the label's, and
+          # falls through to the colour it inherits.
+          typography.color: [modifier.color.icon, modifier.color.text, currentColor]
+          # reads --modifier-color-icon-disabled first; no symbol declares it.
+          typography.color@disabled: color.icon.disabled
+      relation:
+        cardinality: "0..1"
+        slotName: icon
+    - node:
+        role: label text
+      relation:
+        cardinality: "1"
+        slotName: label
+    - node:
+        role: loading spinner
+        styles:
+          layout.position: absolute
+          layout.type: inline-flex
+          layout.align: center
+          layout.justify: center
+          layout.offset.top: 0
+          layout.offset.right: 0
+          layout.offset.bottom: 0
+          layout.offset.left: 0
+      relation:
+        # Present only while loading, when the icon and the label stay in the
+        # DOM at `visibility: hidden` so the button keeps its width.
+        cardinality: "0..1"

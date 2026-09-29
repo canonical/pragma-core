@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_portal.component.badge a ds:Component;
+    ds:name "Badge";
+    ds:summary "Mainly used to display a certain value/number in a condensed fashion.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps_portal.

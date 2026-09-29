@@ -1,0 +1,63 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# A notation migration of the previous DSL (the Coda block "Tooltip.Data"):
+# structure and bindings kept, values migrated, dangling uri: references
+# repaired. react-ds-global implements one Tooltip — the chip bound in
+# ds:global.component.tooltip — and no data variant.
+node:
+  uri: global.component.data_tooltip
+  edges:
+    - node:
+        role: surface
+        styles:
+          # Was `color/surface/tooltip`; no symbol declares
+          # color.background.tooltip, so this is the declared background the
+          # surface correspondence lands on. (The live Tooltip reads the
+          # surface channel: [surface.color.background, color.background].)
+          appearance.background: color.background
+          # Was `size.max.width: size/tooltip/data/max` — dropped, since no
+          # dimension symbol corresponds to it.
+          layout.type: flex   # was stack
+          layout.direction: column   # was vertical
+          layout.align: start
+          # Was `spacing.internal.vertical|horizontal: dimension/100`; the
+          # roster's keys are per side, so the two axes become four.
+          spacing.internal.block.start: dimension.100
+          spacing.internal.block.end: dimension.100
+          spacing.internal.inline.start: dimension.100
+          spacing.internal.inline.end: dimension.100
+        edges:
+          - node:
+              # Was `ds:global.subcomponent:TooltipHeading`, which names no
+              # subject, so the position is an anonymous role.
+              role: heading
+              styles:
+                # Was `typography.color: color/text/onTooltip` — dropped, since
+                # no symbol declares color.text.onTooltip.
+                # Was `typography.size: text/secondary/strong`; the declared
+                # counterpart is the bold text-secondary composite, which
+                # binds typography.font.
+                typography.font: typography.text.secondary.bold
+            relation:
+              cardinality: "0..1"
+              slotName: heading
+          - node:
+              # Was `ds:global.subcomponent:ChartLegend`; the real subject is
+              # global.subcomponent.chart_legend.
+              uri: global.subcomponent.chart_legend
+            relation:
+              cardinality: "1"
+              slotName: default
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        # Was `ds:global.subcomponent:TooltipArrow`, which names no subject, so
+        # the position is an anonymous role.
+        role: arrow
+        styles:
+          # Was `color/surface/tooltip`, as above.
+          appearance.background: color.background
+      relation:
+        cardinality: "0..1"
+        slotName: arrow

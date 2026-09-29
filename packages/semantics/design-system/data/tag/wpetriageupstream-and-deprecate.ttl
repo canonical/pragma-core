@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.wpetriageupstream-and-deprecate a ds:Tag;
+    ds:name "wpe:triage:upstream-and-deprecate";
+    ds:whenToApply "";
+    ds:whenToRemove "".

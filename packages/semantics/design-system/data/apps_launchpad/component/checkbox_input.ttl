@@ -1,0 +1,33 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.checkbox_input a ds:Component;
+    ds:name "CheckboxInput";
+    ds:summary "The **Checkbox** component is a form element that allows users to select one or more options from a list.\n\n**Main Use Cases:**\n\n- **Forms:** Used in forms to allow users to select multiple options from a list of choices.\n- **Settings:** Used in settings pages to allow users to configure their preferences.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.checkbox\n  styles:\n    layout.display: inline-block\n    size.width: size/extra-small\n    size.height: size/extra-small\n    appearance.border: border/style/default\n    appearance.background: color/background/default\n    appearance.radius: radius/small\n  edges:\n    - node:\n        role: marker\n        styles:\n          appearance.background: color/background/default\n      relation:\n        cardinality: \"0..1\"\n        slotName: marker";
+    ds:anatomyClassic "The Checkbox is composed of a main container and an optional marker.\n\n1. **Container:** The outermost wrapper that defines the shape and size of the checkbox.\n2. **Marker:** A visual indicator that the checkbox is selected.\n\nhttps://www.figma.com/design/Y0cqKbTG4rejU9xm2oh5pR/%F0%9F%92%A0-Vanilla---Core-component-library?node-id=2006-123&m=dev";
+    ds:usage "### 1. General Description\n\nThe Checkbox is used when you need to allow users to select one or more options from a set of options. It is a good choice when you have a small number of options that are not mutually exclusive.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Multiple choices:** Use when you need to allow users to make multiple choices from a list of options.\n- **Small number of options:** Use when you have a small number of options.\n\n2.2 When Not to Use\n\n- **Single choice:** Do not use for a single choice. Use Radio buttons or a Select instead.";
+    ds:guidelines "### Accessibility\n\n- **Label:** Always provide a label for the checkbox to improve accessibility.\n- **Fieldset and Legend:** Group related checkboxes in a fieldset with a legend.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "checked";
+        ds:summary "Whether the checkbox is checked or not.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Whether the checkbox is disabled or not.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The value of the checkbox.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ].

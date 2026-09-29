@@ -1,0 +1,32 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# A notation migration of the previous DSL: structure and bindings kept, values
+# migrated. (react-ds-global ships InlineCode, which is the separate
+# ds:global.component.inline_code block, not this one.)
+node:
+  uri: global.component.code_snippet
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    # Was `color/surface/code`; no symbol declares color.background.code, so
+    # this is the declared background the surface correspondence lands on.
+    appearance.background: color.background
+    # Was `appearance.radius: radius/code` — dropped, since no symbol declares
+    # dimension.radius.code.
+    # Was `appearance.border: border/style/code` — dropped: the roster splits a
+    # border into colour, width and style keys, and no symbol declares a
+    # border/style/code counterpart for any of them.
+  edges:
+    - node:
+        # Was `global.subcomponent.code_snippet-header`, which names no
+        # subject; the block is a component, ds:global.component.code_snippet-header.
+        uri: global.component.code_snippet-header
+      relation:
+        cardinality: "0..1"
+        slotName: header
+    - node:
+        # Was `global.subcomponent.code_snippet-content`, likewise a component.
+        uri: global.component.code_snippet-content
+      relation:
+        cardinality: "1"
+        slotName: default

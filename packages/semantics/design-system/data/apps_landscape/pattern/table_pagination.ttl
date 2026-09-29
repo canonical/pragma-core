@@ -1,0 +1,220 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.table_pagination a ds:Pattern;
+    ds:name "Table Pagination";
+    ds:summary "A Landscape component family providing four pagination variants: URL-backed offset pagination, controlled offset state, compact modal previous/next, and cursor-based token pagination. Each calculates page totals, shows count copy when data is available, and renders controls only for multi-page results.\n\nMain use cases:\n\n- Use `TablePagination` for offset-based navigation with URL-synchronized page and size parameters.  \n- Use `SidePanelTablePagination` when offset state is owned by a panel or external controller.  \n- Use `ModalTablePagination` for compact \"Page X of Y\" display in modals with known total pages.  \n- Use `TokenBasedTablePagination` when the API provides cursor-availability flags instead of page counts.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.table_pagination\n  role: pagination family\n  edges:\n    - node:\n        role: pagination status\n        relation:\n          cardinality: \"0..1\"\n          condition: Rendered according to the selected variant's count/page rules.\n    - node:\n        role: pagination controls\n        edges:\n          - node:\n              role: page-size control\n              relation:\n                cardinality: \"0..1\"\n                condition: Rendered by multi-page offset pagination or when token pageSizeControl is supplied.\n          - node:\n              role: sequential navigation\n              edges:\n                - node:\n                    uri: global.component.button\n                    role: previous page\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    role: direct page input\n                    relation:\n                      cardinality: \"0..1\"\n                      condition: Rendered only by multi-page offset pagination.\n                - node:\n                    uri: global.component.button\n                    role: next page\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..1\"\n          condition: Rendered when the selected variant determines navigation is available.";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=26-10&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 69\n\n";
+    ds:usage "### When to use\n\n- Use `TablePagination` when `currentPage` and `pageSize` belong in shared URL parameters.\n- Use `SidePanelTablePagination` for externally controlled offset state inside a panel or local workflow.\n- Use `ModalTablePagination` for a compact known page count without direct entry or page-size choice.\n- Use `TokenBasedTablePagination` when the API exposes previous/next cursor availability rather than page numbers.\n- Keep current counts, total semantics, page state, and rendered rows from the same response snapshot.\n\n### When not to use\n\n**Progressive reveal or infinite scrolling**\n\nLoading and appending results incrementally as the user scrolls or navigates.\n\n**Incorrect pattern**: Using `TokenBasedTablePagination` with an API that cannot reliably report cursor availability or providing a pagination component for lazy-loading feeds.\n\n**Remediation strategy**: Implement infinite scroll with separate cursor-tracking logic, or use a dedicated lazy-load component. Reserve pagination for APIs that provide definitive `hasNext` / `hasPrevious` signals.\n\n**Unimplemented page sizes**\n\nPage-size options that the endpoint does not support.\n\n**Incorrect pattern**: Passing `pageSize: 75` as an option when the API only honors 20/50/100.\n\n**Remediation strategy**: Verify that all rendered page-size options are supported by the endpoint before rendering. Pass only sizes that the API will actually use.\n\n**Treating current item count as a range**\n\nUsing `currentItemCount` as the first or last item number rather than the row count on the current page.\n\n**Incorrect pattern**: Displaying “Items 41–60 of 200” by treating `currentItemCount` as an offset or range boundary.\n\n**Remediation strategy**: Implement your own range display logic separately. The component only reports current-page row count against the total; it does not compute or display range boundaries.";
+    ds:guidelines "### Accessibility\n\n- Offset/token navigation uses the “Table pagination” nav label and explicit previous/next labels. Modal has labelled buttons but no nav landmark.\n- Page-size labels are visually hidden. Token visible “Advance by” text is not itself the select label; the select label is “{plural} per page”.\n- Page input has `aria-label=\"page number\"`, but rendered error paragraphs are not explicitly connected with `aria-describedby` in source.\n- Count/page changes are not live-announced and focus is not moved after navigation.\n\n### Content\n\n- Offset count nouns are hardcoded `result/results`; only the page-size label is configurable.\n- Token nouns are configurable, but all sentence templates, nav labels, errors, and “Advance by” are hardcoded English.\n- Use `isTotalExact={false}` only when `totalItemCount` is a defensible lower bound.\n\n### Internationalization / globalization\n\n- Counts/pages use unformatted JavaScript numbers and English sentence order.\n- Singular/plural handling accepts two noun forms only; it is not locale plural-rules support.\n- Number input uses HTML number parsing/validity; locale decimal entry and translated errors are not configurable.\n\n### Device\n\n- Offset wrapper is a single flex row with no wrap rule; count is pushed left and controls stay shrink-resistant. Test narrow panels and long labels.\n- Token advance controls can wrap internally, but the outer wrapper does not. Navigation is pushed to the end.\n- Page-input error is absolutely positioned and nonwrapping; verify it does not clip or overlap in constrained widths.\n- No component uses viewport/device detection.\n\n### Keyboard\n\n- Previous/next/select use native control behavior.\n- Valid page input invokes `setCurrentPage` on Enter and again on subsequent blur unless navigation unmounts/updates it first.\n- Empty, fractional, or out-of-range input shows an error; invalid blur restores current value and clears error. Escape has no special behavior.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`TablePagination.totalItems`";
+        ds:summary "Supplies the total used for page calculation and count copy. ";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number | undefined`. `undefined` leaves the total-pages hook at its current value; its initial value is one. `TablePaginationProps` is implementation-local and the family barrel exports only the component. "
+    ], [
+        a ds:Property;
+        ds:name "`TablePagination.className`";
+        ds:summary "Adds a class to the base root.";
+        ds:propertyType "text";
+        ds:defaultValue "`\"\"`";
+        ds:constraints "TypeScript: `string`. Merged with footer wrapper styles. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TablePagination.handleClearSelection`";
+        ds:summary "Runs after any pagination request.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Runs for previous, next, direct input, and the reset-to-page-1 request on size change. Page-size change calls `paginate(1)`, so this callback runs before the size update. The component reads `currentPage` and `pageSize` from `usePageParams`, writes through `setPageParams`, and registers page-size values `20`, `50`, `100` plus current pages `1..totalPages`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TablePagination.currentItemCount`";
+        ds:summary "Supplies the current page row count.";
+        ds:propertyType "number";
+        ds:defaultValue "0";
+        ds:constraints "TypeScript: `number`. Falsy zero suppresses count copy. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TablePagination.pageSizeLabel`";
+        ds:summary "Labels the offset page-size select accessibly.";
+        ds:propertyType "text";
+        ds:defaultValue "`Instances per page`";
+        ds:constraints "TypeScript: `string`. Visually hidden; localize and name the entity at the call site. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTablePagination.currentPage`";
+        ds:summary "Supplies the controlled one-based page.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Caller must update it after `paginate`. `SidePanelTablePaginationProps` is implementation-local and the family barrel exports only the component. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTablePagination.pageSize`";
+        ds:summary "Supplies the controlled offset size.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Base options are 20, 50, and 100; caller must update it after `setPageSize`. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTablePagination.paginate`";
+        ds:summary "Receives a previous, next, direct, or page-1 request. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(page: number) => void`. There is no range guard beyond disabled controls and input validity. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTablePagination.setPageSize`";
+        ds:summary "Receives the selected size after `paginate(1)`. ";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(itemsNumber: number) => void`. Calls are not awaited or transacted. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTablePagination.totalItems`";
+        ds:summary "Supplies the total for page calculation and count copy. ";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number | undefined`. Uses the same total-pages hook semantics as the URL-backed variant. "
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTablePagination.className`";
+        ds:summary "Adds a class to the base root.";
+        ds:propertyType "text";
+        ds:defaultValue "`\"\"`";
+        ds:constraints "TypeScript: `string`.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`SidePanelTablePagination.currentItemCount` ";
+        ds:summary "Supplies the current row count.";
+        ds:propertyType "number";
+        ds:defaultValue "0";
+        ds:constraints "TypeScript: `number`. Falsy zero suppresses count copy. This variant does not expose `pageSizeLabel`; it always uses `Instances per page`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`ModalTablePagination.current`";
+        ds:summary "Supplies the displayed current page and button boundaries. ";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. There is no runtime clamping; `current <= 1` disables previous and `current >= max` disables next. `ModalTablePaginationProps` is exported from its source module, while the family barrel exports only the component. "
+    ], [
+        a ds:Property;
+        ds:name "`ModalTablePagination.max`";
+        ds:summary "Supplies the displayed page count.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. The entire component returns `null` when `max <= 1`. "
+    ], [
+        a ds:Property;
+        ds:name "`ModalTablePagination.onPrev`";
+        ds:summary "Handles the previous-page action.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Receives no page argument and is not awaited. "
+    ], [
+        a ds:Property;
+        ds:name "`ModalTablePagination.onNext`";
+        ds:summary "Handles the next-page action.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Receives no page argument and is not awaited. "
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.currentItemCount` ";
+        ds:summary "Supplies the current token page count.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Count copy requires this and `totalItemCount` to be truthy. `TokenBasedTablePaginationProps` is exported from its source module, while the family barrel exports only the component. "
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.totalItemCount` ";
+        ds:summary "Supplies the exact total or lower bound.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Exact zero returns `null`; inexact zero keeps controls but suppresses count copy. "
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.isTotalExact`";
+        ds:summary "Chooses exact versus `more than` count copy and zero rendering. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "true";
+        ds:constraints "TypeScript: `boolean`. Inexact copy is `Showing X of more than Y ...`. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.itemType`";
+        ds:summary "Supplies the singular noun for the exact-count helper. ";
+        ds:propertyType "text";
+        ds:defaultValue "`item`";
+        ds:constraints "TypeScript: `string`. Used only for count copy. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.itemTypePlural` ";
+        ds:summary "Supplies the plural noun for count copy and the advance group. ";
+        ds:propertyType "text";
+        ds:defaultValue "`${itemType}s`";
+        ds:constraints "TypeScript: `string`. Supply irregular plurals. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.hasNextPage`";
+        ds:summary "Enables the next-page action.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. Must match cursor availability. "
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.hasPreviousPage` ";
+        ds:summary "Enables the previous-page action.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. Must match cursor availability. "
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.goToNextPage`";
+        ds:summary "Handles the next-token action.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. It is not awaited and has no pending state. "
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.goToPreviousPage` ";
+        ds:summary "Handles the previous-token action.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. It is not awaited and has no pending state. "
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.pageSizeControl` ";
+        ds:summary "Adds the advance-size select.";
+        ds:propertyType "object";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `{ pageSize: number; setPageSize: (itemsNumber: number) => void }`. Options are fixed to 20, 50, and 100; changing size does not automatically reset token history. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.pageSizeControl.pageSize` ";
+        ds:summary "Supplies the controlled token advance size.";
+        ds:propertyType "number";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. The rendered select offers 20, 50, and 100. "
+    ], [
+        a ds:Property;
+        ds:name "`TokenBasedTablePagination.pageSizeControl.setPageSize` ";
+        ds:summary "Receives the selected token advance size.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(itemsNumber: number) => void`. Changing size does not automatically reset token history. "
+    ].

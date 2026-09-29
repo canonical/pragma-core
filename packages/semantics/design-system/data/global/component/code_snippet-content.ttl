@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.code_snippet-content a ds:Component;
+    ds:name "CodeSnippet.Content";
+    ds:summary "";
+    ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# A notation migration of the previous DSL: structure and bindings kept, values\n# migrated. The previous root uri said\n# `global.subcomponent.code_snippet-content`; the block is a component,\n# ds:global.component.code_snippet-content.\nnode:\n  uri: global.component.code_snippet-content\n  styles:\n    layout.type: flex   # was stack\n    layout.direction: column   # was vertical\n    layout.overflow: hidden\n  edges:\n    - node:\n        role: scroll area\n        styles:\n          layout.overflow: scroll\n          # Was `layout.display: block`, which is not a roster key.\n          layout.type: block\n        edges:\n          - node:\n              role: code block\n              styles:\n                # Was `typography.size: font/size/code` — dropped, since\n                # typography.size admits dimension.* only and no dimension\n                # symbol corresponds to font/size/code.\n                # Was `typography.color: color/text/code` — dropped, since no\n                # symbol declares color.text.code.\n                # Was `spacing.internal: spacing/medium` — dropped: the key is\n                # not in the roster and no declared spacing semantic\n                # corresponds to spacing/medium.\n                # Was `layout.display: block`, which is not a roster key.\n                layout.type: block\n            relation:\n              cardinality: \"1\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n    - node:\n        # Was `uri: global.component.copy_to_clipboard`, which names no\n        # subject — the only copy_to_clipboard in the graph is the app-tier\n        # apps_lxd.subcomponent.copy_to_clipboard, which a global anatomy may\n        # not reference — so the position is an anonymous role.\n        role: copy to clipboard action\n      relation:\n        cardinality: \"1\"";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:parentComponent ds:global.component.code_snippet.

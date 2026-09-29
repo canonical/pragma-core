@@ -1,0 +1,52 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.pattern.responsive_table_filters
+  edges:
+    - node:
+        role: responsive filter wrapper
+        edges:
+          - node:
+              role: inline presentation
+              edges:
+                - node:
+                    # semantic: span
+                    role: inline filter item wrapper
+                    edges:
+                      - node:
+                          role: supplied filter
+                        relation:
+                          cardinality: "1"
+                          slotName: filters
+                  relation:
+                    cardinality: "0..*"
+            relation:
+              cardinality: "0..1"   # rendered when the viewport is at least collapseFrom and isCollapsed is false
+          - node:
+              # role: collapsed presentation
+              uri: global.component.contextual_menu
+              edges:
+                - node:
+                    role: menu toggle content
+                  relation:
+                    cardinality: "1"
+                    slotName: menuLabel
+                - node:
+                    role: collapsed menu container
+                    edges:
+                      - node:
+                          # role: named component filter
+                          uri: apps_landscape.subcomponent.nested_dropdown_item
+                        relation:
+                          cardinality: "0..*"   # rendered when the supplied element has a truthy node.type.name
+                      - node:
+                          role: direct menu content
+                        relation:
+                          cardinality: "0..*"   # rendered when the supplied element does not have a truthy node.type.name
+                          slotName: filters
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "0..1"   # rendered when the viewport is below collapseFrom or isCollapsed is true
+      relation:
+        cardinality: "1"

@@ -1,0 +1,29 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.data_table-action_bar a ds:Subcomponent;
+    ds:name "DataTable.ActionBar";
+    ds:summary "When one or more rows are selected in the table, a bulk action bar appears at the bottom of the table, overlaying the footer area. The bar displays the available action buttons and a deselect (X) button on the far right. The bulk actions shown in the bar are defined by the designer for each table instance. If the ActionBar is combined with the [DataTable.PersistentSelection](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Zx_Vr61cn4)  it also displays the number of selected items (e.g. \"5 Selected\").";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3340-1631&t=8RN2Hpk8UX3gMX3u-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4781-83072&t=2fO23I8WsyT0YVJ1-4";
+    ds:usage "The bulk action bar appears when one or more rows are selected, giving users a way to apply an operation to their entire selection at once. It eliminates the need to act on rows one at a time, which is especially valuable in enterprise applications where users regularly manage large datasets. For example, a system administrator might select 30 machines across several pages and archive them in a single step, rather than repeating the action on each row individually.\n\n## When to use\n\n- Users need to perform the same operation on multiple table rows at once.\n- The table is used in workflows where bulk operations such as archiving, exporting, deleting, or reassigning are common.\n\n## When not to use\n\n- The table does not support row selection. Use inline row actions in the action column instead.\n- The available bulk operations are unlikely to be used. A bulk action bar that appears on selection but offers only one rarely used action adds complexity without meaningful benefit.\n\n## Choosing bulk actions\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-12858&t=2PBanDq6QA2yNcI2-4\n\nThe designer defines which bulk actions appear in the bar for each table instance. Start by identifying what users need to do with multiple items at once. Consider what operations are common enough to justify a bulk workflow and whether the product’s backend supports performing them in batch. Not every action available on a single row needs a bulk equivalent. Focus on the actions that save users the most time when applied to many items at once.\n\nThe action bar supports a maximum of 7 bulk actions. The deselect (X) button does not count toward this limit. When more than 7 actions are needed, group related actions into expandable dropdown menus. A grouped button displays a dropdown caret and opens a popover menu above the action bar listing the sub-actions (for example, an “Export” button expanding into “Export as CSV”, “Export as JSON”, and “Export as PDF”). Grouping is also available as a design choice when fewer than 7 actions exist. If there is a logical grouping the designer wants to enforce, expandable menus can be used even when space is not a constraint.\n\n## Destructive actions\n\nDestructive actions such as “Delete” may be visually distinguished with a red text style, making them clearly identifiable in the action bar.";
+    ds:guidelines "# Interactions\n\n## Scroll offset\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-27553&t=2PBanDq6QA2yNcI2-4\n\nWhen the action bar is visible, the table must allow the user to scroll far enough that the last row sits above the action bar. Without this extra scroll space, the bottom rows can be hidden beneath the overlay and the user cannot see or interact with them.\n\n## Performing a bulk action\n\nSelecting a bulk action button performs the associated action on the current selection. The selection count displayed in the bar (for example, “5 Selected”) lets users confirm how many items will be affected. If persistent selection is enabled, users can also verify their selection via the persistent selection panel before confirming an action.\n\n## Deselect button\n\nSelecting the deselect (X) button clears the current selection and hides the action bar.\n\n## Grouped action expansion\n\nA grouped button displays a dropdown caret; clicking it opens a popover menu above the action bar listing the sub-actions.";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "selection-mode";
+        ds:summary "Determines the selection paradigm. In simple selection mode, the selection indicator shows a count but is not interactive. In persistent selection mode, the selection indicator includes a chevron that opens the persistent selection panel.";
+        ds:propertyType "choice";
+        ds:constraints "Inherited from the data table. The bulk action bar only renders when selection-mode is not none and at least one row is selected.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "bulk-actions";
+        ds:summary "The bulk actions shown in the bar. Each action defines a label and an optional icon. Actions can be standalone buttons or grouped into expandable dropdown menus. A grouped action defines a top-level button with a dropdown caret and a list of sub-actions that appear in a popover menu above the action bar. ";
+        ds:propertyType "object";
+        ds:constraints "Inherited from the data table. Maximum of 7 top-level actions. The deselect button does not count toward this limit.";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:apps.pattern.datatable.

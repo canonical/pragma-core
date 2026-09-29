@@ -1,0 +1,39 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.component.meter a ds:Component;
+    ds:name "Meter";
+    ds:summary "The **Meter** component is a visual progress indicator designed to display percentage-based data with accompanying descriptive text. It renders a horizontal bar that fills proportionally to represent usage, capacity, or completion metrics.\n\n\n\n**Primary purpose**\n\nThis component visualizes numeric data as a percentage-filled bar, making it easy for users to quickly assess levels, usage, or progress at a glance.\n\n**Main use cases**\n\n- **Resource utilization**: Display storage usage, memory consumption, CPU load, or network bandwidth utilization\n- **Dual-Value Metrics**: Present two related percentage values simultaneously (e.g., allocated vs used, or primary vs secondary usage)\n- **Progress Tracking**: Indicate completion status of operations, downloads, or multi-step processes\n\n  \n**Key features**\n\n- **Single or dual display**: Can show one primary percentage or two complementary percentages\n- **Contextual text**: Includes descriptive text below the meter for clarity\n- **Hover information**: Optional tooltip support for additional details\n- **Responsive styling**: Automatically adapts to container width while maintaining minimum visibility\n\n";
+    ds:anatomyDsl "node:\n  uri: core:component:Meter\n  styles:\n    # Structural (implicitly invariant)\n    layout.type: stack\n    layout.direction: vertical\n    layout.align: start\n    \n    # Themeable\n    spacing.gap: spacing/small\n    \n  edges:\n    - node:\n        role: meter bar container\n        styles:\n          # Structural (implicitly invariant)\n          layout.type: flow\n          layout.direction: horizontal\n          layout.align: start\n          size.width: fill\n          size.height: hug\n          \n          # Themeable\n          appearance.background: color/background/meter\n          appearance.radius: shape/rounded/small\n          size.min.height: size/meter/height\n          \n        edges:\n          - node:\n              role: primary meter bar\n              styles:\n                # Structural (implicitly invariant)\n                layout.display: block\n                size.height: fill\n                \n                # Dynamic width based on percentage prop\n                # Note: actual width calculation happens at runtime\n                size.min.width: size/meter/minimum\n                \n                # Themeable\n                appearance.background: color/meter/primary\n                appearance.radius: shape/rounded/small\n                \n            relation:\n              cardinality: \"1..1\"\n              \n          - node:\n              role: secondary meter bar\n              styles:\n                # Structural (implicitly invariant)\n                layout.display: block\n                size.height: fill\n                \n                # Themeable\n                appearance.background: color/meter/secondary\n                appearance.radius: shape/rounded/small\n                \n            relation:\n              cardinality: \"0..1\"\n              \n      relation:\n        cardinality: \"1..1\"\n        slotName: meter\n        \n    - node:\n        role: description text\n        styles:\n          # Structural (implicitly invariant)\n          layout.display: block\n          \n          # Themeable\n          typography.size: font/size/small\n          typography.color: color/text/muted\n          spacing.margin.top: spacing/none\n          spacing.margin.bottom: spacing/none\n          \n      relation:\n        cardinality: \"1..1\"\n        slotName: description";
+    ds:anatomyClassic "In a table:\n\n\n\nIn an overview page:\n\n*Memory has a secondary percentage*\n\n";
+    ds:usage "### **General description**\n\nThe Meter component is a visual progress indicator that displays resource utilization, capacity metrics, or completion status through a horizontal bar representation. It transforms numerical percentage data into an immediate visual assessment, making it easy to quickly understand levels, usage patterns, and capacity relationships at a glance.\n\n\n\n### **When to use**\n\nUse the Meter component when you need to visualize percentage-based data where understanding the relationship to a total capacity or maximum value is more important than precise numeric readouts.\n\nExample: instance memory usage showing 45% used memory with an additional 15% cached, displayed as \"2.0GiB of 3.8GiB\" below the visual bars and with “free: 1.7 GiB | used: 482.4 MiB | cached: 1.5 GiB” in hoverText ";
+    ds:guidelines "";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "percentage";
+        ds:summary "Primary percentage value to display in the meter bar";
+        ds:propertyType "number";
+        ds:constraints "Must be between 0-100";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "secondaryPercentage";
+        ds:summary "Secondary percentage value for dual-metric display, shown as additional bar segment";
+        ds:propertyType "number";
+        ds:constraints "Must be between 0-100";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "text";
+        ds:summary "Descriptive text label displayed below the meter to explain what the meter represents or to give precise values (eg 2.4 GiB of 8.6 GiB)";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "hoverText";
+        ds:summary "Tooltip text that appears on hover to provide additional context or detailed information";
+        ds:propertyType "text";
+        ds:optional "true"
+    ].

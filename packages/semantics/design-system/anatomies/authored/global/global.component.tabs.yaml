@@ -1,0 +1,40 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Tabs/styles.css on .ds.tabs
+# A horizontal strip of tabs with no gap between them over a full-width muted
+# bottom border; the strip fills its container and scrolls on overflow.
+node:
+  uri: global.component.tabs
+  styles:
+    layout.type: block
+  edges:
+    - node:
+        role: tab list
+        styles:
+          layout.type: flex
+          layout.direction: row
+          # No gap between tabs (Figma).
+          spacing.gap: 0
+          spacing.external.block.start: 0
+          spacing.external.block.end: 0
+          spacing.external.inline.start: 0
+          spacing.external.inline.end: 0
+          spacing.internal.block.start: 0
+          spacing.internal.block.end: 0
+          spacing.internal.inline.start: 0
+          spacing.internal.inline.end: 0
+          layout.listStyle: none
+          # The baseline the active tab paints its highlighted segment over.
+          # Its width reads --dimension-strokeThickness-medium, a spelling no
+          # symbol declares (the declared one is --dimension-stroke-thickness-medium),
+          # and the roster has no key for a block-end border width anyway.
+          appearance.border.bottom.color: color.border.muted
+          layout.overflow.inline: auto
+        edges:
+          - node:
+              role: tab
+            relation:
+              cardinality: "1..*"
+              slotName: default
+      relation:
+        cardinality: "1"
+        slotName: default

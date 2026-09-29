@@ -1,0 +1,7 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:concepttype.Explanation a ds:ConceptType;
+    ds:name "Explanation";
+    ds:summary "*Explanation is a discursive treatment of a subject, that permits reflection. Explanation is* ***understanding-oriented****.*\n\nExplanation deepens and broadens the reader’s understanding of a subject. It brings clarity, light and context.\n\nExplanations can include: principles (a type of documentation that outlines the principles that stay at the foundation of a certain decision)".

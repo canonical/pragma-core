@@ -1,0 +1,47 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.pattern.side_panel a ds:Pattern;
+    ds:name "SidePanel";
+    ds:summary "A side panel is a non-modal surface docked to the inline-end edge of the viewport, for work that accompanies the current view rather than interrupting it. The application behind stays visible, clickable and tabbable — there is no backdrop, no focus trap and no aria-modal, and focus moves into the panel on open but is never trapped.";
+    ds:anatomyDsl "---\n# TODO implementation: no reference — the tier has no implementation to derive from\nnode:\n  uri: apps.pattern.side_panel\n  styles:\n    layout.type: flex   # was stack\n    layout.direction: column   # was vertical\n    layout.position: fixed\n    size.height: fill\n    # was spacing.internal.horizontal: spacing/medium (--dimension-300); the\n    # roster's inline padding is per side, so the one axis becomes two\n    spacing.internal.inline.start: dimension.300\n    spacing.internal.inline.end: dimension.300\n    appearance.background: surface.color.background   # was color/surface/default\n    appearance.radius: dimension.radius.medium        # was radius/medium\n    # was interaction.transition.duration: motion/duration/medium (slide-in/out); no\n    # stratum declares motion.duration.medium\n  edges:\n    - node:\n        uri: apps.subcomponent.side_panel-header\n      relation:\n        cardinality: \"0..1\"      # without a header, the panel needs an aria-label\n        slotName: header\n    - node:\n        uri: apps.subcomponent.side_panel-content\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        uri: apps.subcomponent.side_panel-footer\n      relation:\n        cardinality: \"0..1\"\n        slotName: footer";
+    ds:anatomyClassic "";
+    ds:usage "**When to use**\n\n- When showing details of a selected entity.\n- When there is work that accompanies the current view — inspecting or editing an item while the list/app behind stays visible and usable.  \n- When the user needs to fill a form in applications (per Modal guidance: websites → modals,  apps → side panels or full pages). Use side panels when there are multi-step flows that need layer/nesting.\n- Viewing an item's associated entities when the main listing page can't be filtered to just those.\n\n\n\n**When not to use:**\n\n- Interruptive moments needing an explicit decision — for confirmations, destructive actions, warnings, unsaved-changes alerts  use Modal.\n- Anything requiring the page behind to be inert: the panel has no backdrop, no focus trap, no aria-modal; the application stays clickable and tabbable by design.\n- Opening from inside a modal — a side panel can trigger a modal, never the reverse.\n- When there is Information the user must acknowledge before continuing.";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasSubcomponent ds:apps.subcomponent.side_panel-footer, ds:apps.subcomponent.side_panel-header, ds:apps.subcomponent.side_panel-content;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:apps.pattern.side_panel;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.300
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:apps.pattern.side_panel;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.300
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:apps.pattern.side_panel;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:surface.color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:apps.pattern.side_panel;
+        ds:node "$root";
+        anatomy:styleKey "appearance.radius";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.radius.medium
+    ].

@@ -1,0 +1,223 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form
+# src/lib/subcomponent/ComboboxInput/styles.css on .ds.form-combobox and its
+# child selectors, with src/lib/subcomponent/ComboboxInput/common/List/styles.css
+# (.ds.combobox-list) and common/ResetButton/styles.css
+# (.ds.combobox-reset-button). The stylesheet corrects the tree: the query entry
+# is a wrapper carrying the shared input chrome, the clear control sits inside
+# it, and the selected tokens live in their own container above it.
+node:
+  uri: global.subcomponent.combobox_input
+  styles:
+    layout.type: grid
+    layout.grid.columns: 1fr auto
+    layout.grid.rows: auto
+  edges:
+    - node:
+        role: selected items
+        styles:
+          layout.grid.column: "1 / -1"
+          layout.type: flex
+          layout.wrap: wrap
+          # The gap and the block-end margin read --space-050, which no stratum
+          # declares, and the container is `display: none` while empty — a
+          # display value the roster has no key for, since layout.type carries
+          # the display the element has when it is shown.
+        edges:
+          - node:
+              role: selected token
+              styles:
+                layout.type: inline-flex
+                layout.align: center
+                appearance.background: color.foreground.secondary
+                appearance.background@hover: color.foreground.secondary.hover
+                appearance.border.width: dimension.stroke.thickness.medium
+                appearance.border.style: solid
+                appearance.border.color: color.border.muted
+                appearance.radius: [dimension.radius.full, 9999px]
+                typography.color: color.text
+                interaction.cursor: pointer
+                motion.property: background-color
+                # Only the composite's font-size facet is read
+                # (--typography-text-secondary-font-size); typography.size admits
+                # dimension.* alone, so the composite carries it.
+                typography.font: typography.text.secondary
+                # The chip's own gap (0.25rem) and padding (0.125rem 0.5rem) are
+                # literals the stylesheet writes; the spacing keys admit either,
+                # so they are written as the implementation has them.
+                spacing.gap: 0.25rem
+                spacing.internal.block.start: 0.125rem
+                spacing.internal.block.end: 0.125rem
+                spacing.internal.inline.start: 0.5rem
+                spacing.internal.inline.end: 0.5rem
+              edges:
+                - node:
+                    role: remove icon
+                    styles:
+                      typography.size: 0.75em
+                      typography.lineHeight: 1
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: query entry
+        styles:
+          layout.grid.column: "1 / -1"
+          layout.grid.row: 2
+          # A composite wrapper: it overrides the chrome's `display: block` and
+          # resets its padding, because the inner <input> is the text-bearing
+          # leaf. It also declares `anchor-name: --combobox-input`, which the
+          # results list positions against; no roster key takes an anchor name.
+          layout.type: flex
+          layout.align: stretch
+          layout.boxSizing: border-box
+          size.width: 100%
+          spacing.internal.block.start: 0
+          spacing.internal.block.end: 0
+          spacing.internal.inline.start: 0
+          spacing.internal.inline.end: 0
+          # ── the shared input chrome (src/index.css, `.ds.input.chrome`) ──────────
+          appearance.border.width: dimension.stroke.thickness.medium
+          appearance.border.style: solid
+          # The base theme is bottom-border-only: `border-color` is set from
+          # --form-input-border-color, and then the top, right and left colours are
+          # overridden to `transparent` (--form-input-border-color-{top,right,left}),
+          # so only the bottom edge paints. The four-side key therefore takes the
+          # literal the three overridden sides end at, and the bottom key the token
+          # the fourth falls through to.
+          appearance.border.color: transparent
+          appearance.border.bottom.color: color.border
+          # A `.danger` field — a failed validation — repaints the bottom border
+          # alone, through --form-input-border-color-bottom.
+          appearance.border.bottom.color@invalid: color.border.error
+          appearance.radius: dimension.radius.small
+          appearance.background: color.foreground.input
+          typography.color: color.text
+          # The font-family, font-size and line-height facets of the text-primary
+          # composite are read (--typography-text-primary-font-family, and its
+          # font-size and line-height through --form-input-font-size and
+          # --form-input-line-height), so the composite is bound once: typography.size
+          # admits dimension.* alone.
+          typography.font: typography.text.primary
+          motion.property: border-color, box-shadow
+          # The hover fill reads --hover--color-foreground-input first, a computed state
+          # variable that no stratum declares as a symbol.
+          appearance.background@hover: color.foreground.input.hover
+          # Focus lights all four edges and drops the user-agent outline for a ring of
+          # its own.
+          appearance.border.color@focus: color.focusRing
+          appearance.outline.style@focus: none
+          # A disabled control keeps its border BOX so its height still matches an
+          # enabled one, and drops only the paint.
+          appearance.background@disabled: color.foreground.input.disabled
+          appearance.border.color@disabled: transparent
+          interaction.cursor@disabled: not-allowed
+          # Not bound, and why:
+          # - height reads --form-input-height, a calc() over --space-baseline, which
+          #   no stratum declares;
+          # - padding-block reads --form-input-padding-block, then
+          #   --component-padding-block, neither of which is declared. A density scope
+          #   re-derives the INLINE padding (--form-input-padding-inline, from
+          #   --density-padding-inline then --space-200) and never padding-block;
+          # - the focus ring and the disabled text colour are a box-shadow at
+          #   --form-focus-ring-color and a read of --disabled--color-text: no roster
+          #   key takes a box-shadow, and the computed state variable is not a symbol;
+          # - the transition duration reads --motion-duration-fast, undeclared;
+          # - a `.danger` field lights the focus ring at color.focusRing.error,
+          #   which needs the compound of invalid and focus that this version of
+          #   the notation reserves. Its bottom border is bound above.
+        edges:
+          - node:
+              role: value
+              styles:
+                layout.flex.grow: 1
+                layout.flex.shrink: 1
+                layout.flex.basis: 0%
+                size.min.width: 0
+                appearance.border.style: none
+                appearance.background: transparent
+                appearance.outline.style: none
+                typography.color: inherit
+                typography.fontFamily: inherit
+                # The leaf carries the inline padding, which reads
+                # --form-input-padding-inline then --component-padding-inline:
+                # neither is declared.
+            relation:
+              cardinality: "1"
+              slotName: default
+          - node:
+              # The reset control IS the design-system Button: ResetButton.tsx
+              # renders <Button> from @canonical/react-ds-global with the
+              # `ds combobox-reset-button` class on it, so this is a named child
+              # with the contextual overrides that class applies. It is rendered
+              # unconditionally by both the single and the multiple combobox.
+              uri: global.component.button
+              styles:
+                layout.flex.shrink: 0
+                layout.type: flex
+                layout.align: center
+                layout.justify: center
+                typography.color: color.text.muted
+                typography.color@hover: color.text
+                typography.size: 1rem
+                typography.lineHeight: 1
+                interaction.cursor: pointer
+                appearance.outline.style@focus: none
+                appearance.radius@focus: dimension.radius.small
+                # The class opens with `all: unset`, which strips every one of
+                # Button's own declarations before these are applied.
+                # padding-inline reads --component-padding-inline, which no
+                # stratum declares, and the focus ring is a box-shadow at
+                # color.focusRing, which no roster key takes.
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+    - node:
+        role: results list
+        styles:
+          layout.grid.column: "1 / -1"
+          layout.listStyle: none
+          layout.overflow.block: auto
+          size.max.height: 15rem
+          appearance.background: color.background
+          appearance.border.width: dimension.stroke.thickness.medium
+          appearance.border.style: solid
+          appearance.border.color: color.border
+          appearance.radius: dimension.radius.small
+          spacing.internal.block.start: 0
+          spacing.internal.block.end: 0
+          spacing.internal.inline.start: 0
+          spacing.internal.inline.end: 0
+          spacing.external.block.start: 2px
+          # `margin: 0` zeroes the other three sides before the block-start
+          # nudge is applied.
+          spacing.external.block.end: 0
+          spacing.external.inline.start: 0
+          spacing.external.inline.end: 0
+          # A native popover positioned with CSS anchor positioning
+          # (position-anchor: --combobox-input, position-area, width:
+          # anchor-size(inline)) and lifted by a box-shadow: no roster key takes
+          # an anchor, a position-area or a shadow.
+        edges:
+          - node:
+              role: option
+              styles:
+                interaction.cursor: pointer
+                motion.property: background-color
+                appearance.background@hover: color.foreground.ghost.hover
+                typography.weight@selected: bold
+                # Two faces, and they are different elements of state: `.selected`
+                # is the CHOSEN option (List.tsx sets it from isSelected) and takes
+                # the bold weight, while `.highlighted` — the keyboard cursor —
+                # takes the same fill as a hovered option, which the hover binding
+                # above already carries.
+                # padding reads --component-padding-block and
+                # --component-padding-inline, neither declared.
+            relation:
+              cardinality: "0..*"
+      relation:
+        cardinality: "1"

@@ -1,0 +1,108 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.data_table-body_cell a ds:Subcomponent;
+    ds:name "DataTable.BodyCell";
+    ds:summary "The body cell is the data cell element that displays content in each row of the data table. It comes in four types: checkbox, text, icon + text, and action. Some cell types support inline editing with multiple edit modes, and the action cell type supports inline action buttons for row-level operations.\n\nThe body cell is distinct from the header cell. While the header cell handles column-level controls such as sorting, resizing, reordering, and pinning, the body cell is responsible for presenting data values and providing row-level interactions such as inline editing and row actions.\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3340-1934&t=8RN2Hpk8UX3gMX3u-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3834-176770&t=2fO23I8WsyT0YVJ1-4";
+    ds:usage "Every piece of data the user sees in a table row is rendered inside a body cell. The cell type determines how content is displayed and what interactions are available. Choosing the right cell type for each column is one of the most important decisions when designing a table, because it affects how users read, scan, and interact with the data.\n\n## Cell type selection\n\n- Use the **text cell** as the default for any column displaying plain data values.\n- Use the **icon + text cell** to indicate the status or category of a value within a cell, such as status indicators.\n- Use the **checkbox cell** when the user needs to select one or more rows. Use a radio variant if the user may only select one item.\n- Use the **action cell** when the table needs row-level inline actions or table settings access.\n\n## Inline actions configuration\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-29792&t=2PBanDq6QA2yNcI2-4\n\n\n\nA maximum of 4 icon-only inline actions can appear per row. If there are more than 4, they overflow into a contextual menu. The designer can also choose to show only the contextual menu and skip icon-only buttons entirely.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-30895&t=2PBanDq6QA2yNcI2-4\n\nIf there is only one action that cannot be represented as an icon, it can appear as a button instead. The button fills the available space in the action column. The text inside the button is centered. Keep the action column narrow to avoid the button looking disproportionate.\n\n\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-31718&t=2PBanDq6QA2yNcI2-4\n\nThe designer can choose whether inline actions are always visible or appear only on row hover. In hover-only mode, action icons appear only on the currently hovered row, which receives a light background tint. All other rows show no action icons.\n\n\n\nInline actions can be semantically colored. The most common example is “Delete”, which uses a red destructive color. Other actions use the default neutral icon color.\n\n## Inline editing\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-7270&t=2PBanDq6QA2yNcI2-4\n\nThe designer can set columns as editable, allowing users to change data values directly in the table without navigating to a separate form or detail view. Editing is configured at the column level, so all body cells in an editable column support editing. Inline editing works well when users need to make quick, small corrections to existing data, such as updating a name, changing a status, or fixing a typo. It is less appropriate when editing involves complex validation, multi-field dependencies, or when changes have significant consequences that require more context than a single cell can provide. In those cases, a dedicated edit form or detail panel is a better fit.\n\nNot every column needs to be editable. Focus on columns where users frequently need to make changes and where the data type fits one of the available edit modes.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-7270&t=2PBanDq6QA2yNcI2-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-32440&t=2PBanDq6QA2yNcI2-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-33329&t=2PBanDq6QA2yNcI2-4\n\n### Edit modes\n\n- **Text edit** is for short, single-line values such as a hostname, an IP address, or a username. Use this as the default edit mode.\n- **Textarea edit** is for cells that contain longer text, such as a description or a note. The editing area is larger and overlaps cells below it.\n- **Select edit** is for cells where the value must be one of a predefined set of options, such as a status, a region, or a role. It shows a downward-pointing chevron to differentiate it from a text input. A dropdown menu opens below the cell with the selectable options.\n\n\n\n### Save behavior\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-34261&t=2PBanDq6QA2yNcI2-4\n\nBy default, editable cells use **auto-save**. In critical situations where saving needs to be a deliberate decision, the designer can choose **explicit save**. This mode shows “Cancel” and “Save” buttons beneath the cell. Use explicit save when the consequence of an incorrect value is high, such as changing a price, reassigning ownership, or modifying a configuration that affects other users.";
+    ds:guidelines "# Interactions\n\n## Cell editing\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-7270&t=2PBanDq6QA2yNcI2-4\n\nBy default, editable cells show an edit icon when the cell is hovered. The cursor changes to indicate the cell is interactive. Only the currently hovered cell shows the edit icon, and only one cell displays it at a time.\n\nThe designer can choose to always show the edit icon for editable cells. This makes it easier for the user to discover that a cell is editable. In this configuration, edit icons are visible in every editable cell across all rows, not only the hovered one.\n\n\n\n### Text edit mode\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3419-7270&t=2PBanDq6QA2yNcI2-4\n\nThe cell in edit mode has a focus ring and a drop shadow. It stays the same size and position as the cell itself. When the user starts editing, the entire text is selected so they can type to replace it. They can deselect the text by selecting a position within the cell and add to the existing text instead. This places a text cursor within the existing content.\n\n### Textarea edit mode\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-32440&t=2PBanDq6QA2yNcI2-4\n\nThe editing area extends vertically below the cell’s normal boundaries, covering parts of the rows beneath it. The textarea has the same drop shadow and focus ring as the text edit cell.\n\n### Select edit mode\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-33329&t=2PBanDq6QA2yNcI2-4\n\nThe cell in edit mode has the same focus ring and drop shadow as other edit modes. It stays the same size as the cell itself. A downward-pointing chevron differentiates it from a text input. A dropdown menu opens below the cell with selectable options, overlapping the rows beneath it.\n\n\n\n### Saving and canceling with auto-save (default)\n\nIf the user presses \"Enter\" or selects outside the cell after changing its content, the change is saved automatically. This should be an optimistic update: show the updated value in the UI immediately without waiting for server confirmation. If the server rejects the change, roll the value back and notify the user that the edit did not persist. The notification itself is not part of this component. It should be handled through the application's notification system. The user can cancel an edit by pressing \"Escape\" while the cell is in edit mode. This removes focus from the cell without saving.\n\n### Saving and canceling with explicit save\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-34261&t=2PBanDq6QA2yNcI2-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-35176&t=2PBanDq6QA2yNcI2-4\n\nA \"Cancel\" button and a \"Save\" button (green/primary style) appear directly below the editing cell. Pressing \"Escape\" cancels the edit, the same as in auto-save mode. Pressing \"Enter\" does not save the cell, because the user might expect it to create a new line. In explicit save mode, saving must happen through the \"Save\" button. If the user selects somewhere else without saving or canceling, a confirmation modal appears. The modal has the title \"Save changes made to cell?\" and the body text: \"Do you want to save the changes made to this cell? Otherwise any change made to the cell will be discarded.\" Below the body text, a \"Changes:\" section shows the before and after values (for example, \"youthful-yak → Hello world! :)\"). The modal has two buttons: \"Discard changes\" (secondary style) and \"Save changes\" (primary style).\n\n### Unloading with unsaved changes\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-36094&t=2PBanDq6QA2yNcI2-4\n\nIf the user has an unsaved change and is about to leave the page (for example, closing the tab or window), interrupt the navigation and show a confirmation modal. The modal has the title \"Save changes made to cell before exiting?\" and the body text: \"Do you want to save the changes made to this cell before exiting? Otherwise any change made to the cell will be discarded.\" Below the body text, a \"Changes:\" section shows the before and after values (for example, \"youthful-yak → Hello world! :)\"). The modal has two buttons: \"Discard changes and exit\" (secondary style) and \"Save changes and exit\" (primary style).\n\n### Advanced cell type editing\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-37008&t=2PBanDq6QA2yNcI2-4\n\nIf the underlying data is compatible with the available edit modes (text, textarea, or select), more advanced custom cell types can also be edited inline. When a custom cell enters edit mode, it looks the same as any other editing cell. The custom rendering (for example, a percentage bar) is replaced with a standard text input showing the raw value, with the same focus ring and drop shadow styling.\n\n### Validation states\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-38135&t=2PBanDq6QA2yNcI2-4\n\nAn editable cell can have validation states. When active, the focus ring and background reflect the validation state (for example, a red focus ring and red-tinted background for an error). The validation message appears inline with an error icon beneath the editing cell.\n\n\n\n## Inline actions\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3432-39095&t=2PBanDq6QA2yNcI2-4\n\nInline actions are icon-only actions at the end of the row in the action cell type. They share a column with the table settings icon in the header.\n\nEvery icon-only action button must have an appropriate `aria-label` and a tooltip that displays the label on hover. This label should match the one that would appear if the action were shown in a contextual menu.\n\nWhen actions overflow into a contextual menu, it appears as a dropdown anchored to the row. Each menu item displays an icon alongside its label. Destructive actions such as “Delete” are styled in red within the menu.\n\n## Checkbox and radio\n\nA checkbox cell can contain either a checkbox or a radio. A column must use either checkboxes or radios, not a mix.\n\nA header cell checkbox can have the partially selected state, to indicate that some but not all of the page’s rows have been selected. If radios are used, the header cell in that column is empty.";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "cell-type";
+        ds:summary "The type of content the cell displays. Determines the available interactions and visual treatment.";
+        ds:propertyType "choice";
+        ds:defaultValue "text";
+        ds:constraints "A column must use a single cell type.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "highlighted";
+        ds:summary "Whether the cell appears in a highlighted visual state instead of the default state.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Applies to text and icon+text cell types.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "editable";
+        ds:summary "Whether the cell supports inline editing.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Applies to text, icon+text, and compatible custom cell types only. Not available on checkbox or action cell types.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "edit-mode";
+        ds:summary "The editing interface used when the cell enters edit mode. Text is for short single-line values. Textarea is for longer multi-line values. Select is for values from a predefined set of options.";
+        ds:propertyType "choice";
+        ds:defaultValue "text";
+        ds:constraints "Only applies when editable is true.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "select-options";
+        ds:summary "The set of predefined options shown in the select dropdown when the cell enters edit mode.";
+        ds:propertyType "list of text";
+        ds:constraints "Required when edit-mode is select.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "save-mode";
+        ds:summary "How changes are persisted. Auto-save saves on Enter or blur. Explicit save shows Cancel and Save buttons beneath the cell. Use explicit save when the consequence of an incorrect value is high.";
+        ds:propertyType "choice";
+        ds:defaultValue "auto-save";
+        ds:constraints "Only applies when editable is true.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "always-show-edit-icon";
+        ds:summary "Whether the edit icon is always visible on editable cells or only shown on hover. When true, edit icons appear in every editable cell across all rows.";
+        ds:propertyType "boolean";
+        ds:defaultValue "false";
+        ds:constraints "Only applies when editable is true.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "validation-state";
+        ds:summary "The current validation state of the cell. When active, the focus ring and background reflect the state (for example, a red focus ring and red-tinted background for an error).";
+        ds:propertyType "choice";
+        ds:defaultValue "none";
+        ds:constraints "Only applies when editable is true.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "validation-message";
+        ds:summary "The inline validation message displayed beneath the editing cell with an error icon.";
+        ds:propertyType "text";
+        ds:constraints "Only applies when validation-state is not none.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "checkbox-mode";
+        ds:summary "Whether the cell uses a checkbox (multi-select) or radio (single-select) control. When radios are used, the header cell in that column is empty.";
+        ds:propertyType "choice";
+        ds:defaultValue "checkbox";
+        ds:constraints "Only applies when cell-type is checkbox. A column must use either checkboxes or radios, not a mix.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "inline-actions";
+        ds:summary "The set of row-level actions displayed in the cell. Each action defines a label, an icon, an optional `aria-label`, and whether it is destructive.";
+        ds:propertyType "list of text";
+        ds:constraints "Only applies when cell-type is action. Maximum of 4 icon-only actions before overflow to a contextual menu.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "inline-actions-visibility";
+        ds:summary "Whether inline action icons are always visible or appear only on the currently hovered row.";
+        ds:propertyType "choice";
+        ds:defaultValue "always";
+        ds:constraints "Only applies when cell-type is action.";
+        ds:optional "true"
+    ];
+    ds:parentComponent ds:apps.pattern.datatable.

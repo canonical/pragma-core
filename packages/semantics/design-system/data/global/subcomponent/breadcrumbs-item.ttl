@@ -1,0 +1,89 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.breadcrumbs-item a ds:Subcomponent;
+    ds:name "Breadcrumbs.Item";
+    ds:summary "The breadcrumbs item is a subcomponent representing a single level within the navigational trail of [Breadcrumbs](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-BXVe6mKJMd). It serves as a discrete link or label that signifies a specific node in the application's information hierarchy.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/component/Breadcrumbs/common/Item/styles.css on .ds.breadcrumbs-item\n# and its child selectors (> .link, > .separator, and the .current / .disabled\n# item classes).\nnode:\n  uri: global.subcomponent.breadcrumbs-item\n  styles:\n    layout.type: flex\n    layout.direction: row\n    layout.align: center\n    layout.listStyle: none\n  edges:\n    - node:\n        role: link\n        styles:\n          typography.color: color.text.link\n          typography.decoration: none\n          typography.decoration@hover: underline\n          # A `.disabled` item is not a link: the class, not :disabled, is what\n          # the implementation selects on, and it is the disabled state.\n          typography.color@disabled: color.text.disabled\n          interaction.cursor@disabled: not-allowed\n          appearance.outline.width@focus: dimension.stroke.thickness.large\n          appearance.outline.style@focus: solid\n          appearance.outline.color@focus: color.text.link\n          appearance.outline.offset@focus: dimension.025\n          # A `.current` item keeps color.text and `cursor: default` — the trail's\n          # own position, which is a variant rather than one of the five states,\n          # so it is recorded here and not bound.\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        role: separator\n        styles:\n          typography.color: color.text\n          # The separator is hidden on the first item of the trail.\n          spacing.external.inline.start: dimension.100   # --breadcrumbs-item-separator-margin\n          spacing.external.inline.end: dimension.100     # --breadcrumbs-item-separator-margin\n      relation:\n        cardinality: \"0..1\"";
+    ds:anatomyClassic "";
+    ds:usage "Breadcrumb items are intended to build a logical \"path\" for the user. They must be arranged sequentially to reflect the hierarchy of information domains which contextualize the current view.";
+    ds:guidelines "The Breadcrumbs Items share [the common navigation item property interface](https://docs.google.com/document/d/1HSQyocivbz1nyxF2oZ9DnAvTm4sMG_smGcddS9QBKxY/edit?tab=t.0).";
+    ds:tier ds:global;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "-";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Whether navigable";
+        ds:optional "false";
+        ds:propertyType "boolean"
+    ];
+    ds:parentComponent ds:global.component.breadcrumbs;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.link
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "appearance.outline.width";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.large
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "appearance.outline.color";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.link
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/link";
+        anatomy:styleKey "appearance.outline.offset";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.025
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/separator";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/separator";
+        anatomy:styleKey "spacing.external.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.breadcrumbs-item;
+        ds:node "$root/separator";
+        anatomy:styleKey "spacing.external.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ].

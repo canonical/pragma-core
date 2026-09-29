@@ -1,0 +1,50 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.expandable_truncation a ds:Component;
+    ds:name "Expandable Truncation";
+    ds:summary "Expandable Truncation is a controlled disclosure for content that overflows a single line. It renders caller content in a clipped span, measures direct child nodes against the right edge, and shows a disclosure button when content extends past that boundary. When expanded, it displays an absolutely positioned layer with scrollable content.\n\nMain use cases:\n\n- Compact table and metadata values that stay on one line until requested  \n- Scenarios where complete content can safely overlay nearby layout without portaling  \n- Composition inside tables and information grids with different expanded styling\n\nExpansion state, collapse behavior, and accessible disclosure relationships stay with the caller.";
+    ds:anatomyDsl "```yaml\nnode:\n  uri: ds:apps_landscape.component.expandable_truncation\n  role: expansion positioning context\n  edges:\n    - node:\n        role: collapsed or expanded layout\n        description: Switches between inline clipping and an absolutely positioned expanded layer.\n        edges:\n          - node:\n              role: measured value\n              description: Renders caller content and measures direct child nodes against the parent right edge.\n              relation:\n                cardinality: \"1\"\n                slotName: content\n          - node:\n              uri: global.component.button\n              role: one-way disclosure\n              description: Requests expansion and displays either fixed copy or an overflowing-child count.\n              relation:\n                cardinality: \"0..1\"\n                condition: Rendered when one or more direct child nodes overflow and isExpanded is false.\n        relation:\n          cardinality: \"1\"\n```\n\n`TruncatedCell` is a preset around this root, not a child in its rendered anatomy.";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=25-29&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 8\n\n";
+    ds:usage "### When to use\n\n- Use for secondary table or metadata values that must stay on one line until requested.\n- Pass content as direct, stable child nodes when `showCount` needs to represent hidden items; wrapping every item in one fragment or text node changes the count semantics.\n- Keep `isExpanded` and `onExpand` in the owning component. Add an explicit collapse path when users need to return to the compact state.\n- Use `TruncatedCell` only where an absolutely positioned expanded panel can safely overlay the table cell and adjacent content.\n\n### When not to use\n\n**Errors, instructions, or primary content**\n\nInformation required to decide whether to expand or that must always be visible.\n\n**Incorrect pattern**: Hiding error messages, instructions, or primary identifiers inside truncation.\n\n**Remediation strategy**: Keep essential information visible and use truncation only for secondary or supplementary values.\n\n**Headings, controls, or substantial content**\n\nComplex, interactive, or block-level content requiring full expand/collapse semantics.\n\n**Incorrect pattern**: Using this component for substantial blocks, form controls, or content that needs persistent interaction.\n\n**Remediation strategy**: Use a disclosure or accordion component that provides complete open/close semantics and focus management.\n\n**Character or word counts**\n\nScenarios where `showCount` must represent text length rather than item counts.\n\n**Incorrect pattern**: Using `showCount={true}` to display character or word counts; one text node produces only one overflow count.\n\n**Remediation strategy**: For text-based counts, render a separate numeric label or omit `showCount` entirely.\n\n**Positioned expansion in clipping context**\n\nSituations where the expanded layer must avoid clipping or stacking context limitations.\n\n**Incorrect pattern**: Rendering the absolute-positioned expanded content inside a clipped ancestor or low stacking context without testing.\n\n**Remediation strategy**: Use a portal-based disclosure or verify safe stacking and clipping behavior in all contexts before adoption.";
+    ds:guidelines "### Accessibility\n\n- Keep the native button and make the surrounding value identify what will expand. The fixed “Show more” label is not unique when several instances appear together.\n- The control exposes no `aria-expanded` or `aria-controls`, and the expanded content has no generated id. Consumers needing a programmatic disclosure relationship require an implementation change, not only different prose.\n- The clipped content remains in the DOM and accessibility tree; this is visual truncation rather than semantic hiding.\n- Do not rely on `+N` alone when the number does not clearly describe recognizable items in context.\n\n### Content and internationalization\n\n- Put identifying content first because collapsed rendering is one line with ellipsis.\n- “Show more” is hardcoded English. The component has no label, formatter, plural-rules, or translation prop.\n- `+N` uses an unformatted JavaScript number and has no localized explanatory text.\n- Avoid assuming text direction from right-edge measurement. RTL, mixed-direction content, and vertical writing modes are not covered by source or tests.\n\n### Keyboard and focus\n\n- The disclosure is a native button and receives standard keyboard activation.\n- Expansion removes that button from the DOM. The component does not move focus into the expanded value or provide a collapse target, so consumers must verify the resulting focus behavior.\n- There are no Escape, arrow-key, or focus-restoration handlers.\n\n### Device and layout\n\n- `ResizeObserver` watches the immediate parent, not the content span or viewport. Content-only changes that do not resize the parent are not guaranteed to trigger a new measurement.\n- Collapsed layout uses flex and a nonwrapping value/control. Expanded content scrolls vertically after `8rem`.\n- The expanded layer uses `position: absolute; left: 0; right: 0; top: 0` inside a relative root, with no z-index or portal. Check clipping, overlap, and stacking in every host.\n- Touch users can activate the button, but no touch-specific behavior is implemented.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "Truncated.content ";
+        ds:summary "Content rendered in both states and inspected by direct child node. ";
+        ds:propertyType "node";
+        ds:defaultValue "— ";
+        ds:constraints "Exact type: ReactNode. Measurement uses DOM ranges and each child's right edge; semantic item counts require one direct node per item. "
+    ], [
+        a ds:Property;
+        ds:name "Truncated.expandedClassName ";
+        ds:summary "Layout/visual class added to the expanded content-layout element. ";
+        ds:propertyType "text";
+        ds:defaultValue "— ";
+        ds:constraints "Must provide any required background, border, stacking, and placement treatment; it is not applied while collapsed. "
+    ], [
+        a ds:Property;
+        ds:name "Truncated.isExpanded ";
+        ds:summary "Controlled visual state. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "— ";
+        ds:constraints "When true, the disclosure disappears and no built-in control can set the value false. "
+    ], [
+        a ds:Property;
+        ds:name "Truncated.onExpand ";
+        ds:summary "Handles activation of the conditional disclosure. ";
+        ds:propertyType "callback";
+        ds:defaultValue "— ";
+        ds:constraints "Exact type: (event: ReactMouseEvent<HTMLButtonElement, MouseEvent>) => void. The caller must update controlled state; the component does not await, disable, or debounce the callback. "
+    ], [
+        a ds:Property;
+        ds:name "Truncated.showCount ";
+        ds:summary "Replaces \"Show more\" with +N. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "— ";
+        ds:constraints "Omission is treated as false. N is overflowing direct child nodes, not total children and not hidden characters or words. ";
+        ds:optional "true"
+    ].

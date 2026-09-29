@@ -1,0 +1,51 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.badge a ds:Component;
+    ds:name "Badge";
+    ds:summary "A badge is a read-only visual indicator for numeric values. Usually, it is used in other components to show a number of elements contained in that component.\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2877-2620&t=mrOkyDfhQY9JZwMz-1\n\nStyling  \n\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4320-90095&t=mrOkyDfhQY9JZwMz-1";
+    ds:usage "The badge is a read-only visual indicator for numeric values, so only numbers are allowed inside it. The exception is using non numeric characters to show larger numbers than can be shown in the width of the badge. Use a “+” to indicate a larger number such as “999+” or letters to indicate numbers such as “2M” or “25k”.\n\nIt is often used in other components to show a number of elements contained in that component. Such as in tabs to indicate the amount of elements contained inside of it, or in a chip to indicate the amount of items which fall under that filter.\n\n### When to use\n\n- If you need to indicate a specific numeric value and you want to give it visual prominence. For example for:\n  - Unread messages\n  - Amount of items requiring attention\n  - Activity indicators (e.g. comments)\n  - Inventory counts\n  - Total items in collections (items in cart)\n  - Performance metrics (e.g. amount of errors in a log)\n- As part of other components such as navigation items, chips, tabs etc. to show some of the above mentioned metrics\n\n### When not to use\n\n- When text labels, categories, or status descriptors are used to provide qualitative (non-numeric) information.\n  - Incorrect: Using a badge to display a status such as \"In Progress\" or a category like \"Design.\"\n  - Remediation: Use a [Tag](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-osLY8UcQUp) component to represent non-numeric labels or categories.\n- When complex information is presented that requires additional explanation or supporting text to be understood.\n  - Incorrect: Placing a standalone number in a Badge without a clear parent element, leaving the user to guess what the count represents.\n  - Remediation: Ensure the badge is anchored to a specific UI element (like an filter item in a [Combobox](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-x_PYG_O4qD) or a [Chip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-N-fnT7n4mU)).\n- When a numeric value is intended to function as a primary button or a standalone clickable action.\n  - Incorrect: Expecting a user to click directly on a small badge to open a detailed list or perform a task.\n  - Remediation: Place the badge within an interactive parent component, such as a [Navigation](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-nkDiZdUMkV) Item, which then directs the user to the relevant destination (e.g., a [NotificationCenter](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-D0oz4mX_sm)).\n- When you need to display long pieces of information\n  - Incorrect: \n- When you want users to filter information by clicking on the badge.\n  - Incorrect: Use a badge as a clickable quick filter.\n  - Remediation: Use a [Chip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-N-fnT7n4mU) instead.";
+    ds:guidelines "# Accessibility\n\n## **Color**\n\n- Use a modifier if it makes sense semantically for your use case.\n- Avoid using semantic color modifiers on top of colored backgrounds.\n- Ensure you don’t use colour as the only visual means of conveying information or an action.\n\n## **Aria labels**\n\n- Use `aria-label` to provide full context for screen readers. For example “999+ notifications unread”.\n- If the badge is used to represent a live status of some value, using `role=\"status\"` should be considered.\n\n## **Accessibility resources**\n\nApplicable WCAG guidelines:\n\n- [1.3.3: Sensory Characteristics](https://www.w3.org/TR/WCAG22/#sensory-characteristics)\n- [1.4.1: Use of Color](https://www.w3.org/TR/WCAG22/#use-of-color)\n- [3.1.4: Abbreviations](https://www.w3.org/TR/WCAG22/#abbreviations)";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "criticality";
+        ds:summary "The component can comnsume the[Criticality](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-2diO06C-8N/_rui-jOei2P6iqD) modifier family:";
+        ds:propertyType "choice";
+        ds:defaultValue "Default";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The numeric value that should be shown in the badge. Also allows non numeric characters to allow for values such as “999+”, “20M”";
+        ds:propertyType "number";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "formatter";
+        ds:summary "an object that exposes a format method : takes the numeric value and returns the perferred format";
+        ds:propertyType "function";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "capped";
+        ds:summary "when we want to not show a high number, replacesthe default rounded logic";
+        ds:propertyType "boolean";
+        ds:optional "true"
+    ];
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-02-13T08:00:00.000+01:00";
+        ds:change "added content - based on vanillas, changed minimal wording";
+        ds:changeType "change"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-04-09T00:00:00.000+02:00";
+        ds:change "linked the anatomy and styling boards";
+        ds:changeType "change"
+    ];
+    ds:hasModifierFamily ds:global.modifier_family.criticality, ds:global.modifier_family.release.

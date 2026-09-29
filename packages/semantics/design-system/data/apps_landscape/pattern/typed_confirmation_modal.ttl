@@ -1,0 +1,88 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.pattern.typed_confirmation_modal a ds:Pattern;
+    ds:name "Typed Confirmation Modal";
+    ds:summary "A Landscape wrapper around Canonical's `ConfirmationModal` that adds friction to high-consequence actions. Callers supply a confirmation phrase; the modal is disabled until entered text matches after case-insensitive comparison. The confirm action dispatches an async callback and clears the input only after resolution.\n\nMain use cases:\n\n- Protect irreversible destructive operations (permanent deletion, broad config changes) with required phrase typing.  \n- Verify user intent by requiring them to type a resource name or explicit phrase before proceeding.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.pattern.typed_confirmation_modal\n  role: typed safeguard for consequential action\n  edges:\n    - node:\n        uri: global.component.confirmation_modal\n        edges:\n          - node:\n              semantic: form\n              role: confirmation form\n              edges:\n                - node:\n                    role: consequence content\n                    relation:\n                      cardinality: \"1\"\n                      slotName: children\n                - node:\n                    role: phrase instruction\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    uri: global.component.input\n                    role: confirmation text\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n          - node:\n              role: modal-owned action row\n              edges:\n                - node:\n                    uri: global.component.action_button\n                    role: confirm\n                    relation:\n                      cardinality: \"1\"\n              relation:\n                cardinality: \"1\"\n        relation:\n          cardinality: \"0..1\"\n          condition: isOpen is true";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=26-14&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 71\n\n";
+    ds:usage "### When to use\n\n**High-consequence action**\n\nUse as deliberate friction before irreversible deletion or broad destructive changes.\n\n**Specific target verification**\n\nUse when typing a resource name or explicit phrase helps users verify the target and intent.\n\n### When not to use\n\n**Routine confirmation dialogs**\n\nActions that are reversible or low-risk.\n\n**Incorrect pattern**: Requiring users to type a phrase before saving a form or making a non-destructive change.\n\n**Remediation strategy**: Use a simple `ConfirmationModal` with a single tap/click confirmation, or no confirmation at all for changes that can be undone (drafts, save operations).\n\n**Identity verification or authentication**\n\nConfirming user identity as part of authorization.\n\n**Incorrect pattern**: Using phrase matching as a substitute for password verification or identity confirmation before high-security operations.\n\n**Remediation strategy**: Implement proper authentication flows with passwords, MFA, or OAuth. This component is deliberate friction only—it does not provide security or authorization.\n\n**Error-prone confirmation phrases**\n\nPhrases that are long, ambiguous, locale-specific, or hard to read.\n\n**Incorrect pattern**: Using hidden identifiers (IDs, hashes), translated phrases without review, or unclear resource names as the confirmation text. The current input has no visible label.\n\n**Remediation strategy**: Use short, unambiguous confirmation phrases (e.g., resource names from the UI). Add an accessible label to the input field before adopting in new surfaces. Keep phrases in a single language and verify them with users.";
+    ds:guidelines "### Accessibility\n\n- Current source does not give the text Input a label or programmatic accessible name. Placeholder and preceding prose do not establish one. This is an existing accessibility gap, not a completed guideline.\n- Dialog semantics, initial focus, focus trap, Escape, action keyboard behavior, and focus restoration are delegated to Canonical `ConfirmationModal` and are not asserted by local tests.\n- The instruction explains why confirmation is unavailable, but no inline mismatch error or status announcement is rendered.\n- Consumer mutation errors must be surfaced accessibly while the modal remains usable. The wrapper has no error prop or live region.\n\n### Content and safety\n\n- Put target and consequence in `children`; the fixed instruction only communicates the phrase.\n- Phrase instruction text is hardcoded English. `confirmationText`, inherited modal labels/title, and children are caller supplied, but “Type” and “to confirm.” cannot be replaced.\n- Lowercasing uses JavaScript default Unicode casing rather than locale-aware comparison. Products must review behavior for translated phrases.\n- Keep authorization, server validation, and idempotency independent from this client-side safeguard.\n\n### State and async behavior\n\n- `inputText` is the only local state. Change events update it immediately.\n- Confirm can be triggered by the modal action or Form submit. Both paths call `handleSubmit`; the function rechecks validity.\n- A resolved confirmation clears text but does not call `close`. Consumers commonly close in their own mutation handler.\n- A rejected confirmation propagates out of `handleSubmit`; no local `try/catch`, notification, error UI, or reset occurs.\n- Calling the wrapper-provided close path clears text. Directly toggling `isOpen` false and true without that callback preserves text because the component instance/state remains mounted in the parent tree.\n- External loading disables Confirm but does not prevent text edits or locally guard repeated direct calls beyond ConfirmationModal’s button behavior.\n\n### Keyboard and device\n\n- Form submission invokes `handleSubmit`; invalid text causes no action. Local tests click Confirm but do not cover Enter.\n- Source adds no keyboard handlers or focus movement. Tab order and modal keyboard interaction are dependency-owned.\n- Instruction text has no nowrap/truncation style, so it can wrap naturally. The only local style makes the phrase bold and uses `cursor: default`.\n- There are no local breakpoints, maximum phrase length, mobile-keyboard handling, or action-visibility rules. Modal layout is dependency-owned and untested here.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "`confirmationText`";
+        ds:summary "Supplies the displayed phrase, input placeholder, and comparison target. ";
+        ds:propertyType "text";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Compared as `inputText.toLowerCase() === confirmationText.toLowerCase()` with no trim or locale argument. An empty string makes untouched input valid. "
+    ], [
+        a ds:Property;
+        ds:name "`isOpen`";
+        ds:summary "Controls whether the complete modal is rendered.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. False returns `null` but does not itself clear local text. "
+    ], [
+        a ds:Property;
+        ds:name "`close`";
+        ds:summary "Handles consumer-owned modal closure.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. The wrapper's modal-close path invokes it before clearing text. Consumer must update `isOpen`. "
+    ], [
+        a ds:Property;
+        ds:name "`onConfirm`";
+        ds:summary "Runs the protected asynchronous action.";
+        ds:propertyType "callback";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => Promise<void>`. Called only when text is valid. Rejection is not caught; text clears only after resolution. The component does not close automatically. "
+    ], [
+        a ds:Property;
+        ds:name "`confirmButtonDisabled`";
+        ds:summary "Supplies an external disabled condition.";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: inherited Canonical `ConfirmationModal` `confirmButtonDisabled`. Combined with invalid text and loading. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`confirmButtonLoading`";
+        ds:summary "Controls forwarded loading presentation and contributes to disabled state. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: inherited Canonical `ConfirmationModal` `confirmButtonLoading`. Parent owns transitions; text input and cancel remain enabled unless `ConfirmationModal` changes them. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`children`";
+        ds:summary "Supplies required consequence content before the instruction. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Supply enough context to identify the target and impact. The wrapper renders it inside the confirmation Form. "
+    ], [
+        a ds:Property;
+        ds:name "`confirmButtonLabel`";
+        ds:summary "Supplies required content for the modal-owned confirm action. ";
+        ds:propertyType "node";
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: inherited `ReactNode`. Forwarded to `ConfirmationModal`; the action row remains outside the wrapper's Form. "
+    ], [
+        a ds:Property;
+        ds:name "`confirmButtonProps`";
+        ds:summary "Nominally accepts inherited confirm-action overrides. ";
+        ds:propertyType "object";
+        ds:defaultValue "`{ type: \"submit\" }`";
+        ds:constraints "TypeScript: Canonical `Partial<ActionButtonProps>`. A consumer value enters `...props` and is then discarded because the wrapper replaces it with `{ type: \"submit\" }`; consumer `confirmButtonProps` do not survive the later assignment. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "`...props`";
+        ds:summary "Forwards title, labels, appearance, portal behavior, and other modal options. ";
+        ds:propertyType "object";
+        ds:defaultValue "Canonical defaults";
+        ds:constraints "TypeScript: `ComponentProps<typeof ConfirmationModal>`, including inherited supported props and `children`. The wrapper replaces `confirmButtonDisabled`, `confirmButtonProps`, `confirmButtonLoading`, `onConfirm`, and `close`. The explicitly documented inherited props above remain part of this public contract subject to those replacement rules. ";
+        ds:optional "true"
+    ].

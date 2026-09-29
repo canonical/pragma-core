@@ -1,0 +1,16 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.log
+  styles:
+    layout.type: block
+    layout.overflow: auto
+    appearance.background: color.background.layer2   # was color/background/alt
+    # dropped spacing.padding.inline.end: dimension/spacing/inline/m and
+    # spacing.padding.block.end: dimension/spacing/block/xxxl — no spacing symbol corresponds
+  edges:
+    - node:
+        uri: apps_launchpad.subcomponent.log-line
+      relation:
+        cardinality: "0..*"
+        slotName: children

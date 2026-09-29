@@ -1,0 +1,107 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Tooltip/styles.css on .ds.tooltip
+# The chip itself. The engine wrapper the `withTooltip` HOC renders around the
+# TARGET (.ds.tooltip-area and its .target child) is not part of this tree.
+# The tooltip runs on the `contrasted` surface, so its colours invert against
+# the ambient theme; the surface channels are read on this element, never
+# through a :root intermediate.
+node:
+  uri: global.component.tooltip
+  styles:
+    # Stays inline-block: it is the positioning context for the arrow, whose
+    # 50% centring must resolve against this box.
+    layout.type: inline-block
+    layout.position: fixed
+    # MUST stay visible: the arrow sits just outside the box and any clipping
+    # would remove it.
+    layout.overflow: visible
+    appearance.background: [surface.color.background, color.background]
+    typography.color: [surface.color.text, color.text]
+    # The border reuses the background colour, so the arrow built from it is
+    # coloured correctly too.
+    appearance.border.color: [surface.color.background, color.background]
+    appearance.border.style: solid
+    appearance.border.width: 0
+    appearance.radius: 0
+    # Figma asks for text-secondary (14px / 20px). The reference reads
+    # --font-size-small and --line-height-small, which no symbol declares, so
+    # what is left of each chain is its own literal.
+    typography.size: 14px
+    typography.lineHeight: 20px
+    # The weight reads --font-weight-default with no literal fallback and no
+    # symbol declares it, so the binding is dropped.
+    typography.align: left
+    typography.decoration: initial
+    interaction.pointerEvents: auto
+    size.max.width: 284px
+    spacing.external.block.end: 0
+    spacing.external.inline.end: 0
+    spacing.internal.inline.start: dimension.200  # --tooltip-padding-horizontal, a surface inset
+    spacing.internal.inline.end: dimension.200    # --tooltip-padding-horizontal, a surface inset
+    spacing.internal.block.start: dimension.100   # --tooltip-padding-vertical
+    spacing.internal.block.end: dimension.100     # --tooltip-padding-vertical
+    # Closed by default; `aria-hidden="false"` opens it. That is a display
+    # difference, not one of the five interaction states, so it carries no
+    # @state marker here.
+    appearance.opacity: 0
+    appearance.visibility: hidden
+    motion.property: "opacity, visibility"
+    # --tooltip-motion-duration is a component-local 0.1s literal.
+    motion.duration: 0.1s
+    motion.easing: ease-in-out
+  edges:
+    - node:
+        role: content row
+        styles:
+          layout.type: flex
+          layout.align: flex-start
+          spacing.gap: dimension.100   # --tooltip-gap, between a leading icon and the text
+        edges:
+          - node:
+              role: icon
+              styles:
+                layout.type: inline-flex
+                layout.align: center
+                layout.justify: center
+                layout.flex.grow: 0
+                layout.flex.shrink: 0
+                layout.flex.basis: auto
+                size.inline: dimension.200
+                # The box is one text line tall; the reference reads
+                # --tooltip-line-height, whose chain ends in its own literal.
+                size.block: 20px
+            relation:
+              cardinality: "0..1"
+              slotName: icon
+          - node:
+              role: text
+              styles:
+                # Wraps at max-width while honouring explicit newlines.
+                typography.whiteSpace: pre-wrap
+            relation:
+              cardinality: "1"
+              slotName: default
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        # drawn as ::before
+        role: arrow
+        styles:
+          layout.position: absolute
+          # A CSS border triangle drawn on the pointing side, so it has no box
+          # of its own. Which side carries the depth follows the placement class
+          # (.top/.bottom/.left/.right); the edge and centring offsets are
+          # calc()s over the arrow geometry, so none of them is bound.
+          size.width: 0
+          size.height: 0
+          # 8px deep (dimension-100); the 14px base across the edge is two
+          # transparent half-width side borders computed from dimension.175,
+          # which no single roster key carries.
+          appearance.border.top.width: dimension.100
+          appearance.border.style: solid
+          appearance.border.color: [surface.color.background, color.background]
+      relation:
+        # The component draws the arrow; no caller fills it, so it carries no
+        # slot name.
+        cardinality: "1"

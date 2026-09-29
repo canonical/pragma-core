@@ -1,0 +1,25 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_anbox.pattern.side_menu a ds:Pattern;
+    ds:name "SideMenu";
+    ds:summary "A left-hand side menu that is open by default but can also be closed via a button. Can contain multiple other children.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "## When to use\n\nUse the side menu when you want to give users the ability to close it and increase the amount of screen width available.\n\n## When not to use\n\nAvoid using the side menu when its children would be pretty small in width e.g: only icons and you don’t need to give users the ability to collapse the menu.";
+    ds:guidelines "";
+    ds:tier ds:apps_anbox;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The elements to render inside the menu";
+        ds:propertyType "element";
+        ds:optional "false"
+    ];
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-02-04T00:00:00.000+01:00";
+        ds:change "Initial draft";
+        ds:changeType "change"
+    ].

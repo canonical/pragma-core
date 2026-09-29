@@ -1,0 +1,106 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.expandable_radio_group a ds:Component;
+    ds:name "Expandable Radio Group";
+    ds:summary "Expandable Radio Group is a Formik-bound renderer for a typed, mutually exclusive option list. Each option composes a Canonical RadioInput with optional persistent help, an optional `onSelect` effect, and an `expansion` slot mounted inside shared Indent layout only while that option’s value loosely equals the current Formik value.\n\nIt is useful as a Landscape composition primitive, but it is not currently a complete accessible radio-group abstraction: its optional visual label is a styled paragraph and the source adds no `fieldset`, `legend`, `role=\"radiogroup\"`, or label association.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.expandable_radio_group\n  edges:\n    - node:\n        semantic: p\n        role: group label\n        relation:\n          cardinality: \"1\"\n    - node:\n        role: options container\n        edges:\n          - node:\n              role: radio option block\n              edges:\n                - node:\n                    uri: global.component.radio\n                    relation:\n                      cardinality: \"1\"\n                - node:\n                    semantic: p\n                    role: option help\n                    styles:\n                      typography.color: $colors--theme--text-muted\n                      spacing.margin.left: $sp-x-large\n                    relation:\n                      cardinality: \"0..1\"\n                      condition: option help is truthy\n                - node:\n                    uri: ds:apps_landscape.layout.indent\n                    role: option expansion\n                    relation:\n                      cardinality: \"0..1\"\n                      slotName: expansion\n                      condition: option value loosely equals the Formik field value\n              relation:\n                cardinality: \"0..*\"\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=17-23&t=iG2ObZ6Q1XG2A2MB-4\n\nTable 20\n\n";
+    ds:usage "### When to use\n\n**Mutually exclusive modes**\n\nUse when exactly one choice applies and some choices require additional configuration.\n\n**Choice-specific explanation**\n\nUse when options need short help text or an asynchronous side effect after selection.\n\n**Choice-specific controls**\n\nUse when a selected mode reveals a small amount of subordinate content that belongs directly beneath that option.\n\n### When not to use\n\n**Independent selections**\n\nMultiple options that may be selected simultaneously.\n\n**Incorrect pattern**: Using this component when users need to select checkboxes or multiple independent items.\n\n**Remediation strategy**: Use a checkbox group instead for independent multi-select scenarios.\n\n**Large option set**\n\nMany choices or complex nested forms that require navigation or filtering.\n\n**Incorrect pattern**: Rendering dozens of radio options vertically or attempting complex nested form structures.\n\n**Remediation strategy**: Use a select dropdown or separate workflow/modal for extensive option lists.\n\n**Accessible group semantics without a wrapper**\n\nA radio set that needs a programmatic group label but cannot be wrapped.\n\n**Incorrect pattern**: Rendering the radio group bare without providing proper fieldset, legend, or ARIA group semantics.\n\n**Remediation strategy**: Either wrap the component with proper ARIA grouping, or choose a different abstraction that includes complete group semantics.\n\n**Independent or unbound state**\n\nChoices that are not owned by a Formik context or that need independent state management.\n\n**Incorrect pattern**: Using this component for non-Formik state or for checkbox-like independent selections.\n\n**Remediation strategy**: Either integrate with a Formik form context, or use a simpler controlled component pattern for independent state.";
+    ds:guidelines "### Accessibility\n\n- The current source lacks a native fieldset/legend and an ARIA radiogroup/name. The styled paragraph is not a programmatic group label; upstream work should correct this rather than documenting it as complete.\n- Option help is visually indented but is not associated with its radio through `aria-describedby`.\n- Revealed content follows its option in DOM order, but indentation alone must not be the only ownership cue.\n- Do not use indentation alone to communicate which option owns conditional content.\n\n### Content\n\n- Write parallel option labels and use help text for consequences rather than repeating the label.\n- Keep expansions narrowly scoped to information required by their selected mode.\n- The component supplies no default user-facing strings. Localize `label`, each inherited RadioInput label, help, and expansion content at the call site.\n\n### Internationalization\n\n- Allow group and option copy to wrap. The local styles set spacing and muted colour but no truncation.\n- Keep typed option values stable and locale-independent.\n\n### Keyboard navigation\n\n- The wrapper defines no keyboard handlers. Radio keyboard behavior comes from Canonical RadioInput/native inputs.\n- The selected expansion follows the option in Tab order. Selection does not move focus into it, and rejected `setFieldValue`/`onSelect` promises have no local recovery behavior.\n\n### Device and layout\n\n- Options and expansions use block DOM order. Help receives a fixed `$sp-x-large` left margin, and expansion indentation comes from the separate Indent component.\n- The source has no component-specific media/container query. Check fixed indentation with long translations and narrow side panels.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "field ";
+        ds:summary "Formik field name read and updated by every option. ";
+        ds:propertyType "text";
+        ds:defaultValue "— ";
+        ds:constraints "Must be a valid key in the Formik context's values object. "
+    ], [
+        a ds:Property;
+        ds:name "formik ";
+        ds:summary "Supplies current values, getFieldProps, and setFieldValue. ";
+        ds:propertyType "object";
+        ds:defaultValue "— ";
+        ds:constraints "Exact TypeScript type: FormikContextType<TFormik>, where TFormik extends Record<TField, TValue> and contains the named field with compatible values. "
+    ], [
+        a ds:Property;
+        ds:name "inputs ";
+        ds:summary "Ordered option descriptors. ";
+        ds:propertyType "node";
+        ds:defaultValue "[]";
+        ds:constraints "Exact TypeScript type: (Omit<ComponentProps<typeof RadioInput>, \"checked\" | \"key\" | \"onChange\" | keyof ReturnType<FormikContextType<TFormik>[\"getFieldProps\"]>> & { value: TValue; key: Key; expansion?: ReactNode; help?: ReactNode; onSelect?: () => Promise<void> | void; })[]. Empty or omitted input renders no radios. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "label ";
+        ds:summary "Content rendered in the visual label paragraph. ";
+        ds:propertyType "node";
+        ds:defaultValue "— ";
+        ds:constraints "Does not programmatically label the radios. The paragraph still renders when omitted. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "labelHeading ";
+        ds:summary "Declared group flag. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "— ";
+        ds:constraints "Currently unused; changes neither markup nor classes. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "sideByside ";
+        ds:summary "Declared group flag with this exact spelling. ";
+        ds:propertyType "boolean";
+        ds:defaultValue "— ";
+        ds:constraints "Currently unused; options always use the same vertical DOM structure. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "inputs[].key ";
+        ds:summary "React identity for the option block. ";
+        ds:propertyType "text";
+        ds:defaultValue "— ";
+        ds:constraints "Exact TypeScript type: Key. Must be unique and stable; not forwarded to RadioInput. "
+    ], [
+        a ds:Property;
+        ds:name "inputs[].value ";
+        ds:summary "Value compared with the current field and written on selection. ";
+        ds:propertyType "text";
+        ds:defaultValue "— ";
+        ds:constraints "Exact TypeScript type: TValue. Checked state uses loose ==, so coercible values can collide. "
+    ], [
+        a ds:Property;
+        ds:name "inputs[].RadioInput props ";
+        ds:summary "Supplies the visible label and other supported Canonical radio configuration. ";
+        ds:propertyType "object";
+        ds:defaultValue "Canonical RadioInput defaults ";
+        ds:constraints "Exact TypeScript type: Omit<ComponentProps<typeof RadioInput>, \"checked\" | \"key\" | \"onChange\" | keyof ReturnType<FormikContextType<TFormik>[\"getFieldProps\"]>>. Consumers may supply any supported subset. Local Formik bindings and local checked and onChange cannot be overridden. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "inputs[].help ";
+        ds:summary "Renders persistent small muted text below the radio. ";
+        ds:propertyType "node";
+        ds:defaultValue "— ";
+        ds:constraints "No generated id or aria-describedby is added. Falsy values render nothing. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "inputs[].expansion ";
+        ds:summary "Composition slot rendered inside Indent for the selected option. ";
+        ds:propertyType "node";
+        ds:defaultValue "— ";
+        ds:constraints "Mounted only while selected; local state inside it is lost when another option is selected. ";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "inputs[].onSelect ";
+        ds:summary "Runs after setFieldValue resolves. ";
+        ds:propertyType "callback";
+        ds:defaultValue "— ";
+        ds:constraints "Exact TypeScript type: () => Promise<void> | void. The async change handler awaits it; errors are not caught locally. ";
+        ds:optional "true"
+    ].

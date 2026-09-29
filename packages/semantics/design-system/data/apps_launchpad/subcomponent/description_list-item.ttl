@@ -1,0 +1,26 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.description_list-item a ds:Subcomponent;
+    ds:name "DescriptionList.Item";
+    ds:summary "The **DescriptionList Item** is a subcomponent of the DescriptionList that represents a key-value pair.\n\n**Main Use Cases:**\n\n- **Metadata:** Display metadata about an object.\n- **Definitions:** Provide definitions for a list of terms.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.subcomponent.description-list.item\n  styles:\n    layout.display: flex\n    layout.direction: vertical\n    spacing.gap: spacing/block/extra-small\n  edges:\n    - node:\n        role: term\n        styles:\n          typography.size: typography/paragraph/small/strong\n          typography.color: color/text/muted\n      relation:\n        cardinality: \"1\"\n        slotName: name\n    - node:\n        role: separator\n        styles:\n          appearance.background: color/border/low-contrast\n          size.height: 1px\n      relation:\n        cardinality: \"0..1\"\n    - node:\n        role: description\n        styles:\n          typography.size: typography/paragraph/small\n          typography.color: color/text/default\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "The DescriptionList Item is composed of a main container, a term, an optional separator, and a description.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the item.\n2. **Term:** The key or the term to be described.\n3. **Separator:** An optional separator between the term and the description.\n4. **Description:** The value or the description of the term.";
+    ds:usage "### 1. General Description\n\nThe DescriptionList Item is used to display a single item in a DescriptionList. It provides a clear and consistent way to present key-value pairs.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **DescriptionList:** Use as a direct child of a DescriptionList component.\n\n2.2 When Not to Use\n\n- **Standalone:** Do not use as a standalone component.";
+    ds:guidelines "### Content Specification\n\n- **Terms:** Use short and descriptive terms.\n- **Descriptions:** Keep the descriptions concise and to the point.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "term";
+        ds:summary "The term to be described.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The description of the term. ";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:apps_launchpad.component.description_list.

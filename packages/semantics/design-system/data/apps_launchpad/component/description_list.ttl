@@ -1,0 +1,20 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.description_list a ds:Component;
+    ds:name "DescriptionList";
+    ds:summary "The **DescriptionList** component is used to display a list of key-value pairs.\n\n**Main Use Cases:**\n\n- **Metadata:** Display metadata about an object.\n- **Definitions:** Provide definitions for a list of terms.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.description-list\n  styles:\n    layout.display: grid\n    spacing.row-gap: spacing/block/extra-small\n    spacing.column-gap: spacing/inline/extra-small\n  edges:\n    - node:\n        uri: app-launchpad.subcomponent.description-list.item\n      relation:\n        cardinality: \"0..*\"\n        slotName: default";
+    ds:anatomyClassic "The DescriptionList is composed of a main container that holds a list of DescriptionList Items.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the list.\n2. **DescriptionList Item:** A single key-value pair in the list.\n\nhttps://www.figma.com/design/zLPPWH90vDkSUaTnYC0em0/Launchpad-components--new-?node-id=7685-2577&m=dev";
+    ds:usage "### 1. General Description\n\nThe DescriptionList is used to display a list of items and their descriptions. It is a flexible component that can be used in a variety of situations.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Key-value pairs:** Use when you need to display a list of key-value pairs.\n- **Metadata:** Use to display metadata about an object.\n\n2.2 When Not to Use\n\n- **Simple lists:** Do not use for a simple list of items. Use a regular list instead.";
+    ds:guidelines "### Accessibility\n\n- **Semantic HTML:** Use the `<dl>`, `<dt>`, and `<dd>` elements to create a semantic description list.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The list of DescriptionList Items.";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.description_list-item.

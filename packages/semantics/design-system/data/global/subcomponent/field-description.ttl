@@ -1,0 +1,22 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.field-description a ds:Subcomponent;
+    ds:name "Field.Description";
+    ds:summary "The supporting-guidance part of a form field, consumed by Field: short helper text shown between the label and the input to clarify what is expected. Not used independently.";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global-form\n# src/lib/subcomponent/Field/Description/styles.css on .ds.field-description,\n# with the tokens it reads from src/index.css.\nnode:\n  uri: global.subcomponent.field-description\n  styles:\n    # --form-description-color is color.text.muted: the description is\n    # subordinate supporting text.\n    typography.color: color.text.muted\n    # No type binding: the rule sets only `color` and `padding-inline`. Design\n    # review put the description on the SECONDARY ramp and index.css declares\n    # --form-description-font-size for it, but nothing in the package consumes\n    # that variable — the description is a <p> carrying the `.p` class, so its\n    # type comes from the baseline typography engine, not from this rule.\n    # Aligned to the field edge like the label, not to the input's inner\n    # padding: padding-inline reads --form-label-padding-inline, undeclared,\n    # falling back to 0.\n    spacing.internal.inline.start: 0\n    spacing.internal.inline.end: 0\n  edges:\n    - node:\n        role: description text\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "";
+    ds:usage "The supporting chrome part a field composes to guide, hint, or constrain the value it collects.\n\n\n\n### When to use\n\n- A field needs format guidance, examples, or constraints beyond its name.\n\n- Helper text should sit with the input to reduce errors before entry.\n\n\n\n### When not to use\n\n- The text names the field rather than explaining it — compose **Field.Label**.\n\n- The message reports a validation outcome tied to entry state — use the field's status messaging, not this chrome.";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-description;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ].

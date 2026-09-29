@@ -1,0 +1,172 @@
+---
+# TODO implementation: no reference in @canonical/lit-ds-prototype
+# No subcomponent subject exists in this tier, so the header, grid and card parts
+# are roles rather than the retired vanilla.* uris.
+node:
+  uri: sites_webcomponentsprototype.pattern.blog_section
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    size.width: fill
+    # dropped spacing.padding.vertical: spacing/xx-large and
+    # spacing.padding.horizontal: spacing/large — no spacing symbol corresponds
+    appearance.background: color.background   # was color/surface/section
+  edges:
+    - node:
+        role: blog section inner container
+        styles:
+          layout.type: flex   # was stack
+          layout.direction: column   # was vertical
+          # dropped spacing.gap: spacing/x-large — no spacing symbol corresponds
+          # dropped size.max.width: size/container/max — no dimension symbol corresponds
+          spacing.external.inline.start: auto
+          spacing.external.inline.end: auto
+          size.width: fill
+        edges:
+          - node:
+              role: section header
+              styles:
+                layout.type: flex   # was flow
+                layout.direction: row   # was horizontal
+                layout.justify: space-between
+                layout.align: baseline
+                layout.wrap: wrap
+                # dropped spacing.gap: spacing/medium — no spacing symbol corresponds
+                size.width: fill
+              edges:
+                - node:
+                    role: section title
+                    styles:
+                      typography.font: typography.heading.2   # was typography.size: font/size/heading/2
+                      typography.weight: typography.weight.bold   # was font/weight/bold
+                      typography.color: color.text   # was color/text/default
+                  relation:
+                    cardinality: "1"
+                    slotName: title
+                - node:
+                    role: view all link
+                    styles:
+                      # dropped typography.size: font/size/medium — no dimension symbol corresponds
+                      typography.color: color.text.link   # was color/text/link
+                      typography.decoration: none
+                      interaction.cursor: pointer
+                  relation:
+                    cardinality: "0..1"
+                    slotName: link
+            relation:
+              cardinality: "1"
+              slotName: header
+          - node:
+              role: card grid
+              styles:
+                layout.type: grid
+                layout.direction: row   # was horizontal
+                layout.wrap: wrap
+                layout.align: stretch   # was layout.align-items: stretch
+                # dropped spacing.gap: spacing/large — no spacing symbol corresponds
+                size.width: fill
+              edges:
+                - node:
+                    role: blog card
+                    styles:
+                      layout.type: flex   # was stack
+                      layout.direction: column   # was vertical
+                      layout.flex.grow: 1
+                      # dropped size.min.width: size/blog-card/min — no dimension symbol corresponds
+                      size.height: fill
+                      appearance.background: color.background   # was color/surface/card
+                      appearance.radius: dimension.radius.medium   # was shape/rounded/medium
+                      # dropped appearance.shadow: shadow/card? — box-shadow has no roster key
+                      layout.overflow: hidden
+                    edges:
+                      - node:
+                          role: card image
+                          styles:
+                            layout.type: block
+                            size.width: fill
+                            # dropped size.height: size/blog-card/image — no dimension symbol corresponds
+                            layout.objectFit: cover
+                            layout.flex.shrink: 0
+                        relation:
+                          cardinality: "0..1"
+                          slotName: image
+                      - node:
+                          role: card body
+                          styles:
+                            layout.type: flex   # was stack
+                            layout.direction: column   # was vertical
+                            layout.flex.grow: 1
+                            # dropped spacing.internal: spacing/medium and
+                            # spacing.gap: spacing/small — no spacing symbol corresponds
+                          edges:
+                            - node:
+                                role: card meta
+                                styles:
+                                  layout.type: flex   # was flow
+                                  layout.direction: row   # was horizontal
+                                  layout.wrap: wrap
+                                  layout.align: center
+                                  # dropped spacing.gap: spacing/small — no spacing symbol corresponds
+                                edges:
+                                  - node:
+                                      role: topic label
+                                      styles:
+                                        # dropped typography.size: font/size/small — no dimension symbol corresponds
+                                        typography.weight: typography.weight.bold   # was font/weight/bold
+                                        typography.color: color.text.link   # was color/text/link
+                                        # dropped typography.transform: uppercase — the roster has no text-transform key
+                                        typography.letterSpacing: dimension.letterSpacing.wide   # was typography/letter-spacing/wide
+                                    relation:
+                                      cardinality: "0..1"
+                                  - node:
+                                      role: publish date
+                                      styles:
+                                        typography.color: color.text.muted   # was color/text/muted
+                                    relation:
+                                      cardinality: "0..1"
+                                  - node:
+                                      role: author name
+                                      styles:
+                                        typography.color: color.text.muted   # was color/text/muted
+                                    relation:
+                                      cardinality: "0..1"
+                              relation:
+                                cardinality: "0..1"
+                                slotName: meta
+                            - node:
+                                role: post title
+                                styles:
+                                  typography.font: typography.heading.4   # was typography.size: font/size/heading/4
+                                  typography.weight: typography.weight.bold   # was font/weight/bold
+                                  typography.color: color.text   # was color/text/default
+                              relation:
+                                cardinality: "1"
+                                slotName: title
+                            - node:
+                                role: post excerpt
+                                styles:
+                                  typography.color: color.text.muted   # was color/text/muted
+                                  layout.flex.grow: 1
+                              relation:
+                                cardinality: "0..1"
+                                slotName: excerpt
+                            - node:
+                                role: read more link
+                                styles:
+                                  typography.color: color.text.link   # was color/text/link
+                                  typography.decoration: none
+                                  interaction.cursor: pointer
+                                  spacing.external.top: auto
+                              relation:
+                                cardinality: "0..1"
+                                slotName: link
+                        relation:
+                          cardinality: "1"
+                          slotName: body
+                  relation:
+                    cardinality: "1..*"
+            relation:
+              cardinality: "1"
+              slotName: grid
+      relation:
+        cardinality: "1"

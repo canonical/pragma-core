@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.drag_and_drop_list a ds:Component;
+    ds:name "DragAndDropList";
+    ds:summary "The DragAndDropList component enables users to reorder items within a single-dimensional list through direct pointer, keyboard or touch interaction. Its primary purpose is to allow sequence manipulation via multiple different methods.\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "Prototype: [https://seam-brisk-06774316.figma.site/](https://seam-brisk-06774316.figma.site/)";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition.

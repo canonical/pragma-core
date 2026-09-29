@@ -1,0 +1,105 @@
+---
+# TODO implementation: no reference in @canonical/lit-ds-prototype
+# The notation described ONE card under a plural block name, and no subcomponent
+# subject exists in this tier, so every part below is a role. The sites tier does
+# declare ds:sites.component.blog_card for a single card — whether this block
+# should reference it instead is a structural question for its owner.
+node:
+  uri: sites_webcomponentsprototype.component.blog_cards
+  styles:
+    layout.type: flex   # was stack
+    layout.direction: column   # was vertical
+    size.height: fill
+    appearance.background: color.background   # was color/surface/card
+    appearance.radius: dimension.radius.medium   # was shape/rounded/medium
+    # dropped appearance.shadow: shadow/card? — box-shadow has no roster key
+    layout.overflow: hidden
+  edges:
+    - node:
+        role: card image
+        styles:
+          layout.type: block
+          size.width: fill
+          # dropped size.height: size/blog-card/image — no dimension symbol corresponds
+          layout.objectFit: cover
+          layout.flex.shrink: 0
+      relation:
+        cardinality: "0..1"
+        slotName: image
+    - node:
+        role: card body
+        styles:
+          layout.type: flex   # was stack
+          layout.direction: column   # was vertical
+          layout.flex.grow: 1
+          # dropped spacing.internal: spacing/medium and spacing.gap: spacing/small
+          # — no spacing symbol corresponds
+        edges:
+          - node:
+              role: card meta
+              styles:
+                layout.type: flex   # was flow
+                layout.direction: row   # was horizontal
+                layout.wrap: wrap
+                layout.align: center
+                # dropped spacing.gap: spacing/small — no spacing symbol corresponds
+              edges:
+                - node:
+                    role: topic label
+                    styles:
+                      # dropped typography.size: font/size/small — no dimension symbol corresponds
+                      typography.weight: typography.weight.bold   # was font/weight/bold
+                      typography.color: color.text.link   # was color/text/link
+                      # dropped typography.transform: uppercase — the roster has no text-transform key
+                      typography.letterSpacing: dimension.letterSpacing.wide   # was typography/letter-spacing/wide
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    role: publish date
+                    styles:
+                      # dropped typography.size: font/size/small — no dimension symbol corresponds
+                      typography.color: color.text.muted   # was color/text/muted
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    role: author name
+                    styles:
+                      # dropped typography.size: font/size/small — no dimension symbol corresponds
+                      typography.color: color.text.muted   # was color/text/muted
+                  relation:
+                    cardinality: "0..1"
+            relation:
+              cardinality: "0..1"
+              slotName: meta
+          - node:
+              role: post title
+              styles:
+                typography.font: typography.heading.4   # was typography.size: font/size/heading/4
+                typography.weight: typography.weight.bold   # was font/weight/bold
+                typography.color: color.text   # was color/text/default
+            relation:
+              cardinality: "1"
+              slotName: title
+          - node:
+              role: post excerpt
+              styles:
+                # dropped typography.size: font/size/medium — no dimension symbol corresponds
+                typography.color: color.text.muted   # was color/text/muted
+                layout.flex.grow: 1
+            relation:
+              cardinality: "0..1"
+              slotName: excerpt
+          - node:
+              role: read more link
+              styles:
+                # dropped typography.size: font/size/medium — no dimension symbol corresponds
+                typography.color: color.text.link   # was color/text/link
+                typography.decoration: none
+                interaction.cursor: pointer
+                spacing.external.top: auto
+            relation:
+              cardinality: "0..1"
+              slotName: link
+      relation:
+        cardinality: "1"
+        slotName: body

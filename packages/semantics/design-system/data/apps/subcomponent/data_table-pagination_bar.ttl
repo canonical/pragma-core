@@ -1,0 +1,46 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.data_table-pagination_bar a ds:Subcomponent;
+    ds:name "DataTable.PaginationBar";
+    ds:summary "The pagination bar is the navigation bar anchored to the bottom of the table that lets users move between pages of data. The data table supports two pagination variants, offset and keyset, chosen based on the backend's pagination model. Both variants share a common pagination bar but differ in the controls and information they expose.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3340-6556&t=8RN2Hpk8UX3gMX3u-4\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4571-81816&t=2fO23I8WsyT0YVJ1-4";
+    ds:usage "Pagination splits a large dataset into discrete pages, loading and displaying only a subset of rows at a time. This reduces initial load time, keeps the interface responsive, and prevents the browser from rendering thousands of rows at once. Without pagination, the table loads the entire dataset upfront, which works for small, static datasets but becomes a performance and usability problem as the row count grows.\n\nThe decision to paginate depends on both the size of the dataset and how users interact with it. If users need to see all items at a glance or rely on browser search to find specific rows, pagination can get in the way. If the dataset is large, dynamic, or backend-driven, pagination is almost always the right choice.\n\n## When to use\n\n- The dataset contains more than a few dozen rows.\n- Data is fetched from a backend and loading all items at once would be slow or impractical.\n- Users work through data page by page rather than needing a complete view of all items simultaneously.\n- Users benefit from stable page positions as a reference point. Pagination gives users a sense of location within the dataset, making it easier to return to a previously seen item or communicate its position to others (for example, “it’s on page 3”).\n- The table supports sorting, filtering, or grouping that triggers new data fetches.\n\n## When not to use\n\n- The dataset is small and static, such as a configuration table with fewer than 20 rows.\n- Users need to see all items at once to compare or scan across the full set.\n- The table is used for display only and the full dataset is already available on the frontend.\n\n## Offset vs. keyset pagination\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3486-76133&t=2PBanDq6QA2yNcI2-4\n\nOffset pagination is for backends that support offset-based pagination. It provides full random-access navigation across pages.\n\nKeyset pagination is for backends that support keyset-based pagination. Because the backend cannot report a total item count or support arbitrary page jumps, the UI adapts accordingly.\n\n## Page-size options\n\nThe default page-size options are **50, 75, 100**. The designer can change these when the context demands different amounts. For example, a table displaying log entries or audit events may benefit from larger page sizes (such as 100, 250, 500) because users typically scan many rows quickly. A table displaying detailed records where each row requires careful reading may work better with smaller page sizes (such as 10, 25, 50) to avoid overwhelming the user.\n\n## Positioning\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3486-76173&t=2PBanDq6QA2yNcI2-4\n\nThe pagination bar is **sticky** and always visible at the bottom of the table container, even when the table body is scrolled. This makes sure users can navigate between pages without scrolling to the bottom of the table first. On dedicated table pages, the pagination bar sits at the bottom of the page.\n\n**Border treatment** varies with scroll state:\n\n- **1px border** when there are no items scrolled underneath (content does not overflow).\n- **2px border** when there are items below the visible area (content overflows).\n\nWhen **multiple tables** appear on the same page, each table gets its own pagination bar that hugs the table’s content directly, rather than being pushed to the bottom of the page.";
+    ds:guidelines "# Interactions\n\n## Page selector\n\nThe page selector allows the user to jump directly to a specific page without stepping through pages one at a time. It is a **browser-native dropdown** rather than a free-text input field. This avoids the need for input validation and error states inside a pagination bar, which are difficult to handle well. A dropdown restricts the user to valid inputs only. When the dropdown is focused, the user can still type a number and the dropdown selects the matching entry.\n\n## Navigation buttons\n\nIn offset pagination, four buttons are provided:\n\n- Jump to **first page** (double left arrow)\n- Go **one page back** (single left arrow)\n- Go **one page forward** (single right arrow)\n- Jump to **last page** (double right arrow)\n\nIn keyset pagination, only the previous and next buttons are shown.\n\nWhen an action is not possible, for example the previous-page button when the user is already on the first page, the button is **disabled**.\n\n## Keyset item count tooltip\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=3486-76134&t=2PBanDq6QA2yNcI2-4\n\nA **tooltip** is available on hover over the item count summary in keyset pagination. It explains why no definite total can be given. This addresses potential user confusion about the “more than X items” messaging by clarifying that keyset pagination does not provide a total count.\n\n";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "pagination-mode";
+        ds:summary "The pagination strategy. Offset provides random-access page navigation with a page selector, jump-to-first, and jump-to-last buttons. Keyset supports forward and back navigation only and displays an approximate item count.";
+        ds:propertyType "choice";
+        ds:defaultValue "offset";
+        ds:constraints "Inherited from the data table. Keyset pagination is incompatible with grouping and sorting.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "page-size-options";
+        ds:summary "The set of page sizes available in the page-size selector dropdown. The first value in the list is used as the default page size.";
+        ds:propertyType "list of text";
+        ds:defaultValue "50, 75, 100";
+        ds:constraints "Inherited from the data table. Each value must be a positive integer.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "item-label";
+        ds:summary "A context-specific noun used in the item amount label and the item count summary in place of \"Items\" (for example, \"Machines\" or \"Orders\").";
+        ds:propertyType "text";
+        ds:defaultValue "Items";
+        ds:constraints "Inherited from the data table.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "item-count-display";
+        ds:summary "How the total item count is shown. Offset pagination displays an exact total (for example, \"out of 942 items\"). Keyset pagination displays an approximate total (for example, \"of more than 150 items\") because the backend cannot report a definitive count. A tooltip on the keyset item count explains why no exact total is available.";
+        ds:propertyType "choice";
+        ds:defaultValue "Determined by pagination-mode.";
+        ds:optional "true"
+    ];
+    ds:parentComponent ds:apps.pattern.datatable.

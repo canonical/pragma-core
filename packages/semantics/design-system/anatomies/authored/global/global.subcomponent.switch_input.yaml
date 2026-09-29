@@ -1,0 +1,67 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form
+# src/lib/subcomponent/SwitchInput/styles.css on .ds.form-switch and its ::before
+# knob. A checkbox with role="switch" styled as a sliding pill: the track is the
+# <input> box, the knob is a pseudo-element that slides from one end to the
+# other.
+node:
+  uri: global.subcomponent.switch_input
+  styles:
+    appearance.native: none
+    layout.boxSizing: border-box
+    layout.position: relative
+    # margin-inline reads --form-label-padding-inline, undeclared, falling back
+    # to 0: the control aligns to the field edge like the label.
+    spacing.external.inline.start: 0
+    spacing.external.inline.end: 0
+    # A 32x16 track: fixed element sizes, deliberately NOT baseline multiples.
+    # The track carries no border, so width and height are the exact track box
+    # and the absolutely-positioned knob is measured against the same box.
+    size.width: dimension.400
+    size.height: dimension.200
+    appearance.radius: dimension.radius.full
+    # The unselected track prefers --surface-color-foreground-switch-unselected,
+    # which no stratum declares (the surface family mints the switch knob channel
+    # alone), so only the flat token is written.
+    appearance.background: color.foreground.switch.unselected
+    # Selected, the track reads --surface-color-foreground-switch-selected first,
+    # which no stratum declares (the surface family mints the knob channel only).
+    appearance.background@selected: color.foreground.switch.selected
+    appearance.background@disabled: color.foreground.switch.unselected.disabled
+    appearance.outline.style@focus: none
+    interaction.cursor: pointer
+    interaction.cursor@disabled: not-allowed
+    motion.property: background-color
+    # Not bound, and why:
+    # - the transition duration reads --motion-duration-fast, undeclared;
+    # - the focus ring is a box-shadow at color.focusRing, which no roster key
+    #   takes;
+    # - hover shifts only the track, from --hover--color-foreground-switch-
+    #   unselected / -selected: computed state variables that are not symbols,
+    #   and nothing in either chain resolves;
+    # - a disabled selected track takes color.foreground.switch.selected.disabled,
+    #   which needs a compound state.
+  edges:
+    - node:
+        # drawn as ::before
+        role: knob
+        styles:
+          layout.position: absolute
+          # Inset 1px from the track edges (--switch-knob-inset, a literal the
+          # component writes). The knob's own size is a calc() over the track
+          # height and that inset, so it is not bound.
+          # The start inset is written logically (inset-inline-start); the roster's
+          # logical offset key takes a token only, so the literal goes on the
+          # physical key.
+          layout.offset.top: 1px
+          layout.offset.bottom: 1px
+          layout.offset.left: 1px
+          appearance.radius: dimension.radius.full
+          appearance.background: [surface.color.foreground.switch.knob, color.foreground.switch.knob]
+          appearance.background@disabled: color.foreground.switch.knob.disabled
+          # Selected, the knob translates to the far edge by the space left over
+          # after the knob and both insets — a calc(), and `translate` has no
+          # value key of its own.
+          motion.property: translate
+      relation:
+        cardinality: "1"

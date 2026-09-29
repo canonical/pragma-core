@@ -1,0 +1,23 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# The retired root was `global.component.copy-button`, which names no subject; the
+# block's own uri is used instead. The retired file also carried `edges:` on the one
+# edge rather than on its node; the subtree is re-parented onto the node.
+node:
+  uri: apps_lxd.subcomponent.copy_to_clipboard
+  edges:
+    - node:
+        role: button wrapper
+        edges:
+          - node:
+              uri: global.component.icon
+            relation:
+              cardinality: "1"
+              slotName: icon
+          - node:
+              role: label text
+            relation:
+              cardinality: "0..1"
+              slotName: label
+      relation:
+        cardinality: "1"

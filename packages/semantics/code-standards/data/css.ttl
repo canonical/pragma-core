@@ -1,0 +1,452 @@
+@prefix cs: <http://pragma.canonical.com/codestandards#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# CSS Category
+cs:css a cs:Category ;
+    rdfs:label "CSS"@en ;
+    rdfs:comment "Standards for CSS technical implementation"@en ;
+    cs:slug "css" .
+
+# CSS Selector Namespace Standard
+cs:css.selectors.namespace a cs:CodeStandard ;
+    rdfs:label "The ds selector namespace"@en ;
+    cs:hasCategory cs:css ;
+    cs:description "All component selectors must be prefixed with the `.ds` namespace (e.g., `.ds.button`)." ;
+    cs:do [
+        cs:description "Prefix all component selectors with `.ds`." ;
+        cs:language "css" ;
+        cs:code """
+/* Component root with namespace */
+.ds.button {
+  /* Base styles */
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Omit the `.ds` namespace from component selectors." ;
+        cs:language "css" ;
+        cs:code """
+/* Bad: Missing .ds namespace */
+.button {
+  /* styles */
+}
+    """
+    ] .
+
+# CSS Component Encapsulation Standard
+cs:css.component.encapsulation a cs:CodeStandard ;
+    rdfs:label "Scope styles to the root class"@en ;
+    cs:hasCategory cs:css ;
+    cs:description "Component styles must be encapsulated using the component's root class as a boundary. All internal element styles must be scoped to the component's namespace." ;
+    cs:do [
+        cs:description "Scope internal element styles using the component's namespace." ;
+        cs:language "css" ;
+        cs:code """
+.ds.button {
+  /* Component root styles */
+  
+  & > .icon {
+    /* Internal element styles */
+    margin-right: var(--button-icon-spacing);
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Don't style internal elements without the component namespace." ;
+        cs:language "css" ;
+        cs:code """
+/* Bad: Internal element not scoped to component */
+.icon {
+  margin-right: var(--button-icon-spacing);
+}
+    """
+    ] .
+
+# CSS State Handling Standard
+cs:css.component.states a cs:CodeStandard ;
+    rdfs:label "State attributes and modifier classes"@en ;
+    cs:hasCategory cs:css ;
+    cs:description "Component states must be handled using attribute selectors for native states and class modifiers for custom states." ;
+    cs:do [
+        cs:description "Use attribute selectors for native element states." ;
+        cs:language "css" ;
+        cs:code """
+.ds.button {
+  &[disabled] {
+    opacity: var(--button-disabled-opacity);
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use class modifiers for native states." ;
+        cs:language "css" ;
+        cs:code """
+/* Bad: Using class for native state */
+.ds.button.disabled {
+  opacity: var(--button-disabled-opacity);
+}
+    """
+    ] .
+
+# CSS Specificity Management Standard
+cs:css.selectors.specificity a cs:CodeStandard ;
+    rdfs:label "Flat selector specificity"@en ;
+    cs:hasCategory cs:css ;
+    cs:description """CSS selectors must follow a strict specificity pattern:
+- Component root must use namespace + component name (.ds.button)
+- Single modifier class for variants (.ds.button.primary)
+- Single attribute for states (.ds.button[disabled])""" ;
+    cs:do [
+        cs:description "Use a single modifier class for component variants." ;
+        cs:language "css" ;
+        cs:code """
+.ds.button.primary {
+  /* Variant: root + modifier (3 classes) */
+  background: var(--button-primary-background);
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Combine multiple modifiers or mix states with variants." ;
+        cs:language "css" ;
+        cs:code """
+/* Bad: Mixing variant with state */
+.ds.button.primary[disabled].large {
+  /* Too specific: root + 2 modifiers + state */
+}
+    """
+    ] .
+
+# CSS Selector Semantics Standard
+cs:css.selectors.semantics a cs:CodeStandard ;
+    rdfs:label "Name classes by purpose, not appearance"@en ;
+    cs:hasCategory cs:css ;
+    cs:description "CSS class names must describe the purpose or state of an element, not its appearance." ;
+    cs:do [
+        cs:description "Use semantic modifier classes to represent component variations." ;
+        cs:language "css" ;
+        cs:code """
+/* Semantic modifier for a primary button */
+.ds.button.primary {
+  --modifier-color: var(--color-primary);
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use non-semantic or presentational class names." ;
+        cs:language "css" ;
+        cs:code """
+/* Bad: 'big' describes appearance, not purpose */
+.ds.button.big {
+  padding: 1rem;
+}
+    """
+    ] .
+
+# Theme Activation Standard
+cs:css.themes.activation a cs:CodeStandard ;
+    rdfs:label "Activate themes with container classes"@en ;
+    cs:hasCategory cs:css ;
+    cs:description """Theme tokens must be activated through CSS classes on container elements. See cs:styling.themes.definition for theme token structure.""" ;
+    cs:do [
+        cs:description "Define semantic tokens within theme classes." ;
+        cs:language "css" ;
+        cs:code """
+.canonical {
+  --spacing-vertical-medium: var(--spacing-unit-2x);
+  --color-background: var(--color-neutral-100);
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Hardcode theme names in component styles." ;
+        cs:language "css" ;
+        cs:code """
+/* Bad: Component locked to specific theme */
+.ds.button {
+  padding: var(--canonical-spacing-vertical-medium);
+}
+    """
+    ] .
+
+# CSS Property Values Standard
+cs:css.properties.values a cs:CodeStandard ;
+    rdfs:label "Design tokens over raw values"@en ;
+    cs:hasCategory cs:css ;
+    cs:description """CSS properties must use design tokens for design decisions (see cs:styling.tokens.creation) and raw values for properties that are independent from design decisions, or "unthemable.""" ;
+    cs:do [
+        cs:description "Use design tokens for design decisions." ;
+        cs:language "css" ;
+        cs:code """
+.ds.button {
+  /* Design decision uses token */
+  background: var(--button-background);
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Use raw values for unthemable properties (independent of design decisions)." ;
+        cs:language "css" ;
+        cs:code """
+.ds.skip-link {
+    visibility: hidden;
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use raw values for design decisions." ;
+        cs:language "css" ;
+        cs:code """
+.ds.button {
+  /* Bad: Design decision using raw value */
+  background: #0066CC;
+}
+    """
+    ] .
+
+# Child Element Naming Standard
+cs:css.selectors.child_elements a cs:CodeStandard ;
+    rdfs:label "Role-based child class names"@en ;
+    cs:hasCategory cs:css ;
+    cs:description """Child elements within components must use simple, role-based class names (e.g., `.header`, `.content`, `.icon`) scoped by the parent selector, NOT verbose prefixed names that repeat the component name.""" ;
+    cs:do [
+        cs:description "Use simple role-based class names scoped by the parent." ;
+        cs:language "css" ;
+        cs:code """
+.ds.accordion-item {
+  & > .header {
+    /* Header styles */
+  }
+
+  & > .header > .chevron {
+    /* Chevron indicator */
+  }
+
+  & > .header > .heading {
+    /* Heading text */
+  }
+
+  & > .content {
+    /* Collapsible content */
+  }
+}
+
+.ds.breadcrumbs-item {
+  & > .link {
+    /* Link styles */
+  }
+
+  & > .separator {
+    /* Separator styles */
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Use verbose prefixed class names that repeat the component name." ;
+        cs:language "css" ;
+        cs:code """
+/* Bad: Redundant component prefix in child class names */
+.ds.accordion-item .accordion-item-header {
+  /* 'accordion-item-' prefix is redundant */
+}
+
+.ds.accordion-item .accordion-item-chevron {
+  /* Already scoped by parent, no need to repeat */
+}
+
+.ds.timeline-event .timeline-event-marker {
+  /* Verbose and BEM-like */
+}
+    """
+    ] .
+
+# Component Naming Convention for CSS
+cs:css.selectors.naming_convention a cs:CodeStandard ;
+    rdfs:label "Kebab-case class names"@en ;
+    cs:hasCategory cs:css ;
+    cs:description "Component CSS class names must be the kebab-case version of the component's PascalCase name." ;
+    cs:do [
+        cs:description """Convert PascalCase component names to kebab-case for CSS classes:
+- `MyComponent` -> `.ds.my-component`
+- `UserProfile` -> `.ds.user-profile`
+- `Button` -> `.ds.button`"""
+    ] ;
+    cs:dont [
+        cs:description """Use PascalCase or other formats in CSS class names:
+- `.ds.MyComponent` (Bad: Not kebab-case)
+- `.ds.user_profile` (Bad: Not kebab-case)"""
+    ] .
+
+cs:css.selectors.has a cs:CodeStandard ;
+    rdfs:label "State styling with :has()"@en ;
+    cs:hasCategory cs:css ;
+  cs:description "Use `:has()` to style a component from descendant or sibling state (checked, empty, invalid, open) without JavaScript-managed classes." ;
+    cs:do [
+        cs:description "Style a field wrapper from the input's native state with no JavaScript class toggling." ;
+        cs:language "css" ;
+        cs:code """
+.field:has(input:user-invalid) { --label-color: var(--ds-color-negative); }
+.field:has(input:focus) { outline: 2px solid var(--ds-color-focus); }
+    """
+    ] ;
+    cs:dont [
+        cs:description "Mirror child state onto a parent class with JavaScript when :has() expresses it directly." ;
+        cs:language "javascript" ;
+        cs:code """
+input.addEventListener('invalid', () => field.classList.add('is-invalid'));
+    """
+    ] .
+
+cs:css.positioning.anchor a cs:CodeStandard ;
+    rdfs:label "CSS anchor positioning for tethered elements"@en ;
+    cs:hasCategory cs:css ;
+  cs:description "Prefer CSS anchor positioning (`anchor-name`, `position-anchor`, `anchor()`, and `position-try`) for tethered elements such as popovers, tooltips, and menus. Start from a resilient baseline and layer anchor positioning; JavaScript positioning libraries may be used as fallback when needed. See cs:ui_blocks.principles.scripting_progressive_enhancement." ;
+    cs:do [
+    cs:description "Start from static positioning and layer anchor positioning." ;
+        cs:language "css" ;
+        cs:code """
+.tooltip { position: absolute; top: 100%; }
+.trigger { anchor-name: --t; }
+.tooltip { top: anchor(--t bottom); }
+    """
+    ] ;
+    cs:dont [
+      cs:description "Default to JavaScript positioning without attempting anchor positioning." ;
+        cs:language "javascript" ;
+        cs:code """
+window.addEventListener('scroll', () => reposition(tooltip, trigger));
+    """
+    ] .
+
+cs:css.media.container_queries a cs:CodeStandard ;
+    rdfs:label "Container queries over ResizeObserver"@en ;
+    cs:hasCategory cs:css ;
+  cs:description "Use container queries (`container-type` and `@container`) for responsive styling based on a containing element's size. Use `ResizeObserver` only when container queries cannot express the condition, such as changes to content-driven rendered height." ;
+    cs:do [
+        cs:description "Use a query container and adapt styles with @container rules." ;
+        cs:language "css" ;
+        cs:code """
+.card-grid {
+  container-type: inline-size;
+}
+
+@container (min-width: 40rem) {
+  .card { grid-template-columns: 1fr 1fr; }
+}
+        """
+    ] ;
+    cs:dont [
+        cs:description "Use ResizeObserver for width-based layout changes that container queries can express." ;
+        cs:language "javascript" ;
+        cs:code """
+const ro = new ResizeObserver(([entry]) => {
+  card.classList.toggle('wide', entry.contentRect.width >= 640);
+});
+ro.observe(card);
+        """
+    ] .
+
+cs:css.media.scripting a cs:CodeStandard ;
+    rdfs:label "Guard hydration flash with scripting"@en ;
+    cs:hasCategory cs:css ;
+    cs:description """Use the `scripting` media feature when hydration gating would cause a FOUC-like "flash of un-javascripted content" on first paint.""" ;
+    cs:do [
+        cs:description "When hydration gating causes first-paint flash, hide JS-only affordances by default and reveal them when scripting is enabled." ;
+        cs:language "css" ;
+        cs:code """
+.menu-button {
+  display: none;
+}
+
+@media (scripting: enabled) {
+  .menu-button { display: inline-flex; }
+}
+        """
+    ] ;
+    cs:dont [
+        cs:description "Allow JS-only affordances to flash on first paint when they are hydration-gated." ;
+        cs:language "html" ;
+        cs:code """
+<button hidden class="menu-button">Menu</button>
+
+<script type="module">
+  document.querySelector('.menu-button').removeAttribute('hidden');
+</script>
+        """
+    ] .
+
+cs:css.animation.scroll_timeline a cs:CodeStandard ;
+    rdfs:label "Scroll-driven animations without JavaScript"@en ;
+    cs:hasCategory cs:css ;
+    cs:description "Use scroll-driven animations (`animation-timeline`, `scroll()`, `view()`) instead of scroll-event-driven animation logic. JavaScript scroll animations may be layered on as fallback when needed. See cs:ui_blocks.principles.scripting_progressive_enhancement." ;
+    cs:do [
+        cs:description "Bind animation progress to scroll with CSS." ;
+        cs:language "css" ;
+        cs:code """
+.progress {
+  animation: fill linear;
+  animation-timeline: scroll(block);
+}
+
+@keyframes fill {
+  from { scale: 0 1; }
+  to { scale: 1 1; }
+}
+        """
+    ] ;
+    cs:dont [
+        cs:description "Drive scroll-linked motion only from JavaScript when scroll-driven CSS can express it." ;
+        cs:language "javascript" ;
+        cs:code """
+window.addEventListener('scroll', () => {
+  progress.style.transform = `scaleX(${window.scrollY / 600})`;
+});
+        """
+    ] .
+
+cs:css.animation.starting_style a cs:CodeStandard ;
+    rdfs:label "Entry transitions with @starting-style"@en ;
+    cs:hasCategory cs:css ;
+  cs:description "Use `@starting-style` for entry transitions when an element is inserted or toggled into view, especially for popovers and dialogs. JavaScript may be layered on as a fallback around the same declarative CSS for unsupported browsers." ;
+    cs:do [
+        cs:description "Define the starting state in CSS for entry transitions." ;
+        cs:language "css" ;
+        cs:code """
+[popover] {
+  opacity: 0;
+  transition: all 0.3s allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+  }
+}
+
+@starting-style {
+  [popover]:popover-open {
+    opacity: 0;
+  }
+}
+        """
+    ] ;
+    cs:dont [
+      cs:description "Drive entry animations only from JavaScript when `@starting-style` can be used." ;
+        cs:language "javascript" ;
+        cs:code """
+const popover = document.querySelector('[popover]');
+popover.addEventListener('toggle', (e) => {
+  if (e.newState === "open") {
+    popover.classList.add('animate-in');
+    popover.classList.remove('animate-out');
+  } else {
+    popover.classList.remove('animate-in');
+    popover.classList.add('animate-out');
+  }
+})
+        """
+    ] .

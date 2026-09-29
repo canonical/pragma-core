@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_debcrafters.component.my_fancy_component a ds:Component;
+    ds:name "MyFancyComponent";
+    ds:summary "MyFancyComponent allows to navigate between different views, and by doing so allows users to perform X or Y …";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps_debcrafters;
+    ds:documentationStage ds:tag.specialadoption-docs.

@@ -1,0 +1,41 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global
+# src/lib/component/Card/common/Header/styles.css on .ds.card-header, with the
+# parent's own child rules in src/lib/component/Card/styles.css
+# (.ds.card > .card-header).
+node:
+  uri: global.subcomponent.card-header
+  styles:
+    layout.type: flex
+    layout.direction: row
+    layout.align: center
+    layout.justify: space-between
+    # The card places each section on a fixed row track and spans its single
+    # column; the header is track 2.
+    layout.grid.row: 2
+    layout.grid.column: "1 / -1"
+    # --card-header-gap and --card-header-padding-{block,inline} are declared in
+    # :root off --dimension-200.
+    spacing.gap: dimension.200                    # --card-header-gap, between title and actions
+    spacing.internal.block.start: dimension.200   # --card-header-padding-block, a surface inset
+    spacing.internal.block.end: dimension.200     # --card-header-padding-block, a surface inset
+    spacing.internal.inline.start: dimension.200  # --card-header-padding-inline, a surface inset
+    spacing.internal.inline.end: dimension.200    # --card-header-padding-inline, a surface inset
+    # The card collapses the header/content seam: with a content section
+    # directly after it, the header's block-end padding drops to a raw 0, which
+    # the parent writes as unthemable by design.
+  edges:
+    # The implementation renders one container with `children`; the two positions
+    # are what `justify-content: space-between` is for, and they carry no styles
+    # of their own there. The title's `font/weight/semibold` binding is dropped:
+    # neither the header nor its children set a font-weight.
+    - node:
+        role: title
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        role: actions
+      relation:
+        cardinality: "0..1"
+        slotName: actions

@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.needsdefinition a ds:Tag;
+    ds:name "needs:definition";
+    ds:category ds:tagcategory.documentation-stage;
+    ds:whenToApply "UIBlock needs summary, usage, anatomy_dsl and anatomy_classic fields filled";
+    ds:whenToRemove "".

@@ -1,0 +1,26 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form
+# src/lib/subcomponent/Field/Description/styles.css on .ds.field-description,
+# with the tokens it reads from src/index.css.
+node:
+  uri: global.subcomponent.field-description
+  styles:
+    # --form-description-color is color.text.muted: the description is
+    # subordinate supporting text.
+    typography.color: color.text.muted
+    # No type binding: the rule sets only `color` and `padding-inline`. Design
+    # review put the description on the SECONDARY ramp and index.css declares
+    # --form-description-font-size for it, but nothing in the package consumes
+    # that variable — the description is a <p> carrying the `.p` class, so its
+    # type comes from the baseline typography engine, not from this rule.
+    # Aligned to the field edge like the label, not to the input's inner
+    # padding: padding-inline reads --form-label-padding-inline, undeclared,
+    # falling back to 0.
+    spacing.internal.inline.start: 0
+    spacing.internal.inline.end: 0
+  edges:
+    - node:
+        role: description text
+      relation:
+        cardinality: "1"
+        slotName: default

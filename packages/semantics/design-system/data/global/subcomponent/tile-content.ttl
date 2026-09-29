@@ -1,0 +1,60 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.subcomponent.tile-content a ds:Subcomponent;
+    ds:name "Tile.Content";
+    ds:summary "Tile content is the primary area within the tile used to surface singular, cohesive data points that provide a high-level snapshot of an object. They ensure that information remains easily digestible within a view.\n\n";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global\n# src/lib/component/Tile/common/Content/styles.css on .ds.tile-content.\nnode:\n  uri: global.subcomponent.tile-content\n  styles:\n    layout.type: flex\n    layout.direction: column\n    # The block padding is deliberately asymmetric so a header above and this\n    # section read as one region, which no single spacing role can say; each key\n    # binds the dimension its variable reads.\n    spacing.gap: dimension.100                    # --tile-content-gap, the block gap between fields\n    spacing.internal.block.start: dimension.100   # --tile-content-padding-top\n    spacing.internal.block.end: dimension.200     # --tile-content-padding-bottom\n    spacing.internal.inline.start: dimension.200  # --tile-content-padding-inline, a surface inset\n    spacing.internal.inline.end: dimension.200    # --tile-content-padding-inline, a surface inset";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:propertyType "node";
+        ds:optional "false"
+    ];
+    ds:parentComponent ds:global.component.tile;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.tile-content;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ].

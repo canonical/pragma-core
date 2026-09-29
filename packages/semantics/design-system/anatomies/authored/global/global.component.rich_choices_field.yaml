@@ -1,0 +1,142 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form src/lib/common/Wrapper/styles.css on .ds.field
+# and src/lib/component/RichChoicesField/styles.css on .ds.form-rich-choices
+# The field chrome is the shared Wrapper's; the payload holds a grid of
+# options. In a rich option the native input is visually hidden and the LABEL
+# is the visible card surface, so the input chrome — border, radius,
+# background, and the hover / focus / selected / disabled recolours — sits on
+# the label rather than on the control. The previous notation's `role: control`
+# is kept as the hidden input it is.
+node:
+  uri: global.component.rich_choices_field
+  styles:
+    layout.type: grid
+    layout.grid.columns: subgrid
+    # reads --form-field-columns.
+    layout.grid.column: "1 / -1"
+    layout.align: baseline
+    # reads --form-field-label-gap (--space-100 -> --dimension-100).
+    spacing.gap.block: spacing.gap.field.block
+  edges:
+    - node:
+        uri: global.subcomponent.field-label
+        styles:
+          layout.grid.column: "1 / -1"
+      relation:
+        cardinality: "1"
+        slotName: label
+    - node:
+        role: payload
+        styles:
+          layout.type: grid
+          layout.grid.columns: subgrid
+          layout.grid.column: "1 / -1"
+          # reads --form-group-gap (--space-100 -> --dimension-100).
+          spacing.gap.block: spacing.gap.field.block
+        edges:
+          - node:
+              uri: global.subcomponent.field-description
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "0..1"
+              slotName: description
+          - node:
+              role: rich choices group
+              styles:
+                layout.type: grid
+                layout.grid.columns: subgrid
+                layout.grid.column: "1 / -1"
+                appearance.border.style: none
+                spacing.internal.block.start: 0
+                spacing.internal.block.end: 0
+                spacing.internal.inline.start: 0
+                spacing.internal.inline.end: 0
+                spacing.external.block.start: 0
+                spacing.external.block.end: 0
+                spacing.external.inline.start: 0
+                spacing.external.inline.end: 0
+                # reads --form-group-gap (--dimension-100).
+                spacing.gap.block: spacing.gap.field.block
+              edges:
+                - node:
+                    role: option
+                    styles:
+                      layout.position: relative
+                      layout.type: flex
+                      # reads --rich-choices-span, a component-local track span.
+                      layout.grid.column: auto
+                    edges:
+                      - node:
+                          role: control
+                          styles:
+                            # Visually hidden: the label is the control's
+                            # visible surface.
+                            layout.position: absolute
+                            size.width: 1px
+                            size.height: 1px
+                            layout.overflow: hidden
+                            typography.whiteSpace: nowrap
+                            appearance.border.width: 0
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          role: rich label
+                          styles:
+                            layout.type: flex
+                            layout.direction: column
+                            layout.flex.grow: 1
+                            layout.boxSizing: border-box
+                            # reads --form-group-gap (--dimension-100).
+                            spacing.gap.block: spacing.gap.field.block
+                            appearance.border.width: dimension.stroke.thickness.medium
+                            appearance.border.style: solid
+                            appearance.border.color: color.border
+                            appearance.radius: dimension.radius.small
+                            appearance.background: color.foreground.input
+                            typography.color: color.text
+                            interaction.cursor: pointer
+                            interaction.select: none
+                            # reads --hover--color-foreground-input first, a
+                            # computed state variable no symbol declares.
+                            appearance.background@hover: color.foreground.input.hover
+                            appearance.background@selected: color.foreground.input.hover
+                            appearance.border.color@focus: color.focusRing
+                            appearance.border.color@selected: color.focusRing
+                            # A disabled option shows no border by design.
+                            appearance.border.color@disabled: transparent
+                            appearance.background@disabled: color.foreground.input.disabled
+                            interaction.cursor@disabled: not-allowed
+                            # The disabled text colour reads
+                            # --disabled--color-text, a computed state variable
+                            # no symbol declares and with no literal fallback,
+                            # so that binding is dropped.
+                            motion.property: "border-color, background-color, box-shadow"
+                            # The card's own inline padding reads
+                            # --form-input-padding-inline (16px) and its block
+                            # padding --form-input-padding-block (8px), both
+                            # through --dimension-* symbols.
+                            spacing.internal.inline.start: dimension.200
+                            spacing.internal.inline.end: dimension.200
+                            spacing.internal.block.start: dimension.100
+                            spacing.internal.block.end: dimension.100
+                            # The focus and selected rings are box-shadows,
+                            # which the roster has no key for.
+                        relation:
+                          cardinality: "1"
+                          slotName: default
+                  relation:
+                    cardinality: "2..*"
+                    slotName: default
+            relation:
+              cardinality: "1"
+              slotName: default
+          - node:
+              uri: global.subcomponent.field-error
+              styles:
+                layout.grid.column: "1 / -1"
+            relation:
+              cardinality: "0..1"
+              slotName: error
+      relation:
+        cardinality: "1"

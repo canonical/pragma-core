@@ -1,0 +1,344 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.tooltip a ds:Component;
+    ds:name "Tooltip";
+    ds:summary "A tooltip provides brief, contextual information, that appears on hover or focus. It is used to clarify an unfamiliar icon/control, explain truncated/abbreviated content, or to add context without interrupting user flow. Tooltips should be short, optional, and non-critical. If the information is vital or requires interaction, use a different pattern.\n\n";
+    ds:anatomyDsl "---\n# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Tooltip/styles.css on .ds.tooltip\n# The chip itself. The engine wrapper the `withTooltip` HOC renders around the\n# TARGET (.ds.tooltip-area and its .target child) is not part of this tree.\n# The tooltip runs on the `contrasted` surface, so its colours invert against\n# the ambient theme; the surface channels are read on this element, never\n# through a :root intermediate.\nnode:\n  uri: global.component.tooltip\n  styles:\n    # Stays inline-block: it is the positioning context for the arrow, whose\n    # 50% centring must resolve against this box.\n    layout.type: inline-block\n    layout.position: fixed\n    # MUST stay visible: the arrow sits just outside the box and any clipping\n    # would remove it.\n    layout.overflow: visible\n    appearance.background: [surface.color.background, color.background]\n    typography.color: [surface.color.text, color.text]\n    # The border reuses the background colour, so the arrow built from it is\n    # coloured correctly too.\n    appearance.border.color: [surface.color.background, color.background]\n    appearance.border.style: solid\n    appearance.border.width: 0\n    appearance.radius: 0\n    # Figma asks for text-secondary (14px / 20px). The reference reads\n    # --font-size-small and --line-height-small, which no symbol declares, so\n    # what is left of each chain is its own literal.\n    typography.size: 14px\n    typography.lineHeight: 20px\n    # The weight reads --font-weight-default with no literal fallback and no\n    # symbol declares it, so the binding is dropped.\n    typography.align: left\n    typography.decoration: initial\n    interaction.pointerEvents: auto\n    size.max.width: 284px\n    spacing.external.block.end: 0\n    spacing.external.inline.end: 0\n    spacing.internal.inline.start: dimension.200  # --tooltip-padding-horizontal, a surface inset\n    spacing.internal.inline.end: dimension.200    # --tooltip-padding-horizontal, a surface inset\n    spacing.internal.block.start: dimension.100   # --tooltip-padding-vertical\n    spacing.internal.block.end: dimension.100     # --tooltip-padding-vertical\n    # Closed by default; `aria-hidden=\"false\"` opens it. That is a display\n    # difference, not one of the five interaction states, so it carries no\n    # @state marker here.\n    appearance.opacity: 0\n    appearance.visibility: hidden\n    motion.property: \"opacity, visibility\"\n    # --tooltip-motion-duration is a component-local 0.1s literal.\n    motion.duration: 0.1s\n    motion.easing: ease-in-out\n  edges:\n    - node:\n        role: content row\n        styles:\n          layout.type: flex\n          layout.align: flex-start\n          spacing.gap: dimension.100   # --tooltip-gap, between a leading icon and the text\n        edges:\n          - node:\n              role: icon\n              styles:\n                layout.type: inline-flex\n                layout.align: center\n                layout.justify: center\n                layout.flex.grow: 0\n                layout.flex.shrink: 0\n                layout.flex.basis: auto\n                size.inline: dimension.200\n                # The box is one text line tall; the reference reads\n                # --tooltip-line-height, whose chain ends in its own literal.\n                size.block: 20px\n            relation:\n              cardinality: \"0..1\"\n              slotName: icon\n          - node:\n              role: text\n              styles:\n                # Wraps at max-width while honouring explicit newlines.\n                typography.whiteSpace: pre-wrap\n            relation:\n              cardinality: \"1\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        # drawn as ::before\n        role: arrow\n        styles:\n          layout.position: absolute\n          # A CSS border triangle drawn on the pointing side, so it has no box\n          # of its own. Which side carries the depth follows the placement class\n          # (.top/.bottom/.left/.right); the edge and centring offsets are\n          # calc()s over the arrow geometry, so none of them is bound.\n          size.width: 0\n          size.height: 0\n          # 8px deep (dimension-100); the 14px base across the edge is two\n          # transparent half-width side borders computed from dimension.175,\n          # which no single roster key carries.\n          appearance.border.top.width: dimension.100\n          appearance.border.style: solid\n          appearance.border.color: [surface.color.background, color.background]\n      relation:\n        # The component draws the arrow; no caller fills it, so it carries no\n        # slot name.\n        cardinality: \"1\"";
+    ds:anatomyClassic "\n\n**Standard**\n\n**https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4226-3390&t=oewNjqDyVoQqTJZp-1**\n\n";
+    ds:usage "[Standard tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-Y9PpN4FiwA) \n\n## When to use\n\n- When a default tooltip is required for controls or icons\n- When an unfamiliar UI element, label, or action requires clarification\n- When content can be expressed as a single-line explanation or short phrase\n- When sufficient space is available for comfortable reading near the trigger\n- When supplementary information does not need to persist\n\n\n\n## When not to use\n\n- When the layout is dense and the tooltip may overlap important UI\n  - Incorrect: A standard tooltip is used inside a compact data table where it obscures adjacent values\n  - Remediation: Use a [Dense tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-tES05lAnIw) to reduce visual footprint\n- When content consists of abbreviations or truncated values\n  - Incorrect: A standard tooltip is used to expand shortened labels in a toolbar\n  - Remediation: Use a [Dense tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-tES05lAnIw) designed for compact label expansion\n- When content is structured or contains multiple elements\n  - Incorrect: A tooltip contains a table, multiple text blocks, and icons\n  - Remediation: Use [Wrapper tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-QhcH6cvnjz)  to support structured content\n- When used for data visualisation\n  - Incorrect: A standard tooltip is used to display chart data values\n  - Remediation: Use [Data tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-Z6bUmHSTsj) for label–value pairs and data inspection\n- When content is interactive or requires persistence\n  - Incorrect: A tooltip contains clickable actions or inputs\n  - Remediation: Use [Popover](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-i-62pvfoOF) or another persistent surface\n\n\n\n### Variant: [Dense tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-tES05lAnIw) \n\nWhen to use\n\n- When space is limited, such as in tables, toolbars, or dashboards\n- When clarifying truncated labels, abbreviations, acronyms, or status indicators. \n- When tooltips appear frequently and should not visually dominate the interface\n\nWhen not to use\n\n- When content requires multiple lines or comfortable reading space\n  - Incorrect: A dense tooltip is used for a multi-line explanatory message\n  - Remediation: Use a [Standard tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-Y9PpN4FiwA) for improved readability\n\nWhen content is descriptive or longer than a short phrase\n\n  - Incorrect: A dense tooltip contains multiple lines of explanatory text\n  - Remediation: Use a [Standard tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-Y9PpN4FiwA) \n\nWhen content is complex or structured\n\n  - Incorrect: A dense tooltip includes multiple elements such as icons and key-value pairs\n  - Remediation: Use [Wrapper tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20chnVyhaz/_rui-QhcH6cvnjz) \n\n\n\n**In essence:**\n\nWhen in doubt, start with Standard. Move to Dense for space constraints; Wrapper for structured content and complex hierarchies; Data for data visualization. \n\n";
+    ds:guidelines "### **Important note on implementation:**\n\nAnimation values below are intended for [Framer Motion](https://motion.dev/), now just “Motion”.\n\n### **For all variants**\n\n- Show with a 400 ms delay after hover or focus\n- Hide with a 400 ms delay after the pointer leaves\n- Cancel display if the pointer exits before the show delay completes\n- If the pointer moves directly from one tooltip trigger to another, show the new tooltip immediately and skip the previous tooltip’s exit animation\n\n### **Transition**\n\n- **Type**: spring\n- **Duration**: 0.4 s\n- **Bounce**: 0.2\n- **Delay**: 0 s";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "***All variants***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Type";
+        ds:summary "Selects the tooltip variant";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Standard";
+        ds:constraints "Dense\nWrapper\nData"
+    ], [
+        a ds:Property;
+        ds:name "Surrounding UI theme";
+        ds:summary "Sets tooltip theme based on surrounding UI context";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Paper";
+        ds:constraints "Dark"
+    ], [
+        a ds:Property;
+        ds:name "***Standard tooltip***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Icon";
+        ds:summary "Shows an optional icon inside the tooltip";
+        ds:optional "true";
+        ds:propertyType "boolean";
+        ds:defaultValue "Yes";
+        ds:constraints "No"
+    ], [
+        a ds:Property;
+        ds:name "Arrow";
+        ds:summary "Sets arrow orientation";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Left";
+        ds:constraints "Right\nUp\nDown"
+    ], [
+        a ds:Property;
+        ds:name "Max width";
+        ds:summary "Maximum width of tooltip container";
+        ds:optional "false";
+        ds:propertyType "number";
+        ds:defaultValue "284";
+        ds:constraints "px"
+    ], [
+        a ds:Property;
+        ds:name "***Dense tooltip***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Position";
+        ds:summary "Preferred placement relative to trigger";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Auto";
+        ds:constraints "Right\nUp\nDown"
+    ], [
+        a ds:Property;
+        ds:name "Max width";
+        ds:summary "Maximum width of tooltip container";
+        ds:optional "false";
+        ds:propertyType "number";
+        ds:defaultValue "284";
+        ds:constraints "px"
+    ], [
+        a ds:Property;
+        ds:name "***Wrapper tooltip***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "*Wrapper container*";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Position";
+        ds:summary "Preferred placement relative to trigger";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Auto";
+        ds:constraints "Right\nUp\nDown"
+    ], [
+        a ds:Property;
+        ds:name "Max width";
+        ds:summary "Optional width override for wrapper tooltip";
+        ds:optional "false";
+        ds:propertyType "number";
+        ds:defaultValue "284";
+        ds:constraints "px"
+    ], [
+        a ds:Property;
+        ds:name "*Wrapper item*";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Wrapper item (instance swap)";
+        ds:summary "Selects which content block appears in this wrapper row";
+        ds:optional "false";
+        ds:propertyType "element";
+        ds:defaultValue "none";
+        ds:constraints "Image\nCTA\nTable\nChart legend\nKVP"
+    ], [
+        a ds:Property;
+        ds:name "*Key-value pair* (when selected as wrapper item)";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Value structure";
+        ds:summary "Whether value is single or multi-entry";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Single";
+        ds:constraints "Multi"
+    ], [
+        a ds:Property;
+        ds:name "Value layout";
+        ds:summary "How value is arranged visually";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Inline";
+        ds:constraints "Stacked"
+    ], [
+        a ds:Property;
+        ds:name "Layout";
+        ds:summary "Layout control. Not for users.";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Horizontal";
+        ds:constraints "Vertical"
+    ], [
+        a ds:Property;
+        ds:name "***Data tooltip***";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Show header";
+        ds:summary "Shows legend header";
+        ds:optional "true";
+        ds:propertyType "boolean";
+        ds:defaultValue "Yes";
+        ds:constraints "No"
+    ], [
+        a ds:Property;
+        ds:name "Indicator";
+        ds:summary "Shows colour marker matching chart encoding";
+        ds:optional "true";
+        ds:propertyType "boolean";
+        ds:defaultValue "Yes";
+        ds:constraints "No"
+    ], [
+        a ds:Property;
+        ds:name "Show cursor";
+        ds:summary "Tooltip follows cursor instead of anchoring to trigger";
+        ds:optional "false";
+        ds:propertyType "boolean";
+        ds:defaultValue "Yes";
+        ds:constraints "No"
+    ], [
+        a ds:Property;
+        ds:name "*Cursor animation* *(framer)*";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "cursorFollow.position";
+        ds:summary "Cursor-follow placement direction";
+        ds:optional "false";
+        ds:propertyType "choice";
+        ds:defaultValue "Right";
+        ds:constraints "Right"
+    ], [
+        a ds:Property;
+        ds:name "cursorFollow.offsetX";
+        ds:summary "Horizontal offset from cursor";
+        ds:optional "false";
+        ds:propertyType "number";
+        ds:defaultValue "16";
+        ds:constraints "px"
+    ], [
+        a ds:Property;
+        ds:name "cursorFollow.offsetY";
+        ds:summary "Vertical offset from cursor";
+        ds:optional "false";
+        ds:propertyType "number";
+        ds:defaultValue "8";
+        ds:constraints "px"
+    ], [
+        a ds:Property;
+        ds:name "Motion feel";
+        ds:summary "High-level motion tuning preset";
+        ds:optional "true";
+        ds:propertyType "choice";
+        ds:defaultValue "Snappy";
+        ds:constraints "No-bounce"
+    ];
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-04-17T00:00:00.000+02:00";
+        ds:change "The tooltip will be split :\nNormal/Dense → remains tooltip\nData → Becomes DataTooltip (inheritance)\nWrapper → TBD";
+        ds:changeType "decision"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-05-12T00:00:00.000+02:00";
+        ds:change "edited the tooltip documentation with format changes to match our template";
+        ds:changeType "change"
+    ];
+    ds:specializedBy ds:global.component.data_tooltip;
+    ds:hasVariant ds:global.variant.tooltip_dense;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:surface.color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:surface.color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:surface.color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root/content row";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root/content row/icon";
+        anatomy:styleKey "size.inline";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root/arrow";
+        anatomy:styleKey "appearance.border.top.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root/arrow";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:surface.color.background
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.tooltip;
+        ds:node "$root/arrow";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.background
+    ].

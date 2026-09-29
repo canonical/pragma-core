@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devsveltedone a ds:Tag;
+    ds:name "dev:svelte:done";
+    ds:category ds:tagcategory.implementation-status;
+    ds:whenToApply "Stable implementation in svelte codebase";
+    ds:whenToRemove "".

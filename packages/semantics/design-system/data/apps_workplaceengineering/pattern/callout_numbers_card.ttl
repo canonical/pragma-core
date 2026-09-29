@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_workplaceengineering.pattern.callout_numbers_card a ds:Pattern;
+    ds:name "Callout numbers card";
+    ds:summary "A high-level dashboard widget designed to display crucial **Key Performance Indicators (KPIs)** at a glance. This component groups individual metric cards in a horizontal grid, combining primary callout numbers, contextual comparison badges, and minimalist trend sparklines to give users immediate, actionable insights.\n\n";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "- **Header:** Includes a clean, uppercase section title (`KEY METRICS`) accompanied by an info tooltip icon for quick metric definitions.\n- **Hero Callout:** Large, bold typography emphasizing the primary metric value (e.g., `89 days`, `5 hires`).\n- **Metric Label & Tooltip:** Explanatory text directly below the value (e.g., `Median time to hire`) paired with an inline information icon.\n- **Comparison Badges (Pragma Tags):** \n  - **Green tag:** Indicates a positive trend (e.g., *decreasing* time to hire).\n  - **Red tag:** Indicates a negative trend (e.g., *decreasing* total hires or *increasing* overdue actions).\n- **Trend Sparkline:** A compact, gradient-filled area chart plotted over a quarterly timeline (Q1'26 to Q3'26). It features a distinct end-point node (orange dot) to highlight the most recent data point.";
+    ds:usage "## \n\n- Tracking time-to-hire, seats filled, and pending onboarding actions.\n- Reviewing quarterly targets, open leads, or overdue tasks.\n- Monitoring completed milestones, or backlog items.";
+    ds:guidelines "";
+    ds:tier ds:apps_workplaceengineering;
+    ds:documentationStage ds:tag.needsdefinition.

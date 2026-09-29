@@ -1,0 +1,20 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.modal-content-body a ds:Subcomponent;
+    ds:name "Modal.Content.Body";
+    ds:summary "Modal.Content.Body is the main narrative region inside modal content. It carries explanatory text, form fields, or other core task UI.\n\nMain use cases:\n\n- Present decision context and consequences.\n- Host primary interaction controls such as form elements.";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.subcomponent.modal-content_body\n  styles:\n    typography.style: \"paragraph/default\"\n    typography.color: \"color/text/default\"";
+    ds:anatomyClassic "";
+    ds:usage "## When to use\n\nUse it for the main informational or interactive payload of the modal.";
+    ds:guidelines "";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "Snippet that renders the content";
+        ds:propertyType "Snippet";
+        ds:optional "true"
+    ];
+    ds:parentComponent ds:apps_launchpad.subcomponent.modal-content.

@@ -1,0 +1,90 @@
+---
+# Authored 2026-09-13 from @canonical/react-ds-global-form src/lib/common/Wrapper/ToggleWrapper.css on .ds.field.field-toggle
+# The toggle field chrome, top to bottom: an optional heading, a control row
+# where the control sits inline with its own label, then the description and
+# any error. Spacing belongs to the FIELD — the row's column gap separates
+# control from label, the field's row gap separates the row from the
+# description and error — so neither label nor control carries padding or
+# margin. The control is checkbox input (src/lib/subcomponent/CheckboxInput/styles.css on `.ds.form-checkbox`)
+# and its own styles live in its own anatomy, not copied here. The label
+# follows the control by default.
+node:
+  uri: global.component.checkbox_field
+  styles:
+    layout.type: flex
+    layout.direction: column
+    # reads --form-group-gap, which resolves through --space-100 to
+    # --dimension-100; this is the spacing semantic that resolves to it.
+    spacing.gap.block: spacing.gap.field.block
+    # From the shared .ds.field rule, which the toggle variant does not
+    # override: reads --form-field-columns.
+    layout.grid.column: "1 / -1"
+  edges:
+    - node:
+        uri: global.subcomponent.field-label
+        styles:
+          # The heading is a mock label (a <legend>); the fieldset default is
+          # reset so it flows like the other block children.
+          spacing.internal.block.start: 0
+          spacing.internal.block.end: 0
+          spacing.internal.inline.start: 0
+          spacing.internal.inline.end: 0
+      relation:
+        cardinality: "0..1"
+        slotName: heading
+    - node:
+        role: control row
+        styles:
+          layout.type: flex
+          layout.direction: row
+          layout.align: center
+          # --form-field-inline-gap resolves through --container-gap-default and
+          # --space-200 to --dimension-200 (16px).
+          spacing.gap.inline: dimension.200
+        edges:
+          - node:
+              uri: global.subcomponent.checkbox_input
+              styles:
+                # The control is a fixed 16px box (--dimension-200); the row's
+                # centring does the alignment, so it carries no offset.
+                size.inline: dimension.200
+                size.block: dimension.200
+            relation:
+              cardinality: "1"
+              slotName: default
+          - node:
+              uri: global.subcomponent.field-label
+              styles:
+                # Often a full clickable sentence, so it reads as regular body
+                # prose rather than the field label's heading weight, and it
+                # takes the remaining width so it wraps beside the control.
+                layout.flex.grow: 1
+                size.min.width: 0
+                typography.weight: typography.weight.regular
+                typography.align: start
+                interaction.cursor: pointer
+                spacing.internal.block.start: 0
+                spacing.internal.block.end: 0
+                spacing.internal.inline.start: 0
+                spacing.internal.inline.end: 0
+                # A disabled control makes the row stop signalling clickable
+                # and turns the label to the disabled text token; the
+                # reference reads --form-label-color-disabled first, which no
+                # symbol declares.
+                typography.color@disabled: color.text.disabled
+                interaction.cursor@disabled: not-allowed
+            relation:
+              cardinality: "1"
+              slotName: label
+      relation:
+        cardinality: "1"
+    - node:
+        uri: global.subcomponent.field-description
+      relation:
+        cardinality: "0..1"
+        slotName: description
+    - node:
+        uri: global.subcomponent.field-error
+      relation:
+        cardinality: "0..1"
+        slotName: error

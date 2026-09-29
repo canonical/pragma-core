@@ -1,0 +1,37 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_lxd.component.tab_links a ds:Component;
+    ds:name "TabLinks";
+    ds:summary "The **TabLinks** component is a wrapper that extends `canonical/react-components` [Tabs](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) by automatically handling URL navigation and browser history management when users switch between tabs.\n\n\n\n**Primary purpose**\n\nThis component creates a set of navigational tabs where each tab corresponds to a different route/URL, allowing users to navigate between related sections or views while maintaining proper browser history and bookmarkable URLs.\n\n\n\n**Main use cases**\n\n1. **Page section navigation**: Organize different views or sections of a page (e.g., \"Overview\", \"Settings\", \"Logs\") where each tab represents a distinct route\n2. **Multi-step workflows**: Guide users through sequential steps or categories where each tab represents a stage in a process";
+    ds:anatomyDsl "node:\n  uri: core:component:TabLinks\n  styles:\n    layout.type: flow\n    layout.direction: horizontal\n    layout.role: navigation\n    appearance.background: color/surface/navigation\n    spacing.external: spacing/medium\n    \n  edges:\n    - node:\n        uri: core:component:Tabs\n        styles:\n          layout.type: flow\n          layout.direction: horizontal\n          layout.align: start\n          layout.wrap: false\n          appearance.border.bottom: border/style/tab-navigation\n          spacing.gap: spacing/none\n          \n        edges:\n          - node:\n              uri: core:element:TabLink\n              styles:\n                layout.type: flow\n                layout.direction: horizontal\n                layout.align: center\n                layout.justify: center\n                interaction.cursor: pointer\n                interaction.focusable: true\n                \n                appearance.background: color/surface/tab/default\n                appearance.background:active: color/surface/tab/active\n                appearance.background:hover: color/surface/tab/hover\n                appearance.background:focus: color/surface/tab/focus\n                \n                appearance.border.bottom: border/style/none\n                appearance.border.bottom:active: border/style/tab/active\n                \n                spacing.internal: spacing/tab/internal\n                typography.color: color/text/tab/default\n                typography.color:active: color/text/tab/active\n                typography.size: font/size/navigation\n                typography.weight: font/weight/medium\n                typography.weight:active: font/weight/semibold\n                \n                interaction.transition.property: background, border, color\n                interaction.transition.duration: transition/duration/fast\n                interaction.transition.timing: ease\n                \n              edges:\n                - node:\n                    role: tab label\n                    styles:\n                      layout.display: block\n                      typography.overflow: ellipsis\n                      typography.whitespace: nowrap\n                      typography.color: inherit\n                      typography.size: inherit\n                      typography.weight: inherit\n                      \n                  relation:\n                    cardinality: \"1..1\"\n                    slotName: default\n                    \n            relation:\n              cardinality: \"1..*\"\n              slotName: default\n              \n      relation:\n        cardinality: \"1..1\"\n        slotName: default";
+    ds:anatomyClassic "\n\n";
+    ds:usage "### **When to use**\n\n✅ Navigable sections where each section needs its own URL for direct access.\n\n\n\n### **When not to use**\n\n❌ Switching between content views where URL persistence isn't needed\n\n❌ Navigation to external resources or different applications";
+    ds:guidelines "";
+    ds:tier ds:apps_lxd;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "tabs";
+        ds:summary "Array of tab definitions that can be either simple string labels or TabLink objects from canonical/react-components";
+        ds:constraints "Must contain at least one tab. When using strings, they will be automatically converted to URL-friendly slugs. When using TabLink objects, they must follow the canonical/react-components TabLink interface";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "tabUrl";
+        ds:summary "Base URL path for the tab navigation. Individual tabs will extend this URL with their slugified names (except the first tab which uses the base URL)";
+        ds:constraints "Must be a valid URL path. Should not include trailing slash as tab paths are appended automatically";
+        ds:optional "false";
+        ds:propertyType "text"
+    ], [
+        a ds:Property;
+        ds:name "activeTab";
+        ds:summary "The slug identifier of the currently active tab. Used to determine which tab should display as selected";
+        ds:constraints "Must match the slugified version of a tab name or the id of a TabLink object. If not provided, the first tab becomes active by default";
+        ds:optional "true";
+        ds:propertyType "text";
+        ds:defaultValue "First tab in the tabs array"
+    ], [
+        a ds:Property;
+        ds:optional "false"
+    ].

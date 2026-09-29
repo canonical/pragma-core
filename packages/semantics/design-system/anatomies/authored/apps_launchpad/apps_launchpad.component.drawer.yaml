@@ -1,0 +1,27 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.component.drawer
+  styles:
+    layout.position: fixed
+    # dropped layout.side: inline-end — the roster has no side key
+    size.height: 100vh
+    # dropped appearance.shadow: "0 0 32px 0 rgba(0,0,0,0.2)" — box-shadow has no roster key
+    # dropped appearance.backdrop.color: transparent — the roster has no backdrop key
+    appearance.border.style: none
+    motion.property: display, transform, overlay
+    # dropped the open/closed transform values — the roster has no transform key
+  edges:
+    - node:
+        role: trigger snippet
+      relation:
+        cardinality: "0..1"
+        slotName: trigger
+    - switch:
+        on: override
+        cases:
+          - uri: apps_launchpad.subcomponent.side_panel-content
+          - uri: $custom
+      relation:
+        cardinality: "0..1"
+        slotName: children

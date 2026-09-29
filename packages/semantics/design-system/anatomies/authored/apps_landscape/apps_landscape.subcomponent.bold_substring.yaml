@@ -1,0 +1,28 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+node:
+  uri: apps_landscape.subcomponent.bold_substring
+  edges:
+    - node:
+        role: plain text result
+      relation:
+        cardinality: "0..1"   # rendered when substring is empty or no case-insensitive match exists
+    - node:
+        role: matched text result
+        edges:
+          - node:
+              role: leading text
+            relation:
+              cardinality: "0..1"   # rendered when the first match starts after index zero
+          - node:
+              # was uri: global.element.strong, which names no subject — the graph has
+              # no element tier
+              role: first matching substring
+            relation:
+              cardinality: "1"
+          - node:
+              role: trailing text
+            relation:
+              cardinality: "0..1"   # rendered when characters follow the first match
+      relation:
+        cardinality: "0..1"   # rendered when substring is non-empty and found

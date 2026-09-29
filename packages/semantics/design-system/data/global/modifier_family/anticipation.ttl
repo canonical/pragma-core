@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier_family.anticipation a ds:ModifierFamily;
+    ds:name "Anticipation";
+    ds:summary "";
+    ds:tier ds:global;
+    ds:hasModifier ds:global.modifier.constructive, ds:global.modifier.destructive, ds:global.modifier.caution.

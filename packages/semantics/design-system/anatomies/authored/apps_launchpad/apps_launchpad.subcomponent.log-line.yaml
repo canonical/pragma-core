@@ -1,0 +1,27 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.log-line
+  styles:
+    layout.type: grid
+    typography.font: typography.text.primary.code   # was typography/code/s
+    typography.color: color.text   # was color.text: color/text/default
+  edges:
+    - node:
+        role: line number
+        styles:
+          typography.color: color.text.muted   # was color.text: color/text/muted
+          layout.position: sticky
+      relation:
+        cardinality: "1"
+        slotName: line
+    - node:
+        role: timestamp
+      relation:
+        cardinality: "0..1"
+        slotName: timestamp
+    - node:
+        role: content
+      relation:
+        cardinality: "1"
+        slotName: children

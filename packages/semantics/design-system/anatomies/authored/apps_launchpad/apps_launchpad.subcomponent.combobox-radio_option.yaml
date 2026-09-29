@@ -1,0 +1,34 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-app-launchpad
+node:
+  uri: apps_launchpad.subcomponent.combobox-radio_option
+  styles:
+    layout.type: grid
+    appearance.background: color.background   # was color/background/default
+    # dropped spacing.padding: spacing/inline/medium — no spacing symbol corresponds
+  edges:
+    - node:
+        role: label text
+      relation:
+        cardinality: "1"
+        slotName: text
+    - node:
+        role: option icon
+      relation:
+        cardinality: "0..1"
+        slotName: icon
+    - node:
+        role: secondary text
+      relation:
+        cardinality: "0..1"
+        slotName: secondaryText
+    - node:
+        role: trailing text
+      relation:
+        cardinality: "0..1"
+        slotName: trailingText
+    - node:
+        uri: apps_launchpad.component.radio_input
+      relation:
+        cardinality: "1"
+        slotName: checked

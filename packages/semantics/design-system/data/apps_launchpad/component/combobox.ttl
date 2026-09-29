@@ -1,0 +1,59 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.component.combobox a ds:Component;
+    ds:name "Combobox";
+    ds:summary "The **Combobox** component is a combination of a text input and a dropdown list. It allows users to filter a list of options by typing a search query.\n\n**Main Use Cases:**\n\n- **Filtering:** Filter a long list of options.\n- **Search:** Provide a quick way to find a specific option.\n- **Autocomplete:** Provide suggestions as the user types.";
+    ds:anatomyDsl "---\nnode:\n  uri: app-launchpad.component.combobox\n  styles:\n    layout.display: flex\n    layout.direction: vertical\n    spacing.gap: spacing/block/small\n    appearance.background: color/background/default\n    appearance.border: border/style/container\n    appearance.radius: radius/medium\n    appearance.shadow: shadow/overlay/default\n  edges:\n    - node:\n        uri: app-launchpad.subcomponent.combobox.search\n      relation:\n        cardinality: \"1\"\n        slotName: search\n    - node:\n        role: option list\n        styles:\n          layout.display: flex\n          layout.direction: vertical\n          size.max-height: 350px\n          layout.overflow-y: auto\n        edges:\n          - switch:\n              cases:\n                - node:\n                    uri: app-launchpad.subcomponent.combobox.loading\n                - node:\n                    uri: app-launchpad.subcomponent.combobox.no-results\n                - node:\n                    uri: app-launchpad.subcomponent.combobox.group\n                  edges:\n                    - switch:\n                        cases:\n                          - node:\n                              uri: app-launchpad.subcomponent.combobox.checkbox-option\n                          - node:\n                              uri: app-launchpad.subcomponent.combobox.radio-option\n                      relation:\n                        cardinality: \"1..*\"\n                        slotName: default\n            relation:\n              cardinality: \"0..*\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        uri: app-launchpad.subcomponent.combobox.helper\n      relation:\n        cardinality: \"0..1\"\n        slotName: helper\n    - node:\n        uri: app-launchpad.subcomponent.combobox.footer\n      relation:\n        cardinality: \"0..1\"\n        slotName: footer";
+    ds:anatomyClassic "The Combobox is composed of a main container, a search input, a list of options, and optional helper text and a footer.\n\n1. **Container:** The outermost wrapper that defines the layout and styling of the combobox.\n2. **Search:** The search input field.\n3. **Option List:** The list of options.\n4. **Helper:** Optional helper text.\n5. **Footer:** Optional footer with actions.\n\nhttps://www.figma.com/design/zLPPWH90vDkSUaTnYC0em0/Launchpad-components--new-?node-id=6127-34506&m=dev";
+    ds:usage "### 1. General Description\n\nThe Combobox is used when you need to provide a search and filtering functionality for a list of options. It is a powerful component that can be used in a variety of situations.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Long lists:** Use when you have a long list of options that is difficult to navigate.\n- **Filtering:** Use to provide a powerful filtering mechanism.\n- **Autocomplete:** Use to provide suggestions as the user types.\n\n2.2 When Not to Use\n\n- **Short lists:** Do not use for short lists of options that can be easily scanned.\n\n";
+    ds:guidelines "### Accessibility\n\n- **ARIA attributes:** Use the appropriate ARIA attributes to make the combobox accessible.\n- **Keyboard navigation:** Ensure that the combobox can be fully operated with the keyboard.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The content of the combobox, typically a list of options.";
+        ds:propertyType "list of nodes";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "search";
+        ds:summary "Search input for the combobox content.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "inputsName";
+        ds:summary "```The `name` attribute of the input elements within the combobox. This is provided on the root element instead of individual options to ensure all inputs share the same name.```";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "type";
+        ds:summary "Combobox type.";
+        ds:propertyType "choice";
+        ds:optional "false";
+        ds:defaultValue "multi-select";
+        ds:constraints "multi-select, single-select"
+    ], [
+        a ds:Property;
+        ds:name "aria-busy";
+        ds:summary "```Overrides `aria-busy` on the combobox options container to indicate that the combobox is loading data, such as fetching options from an API.```";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "als"
+    ], [
+        a ds:Property;
+        ds:name "helper";
+        ds:summary "Helper content providing additional context or information for the entire panel.";
+        ds:propertyType "node";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "footer";
+        ds:summary "Footer content, often used for actions related to the panel's content.";
+        ds:propertyType "node";
+        ds:optional "true"
+    ];
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.combobox-footer, ds:apps_launchpad.subcomponent.combobox-group, ds:apps_launchpad.subcomponent.combobox-helper, ds:apps_launchpad.subcomponent.combobox-no_results, ds:apps_launchpad.subcomponent.combobox-search, ds:apps_launchpad.subcomponent.combobox-checkbox_option, ds:apps_launchpad.subcomponent.combobox-radio_option, ds:apps_launchpad.subcomponent.combobox-loading.

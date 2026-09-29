@@ -1,0 +1,29 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.contextual_menu a ds:Component;
+    ds:name "ContextualMenu";
+    ds:summary "A contextual menu provides secondary actions and options that can be attached to various interface controls, including Buttons, command Links, and right-click interactions. It displays relevant actions based on the context of the element or area it's associated with, helping to keep the interface clean while making additional functionality easily accessible when needed. ";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "Anatomy\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=5746-5679&t=B51H6nnIINbJS0am-4\n\nStyling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=4456-89917&t=mrOkyDfhQY9JZwMz-1\n\n";
+    ds:usage "A contextual menu provides secondary actions and options that can be attached to various interface controls, including Buttons, command Links, and right-click interactions. It displays relevant actions based on the context of the element or area it's associated with, helping to keep the interface clean while making additional functionality easily accessible when needed. \n\nContextual menus are designed to initiate and perform actions, not to collect input from users. They work best for presenting action-oriented options that transform, manipulate or delete based on the user's selection. \n\n## When to use\n\n- Providing secondary actions for specific elements or content items\n- Offering context-specific operations that relate to a selected item or area\n- Keeping the primary interface clean by hiding less frequently used actions\n- Right-click functionality where desktop conventions apply\n\n## When not to use\n\n\n\n- As an input method for forms or filters. \n  - Incorrect: Using a contextual menu to allow users to pick a date or select a category within a data-entry form.\n  - Remediation: Use a [SelectInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-xiMRYATXwr) instead to ensure the input is properly associated with the form field.\n- For collecting user preferences or settings that require input selection. \n  - Incorrect: Nesting checkboxes or radio buttons inside a contextual menu to let users toggle notification settings. \n  - Remediation: Use a dedicated page or a [Modal](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-XsokbPLmnc) containing standard form controls like switches and checkboxes.\n- When the actions are primary and should be immediately visible. \n  - Incorrect: Hiding the only \"Delete\" or \"Edit\" button inside a contextual menu, forcing users to discover the menu before they can perform a critical task. \n  - Remediation: Surface high-priority actions directly in the UI using [Button](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8SdtbQUhTr)s or icon buttons to ensure they are discoverable at a glance.\n- For navigation that serves as the main way to move through your application. \n  - Incorrect: Placing the main links to \"Dashboard,\" \"Profile,\" and \"Settings\" inside a right-click or overflow contextual menu. \n  - Remediation: Use [Navigation](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-nkDiZdUMkV) or [Tabs](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-1SwWDDUyIt) to provide a persistent and accessible map of the application's architecture.\n\n\n\n## Grouping actions\n\nWhen a contextual menu contains many actions, consider organizing them into logical action groups to improve scannability and reduce cognitive load.  Group related actions together based on their function or purpose.\n\nCommon grouping categories include:\n\n- **Edit actions**: Copy, cut, paste, duplicate\n- **Organization actions**: Move to folder, rename, sort\n- **Sharing and permissions**: Share, change permissions, export\n- **Destructive actions**: Delete, archive, remove (typically separated at the bottom)\n- **View options**: Open in new tab, preview, download\n\n## Managing menu length\n\nAvoid letting contextual menus grow too long, as this creates cognitive overload and makes scanning difficult. If you have many actions available:\n\n- First, group related actions using the categories mentioned above to improve organization\n- For longer lists, consider nesting actions into submenus to reduce the initial visual complexity\n- Evaluate whether all actions are truly necessary in the contextual menu, or if some could be moved to a dedicated settings area or toolbar";
+    ds:guidelines "";
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdefinition;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "Actions";
+        ds:summary "The actions that this contextual menu should have. Optionally also sets wether specific actions should be grouped in action groups.";
+        ds:propertyType "object";
+        ds:optional "false"
+    ];
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-05-04T00:00:00.000+02:00";
+        ds:change "Initial commit"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-05-11T00:00:00.000+02:00";
+        ds:change "formatting to our template"
+    ].

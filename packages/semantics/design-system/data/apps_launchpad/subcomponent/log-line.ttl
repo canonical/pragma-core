@@ -1,0 +1,40 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_launchpad.subcomponent.log-line a ds:Subcomponent;
+    ds:name "Log.Line";
+    ds:summary "Log.Line is a single row within a Log table, combining a line number, an optional timestamp, and free-form message content. It must be used as a direct child of Log. The line number cell supports a custom snippet to enable deep-linking (e.g. wrapping the number in a Link), and each line can be individually permalink-addressable via its `id` attribute and the browser's native URL fragment mechanism.";
+    ds:anatomyDsl "node:\n  uri: app-launchpad.subcomponent.log-line\n  styles:\n    layout.display: grid\n    typography.font: \"typography/code/s\"\n    color.text: \"color/text/default\"\n  edges:\n    - node:\n        role: line-number\n        styles:\n          color.text: \"color/text/muted\"\n          layout.position: sticky\n      relation:\n        cardinality: \"1\"\n        slotName: line\n\n    - node:\n        role: timestamp\n      relation:\n        cardinality: \"0..1\"\n        slotName: timestamp\n\n    - node:\n        role: content\n      relation:\n        cardinality: \"1\"\n        slotName: children";
+    ds:anatomyClassic "https://www.figma.com/design/zLPPWH90vDkSUaTnYC0em0/Launchpad-components--LUI-?node-id=3929-122302&m=dev";
+    ds:usage "### When to use\n\nUse Log.Line for each individual entry in a Log. Every visible row in a log output — whether it carries a timestamp or not — is a Log.Line.\n\n### Timestamped log entry\n\nRendering a single event from a stream where the source provides an ISO timestamp, a Unix epoch, or a Date object alongside the message text.\n\n### Anonymous log entry\n\nRendering a line that has no associated timestamp (e.g. blank separators, or synthetic entries injected by the UI), by omitting the `timestamp` prop. The timestamp cell is rendered empty, preserving column alignment with surrounding lines.";
+    ds:guidelines "## Row header scope\n\nLog.Line renders its line number as a `<th scope=\"row\">`, establishing a row header relationship so screen readers associate the line number with the timestamp and content cells on the same row.\n\nTimestamp element\n\nWhen a timestamp is present, it is wrapped in a `<time>` element whose `datetime` attribute is set to the ISO 8601 representation of the date, regardless of how the visible text is formatted. This allows assistive technologies and machine parsers to access the precise time value.\n\n## Deep-linking and line highlighting\n\nSet a unique `id` on Log.Line to make it permalink-addressable. When the element’s `id` matches the URL fragment, the `:target` pseudo-class applies a highlight animation: the row background transitions to `color/background/active`, holds for 5 seconds, then fades back to the default. Pair this with a `Link` in the `line` snippet so users can copy the fragment URL directly from the line number.\n\n## Line number snippet\n\nWhen the default numeric line number is insufficient — for example when lines should be individually linkable — pass a snippet to the `line` prop instead of a number. The snippet replaces the entire line number cell content, so it is responsible for rendering the visible number as well as any interactive wrapper.";
+    ds:tier ds:apps_launchpad;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "line";
+        ds:summary "When a snippet is used (e.g. wrapping the number in a `Link`), it replaces the default numeric rendering entirely.";
+        ds:propertyType "number";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "timestamp";
+        ds:summary "The timestamp of the log entry.";
+        ds:propertyType "datetime";
+        ds:optional "true";
+        ds:constraints "Accepts any value accepted by the `Date` constructor (Date, number, string). If omitted, the timestamp cell is rendered empty."
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The message content of the log entry.";
+        ds:propertyType "Snippet";
+        ds:optional "false";
+        ds:constraints "Rendered as pre-formatted text. Wrapping is controlled by the parent `Log`’s `wrapLines` prop."
+    ], [
+        a ds:Property;
+        ds:name "HTML tr attributes";
+        ds:summary "Forwarded HTML `<tr>` attributes.";
+        ds:optional "true";
+        ds:constraints "Setting id enables URL fragment deep-linking and the :target highlight animation."
+    ];
+    ds:parentComponent ds:apps_launchpad.component.log.

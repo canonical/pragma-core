@@ -1,0 +1,7 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:concepttype.Tutorial a ds:ConceptType;
+    ds:name "Tutorial";
+    ds:summary "*A tutorial is an* ***experience*** *that takes place under the guidance of a tutor. A tutorial is always* ***learning-oriented****.*\n\nA tutorial serves the user’s *acquisition* of skills and knowledge - their study. Its purpose is not to help the user get something done, but to help them learn.".

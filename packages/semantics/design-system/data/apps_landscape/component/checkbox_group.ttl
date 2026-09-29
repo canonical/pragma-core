@@ -1,0 +1,110 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps_landscape.component.checkbox_group a ds:Component;
+    ds:name "Checkbox Group";
+    ds:summary "Checkbox Group renders a controlled array of string selections as a native `fieldset` containing labelled checkbox inputs. It adds a visible `legend`, optional error and help messages, a visual required marker, group-level disabling, root `className`/`style` hooks, and a shared blur callback.\n\nUse it for a short, visible set of related choices when any number of values may be selected. It differs from a single Checkbox and from mutually exclusive Radio inputs by owning the group label and translating each toggle into the complete next `string[]` value.";
+    ds:anatomyDsl "node:\n  uri: ds:apps_landscape.component.checkbox_group\n  semantic: fieldset\n  styles:\n    layout.overflow: visible\n  edges:\n    - node:\n        semantic: legend\n        role: group label\n        relation:\n          cardinality: \"1\"\n    - node:\n        semantic: p\n        role: error message\n        relation:\n          cardinality: \"0..1\"\n          condition: error is truthy\n    - node:\n        semantic: p\n        role: help text\n        relation:\n          cardinality: \"0..1\"\n          condition: help is truthy\n    - node:\n        role: options container\n        edges:\n          - node:\n              uri: global.component.checkbox\n              role: checkbox option\n              relation:\n                cardinality: \"0..*\"\n        relation:\n          cardinality: \"1\"";
+    ds:anatomyClassic "https://www.figma.com/design/I4WpvwMuQI6v1qhgUl63Sx/Landscape-Pragma-components?node-id=17-9&t=JhmpJ2Kptl96X0Fe-4\n\nTable 14\n\n";
+    ds:usage "### When to use\n\n**Independent choices**\n\nUse when users may select zero, one, or several options from a related set and the form value is a controlled array of strings.\n\n**Visible option set**\n\nUse when showing all options at once improves comparison and discovery.\n\n**Group-level guidance or validation**\n\nUse when the choices need one shared legend, help message, or error message rather than repeated instructions on each checkbox.\n\n### When not to use\n\n**Mutually exclusive choice**\n\nOnly one option may be selected by the user.\n\n**Incorrect pattern**: Using Checkbox Group when the form value must always contain exactly one selected option.\n\n**Remediation strategy**: Use Radio Group for mutually exclusive options, or a Select component for a space-constrained dropdown list.\n\n**Large dynamic set**\n\nThe option list is lengthy, searchable, or grows or shrinks at runtime.\n\n**Incorrect pattern**: Rendering all options of a 50+ item list as visible checkboxes, causing layout overflow and poor discoverability.\n\n**Remediation strategy**: Use a multi-select or tag-select control that supports search, filtering, and scrolling within a compact UI.\n\n**One independent boolean**\n\nThe form contains a single toggle unrelated to other options.\n\n**Incorrect pattern**: Wrapping a single checkbox in Checkbox Group when the setting stands alone and does not benefit from group legend and spacing semantics.\n\n**Remediation strategy**: Use a standalone `Checkbox` component for individual boolean settings; reserve Checkbox Group for logically related sets.\n\n**Per-option disabled choices**\n\nIndividual options must be disabled or enabled independently.\n\n**Incorrect pattern**: Passing `SelectOption.disabled: true` on some options and expecting them to be visually or functionally disabled within the group.\n\n**Remediation strategy**: Currently, only the entire fieldset can be disabled. For per-option disabling, either extend the component to forward the disabled prop to each CheckboxInput, or use a custom wrapper that manages individual disabled states.";
+    ds:guidelines "### Accessibility\n\n- Preserve native fieldset and legend semantics so the group label is announced for every checkbox.\n- Do not treat the current asterisk as a complete required-state implementation. The source adds no native `required`, `aria-required`, or minimum-selection validation behavior.\n- The current error/help paragraphs are visually adjacent but have no generated ids or described-by association. Consumers that require deterministic announcement need an upstream API or wrapper that supplies that relationship.\n- Error state is not conveyed only by the `is-error` class because text is rendered, but the error must explain how to recover.\n\n### Content\n\n- Write a concise legend and parallel, independently understandable option labels.\n- Use help text for selection rules such as minimum or maximum counts.\n- Localize the legend, option labels, help, and error content at the call site; the component contains no user-facing default strings.\n\n### Internationalization\n\n- Allow translated labels and messages to wrap. The local stylesheet sets only `overflow: visible` and does not impose truncation.\n- Keep option values stable, locale-independent identifiers; only labels and messages should change with locale.\n\n### Keyboard navigation\n\n- Retain native Tab navigation and Space activation for each checkbox.\n- The component defines no custom key handlers, focus movement, or roving tab index; behavior comes from native inputs through Canonical `CheckboxInput`.\n\n### Device and layout\n\n- Verify wrapping in the surrounding form. The local stylesheet does not define option direction or responsive breakpoints; it only permits overflow to remain visible.\n- Keep each checkbox and label together at narrow widths and do not depend on hover or pointer precision.";
+    ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "name";
+        ds:summary "Shared native name forwarded to every checkbox.";
+        ds:propertyType "text";
+        ds:defaultValue "None";
+        ds:constraints "Use a stable form field name.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "Visible text rendered in the fieldset legend.";
+        ds:propertyType "text";
+        ds:defaultValue "None";
+        ds:constraints "The current API does not accept rich label content.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "options";
+        ds:summary "Ordered records with label, value, and optional disabled.";
+        ds:propertyType "list of objects";
+        ds:defaultValue "None";
+        ds:constraints "Values must be unique for React keys and unambiguous selection. Each entry is a `SelectOption` with `label: string`, `value: string`, `disabled?: boolean`. An empty array renders no checkboxes.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "Controlled selected values.";
+        ds:propertyType "list of text";
+        ds:defaultValue "None";
+        ds:constraints "A checkbox is checked when its option value is included. Unknown values remain in the array until the consumer changes it.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "onChange";
+        ds:summary "Receives the complete next array after a toggle.";
+        ds:propertyType "function";
+        ds:defaultValue "None";
+        ds:constraints "The component does not mutate value; the consumer must provide the updated prop.";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "onBlur";
+        ds:summary "Shared blur handler forwarded to every checkbox.";
+        ds:propertyType "function";
+        ds:defaultValue "undefined";
+        ds:constraints "Receives the blurred checkbox event.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "error";
+        ds:summary "Renders a group-level validation paragraph and adds is-error to the fieldset.";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "undefined";
+        ds:constraints "Truthiness controls rendering and class state; no aria-describedby/aria-errormessage wiring is added locally.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "help";
+        ds:summary "Renders persistent group guidance after any error and before the options.";
+        ds:propertyType "ReactNode";
+        ds:defaultValue "undefined";
+        ds:constraints "No described-by association is added locally.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "required";
+        ds:summary "Adds the local required-marker class to the legend.";
+        ds:propertyType "boolean";
+        ds:defaultValue "undefined";
+        ds:constraints "Visual marker only; the component does not apply required to descendant inputs or enforce a minimum selection.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "disabled";
+        ds:summary "Sets native disabled on the fieldset, disabling descendant controls.";
+        ds:propertyType "boolean";
+        ds:defaultValue "undefined";
+        ds:constraints "Applies to the whole group.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "className";
+        ds:summary "Merges consumer classes onto the fieldset.";
+        ds:propertyType "text";
+        ds:defaultValue "undefined";
+        ds:constraints "Added after built-in classes through classnames.";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "style";
+        ds:summary "Applies inline styles to the fieldset.";
+        ds:propertyType "object";
+        ds:defaultValue "undefined";
+        ds:constraints "Standard React style object.";
+        ds:optional "true"
+    ].

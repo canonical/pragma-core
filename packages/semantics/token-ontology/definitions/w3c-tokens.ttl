@@ -1,0 +1,464 @@
+###############################################################################
+# w3c-tokens.ttl — W3C Design Tokens Vocabulary (mirror)
+###############################################################################
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix w3c-tokens: <https://dt.canonical.com/w3c-tokens/> .
+
+# Ontology Declaration
+w3c-tokens: a owl:Ontology ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:label "W3C Design Tokens Vocabulary" ;
+    skos:definition "RDF vocabulary mirroring what the Design Tokens specification states: the structure of token documents and resolvers, and the type system for token values." ;
+    skos:note "Mirrors the Design Tokens Community Group Final Report, edition 2025.10 (28 October 2025): the format, color, and resolver modules." ;
+    rdfs:seeAlso <https://www.designtokens.org/TR/2025.10/format/> ,
+                 <https://www.designtokens.org/TR/2025.10/color/> ,
+                 <https://www.designtokens.org/TR/2025.10/resolver/> .
+
+###############################################################################
+# DOCUMENT STRUCTURE
+###############################################################################
+
+## Classes
+
+w3c-tokens:File
+    a owl:Class ;
+    rdfs:label "File" ;
+    skos:definition "One design-token document." ;
+    skos:note "Files carry context: a token stands under a context exactly when its file appears in that context's includes list." ;
+    skos:example "global/semantic/color/light.tokens.json" .
+
+w3c-tokens:Token
+    a owl:Class ;
+    rdfs:label "Token" ;
+    skos:definition "One definition of a token in one file, bearing a value or a reference; its identity is the pair (name, file)." ;
+    skos:note "The same dotted name defined in several files yields several definitions — the resolver's override mechanism." ;
+    skos:note "An entry is a token exactly when it bears $value or $ref." .
+
+w3c-tokens:Group
+    a owl:Class ;
+    rdfs:label "Group" ;
+    skos:definition "A named container of tokens and groups within a file; its identity is the pair (name, file)." ;
+    skos:note "Lifted as a node only when it carries a property; a group with none is represented by its name segment alone." ;
+    skos:note "The document root is itself a group, and has no name." .
+
+w3c-tokens:Resolver
+    a owl:Class ;
+    rdfs:label "Resolver" ;
+    skos:definition "A resolver document: token sets, modifier axes with their contexts, and a resolution order." .
+
+w3c-tokens:TokenSet
+    a owl:Class ;
+    rdfs:label "Token Set" ;
+    skos:definition "A named, ordered collection of sources forming a base layer of resolution." .
+
+w3c-tokens:ResolverModifier
+    a owl:Class ;
+    rdfs:label "Resolver Modifier" ;
+    skos:definition "An axis of variation declared by a resolver, holding mutually exclusive contexts." ;
+    skos:example "theme" , "surface" , "anticipation" .
+
+w3c-tokens:ResolverContext
+    a owl:Class ;
+    rdfs:label "Resolver Context" ;
+    skos:definition "A mutually exclusive setting on an axis, contributing an ordered, possibly empty, list of sources." ;
+    skos:example "light" , "layer2" , "constructive" .
+
+w3c-tokens:InlineSource
+    a owl:Class ;
+    rdfs:label "Inline Source" ;
+    skos:definition "A source given as a token document written directly inside the resolver document, rather than by file reference." .
+
+## Properties
+
+w3c-tokens:path
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:File ;
+    rdfs:range xsd:string ;
+    rdfs:label "path" ;
+    skos:definition "The file's repository-relative path." .
+
+w3c-tokens:schema
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "schema" ;
+    skos:definition "The document's declared $schema identifier." .
+
+w3c-tokens:name
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "name" ;
+    skos:definition "The authored name, verbatim." ;
+    skos:note "For tokens, the joined dotted path." .
+
+w3c-tokens:inFile
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:range w3c-tokens:File ;
+    rdfs:label "inFile" ;
+    skos:definition "The file the definition lives in." .
+
+w3c-tokens:value
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Token ;
+    rdfs:range rdf:JSON ;
+    rdfs:label "value" ;
+    skos:definition "The authored $value, verbatim, as a JSON literal." .
+
+w3c-tokens:ref
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Token ;
+    rdfs:range xsd:string ;
+    rdfs:label "ref" ;
+    skos:definition "The authored $ref: a JSON-Pointer reference standing in place of a value." ;
+    skos:note "Mutually exclusive with the value." .
+
+w3c-tokens:type
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "type" ;
+    skos:definition "The authored or group-inherited $type." .
+
+w3c-tokens:description
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "description" ;
+    skos:definition "The authored $description, verbatim." .
+
+w3c-tokens:extensions
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:range rdf:JSON ;
+    rdfs:label "extensions" ;
+    skos:definition "The authored $extensions, verbatim, as a JSON literal." .
+
+w3c-tokens:deprecated
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "deprecated" ;
+    skos:definition "The authored $deprecated: true, false, or a string stating the reason." ;
+    skos:note "False overrides a deprecation inherited from an enclosing group." .
+
+w3c-tokens:extends
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Group ;
+    rdfs:range xsd:string ;
+    rdfs:label "extends" ;
+    skos:definition "The authored $extends reference: the group whose members this group inherits, by name." .
+
+w3c-tokens:set
+    a owl:ObjectProperty ;
+    rdfs:domain w3c-tokens:Resolver ;
+    rdfs:range w3c-tokens:TokenSet ;
+    rdfs:label "set" ;
+    skos:definition "A token set declared by the resolver." .
+
+w3c-tokens:modifier
+    a owl:ObjectProperty ;
+    rdfs:domain w3c-tokens:Resolver ;
+    rdfs:range w3c-tokens:ResolverModifier ;
+    rdfs:label "modifier" ;
+    skos:definition "An axis declared by the resolver." .
+
+w3c-tokens:context
+    a owl:ObjectProperty ;
+    rdfs:domain w3c-tokens:ResolverModifier ;
+    rdfs:range w3c-tokens:ResolverContext ;
+    rdfs:label "context" ;
+    skos:definition "A context of the axis." .
+
+w3c-tokens:default
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:ResolverModifier ;
+    rdfs:range w3c-tokens:ResolverContext ;
+    rdfs:label "default" ;
+    skos:definition "The context in force when the axis is unset." .
+
+w3c-tokens:includes
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:range rdf:List ;
+    rdfs:label "includes" ;
+    skos:definition "The ordered list of sources — files, inline token documents, or sets by reference — a token set or a resolver context contributes; within the list, later sources override earlier ones." ;
+    skos:note "The empty list is meaningful: a context may deliberately contribute nothing." .
+
+w3c-tokens:tokens
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:InlineSource ;
+    rdfs:range rdf:JSON ;
+    rdfs:label "tokens" ;
+    skos:definition "The inline token document, verbatim, as a JSON literal." .
+
+w3c-tokens:resolutionOrder
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Resolver ;
+    rdfs:range rdf:List ;
+    rdfs:label "resolutionOrder" ;
+    skos:definition "The ordered list of token sets and axes governing the merge: later entries override earlier ones." ;
+    skos:note "Members are sets and axes, by reference or written inline in the list; an inline member's name must be unique within the order. Inline members are lifted as token-set and modifier nodes that appear only in this list." .
+
+w3c-tokens:version
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Resolver ;
+    rdfs:range xsd:string ;
+    rdfs:label "version" ;
+    skos:definition "The specification edition the resolver document declares." .
+
+w3c-tokens:defs
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:Resolver ;
+    rdfs:range rdf:JSON ;
+    rdfs:label "defs" ;
+    skos:definition "The resolver document's reusable definitions object, verbatim, as a JSON literal." ;
+    skos:note "Tools MAY support definitions but MUST NOT error on them." .
+
+###############################################################################
+# THE TYPE SYSTEM
+###############################################################################
+
+## Classes
+
+w3c-tokens:TokenType
+    a owl:Class ;
+    rdfs:label "Token Type" ;
+    skos:definition "A value type the specification defines for design tokens." .
+
+w3c-tokens:CompositeType
+    a owl:Class ;
+    rdfs:subClassOf w3c-tokens:TokenType ;
+    rdfs:label "Composite Type" ;
+    skos:definition "A token type whose value is an object or array with named, typed sub-values." .
+
+w3c-tokens:SubValue
+    a owl:Class ;
+    rdfs:label "Sub-Value" ;
+    skos:definition "A named slot of a composite value, typed by the token type its content must satisfy." ;
+    skos:note "A slot's content may be given inline or as a reference to a token of the slot's type." .
+
+w3c-tokens:ColorSpace
+    a owl:Class ;
+    rdfs:label "Color Space" ;
+    skos:definition "A color space the specification admits for color values, with ordered channels." .
+
+w3c-tokens:WeightKeyword
+    a owl:Class ;
+    rdfs:label "Weight Keyword" ;
+    skos:definition "A pre-defined font-weight keyword equivalent to a numeric weight." .
+
+## Properties
+
+w3c-tokens:admitsUnit
+    a owl:DatatypeProperty ;
+    rdfs:domain w3c-tokens:TokenType ;
+    rdfs:range xsd:string ;
+    rdfs:label "admitsUnit" ;
+    skos:definition "A unit of measurement the type admits for its numeric value." .
+
+w3c-tokens:admitsKeyword
+    a owl:DatatypeProperty ;
+    rdfs:domain w3c-tokens:TokenType ;
+    rdfs:range xsd:string ;
+    rdfs:label "admitsKeyword" ;
+    skos:definition "A pre-defined string value the type admits." .
+
+w3c-tokens:subValue
+    a owl:ObjectProperty ;
+    rdfs:domain w3c-tokens:TokenType ;
+    rdfs:range w3c-tokens:SubValue ;
+    rdfs:label "subValue" ;
+    skos:definition "A slot of the type's value." .
+
+w3c-tokens:slotName
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:SubValue ;
+    rdfs:range xsd:string ;
+    rdfs:label "slotName" ;
+    skos:definition "The slot's key within the value object." .
+
+w3c-tokens:slotType
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:SubValue ;
+    rdfs:range w3c-tokens:TokenType ;
+    rdfs:label "slotType" ;
+    skos:definition "The token type the slot's content must satisfy." .
+
+w3c-tokens:slotOptional
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:SubValue ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "slotOptional" ;
+    skos:definition "Whether the slot may be omitted." .
+
+w3c-tokens:channel
+    a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:ColorSpace ;
+    rdfs:range rdf:List ;
+    rdfs:label "channel" ;
+    skos:definition "The ordered channel names of the space's components array." .
+
+w3c-tokens:keyword
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:WeightKeyword ;
+    rdfs:range xsd:string ;
+    rdfs:label "keyword" ;
+    skos:definition "The keyword string." .
+
+w3c-tokens:weight
+    a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain w3c-tokens:WeightKeyword ;
+    rdfs:range xsd:integer ;
+    rdfs:label "weight" ;
+    skos:definition "The numeric weight the keyword denotes." .
+
+## Token types
+
+w3c-tokens:color
+    a w3c-tokens:TokenType ;
+    rdfs:label "color" ;
+    skos:note "Value: an object of colorSpace, components, and optionally alpha and hex." ;
+    w3c-tokens:subValue
+        [ w3c-tokens:slotName "colorSpace" ; skos:note "The color-space identifier." ] ,
+        [ w3c-tokens:slotName "components" ; skos:note "Each component is a number or the keyword 'none'." ] ,
+        [ w3c-tokens:slotName "alpha" ; w3c-tokens:slotType w3c-tokens:number ; w3c-tokens:slotOptional true ] ,
+        [ w3c-tokens:slotName "hex" ; w3c-tokens:slotOptional true ; skos:note "Referenceable by JSON Pointer only, not curly braces." ] .
+
+w3c-tokens:dimension
+    a w3c-tokens:TokenType ;
+    rdfs:label "dimension" ;
+    skos:note "Value: an object of a number and a unit." ;
+    w3c-tokens:admitsUnit "px" , "rem" .
+
+w3c-tokens:fontFamily
+    a w3c-tokens:TokenType ;
+    rdfs:label "fontFamily" ;
+    skos:note "Value: a string or an array of strings." .
+
+w3c-tokens:fontWeight
+    a w3c-tokens:TokenType ;
+    rdfs:label "fontWeight" ;
+    skos:note "Value: a number or a pre-defined keyword." .
+
+w3c-tokens:duration
+    a w3c-tokens:TokenType ;
+    rdfs:label "duration" ;
+    skos:note "Value: an object of a number and a unit." ;
+    w3c-tokens:admitsUnit "ms" , "s" .
+
+w3c-tokens:cubicBezier
+    a w3c-tokens:TokenType ;
+    rdfs:label "cubicBezier" ;
+    skos:note "Value: an array of four numbers." .
+
+w3c-tokens:number
+    a w3c-tokens:TokenType ;
+    rdfs:label "number" ;
+    skos:note "Value: a number." .
+
+## Composite types
+
+w3c-tokens:strokeStyle
+    a w3c-tokens:CompositeType ;
+    rdfs:label "strokeStyle" ;
+    skos:note "Value: a pre-defined string or an object." ;
+    w3c-tokens:admitsKeyword "solid" , "dashed" , "dotted" , "double" , "groove" , "ridge" , "outset" , "inset" ;
+    w3c-tokens:subValue
+        [ w3c-tokens:slotName "dashArray" ; w3c-tokens:slotType w3c-tokens:dimension ; skos:note "An array of dimension values or references." ] ,
+        [ w3c-tokens:slotName "lineCap" ; skos:note "A pre-defined keyword: round, butt, or square." ] .
+
+w3c-tokens:border
+    a w3c-tokens:CompositeType ;
+    rdfs:label "border" ;
+    w3c-tokens:subValue
+        [ w3c-tokens:slotName "color" ; w3c-tokens:slotType w3c-tokens:color ] ,
+        [ w3c-tokens:slotName "width" ; w3c-tokens:slotType w3c-tokens:dimension ] ,
+        [ w3c-tokens:slotName "style" ; w3c-tokens:slotType w3c-tokens:strokeStyle ] .
+
+w3c-tokens:transition
+    a w3c-tokens:CompositeType ;
+    rdfs:label "transition" ;
+    w3c-tokens:subValue
+        [ w3c-tokens:slotName "duration" ; w3c-tokens:slotType w3c-tokens:duration ] ,
+        [ w3c-tokens:slotName "delay" ; w3c-tokens:slotType w3c-tokens:duration ] ,
+        [ w3c-tokens:slotName "timingFunction" ; w3c-tokens:slotType w3c-tokens:cubicBezier ] .
+
+w3c-tokens:shadow
+    a w3c-tokens:CompositeType ;
+    rdfs:label "shadow" ;
+    skos:note "Value: one object or an array of objects and references." ;
+    w3c-tokens:subValue
+        [ w3c-tokens:slotName "color" ; w3c-tokens:slotType w3c-tokens:color ] ,
+        [ w3c-tokens:slotName "offsetX" ; w3c-tokens:slotType w3c-tokens:dimension ] ,
+        [ w3c-tokens:slotName "offsetY" ; w3c-tokens:slotType w3c-tokens:dimension ] ,
+        [ w3c-tokens:slotName "blur" ; w3c-tokens:slotType w3c-tokens:dimension ] ,
+        [ w3c-tokens:slotName "spread" ; w3c-tokens:slotType w3c-tokens:dimension ] ,
+        [ w3c-tokens:slotName "inset" ; w3c-tokens:slotOptional true ; skos:note "A boolean flag; no token type." ] .
+
+w3c-tokens:gradient
+    a w3c-tokens:CompositeType ;
+    rdfs:label "gradient" ;
+    skos:note "Value: an array of stops or references; the slots describe each stop." ;
+    w3c-tokens:subValue
+        [ w3c-tokens:slotName "color" ; w3c-tokens:slotType w3c-tokens:color ] ,
+        [ w3c-tokens:slotName "position" ; w3c-tokens:slotType w3c-tokens:number ] .
+
+w3c-tokens:typography
+    a w3c-tokens:CompositeType ;
+    rdfs:label "typography" ;
+    w3c-tokens:subValue
+        [ w3c-tokens:slotName "fontFamily" ; w3c-tokens:slotType w3c-tokens:fontFamily ] ,
+        [ w3c-tokens:slotName "fontSize" ; w3c-tokens:slotType w3c-tokens:dimension ] ,
+        [ w3c-tokens:slotName "fontWeight" ; w3c-tokens:slotType w3c-tokens:fontWeight ] ,
+        [ w3c-tokens:slotName "letterSpacing" ; w3c-tokens:slotType w3c-tokens:dimension ] ,
+        [ w3c-tokens:slotName "lineHeight" ; w3c-tokens:slotType w3c-tokens:number ] .
+
+## Color spaces
+
+w3c-tokens:srgb a w3c-tokens:ColorSpace ; rdfs:label "srgb" ;
+    w3c-tokens:channel ( "Red" "Green" "Blue" ) .
+w3c-tokens:srgb-linear a w3c-tokens:ColorSpace ; rdfs:label "srgb-linear" ;
+    w3c-tokens:channel ( "Red" "Green" "Blue" ) .
+w3c-tokens:display-p3 a w3c-tokens:ColorSpace ; rdfs:label "display-p3" ;
+    w3c-tokens:channel ( "Red" "Green" "Blue" ) .
+w3c-tokens:a98-rgb a w3c-tokens:ColorSpace ; rdfs:label "a98-rgb" ;
+    w3c-tokens:channel ( "Red" "Green" "Blue" ) .
+w3c-tokens:prophoto-rgb a w3c-tokens:ColorSpace ; rdfs:label "prophoto-rgb" ;
+    w3c-tokens:channel ( "Red" "Green" "Blue" ) .
+w3c-tokens:rec2020 a w3c-tokens:ColorSpace ; rdfs:label "rec2020" ;
+    w3c-tokens:channel ( "Red" "Green" "Blue" ) .
+w3c-tokens:hsl a w3c-tokens:ColorSpace ; rdfs:label "hsl" ;
+    w3c-tokens:channel ( "Hue" "Saturation" "Lightness" ) .
+w3c-tokens:hwb a w3c-tokens:ColorSpace ; rdfs:label "hwb" ;
+    w3c-tokens:channel ( "Hue" "Whiteness" "Blackness" ) .
+w3c-tokens:lab a w3c-tokens:ColorSpace ; rdfs:label "lab" ;
+    w3c-tokens:channel ( "Lightness" "A" "B" ) .
+w3c-tokens:oklab a w3c-tokens:ColorSpace ; rdfs:label "oklab" ;
+    w3c-tokens:channel ( "Lightness" "A" "B" ) .
+w3c-tokens:lch a w3c-tokens:ColorSpace ; rdfs:label "lch" ;
+    w3c-tokens:channel ( "Lightness" "Chroma" "Hue" ) .
+w3c-tokens:oklch a w3c-tokens:ColorSpace ; rdfs:label "oklch" ;
+    w3c-tokens:channel ( "Lightness" "Chroma" "Hue" ) .
+w3c-tokens:xyz-d65 a w3c-tokens:ColorSpace ; rdfs:label "xyz-d65" ;
+    w3c-tokens:channel ( "X" "Y" "Z" ) .
+w3c-tokens:xyz-d50 a w3c-tokens:ColorSpace ; rdfs:label "xyz-d50" ;
+    w3c-tokens:channel ( "X" "Y" "Z" ) .
+
+## Weight keywords
+
+w3c-tokens:thin a w3c-tokens:WeightKeyword ; rdfs:label "thin" ; w3c-tokens:keyword "thin" ; w3c-tokens:weight 100 .
+w3c-tokens:hairline a w3c-tokens:WeightKeyword ; rdfs:label "hairline" ; w3c-tokens:keyword "hairline" ; w3c-tokens:weight 100 .
+w3c-tokens:extra-light a w3c-tokens:WeightKeyword ; rdfs:label "extra-light" ; w3c-tokens:keyword "extra-light" ; w3c-tokens:weight 200 .
+w3c-tokens:ultra-light a w3c-tokens:WeightKeyword ; rdfs:label "ultra-light" ; w3c-tokens:keyword "ultra-light" ; w3c-tokens:weight 200 .
+w3c-tokens:light a w3c-tokens:WeightKeyword ; rdfs:label "light" ; w3c-tokens:keyword "light" ; w3c-tokens:weight 300 .
+w3c-tokens:normal a w3c-tokens:WeightKeyword ; rdfs:label "normal" ; w3c-tokens:keyword "normal" ; w3c-tokens:weight 400 .
+w3c-tokens:regular a w3c-tokens:WeightKeyword ; rdfs:label "regular" ; w3c-tokens:keyword "regular" ; w3c-tokens:weight 400 .
+w3c-tokens:book a w3c-tokens:WeightKeyword ; rdfs:label "book" ; w3c-tokens:keyword "book" ; w3c-tokens:weight 400 .
+w3c-tokens:medium a w3c-tokens:WeightKeyword ; rdfs:label "medium" ; w3c-tokens:keyword "medium" ; w3c-tokens:weight 500 .
+w3c-tokens:semi-bold a w3c-tokens:WeightKeyword ; rdfs:label "semi-bold" ; w3c-tokens:keyword "semi-bold" ; w3c-tokens:weight 600 .
+w3c-tokens:demi-bold a w3c-tokens:WeightKeyword ; rdfs:label "demi-bold" ; w3c-tokens:keyword "demi-bold" ; w3c-tokens:weight 600 .
+w3c-tokens:bold a w3c-tokens:WeightKeyword ; rdfs:label "bold" ; w3c-tokens:keyword "bold" ; w3c-tokens:weight 700 .
+w3c-tokens:extra-bold a w3c-tokens:WeightKeyword ; rdfs:label "extra-bold" ; w3c-tokens:keyword "extra-bold" ; w3c-tokens:weight 800 .
+w3c-tokens:ultra-bold a w3c-tokens:WeightKeyword ; rdfs:label "ultra-bold" ; w3c-tokens:keyword "ultra-bold" ; w3c-tokens:weight 800 .
+w3c-tokens:black a w3c-tokens:WeightKeyword ; rdfs:label "black" ; w3c-tokens:keyword "black" ; w3c-tokens:weight 900 .
+w3c-tokens:heavy a w3c-tokens:WeightKeyword ; rdfs:label "heavy" ; w3c-tokens:keyword "heavy" ; w3c-tokens:weight 900 .
+w3c-tokens:extra-black a w3c-tokens:WeightKeyword ; rdfs:label "extra-black" ; w3c-tokens:keyword "extra-black" ; w3c-tokens:weight 950 .
+w3c-tokens:ultra-black a w3c-tokens:WeightKeyword ; rdfs:label "ultra-black" ; w3c-tokens:keyword "ultra-black" ; w3c-tokens:weight 950 .
