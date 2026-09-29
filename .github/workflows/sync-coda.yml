@@ -21,7 +21,7 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    # Deployable from main only; holds SUPERHUMAN_DOCS_API_KEY and the sync App's credentials, so
+    # Deployable from main only; holds SUPERHUMAN_DOCS_API_KEY and SUPERHUMAN_DOCS_SYNC_TOKEN, so
     # no pull request branch can read them.
     environment: sync
     defaults:
@@ -46,20 +46,13 @@ jobs:
       # must not also wave through rows the source is losing by accident.
       SYNC_ALLOW_MALFORMED_ROWS: ${{ inputs.allow_malformed_rows && '1' || '0' }}
     steps:
-      # A GitHub App token, not GITHUB_TOKEN: GitHub starts no workflow for a push or a pull
-      # request made with the workflow's own token, so pr.yml would never run on the sync
+      # SUPERHUMAN_DOCS_SYNC_TOKEN, not GITHUB_TOKEN: GitHub starts no workflow for a push or a
+      # pull request made with the workflow's own token, so pr.yml would never run on the sync
       # pull request and auto-merge would wait forever.
-      - name: Mint the sync App token
-        id: app-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        with:
-          client-id: ${{ secrets.SYNC_APP_CLIENT_ID }}
-          private-key: ${{ secrets.SYNC_APP_PRIVATE_KEY }}
-
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          token: ${{ steps.app-token.outputs.token }}
-          # Persist the App token so the later `git push` is authenticated as the App.
+          token: ${{ secrets.SUPERHUMAN_DOCS_SYNC_TOKEN }}
+          # Persist the token so the later `git push` is authenticated with it.
           persist-credentials: true
 
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
@@ -121,7 +114,7 @@ jobs:
       # it lands. It merges itself (squash) once the required checks are green.
       - name: Open the sync pull request and let it merge itself
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ secrets.SUPERHUMAN_DOCS_SYNC_TOKEN }}
           TITLE: "chore(design-system): sync data from Coda [${{ inputs.trigger }}]"
         run: |
           git config user.name "github-actions[bot]"

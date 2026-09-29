@@ -39,7 +39,7 @@ their secrets.
 |---|---|---|
 | `release` | `DEPLOY_KEY` | `tag.yml`'s version job, which checks out with it and pushes the version commit and tag |
 | `sync` | `SUPERHUMAN_DOCS_API_KEY` | the Coda sync (`sync-coda.yml`), to read the Coda document |
-| `sync` | `SYNC_APP_CLIENT_ID`, `SYNC_APP_PRIVATE_KEY` | the Coda sync, to push its branch and open its pull request as the sync GitHub App (Contents and Pull requests read and write, installed on this repository only). A push or pull request made with the workflow's own token starts no workflows, so CI would never run on the sync pull request and auto-merge would never complete |
+| `sync` | `SUPERHUMAN_DOCS_SYNC_TOKEN` | the Coda sync, to push its branch and open its pull request. It is a fine-grained personal access token limited to this repository, with Contents and Pull requests read and write; an organisation-owned GitHub App replaces it when one is available. A push or pull request made with the workflow's own token starts no workflows, so CI would never run on the sync pull request and auto-merge would never complete |
 
 The publish job needs no secret: npm trusted publishing gives it a short-lived token through OIDC.
 
@@ -58,12 +58,11 @@ gh repo deploy-key delete <old-key-id> --repo canonical/pragma-core
 rm release_key release_key.pub
 ```
 
-**The sync App's private key.** Generate a new private key on the App's settings page, store it in
-the `sync` environment, delete the old key on the same page, and delete the downloaded file:
+**The sync token.** Regenerate the token on its settings page (or create a new one with the same
+scope), store it in the `sync` environment, then revoke the old one:
 
 ```bash
-gh secret set SYNC_APP_PRIVATE_KEY --repo canonical/pragma-core --env sync < pragma-core-sync.private-key.pem
-rm pragma-core-sync.private-key.pem
+gh secret set SUPERHUMAN_DOCS_SYNC_TOKEN --repo canonical/pragma-core --env sync
 ```
 
 **The Coda API key.** Create a new key in Coda, store it, then revoke the old one in Coda:
