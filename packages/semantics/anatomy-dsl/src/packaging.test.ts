@@ -22,11 +22,15 @@ const manifest = JSON.parse(
 let packed: string[] | undefined;
 function packedFiles(): string[] {
   if (packed !== undefined) return packed;
-  const out = execFileSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], {
-    cwd: ROOT,
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "ignore"],
-  });
+  const out = execFileSync(
+    "npm",
+    ["pack", "--dry-run", "--json", "--ignore-scripts"],
+    {
+      cwd: ROOT,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    },
+  );
   const [entry] = JSON.parse(out) as { files: { path: string }[] }[];
   packed = (entry?.files ?? []).map((file) => file.path);
   return packed;
