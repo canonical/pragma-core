@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.43.0-experimental.0 (2026-09-29)
+
+### Features
+
+* **configs:** add the Biome, TypeScript and Renovate configurations ([#2](https://github.com/canonical/pragma-core/issues/2)) ([50b7ae6](https://github.com/canonical/pragma-core/commit/50b7ae67b11a4e5d298c41d8d9c4ad3bbb21b9b5))
+
+
 # [0.42.0](https://github.com/canonical/pragma/compare/v0.41.0...v0.42.0) (2026-09-28)
 
 **Note:** Version bump only for package @canonical/renovate-config

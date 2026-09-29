@@ -1,6 +1,6 @@
 {
   "name": "@canonical/code-standards",
-  "version": "0.1.5",
+  "version": "0.43.0-experimental.0",
   "description": "Code standards ontology and documentation generator",
   "type": "module",
   "scripts": {
@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
-    "@canonical/biome-config": "^0.42.0",
-    "@canonical/typescript-config": "^0.42.0",
+    "@canonical/biome-config": "^0.43.0-experimental.0",
+    "@canonical/typescript-config": "^0.43.0-experimental.0",
     "@types/bun": "latest",
     "typescript": "^7.0.2",
     "vitest": "^4.0.18"

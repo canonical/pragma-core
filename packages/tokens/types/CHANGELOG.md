@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.43.0-experimental.0 (2026-09-29)
+
+### Features
+
+* **tokens:** add the design tokens and their build and editor tooling ([#6](https://github.com/canonical/pragma-core/issues/6)) ([bca2af5](https://github.com/canonical/pragma-core/commit/bca2af534525025579b60a440c358f4a7a30886d))
+
+
 # [0.10.0](https://github.com/canonical/design-tokens/compare/v0.9.1...v0.10.0) (2026-09-08)
 
 **Note:** Version bump only for package @canonical/token-types

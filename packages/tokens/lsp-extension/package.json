@@ -2,7 +2,7 @@
   "name": "@canonical/terrazzo-lsp-extension",
   "displayName": "Terrazzo LSP",
   "description": "CSS custom property intelligence for design token workflows",
-  "version": "0.10.0",
+  "version": "0.43.0-experimental.0",
   "publisher": "canonical",
   "license": "LGPL-3.0-only",
   "galleryBanner": {
@@ -95,9 +95,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
-    "@canonical/biome-config": "^0.42.0",
-    "@canonical/terrazzo-lsp": "^0.10.0",
-    "@canonical/typescript-config": "^0.42.0",
+    "@canonical/biome-config": "^0.43.0-experimental.0",
+    "@canonical/terrazzo-lsp": "^0.43.0-experimental.0",
+    "@canonical/typescript-config": "^0.43.0-experimental.0",
     "@types/node": "^26.4.1",
     "@types/vscode": "~1.91.0",
     "@vscode/vsce": "^3.9.2",

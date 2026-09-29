@@ -1,6 +1,6 @@
 {
   "name": "@canonical/token-types",
-  "version": "0.10.0",
+  "version": "0.43.0-experimental.0",
   "description": "Shared types for Canonical design token tooling.",
   "type": "module",
   "license": "LGPL-3.0",
@@ -40,7 +40,7 @@
     "test": "vitest run --typecheck.only"
   },
   "devDependencies": {
-    "@canonical/typescript-config": "^0.42.0",
+    "@canonical/typescript-config": "^0.43.0-experimental.0",
     "@types/node": "^26.4.1",
     "typescript": "^7.0.2",
     "vitest": "^5.0.0"

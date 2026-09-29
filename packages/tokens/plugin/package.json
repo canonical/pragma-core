@@ -1,6 +1,6 @@
 {
   "name": "@canonical/terrazzo-plugin-css",
-  "version": "0.10.0",
+  "version": "0.43.0-experimental.0",
   "description": "Terrazzo CSS plugin for Canonical design tokens. Transforms DTCG tokens into CSS custom properties with light-dark(), modifier families, @layer ordering, and @media scoping.",
   "type": "module",
   "license": "LGPL-3.0",
@@ -49,13 +49,13 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@canonical/token-types": "^0.10.0"
+    "@canonical/token-types": "^0.43.0-experimental.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
-    "@canonical/biome-config": "^0.42.0",
-    "@canonical/typescript-config": "^0.42.0",
-    "@canonical/webarchitect": "^0.42.0",
+    "@canonical/biome-config": "^0.43.0-experimental.0",
+    "@canonical/typescript-config": "^0.43.0-experimental.0",
+    "@canonical/webarchitect": "^0.43.0-experimental.0",
     "@terrazzo/token-tools": "2.7.1",
     "@types/node": "^26.4.1",
     "typescript": "^7.0.2",
