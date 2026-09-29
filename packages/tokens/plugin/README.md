@@ -60,7 +60,7 @@ canonicalPlugin({
 | `sets` | Configuration for primitive and semantic token sets. |
 | `theme` | Light/dark theme modifier — controls `light-dark()` output and `color-scheme` declarations. |
 | `typography` | Typography modifier configuration. |
-| `surfaces` | Maps resolver context names to CSS selectors. See [documentation/surfaces.md](../../documentation/surfaces.md). |
+| `surfaces` | Maps resolver context names to CSS selectors. See [documentation/surfaces.md](../documentation/surfaces.md). |
 | `states` | Interactive state derivation layer (hover, active, disabled). |
 | `motion` | `@media (prefers-reduced-motion)` scoping configuration. |
 | `contrast` | `@media (prefers-contrast)` scoping configuration. |

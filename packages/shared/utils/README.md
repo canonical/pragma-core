@@ -2,7 +2,7 @@
 
 Utility functions for the Pragma design system. This package contains battle-tested helpers that have proven useful across multiple packages.
 
-Design-system helpers — navigation trees, `debounce`, `throttle`, `humanizeNumber`, `pluralize` and the `AllOrNone` type — live in [`@canonical/ds-utils`](../runtime/ds-utils/README.md).
+Design-system helpers — navigation trees, `debounce`, `throttle`, `humanizeNumber`, `pluralize` and the `AllOrNone` type — live in [`@canonical/ds-utils`](https://www.npmjs.com/package/@canonical/ds-utils).
 
 ## Installation
 

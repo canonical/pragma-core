@@ -185,11 +185,11 @@ design-tokens/
 
 | Package | Description | README |
 |---------|-------------|--------|
-| [`@canonical/design-tokens`](packages/tokens/) | Token definitions (DTCG format) with CSS custom property output. | [packages/tokens/README.md](packages/tokens/README.md) |
-| [`@canonical/terrazzo-plugin-css`](packages/plugin/) | Terrazzo CSS plugin — transforms DTCG tokens into CSS custom properties with `light-dark()`, modifier families, `@layer` ordering, and `@media` scoping. | [packages/plugin/README.md](packages/plugin/README.md) |
-| [`@canonical/terrazzo-lsp`](packages/lsp/) | Language server providing CSS custom property intelligence — completions, hover, diagnostics, go-to-definition, rename, document colours, and workspace symbols. | [packages/lsp/README.md](packages/lsp/README.md) |
-| [`@canonical/terrazzo-lsp-extension`](packages/lsp-extension/) | VS Code extension that bundles the LSP server. Install with `npx @canonical/terrazzo-lsp-extension`. | [packages/lsp-extension/README.md](packages/lsp-extension/README.md) |
-| [`@canonical/token-types`](packages/types/) | Shared TypeScript types defining the `tokens.json` artifact contract between the plugin and the LSP. | [packages/types/README.md](packages/types/README.md) |
+| [`@canonical/design-tokens`](tokens/) | Token definitions (DTCG format) with CSS custom property output. | [tokens/README.md](tokens/README.md) |
+| [`@canonical/terrazzo-plugin-css`](plugin/) | Terrazzo CSS plugin — transforms DTCG tokens into CSS custom properties with `light-dark()`, modifier families, `@layer` ordering, and `@media` scoping. | [plugin/README.md](plugin/README.md) |
+| [`@canonical/terrazzo-lsp`](lsp/) | Language server providing CSS custom property intelligence — completions, hover, diagnostics, go-to-definition, rename, document colours, and workspace symbols. | [lsp/README.md](lsp/README.md) |
+| [`@canonical/terrazzo-lsp-extension`](lsp-extension/) | VS Code extension that bundles the LSP server. Install with `npx @canonical/terrazzo-lsp-extension`. | [lsp-extension/README.md](lsp-extension/README.md) |
+| [`@canonical/token-types`](types/) | Shared TypeScript types defining the `tokens.json` artifact contract between the plugin and the LSP. | [types/README.md](types/README.md) |
 
 ## Design Tokens
 
@@ -227,7 +227,7 @@ Tokens span several CSS value types. The LSP uses these types for diagnostics (c
 
 ## Terrazzo LSP
 
-A language server providing CSS custom property intelligence for design token workflows. It reads the `tokens.json` build artifact and provides editor features for CSS and SCSS files. See the [LSP README](packages/lsp/README.md) for the full feature reference, diagnostics guide, configuration schema, and editor setup instructions.
+A language server providing CSS custom property intelligence for design token workflows. It reads the `tokens.json` build artifact and provides editor features for CSS and SCSS files. See the [LSP README](lsp/README.md) for the full feature reference, diagnostics guide, configuration schema, and editor setup instructions.
 
 Quick editor setup for consumers:
 
