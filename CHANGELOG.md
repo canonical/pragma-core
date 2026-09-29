@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.43.0-experimental.1](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.0...v0.43.0-experimental.1) (2026-09-29)
+
+### Bug Fixes
+
+* **design-system:** drop the token-ontology override ([#17](https://github.com/canonical/pragma-core/issues/17)) ([2fd8d74](https://github.com/canonical/pragma-core/commit/2fd8d74bcf3d1e31e487c593d9159cd99253df90))
+
+
 # 0.43.0-experimental.0 (2026-09-29)
 
 ### Features

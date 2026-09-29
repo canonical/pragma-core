@@ -1,7 +1,7 @@
 {
   "name": "@canonical/summon-core",
   "description": "Code generation framework: generator definitions, templates, stamps, discovery. Built on @canonical/task.",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "type": "module",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "@canonical/task": "^0.43.0-experimental.0",
-    "@canonical/utils": "^0.43.0-experimental.0",
+    "@canonical/utils": "^0.43.0-experimental.1",
     "chalk": "^6.0.0",
     "commander": "^15.0.0",
     "ejs": "^5.0.0",

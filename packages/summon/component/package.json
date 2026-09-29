@@ -1,7 +1,7 @@
 {
   "name": "@canonical/summon-component",
   "description": "Component generators for Summon - React, Svelte and Lit component scaffolding",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "type": "module",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
@@ -55,7 +55,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@canonical/utils": "^0.43.0-experimental.0"
+    "@canonical/utils": "^0.43.0-experimental.1"
   },
   "peerDependencies": {
     "@canonical/summon-core": "^0.43.0-experimental.0",

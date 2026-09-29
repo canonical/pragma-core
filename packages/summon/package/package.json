@@ -1,7 +1,7 @@
 {
   "name": "@canonical/summon-package",
   "description": "Package generator for Summon - scaffold new npm packages with proper configuration",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "type": "module",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
@@ -47,7 +47,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
     "@canonical/biome-config": "^0.43.0-experimental.0",
-    "@canonical/summon-core": "^0.43.0-experimental.0",
+    "@canonical/summon-core": "^0.43.0-experimental.1",
     "@canonical/task": "^0.43.0-experimental.0",
     "@canonical/typescript-config": "^0.43.0-experimental.0",
     "@canonical/webarchitect": "^0.43.0-experimental.0",
@@ -57,7 +57,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@canonical/utils": "^0.43.0-experimental.0"
+    "@canonical/utils": "^0.43.0-experimental.1"
   },
   "peerDependencies": {
     "@canonical/summon-core": "^0.43.0-experimental.0",

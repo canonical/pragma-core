@@ -4,7 +4,7 @@
   "types": "src/index.ts",
   "type": "module",
   "license": "LGPL-3.0",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "bin": {
     "collect-implementations": "./src/collect-implementations.ts"
   },
@@ -43,8 +43,8 @@
     "vitest": "^4.1.9"
   },
   "dependencies": {
-    "@canonical/anatomy-dsl": "^0.43.0-experimental.0",
-    "@canonical/token-ontology": "^0.43.0-experimental.0",
+    "@canonical/anatomy-dsl": "^0.43.0-experimental.1",
+    "@canonical/token-ontology": "^0.43.0-experimental.1",
     "ajv": "^8.17.1",
     "jsonld": "^9.0.0",
     "n3": "^2.0.1",

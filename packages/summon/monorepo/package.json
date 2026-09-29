@@ -1,7 +1,7 @@
 {
   "name": "@canonical/summon-monorepo",
   "description": "Monorepo generator for Summon - scaffold new Bun + Lerna monorepos with CI, release, and shared config",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "type": "module",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
@@ -45,7 +45,7 @@
     "test:vitest:watch": "vitest"
   },
   "dependencies": {
-    "@canonical/summon-core": "^0.43.0-experimental.0",
+    "@canonical/summon-core": "^0.43.0-experimental.1",
     "@canonical/task": "^0.43.0-experimental.0"
   },
   "devDependencies": {

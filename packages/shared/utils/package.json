@@ -1,7 +1,7 @@
 {
   "name": "@canonical/utils",
   "description": "Standard utility functions for Canonical's Web Engineering team",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "type": "module",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",

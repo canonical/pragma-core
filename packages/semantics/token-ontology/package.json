@@ -1,7 +1,7 @@
 {
   "name": "@canonical/token-ontology",
   "description": "Semantic model of the Canonical design tokens: authored dt: ontology (definitions) and generated strata data, with TypeScript build scripts.",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "type": "module",
   "module": "src/index.ts",
   "types": "src/index.ts",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
     "@canonical/biome-config": "^0.43.0-experimental.0",
-    "@canonical/design-tokens": "^0.43.0-experimental.0",
+    "@canonical/design-tokens": "^0.43.0-experimental.1",
     "@canonical/typescript-config": "^0.43.0-experimental.0",
     "@types/n3": "^1.26.3",
     "@types/node": "^26.4.1",

@@ -1,7 +1,7 @@
 {
   "name": "@canonical/anatomy-dsl",
   "description": "Anatomy DSL meta-model: TypeScript types mirroring the OWL ontology, and a YAML-to-Turtle transform",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "type": "module",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
     "@canonical/biome-config": "^0.43.0-experimental.0",
-    "@canonical/token-ontology": "^0.43.0-experimental.0",
+    "@canonical/token-ontology": "^0.43.0-experimental.1",
     "@canonical/typescript-config": "^0.43.0-experimental.0",
     "@types/n3": "^1.26.3",
     "@types/node": "^26.4.0",

@@ -1,7 +1,7 @@
 {
   "name": "@canonical/summon",
   "description": "Summon CLI binary: interactive code generator with Ink UI, shell completion, and Commander registration.",
-  "version": "0.43.0-experimental.0",
+  "version": "0.43.0-experimental.1",
   "type": "module",
   "module": "src/index.ts",
   "types": "src/index.ts",
@@ -52,9 +52,9 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@canonical/summon-core": "^0.43.0-experimental.0",
+    "@canonical/summon-core": "^0.43.0-experimental.1",
     "@canonical/task": "^0.43.0-experimental.0",
-    "@canonical/utils": "^0.43.0-experimental.0",
+    "@canonical/utils": "^0.43.0-experimental.1",
     "chalk": "^6.0.0",
     "commander": "^15.0.0",
     "ink": "^6.8.0",
