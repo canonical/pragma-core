@@ -23,6 +23,9 @@ permissions:
 jobs:
   sync:
     uses: ./.github/workflows/sync-coda.yml
+    # The sync job runs in the `sync` environment; a called workflow only receives
+    # that environment's secrets when its caller passes secrets on.
+    secrets: inherit
     with:
       trigger: Manual
       allow_shrink: ${{ inputs.allow_shrink }}
