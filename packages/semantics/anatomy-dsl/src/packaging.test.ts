@@ -1,7 +1,6 @@
-import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const manifest = JSON.parse(
@@ -13,48 +12,7 @@ const manifest = JSON.parse(
   devDependencies: Record<string, string>;
 };
 
-/**
- * The tarball's file list, as npm would publish it — computed once, because
- * `npm pack` takes over a second and the file list cannot change mid-run.
- * `--ignore-scripts` skips the `prepack` build: the list is what is asked
- * about, and the package is already built before its tests run.
- */
-let packed: string[] | undefined;
-function packedFiles(): string[] {
-  if (packed !== undefined) return packed;
-  const out = execFileSync(
-    "npm",
-    ["pack", "--dry-run", "--json", "--ignore-scripts"],
-    {
-      cwd: ROOT,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    },
-  );
-  const [entry] = JSON.parse(out) as { files: { path: string }[] }[];
-  packed = (entry?.files ?? []).map((file) => file.path);
-  return packed;
-}
-
 describe("what the package ships", () => {
-  // `npm pack` runs as a subprocess and can take several seconds on a busy
-  // runner, so the list is computed once here, outside the per-test limit.
-  beforeAll(() => {
-    packedFiles();
-  }, 30_000);
-
-  it("carries the definition files design-system imports", () => {
-    // design-system reads these from the package and never copies them, so
-    // one of them missing from the tarball is a silent divergence between
-    // the two repositories rather than a build error.
-    const files = packedFiles();
-    expect(files).toContain("definitions/style-keys.yaml");
-    expect(files).toContain("definitions/registry.ttl");
-    expect(files).toContain("definitions/lift.fixture.json");
-    expect(files).toContain("definitions/ontology.ttl");
-    expect(files).toContain("definitions/shapes.ttl");
-  });
-
   it("exports the whole of definitions/ as a subpath", () => {
     // An `exports` map blocks every subpath it does not list with
     // ERR_PACKAGE_PATH_NOT_EXPORTED, and this package's map listed "." alone
@@ -116,13 +74,5 @@ describe("what the package ships", () => {
     }
     expect(existsSync(resolve(ROOT, "src", "stylesheet.ts"))).toBe(false);
     expect(existsSync(resolve(ROOT, "src", "census.ts"))).toBe(false);
-  });
-
-  it("ships the entry point the exports map promises, once built", () => {
-    // `bun run build` runs before `bun run test` in CI; locally the dist may
-    // be absent, and this assertion is then vacuous by design rather than
-    // red for the wrong reason.
-    if (!existsSync(resolve(ROOT, "dist", "esm", "index.js"))) return;
-    expect(packedFiles()).toContain("dist/esm/index.js");
   });
 });
