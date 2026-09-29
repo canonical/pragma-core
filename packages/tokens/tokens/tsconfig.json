@@ -1,0 +1,8 @@
+{
+  "extends": "@canonical/typescript-config",
+  "include": ["terrazzo.config.ts"],
+  "compilerOptions": {
+    "types": ["node"],
+    "skipLibCheck": true
+  }
+}

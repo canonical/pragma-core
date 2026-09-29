@@ -1,0 +1,2 @@
+export { default as buildSelectorContext } from "./buildSelectorContext.js";
+export { default as classifySelectorScope } from "./classifySelectorScope.js";

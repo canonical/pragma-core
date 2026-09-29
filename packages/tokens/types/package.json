@@ -1,0 +1,48 @@
+{
+  "name": "@canonical/token-types",
+  "version": "0.10.0",
+  "description": "Shared types for Canonical design token tooling.",
+  "type": "module",
+  "license": "LGPL-3.0",
+  "author": {
+    "email": "webteam@canonical.com",
+    "name": "Canonical Webteam"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canonical/pragma-core"
+  },
+  "bugs": {
+    "url": "https://github.com/canonical/pragma-core/issues"
+  },
+  "homepage": "https://github.com/canonical/pragma-core#readme",
+  "engines": {
+    "bun": ">=1.3",
+    "node": ">=22"
+  },
+  "keywords": [
+    "design-tokens",
+    "typescript",
+    "canonical",
+    "dtcg"
+  ],
+  "main": "dist/esm/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "build:all": "bun run build",
+    "check": "bun run check:ts",
+    "check:ts": "tsc --noEmit",
+    "test": "vitest run --typecheck.only"
+  },
+  "devDependencies": {
+    "@canonical/typescript-config": "^0.42.0",
+    "@types/node": "^26.4.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "foreground": {
+      "primary": {
+        "$root": {
+          "$value": "{color.foreground.primary.branded.$root}",
+          "$description": "Fill color for primary interactive elements that need to reflect the brand identity"
+        }
+      },
+      "secondary": {
+        "$root": {
+          "$value": "{color.foreground.secondary.branded.$root}",
+          "$description": "Fill color for secondary interactive elements that need to reflect the brand identity"
+        }
+      },
+      "ghost": {
+        "$root": {
+          "$value": "{color.foreground.ghost.branded.$root}",
+          "$description": "Fill color for branded ghost-style interactive elements that match the background in their default state"
+        }
+      }
+    },
+    "text": {
+      "$root": {
+        "$value": "{color.text.branded.$root}",
+        "$description": "Text color for branded elements that need to reflect the brand identity"
+      }
+    },
+    "icon": {
+      "$root": {
+        "$value": "{color.icon.branded.$root}",
+        "$description": "Icon color for branded elements that need to reflect the brand identity"
+      }
+    },
+    "border": {
+      "$root": {
+        "$value": "{color.border.branded.$root}",
+        "$description": "Border color for elements that need to reflect the brand identity"
+      }
+    },
+    "$type": "color"
+  },
+  "$description": "Emphasis: branded context."
+}

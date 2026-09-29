@@ -1,0 +1,34 @@
+import type { TokenNode } from "../types/graph.js";
+import makeTokenNode from "./makeTokenNode.js";
+
+/**
+ * Build a fully-populated `TokenNode` with artifact-flavoured defaults.
+ *
+ * Unlike the bare `makeTokenNode` (which leaves most fields null),
+ * this preset fills in colour values, tier, type, provenance, and
+ * output-file fields — the minimum a realistic artifact token needs
+ * for diagnostic or provider tests.
+ */
+export default function makeArtifactToken(
+  overrides?: Partial<TokenNode>,
+): TokenNode {
+  return makeTokenNode({
+    cssVar: "--test",
+    provenance: { kind: "artifact", packageSource: "@test/tokens" },
+    id: "color.test",
+    type: "color",
+    tier: "semantic",
+    packageSource: "@test/tokens",
+    cssType: "<color>",
+    valueLight: "#fff",
+    valueDark: "#000",
+    isPaired: true,
+    hexLight: "#ffffff",
+    hexDark: "#000000",
+    sourceFile: "/src/tokens/color.tokens.json",
+    sourceLine: 5,
+    cssOutputFile: "/dist/tokens.css",
+    cssOutputLine: 10,
+    ...overrides,
+  });
+}

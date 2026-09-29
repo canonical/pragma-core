@@ -1,0 +1,45 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "foreground": {
+      "secondary": {
+        "$root": {
+          "$value": "{color.foreground.secondary.information.$root}",
+          "$description": "Fill color for secondary interactive elements conveying informational or neutral feedback"
+        }
+      },
+      "primary": {
+        "$root": {
+          "$value": "{color.foreground.primary.information.$root}",
+          "$description": "Fill color for primary interactive elements conveying informational or neutral feedback"
+        }
+      }
+    },
+    "text": {
+      "$root": {
+        "$value": "{color.text.information.$root}",
+        "$description": "Text color for conveying informational or neutral feedback"
+      },
+      "onForegroundSecondary": {
+        "$root": {
+          "$value": "{color.text.onForegroundSecondary.information.$root}",
+          "$description": "Information text color for text placed on secondary foreground surfaces"
+        }
+      }
+    },
+    "icon": {
+      "$root": {
+        "$value": "{color.icon.information.$root}",
+        "$description": "Icon color for conveying informational or neutral feedback"
+      }
+    },
+    "border": {
+      "$root": {
+        "$value": "{color.border.information.$root}",
+        "$description": "Border color for elements conveying informational or neutral feedback"
+      }
+    },
+    "$type": "color"
+  },
+  "$description": "Criticality: information context."
+}

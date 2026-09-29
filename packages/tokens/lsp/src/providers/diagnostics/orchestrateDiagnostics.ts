@@ -1,0 +1,116 @@
+import { formatFileUri } from "../../css/index.js";
+import * as scanners from "../../css/scanners/index.js";
+import * as values from "../../css/values/index.js";
+import type { ReachabilityCache, TokenGraph } from "../../graph/index.js";
+import {
+  type Diagnostic,
+  DiagnosticSeverity,
+  type ResolvedConfig,
+} from "../../types/index.js";
+import makeDiagnostic from "../makeDiagnostic.js";
+import checkMissingFallback from "./checkMissingFallback.js";
+import checkNoColorScheme from "./checkNoColorScheme.js";
+import checkPrimitiveToken from "./checkPrimitiveToken.js";
+import checkScopedUsage from "./checkScopedUsage.js";
+import checkStaleFallback from "./checkStaleFallback.js";
+import checkTypeMismatch from "./checkTypeMismatch.js";
+import checkTypeUncertain from "./checkTypeUncertain.js";
+import checkUnknownVar from "./checkUnknownVar.js";
+import checkUnreachableToken from "./checkUnreachableToken.js";
+import type { UsageRuleContext } from "./types.js";
+
+/** Produce diagnostics for a CSS file. */
+const produceDiagnostics = (
+  fileUri: string,
+  source: string,
+  graph: TokenGraph,
+  cache: ReachabilityCache,
+  config: ResolvedConfig,
+): Diagnostic[] => {
+  const results: Diagnostic[] = [];
+  const { directives, unknownRules } =
+    scanners.parseSuppressionDirectives(source);
+  for (const { rule, line } of unknownRules) {
+    results.push(
+      makeDiagnostic(
+        line,
+        0,
+        DiagnosticSeverity.Information,
+        "css/unknown-var",
+        `Unknown rule "${rule}" in suppression comment`,
+        0,
+      ),
+    );
+  }
+  const usages = scanners.scanUsages(source, fileUri);
+  const reachableFiles = cache.getReachableFiles(fileUri, graph);
+  const globalUris = resolveGlobalUris(graph, config);
+  const lines = source.split("\n");
+
+  // File-level checks
+  checkNoColorScheme({ source, config, directives }, results);
+
+  for (const usage of usages) {
+    const token = graph.resolveToken(usage.cssVar);
+    const prop = graph.getProperty(usage.cssVar);
+    const isRegistered = token?.registered || !!prop;
+    const lineText = lines[usage.line] ?? "";
+    const insideMath = isInsideMathFunction(lineText, usage.column);
+    const ctx: UsageRuleContext = {
+      usage,
+      token,
+      prop,
+      isRegistered,
+      lineText,
+      insideMath,
+      fileUri,
+      reachableFiles,
+      globalUris,
+      config,
+      directives,
+      graph,
+    };
+    checkMissingFallback(ctx, results);
+    checkTypeMismatch(ctx, results);
+    checkTypeUncertain(ctx, results);
+    checkUnknownVar(ctx, results);
+    checkUnreachableToken(ctx, results);
+    checkPrimitiveToken(ctx, results);
+    checkStaleFallback(ctx, results);
+    checkScopedUsage(ctx, results);
+  }
+  return results;
+};
+
+export default produceDiagnostics;
+
+function isInsideMathFunction(lineText: string, column: number): boolean {
+  const before = lineText.substring(0, column);
+  for (const fn of values.MATH_FUNCTIONS) {
+    const fnPattern = `${fn}(`;
+    const idx = before.lastIndexOf(fnPattern);
+    if (idx >= 0) {
+      const afterFn = lineText.substring(idx);
+      let depth = 0;
+      for (let i = 0; i < afterFn.length && idx + i <= column; i++) {
+        if (afterFn[i] === "(") depth++;
+        if (afterFn[i] === ")") depth--;
+      }
+      if (depth > 0) return true;
+    }
+  }
+  return false;
+}
+
+function resolveGlobalUris(
+  graph: TokenGraph,
+  config: ResolvedConfig,
+): Set<string> {
+  if (config.globalStylesheets === null) {
+    const uris = new Set<string>();
+    for (const token of graph.tokenValues())
+      if (token.cssOutputFile) uris.add(formatFileUri(token.cssOutputFile));
+    return uris;
+  }
+  return new Set(config.globalStylesheets);
+}

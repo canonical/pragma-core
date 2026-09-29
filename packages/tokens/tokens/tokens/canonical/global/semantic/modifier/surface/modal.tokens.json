@@ -1,0 +1,7 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "$type": "color"
+  },
+  "$description": "[EXPERIMENTAL] Surface: modal context. 15 rest roles. Aliases the same base semantic tokens as layer1, populating the surface channel under a distinct .modal selector so modal content can opt into the base surface treatment directly."
+}

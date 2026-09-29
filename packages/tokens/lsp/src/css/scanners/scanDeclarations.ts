@@ -1,0 +1,54 @@
+/** Scan CSS source for custom property declarations. */
+import type { DeclarationNode } from "../../types/index.js";
+import type { Tree } from "../lezer/index.js";
+import * as lezer from "../lezer/index.js";
+import buildSelectorContext from "../selectors/buildSelectorContext.js";
+import * as treeHelpers from "../tree/index.js";
+import inferValueType from "../values/inferValueType.js";
+
+export default function scanDeclarations(
+  source: string,
+  fileUri: string,
+  tree?: Tree,
+): DeclarationNode[] {
+  const results: DeclarationNode[] = [];
+  const parsed = tree ?? lezer.parseCSS(source);
+  const lineOffsets = treeHelpers.buildLineOffsets(source);
+
+  visit(parsed.topNode, (node) => {
+    if (node.name !== "Declaration") return;
+
+    const varNode = node.getChild("VariableName");
+    if (!varNode) return;
+
+    const cssVar = lezer.getNodeText(source, varNode);
+    if (!cssVar.startsWith("--")) return;
+
+    const rawValue = treeHelpers.extractDeclarationValue(source, node);
+    const atRules = treeHelpers.resolveAncestorAtRules(node, source);
+    results.push({
+      cssVar,
+      fileUri,
+      line: treeHelpers.getLineAt(varNode.from, lineOffsets),
+      column: treeHelpers.getColumnAt(varNode.from, lineOffsets),
+      rawValue,
+      cssType: inferValueType(rawValue),
+      selector: buildSelectorContext(
+        treeHelpers.resolveAncestorSelector(node, source),
+        atRules,
+      ),
+    });
+  });
+
+  return results;
+}
+
+function visit(
+  node: import("../lezer/index.js").SyntaxNode,
+  onNode: (node: import("../lezer/index.js").SyntaxNode) => void,
+): void {
+  onNode(node);
+  for (let child = node.firstChild; child; child = child.nextSibling) {
+    visit(child, onNode);
+  }
+}

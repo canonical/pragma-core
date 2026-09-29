@@ -1,0 +1,57 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "foreground": {
+      "secondary": {
+        "$root": {
+          "$value": "{color.foreground.secondary.error.$root}",
+          "$description": "Fill color for secondary interactive elements indicating errors or critical issues"
+        }
+      },
+      "input": {
+        "$root": {
+          "$value": "{color.foreground.input.error.$root}",
+          "$description": "Fill color for input elements in an error validation state"
+        }
+      },
+      "primary": {
+        "$root": {
+          "$value": "{color.foreground.primary.error.$root}",
+          "$description": "Fill color for primary interactive elements indicating errors or critical issues"
+        }
+      }
+    },
+    "text": {
+      "$root": {
+        "$value": "{color.text.error.$root}",
+        "$description": "Text color for indicating errors or critical issues"
+      },
+      "onForegroundSecondary": {
+        "$root": {
+          "$value": "{color.text.onForegroundSecondary.error.$root}",
+          "$description": "Error text color for text placed on secondary foreground surfaces"
+        }
+      }
+    },
+    "icon": {
+      "$root": {
+        "$value": "{color.icon.error.$root}",
+        "$description": "Icon color for indicating errors or critical issues"
+      }
+    },
+    "border": {
+      "$root": {
+        "$value": "{color.border.error.$root}",
+        "$description": "Border color for elements indicating errors or critical issues that require immediate action"
+      }
+    },
+    "focusRing": {
+      "$root": {
+        "$value": "{color.focusRing.error}",
+        "$description": "Focus ring color for elements in an error state"
+      }
+    },
+    "$type": "color"
+  },
+  "$description": "Criticality: error context."
+}

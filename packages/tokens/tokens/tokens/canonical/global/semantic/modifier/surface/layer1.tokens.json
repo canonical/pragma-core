@@ -1,0 +1,7 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "$type": "color"
+  },
+  "$description": "Surface: layer1 context. 15 rest roles. Aliases base semantic tokens to populate the surface channel at depth 1."
+}

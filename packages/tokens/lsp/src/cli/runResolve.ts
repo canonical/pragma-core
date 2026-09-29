@@ -1,0 +1,19 @@
+/**
+ * `resolve` command — resolve an import specifier.
+ *
+ * @note Impure — dynamically imports css module, writes to stdout/stderr,
+ * may exit the process.
+ */
+export async function runResolve(
+  specifier: string | undefined,
+  rootDir: string,
+): Promise<void> {
+  if (!specifier) {
+    console.error("Usage: terrazzo-lsp resolve <import-specifier>");
+    process.exit(1);
+    return;
+  }
+  const { resolveImportSpecifier } = await import("../css/index.js");
+  const resolved = resolveImportSpecifier(specifier, rootDir, rootDir);
+  console.log(resolved ?? "(unresolvable)");
+}

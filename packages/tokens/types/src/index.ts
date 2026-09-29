@@ -1,0 +1,28 @@
+export type {
+  Artifact,
+  ArtifactAtRule,
+  ArtifactDeclaration,
+  ArtifactDerivationFields,
+  ArtifactDerivationKind,
+  ArtifactEnvelope,
+  ArtifactMetadataFields,
+  ArtifactRegistrationFields,
+  ArtifactResolvedValueFields,
+  ArtifactSourceFields,
+  ArtifactTier,
+  ArtifactToken,
+  ArtifactTokenInit,
+  DerivationKind,
+  DerivedArtifactTokenInit,
+  DtcgTokenType,
+  KnownDerivationKind,
+  KnownDtcgTokenType,
+  KnownTokenTier,
+  TokenTier,
+  TokenVisibility,
+  WrappedArtifactEnvelope,
+} from "./artifact/types.js";
+export {
+  isKnownDtcgTokenType,
+  KNOWN_DTCG_TOKEN_TYPES,
+} from "./artifact/types.js";

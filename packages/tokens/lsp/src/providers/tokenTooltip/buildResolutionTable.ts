@@ -1,0 +1,165 @@
+import type { TokenGraph } from "../../graph/index.js";
+import type { TokenNode } from "../../types/index.js";
+import resolveToLiteral from "./resolveToLiteral.js";
+
+interface ResolutionStep {
+  cssVar: string;
+  value: string;
+  tier: TokenNode["tier"];
+}
+
+export default function buildResolutionTable(
+  token: TokenNode,
+  graph: TokenGraph,
+): string | null {
+  const steps = buildResolutionSteps(token, graph);
+  if (steps.length === 0) return null;
+
+  const darkTerminal = resolveDarkTerminal(steps, graph);
+  const lines: string[] = ["| # | Token | Value |", "|:--|:------|:------|"];
+
+  for (let index = 0; index < steps.length; index++) {
+    const step = steps[index];
+    const displayIndex = steps.length - index;
+    const isTerminal = index === steps.length - 1;
+
+    if (isTerminal && darkTerminal) {
+      lines.push(
+        `| ${displayIndex}L | \`${step.cssVar}\` | \`${step.value}\` |`,
+      );
+      lines.push(
+        `| ${displayIndex}D | \`${darkTerminal.cssVar}\` | \`${darkTerminal.value}\` |`,
+      );
+      continue;
+    }
+
+    lines.push(`| ${displayIndex} | \`${step.cssVar}\` | \`${step.value}\` |`);
+  }
+
+  return lines.join("\n");
+}
+
+function resolveDarkTerminal(
+  steps: ResolutionStep[],
+  graph: TokenGraph,
+): ResolutionStep | null {
+  if (steps.length < 2) return null;
+
+  const lightTerminal = steps[steps.length - 1];
+  for (let index = steps.length - 2; index >= 0; index--) {
+    const parentToken = graph.resolveToken(steps[index].cssVar);
+    if (!parentToken?.isPaired || !parentToken.valueDark) continue;
+
+    const darkReference = extractVarRef(parentToken.valueDark);
+    if (!darkReference || darkReference === steps[index + 1]?.cssVar) continue;
+
+    const darkValue = resolveToLiteral(parentToken.valueDark, graph, "dark");
+    const darkTarget = graph.resolveToken(darkReference);
+
+    let terminalVar = darkReference;
+    let current = darkTarget;
+    const visited = new Set<string>([darkReference]);
+    while (current?.valueLight) {
+      const nextReference = extractVarRef(current.valueLight);
+      if (!nextReference || visited.has(nextReference)) break;
+      visited.add(nextReference);
+      terminalVar = nextReference;
+      current = graph.resolveToken(nextReference);
+    }
+
+    if (terminalVar === lightTerminal.cssVar) return null;
+
+    return {
+      cssVar: terminalVar,
+      value: darkValue,
+      tier: current?.tier ?? null,
+    };
+  }
+
+  return null;
+}
+
+function extractVarRef(value: string | null): string | null {
+  if (!value) return null;
+  const match = value.match(/^var\((--[\w-]+)\)$/);
+  return match ? match[1] : null;
+}
+
+function buildResolutionSteps(
+  token: TokenNode,
+  graph: TokenGraph,
+): ResolutionStep[] {
+  const steps: ResolutionStep[] = [
+    {
+      cssVar: token.cssVar,
+      value: "",
+      tier: token.tier,
+    },
+  ];
+
+  const visited = new Set<string>([token.cssVar]);
+  for (const reference of token.aliasChain) {
+    if (visited.has(reference)) break;
+    visited.add(reference);
+    const target = graph.resolveToken(reference);
+    if (!target) {
+      steps.push({ cssVar: reference, value: "?", tier: null });
+      break;
+    }
+    steps.push({ cssVar: target.cssVar, value: "", tier: target.tier });
+  }
+
+  for (let index = 0; index < steps.length; index++) {
+    if (index < steps.length - 1) {
+      const nextCssVar = steps[index + 1].cssVar;
+      const currentToken = graph.resolveToken(steps[index].cssVar);
+      if (currentToken?.isPaired && currentToken.valueDark) {
+        const lightReference = formatReferenceValue(
+          currentToken.valueLight,
+          nextCssVar,
+        );
+        const darkReference = formatReferenceValue(
+          currentToken.valueDark,
+          nextCssVar,
+        );
+        steps[index].value =
+          lightReference !== darkReference
+            ? `light-dark(${lightReference}, ${darkReference})`
+            : lightReference;
+        continue;
+      }
+
+      steps[index].value = `var(${nextCssVar})`;
+      continue;
+    }
+
+    const terminalToken = graph.resolveToken(steps[index].cssVar);
+    if (terminalToken) {
+      steps[index].value = formatTerminalValue(terminalToken);
+    } else if (!steps[index].value) {
+      steps[index].value = "?";
+    }
+  }
+
+  return steps;
+}
+
+function formatReferenceValue(
+  rawValue: string | null,
+  fallbackTarget: string,
+): string {
+  if (rawValue?.startsWith("var(")) return rawValue;
+  return `var(${fallbackTarget})`;
+}
+
+function formatTerminalValue(token: TokenNode): string {
+  if (
+    token.isPaired &&
+    token.valueLight &&
+    token.valueDark &&
+    token.valueLight !== token.valueDark
+  ) {
+    return `light-dark(${token.valueLight}, ${token.valueDark})`;
+  }
+  return token.valueLight ?? "?";
+}

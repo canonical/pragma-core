@@ -1,0 +1,17 @@
+/**
+ * Synchronize import graph edges for a single importer.
+ */
+import type { TokenGraph } from "../../graph/index.js";
+
+interface UpdateImportEdgesOptions {
+  graph: TokenGraph;
+  importedUris: Iterable<string>;
+  importerUri: string;
+}
+
+export default function updateImportEdges(
+  options: UpdateImportEdgesOptions,
+): void {
+  const { graph, importedUris, importerUri } = options;
+  graph.setImports(importerUri, new Set(importedUris));
+}

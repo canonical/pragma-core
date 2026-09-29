@@ -1,0 +1,108 @@
+{
+  "name": "@canonical/terrazzo-lsp-extension",
+  "displayName": "Terrazzo LSP",
+  "description": "CSS custom property intelligence for design token workflows",
+  "version": "0.10.0",
+  "publisher": "canonical",
+  "license": "LGPL-3.0-only",
+  "galleryBanner": {
+    "color": "#E95420",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.91.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canonical/pragma-core"
+  },
+  "bugs": {
+    "url": "https://github.com/canonical/pragma-core/issues"
+  },
+  "icon": "icon.png",
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "css",
+    "design-tokens",
+    "custom-properties",
+    "canonical",
+    "terrazzo",
+    "dtcg",
+    "lsp"
+  ],
+  "activationEvents": [
+    "onLanguage:css",
+    "onLanguage:scss"
+  ],
+  "main": "./dist/extension.js",
+  "bin": {
+    "terrazzo-lsp-extension": "./install.mjs",
+    "terrazzo-lsp-install-vscode": "./install.mjs"
+  },
+  "files": [
+    "dist",
+    "terrazzo-lsp.vsix",
+    "install.mjs"
+  ],
+  "scripts": {
+    "build:client": "bun build extension.ts --outdir dist --format=cjs --target=node --external vscode",
+    "build:server": "node build-server.mjs",
+    "build": "bun run build:client && bun run build:server",
+    "build:all": "bun run build",
+    "check": "bun run check:biome && bun run check:ts && bun run check:engines",
+    "check:fix": "bun run check:biome:fix && bun run check:ts && bun run check:engines",
+    "check:biome": "biome check",
+    "check:biome:fix": "biome check --write",
+    "check:ts": "tsc --noEmit",
+    "package": "bun run build && node vsce-pack.mjs",
+    "prepack": "bun run package",
+    "check:engines": "node check-engines.mjs"
+  },
+  "contributes": {
+    "configuration": {
+      "title": "Terrazzo LSP",
+      "properties": {
+        "terrazzo-lsp.serverPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to dist/esm/cli.js. If empty, uses the bundled server."
+        },
+        "terrazzo-lsp.runtime": {
+          "type": "string",
+          "enum": [
+            "",
+            "bun",
+            "node"
+          ],
+          "default": "",
+          "description": "Runtime override. Empty = auto-detect (bun preferred, node >= 22 fallback)."
+        },
+        "terrazzo-lsp.trace.server": {
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Trace communication with the LSP server."
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@canonical/biome-config": "^0.42.0",
+    "@canonical/terrazzo-lsp": "^0.10.0",
+    "@canonical/typescript-config": "^0.42.0",
+    "@types/node": "^26.4.1",
+    "@types/vscode": "~1.91.0",
+    "@vscode/vsce": "^3.9.2",
+    "typescript": "^7.0.2",
+    "vscode-languageclient": "^10.1.1"
+  },
+  "homepage": "https://github.com/canonical/pragma-core#readme"
+}

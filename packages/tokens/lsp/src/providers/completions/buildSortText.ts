@@ -1,0 +1,47 @@
+import * as values from "../../css/values/index.js";
+import type { CssValueType, TokenNode } from "../../types/index.js";
+
+/**
+ * Score how well a token's CSS type matches the expected property type.
+ *
+ * - `"0"` — type is assignable to the expected type (best match)
+ * - `"1"` — no expected type, or type is unknown (neutral)
+ * - `"2"` — type is NOT assignable (worst match)
+ */
+export function contextMatchScore(
+  cssType: CssValueType,
+  expectedType: CssValueType | null,
+): "0" | "1" | "2" {
+  if (!expectedType) return "1";
+  if (cssType === "<unknown>") return "1";
+  if (values.isAssignable(cssType, expectedType)) return "0";
+  return "2";
+}
+
+/**
+ * Tier sort groups. Known tiers get explicit priority;
+ * unrecognised tiers default to `"1"` (middle priority).
+ */
+const TIER_SORT_GROUP: Readonly<Record<string, string>> = {
+  semantic: "0",
+  derived: "1",
+  primitive: "2",
+};
+const TIER_SORT_DEFAULT = "1";
+
+/**
+ * Build a sort string that groups by context match, provenance, tier,
+ * type, then alphabetically.
+ */
+export function buildSortText(
+  contextPrefix: string,
+  provenancePrefix: string,
+  cssVar: string,
+  token: TokenNode,
+): string {
+  const tierGroup = token.tier
+    ? (TIER_SORT_GROUP[token.tier] ?? TIER_SORT_DEFAULT)
+    : TIER_SORT_DEFAULT;
+  const typeGroup = token.type ?? "zzz";
+  return `${contextPrefix}_${provenancePrefix}_${tierGroup}_${typeGroup}_${cssVar.replace(/^--/, "")}`;
+}
