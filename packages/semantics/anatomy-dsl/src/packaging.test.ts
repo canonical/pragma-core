@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const manifest = JSON.parse(
@@ -37,6 +37,12 @@ function packedFiles(): string[] {
 }
 
 describe("what the package ships", () => {
+  // `npm pack` runs as a subprocess and can take several seconds on a busy
+  // runner, so the list is computed once here, outside the per-test limit.
+  beforeAll(() => {
+    packedFiles();
+  }, 30_000);
+
   it("carries the definition files design-system imports", () => {
     // design-system reads these from the package and never copies them, so
     // one of them missing from the tarball is a silent divergence between
