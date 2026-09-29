@@ -51,9 +51,6 @@
     "tinyglobby": "^0.2.14",
     "yaml": "^2.7.1"
   },
-  "overrides": {
-    "@canonical/token-ontology": "^0.10.1"
-  },
   "files": [
     "data",
     "definitions",
