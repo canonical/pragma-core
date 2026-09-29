@@ -101,6 +101,12 @@
         "- [ ] **Cross-tool coupling checked.** Nx parses `bun.lock`; Lerna drives Nx; Bun writes the lockfile both read. A version of one can require a version of another.",
         "> If this body was truncated, the upstream release notes are **not** shown above. Read them at the source before ticking."
       ]
+    },
+    {
+      "description": "One pull request per pragma-core release: its packages are published together at one version, so their updates land together and are reviewed rather than merged automatically",
+      "matchSourceUrls": ["https://github.com/canonical/pragma-core"],
+      "groupName": "pragma-core",
+      "automerge": false
     }
   ]
 }
