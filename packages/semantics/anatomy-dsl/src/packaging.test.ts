@@ -16,11 +16,13 @@ const manifest = JSON.parse(
 /**
  * The tarball's file list, as npm would publish it — computed once, because
  * `npm pack` takes over a second and the file list cannot change mid-run.
+ * `--ignore-scripts` skips the `prepack` build: the list is what is asked
+ * about, and the package is already built before its tests run.
  */
 let packed: string[] | undefined;
 function packedFiles(): string[] {
   if (packed !== undefined) return packed;
-  const out = execFileSync("npm", ["pack", "--dry-run", "--json"], {
+  const out = execFileSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], {
     cwd: ROOT,
     encoding: "utf8",
     stdio: ["ignore", "pipe", "ignore"],
