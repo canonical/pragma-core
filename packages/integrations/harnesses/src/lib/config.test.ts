@@ -444,6 +444,96 @@ describe("Oh My Pi config (.omp/mcp.json)", () => {
   });
 });
 
+describe("Pi config (.pi/mcp.json)", () => {
+  const pi = findHarnessById("pi") as (typeof harnesses)[number];
+
+  it("writes the plain stdio shape under `mcpServers` in the project band", () => {
+    // Pi's stdio entry takes `command`, `args`, `env` and `cwd`, with `type`
+    // optional ("A `command` selects stdio"), so the row declares no
+    // `mcpEntry` and the DEFAULT serializer must be what reaches the file.
+    const result = dryRunWith(
+      writeMcpConfig(pi, "/project", "pragma", {
+        command: "pragma",
+        args: ["mcp"],
+        cwd: "/project",
+      }),
+      buildMocks({
+        Exists: existsMock(() => false),
+        MakeDir: mkdirMock,
+        WriteFile: writeMock,
+      }),
+    );
+
+    const writeEffects = filterEffects(result.effects, "WriteFile");
+    expect(writeEffects.length).toBe(1);
+    expect(writeEffects[0].path).toBe("/project/.pi/mcp.json");
+
+    const written = JSON.parse(writeEffects[0].content);
+    expect(written.mcpServers.pragma).toEqual({
+      command: "pragma",
+      args: ["mcp"],
+      cwd: "/project",
+    });
+  });
+
+  it("merges into an existing file, preserving autoEnableCodemode", () => {
+    // `autoEnableCodemode` is pi's own top-level key beside `mcpServers`; a
+    // write that dropped it would silently turn codemode activation back on.
+    const existingConfig = JSON.stringify({
+      mcpServers: {
+        filesystem: { command: "npx", exposure: "direct" },
+      },
+      autoEnableCodemode: false,
+    });
+
+    const result = dryRunWith(
+      writeMcpConfig(pi, "/project", "pragma", {
+        command: "pragma",
+        args: ["mcp"],
+      }),
+      buildMocks({
+        Exists: existsMock(() => true),
+        ReadFile: readFileMock(existingConfig),
+        WriteFile: writeMock,
+      }),
+    );
+
+    const written = JSON.parse(
+      filterEffects(result.effects, "WriteFile")[0].content,
+    );
+    expect(written.mcpServers.filesystem).toEqual({
+      command: "npx",
+      exposure: "direct",
+    });
+    expect(written.mcpServers.pragma).toEqual({
+      command: "pragma",
+      args: ["mcp"],
+    });
+    expect(written.autoEnableCodemode).toBe(false);
+  });
+
+  it("writes the global band into pi's agent dir", () => {
+    const result = dryRunWith(
+      writeMcpConfig(
+        pi,
+        "/project",
+        "pragma",
+        { command: "pragma" },
+        "global",
+        PLATFORM,
+      ),
+      buildMocks({
+        Exists: existsMock(() => false),
+        MakeDir: mkdirMock,
+        WriteFile: writeMock,
+      }),
+    );
+    expect(filterEffects(result.effects, "WriteFile")[0].path).toBe(
+      "/home/tester/.pi/agent/mcp.json",
+    );
+  });
+});
+
 describe("removeMcpConfig", () => {
   it("is a no-op when config file does not exist", () => {
     const result = dryRunWith(
