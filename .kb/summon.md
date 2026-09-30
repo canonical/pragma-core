@@ -12,3 +12,6 @@ Read the top-level `.kb/agents.md` file before continuing below.
 
 - **Generators write file content from `.ejs` templates**, kept in a `templates/` directory beside the generator, never from TypeScript string builders.
 - **Generated code has no privileged relationship to its generator.** A generated file is ordinary code that can be edited freely, and anything a generator produces can also be written by hand.
+- **A generator never edits an existing file.** It writes new files and prints the wiring to paste into existing ones; `summon page`, for example, prints the route to add rather than editing the router.
+- **A generator carries no option that its output does not use.**
+- **Generated code follows domain-driven naming: the folder carries the name and the file its role**, such as `domains/invoices/routes.ts`, never `invoicesRoutes.ts`. All of a domain's routes live in its `routes.ts`.
