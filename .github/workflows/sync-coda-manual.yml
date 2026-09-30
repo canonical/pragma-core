@@ -9,9 +9,9 @@ on:
         default: false
         type: boolean
       allow_malformed_rows:
-        description: "Sync anyway despite upstream rows whose uri is present but malformed (their subjects will be missing from data/)."
+        description: "Sync past upstream rows whose uri is present but malformed; their subjects are left out of data/ and listed in the run summary and the pull request. Untick to make such rows stop the sync."
         required: false
-        default: false
+        default: true
         type: boolean
 
 # Reusable-workflow permissions are capped by the caller, so the write grants

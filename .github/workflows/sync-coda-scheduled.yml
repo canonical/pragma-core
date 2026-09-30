@@ -21,7 +21,8 @@ jobs:
       # Scheduled runs never bypass the fail-closed guards; use the manual
       # workflow's allow_shrink input for intentional large deletions.
       allow_shrink: false
-      # Malformed upstream rows always fail a scheduled run: they mean the
-      # source document has lost a subject's identity, which is a defect to
-      # fix at the source, never something to sync past unattended.
-      allow_malformed_rows: false
+      # Malformed upstream rows do not stop the sync: one bad row in the source
+      # document would otherwise hold back every other edit. Each row left out is
+      # listed in the run summary and in the sync pull request, to be fixed at the
+      # source.
+      allow_malformed_rows: true
