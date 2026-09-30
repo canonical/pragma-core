@@ -99,7 +99,7 @@ describe("application/react generator", () => {
    * are emitted, not what is in them. The other half of the guarantee — that
    * the entry imports `#styles/index.css`, and with it the order statement,
    * before anything that pulls these files in — is asserted by the change that
-   * fixes that import order (canonical/pragma#1122).
+   * fixes that import order (canonical/pragma-web#1122).
    */
   it("emits the application's own CSS in @layer app", () => {
     const result = dryRun(

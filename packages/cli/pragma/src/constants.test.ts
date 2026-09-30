@@ -20,7 +20,7 @@ describe("constants", () => {
     expect(MCP_SERVER_NAME).toBe("pragma");
     expect(PROGRAM_DESCRIPTION).toBe("Explore the design system");
     expect(RECOVERY_CLI_PREFIX).toBe("pragma ");
-    expect(ISSUES_URL).toBe("https://github.com/canonical/pragma/issues");
+    expect(ISSUES_URL).toBe("https://github.com/canonical/pragma-core/issues");
   });
 
   it("reads a semver version from package.json", () => {

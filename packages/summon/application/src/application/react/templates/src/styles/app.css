@@ -3,7 +3,7 @@
  * by accident rather than by intent. `app` sorts above the design system's
  * own layers only while the entry imports `#styles/index.css`, and with it
  * `@canonical/styles`' order statement, before anything that pulls this file
- * in; that is what canonical/pragma#1122 puts in the generated entry, and
+ * in; that is what canonical/pragma-web#1122 puts in the generated entry, and
  * this file lands after it. Keep that import first. */
 
 @layer app {

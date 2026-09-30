@@ -91,11 +91,10 @@ input { theme: dark }
 ## Quick Start
 
 ```bash
-git clone https://github.com/canonical/design-tokens
-cd design-tokens
+git clone https://github.com/canonical/pragma-core
+cd pragma-core
 bun install
-bun run build              # Build all packages (tokens, plugin, LSP)
-bun run build:all          # Build everything including the VS Code extension
+bun run build              # Build every package, including tokens, plugin, LSP and the VS Code extension
 
 # In a consuming project:
 npm install -D @canonical/design-tokens

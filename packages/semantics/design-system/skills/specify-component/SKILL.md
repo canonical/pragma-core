@@ -437,7 +437,7 @@ If this skill leads somewhere broken — a command that errors, guidance that
 contradicts what the live system answers, a gap the flow cannot cover — you are not
 stuck:
 
-- Raise an issue in the pragma repo: https://github.com/canonical/pragma/issues —
+- Raise an issue in the pragma-core repo: https://github.com/canonical/pragma-core/issues —
   include the skill name, what was run, and expected vs. actual outcome.
 - Or contact the design-system team owners directly through your organization's
   professional messaging channels for assistance.

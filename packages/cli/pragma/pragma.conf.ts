@@ -2005,15 +2005,15 @@ export default {
     // installed user has no `docs/architecture.md` to open.
     markdown: `pragma is a **domain-based toolchain** — one CLI and one MCP server
 projected from a single grammar. That machinery is documented at
-https://github.com/canonical/pragma/blob/main/packages/cli/pragma/docs/architecture.md;
+https://github.com/canonical/pragma-core/blob/main/packages/cli/pragma/docs/architecture.md;
 what follows is the domain it serves.
 
 Made by the Canonical Webteam — https://canonical.com.`,
-    summary: `pragma is a domain-based toolchain: one CLI + MCP server projected from a single grammar (https://github.com/canonical/pragma/blob/main/packages/cli/pragma/docs/architecture.md). The domain it serves follows.
+    summary: `pragma is a domain-based toolchain: one CLI + MCP server projected from a single grammar (https://github.com/canonical/pragma-core/blob/main/packages/cli/pragma/docs/architecture.md). The domain it serves follows.
 
 Made by the Canonical Webteam — https://canonical.com.`,
   },
-  issuesUrl: "https://github.com/canonical/pragma/issues",
+  issuesUrl: "https://github.com/canonical/pragma-core/issues",
   packs: [
     {
       name: "@canonical/design-system",
