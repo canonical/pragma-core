@@ -7,7 +7,7 @@ import { checkSignal } from "./signals.js";
 
 describe("harnesses registry", () => {
   it("contains all known harnesses", () => {
-    expect(harnesses).toHaveLength(16);
+    expect(harnesses).toHaveLength(17);
     const ids = harnesses.map((h) => h.id);
     expect(ids).toEqual([
       "claude-code",
@@ -26,6 +26,7 @@ describe("harnesses registry", () => {
       "opendesign",
       "crush",
       "oh-my-pi",
+      "pi",
     ]);
   });
 
@@ -433,6 +434,66 @@ describe("harnesses registry", () => {
     const omp = harnesses.find((h) => h.id === "oh-my-pi");
     expect(omp?.skillsPath("/project")).toBe("/project/.agents/skills");
     expect(omp?.skillsPath("/home/tester")).not.toContain("managed-skills");
+  });
+
+  it("pi is dual-scope: project .pi/mcp.json, user ~/.pi/agent/mcp.json", () => {
+    // Pi reads both bands and a project entry replaces a user one of the
+    // same name (docs/mcp.md), so a project-only row would be skipped by
+    // setup's default global band.
+    const pi = harnesses.find((h) => h.id === "pi");
+    expect(pi?.scope).toBe("both");
+    expect(pi?.configPath("/project")).toBe("/project/.pi/mcp.json");
+    expect(pi?.homeConfigPath?.(PLATFORM)).toBe(
+      "/home/tester/.pi/agent/mcp.json",
+    );
+    expect(pi?.mcpKey).toBe("mcpServers");
+    expect(pi?.configFormat).toBe("json");
+    // `type` is optional and `cwd` allowed: the default entry shape.
+    expect(pi?.mcpEntry).toBeUndefined();
+    expect(pi?.skillsPath("/project")).toBe("/project/.agents/skills");
+  });
+
+  it("pi's user config follows $PI_CODING_AGENT_DIR, expanding a leading ~", () => {
+    // `getAgentDir()` uses the variable when non-empty and expands `~` / `~/`
+    // against home; an empty value falls back to the default.
+    const pi = harnesses.find((h) => h.id === "pi");
+    const at = (dir: string): string | undefined =>
+      pi?.homeConfigPath?.({ ...PLATFORM, env: { PI_CODING_AGENT_DIR: dir } });
+    expect(at("/opt/pi-agent")).toBe("/opt/pi-agent/mcp.json");
+    expect(at("~/pi-agent")).toBe("/home/tester/pi-agent/mcp.json");
+    expect(at("~")).toBe("/home/tester/mcp.json");
+    expect(at("")).toBe("/home/tester/.pi/agent/mcp.json");
+  });
+
+  it("pi guards its `pi` PATH probe against CLN's digits-of-pi binary", () => {
+    // Debian/Ubuntu's `pi` package ships `/usr/bin/pi` (CLN). Pi prints its
+    // bare version; CLN prints a named banner plus copyright lines.
+    const pi = harnesses.find((h) => h.id === "pi");
+    const verifies = (pi?.detect ?? []).flatMap((s) =>
+      s.type === "process" && s.name === "pi" && s.verify ? [s.verify] : [],
+    );
+    expect(verifies).toHaveLength(1);
+    const verify = verifies[0];
+    expect(verify?.args).toEqual(["--version"]);
+    expect(verify?.match.test("0.99.2\n")).toBe(true);
+    expect(verify?.match.test("1.0.0-beta.1\n")).toBe(true);
+    expect(
+      verify?.match.test(
+        "pi (CLN 1.3.7)\nWritten by Bruno Haible and Richard B. Kreckel.\n",
+      ),
+    ).toBe(false);
+    // Oh My Pi's `<bin>/<version>` form is not pi's.
+    expect(verify?.match.test("omp/1.4.0\n")).toBe(false);
+  });
+
+  it("pi is detectable from its project AND user directories, not oh-my-pi's", () => {
+    const pi = harnesses.find((h) => h.id === "pi");
+    expect(pi?.detect).toContainEqual({ type: "directory", path: ".pi" });
+    expect(pi?.detect).toContainEqual({ type: "directory", path: "~/.pi" });
+    const paths = (pi?.detect ?? []).flatMap((s) =>
+      "path" in s ? [s.path] : [],
+    );
+    expect(paths.some((p) => p.includes(".omp"))).toBe(false);
   });
 
   it("roo-code skillsPath", () => {

@@ -629,3 +629,86 @@ describe("detectHarnesses — Oh My Pi signals", () => {
     expect(result.value).toEqual([]);
   });
 });
+
+/**
+ * Pi's signal set. As with Oh My Pi, the point is the PATH probe: `pi` is also
+ * the name of CLN's digits-of-pi binary, which must not be detected as a
+ * coding agent.
+ */
+describe("detectHarnesses — Pi signals", () => {
+  const withPath = (path: string): PlatformEnv => ({
+    ...PLATFORM,
+    env: { ...PLATFORM.env, PATH: path },
+  });
+
+  /** Exists true for exactly one path; every other effect left unmocked. */
+  const only = (wanted: string): Map<string, (effect: Effect) => unknown> =>
+    new Map([
+      [
+        "Exists",
+        (effect: Effect): unknown =>
+          (effect as Effect & { _tag: "Exists"; path: string }).path === wanted,
+      ],
+    ]);
+
+  /** Exists true for one path, plus a stubbed `--version` stdout. */
+  const onlyWithVersion = (
+    wanted: string,
+    stdout: string,
+  ): Map<string, (effect: Effect) => unknown> =>
+    new Map<string, (effect: Effect) => unknown>([
+      [
+        "Exists",
+        (effect: Effect): unknown =>
+          (effect as Effect & { _tag: "Exists"; path: string }).path === wanted,
+      ],
+      ["Exec", () => ({ stdout, stderr: "", exitCode: 0 })],
+    ]);
+
+  it("detects Pi from the project .pi directory alone, at high confidence", () => {
+    const result = dryRunWith(
+      detectHarnesses("/project", PLATFORM),
+      only("/project/.pi"),
+    );
+
+    expect(result.value.map((d) => d.harness.id)).toEqual(["pi"]);
+    expect(result.value[0]?.confidence).toBe("high");
+    expect(result.value[0]?.configPath).toBe("/project/.pi/mcp.json");
+  });
+
+  it("detects an installed Pi from ~/.pi before any project config exists", () => {
+    const result = dryRunWith(
+      detectHarnesses("/project", PLATFORM),
+      only("/home/tester/.pi"),
+    );
+
+    expect(result.value.map((d) => d.harness.id)).toEqual(["pi"]);
+    expect(result.value[0]?.confidence).toBe("high");
+    expect(result.value[0]?.configExists).toBe(false);
+  });
+
+  it("detects `pi` on PATH when --version prints a bare version", () => {
+    const result = dryRunWith(
+      detectHarnesses("/project", withPath("/usr/bin:/bin:/usr/local/bin")),
+      onlyWithVersion("/usr/local/bin/pi", "0.99.2\n"),
+    );
+
+    expect(result.value.map((d) => d.harness.id)).toEqual(["pi"]);
+    // On PATH means "installed", not "this project uses it".
+    expect(result.value[0]?.confidence).toBe("medium");
+  });
+
+  it("does NOT detect Pi from a `pi` that is really CLN's digits-of-pi", () => {
+    // Debian/Ubuntu's `pi` package installs `/usr/bin/pi`; its `--version`
+    // opens with a named banner, which the whole-output match rejects.
+    const result = dryRunWith(
+      detectHarnesses("/project", withPath("/usr/bin:/bin:/usr/local/bin")),
+      onlyWithVersion(
+        "/usr/bin/pi",
+        "pi (CLN 1.3.7)\nWritten by Bruno Haible and Richard B. Kreckel.\n",
+      ),
+    );
+
+    expect(result.value).toEqual([]);
+  });
+});

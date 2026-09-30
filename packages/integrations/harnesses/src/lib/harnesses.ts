@@ -578,20 +578,94 @@ const harnesses: readonly HarnessDefinition[] = [
     // `~/.agents/skills` link covers the global band without touching it.
     skillsPath: (root) => `${root}/.agents/skills`,
   },
+  {
+    id: "pi",
+    name: "Pi",
+    version: "*",
+    // Pi (github.com/earendil-works/pi, binary `pi`) — NOT the `oh-my-pi` row
+    // above, despite the name: Oh My Pi (github.com/can1357/oh-my-pi, binary
+    // `omp`) is a separate project with its own `.omp` directories. Until
+    // v0.99.0 (2026-09-29) pi had no MCP client of its own ("No MCP" in its
+    // README) and was deliberately absent from this registry; v0.99.0 ships
+    // one as a BUILT-IN extension (`builtin:mcp`), on by default.
+    //
+    // Paths verified against pi's source @005af57 (tag v0.99.2,
+    // `packages/coding-agent/src/extensions/mcp/config.ts` `loadMcpConfig`,
+    // `src/config.ts` `getAgentDir`) and docs/mcp.md. Pi reads BOTH bands
+    // and a project entry replaces a user entry of the same name — a
+    // project-only row would be skipped by setup's DEFAULT global band (the
+    // opencode/crush lesson), so: both.
+    scope: "both",
+    detect: [
+      // Pi's PROJECT directory (`CONFIG_DIR_NAME`, `.pi`), which holds the
+      // `.pi/mcp.json` this row writes. Project-relative, so it answers "this
+      // repo uses pi".
+      { type: "directory", path: ".pi" },
+      // The user config root (`~/.pi/agent` holds settings, sessions and the
+      // user `mcp.json`) — the "pi is installed" signal that does not wait
+      // for a project config. `$PI_CODING_AGENT_DIR` relocates the agent dir
+      // to an arbitrary path the signal grammar cannot express (see
+      // `resolveFsPath`); a user who sets it is still found by the PATH probe.
+      { type: "directory", path: "~/.pi" },
+      {
+        type: "process",
+        name: "pi",
+        // `pi` is NOT an unambiguous binary name: Debian/Ubuntu's `pi` package
+        // (CLN's digits-of-pi demo, `/usr/bin/pi`) and Arch's `cln` ship one.
+        // Pi's `--version` prints its bare version and nothing else
+        // (`console.log(VERSION)`, packages/coding-agent/src/main.ts); CLN's
+        // prints "pi (CLN 1.3.7)" followed by copyright lines
+        // (cln examples/pi.cc). The match is therefore anchored to the WHOLE
+        // output — no `m` flag — so the CLN banner fails it. A weaker guard
+        // than the `omp/` prefix the Oh My Pi row can key on, because pi
+        // prints no name to key on.
+        verify: {
+          args: ["--version"],
+          match: /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?\s*$/,
+        },
+      },
+    ],
+    // Read ONLY once the user has granted pi's project trust (docs/security.md
+    // "Understand project trust"); an untrusted project's `.pi/mcp.json` is
+    // skipped, and the user band is the one that works everywhere.
+    configPath: (root) => `${root}/.pi/mcp.json`,
+    /**
+     * `getAgentDir()` (src/config.ts): `$PI_CODING_AGENT_DIR` when set and
+     * non-empty — with a leading `~` / `~/` expanded against home, as pi's
+     * `normalizePath` does — else `~/.pi/agent`; the user `mcp.json` sits
+     * directly in it. A RELATIVE `$PI_CODING_AGENT_DIR` resolves against pi's
+     * own cwd, which `PlatformEnv` does not carry (the gap the Oh My Pi row
+     * documents for the same variable); it is passed through as written.
+     */
+    homeConfigPath: (p) => {
+      const dir = p.env.PI_CODING_AGENT_DIR;
+      const home = userHome(p);
+      const agentDir = !dir
+        ? `${home}/.pi/agent`
+        : dir === "~"
+          ? home
+          : dir.startsWith("~/")
+            ? `${home}/${dir.slice(2)}`
+            : dir;
+      return `${agentDir}/mcp.json`;
+    },
+    configFormat: "json",
+    mcpKey: "mcpServers",
+    // No `mcpEntry` column: pi's stdio entry is `{command, args?, env?, cwd?}`
+    // under `mcpServers`, `type` optional ("A `command` selects stdio") and
+    // `cwd` allowed (`validateMcpServerConfig`, src/core/mcp-servers.ts) —
+    // exactly what `defaultMcpEntry` emits.
+    //
+    // Pi reads `~/.agents/skills` and project `.agents/skills` (docs/skills.md
+    // "Add it to Pi") beside its own `.pi/skills`; `.agents/skills` is the
+    // cross-client directory `setup skills` already links.
+    skillsPath: (root) => `${root}/.agents/skills`,
+    // Shadowing caveat, not a reason to decline: an installed extension that
+    // registers `/mcp` (e.g. the third-party pi-mcp-adapter that served pi
+    // before v0.99.0) REPLACES the built-in client, and pi then reads neither
+    // `mcp.json` (docs/mcp.md "Replace the built-in MCP support"); so does
+    // `"extensions": ["-builtin:mcp"]` in pi's settings.
+  },
 ];
-
-// Deliberately ABSENT from the registry (product calls, not oversights):
-//
-// - `pi` (github.com/earendil-works/pi): no first-party MCP client exists —
-//   the README states "No MCP" outright; MCP reaches pi only through the
-//   third-party pi-mcp-adapter extension a user installs themselves. A row
-//   here would write config pi itself never reads. pi IS served on the skills
-//   side without a row: it reads `.agents/skills`, the cross-client directory
-//   `setup skills` always links into.
-//   NOT the same tool as `oh-my-pi` above, despite the name and the shared
-//   `.agents/skills` sentence: Oh My Pi (github.com/can1357/oh-my-pi, binary
-//   `omp`) is a separate project that DOES ship a first-party MCP client, which
-//   is why it has a row and this one does not. Neither entry was written in
-//   ignorance of the other.
 
 export default harnesses;
