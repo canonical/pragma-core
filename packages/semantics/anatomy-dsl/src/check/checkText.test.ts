@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  ALIASED_STYLES,
+  BARE_FLOW_KEY,
+  COLLECTION_KEY,
+  DIFFERENT_RULE_FIRST,
   EDGE_WITHOUT_TARGET,
+  EMPTY_VALUE,
   FLOW_ALIAS,
   MINIMAL,
   NO_NODE,
@@ -58,6 +63,44 @@ describe("checkText", () => {
   it("reports a structural error without a location", () => {
     expect(checkText(EDGE_WITHOUT_TARGET)).toEqual({
       message: "Edge must have node, uri, or switch",
+    });
+  });
+
+  it("reports a rejected value without a location when the styles come through an alias", () => {
+    expect(checkText(ALIASED_STYLES)).toEqual({
+      message: `style value of gap "x/y" is rejected: ${RULES.slashPath}`,
+    });
+  });
+
+  it("locates a style key that has no value after its colon", () => {
+    expect(checkText(EMPTY_VALUE)).toEqual({
+      message: `style value of gap "null" is rejected: ${RULES.empty}`,
+      line: 4,
+      col: 9,
+    });
+  });
+
+  it("passes over a collection used as a style key", () => {
+    expect(checkText(COLLECTION_KEY)).toEqual({
+      message: `style value of gap "x/y" is rejected: ${RULES.slashPath}`,
+      line: 6,
+      col: 10,
+    });
+  });
+
+  it("passes over an earlier style under the same key that breaks a different rule", () => {
+    expect(checkText(DIFFERENT_RULE_FIRST)).toEqual({
+      message: `style value of gap "x/y" is rejected: ${RULES.slashPath}`,
+      line: 11,
+      col: 10,
+    });
+  });
+
+  it("locates a bare key in a flow map at the key", () => {
+    expect(checkText(BARE_FLOW_KEY)).toEqual({
+      message: `style value of gap "null" is rejected: ${RULES.empty}`,
+      line: 3,
+      col: 12,
     });
   });
 });

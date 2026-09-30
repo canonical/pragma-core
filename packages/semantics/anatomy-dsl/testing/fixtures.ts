@@ -73,3 +73,54 @@ export const EDGE_WITHOUT_TARGET = joinLines([
   "    - relation:",
   '        cardinality: "1"',
 ]);
+
+/** Styles given by an alias to another mapping: the value has no `styles` entry to point at. */
+export const ALIASED_STYLES = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  props: &shared {gap: x/y}",
+  "  styles: *shared",
+]);
+
+/** A style key with no value, rejected just after the colon (4:9). */
+export const EMPTY_VALUE = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  styles:",
+  "    gap:",
+]);
+
+/** A collection used as a style key before the broken value (6:10). */
+export const COLLECTION_KEY = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  styles:",
+  "    ? [a]",
+  "    : b",
+  "    gap: x/y",
+]);
+
+/**
+ * A child's style, earlier in the document, breaks a different rule under the
+ * same key; the root's own style is the one rejected (9:10).
+ */
+export const DIFFERENT_RULE_FIRST = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  edges:",
+  "    - node:",
+  "        role: label",
+  "        styles:",
+  "          gap:",
+  "      relation:",
+  '        cardinality: "1"',
+  "  styles:",
+  "    gap: x/y",
+]);
+
+/** A bare key in a flow map: there is no value node, so it is located at the key (3:12). */
+export const BARE_FLOW_KEY = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  styles: {gap}",
+]);
