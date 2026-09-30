@@ -417,7 +417,7 @@
         "@canonical/terrazzo-lsp": "^0.43.0-experimental.0",
         "@canonical/typescript-config": "^0.43.0-experimental.0",
         "@types/node": "^26.4.1",
-        "@types/vscode": "~1.91.0",
+        "@types/vscode": "~1.138.0",
         "@vscode/vsce": "^3.9.2",
         "typescript": "^7.0.2",
         "vscode-languageclient": "^10.1.1",
@@ -1288,7 +1288,7 @@
 
     "@types/unist": ["@types/unist@3.0.3", "", {}, "sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q=="],
 
-    "@types/vscode": ["@types/vscode@1.91.0", "", {}, "sha512-PgPr+bUODjG3y+ozWUCyzttqR9EHny9sPAfJagddQjDwdtf66y2sDKJMnFZRuzBA2YtBGASqJGPil8VDUPvO6A=="],
+    "@types/vscode": ["@types/vscode@1.138.0", "", {}, "sha512-DhlvrucJa8n6EHst7qQcXOcjLKs/VRTQy55plLO+RN74jonYsr/t9dd66zBnAyz1tpDig0okQAxuoPHpVNje2g=="],
 
     "@typescript/typescript-aix-ppc64": ["@typescript/typescript-aix-ppc64@7.0.2", "", { "os": "aix", "cpu": "ppc64" }, "sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ=="],
 
