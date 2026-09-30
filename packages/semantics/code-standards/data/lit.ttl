@@ -14,7 +14,7 @@ cs:lit a cs:Category ;
 cs:lit.component.structure.folder a cs:CodeStandard ;
     rdfs:label "One folder per web component"@en ;
     cs:hasCategory cs:lit ;
-    cs:description "Each web component must reside in its own PascalCase-named folder. Component-specific files are prefixed with the component name (`[MyComponent].ts`, `[MyComponent].stories.ts`, `[MyComponent].tests.ts`). Domain-level files use generic names without the prefix (`index.ts`, `types.ts`, `styles.css`, `constants.ts`) — the folder name already provides the namespace. Subcomponents reside in a `common/` subfolder." ;
+    cs:description "Each web component must reside in its own PascalCase-named folder. Component-specific files are prefixed with the component name (`[MyComponent].ts`, `[MyComponent].stories.ts`, `[MyComponent].test.ts`). Domain-level files use generic names without the prefix (`index.ts`, `types.ts`, `styles.css`, `constants.ts`) — the folder name already provides the namespace. Subcomponents reside in a `common/` subfolder." ;
     cs:do [
         cs:description "Place all component-related files within a single folder named after the component." ;
         cs:language "bash" ;
@@ -22,7 +22,7 @@ cs:lit.component.structure.folder a cs:CodeStandard ;
 MyComponent/
   ├── MyComponent.ts           # Component-specific
   ├── MyComponent.stories.ts   # Component-specific
-  ├── MyComponent.tests.ts     # Component-specific
+  ├── MyComponent.test.ts      # Component-specific
   ├── index.ts                 # Domain-level
   ├── types.ts                 # Domain-level
   ├── constants.ts             # Domain-level
