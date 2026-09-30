@@ -4,7 +4,12 @@ import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AUTHORED_DIR } from "../anatomies/authored.js";
 import { type Census, readCensus } from "../anatomies/census.js";
-import type { ColumnMetadata, TableRow } from "../providers/index.js";
+import type {
+  ColumnMetadata,
+  MutationStatus,
+  RowUpdateResult,
+  TableRow,
+} from "../providers/index.js";
 import type { CellWriter } from "../sync/applyCells.js";
 import { SNAPSHOT_DIR } from "../sync/cellSnapshot.js";
 import anatomies, {
@@ -117,7 +122,17 @@ interface Recorded {
  * and the tier narrowing could not be told from a stale file.
  */
 function fake(
-  options: { cell?: string; swallow?: boolean; extra?: readonly string[] } = {},
+  options: {
+    cell?: string;
+    swallow?: boolean;
+    extra?: readonly string[];
+    /** The document never reports the mutation applied. */
+    neverCompletes?: boolean;
+    /** The write comes back with no `requestId`, so there is nothing to follow. */
+    noRequestId?: boolean;
+    /** The status call itself fails — an expired request id answers 400. */
+    statusFails?: boolean;
+  } = {},
 ) {
   const rows: TableRow[] = [
     {
@@ -147,16 +162,28 @@ function fake(
         format: {} as ColumnMetadata["format"],
       }));
     },
-    async updateRow(_document, _table, rowId, cells) {
+    async updateRow(_document, _table, rowId, cells): Promise<RowUpdateResult> {
       writes.push({ rowId, cells });
+      // A row PUT is answered with the queued mutation's id; the apply follows it
+      // with `getMutationStatus` before it re-reads.
+      const accepted = { id: rowId, requestId: `r-${writes.length}` };
+      if (options.noRequestId === true) {
+        return {} as RowUpdateResult;
+      }
       if (options.swallow === true) {
-        return {};
+        return accepted;
       }
       const row = rows.find((candidate) => candidate._codaId === rowId);
       for (const [column, value] of Object.entries(cells)) {
         (row as TableRow)[column.replace(/^c-/, "")] = value;
       }
-      return {};
+      return accepted;
+    },
+    async getMutationStatus(): Promise<MutationStatus> {
+      if (options.statusFails === true) {
+        throw new Error("Coda API error: 400 Bad Request");
+      }
+      return { completed: options.neverCompletes !== true };
     },
   };
   return provider;
@@ -916,16 +943,70 @@ describe("the write's apply", () => {
 
     expect(result.exitCode).toBe(1);
     expect(result.output).toContain("did not come back as it was written");
+    // The mutation status is the half that says WHOSE fault it is: the document
+    // applied the write and the cell is still what it was, so the document itself is
+    // refusing the content and re-running will not land it.
+    expect(result.output).toContain(
+      "the mutation completed but the cell did not change (request r-1)",
+    );
     expect(result.output).toContain("did not reconcile");
   });
 
-  it("carries what it wrote in the --json, including the snapshot's path", async () => {
+  it("says so when the document never completed the mutation inside the bound", async () => {
+    const result = await runWrite(
+      { apply: true },
+      fake({ swallow: true, neverCompletes: true }),
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(result.output).toContain(
+      "the mutation never completed within 60 s (request r-1)",
+    );
+  });
+
+  it("says so when the status call itself failed, rather than losing the reconcile", async () => {
+    const result = await runWrite(
+      { apply: true },
+      fake({ swallow: true, statusFails: true }),
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(result.output).toContain(
+      "the mutation could not be followed: Coda API error: 400 Bad Request (request r-1)",
+    );
+  });
+
+  it("says so when the write came back with no request id to follow", async () => {
+    const result = await runWrite(
+      { apply: true },
+      fake({ swallow: true, noRequestId: true }),
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(result.output).toContain(
+      "the write came back with no request id, so its mutation could not be followed",
+    );
+  });
+
+  it("carries what it wrote in the --json, including the snapshot's path and every request id", async () => {
     const result = await runWrite({ apply: true, json: true });
     const parsed = JSON.parse(result.output);
 
     expect(parsed.snapshot).toBe(`${SNAPSHOT_DIR}/stamped-uiBlocks.json`);
     expect(parsed.writes).toBe(1);
     expect(parsed.mismatches).toEqual([]);
+    // One record per write, so a run can be correlated against the document's own
+    // record of the mutation afterwards.
+    expect(parsed.mutations).toEqual([
+      {
+        uri: "global.component.button",
+        rowId: "i-button",
+        requestId: "r-1",
+        completed: true,
+        waitedMs: 0,
+        error: null,
+      },
+    ]);
   });
 
   it("stamps the snapshot with the clock when no stamp is given", async () => {

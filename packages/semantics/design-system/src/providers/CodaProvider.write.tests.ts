@@ -222,4 +222,49 @@ describe("updateRow", () => {
     );
     expect(mockFetch).toHaveBeenCalledTimes(2);
   });
+
+  it("hands back the queued mutation's id, which is the only handle on the write", async () => {
+    // Coda applies a mutation asynchronously: the 202 says queued, and the
+    // requestId is what `getMutationStatus` answers about. Discarding it is what
+    // left "accepted and never applied" indistinguishable from "not yet applied".
+    mockFetch.mockResolvedValue(ok({ requestId: "r-1", id: "i-button" }));
+    const accepted = await withTimers(
+      new CodaProvider(CodaProvider.WRITE_KEY_VAR).updateRow(
+        "doc",
+        "grid-blocks",
+        "i-button",
+        { "c-anatomy_dsl": "node:\n" },
+      ),
+    );
+    expect(accepted.requestId).toBe("r-1");
+  });
+});
+
+describe("getMutationStatus", () => {
+  beforeEach(() => {
+    vi.stubEnv("CODA_WRITE_TOKEN", "write-token");
+  });
+
+  it("asks the workspace host about one request id, as a read", async () => {
+    mockFetch.mockResolvedValue(ok({ completed: true }));
+    const status = await withTimers(
+      new CodaProvider(CodaProvider.WRITE_KEY_VAR).getMutationStatus("r-1"),
+    );
+
+    const [url, init] = mockFetch.mock.calls[0];
+    expect(url).toBe(`${CODA_API_BASE}/mutationStatus/r-1`);
+    expect(init.method).toBe("GET");
+    expect(status.completed).toBe(true);
+  });
+
+  it("retries a 429, so the answer to 'has it applied yet' is not itself lost", async () => {
+    mockFetch
+      .mockResolvedValueOnce(failure(429))
+      .mockResolvedValueOnce(ok({ completed: false }));
+    const status = await withTimers(
+      new CodaProvider(CodaProvider.WRITE_KEY_VAR).getMutationStatus("r-1"),
+    );
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+    expect(status.completed).toBe(false);
+  });
 });

@@ -55,6 +55,28 @@ export type CodaColumn = components["schemas"]["Column"];
 export type CodaColumnList = components["schemas"]["ColumnList"];
 export type CodaCellValue = components["schemas"]["CellValue"];
 
+/**
+ * What a row PUT answers: the queued mutation's id, and the row's.
+ *
+ * The `requestId` is the only handle on a write after it has been accepted — Coda
+ * applies a mutation asynchronously, so a 202 says "queued" and nothing more — and
+ * `getMutationStatus` is what turns it into an answer.
+ *
+ * @see https://coda.io/developers/apis/v1#operation/updateRow
+ */
+export type RowUpdateResult = components["schemas"]["RowUpdateResult"];
+
+/**
+ * What `GET /mutationStatus/{requestId}` answers.
+ *
+ * `completed` is the whole point: it separates "the document has not caught up yet"
+ * from "the document applied the mutation and the cell still does not say what was
+ * written", which are the same silence from the write's side.
+ *
+ * @see https://coda.io/developers/apis/v1#operation/getMutationStatus
+ */
+export type MutationStatus = components["schemas"]["MutationStatus"];
+
 // Simplified types for this provider's API
 export interface TableMetadata {
   id: string;
@@ -446,11 +468,28 @@ export default class CodaProvider {
     tableId: string,
     rowId: string,
     cells: Record<string, string>,
-  ): Promise<unknown> {
+  ): Promise<RowUpdateResult> {
     const url = `${CODA_API_BASE}/docs/${documentId}/tables/${tableId}/rows/${rowId}`;
-    return this.mutateWithAuth(url, "PUT", {
+    return this.mutateWithAuth<RowUpdateResult>(url, "PUT", {
       row: { cells: this.buildCells(cells) },
     });
+  }
+
+  /**
+   * Whether a queued mutation has been applied yet.
+   *
+   * A write is accepted with a 202 and a `requestId`, and the document applies it
+   * afterwards; this is the only way to tell that it HAS. It is a read — same host,
+   * same credential, same retry — so the answer to "is the document still catching
+   * up?" cannot itself be lost to a 429.
+   *
+   * @param requestId - the `requestId` a mutating call returned
+   * @see https://coda.io/developers/apis/v1#operation/getMutationStatus
+   */
+  async getMutationStatus(requestId: string): Promise<MutationStatus> {
+    return this.fetchWithAuth<MutationStatus>(
+      `${CODA_API_BASE}/mutationStatus/${requestId}`,
+    );
   }
 
   /**
