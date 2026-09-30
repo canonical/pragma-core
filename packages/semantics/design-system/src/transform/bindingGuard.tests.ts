@@ -4,6 +4,7 @@ import { NAMESPACES, PREDICATES } from "../constants.js";
 import { GraphStore } from "../graph/index.js";
 import guardTokenBindings, {
   renderFindings,
+  renderSkippedAnatomies,
   runBindingGuard,
   tokenNamespaceOf,
 } from "./bindingGuard.js";
@@ -254,17 +255,139 @@ describe("guardTokenBindings — the register admits the derivation's findings",
     expect(result.findings.filter((f) => f.severity === "finding")).toEqual([]);
   });
 
-  it("still refuses the same parse failure when no row admits it", () => {
-    vi.spyOn(console, "log").mockImplementation(() => undefined);
+  it("skips and reports the same parse failure when no row admits it", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const store = storeWith("    typography.color: color/text\n");
     deriveTokenBindings(store);
-    expect(() =>
-      guardTokenBindings(
-        store,
-        {},
-        { anatomies: 1, parsed: 0 },
-        { census: null, register: [] },
+    const result = guardTokenBindings(
+      store,
+      {},
+      { anatomies: 1, parsed: 0 },
+      { census: null, register: [] },
+    );
+    expect(result.findings).toEqual([]);
+    expect(result.skipped.map((finding) => finding.code)).toEqual(["X16"]);
+    expect(warn.mock.calls.map(([line]) => line)).toEqual([
+      expect.stringMatching(
+        /^Skipping the anatomy of global\.component\.button — it does not parse, so its token bindings are left out of data\/: /,
       ),
+    ]);
+  });
+});
+
+describe("guardTokenBindings — an anatomy that does not parse is skipped, not refused", () => {
+  /** Two blocks: a card whose tree references a label that does not parse. */
+  function storeWithBrokenLabel(): GraphStore {
+    const store = new GraphStore();
+    store.addLiteral(
+      `${ds}global.component.card`,
+      PREDICATES.anatomyDsl,
+      [
+        "node:",
+        "  uri: global.component.card",
+        "  styles:",
+        "    typography.color: color.text",
+        "  edges:",
+        "    - node:",
+        "        uri: global.subcomponent.label",
+        '      relation: { cardinality: "1", slotName: default }',
+        "",
+      ].join("\n"),
+    );
+    store.addLiteral(
+      `${ds}global.subcomponent.label`,
+      PREDICATES.anatomyDsl,
+      "node:\n  uri: global.subcomponent.label\n  styles:\n    typography.weight: font/weight/medium\n",
+    );
+    return store;
+  }
+
+  it("keeps the other block's records and reports the skipped one once", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const store = storeWithBrokenLabel();
+    const derivation = deriveTokenBindings(store);
+    const result = guardTokenBindings(store, {}, derivation, {
+      census: null,
+      register: [],
+    });
+    expect(result.findings).toEqual([]);
+    expect(result.records).toBe(1);
+    const lines = warn.mock.calls.map(([line]) => line as string);
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toMatch(
+      /^Skipping the anatomy of global\.subcomponent\.label — it does not parse, so its token bindings, and those global\.component\.card reach through it, are left out of data\/: /,
+    );
+    expect(lines[0]).toContain("slash-delimited token path");
+  });
+
+  it("counts a skipped anatomy toward the parse floor and does not measure the record floor", () => {
+    vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const store = storeWithBrokenLabel();
+    const derivation = deriveTokenBindings(store);
+    // The committed census says both anatomies parsed and held more records: the label
+    // stopped parsing in this run, which is the case that used to stop the sync.
+    const result = runBindingGuard(store, {}, derivation, {
+      census: { records: 5, parseable: 2, anatomies: 2 } as Census,
+      register: [],
+    });
+    expect(result.findings).toEqual([]);
+  });
+
+  it("still refuses every other finding on a run that skipped an anatomy", () => {
+    vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const store = storeWithBrokenLabel();
+    store.addLiteral(
+      `${ds}global.component.chip`,
+      PREDICATES.anatomyDsl,
+      "node:\n  uri: global.component.chip\n  styles:\n    typography.color: modifier.color.notasymbol\n",
+    );
+    const derivation = deriveTokenBindings(store);
+    expect(() =>
+      guardTokenBindings(store, {}, derivation, { census: null, register: [] }),
     ).toThrow("Refusing to overwrite committed data");
+  });
+
+  it("still refuses a parse count that fell without a skipped anatomy to account for it", () => {
+    vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const store = storeWithBrokenLabel();
+    const derivation = deriveTokenBindings(store);
+    const result = runBindingGuard(store, {}, derivation, {
+      census: { records: 1, parseable: 3, anatomies: 2 } as Census,
+      register: [],
+    });
+    expect(result.findings.map((finding) => finding.code)).toEqual([
+      "PARSE_FLOOR",
+    ]);
+  });
+});
+
+describe("renderSkippedAnatomies", () => {
+  it("says nothing when nothing was skipped", () => {
+    expect(renderSkippedAnatomies([])).toEqual([]);
+  });
+
+  it("keeps a multi-line parse error to its first line, and lists the blocks in order", () => {
+    // The sync workflow lists the log lines that start with `Skipping`; a second line
+    // of the error would not start with it and would be lost.
+    expect(
+      renderSkippedAnatomies([
+        {
+          code: "X16",
+          severity: "finding",
+          block: `${ds}global.component.table`,
+          message: `${ds}global.component.table: ds:anatomyDsl does not parse as an anatomy document — not a mapping`,
+        },
+        {
+          code: "X16",
+          severity: "finding",
+          block: `${ds}global.component.card`,
+          message: `${ds}global.component.card: ds:anatomyDsl does not parse as an anatomy document — bad indentation\n  at line 3`,
+        },
+      ]),
+    ).toEqual([
+      "Skipping the anatomy of global.component.card — it does not parse, so its token bindings are left out of data/: bad indentation",
+      "Skipping the anatomy of global.component.table — it does not parse, so its token bindings are left out of data/: not a mapping",
+    ]);
   });
 });

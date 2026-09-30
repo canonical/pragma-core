@@ -1,4 +1,4 @@
-import { mkdtemp, rm, stat, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -274,6 +274,62 @@ describe("transform command", () => {
 
       expect(await exists(blockPath(1))).toBe(true);
       expect(await exists(blockPath(2))).toBe(true);
+    });
+
+    it("skips and reports an anatomy that does not parse, and writes every other block's records", async () => {
+      // One bad cell in the source document must not stop every other edit from
+      // syncing: the anatomy is left out and named on a `Skipping` line, which the sync
+      // workflow lists in its run summary and in the sync pull request.
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      vi.spyOn(console, "log").mockImplementation(() => {});
+
+      await runTransform(
+        fullTables([
+          blockRow(1, {
+            anatomy_dsl:
+              "node:\n  uri: global.component.block1\n  styles:\n    typography.color: color/text\n",
+          }),
+          blockRow(2, {
+            anatomy_dsl:
+              "node:\n  uri: global.component.block2\n  styles:\n    typography.color: color.text\n",
+          }),
+        ]),
+      );
+
+      expect(
+        warn.mock.calls.filter(([line]) => String(line).startsWith("Skipping")),
+      ).toEqual([
+        [
+          expect.stringMatching(
+            /^Skipping the anatomy of global\.component\.block1 — it does not parse/,
+          ),
+        ],
+      ]);
+      const skipped = await readFile(blockPath(1), "utf-8");
+      const kept = await readFile(blockPath(2), "utf-8");
+      expect(skipped).not.toContain("consumesSymbol");
+      expect(kept).toContain("consumesSymbol");
+    });
+
+    it("still refuses another token-binding finding on a run that skipped an anatomy", async () => {
+      await runTransform(fullTables(blocks(2)));
+      vi.spyOn(console, "warn").mockImplementation(() => {});
+      vi.spyOn(console, "log").mockImplementation(() => {});
+
+      await expect(
+        runTransform(
+          fullTables([
+            blockRow(1, {
+              anatomy_dsl:
+                "node:\n  uri: global.component.block1\n  styles:\n    typography.color: color/text\n",
+            }),
+            blockRow(2, {
+              anatomy_dsl:
+                "node:\n  uri: global.component.block2\n  styles:\n    appearance.background: modifier.surface\n",
+            }),
+          ]),
+        ),
+      ).rejects.toThrow("token-binding guard reported");
     });
 
     it("lets an unregistered symbol through with allowUnboundSymbols set", async () => {
