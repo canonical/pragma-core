@@ -113,8 +113,8 @@ const manifestOutPath = join(embeddedDir, "pack.manifest.generated.ts");
  * writes has to live where git holds it — exactly as `pack.generated.ts` does.
  * `src/` is wrong because `tsc` copies no non-TS file into `dist/`, and because
  * biome's include list covers everything under `src`, which would start linting
- * whatever JSON an upstream skill happens to ship. The package root is the same place a pack
- * puts its own `skills/`, which is the layout this is a snapshot OF.
+ * whatever JSON an upstream skill happens to ship. The package root is the same
+ * place a pack puts its own `skills/`, which is the layout this is a snapshot OF.
  * `package.json`'s `files` allowlists the directory by name.
  */
 const skillsOutDir = join(packageRoot, "bundled-skills");

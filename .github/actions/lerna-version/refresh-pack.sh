@@ -12,11 +12,11 @@
 #
 # In `pragma-core` neither half of that is true any more:
 #
-#   - the four absorbed packs (design-system, anatomy-dsl, token-ontology,
-#     code-standards) are WORKSPACE MEMBERS, linked into node_modules, and the
+#   - the workspace packs (design-system, anatomy-dsl, token-ontology,
+#     code-standards, skills-pragma) are WORKSPACE MEMBERS, linked into node_modules, and the
 #     bundler resolves them there through `SOURCE_OVERRIDES` in
 #     packages/cli/pragma/scripts/embedSources.ts;
-#   - the fifth, ds-implementations, is a PUBLIC repository.
+#   - the other, ds-implementations, is a PUBLIC repository.
 #
 # So there is nothing left to authenticate, the step is unconditional again, and
 # a real failure fails the release — the behaviour this script's own comment

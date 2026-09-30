@@ -69,11 +69,11 @@ modelling convention is what is at issue — a pseudo-element drawn by the style
 modifier family a component supports — this SKILL.md is the authority, and it says so
 at each of those places. The authored corpus follows this file.
 
-**And this file, in the design-system repository, is the authority over the copy
-`pragma skill lookup anatomy-author` prints.** That copy is bundled into a pragma
-release and lags the repository until the next one, so a sentence you find there and
-cannot find here is old text, not a second opinion. Read the repository file when the
-two differ.
+**And this file, `packages/skills/pragma/skills/anatomy-author/SKILL.md` in
+canonical/pragma-core, is the authority over the copy `pragma skill lookup anatomy-author`
+prints.** That copy is bundled into a pragma release and lags the repository until the
+next one, so a sentence you find there and cannot find here is old text, not a second
+opinion. Read the repository file when the two differ.
 
 ## Opening move: ask, or offer the tutorial
 

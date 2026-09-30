@@ -6,9 +6,6 @@
   "files": [
     "skills"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "author": {
     "email": "webteam@canonical.com",
     "name": "Canonical Webteam"
@@ -22,12 +19,12 @@
     "url": "https://github.com/canonical/pragma-core/issues"
   },
   "homepage": "https://github.com/canonical/pragma-core#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "check": "bun run check:biome && bun run check:ts",
-    "check:fix": "bun run check:biome:fix && bun run check:ts",
-    "check:biome": "biome check",
-    "check:biome:fix": "biome check --write",
-    "check:ts": "tsc --noEmit",
+    "check": "biome check && tsc --noEmit",
+    "check:fix": "biome check --write",
     "test": "vitest run"
   },
   "devDependencies": {

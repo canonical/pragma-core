@@ -567,7 +567,7 @@ const CONFIG_FIELD_DOCS: Record<keyof RawConfig, ConfigFieldDoc> = {
   packs: {
     type: "array (optional)",
     notes:
-      "A pack is a source of graph data, skills, or both. Semantic pack sources built by `sources update`. Each entry is a bare npm name or `{ name, source, stories? }`; `stories` are read stories the pack supplies, in the pack grammar.",
+      "A pack is a source of graph data, skills, or both. Pack sources built by `sources update`. Each entry is a bare npm name or `{ name, source, stories? }`; `stories` are read stories the pack supplies, in the pack grammar.",
   },
   stories: {
     type: "array (optional)",

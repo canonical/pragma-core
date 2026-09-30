@@ -44,11 +44,12 @@ describe("defaults — the validated distribution config (pragma.conf.ts)", () =
     expect(defaults.colophon?.summary?.length).toBeLessThan(400);
   });
 
-  // Six packs, and ONE carries a subdirectory. That is load-bearing, not
-  // decoration: `@canonical/token-ontology` lives inside a monorepo, and a
-  // git source names a repository — without `:packages/token-ontology` the
-  // clone would succeed against a root that has no `definitions/` or `data/`
-  // and the pack would contribute nothing, silently.
+  // Six packs; the five from pragma-core each carry a subdirectory. That is
+  // load-bearing, not decoration: a package like `@canonical/token-ontology`
+  // lives inside a monorepo, and a git source names a repository — without
+  // `:packages/semantics/token-ontology` the clone would succeed against a root
+  // that has no `definitions/` or `data/` and the pack would contribute
+  // nothing, silently.
   it("ships the six canonical default packs (all git+https)", () => {
     expect(
       defaults.packs?.map((pack) =>

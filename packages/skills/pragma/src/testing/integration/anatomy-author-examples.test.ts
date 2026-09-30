@@ -16,6 +16,8 @@
  */
 import { readFileSync } from "node:fs";
 import { STYLE_KEYS } from "@canonical/anatomy-dsl";
+// design-system publishes no entry for these two, so they resolve only in this workspace,
+// which is the only place this test runs.
 import { RETIRED_PATH } from "@canonical/design-system/src/anatomies/validate.js";
 import { loadSymbolIndex } from "@canonical/design-system/src/transform/symbols.js";
 import { describe, expect, it } from "vitest";
@@ -169,7 +171,10 @@ describe("the anatomy-author skill's examples", () => {
 
   it("binds only style keys the published roster declares", () => {
     const outside = bindings
-      .filter((binding) => STYLE_KEYS[binding.key.split("@")[0]] === undefined)
+      .filter(
+        (binding) =>
+          STYLE_KEYS[binding.key.split("@").at(0) ?? ""] === undefined,
+      )
       .map((binding) => `${binding.where} ${binding.key}`);
     expect(outside).toEqual([]);
   });
