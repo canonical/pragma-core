@@ -2,7 +2,7 @@
 
 What to run before pushing, where to run it, and how to revise a branch so that CI passes on the first run. Read this before every push.
 
-This file is identical in canonical/pragma-core and canonical/pragma-web; change both in paired pull requests.
+The original of this file lives in canonical/pragma-core; canonical/pragma-web carries a copy that links to it. Change the original first, then the copy, in paired pull requests.
 
 Read the top-level `.kb/agents.md` file before continuing below.
 
