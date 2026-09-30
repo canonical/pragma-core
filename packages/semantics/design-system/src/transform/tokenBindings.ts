@@ -110,6 +110,11 @@ export interface BindingFinding {
   block?: string;
   /** Carried by the state lint alone, which renders grouped by origin. */
   origin?: WarningOrigin;
+  /**
+   * Carried by a parse failure met through a `uri:` reference: the block whose tree
+   * reached the unparseable one, and so lost the records it would have reached.
+   */
+  reachedFrom?: string;
 }
 
 /** What `deriveTokenBindings` derived, and what it could not. */
@@ -302,6 +307,7 @@ function parse(
       severity: "finding",
       message: `${block}: ds:anatomyDsl does not parse as an anatomy document${via} — ${(error as Error).message}`,
       block,
+      ...(reachedFrom === undefined ? {} : { reachedFrom }),
     });
     return null;
   }

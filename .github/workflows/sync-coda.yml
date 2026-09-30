@@ -82,7 +82,8 @@ jobs:
           CODA_API_KEY: ${{ secrets.SUPERHUMAN_DOCS_API_KEY }}
 
       # Fail-closed on a finding, as the deletion guard is: an unregistered symbol
-      # or an unparseable anatomy stops the sync. It is NOT gated on the diff — the
+      # stops the sync; an anatomy that does not parse does not, as the transform
+      # skipped it and the report below lists it. It is NOT gated on the diff — the
       # document is the editing surface, so a census that moved is the ordinary case
       # and the regeneration is what keeps it current. The run also rewrites
       # `anatomies/register.yaml`, which is not committed and so is neither staged

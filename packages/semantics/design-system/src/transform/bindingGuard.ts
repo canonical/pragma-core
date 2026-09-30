@@ -17,12 +17,18 @@
  * matches §5.3's own `>=` record floor. It also runs BEFORE `collectDataMetrics`, so a
  * batch of parse failures is refused with its own message rather than surfacing as a
  * mystifying `MAX_PROPERTY_USAGE_DROP_RATIO` trip.
+ *
+ * One parse failure is not refused: an anatomy that does not parse and that no register
+ * row admits is SKIPPED — the derivation leaves its records out — and reported as a
+ * `Skipping …` line, as the transform does for a malformed upstream row. Refusing it
+ * would let one bad cell in the source document stop every other edit from syncing.
  */
 import { STYLE_KEYS } from "@canonical/anatomy-dsl";
 import { admitRegistered } from "../anatomies/admission.js";
 import { type Census, readCensus } from "../anatomies/census.js";
 import { readRegister } from "../anatomies/register.js";
 import type { Config } from "../config/types.js";
+import { NAMESPACES } from "../constants.js";
 import type { GraphStore } from "../graph/index.js";
 import { loadSymbolIndex, type SymbolIndex } from "./symbols.js";
 import {
@@ -39,9 +45,18 @@ export function tokenNamespaceOf(key: string): readonly string[] | undefined {
   return STYLE_KEYS[key]?.tokenNamespace;
 }
 
+/** The derivation's code for an anatomy that does not parse. */
+const UNPARSEABLE = "X16";
+
 /** What the guard found, and the floors it measured. */
 export interface GuardResult {
   findings: BindingFinding[];
+  /**
+   * Parse failures no register row admits: one per failure, so an anatomy reached
+   * through references appears once for itself and once per tree that reached it.
+   * Skipped and reported, never refused.
+   */
+  skipped: BindingFinding[];
   /** Records the graph holds. */
   records: number;
   /** The committed floors, or `null` where no census is committed yet. */
@@ -79,7 +94,7 @@ export function runBindingGuard(
   // registered exception that stopped the daily sync would make the register a
   // fiction. A resolution finding is admitted inside `checkBindings` already.
   const register = inputs.register ?? readRegister().rows;
-  const findings = admitRegistered(
+  const reported = admitRegistered(
     assertBindingsResolve(store, {
       symbols: inputs.symbols ?? loadSymbolIndex(),
       register,
@@ -88,6 +103,13 @@ export function runBindingGuard(
     }),
     register,
   );
+  // An anatomy that does not parse, and that no row admits, is skipped rather than
+  // refused: the derivation has already left its records out, and one bad cell in the
+  // source document must not hold back every other edit. It is reported instead, by
+  // `guardTokenBindings`, as a line the sync's run summary and pull request list.
+  const skipped = reported.filter((finding) => finding.code === UNPARSEABLE);
+  const findings = reported.filter((finding) => finding.code !== UNPARSEABLE);
+  const skippedAnatomies = new Set(skipped.map((finding) => finding.block));
 
   const records = readBindingRecords(store).length;
   const census = inputs.census === undefined ? readCensus() : inputs.census;
@@ -104,15 +126,21 @@ export function runBindingGuard(
   // that saw at least as many anatomies as the census counted. A test fixture, or a
   // scoped run, is not that corpus and must not trip a floor measured against it — the
   // guard that catches a corpus which shrank is the delta guard, and it says so.
+  //
+  // A skipped anatomy is one that did not parse, so it counts toward the parse floor:
+  // the floor catches an anatomy that stops parsing unnoticed, and a skipped one is
+  // named. Its records, and those other trees reached through it, are gone as well, by
+  // a number this run cannot know — the census counted them from a tree it can no
+  // longer read — so the record floor is not measured on a run that skipped one.
   if (floors !== null && derivation.anatomies >= floors.anatomies) {
-    if (derivation.parsed < floors.parseable) {
+    if (derivation.parsed + skippedAnatomies.size < floors.parseable) {
       findings.push({
         code: "PARSE_FLOOR",
         severity: "finding",
         message: `${derivation.parsed} anatomies parsed, below the ${floors.parseable} that anatomies/census.json commits to — an anatomy that used to parse no longer does`,
       });
     }
-    if (records < floors.records) {
+    if (skippedAnatomies.size === 0 && records < floors.records) {
       findings.push({
         code: "RECORD_FLOOR",
         severity: "finding",
@@ -121,7 +149,49 @@ export function runBindingGuard(
     }
   }
 
-  return { findings, records, floors };
+  return { findings, skipped, records, floors };
+}
+
+/** A block's dotted local name, which is what the source document shows. */
+function localName(iri: string): string {
+  return iri.replace(NAMESPACES.ds, "");
+}
+
+/**
+ * One `Skipping …` line per anatomy the guard skipped.
+ *
+ * The prefix is the contract: the sync workflow lists every log line that starts with
+ * `Skipping` in its run summary and in the sync pull request, beside the rows the
+ * transform left out. A parse error spans several lines, so only its first is kept —
+ * the line has to stay one line to be listed whole.
+ */
+export function renderSkippedAnatomies(
+  skipped: readonly BindingFinding[],
+): string[] {
+  const byBlock = new Map<string, { error: string; reachedFrom: string[] }>();
+  for (const finding of skipped) {
+    const block = finding.block as string;
+    const entry = byBlock.get(block) ?? {
+      error: finding.message.slice(finding.message.indexOf(" — ") + 3),
+      reachedFrom: [],
+    };
+    if (finding.reachedFrom !== undefined) {
+      entry.reachedFrom.push(localName(finding.reachedFrom));
+    }
+    byBlock.set(block, entry);
+  }
+  return [...byBlock.entries()]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([block, entry]) => {
+      const through =
+        entry.reachedFrom.length === 0
+          ? ""
+          : `, and those ${entry.reachedFrom.sort().join(", ")} reach through it,`;
+      return (
+        `Skipping the anatomy of ${localName(block)} — it does not parse, so its ` +
+        `token bindings${through} are left out of data/: ${entry.error.split("\n")[0]}`
+      );
+    });
 }
 
 /** Print a guard's findings, warnings included, in a stable order. */
@@ -146,7 +216,8 @@ export function renderFindings(findings: readonly BindingFinding[]): string {
 }
 
 /**
- * The transform's contract: refuse on a finding, print warnings and continue.
+ * The transform's contract: refuse on a finding, report a skipped anatomy, print
+ * warnings and continue.
  *
  * @throws when any finding is of severity `finding`.
  */
@@ -157,6 +228,9 @@ export default function guardTokenBindings(
   inputs: GuardInputs = {},
 ): GuardResult {
   const result = runBindingGuard(store, config, derivation, inputs);
+  for (const line of renderSkippedAnatomies(result.skipped)) {
+    console.warn(line);
+  }
   if (result.findings.length > 0) {
     console.log(renderFindings(result.findings));
   }
