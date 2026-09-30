@@ -38,7 +38,7 @@ const data = useLazyLoadQuery(inspectorPanesQuery, { refId }); // runtime-invoke
 
 ## cs:relay.fragment.connection_key_fenced
 
-Every `@connection(key: "...")` corresponds 1:1 to an entry in the shared `CONNECTION_KEYS` table (`@freefold/feed-relay` `constants.ts`), and a fence test asserts the correspondence in BOTH directions (no key in a fragment without a table entry; no table entry without a fragment key). `CONNECTION_KEYS` carries both hosts' keys in one table (the web `turns`/`effects`/`refs`/`commits` and the TUI `timeline`/`chat`/`roomTail`/`roster`/`worklist`), so the fence is the single source of connection-name truth across hosts.
+Every `@connection(key: "...")` corresponds 1:1 to an entry in the shared `CONNECTION_KEYS` table (`@scope/relay-writer` `constants.ts`), and a fence test asserts the correspondence in BOTH directions (no key in a fragment without a table entry; no table entry without a fragment key). `CONNECTION_KEYS` carries both hosts' keys in one table (the web `turns`/`effects`/`refs`/`commits` and the TUI `timeline`/`chat`/`roomTail`/`roster`/`worklist`), so the fence is the single source of connection-name truth across hosts.
 
 ### Do
 
@@ -63,7 +63,7 @@ const connection = getOrCreateConnectionRecord(store, hostId, "chat");
 
 ## cs:relay.fragment.edge_via_shared_path
 
-Connection edges are inserted ONLY through the shared feed-relay path — `applyProjectionBatch` (the sink) and `getOrCreateConnectionRecord` (the one shell-construction path the sink AND the optimistic overlays share). An overlay that adds an optimistic edge get-or-creates the host + connection record through `getOrCreateConnectionRecord`, then uses `ConnectionHandler.insertEdgeAfter`; it never hand-walks `edges`. Ordering/dedup/frontier guards live in `applyEdge`, which throws `ProjectionOrderViolation` on a cursor-order break. Because both the sink and every overlay build the connection shell through one function, the record shapes cannot drift.
+Connection edges are inserted ONLY through the shared relay-writer path — `applyProjectionBatch` (the sink) and `getOrCreateConnectionRecord` (the one shell-construction path the sink AND the optimistic overlays share). An overlay that adds an optimistic edge get-or-creates the host + connection record through `getOrCreateConnectionRecord`, then uses `ConnectionHandler.insertEdgeAfter`; it never hand-walks `edges`. Ordering/dedup/frontier guards live in `applyEdge`, which throws `ProjectionOrderViolation` on a cursor-order break. Because both the sink and every overlay build the connection shell through one function, the record shapes cannot drift.
 
 ### Do
 
@@ -252,7 +252,7 @@ export default function Roster({ roomId }: { roomId: string }) {
 
 ## cs:relay.host.retain_ownership
 
-On the web host, `environment.retain` is called ONLY in the host layer — the projected environment retains a store-scoped operation (root linkage + refs window) for its whole life, and per-ref retains are acquired at ref-open and released at ref-drop. The composition root (`harness-web-app`) owns the root query (the one `graphql`-INVOKED tag), `useLazyLoadQuery`, and `RelayEnvironmentProvider`. No library projection component and no fragment module calls `retain` or invokes the graphql tag; that concentration is what makes the components pure and portable.
+On the web host, `environment.retain` is called ONLY in the host layer — the projected environment retains a store-scoped operation (root linkage + refs window) for its whole life, and per-ref retains are acquired at ref-open and released at ref-drop. The composition root (the web host application) owns the root query (the one `graphql`-INVOKED tag), `useLazyLoadQuery`, and `RelayEnvironmentProvider`. No library projection component and no fragment module calls `retain` or invokes the graphql tag; that concentration is what makes the components pure and portable.
 
 ### Do
 
