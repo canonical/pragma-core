@@ -1,7 +1,7 @@
 ---
 name: Propose changes to existing UI Block
 about: Contribute changes to a component or pattern
-title: "feat(design-system): "
+title: ''
 labels: ''
 assignees: ''
 
