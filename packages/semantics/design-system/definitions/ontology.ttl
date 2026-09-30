@@ -96,6 +96,13 @@ ds:Group
     rdfs:label "Group" ;
     skos:definition "A set of sibling UIBlocks documented and used together as a collective unit, where the collection itself carries design-system identity distinct from its members (e.g. a coherent icon set, a family of related chips). Distinct from a Layout (which arranges space) and a Pattern (a single situated solution): a Group's identity is the collection." .
 
+ds:Page
+    a owl:Class ;
+    rdfs:subClassOf ds:UIBlock ;
+    rdfs:label "Page" ;
+    skos:definition "A Layout situated with additional context: a route-level UIBlock that adds, on top of a bare Layout's division of space, either semantic context (the route means something specific beyond the arrangement) or behaviour (it needs a hook: a data read, an effect, or a lifecycle). A Page relates to a Layout as a Pattern relates to a Component — a situated solution rather than a bare piece of arrangement. Discriminating test versus Layout: 'Does it add situated context or a hook on top of a Layout? -> Page. Is it pure space-division? -> Layout.'" ;
+    ds:acceptanceCriteria "Must add situated context or a hook on top of a Layout: either the route carries semantic meaning beyond pure arrangement, or it requires a hook (a data read, an effect, or a lifecycle). If the block is pure space-division with no situated context and no hook, it is a Layout, not a Page. The future home for Page instances is data/{tier}/page/, mirroring the other per-kind data folders." .
+
 ###############################################################################
 # 3. OTHER CORE CLASSES
 ###############################################################################
