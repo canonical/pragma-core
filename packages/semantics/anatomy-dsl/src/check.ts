@@ -81,8 +81,8 @@ function checkText(text: string): Problem | undefined {
 
 /**
  * The offset of the style value an `AnatomyValueError` names: the first
- * `styles` entry whose key and value raise that same error, and within a
- * sequence the element the error quotes.
+ * `styles` entry, in document order, whose key and value raise that same
+ * error, and within a sequence the element the error quotes.
  */
 function locate(
   document: Document,

@@ -108,6 +108,22 @@ describe("anatomy-dsl check", () => {
     });
   });
 
+  it("locates a value in a flow map and behind an alias", async () => {
+    const path = file("flow-alias.yaml", [
+      "node:",
+      "  uri: global.component.button",
+      "  props: {spacing: &gap x/y}",
+      "  styles: {layout.type: flex, layout.gap: *gap}",
+    ]);
+    expect(await check("check", path)).toEqual({
+      exitCode: 1,
+      out: [
+        `${path}:4:43: style value of layout.gap "x/y" is rejected: ${RULES.slashPath}`,
+      ],
+      err: [],
+    });
+  });
+
   it("reports a document without a top-level node key", async () => {
     const path = file("no-node.yaml", ["uri: global.component.button"]);
     expect(await check("check", path)).toEqual({
