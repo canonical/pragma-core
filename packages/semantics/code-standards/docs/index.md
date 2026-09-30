@@ -11,6 +11,7 @@ Standards documentation generated from the code-standards ontology.
 - [Lit](./lit.md) (13)
 - [Packaging](./packaging.md) (12)
 - [React](./react.md) (16)
+- [Relay](./relay.md) (15)
 - [Rust](./rust.md) (11)
 - [Storybook](./storybook.md) (11)
 - [Styling](./styling.md) (4)
