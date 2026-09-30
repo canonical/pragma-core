@@ -117,10 +117,8 @@ jobs:
       - name: Report what the sync left out
         run: |
           {
-            if [ "$SYNC_ALLOW_MALFORMED_ROWS" = 1 ] || [ "$SYNC_ALLOW_SHRINK" = 1 ]; then
-              echo "### Synced with a guard bypassed"
-              [ "$SYNC_ALLOW_MALFORMED_ROWS" = 1 ] && echo "- \`allow_malformed_rows\`: rows with a malformed \`uri\` were dropped from \`data/\`."
-              [ "$SYNC_ALLOW_SHRINK" = 1 ] && echo "- \`allow_shrink\`: the content-loss guards were bypassed."
+            if [ "$SYNC_ALLOW_SHRINK" = 1 ]; then
+              echo "### Synced with the content-loss guards bypassed (\`allow_shrink\`)"
               echo
             fi
             if grep -q '^Skipping' /tmp/sync-build.log; then
