@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { DUPLICATE_KEY, SECOND_DOCUMENT } from "../testing/fixtures.js";
+import { AnatomySyntaxError } from "./document/index.js";
 import { parseAnatomyYAML } from "./parse.js";
 import {
   AnatomyValueError,
@@ -193,6 +195,13 @@ node:
   it("refuses a document that is not one", () => {
     expect(() => parseAnatomyYAML("just a scalar")).toThrow("one `node` key");
     expect(() => parseAnatomyYAML("")).toThrow("one `node` key");
+  });
+
+  it("refuses text that is not well-formed YAML, with the error's location", () => {
+    expect(() => parseAnatomyYAML(DUPLICATE_KEY)).toThrow(
+      "YAML syntax error at line 3, column 3: Map keys must be unique",
+    );
+    expect(() => parseAnatomyYAML(SECOND_DOCUMENT)).toThrow(AnatomySyntaxError);
   });
 
   it("names the failing binding when a value is rejected", () => {

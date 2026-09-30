@@ -24,13 +24,17 @@ describe("what the package ships", () => {
   });
 
   it("declares yaml as a runtime dependency, not a dev one", () => {
-    // src/parse.ts loads it — the value grammar runs over the parsed
-    // document — and design-system calls this package in process.
+    // src/document/parseAnatomyDocument.ts loads it — the value grammar runs
+    // over the parsed document — and design-system calls this package in
+    // process.
     expect(manifest.dependencies.yaml).toBeDefined();
     expect(manifest.devDependencies.yaml).toBeUndefined();
-    expect(readFileSync(resolve(ROOT, "src", "parse.ts"), "utf8")).toContain(
-      'from "yaml"',
-    );
+    expect(
+      readFileSync(
+        resolve(ROOT, "src", "document", "parseAnatomyDocument.ts"),
+        "utf8",
+      ),
+    ).toContain('from "yaml"');
   });
 
   it("keeps the generators out of the published build", () => {

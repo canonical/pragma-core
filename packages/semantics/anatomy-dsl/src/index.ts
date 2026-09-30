@@ -1,3 +1,4 @@
+export { AnatomySyntaxError, parseAnatomyDocument } from "./document/index.js";
 export { parseAnatomyYAML } from "./parse.js";
 
 export {

@@ -1,4 +1,4 @@
-import { parseDocument } from "yaml";
+import { parseAnatomyDocument } from "./document/index.js";
 import type {
   Edge,
   Node,
@@ -72,14 +72,14 @@ interface RawRelation {
  * Parse an anatomy document.
  *
  * Give it the YAML text — which is what design-system holds, one
- * `ds:anatomyDsl` literal per block — and it is parsed here, with the
- * `yaml` package's Document API; that is why `yaml` is a runtime dependency
- * and not a devDependency. An already-parsed value is still accepted, for a
+ * `ds:anatomyDsl` literal per block — and it is parsed here, with
+ * `parseAnatomyDocument`, which throws an `AnatomySyntaxError` on text that
+ * is not well-formed YAML. An already-parsed value is still accepted, for a
  * caller that has one.
  */
 export function parseAnatomyYAML(raw: string | unknown): Specification {
   const doc = (
-    typeof raw === "string" ? parseDocument(raw).toJS() : raw
+    typeof raw === "string" ? parseAnatomyDocument(raw).toJS() : raw
   ) as RawYaml;
   if (doc === null || typeof doc !== "object" || doc.node === undefined) {
     throw new Error("An anatomy document is a mapping with one `node` key");

@@ -4,6 +4,7 @@ import {
   BARE_FLOW_KEY,
   COLLECTION_KEY,
   DIFFERENT_RULE_FIRST,
+  DUPLICATE_KEY,
   EDGE_WITHOUT_TARGET,
   EMPTY_VALUE,
   FLOW_ALIAS,
@@ -12,8 +13,12 @@ import {
   PRIMITIVE_NOT_LAST,
   PRIMITIVE_NOT_LAST_MESSAGE,
   SAME_KEY,
+  SECOND_DOCUMENT,
   STATE_SUFFIXED,
+  UNCLOSED_FLOW,
+  UNCLOSED_FLOW_REASON,
 } from "../../testing/fixtures.js";
+import { MULTIPLE_DOCUMENTS_REASON } from "../document/index.js";
 import { RULES } from "../value.js";
 import checkText from "./checkText.js";
 
@@ -51,6 +56,30 @@ describe("checkText", () => {
       message: `style value of layout.gap "x/y" is rejected: ${RULES.slashPath}`,
       line: 4,
       col: 43,
+    });
+  });
+
+  it("locates a YAML syntax error, reported by its reason", () => {
+    expect(checkText(UNCLOSED_FLOW)).toEqual({
+      message: UNCLOSED_FLOW_REASON,
+      line: 5,
+      col: 1,
+    });
+  });
+
+  it("locates a duplicate key", () => {
+    expect(checkText(DUPLICATE_KEY)).toEqual({
+      message: "Map keys must be unique",
+      line: 3,
+      col: 3,
+    });
+  });
+
+  it("locates a second document", () => {
+    expect(checkText(SECOND_DOCUMENT)).toEqual({
+      message: MULTIPLE_DOCUMENTS_REASON,
+      line: 3,
+      col: 1,
     });
   });
 

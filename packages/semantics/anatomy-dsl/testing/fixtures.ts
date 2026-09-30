@@ -124,3 +124,31 @@ export const BARE_FLOW_KEY = joinLines([
   "  uri: global.component.button",
   "  styles: {gap}",
 ]);
+
+/** A flow sequence left open, rejected where the document ends (5:1). */
+export const UNCLOSED_FLOW = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  styles:",
+  "    typography.color: [modifier.color.text, color.text",
+]);
+
+/** The message `UNCLOSED_FLOW` is rejected with. */
+export const UNCLOSED_FLOW_REASON =
+  "Flow sequence in block collection must be sufficiently indented and end with a ]";
+
+/** A key given twice in one mapping, rejected at the second (3:3). */
+export const DUPLICATE_KEY = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  uri: global.component.link",
+]);
+
+/** A second YAML document after the anatomy, rejected at its `---` (3:1). */
+export const SECOND_DOCUMENT = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "---",
+  "node:",
+  "  uri: global.component.link",
+]);
