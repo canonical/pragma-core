@@ -2056,12 +2056,13 @@ Made by the Canonical Webteam — https://canonical.com.`,
       stories: codeStandardsStories,
     },
     // The implementation graph: ds:ImplementationLibrary / ds:ImplementationObject
-    // nodes collected from `@implements` annotations across this monorepo
-    // (regenerated each release into the root `data/` directory, which is what
-    // a git ref scans — the npm distribution is `@canonical/ds-implementations`).
+    // nodes collected from `@implements` annotations across the component
+    // packages of canonical/pragma-web (regenerated each release into that
+    // repository's root `data/` directory, which is what a git ref scans — the
+    // npm distribution is `@canonical/ds-implementations`).
     {
       name: "@canonical/ds-implementations",
-      source: "git+https://github.com/canonical/pragma.git#main",
+      source: "git+https://github.com/canonical/pragma-web.git#main",
       stories: [implementationStory],
     },
   ],
