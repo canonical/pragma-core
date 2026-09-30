@@ -342,8 +342,8 @@ definitions/   Turtle ontology (OWL) + SHACL shapes, the style-key roster and
 docs/          API reference (WD404 + WD404.1 + WD404.2 + WD404.3)
 examples/      Example anatomy files (YAML + Turtle pairs), the corpus the
                round-trip and SHACL tests read
-src/           TypeScript types, parser, value grammar, transform and the
-               generators
+src/           TypeScript types, parser, value grammar, transform, the
+               check command and the generators
 ```
 
 ## Scope

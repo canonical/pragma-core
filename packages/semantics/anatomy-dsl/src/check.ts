@@ -1,6 +1,8 @@
 import { readFile } from "node:fs/promises";
 import {
+  type Document,
   isNode,
+  isPair,
   isScalar,
   isSeq,
   LineCounter,
@@ -13,27 +15,21 @@ import { AnatomyValueError, parseStyleValue } from "./value.js";
 
 export const USAGE = "Usage: anatomy-dsl check <file...>";
 
-/** Where a report line goes: `out` for results, `err` for usage and read errors. */
-export interface Output {
-  out: (line: string) => void;
-  err: (line: string) => void;
-}
-
 /**
  * Run the command line: `check <file...>`. Each file is parsed with
  * `parseAnatomyYAML`, the parser every consumer of an anatomy uses, so a file
- * passes here exactly when it parses there. The result is the exit code: 0
- * when every file parses, 1 when any does not, 2 on a usage error or a file
- * that cannot be read.
+ * passes here exactly when it parses there. Results go to `log`, usage and
+ * read errors to `error`. The result is the exit code: 0 when every file
+ * parses, 1 when any does not, 2 on a usage error or a file that cannot be
+ * read.
  */
-export async function run(args: string[], output: Output): Promise<number> {
+export async function run(
+  args: string[],
+  output: Pick<Console, "log" | "error">,
+): Promise<number> {
   const [command, ...files] = args;
-  if (command === "-h" || command === "--help") {
-    output.out(USAGE);
-    return 0;
-  }
   if (command !== "check" || files.length === 0) {
-    output.err(USAGE);
+    output.error(USAGE);
     return 2;
   }
   let exitCode = 0;
@@ -42,18 +38,18 @@ export async function run(args: string[], output: Output): Promise<number> {
     try {
       text = await readFile(file, "utf8");
     } catch (error) {
-      output.err(`${file}: cannot be read — ${(error as Error).message}`);
+      output.error(`${file}: cannot be read — ${(error as Error).message}`);
       exitCode = 2;
       continue;
     }
     const problem = checkText(text);
     if (problem === undefined) {
-      output.out(`${file}: OK`);
+      output.log(`${file}: OK`);
       continue;
     }
     const at =
-      problem.line === undefined ? "" : `:${problem.line}:${problem.column}`;
-    output.out(`${file}${at}: ${problem.message}`);
+      problem.line === undefined ? "" : `:${problem.line}:${problem.col}`;
+    output.log(`${file}${at}: ${problem.message}`);
     exitCode = Math.max(exitCode, 1);
   }
   return exitCode;
@@ -63,43 +59,48 @@ export async function run(args: string[], output: Output): Promise<number> {
 interface Problem {
   message: string;
   line?: number;
-  column?: number;
+  col?: number;
 }
 
 /** The first problem `parseAnatomyYAML` finds in the text, or undefined. */
 function checkText(text: string): Problem | undefined {
+  const lineCounter = new LineCounter();
+  const document = parseDocument(text, { lineCounter });
   try {
-    parseAnatomyYAML(text);
+    parseAnatomyYAML(document.toJS());
     return undefined;
   } catch (error) {
     const message = (error as Error).message;
-    return error instanceof AnatomyValueError
-      ? { message, ...locate(text, error) }
-      : { message };
+    if (!(error instanceof AnatomyValueError)) return { message };
+    const offset = locate(document, error);
+    return offset === undefined
+      ? { message }
+      : { message, ...lineCounter.linePos(offset) };
   }
 }
 
 /**
- * The line and column of the style value an `AnatomyValueError` names: the
- * first style entry whose key and value raise that same error, and within a
+ * The offset of the style value an `AnatomyValueError` names: the first
+ * `styles` entry whose key and value raise that same error, and within a
  * sequence the element the error quotes.
  */
 function locate(
-  text: string,
+  document: Document,
   error: AnatomyValueError,
-): { line: number; column: number } | undefined {
-  const lineCounter = new LineCounter();
-  const document = parseDocument(text, { lineCounter });
+): number | undefined {
   let offset: number | undefined;
   visit(document, {
-    Pair(_, pair) {
+    Pair(_, pair, path) {
+      const styles = path.at(-2);
+      if (!isPair(styles) || !isScalar(styles.key)) return;
+      if (styles.key.value !== "styles") return;
       const authored = pair.key;
       if (!isScalar(authored)) return;
       const key = String(authored.value).split("@")[0];
       if (key !== error.key) return;
       const value = isNode(pair.value) ? pair.value : undefined;
       try {
-        parseStyleValue(value?.toJSON() ?? null, key);
+        parseStyleValue(value?.toJS(document) ?? null, key);
         return;
       } catch (candidate) {
         if ((candidate as Error).message !== error.message) return;
@@ -114,7 +115,5 @@ function locate(
       return visit.BREAK;
     },
   });
-  if (offset === undefined) return undefined;
-  const { line, col } = lineCounter.linePos(offset);
-  return { line, column: col };
+  return offset;
 }
