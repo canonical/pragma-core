@@ -16,25 +16,25 @@ These skills are for contributors to pragma itself. The `pragma` command-line to
 
 ## Install
 
-Link the skill folders into the folder your agent reads skills from: `~/.claude/skills` for Claude Code, `~/.agents/skills` for most other agents.
+Link the skill folders into the repository's own `.claude/skills/`, which both repositories ignore in git, so the skills load only when you work on pragma. Claude Code reads `.claude/skills/`; agents that read the shared `.agents/skills/` folder take the same links there.
 
-From a pragma-core checkout, run this at its root:
+From a pragma-core checkout, run this at the root of the repository you work in, with `<pragma-core>` the path to that checkout:
 
 ```bash
-mkdir -p ~/.claude/skills
-ln -s "$PWD"/packages/skills/contribute/skills/* ~/.claude/skills/
+mkdir -p .claude/skills
+ln -sf <pragma-core>/packages/skills/contribute/skills/* .claude/skills/
 ```
 
 From npm, with Bun:
 
 ```bash
 bun add --global @canonical/skills-contribute
-mkdir -p ~/.claude/skills
-ln -s "${BUN_INSTALL:-$HOME/.bun}"/install/global/node_modules/@canonical/skills-contribute/skills/* ~/.claude/skills/
+mkdir -p .claude/skills
+ln -sf "${BUN_INSTALL:-$HOME/.bun}"/install/global/node_modules/@canonical/skills-contribute/skills/* .claude/skills/
 ```
 
-An agent without them installed can read a skill directly from [`skills/`](skills/).
+Start a new agent session afterwards: the seven skills appear in its list of skills. An agent without them installed can read a skill directly from [`skills/`](skills/).
 
 ## Changing a skill
 
-The skills are the single source of the shared contributor guidance for both repositories; pragma-web carries no copy. Keep each `SKILL.md` under 500 lines, with YAML frontmatter first, and a `description` that says what the skill does, when to use it, and names both repositories. Repository-specific knowledge stays in each repository's `.kb/` files.
+These skills are the one source of the contributor guidance shared by both repositories; pragma-web carries no copy. Knowledge specific to one repository stays in that repository's `.kb/` files. `bun run check` checks each skill's frontmatter, its description and its length.

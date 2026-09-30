@@ -22,12 +22,12 @@ Use this at the start of any change to `canonical/pragma-core` or `canonical/pra
 - **pragma-core holds the toolchain.** That means the `pragma` and `summon` command-line tools and the generators, `webarchitect`, the Biome, TypeScript and Renovate configurations, `utils`, `task`, `ke`, `ke-graphql`, `harnesses`, the design tokens and the design-system models.
 - **pragma-web holds everything that renders.** That means the React, Svelte and Lit components, the stylesheets, Storybook, the runtime packages, the applications and the documentation site. Anything that renders belongs to pragma-web, even when a generator in pragma-core emits it.
 - **pragma-web consumes pragma-core from npm**, pinned to exact versions. A change to a pragma-core package is a pull request in pragma-core. Once it is released, pragma-web bumps the pin (the `change-dependencies` skill).
-- **A change that spans both repositories is two pull requests**, one in each. The pragma-core one normally lands first, and each body names the other in full (the `open-pull-request` skill).
-- **Some files are shared.** `AGENTS.md`, `.kb/agents.md` and `CONSTITUTION.md` have their originals in pragma-core. pragma-web's copies start with `<!-- Copied from <url of the original>; change it there first. -->`. Change the original first, then the copy, in paired pull requests.
+- **A change that spans both repositories is two pull requests**, one in each. The pragma-core one lands first, and each body names the other in full (the `open-pull-request` skill).
+- **Some files are shared, and each has one original.** `AGENTS.md`, `.kb/agents.md` and `CONSTITUTION.md` have their originals in pragma-core, and pragma-web's copies start with a line saying `Copied from <url of the original>; change it there first.` The pull request template is the other way round: its original is pragma-web's, and pragma-core's copy differs only by the Chromatic line. Change the original first, then the copy, in paired pull requests.
 
 ## 2. Create the branch and its worktree
 
-The branch name follows the code standard `cs:git.branch.name`, with the commit types this repository allows (the `commit-changes` skill). Look the standard up with the pragma MCP tool `standard_lookup`.
+Name the branch by the branch-name standard (`cs:git.branch.name`), using only the commit types this repository allows (the `commit-changes` skill).
 
 Branch from an up-to-date `origin/main`, in a worktree under `.claude/worktrees/`. Name the worktree folder after the branch, with the `/` replaced by `-`:
 
@@ -38,29 +38,27 @@ git worktree add -b feat/minor-cli-improvements \
   .claude/worktrees/feat-minor-cli-improvements origin/main
 ```
 
-Each line of work stays isolated, several can run in parallel, and the main checkout stays untouched. Nobody pushes to `main`: every change lands through a pull request.
-
 ## 3. Install with the pinned Bun
 
-- **Bun is pinned in `.bun-version`.** Compare it with `bun --version`. When they differ, run the pinned Bun through `bunx`, for example `bunx bun@$(cat .bun-version) install`.
-- **Node must be in the root `engines` range** (`^22.13.0 || ^24.0.0 || ^26.0.0`), because Lerna requires it. `bun install` warns when the local Node is outside it.
+- **Bun is pinned in `.bun-version`.** When `bun --version` differs, run every Bun command through `bunx bun@$(cat .bun-version)` (the `change-dependencies` skill).
+- **Node must be in the `engines` range of the root `package.json`**, because Lerna requires it. `bun install` warns when the local Node is outside it.
 - **A fresh worktree has no `node_modules`.** Run `bun install` in it before the first `check` or `test`.
 
 ## 4. Read what applies to this repository
 
-Read `.kb/this-repository.md`. It says what is specific to this repository and names the topic file for each area, for example generators, graph packs or Chromatic. Read the topic files for the area you are about to change.
+Read `.kb/this-repository.md`, then the topic files it names for the area you are about to change.
 
 ## 5. Load the code standards
 
-Before writing code, find the standards that apply with the pragma MCP tool `standard_list` (filter by category, such as `react`, `css`, `packaging` or `testing`). Read them with `standard_lookup` and `detail: "detailed"`, which returns the dos and the don'ts. Follow them, and look for the existing convention in a sibling package when no standard covers a choice.
+`AGENTS.md` asks you to look up the code standards before writing code. They are served by the pragma MCP server, which comes with the `pragma` command-line tool: install it with `bun add --global @canonical/pragma-cli`, then register the server with your agent with `pragma setup mcp`. Filter `standard_list` by the category you are about to write (such as `react`, `css`, `packaging` or `testing`), then read each match with `standard_lookup`.
 
 ## Next
 
 | When you… | Load |
 | --- | --- |
-| change a dependency, a version, a `package.json` or `bun.lock` | `change-dependencies` |
-| commit | `commit-changes` |
-| get the branch push-ready and push it | `push-branch` |
-| open or update a pull request | `open-pull-request` |
-| file, triage or move an issue | `file-issue` |
-| change a workflow or add a check | `change-ci` |
+| change a dependency, a version, a `package.json` or `bun.lock` | the `change-dependencies` skill |
+| commit | the `commit-changes` skill |
+| get the branch push-ready and push it | the `push-branch` skill |
+| open or update a pull request | the `open-pull-request` skill |
+| file, triage or move an issue | the `file-issue` skill |
+| change a workflow or add a check | the `change-ci` skill |

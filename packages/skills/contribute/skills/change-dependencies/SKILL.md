@@ -1,11 +1,11 @@
 ---
 name: change-dependencies
-description: Changes a dependency, a version range or the lockfile in canonical/pragma-core or canonical/pragma-web. Covers regenerating bun.lock with the pinned Bun, sibling ranges, peer dependencies, TypeScript configs, the Biome schema and the sigstore patch. Use when editing any package.json, adding or removing a dependency, bumping a version, or resolving a bun.lock conflict in either pragma repository.
+description: Changes a dependency, a version range or the lockfile in canonical/pragma-core or canonical/pragma-web. Covers regenerating bun.lock with the pinned Bun, sibling ranges, peer dependencies, TypeScript configurations and the sigstore patch. Use when adding, removing or bumping a dependency, changing a version, or resolving a bun.lock conflict in either pragma repository.
 ---
 
 # Change dependencies
 
-Use this when a change touches a `package.json`, a version or `bun.lock` in `canonical/pragma-core` or `canonical/pragma-web`.
+Use this when a change adds, removes or bumps a dependency, changes a version, or touches `bun.lock` in `canonical/pragma-core` or `canonical/pragma-web`.
 
 ## Checklist
 
@@ -14,7 +14,7 @@ Use this when a change touches a `package.json`, a version or `bun.lock` in `can
 - [ ] 2. Edit the manifests
 - [ ] 3. Regenerate the lockfile: two installs, then a third that changes nothing
 - [ ] 4. Read the lockfile diff and disclose what else moved
-- [ ] 5. Apply this repository's notes (.kb/this-repository.md)
+- [ ] 5. Apply this repository's notes in .kb/this-repository.md
 ```
 
 ## 1. Use the pinned Bun
@@ -29,7 +29,7 @@ npm appears only for the first publish of a new package (`.kb/publishing.md`). N
 - **Remove an unused peer dependency.** Do not mark it optional instead: `optionalDependencies` would install the package into every consumer.
 - **Shared TypeScript configurations keep old majors in their peer range**, for example `^5.9.3 || ^6.0.0 || ^7.0.0`. Drop a major only when a change requires it.
 - **TypeScript 7 no longer loads every installed `@types/*` package** (`types` defaults to `[]`). A package names the ones it needs, for example `"types": ["bun"]`.
-- **Keep `"$schema"` in every `biome.json` in step with the `@biomejs/biome` version.** A Biome bump that leaves the schema behind makes `biome check` fail to read its configuration.
+- **A `biome.json` whose `$schema` names a Biome version moves with every `@biomejs/biome` bump.** A schema left behind makes `biome check` fail to read its configuration.
 - **In pragma-core, every package manifest keeps its `repository` field.** npm's provenance check requires it to name the repository that runs the release, and Renovate groups a pragma-core release into one pull request by it.
 
 ## 3. Regenerate the lockfile
@@ -41,10 +41,10 @@ npm appears only for the first publish of a new package (`.kb/publishing.md`). N
 ## 4. Read the lockfile diff
 
 - **Regenerating the lockfile can dedupe other packages within their declared ranges.** Say so in the pull request body.
-- **Keep `sigstore` at exactly 4.1.0.** The root `patchedDependencies` patch prevents half-published releases, applies only to that version, and Bun installs an unpatched version without any warning. A step in `pr.yml` fails when the lockfile no longer carries the patch.
+- **Keep `sigstore` at the exact version the root `patchedDependencies` patch names.** The patch prevents half-published releases and applies only to that version, and Bun installs an unpatched version without any warning. A step in `pr.yml` fails when the lockfile no longer carries the patch.
 
 ## 5. Apply this repository's notes
 
-`.kb/this-repository.md` names any topic that applies to dependencies here, for example how pragma-web pins the pragma-core packages.
+`.kb/this-repository.md` names any topic here that applies to dependencies.
 
-Then commit (`commit-changes`) and push (`push-branch`).
+Then commit (the `commit-changes` skill) and push (the `push-branch` skill).

@@ -1,8 +1,14 @@
 {
   "name": "@canonical/skills-contribute",
+  "description": "Agent skills for people and agents working on the pragma repositories, canonical/pragma-core and canonical/pragma-web.",
   "version": "0.43.0",
-  "description": "Agent skills for people and agents working on the pragma repositories, canonical/pragma-core and canonical/pragma-web",
-  "license": "LGPL-3.0",
+  "type": "module",
+  "files": [
+    "skills"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": {
     "email": "webteam@canonical.com",
     "name": "Canonical Webteam"
@@ -11,18 +17,17 @@
     "type": "git",
     "url": "https://github.com/canonical/pragma-core"
   },
+  "license": "LGPL-3.0",
   "bugs": {
     "url": "https://github.com/canonical/pragma-core/issues"
   },
-  "homepage": "https://github.com/canonical/pragma-core/tree/main/packages/skills/contribute#readme",
-  "files": [
-    "skills"
-  ],
+  "homepage": "https://github.com/canonical/pragma-core#readme",
   "scripts": {
-    "check": "bun run check:biome",
-    "check:fix": "bun run check:biome:fix",
+    "check": "bun run check:biome && bun run check:skills",
+    "check:fix": "bun run check:biome:fix && bun run check:skills",
     "check:biome": "biome check",
-    "check:biome:fix": "biome check --write"
+    "check:biome:fix": "biome check --write",
+    "check:skills": "bun test src"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",

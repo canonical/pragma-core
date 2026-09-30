@@ -20,9 +20,10 @@ Use this before every push in `canonical/pragma-core` or `canonical/pragma-web`,
 
 Run `git fetch origin main`. When the branch is behind, bring `main` in:
 
-- **A branch that someone else builds on** — shared with another person, or part of a stack of pull requests — takes **normal commits only**: no amend, no rebase, no force-push. Bring `main` in as a merge commit. A stack of pull requests is linked as a GitHub stack (`gh stack`) and merged bottom-up. A branch higher in the stack picks up the one below it through a normal merge.
-- **A branch nobody else builds on** is rebased onto `origin/main`, not merged. Tidy its history in the same pass (`commit-changes`).
-- **Resolve a `bun.lock` conflict by regenerating it** with the pinned Bun (`change-dependencies`).
+- **A branch not yet pushed** is rebased onto `origin/main`. Tidy its history in the same pass (the `commit-changes` skill).
+- **A branch that someone else builds on** — shared with another person, or part of a stack of pull requests — takes normal commits only: no amend, no rebase, no force-push. Bring `main` in as a merge commit. A stack of pull requests is linked as a GitHub stack (`gh stack`) and merged bottom-up; a branch higher in the stack picks up the one below it through a normal merge.
+- **A pushed branch that nobody else builds on**: ask a maintainer before rebasing it. When they agree, push it with `git push --force-with-lease`, which refuses when someone else pushed to the branch meanwhile.
+- **Resolve a `bun.lock` conflict by regenerating it** with the pinned Bun (the `change-dependencies` skill).
 
 ## 2. Run the root gate
 
@@ -40,12 +41,10 @@ bun run build        # only when the change affects build artifacts or a publish
 - **Satisfy lint and coverage together.** Do not trade one for the other, for example with a `!` non-null assertion that drops an uncovered `?? ""` branch. Rewrite the code so both pass.
 - **Blame the environment only after the same failure reproduces on a clean `origin/main`.**
 - **On a loaded machine, local tests can time out.** Re-run with a longer timeout or with `--concurrency 1`, and say which you did. CI is the verdict.
-- **`.kb/this-repository.md` names any check the root gate does not cover** here, such as a visual review.
+- **`.kb/this-repository.md` names any check the root gate does not cover here.**
 
 ## 3. Push
 
-- The first push is a plain `git push -u origin <branch>`.
-- After rebasing or rewording a branch nobody else builds on, push with `git push --force-with-lease`. It refuses when someone else pushed to the branch meanwhile: bring their work in first.
 - Never push speculative "maybe this fixes CI" commits: fix the cause, run the gate, then push.
 - Never use plain `--force`.
 
@@ -53,4 +52,4 @@ bun run build        # only when the change affects build artifacts or a publish
 
 Green locally is necessary, not sufficient. When a job fails, read its log with `gh run view <id> --log-failed`, fix the cause at its source, and go back to step 2.
 
-Then open or update the pull request (`open-pull-request`).
+Then open or update the pull request (the `open-pull-request` skill).
