@@ -353,28 +353,104 @@ const Button = ({
 
 **Identifier:** `cs:react.component.props.html_rendering`
 
-Components that render HTML markup must extend the base HTML element props interface to enable passing native properties through spreading.
+A component's props type must extend the native props of the element it renders as its root: a design-system-owned `OwnProps` intersected with that tag's `ComponentProps`, with the design-system keys omitted from the native half.
 
 ### Do
 
-Extend the appropriate React HTML props interface and add component-specific props.
+Intersect the design-system props with the root tag's native props, omitting the DS-owned keys.
 ```typescript
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** The button label */
-  label: string;
+import type { ComponentProps } from "react";
+
+type OwnProps = {
+  /** Visual prominence of the button. */
+  importance?: "primary" | "secondary";
+};
+
+// Change "button" to whatever element the component actually renders as its root.
+export type ButtonProps = OwnProps & Omit<ComponentProps<"button">, keyof OwnProps>;
+```
+
+Destructure every DS-owned prop out, spread the rest onto the root, and set DS-controlled attributes after the spread so they win.
+```tsx
+const Button = ({ importance, className, ...rest }: ButtonProps) => (
+  // type is set before the spread, so a caller can still override it;
+  // className is merged rather than replaced.
+  <button type="button" {...rest} className={["ds", importance, className].filter(Boolean).join(" ")} />
+);
+```
+
+State any further exclusion the component deliberately controls, and say why.
+```typescript
+// The design system owns href and tabIndex on this component, so they are
+// excluded from the native half rather than left for a caller to set.
+export type SkipLinkProps = OwnProps &
+  Omit<ComponentProps<"a">, keyof OwnProps | "href" | "tabIndex">;
+```
+
+A component with no single native root is exempt — and says so in the file, so a later reader knows it was decided rather than missed. Check first: a component that renders a wrapper element has a root, however composite it looks.
+```typescript
+/**
+ * Internal renderer props — exempt from the native-prop extension convention.
+ * This is not a public component and has no single native root the consumer
+ * styles: it receives a ready-made ARIA/roving prop bag from the menu hook and
+ * spreads that onto its element instead of extending a tag's native props.
+ */
+export interface ItemProps {
+  item: _Item<MenuItem>;
+  itemProps: Record<string, unknown>;
 }
 ```
 
 ### Don't
 
-Manually redefine standard HTML attributes that are already available through the base interface.
+Use `interface … extends` for the native half. It does not distribute over unions, so a component with two root forms silently loses its discriminant.
 ```typescript
-export interface ButtonProps {
-  /** The button label */
-  label: string;
-  onClick?: () => void;    // Bad: Duplicates HTML button props
-  disabled?: boolean;      // Bad: Duplicates HTML button props
+// Bad: an interface cannot express the union case, and extending one
+// alongside union members can collapse the props to `any`.
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  importance?: "primary" | "secondary";
 }
+```
+
+Reach for the per-element `XxxHTMLAttributes<T>` interfaces. They are easy to mis-instantiate against an element the component does not render.
+```typescript
+// Bad: says HTMLDivElement while the component renders a <section>.
+// ComponentProps<"section"> cannot be wrong in that way.
+export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
+  spacing?: "tight" | "loose";
+}
+```
+
+Re-declare attributes the native props already carry — they drift from the DOM and hide which props the design system actually owns.
+```typescript
+// Bad: every one of these already exists on ComponentProps<"button">.
+export interface ButtonProps {
+  importance?: "primary" | "secondary";
+  id?: string;
+  className?: string;
+  disabled?: boolean;
+  onClick?: () => void;
+}
+```
+
+Use `ComponentPropsWithoutRef` on React 19, where `ref` is an ordinary prop and belongs in the surface.
+```typescript
+// Bad on React 19: drops ref from the public props for no reason.
+export type ButtonProps = OwnProps &
+  Omit<ComponentPropsWithoutRef<"button">, keyof OwnProps>;
+```
+
+Give the design-system half the public name and invent a suffixed one for the finished type. A `Type` suffix carries no information — the position already says it is a type — and it appears when the good name is taken, which is the collision to fix rather than work around.
+```typescript
+// Bad: a consumer importing ChipProps reasonably expects the props of <Chip>,
+// and receives the design-system fields with none of the native ones. The name
+// that reads correctly is the one that is wrong.
+export interface ChipProps { criticality?: Criticality }
+export type ChipPropsType = InteractiveChipProps | StaticChipProps;
+
+// Good: the finished type takes the name, the design-system half is private.
+type OwnProps = { criticality?: Criticality };
+export type ChipProps = InteractiveChipProps | StaticChipProps;
 ```
 
 ---
