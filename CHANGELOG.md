@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
+
+### Features
+
+* **renovate-config:** group each pragma-core release into one pull request ([#19](https://github.com/canonical/pragma-core/issues/19)) ([cb01cbd](https://github.com/canonical/pragma-core/commit/cb01cbd1445415f78a613478036718fa8548ad42))
+
+
 # [0.43.0-experimental.1](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.0...v0.43.0-experimental.1) (2026-09-29)
 
 ### Bug Fixes

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
+
+**Note:** Version bump only for package @canonical/harnesses
+
+
+
+
+
 # 0.43.0-experimental.0 (2026-09-29)
 
 ### Features
