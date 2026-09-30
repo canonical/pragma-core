@@ -532,7 +532,7 @@ packages/my-package/
 │   ├── lib/
 │   │   ├── Button/
 │   │   │   ├── Button.tsx
-│   │   │   ├── Button.tests.tsx
+│   │   │   ├── Button.test.tsx
 │   │   │   ├── types.ts
 │   │   │   └── index.ts       # Barrel: exports Button public API
 │   │   ├── hooks/
