@@ -1,4 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>canonical/pragma-core//configs/renovate/default.json"]
+  "extends": ["local>canonical/pragma-core//configs/renovate/default.json"],
+  "packageRules": [
+    {
+      "description": "@types/vscode tracks the oldest VS Code the extension supports (engines.vscode), not the newest; raising it is a decision to drop older editors, made in engines.vscode first",
+      "matchPackageNames": ["@types/vscode"],
+      "enabled": false
+    }
+  ]
 }
