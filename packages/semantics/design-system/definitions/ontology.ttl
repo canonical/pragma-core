@@ -241,7 +241,7 @@ ds:anatomyDsl
     rdfs:range xsd:string ;
     rdfs:label "anatomyDsl" ;
     skos:definition "YAML specification of component structure using the Anatomy DSL. Describes nodes (named/anonymous), edges with cardinality, slots, and CTI-inspired styles." ;
-    ds:acceptanceCriteria "Must be valid YAML conforming to the Anatomy DSL specification. Root node must be named (have uri). See skills/anatomy-author/SKILL.md for format." .
+    ds:acceptanceCriteria "Must be valid YAML conforming to the Anatomy DSL specification. Root node must be named (have uri). See the anatomy-author skill (pragma skill lookup anatomy-author) for format." .
 
 ds:usage
     a owl:DatatypeProperty ;
