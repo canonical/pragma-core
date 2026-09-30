@@ -286,6 +286,37 @@ The button example above produces:
     ] .
 ```
 
+## Checking a file
+
+`anatomy-dsl check` parses each file with `parseAnatomyYAML`, so a file passes
+exactly when every consumer of the anatomy can read it:
+
+```sh
+bunx @canonical/anatomy-dsl check Button.anatomy.yaml Card.anatomy.yaml
+```
+
+```text
+Button.anatomy.yaml: OK
+Card.anatomy.yaml:5:23: style value of motion.property "background-color" is rejected: a primitive may only end a value: the sequence is the fallback order and a literal is what the chain ends in
+```
+
+Text piped in with no file named, or a file named `-`, is read from standard
+input and reported as `<stdin>`, so an anatomy copied from anywhere can be
+checked without saving it:
+
+```sh
+pbpaste | bunx @canonical/anatomy-dsl check
+```
+
+The package installs the `anatomy-dsl` command: as a dev dependency it runs
+from the project's scripts or `bunx anatomy-dsl`, and a global install
+(`bun add -g @canonical/anatomy-dsl` or `npm i -g @canonical/anatomy-dsl`)
+puts it on the `PATH`.
+
+It prints one line per file, with the line and column of a rejected style
+value. The exit code is 0 when every file passes, 1 when any fails, and 2 when
+no file is given or a file cannot be read.
+
 ## API
 
 ### `parseAnatomyYAML(raw: unknown): Specification`
@@ -324,8 +355,8 @@ definitions/   Turtle ontology (OWL) + SHACL shapes, the style-key roster and
 docs/          API reference (WD404 + WD404.1 + WD404.2 + WD404.3)
 examples/      Example anatomy files (YAML + Turtle pairs), the corpus the
                round-trip and SHACL tests read
-src/           TypeScript types, parser, value grammar, transform and the
-               generators
+src/           TypeScript types, parser, value grammar, transform, the
+               check command and the generators
 ```
 
 ## Scope

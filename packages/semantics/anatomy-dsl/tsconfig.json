@@ -1,6 +1,7 @@
 {
   "extends": "@canonical/typescript-config",
   "compilerOptions": {
+    "types": ["node"],
     "declaration": true,
     "noUncheckedIndexedAccess": true,
     "esModuleInterop": true,
