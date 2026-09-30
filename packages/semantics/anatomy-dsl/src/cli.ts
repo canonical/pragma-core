@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import { run } from "./check.js";
+import { runCheck } from "./check/index.js";
 
-process.exitCode = await run(process.argv.slice(2), console);
+process.exitCode = await runCheck(process.argv.slice(2), console);
