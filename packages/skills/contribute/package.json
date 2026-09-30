@@ -1,0 +1,31 @@
+{
+  "name": "@canonical/skills-contribute",
+  "version": "0.43.0",
+  "description": "Agent skills for people and agents working on the pragma repositories, canonical/pragma-core and canonical/pragma-web",
+  "license": "LGPL-3.0",
+  "author": {
+    "email": "webteam@canonical.com",
+    "name": "Canonical Webteam"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canonical/pragma-core"
+  },
+  "bugs": {
+    "url": "https://github.com/canonical/pragma-core/issues"
+  },
+  "homepage": "https://github.com/canonical/pragma-core/tree/main/packages/skills/contribute#readme",
+  "files": [
+    "skills"
+  ],
+  "scripts": {
+    "check": "bun run check:biome",
+    "check:fix": "bun run check:biome:fix",
+    "check:biome": "biome check",
+    "check:biome:fix": "biome check --write"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@canonical/biome-config": "^0.43.0"
+  }
+}
