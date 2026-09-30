@@ -79,7 +79,7 @@ describe("defaults — the validated distribution config (pragma.conf.ts)", () =
       },
       {
         name: "@canonical/ds-implementations",
-        source: "git+https://github.com/canonical/pragma.git#main",
+        source: "git+https://github.com/canonical/pragma-web.git#main",
       },
     ]);
   });
