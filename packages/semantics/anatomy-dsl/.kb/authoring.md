@@ -12,5 +12,5 @@ Read the top-level `.kb/agents.md` file before continuing below.
 
 - **An anatomy is a YAML mapping with exactly one top-level `node:` key.** Variants go in one tree with `switch`, or become separate blocks.
 - **`motion.property` is a primitive, written as one comma-separated string** (`transform, display`), never a YAML list. A list is read as a fallback chain of tokens ending in one literal, and fails with `primitiveNotLast`.
-- **A named `uri:` must name an existing block.** A dangling one blocks the sync unless the anatomy register admits it. A part with no block of its own is an anonymous node with a `role:`.
+- **A named `uri:` must name an existing block.** A dangling one blocks the sync unless the anatomy register (`packages/semantics/design-system/anatomies/register.yaml`) admits it. A part with no block of its own is an anonymous node with a `role:`.
 - **Style values name dotted symbols that exist in the token ontology.** Slash token paths (`color/background/default`) are retired.
