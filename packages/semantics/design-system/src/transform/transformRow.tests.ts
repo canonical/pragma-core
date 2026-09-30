@@ -463,4 +463,211 @@ describe("transformRow", () => {
     );
     expect(hasPropertyQuads).toHaveLength(0);
   });
+
+  describe("whitespace carried from the document", () => {
+    it("trims a plain-text cell so the name is the name it is looked up by", () => {
+      const store = new GraphStore();
+      const prefixes = new PrefixMap();
+      prefixes.add("ds", NAMESPACES.ds);
+
+      // What the document holds after someone typed a trailing space into the cell.
+      const row = {
+        name: "Timeline ",
+        summary: "  A dated sequence.  ",
+        uri: buttonUri,
+      };
+      const config = {
+        "@context": {
+          ds: NAMESPACES.ds,
+          name: "ds:name",
+          summary: "ds:summary",
+        },
+        class: "ds:Component",
+        uriTemplate: "{uri}",
+      };
+
+      transformRow(row, config, store, prefixes, new Map());
+
+      const quads = store.getQuads();
+      const nameQuad = quads.find((q) => q.predicate.value === PREDICATES.name);
+      expect(nameQuad?.object.value).toBe("Timeline");
+      const summaryQuad = quads.find(
+        (q) => q.predicate.value === PREDICATES.summary,
+      );
+      expect(summaryQuad?.object.value).toBe("A dated sequence.");
+    });
+
+    it("leaves a cell of only whitespace as an empty literal", () => {
+      const store = new GraphStore();
+      const prefixes = new PrefixMap();
+      prefixes.add("ds", NAMESPACES.ds);
+
+      const row = { name: "Button", summary: "   ", uri: buttonUri };
+      const config = {
+        "@context": {
+          ds: NAMESPACES.ds,
+          name: "ds:name",
+          summary: "ds:summary",
+        },
+        class: "ds:Component",
+        uriTemplate: "{uri}",
+      };
+
+      transformRow(row, config, store, prefixes, new Map());
+
+      const summaryQuad = store
+        .getQuads()
+        .find((q) => q.predicate.value === PREDICATES.summary);
+      expect(summaryQuad?.object.value).toBe("");
+    });
+
+    it("keeps a document body byte for byte, trailing newline and all", () => {
+      const store = new GraphStore();
+      const prefixes = new PrefixMap();
+      prefixes.add("ds", NAMESPACES.ds);
+
+      const anatomy = "block: Timeline\nnodes:\n  - name: item\n";
+      const row = {
+        name: "Timeline",
+        anatomy_dsl: anatomy,
+        usage: " Use it for dated sequences.\n",
+        guidelines: "\nKeep the dates ascending.\n",
+        uri: buttonUri,
+      };
+      const config = {
+        "@context": {
+          ds: NAMESPACES.ds,
+          name: "ds:name",
+          anatomy_dsl: "ds:anatomyDsl",
+          usage: "ds:usage",
+          guidelines: "ds:guidelines",
+        },
+        class: "ds:Component",
+        uriTemplate: "{uri}",
+      };
+
+      transformRow(row, config, store, prefixes, new Map());
+
+      const quads = store.getQuads();
+      const literalFor = (predicate: string) =>
+        quads.find((q) => q.predicate.value === predicate)?.object.value;
+      expect(literalFor(PREDICATES.anatomyDsl)).toBe(anatomy);
+      expect(literalFor(`${NAMESPACES.ds}usage`)).toBe(
+        " Use it for dated sequences.\n",
+      );
+      expect(literalFor(`${NAMESPACES.ds}guidelines`)).toBe(
+        "\nKeep the dates ascending.\n",
+      );
+    });
+
+    it("trims each value of a list-valued literal", () => {
+      const store = new GraphStore();
+      const prefixes = new PrefixMap();
+      prefixes.add("ds", NAMESPACES.ds);
+
+      const row = {
+        name: "Button",
+        summary: ["First. ", " Second."],
+        uri: buttonUri,
+      };
+      const config = {
+        "@context": {
+          ds: NAMESPACES.ds,
+          name: "ds:name",
+          summary: "ds:summary",
+        },
+        class: "ds:Component",
+        uriTemplate: "{uri}",
+      };
+
+      transformRow(row, config, store, prefixes, new Map());
+
+      const summaries = store
+        .getQuads()
+        .filter((q) => q.predicate.value === PREDICATES.summary)
+        .map((q) => q.object.value);
+      expect(summaries).toEqual(["First.", "Second."]);
+    });
+
+    it("trims an inline blank node's cells", () => {
+      const store = new GraphStore();
+      const prefixes = new PrefixMap();
+      prefixes.add("ds", NAMESPACES.ds);
+
+      const row = { name: "Truncated", properties: "prop-1", uri: buttonUri };
+      const config = {
+        "@context": {
+          ds: NAMESPACES.ds,
+          name: "ds:name",
+          properties: {
+            "@id": "ds:hasProperty",
+            "@inline": {
+              table: "properties",
+              class: "ds:Property",
+              properties: {
+                "property name": "ds:name",
+                type: "ds:propertyType",
+              },
+            },
+          },
+        },
+        class: "ds:Component",
+        uriTemplate: "{uri}",
+      };
+
+      const inlineData = {
+        properties: new Map([
+          [
+            "prop-1",
+            {
+              _codaId: "prop-1",
+              "property name": "Truncated.content ",
+              type: " string",
+            },
+          ],
+        ]),
+      };
+
+      transformRow(row, config, store, prefixes, new Map(), inlineData);
+
+      const quads = store.getQuads();
+      const propertyName = quads.find(
+        (q) =>
+          q.subject.termType === "BlankNode" &&
+          q.predicate.value === PREDICATES.name,
+      );
+      expect(propertyName?.object.value).toBe("Truncated.content");
+      const propertyType = quads.find(
+        (q) => q.predicate.value === `${NAMESPACES.ds}propertyType`,
+      );
+      expect(propertyType?.object.value).toBe("string");
+    });
+
+    it("trims a classProperties cell", () => {
+      const store = new GraphStore();
+      const prefixes = new PrefixMap();
+      prefixes.add("ds", NAMESPACES.ds);
+
+      const row = {
+        name: "Page",
+        layout_grid_template: " 12-column ",
+        uri: buttonUri,
+      };
+      const config = {
+        "@context": { ds: NAMESPACES.ds, name: "ds:name" },
+        class: "ds:Layout",
+        uriTemplate: "{uri}",
+        classProperties: {
+          "ds:Layout": { layout_grid_template: "ds:grid" },
+        },
+      };
+
+      transformRow(row, config, store, prefixes, new Map());
+
+      const gridQuad = store
+        .getQuads()
+        .find((q) => q.predicate.value === `${NAMESPACES.ds}grid`);
+      expect(gridQuad?.object.value).toBe("12-column");
+    });
+  });
 });
