@@ -1,5 +1,5 @@
 name: GitHub Release
-description: Creates the GitHub Release for a tag and attaches the release artifacts.
+description: Creates the GitHub Release for a tag, with notes generated from its commits.
 inputs:
   version:
     description: "The released version number (without tag prefix)."
@@ -11,6 +11,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Create release and upload artifacts
+    - name: Create the release
       shell: bash
       run: ${{ github.action_path }}/release.sh ${{ inputs.version }} ${{ inputs.tag_prefix }}
