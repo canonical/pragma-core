@@ -31,8 +31,8 @@ jobs:
     # contents: write — push the regenerated data/ back to the branch.
     # Without this the default GITHUB_TOKEN is read-only and `git push` fails
     # with "Write access to repository not granted" (HTTP 403).
-    # issues: write — open/annotate an issue when a fail-closed guard blocks
-    # the sync so the failure is visible outside the Actions tab.
+    # issues: write — open an issue when the anatomy census moves (see "Open an
+    # issue on a census diff"). A blocked sync is reported in the run summary.
     permissions:
       contents: write
       issues: write
@@ -269,30 +269,4 @@ jobs:
               echo
               echo "Nothing is wrong and nothing was lost. Deleting these rows in the source document is optional tidying."
             } >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-      - name: Open issue on failure
-        if: failure()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          {
-            # Lead with the cause: the title and first line should say what to
-            # fix without anyone opening the Actions tab.
-            cat /tmp/guard-summary.md 2>/dev/null || echo "A Coda pull sync was blocked before committing, so \`data/\` on the default branch was left untouched."
-            echo
-            echo "- Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            echo "- Trigger: ${{ inputs.trigger }}"
-            echo
-            echo "### Full guard output"
-            echo '```'
-            tail -n 40 /tmp/sync-build.log /tmp/deletion-guard.log 2>/dev/null || echo "(no logs captured)"
-            echo '```'
-          } > /tmp/issue-body.md
-          title="Coda sync blocked: ${SYNC_FAILURE_CAUSE:-fail-closed guard tripped}"
-          existing=$(gh issue list --state open --search 'Coda sync blocked in:title' --json number --jq '.[0].number // empty')
-          if [ -n "$existing" ]; then
-            gh issue comment "$existing" --body-file /tmp/issue-body.md
-          else
-            gh issue create --title "$title" --body-file /tmp/issue-body.md
           fi
