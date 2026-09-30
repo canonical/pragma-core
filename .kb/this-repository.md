@@ -12,10 +12,10 @@ Most conventions here are documented. The domain map and the monorepo mechanics 
 
 # Important
 
-- The contributor skills that `AGENTS.md` lists live in this repository, in [`packages/skills/contribute/skills/`](../packages/skills/contribute/skills/). Load one by reading its `SKILL.md`, or install them all for your agent as the [package README](../packages/skills/contribute/README.md) describes. Start with `start-change`.
+- The contributor skills that `AGENTS.md` lists live in this repository, in `packages/skills/contribute/skills/`. Install them for your agent as the [package README](../packages/skills/contribute/README.md) describes, or read one directly, starting with [`start-change`](../packages/skills/contribute/skills/start-change/SKILL.md).
 - pragma-core never depends on a pragma-web package, not even as a development dependency. A check that needs both sides lives in pragma-web, which checks what depends on its own code.
 - Before adding a package, read [`docs/explanations/DOMAINS.md`](../docs/explanations/DOMAINS.md): it states what each domain does and does not hold, and names each package on npm beside its folder.
-- A package under `packages/semantics/` publishes only what its consumers load, such as its data, definitions and entry point, through a `files` allowlist in its `package.json`.
+- Give a package under `packages/semantics/` a `files` allowlist in its `package.json`, so it publishes only what its consumers load, such as its data, definitions and entry point. `code-standards` has none yet.
 - Before changing a generator or its templates, read `.kb/summon.md`: generators return data, and they write file content from `.ejs` templates.
 - Before changing a design-system model under `packages/semantics/`, or the `pragma` command-line tool's pack configuration, read `.kb/graph-packs.md`: the tool ships a generated snapshot of the graph packs, and a parity check guards it.
 - Before writing or changing an anatomy, read [`packages/semantics/anatomy-dsl/.kb/authoring.md`](../packages/semantics/anatomy-dsl/.kb/authoring.md): the traps that make an anatomy fail to parse or resolve.
