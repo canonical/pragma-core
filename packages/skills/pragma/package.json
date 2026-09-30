@@ -1,0 +1,44 @@
+{
+  "name": "@canonical/skills-pragma",
+  "description": "Agent skills for the pragma command-line tool: specifying, implementing and auditing design-system components, adopting the design system, and adding code standards.",
+  "version": "0.43.0",
+  "type": "module",
+  "files": [
+    "skills"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": {
+    "email": "webteam@canonical.com",
+    "name": "Canonical Webteam"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canonical/pragma-core"
+  },
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/canonical/pragma-core/issues"
+  },
+  "homepage": "https://github.com/canonical/pragma-core#readme",
+  "scripts": {
+    "check": "bun run check:biome && bun run check:ts",
+    "check:fix": "bun run check:biome:fix && bun run check:ts",
+    "check:biome": "biome check",
+    "check:biome:fix": "biome check --write",
+    "check:ts": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@canonical/anatomy-dsl": "^0.43.0",
+    "@canonical/biome-config": "^0.43.0",
+    "@canonical/design-system": "^0.43.0",
+    "@canonical/typescript-config": "^0.43.0",
+    "@types/node": "^26.4.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.0.18",
+    "yaml": "^2.7.1"
+  }
+}

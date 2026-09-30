@@ -16,18 +16,16 @@
  */
 import { readFileSync } from "node:fs";
 import { STYLE_KEYS } from "@canonical/anatomy-dsl";
+import { RETIRED_PATH } from "@canonical/design-system/src/anatomies/validate.js";
+import { loadSymbolIndex } from "@canonical/design-system/src/transform/symbols.js";
 import { describe, expect, it } from "vitest";
 import { isMap, isScalar, isSeq, parseDocument, type Scalar } from "yaml";
-import { loadSymbolIndex } from "../transform/symbols.js";
-import { RETIRED_PATH } from "./validate.js";
 
-const FILES = [
-  "skills/anatomy-author/SKILL.md",
-  "skills/anatomy-author/ANATOMY_DSL_SPEC.md",
-];
+const SKILL = "skills/anatomy-author/SKILL.md";
+const FILES = [SKILL, "skills/anatomy-author/ANATOMY_DSL_SPEC.md"];
 
 /** Every fenced YAML block in a document, with the line it starts on. */
-function yamlBlocks(path: string): Array<{ line: number; body: string }> {
+function findYamlBlocks(path: string): Array<{ line: number; body: string }> {
   const lines = readFileSync(path, "utf-8").split("\n");
   const blocks: Array<{ line: number; body: string }> = [];
   let start: number | null = null;
@@ -59,7 +57,7 @@ interface Binding {
 }
 
 /** Every style binding in one block, or null when the block is not a document. */
-function bindingsIn(
+function findBindings(
   path: string,
   block: { line: number; body: string },
 ): Binding[] | null {
@@ -120,10 +118,10 @@ function bindingsIn(
 }
 
 const blocks = FILES.flatMap((path) =>
-  yamlBlocks(path).map((block) => ({ path, block })),
+  findYamlBlocks(path).map((block) => ({ path, block })),
 );
 const bindings = blocks.flatMap(
-  ({ path, block }) => bindingsIn(path, block) ?? [],
+  ({ path, block }) => findBindings(path, block) ?? [],
 );
 
 describe("the anatomy-author skill's examples", () => {
@@ -150,13 +148,13 @@ describe("the anatomy-author skill's examples", () => {
         }
         // Only the value half of a `key: value` line, so a URL in prose is not a
         // token path and is not treated as one.
-        const match = /^\s*[-*]?\s*"?[a-z][\w.@]*"?\s*:\s*(.+?)\s*(#.*)?$/.exec(
-          line,
-        );
-        if (match === null) {
+        const value = /^\s*[-*]?\s*"?[a-z][\w.@]*"?\s*:\s*(.+?)\s*(#.*)?$/
+          .exec(line)
+          ?.at(1);
+        if (value === undefined) {
           return;
         }
-        for (const element of match[1]
+        for (const element of value
           .replace(/^\[|\]$/g, "")
           .split(",")
           .map((part) => part.trim().replace(/^["']|["']$/g, ""))) {
@@ -199,7 +197,7 @@ describe("the anatomy-author skill's examples", () => {
   });
 
   it("teaches the value form, the roster and the comment", () => {
-    const skill = readFileSync(FILES[0], "utf-8");
+    const skill = readFileSync(SKILL, "utf-8");
     // The things an author has to know, each stated in the skill itself.
     expect(skill).toContain("A style value is the symbol consumed");
     expect(skill).toContain("an ordered list of symbol names");

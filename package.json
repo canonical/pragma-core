@@ -25,7 +25,8 @@
     "packages/integrations/*",
     "packages/semantics/*",
     "packages/summon/*",
-    "packages/cli/*"
+    "packages/cli/*",
+    "packages/skills/*"
   ],
   "scripts": {
     "check:ranges": "bun scripts/check-workspace-ranges.ts",

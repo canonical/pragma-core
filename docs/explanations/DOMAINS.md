@@ -16,9 +16,10 @@ Each folder has an **entry rule**: the sentence a new package must satisfy to go
 | `packages/tokens/` | design values and their build |
 | `packages/engine/` | storing and querying knowledge |
 | `packages/integrations/` | adapters to third-party tools and services |
-| `packages/semantics/` | the design system's models (ontologies, data, skills) |
+| `packages/semantics/` | the design system's models (ontologies, data) |
 | `packages/summon/` | code generation, its engine and generators |
 | `packages/cli/` | the commands people and agents use to reach the system |
+| `packages/skills/` | agent skills, as packages |
 
 The npm name is given beside every folder, because the two do not always match: the folder name is
 the human coordinate and the npm name is the published one, and a later rename of either has to be
@@ -141,14 +142,14 @@ adapter is the package's purpose, not a detail of it.
 
 **Belongs here:** the models that say what a design-system entity *is*, independent of any
 implementation of it: the `ds:` ontology, the component and UI-block specifications synchronised from
-Coda into `data/`, the `collect` library, the agent skills the command-line tool bundles, the grammar
-(plus validating shapes) for writing a component's anatomy as data, the code-standards corpus (its
-ontology, the generated documentation and the `add-standard` skill), and the `dt:` ontology that
-models the design tokens.
+Coda into `data/`, the `collect` library, the grammar (plus validating shapes) for writing a
+component's anatomy as data, the code-standards corpus (its ontology and the generated
+documentation), and the `dt:` ontology that models the design tokens.
 
 **Does not belong here:** the *implementation* graph — which React or Svelte component realises
 which specification. That is collected from the annotations in the component packages and lives in
-`pragma-web` as `@canonical/ds-implementations`.
+`pragma-web` as `@canonical/ds-implementations`. Nor do the agent skills that teach these models:
+they are `skills`.
 
 ---
 
@@ -186,3 +187,19 @@ graph, but the compiler is `packages/engine/ke`; `summon` generates code, but th
 framework is `packages/summon/core`. A binary is a surface over libraries, and stays thin enough to
 say so. A tool that builds run on our own code (`webarchitect`) is `tools`, even though it has a
 `bin`.
+
+---
+
+## `packages/skills` — agent skills, as packages
+
+| Folder | npm name |
+|---|---|
+| `packages/skills/pragma` | `@canonical/skills-pragma` |
+
+**Belongs here:** a package of agent skills — `skills/<name>/SKILL.md` folders — plus the tests that
+check them. `skills-pragma` holds the skills people use through the `pragma` command-line tool, which
+declares it as a pack and ships a snapshot of it.
+
+**Does not belong here:** the models and data a skill teaches (they are `semantics`), and the
+command that finds and installs skills (it is `cli`). A skills package holds no library code and no
+graph data.

@@ -54,7 +54,6 @@
   "files": [
     "data",
     "definitions",
-    "skills",
     "src/collect",
     "src/graph",
     "src/serializers",
