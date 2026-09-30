@@ -286,6 +286,24 @@ The button example above produces:
     ] .
 ```
 
+## Checking a file
+
+`anatomy-dsl check` parses each file with `parseAnatomyYAML`, so a file passes
+exactly when every consumer of the anatomy can read it:
+
+```sh
+bunx @canonical/anatomy-dsl check Button.anatomy.yaml Card.anatomy.yaml
+```
+
+```text
+Button.anatomy.yaml: OK
+Card.anatomy.yaml:5:23: style value of motion.property "background-color" is rejected: a primitive may only end a value: the sequence is the fallback order and a literal is what the chain ends in
+```
+
+It prints one line per file, with the line and column of a rejected style
+value. The exit code is 0 when every file passes, 1 when any fails, and 2 when
+no file is given or a file cannot be read.
+
 ## API
 
 ### `parseAnatomyYAML(raw: unknown): Specification`
