@@ -1,8 +1,9 @@
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { Readable } from "node:stream";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { run, USAGE } from "./check.js";
+import { run, type Stdin, USAGE } from "./check.js";
 import { RULES } from "./value.js";
 
 const VALID = resolve(
@@ -23,15 +24,32 @@ function file(name: string, lines: string[]): string {
   return path;
 }
 
+/** A terminal on stdin: nothing is piped in. */
+const TERMINAL = Object.assign(Readable.from([]), { isTTY: true });
+
 /** Run the command line, collecting what it prints. */
 async function check(...args: string[]) {
+  return checkWith(TERMINAL, ...args);
+}
+
+/** Run the command line with `stdin` as its standard input. */
+async function checkWith(stdin: Stdin, ...args: string[]) {
   const out: string[] = [];
   const err: string[] = [];
-  const exitCode = await run(args, {
-    log: (line: string) => out.push(line),
-    error: (line: string) => err.push(line),
-  });
+  const exitCode = await run(
+    args,
+    {
+      log: (line: string) => out.push(line),
+      error: (line: string) => err.push(line),
+    },
+    stdin,
+  );
   return { exitCode, out, err };
+}
+
+/** Standard input carrying `lines`, as a pipe delivers it. */
+function piped(lines: string[]): Stdin {
+  return Readable.from([`${lines.join("\n")}\n`]);
 }
 
 beforeAll(() => {
@@ -167,6 +185,29 @@ describe("anatomy-dsl check", () => {
     expect(err).toHaveLength(1);
     expect(err[0]).toMatch(`${missing}: cannot be read — `);
     expect(out).toEqual([`${primitiveNotLast}:4:23: ${PRIMITIVE_NOT_LAST}`]);
+  });
+
+  it("reads piped text when no file is given", async () => {
+    const stdin = piped([
+      "node:",
+      "  uri: global.component.button",
+      "  styles:",
+      "    motion.property: [background-color, color]",
+    ]);
+    expect(await checkWith(stdin, "check")).toEqual({
+      exitCode: 1,
+      out: [`<stdin>:4:23: ${PRIMITIVE_NOT_LAST}`],
+      err: [],
+    });
+  });
+
+  it("reads stdin for a file named -, alongside named files", async () => {
+    const stdin = piped(["node:", "  uri: global.component.button"]);
+    expect(await checkWith(stdin, "check", VALID, "-")).toEqual({
+      exitCode: 0,
+      out: [`${VALID}: OK`, "<stdin>: OK"],
+      err: [],
+    });
   });
 
   it("exits 2 with the usage when no file or no command is given", async () => {
