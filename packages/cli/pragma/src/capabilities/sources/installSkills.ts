@@ -1,7 +1,7 @@
 /**
  * Plan the symlink install of package-provided skills (U10).
  *
- * Design-system packages ship a top-level `skills/<name>/SKILL.md`, but skill
+ * Packs ship a top-level `skills/<name>/SKILL.md`, but skill
  * discovery only scans the project root and the installed-skills root — never a
  * resolved package's clone/dir. So `sources update` INSTALLS each package's
  * skills into the installed-skills root (`$XDG_DATA_HOME/<bin>/skills`) as

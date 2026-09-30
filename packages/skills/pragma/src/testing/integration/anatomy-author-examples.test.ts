@@ -26,9 +26,14 @@ import { isMap, isScalar, isSeq, parseDocument, type Scalar } from "yaml";
 const SKILL = "skills/anatomy-author/SKILL.md";
 const FILES = [SKILL, "skills/anatomy-author/ANATOMY_DSL_SPEC.md"];
 
+/** Read a file by its path from the package root, wherever the runner started. */
+function readPackageFile(path: string): string {
+  return readFileSync(new URL(`../../../${path}`, import.meta.url), "utf-8");
+}
+
 /** Every fenced YAML block in a document, with the line it starts on. */
 function findYamlBlocks(path: string): Array<{ line: number; body: string }> {
-  const lines = readFileSync(path, "utf-8").split("\n");
+  const lines = readPackageFile(path).split("\n");
   const blocks: Array<{ line: number; body: string }> = [];
   let start: number | null = null;
   let body: string[] = [];
@@ -137,7 +142,7 @@ describe("the anatomy-author skill's examples", () => {
     // A reader copies what they see.
     const offences: string[] = [];
     for (const path of FILES) {
-      const lines = readFileSync(path, "utf-8").split("\n");
+      const lines = readPackageFile(path).split("\n");
       lines.forEach((line, index) => {
         // The spec has to be able to SHOW what is rejected, so a line the text
         // itself marks as rejected is the one place the retired form may appear.
@@ -202,7 +207,7 @@ describe("the anatomy-author skill's examples", () => {
   });
 
   it("teaches the value form, the roster and the comment", () => {
-    const skill = readFileSync(SKILL, "utf-8");
+    const skill = readPackageFile(SKILL);
     // The things an author has to know, each stated in the skill itself.
     expect(skill).toContain("A style value is the symbol consumed");
     expect(skill).toContain("an ordered list of symbol names");
