@@ -6,7 +6,7 @@ describe("defaults — the validated distribution config (pragma.conf.ts)", () =
     expect(defaults.name).toBe("pragma");
     expect(defaults.help).toBe("Explore the design system");
     expect(defaults.issuesUrl).toBe(
-      "https://github.com/canonical/pragma/issues",
+      "https://github.com/canonical/pragma-core/issues",
     );
   });
 
@@ -35,10 +35,10 @@ describe("defaults — the validated distribution config (pragma.conf.ts)", () =
     // allowlist and is not copied into `dist`, so a path would name a file no
     // installed user has. A bare `docs/architecture.md` must fail here.
     expect(defaults.colophon?.markdown).toContain(
-      "https://github.com/canonical/pragma/blob/main/packages/cli/pragma/docs/architecture.md",
+      "https://github.com/canonical/pragma-core/blob/main/packages/cli/pragma/docs/architecture.md",
     );
     expect(defaults.colophon?.summary).toContain(
-      "https://github.com/canonical/pragma/blob/main/packages/cli/pragma/docs/architecture.md",
+      "https://github.com/canonical/pragma-core/blob/main/packages/cli/pragma/docs/architecture.md",
     );
     expect(defaults.colophon?.markdown.length).toBeLessThan(400);
     expect(defaults.colophon?.summary?.length).toBeLessThan(400);

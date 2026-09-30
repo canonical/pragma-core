@@ -44,7 +44,7 @@ export interface CollectConfig {
   version?: string;
 
   /**
-   * Base URL of the source repository (e.g., "https://github.com/canonical/pragma").
+   * Base URL of the source repository (e.g., "https://github.com/canonical/pragma-web").
    * When set, headLink/versionedLink are emitted as full blob URLs instead of
    * repo-relative paths.
    */

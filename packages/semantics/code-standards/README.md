@@ -173,6 +173,6 @@ code-standards/
 
 ## Links
 
-- [Source](https://github.com/canonical/code-standards)
-- [Design System Ontology](https://github.com/canonical/design-system)
-- [Pragma Monorepo](https://github.com/canonical/pragma)
+- [Source](https://github.com/canonical/pragma-core/tree/main/packages/semantics/code-standards)
+- [Design System Ontology](https://github.com/canonical/pragma-core/tree/main/packages/semantics/design-system)
+- [Pragma Monorepo](https://github.com/canonical/pragma-web)
