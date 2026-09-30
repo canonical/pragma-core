@@ -360,6 +360,26 @@ describe("guardTokenBindings — an anatomy that does not parse is skipped, not 
     expect(lines[0]).toContain("slash-delimited token path");
   });
 
+  it("skips an anatomy whose YAML has a syntax error, and reports where the error is", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    // A duplicate key: the YAML still yields a mapping, so this parsed before, on
+    // whichever of the two values the reader kept.
+    const store = storeWith(
+      "    typography.color: color.text\n    typography.color: color.text.muted\n",
+    );
+    const derivation = deriveTokenBindings(store);
+    const result = guardTokenBindings(store, {}, derivation, {
+      census: null,
+      register: [],
+    });
+    expect(derivation.parsed).toBe(0);
+    expect(result.findings).toEqual([]);
+    expect(result.records).toBe(0);
+    expect(warn.mock.calls.map(([line]) => line)).toEqual([
+      "Skipping the anatomy of global.component.button — it does not parse, so its token bindings are left out of data/: YAML syntax error at line 5, column 5: Map keys must be unique",
+    ]);
+  });
+
   it("counts a skipped anatomy toward the parse floor and does not measure the record floor", () => {
     vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const store = storeWithBrokenLabel();

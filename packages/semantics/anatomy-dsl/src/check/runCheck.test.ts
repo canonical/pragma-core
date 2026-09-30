@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { Readable } from "node:stream";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
+  DUPLICATE_KEY,
   MINIMAL,
   NO_NODE,
   PRIMITIVE_NOT_LAST,
@@ -95,6 +96,14 @@ describe("runCheck", () => {
     ).toEqual({
       exitCode: 0,
       out: [`${VALID_FILE}: OK`, "<stdin>: OK"],
+      err: [],
+    });
+  });
+
+  it("prints a YAML syntax error with its line and column, and exits 1", async () => {
+    expect(await runWith(Readable.from([DUPLICATE_KEY]), "check")).toEqual({
+      exitCode: 1,
+      out: ["<stdin>:3:3: Map keys must be unique"],
       err: [],
     });
   });

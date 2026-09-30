@@ -313,15 +313,20 @@ from the project's scripts or `bunx anatomy-dsl`, and a global install
 (`bun add -g @canonical/anatomy-dsl` or `npm i -g @canonical/anatomy-dsl`)
 puts it on the `PATH`.
 
-It prints one line per file, with the line and column of a rejected style
-value. The exit code is 0 when every file passes, 1 when any fails, and 2 when
+It prints one line per file, with the line and column of a YAML syntax error
+(an unclosed `[`, a duplicate key, a second `---` document) or of a rejected
+style value. The exit code is 0 when every file passes, 1 when any fails, and 2 when
 no file is given or a file cannot be read.
 
 ## API
 
-### `parseAnatomyYAML(raw: unknown): Specification`
+### `parseAnatomyYAML(raw: string | unknown): Specification`
 
-Converts a parsed YAML object (from any YAML library) into the typed `Specification` structure. Handles field mapping between the YAML format and the TypeScript types.
+Converts anatomy YAML text, or an already-parsed YAML object (from any YAML library), into the typed `Specification` structure. Handles field mapping between the YAML format and the TypeScript types. Text is parsed with `parseAnatomyDocument`, so text that is not well-formed YAML throws an `AnatomySyntaxError`.
+
+### `parseAnatomyDocument(text: string, lineCounter?: LineCounter): Document`
+
+Parses anatomy text into a `yaml` `Document` and throws an `AnatomySyntaxError` on the first YAML syntax error — an unclosed flow collection, a duplicate key, a second `---` document — with its `line`, `col` and `reason`. Every consumer that reads anatomy text goes through it, so all of them reject the same text the same way.
 
 ### `anatomyToTTL(spec: Specification): string`
 
@@ -356,7 +361,9 @@ docs/          API reference (WD404 + WD404.1 + WD404.2 + WD404.3)
 examples/      Example anatomy files (YAML + Turtle pairs), the corpus the
                round-trip and SHACL tests read
 src/           TypeScript types, parser, value grammar, transform and the
-               generators; src/check/ holds the check command
+               generators; src/document/ parses anatomy text and
+               rejects YAML syntax errors; src/check/ holds the check
+               command
 testing/       Shared test fixtures
 ```
 
