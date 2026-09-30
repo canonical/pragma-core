@@ -44,12 +44,12 @@ describe("defaults — the validated distribution config (pragma.conf.ts)", () =
     expect(defaults.colophon?.summary?.length).toBeLessThan(400);
   });
 
-  // Five packs, and ONE carries a subdirectory. That is load-bearing, not
+  // Six packs, and ONE carries a subdirectory. That is load-bearing, not
   // decoration: `@canonical/token-ontology` lives inside a monorepo, and a
   // git source names a repository — without `:packages/token-ontology` the
   // clone would succeed against a root that has no `definitions/` or `data/`
   // and the pack would contribute nothing, silently.
-  it("ships the five canonical default packs (all git+https)", () => {
+  it("ships the six canonical default packs (all git+https)", () => {
     expect(
       defaults.packs?.map((pack) =>
         typeof pack === "string"
@@ -78,6 +78,11 @@ describe("defaults — the validated distribution config (pragma.conf.ts)", () =
           "git+https://github.com/canonical/pragma-core.git#main:packages/semantics/code-standards",
       },
       {
+        name: "@canonical/skills-pragma",
+        source:
+          "git+https://github.com/canonical/pragma-core.git#main:packages/skills/pragma",
+      },
+      {
         name: "@canonical/ds-implementations",
         source: "git+https://github.com/canonical/pragma-web.git#main",
       },
@@ -95,7 +100,7 @@ describe("defaults — the validated distribution config (pragma.conf.ts)", () =
     // and concept. `token` and `variable` read the token-ontology pack's
     // strata and are declared on this one anyway, because `token consumers`
     // spans both and no single pack's stories could carry the pair.
-    expect(storyCounts).toEqual([6, 0, 0, 1, 1]);
+    expect(storyCounts).toEqual([6, 0, 0, 1, 0, 1]);
   });
 
   it("declares no removed field — the validator would refuse to load one", () => {
