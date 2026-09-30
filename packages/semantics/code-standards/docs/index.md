@@ -9,7 +9,7 @@ Standards documentation generated from the code-standards ontology.
 - [Git](./git.md) (7)
 - [Icons](./icons.md) (8)
 - [Lit](./lit.md) (13)
-- [Packaging](./packaging.md) (7)
+- [Packaging](./packaging.md) (8)
 - [React](./react.md) (16)
 - [Rust](./rust.md) (11)
 - [Storybook](./storybook.md) (11)
