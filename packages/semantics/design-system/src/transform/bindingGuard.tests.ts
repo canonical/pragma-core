@@ -255,6 +255,46 @@ describe("guardTokenBindings — the register admits the derivation's findings",
     expect(result.findings.filter((f) => f.severity === "finding")).toEqual([]);
   });
 
+  it("still reports a registered parse failure, on every run until it parses", () => {
+    // The register is regenerated from the committed corpus before each sync, so after
+    // the first run that skipped an anatomy a row admits it; the report must not honour
+    // that row, or the anatomy would be named once and then never again.
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const store = storeWith("    typography.color: color/text\n");
+    deriveTokenBindings(store);
+    const result = guardTokenBindings(
+      store,
+      {},
+      { anatomies: 1, parsed: 0 },
+      { census: null, register: registered },
+    );
+    expect(result.findings).toEqual([]);
+    expect(result.skipped.map((finding) => finding.code)).toEqual(["X16"]);
+    expect(warn.mock.calls.map(([line]) => line)).toEqual([
+      expect.stringMatching(
+        /^Skipping the anatomy of global\.component\.button — it does not parse, so its token bindings are left out of data\/: /,
+      ),
+    ]);
+  });
+
+  it("keeps a registered parse failure out of the floors, as the census never counted it", () => {
+    // The committed census already excludes the admitted anatomy from `parseable` and
+    // its records from `records`, so it neither offsets a parse count that fell nor
+    // switches off the record floor.
+    const store = storeWith("    typography.color: color/text\n");
+    deriveTokenBindings(store);
+    const result = runBindingGuard(
+      store,
+      {},
+      { anatomies: 1, parsed: 0 },
+      { census: census(1, 1), register: registered },
+    );
+    expect(result.findings.map((finding) => finding.code)).toEqual([
+      "PARSE_FLOOR",
+      "RECORD_FLOOR",
+    ]);
+  });
+
   it("skips and reports the same parse failure when no row admits it", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const store = storeWith("    typography.color: color/text\n");

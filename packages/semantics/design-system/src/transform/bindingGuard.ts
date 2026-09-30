@@ -18,10 +18,13 @@
  * batch of parse failures is refused with its own message rather than surfacing as a
  * mystifying `MAX_PROPERTY_USAGE_DROP_RATIO` trip.
  *
- * One parse failure is not refused: an anatomy that does not parse and that no register
- * row admits is SKIPPED — the derivation leaves its records out — and reported as a
- * `Skipping …` line, as the transform does for a malformed upstream row. Refusing it
- * would let one bad cell in the source document stop every other edit from syncing.
+ * One parse failure is not refused: an anatomy that does not parse is SKIPPED — the
+ * derivation leaves its records out — and reported as a `Skipping …` line, as the
+ * transform does for a malformed upstream row. Refusing it would let one bad cell in
+ * the source document stop every other edit from syncing. It is reported on every run
+ * until it parses, whether or not a register row admits it: the register is
+ * regenerated from the committed corpus before each sync, so after the first run that
+ * skipped it a row admits it, and a report that honoured the row would fall silent.
  */
 import { STYLE_KEYS } from "@canonical/anatomy-dsl";
 import { admitRegistered } from "../anatomies/admission.js";
@@ -52,9 +55,9 @@ const UNPARSEABLE = "X16";
 export interface GuardResult {
   findings: BindingFinding[];
   /**
-   * Parse failures no register row admits: one per failure, so an anatomy reached
-   * through references appears once for itself and once per tree that reached it.
-   * Skipped and reported, never refused.
+   * Every parse failure, admitted by a register row or not: one per failure, so an
+   * anatomy reached through references appears once for itself and once per tree that
+   * reached it. Skipped and reported on every run, never refused.
    */
   skipped: BindingFinding[];
   /** Records the graph holds. */
@@ -94,22 +97,29 @@ export function runBindingGuard(
   // registered exception that stopped the daily sync would make the register a
   // fiction. A resolution finding is admitted inside `checkBindings` already.
   const register = inputs.register ?? readRegister().rows;
-  const reported = admitRegistered(
-    assertBindingsResolve(store, {
-      symbols: inputs.symbols ?? loadSymbolIndex(),
-      register,
-      tokenNamespace: tokenNamespaceOf,
-      allowUnboundSymbols: config.allowUnboundSymbols === true,
-    }),
+  const derived = assertBindingsResolve(store, {
+    symbols: inputs.symbols ?? loadSymbolIndex(),
     register,
-  );
-  // An anatomy that does not parse, and that no row admits, is skipped rather than
-  // refused: the derivation has already left its records out, and one bad cell in the
-  // source document must not hold back every other edit. It is reported instead, by
-  // `guardTokenBindings`, as a line the sync's run summary and pull request list.
-  const skipped = reported.filter((finding) => finding.code === UNPARSEABLE);
+    tokenNamespace: tokenNamespaceOf,
+    allowUnboundSymbols: config.allowUnboundSymbols === true,
+  });
+  const reported = admitRegistered(derived, register);
+  // An anatomy that does not parse is skipped rather than refused: the derivation has
+  // already left its records out, and one bad cell in the source document must not
+  // hold back every other edit. It is reported instead, by `guardTokenBindings`, as a
+  // line the sync's run summary and pull request list. The report is taken from the
+  // findings BEFORE admission, so a failure a register row admits is still named on
+  // every run until it parses.
+  const skipped = derived.filter((finding) => finding.code === UNPARSEABLE);
   const findings = reported.filter((finding) => finding.code !== UNPARSEABLE);
-  const skippedAnatomies = new Set(skipped.map((finding) => finding.block));
+  // The floors account only for the failures no row admits: an admitted one did not
+  // parse in the committed corpus either, so the census counted neither it among the
+  // parseable anatomies nor its records.
+  const newlySkipped = new Set(
+    reported
+      .filter((finding) => finding.code === UNPARSEABLE)
+      .map((finding) => finding.block),
+  );
 
   const records = readBindingRecords(store).length;
   const census = inputs.census === undefined ? readCensus() : inputs.census;
@@ -127,20 +137,20 @@ export function runBindingGuard(
   // scoped run, is not that corpus and must not trip a floor measured against it — the
   // guard that catches a corpus which shrank is the delta guard, and it says so.
   //
-  // A skipped anatomy is one that did not parse, so it counts toward the parse floor:
+  // A newly skipped anatomy did not parse, so it counts toward the parse floor:
   // the floor catches an anatomy that stops parsing unnoticed, and a skipped one is
   // named. Its records, and those other trees reached through it, are gone as well, by
   // a number this run cannot know — the census counted them from a tree it can no
   // longer read — so the record floor is not measured on a run that skipped one.
   if (floors !== null && derivation.anatomies >= floors.anatomies) {
-    if (derivation.parsed + skippedAnatomies.size < floors.parseable) {
+    if (derivation.parsed + newlySkipped.size < floors.parseable) {
       findings.push({
         code: "PARSE_FLOOR",
         severity: "finding",
         message: `${derivation.parsed} anatomies parsed, below the ${floors.parseable} that anatomies/census.json commits to — an anatomy that used to parse no longer does`,
       });
     }
-    if (skippedAnatomies.size === 0 && records < floors.records) {
+    if (newlySkipped.size === 0 && records < floors.records) {
       findings.push({
         code: "RECORD_FLOOR",
         severity: "finding",
