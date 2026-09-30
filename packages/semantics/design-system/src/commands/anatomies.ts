@@ -30,10 +30,13 @@
  *      is unset, when the law reports a finding (a warning prints and the run
  *      proceeds), when an authored file names no live row, and when the plan is empty
  *      — nothing to do is not an apply.
- *   4. The order under `--apply` is snapshot, write, re-read, reconcile. The snapshot
- *      is every live row, taken before the first write, so the whole table can be put
- *      back; the re-read is because Coda answers 202 and a write it never made would
- *      otherwise be reported as a success.
+ *   4. The order under `--apply` is snapshot, write, follow the mutations, re-read,
+ *      reconcile. The snapshot is every live row, taken before the first write, so
+ *      the whole table can be put back; the re-read is because Coda answers 202 and
+ *      a write it never made would otherwise be reported as a success; and the
+ *      mutation each write queues is polled by its `requestId` so a cell that did
+ *      not change says WHICH silence it is — the document applied the write and the
+ *      cell is unchanged, or the document never applied it at all.
  *   5. The canary comes first: `--only <uri>` writes one anatomy, and the rest follow
  *      once that cell has been read in the document. `--tier <name>` is the same
  *      instinct a tier at a time — the round that writes the top-level tiers names
@@ -66,6 +69,7 @@ import readAnatomyTable, {
 import applyCells, {
   type CellWriter,
   type Mismatch,
+  type Mutation,
 } from "../sync/applyCells.js";
 import planRestore, {
   parseSnapshot,
@@ -75,6 +79,7 @@ import planRestore, {
   writeSnapshotFile,
 } from "../sync/cellSnapshot.js";
 import checkAuthored from "../sync/checkAuthored.js";
+import { MUTATION_TIMEOUT_MS } from "../sync/constants.js";
 import readLiveBlocks, { type LiveBlocks } from "../sync/liveBlocks.js";
 import planCells, { type CellPlan } from "../sync/planCells.js";
 import renderCells from "../sync/renderCells.js";
@@ -334,6 +339,28 @@ function resolveTable(
   }
 }
 
+/**
+ * What the queued mutation says about a cell that did not change.
+ *
+ * The answers are different faults and want different next steps: the document
+ * applied the write and the cell is still what it was (the document is refusing the
+ * content — a hand paste is the remaining path), the document had not applied it
+ * inside the bound (the queue is behind it, and the cell may yet change on its own),
+ * the status call itself failed, or the write came back with no id at all (nothing
+ * to follow, so the reconcile is the only evidence there is).
+ */
+function mutationNote(mutation: Mutation): string {
+  if (mutation.requestId === null) {
+    return "the write came back with no request id, so its mutation could not be followed";
+  }
+  if (mutation.error !== null) {
+    return `the mutation could not be followed: ${mutation.error} (request ${mutation.requestId})`;
+  }
+  return mutation.completed
+    ? `the mutation completed but the cell did not change (request ${mutation.requestId})`
+    : `the mutation never completed within ${MUTATION_TIMEOUT_MS / 1000} s (request ${mutation.requestId})`;
+}
+
 /** The apply: the snapshot, then the writes, then the reconcile. */
 async function applyPlan(
   options: AnatomiesOptions,
@@ -362,7 +389,7 @@ async function applyPlan(
   ];
   for (const mismatch of outcome.mismatches) {
     log.push(
-      `✗ ${mismatch.uri} (row ${mismatch.rowId}) did not come back as it was written — the document holds ${mismatch.found.split("\n").length} line(s), the plan sent ${mismatch.expected.split("\n").length}`,
+      `✗ ${mismatch.uri} (row ${mismatch.rowId}) did not come back as it was written — ${mutationNote(mismatch.mutation)}; the document holds ${mismatch.found.split("\n").length} line(s), the plan sent ${mismatch.expected.split("\n").length}`,
     );
   }
   log.push(
@@ -377,6 +404,7 @@ async function applyPlan(
     written: {
       snapshot: path,
       writes: outcome.writes,
+      mutations: outcome.mutations,
       mismatches: outcome.mismatches,
     },
   };
@@ -386,12 +414,20 @@ async function applyPlan(
 interface Written {
   snapshot: string | null;
   writes: number;
+  /**
+   * One per write: its `requestId` and whether the document reported the mutation
+   * applied. Carried in `--json` and nowhere else — a request id is for correlating
+   * a write against the document's own record of it, which is a thing a reader does
+   * with a file and not by eye.
+   */
+  mutations: Mutation[];
   mismatches: Mismatch[];
 }
 
 const NOTHING_WRITTEN: Written = {
   snapshot: null,
   writes: 0,
+  mutations: [],
   mismatches: [],
 };
 

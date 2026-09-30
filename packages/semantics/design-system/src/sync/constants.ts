@@ -48,5 +48,22 @@ export const LOOKUP_OPTION = {
 /** Pause (ms) after an apply pass before re-reading — Coda's write queue is eventually consistent. */
 export const SETTLE_MS = 4000;
 
+/**
+ * How long (ms) one queued mutation is followed before the poll gives up on it.
+ *
+ * A write is accepted with a `requestId` and applied afterwards, so "the cell did
+ * not change" has two very different causes — the document never applied the
+ * mutation, or it applied it and the cell still does not say what was written — and
+ * only `getMutationStatus` separates them. Counted as time SLEPT rather than wall
+ * clock, so the bound is the same on a fake clock as on a real one.
+ */
+export const MUTATION_TIMEOUT_MS = 60_000;
+
+/** First wait (ms) between mutation-status polls; it doubles from here. */
+export const MUTATION_POLL_START_MS = 500;
+
+/** Ceiling (ms) the doubling poll interval stops at. */
+export const MUTATION_POLL_MAX_MS = 8000;
+
 /** Max apply→verify→retry passes to converge against Coda's silent write drops. */
 export const RECONCILE_PASSES = 4;

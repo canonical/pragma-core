@@ -9,6 +9,8 @@ export type {
   CodaTableList,
   CodaTableReference,
   ColumnMetadata,
+  MutationStatus,
+  RowUpdateResult,
   TableMetadata,
   TableRow,
 } from "./CodaProvider.js";
