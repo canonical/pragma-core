@@ -21,7 +21,7 @@ A workflow does not poll, wait for, retry against, verify against or reconcile w
 
 ## Traps
 
-- **The pull request run covers only the Nx-affected projects; the run on `main` covers everything.** A green pull request, including a Renovate auto-merge, can still break `main`. Before merging a change that reaches every package, run the root gate locally, which covers every package.
+- **The pull request run covers only the Nx-affected projects; the run on `main` covers everything.** A green pull request, including a Renovate auto-merge, can still break `main`. Before merging a change that reaches every package, run the root gate locally (the `push-branch` skill).
 - **A reusable workflow receives an environment's secrets only when its caller passes `secrets: inherit`.**
 - **A push or pull request made with the workflow's own `GITHUB_TOKEN` starts no workflow.** A bot pull request that needs CI is opened with another token, such as a personal access token or a GitHub App token.
 - **Auto-merge needs a required status check**, or it merges before CI finishes. The paths a bot writes have no code owner, because a bot never gets a code-owner review.

@@ -13,7 +13,7 @@ Use this when committing in `canonical/pragma-core` or `canonical/pragma-web`.
 - **Use only the types `feat`, `fix`, `docs`, `refactor`, `chore`, `test`, `ci` and `revert`.** `pr-lint.yml` rejects any other type in a pull request title.
 - **The scope is the package**: its folder or its npm name, without `@canonical/`, for example `feat(pragma-cli): …` or `fix(code-standards): …`. The pull request title becomes the squash commit, which becomes the changelog line.
 - **`!` marks only a change that breaks consumers** (`feat(router)!: …`). A development-dependency bump changes nothing for consumers and is not breaking.
-- **Before 1.0, a breaking change cannot go out in a pre-release.** Lerna would move the major version, and the release's version script refuses that. Only a stable release turns a breaking change into a minor bump at 0.x.
+- **Before 1.0, ask a maintainer before marking a commit `!`.** The release's version script refuses a pre-release that moves the major version.
 
 ## The commits
 

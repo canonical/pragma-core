@@ -29,7 +29,7 @@ npm appears only for the first publish of a new package (`.kb/publishing.md`). N
 - **Remove an unused peer dependency.** Do not mark it optional instead: `optionalDependencies` would install the package into every consumer.
 - **Shared TypeScript configurations keep old majors in their peer range**, for example `^5.9.3 || ^6.0.0 || ^7.0.0`. Drop a major only when a change requires it.
 - **TypeScript 7 no longer loads every installed `@types/*` package** (`types` defaults to `[]`). A package names the ones it needs, for example `"types": ["bun"]`.
-- **A `biome.json` whose `$schema` names a Biome version moves with every `@biomejs/biome` bump.** A schema left behind makes `biome check` fail to read its configuration.
+- **When `@biomejs/biome` is bumped, update every `biome.json` whose `$schema` names a Biome version.** A schema left behind makes `biome check` fail to read its configuration.
 - **In pragma-core, every package manifest keeps its `repository` field.** npm's provenance check requires it to name the repository that runs the release, and Renovate groups a pragma-core release into one pull request by it.
 
 ## 3. Regenerate the lockfile

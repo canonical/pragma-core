@@ -14,7 +14,7 @@ Use this at the start of any change to `canonical/pragma-core` or `canonical/pra
 - [ ] 2. Create the branch and its worktree
 - [ ] 3. Install with the pinned Bun
 - [ ] 4. Read what applies to this repository
-- [ ] 5. Load the code standards for the code you will write
+- [ ] 5. Load the code standards for the code you are about to write
 ```
 
 ## 1. Pick the repository
@@ -50,15 +50,15 @@ Read `.kb/this-repository.md`, then the topic files it names for the area you ar
 
 ## 5. Load the code standards
 
-`AGENTS.md` asks you to look up the code standards before writing code. They are served by the pragma MCP server, which comes with the `pragma` command-line tool: install it with `bun add --global @canonical/pragma-cli`, then register the server with your agent with `pragma setup mcp`. Filter `standard_list` by the category you are about to write (such as `react`, `css`, `packaging` or `testing`), then read each match with `standard_lookup`.
+`AGENTS.md` asks you to look up the code standards before writing code. They are served by the pragma MCP server, which comes with the `pragma` command-line tool: install it with `bun add --global @canonical/pragma-cli`, then register the server with your agent with `pragma setup mcp`. Filter `standard_list` by the category you are about to write (such as `react`, `css`, `packaging` or `testing`), then read each match with `standard_lookup` (`detail: "detailed"`).
 
 ## Next
 
 | When you… | Load |
 | --- | --- |
-| change a dependency, a version, a `package.json` or `bun.lock` | the `change-dependencies` skill |
-| commit | the `commit-changes` skill |
-| get the branch push-ready and push it | the `push-branch` skill |
-| open or update a pull request | the `open-pull-request` skill |
-| file, triage or move an issue | the `file-issue` skill |
-| change a workflow or add a check | the `change-ci` skill |
+| change a dependency, a version or `bun.lock` | `change-dependencies` |
+| commit | `commit-changes` |
+| get the branch push-ready and push it | `push-branch` |
+| open or update a pull request | `open-pull-request` |
+| file, triage or move an issue | `file-issue` |
+| change a workflow or add a check | `change-ci` |

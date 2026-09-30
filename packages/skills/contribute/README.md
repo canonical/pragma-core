@@ -18,7 +18,7 @@ These skills are for contributors to pragma itself. The `pragma` command-line to
 
 Link the skill folders into the repository's own `.claude/skills/`, which both repositories ignore in git, so the skills load only when you work on pragma. Claude Code reads `.claude/skills/`; agents that read the shared `.agents/skills/` folder take the same links there.
 
-From a pragma-core checkout, run this at the root of the repository you work in, with `<pragma-core>` the path to that checkout:
+From a pragma-core checkout, run this at the root of the repository you work in, with `<pragma-core>` the absolute path to that checkout:
 
 ```bash
 mkdir -p .claude/skills
@@ -33,7 +33,7 @@ mkdir -p .claude/skills
 ln -sf "${BUN_INSTALL:-$HOME/.bun}"/install/global/node_modules/@canonical/skills-contribute/skills/* .claude/skills/
 ```
 
-Start a new agent session afterwards: the seven skills appear in its list of skills. An agent without them installed can read a skill directly from [`skills/`](skills/).
+Start a new agent session afterwards: the skills appear in its list of skills. An agent started inside a worktree under `.claude/worktrees/` may not look above that worktree; link the skills into its `.claude/skills/` as well, or start the agent at the main checkout. An agent without them installed can read a skill directly from [`skills/`](skills/).
 
 ## Changing a skill
 
