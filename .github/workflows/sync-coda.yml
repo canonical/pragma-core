@@ -110,12 +110,36 @@ jobs:
           git add data/ anatomies/census.json
           bun src/scripts/checkDataDeletion.ts data/ 2>&1 | tee /tmp/deletion-guard.log
 
+      # A run that passed can still have left rows or references out: either an escape
+      # hatch let a guard through, or a dangling reference was skipped as a warning.
+      # Both are written to the run's summary and carried into the pull request body,
+      # so a sync that dropped something never reads as a clean one.
+      - name: Report what the sync left out
+        run: |
+          {
+            if [ "$SYNC_ALLOW_MALFORMED_ROWS" = 1 ] || [ "$SYNC_ALLOW_SHRINK" = 1 ]; then
+              echo "### Synced with a guard bypassed"
+              [ "$SYNC_ALLOW_MALFORMED_ROWS" = 1 ] && echo "- \`allow_malformed_rows\`: rows with a malformed \`uri\` were dropped from \`data/\`."
+              [ "$SYNC_ALLOW_SHRINK" = 1 ] && echo "- \`allow_shrink\`: the content-loss guards were bypassed."
+              echo
+            fi
+            if grep -q '^Skipping' /tmp/sync-build.log; then
+              echo "### Left out of \`data/\`"
+              echo '```'
+              grep '^Skipping' /tmp/sync-build.log
+              echo '```'
+              echo "Fix each row or reference named above in the source document."
+            fi
+          } > /tmp/sync-report.md
+          cat /tmp/sync-report.md >> "$GITHUB_STEP_SUMMARY"
+
       # A pull request, not a push to main: main requires one, and pr.yml tests the sync before
       # it lands. It merges itself (squash) once the required checks are green.
       - name: Open the sync pull request and let it merge itself
         env:
           GH_TOKEN: ${{ secrets.SUPERHUMAN_DOCS_SYNC_TOKEN }}
           TITLE: "chore(design-system): sync data from Coda [${{ inputs.trigger }}]"
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -127,8 +151,12 @@ jobs:
             git switch -c "$branch"
             git commit -m "$TITLE"
             git push origin "$branch"
-            gh pr create --base main --head "$branch" --title "$TITLE" \
-              --body "Regenerated \`packages/semantics/design-system/data/\` and \`anatomies/census.json\` from Coda. The fail-closed guards passed. This pull request merges itself when the required checks are green. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            {
+              echo "Regenerated \`packages/semantics/design-system/data/\` and \`anatomies/census.json\` from Coda. This pull request merges itself when the required checks are green. Run: $RUN_URL"
+              echo
+              if [ -s /tmp/sync-report.md ]; then cat /tmp/sync-report.md; else echo "The fail-closed guards passed and nothing was left out."; fi
+            } > /tmp/sync-pr-body.md
+            gh pr create --base main --head "$branch" --title "$TITLE" --body-file /tmp/sync-pr-body.md
             gh pr merge "$branch" --auto --squash
           fi
 
