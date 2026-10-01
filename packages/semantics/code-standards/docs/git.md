@@ -71,31 +71,32 @@ feat/Add-Search           # Wrong: capitalized
 
 **Identifier:** `cs:git.commit.message`
 
-Use imperative mood in the description — complete the sentence "this commit will...".
+Commits that land on the main branch must follow the Conventional Commits specification. The format is `type(scope): subject`. The type communicates the nature of the change. The required scope names the package the change belongs to. The subject is a third-person present verb phrase that states what the change does. It is the contract the reviewer checks the diff against. A verb is contractual when the title can be proven wrong against the diff. Verbs that only name an activity are not contractual on their own: does, updates (without the target), improves, changes, tweaks, handles, addresses, cleans up, enhances, reworks. `fixes` and `refactors` are contractual only with their object: `fixes <the defect>`, `refactors <the unit> into <the shape>`. The subject is never a list of several things and never a noun fragment. A change whose title cannot be one verb phrase holds more than one concern and is split. This enables automated changelog generation, semantic version bumping, and scannable git history.
 
 ### Do
 
-Structure commit messages as `type(scope): description`.
+Structure commit messages as `type(scope): subject`.
 ```
-feat(auth): add OAuth2 login flow
-fix(csv-export): handle UTF-8 BOM in output
-chore(deps): bump vitest to 3.2
-docs(api): document rate-limiting headers
-refactor(router): extract middleware chain
-test(auth): add integration tests for token refresh
-ci(deploy): add staging environment workflow
-perf(queries): add index for user lookup
+feat(auth): adds the OAuth2 login flow
+fix(csv-export): strips the UTF-8 BOM from the output
+chore(deps): bumps vitest to 3.2
+docs(api): documents the rate-limiting headers
+refactor(router): extracts the middleware chain into its own module
+test(auth): covers token refresh with integration tests
+ci(ci): adds a staging deployment workflow
+perf(queries): adds an index for user lookup
 ```
 
-Use imperative mood in the description — complete the sentence "this commit will...".
+Write the subject as one third-person present verb phrase that the diff can prove wrong. Give `fixes` and `refactors` their object.
 ```
-feat(button): add loading state        # "this commit will add loading state"
-fix(form): prevent double submission   # "this commit will prevent double submission"
+feat(button): adds a loading state
+fix(form): prevents double submission on Enter
+refactor(router): refactors route matching into a lookup table
 ```
 
 Add a body separated by a blank line for non-trivial changes, and a footer for breaking changes.
 ```
-feat(api)!: change pagination response shape
+feat(api)!: renames the pagination response fields
 
 The `results` field is now `items` and `total` is replaced by `hasMore`.
 Clients must update their response handlers.
@@ -105,7 +106,7 @@ BREAKING CHANGE: pagination response fields renamed
 
 Keep the subject line under 72 characters.
 ```
-feat(search): add fuzzy matching with configurable threshold
+feat(search): adds fuzzy matching with a configurable threshold
 ```
 
 ### Don't
@@ -117,11 +118,13 @@ fix bug in login
 update dependencies
 ```
 
-Use past tense or non-imperative mood.
+Name only an activity, list several things, write a noun fragment, or use another mood or tense.
 ```
-feat(auth): added OAuth2 login       # Wrong: "added" → "add"
-fix(form): fixed double submit       # Wrong: "fixed" → "prevent double submission"
-feat(ui): adds loading spinner       # Wrong: "adds" → "add"
+feat(ui): improves the button                        # Wrong: cannot be proven wrong
+fix(form): fixes a bug                               # Wrong: names no defect
+feat(table): adds sorting, paging and a filter bar   # Wrong: a list; split the PR
+docs(api): rate-limiting headers                     # Wrong: noun fragment
+feat(auth): add OAuth2 login                         # Wrong: imperative, use "adds"
 ```
 
 Write vague descriptions that don't explain the change.
@@ -134,7 +137,7 @@ refactor: clean up
 
 Exceed 72 characters in the subject line.
 ```
-feat(search): add fuzzy matching with configurable threshold and fallback to exact match when score is below minimum
+feat(search): adds fuzzy matching with a configurable threshold and falls back to exact match when the score is below the minimum
 ```
 
 ---
@@ -143,49 +146,49 @@ feat(search): add fuzzy matching with configurable threshold and fallback to exa
 
 **Identifier:** `cs:git.commit.scope`
 
-The scope in a conventional commit should identify the package, module, or domain affected by the change. In a monorepo, the scope is typically the package name (without the namespace prefix). In a single-package repo, it is the module or feature area. Consistent scopes make `git log --grep` useful and enable per-package changelogs.
+The scope in a conventional commit is required. In a monorepo, it is the workspace package name without the `@canonical/` prefix. A change that belongs to no package takes exactly one of `deps` (dependencies), `monorepo` (root files that belong to no package), `constitution` or `ci` (workflows and actions). Several scopes are comma-separated only when a change cannot be separated. In a single-package repo, the scope is the module or feature area. Consistent scopes make `git log --grep` useful and enable per-package changelogs.
 
 ### Do
 
 Use the package name (without namespace) as scope in a monorepo.
 ```
-feat(button): add outline variant
-fix(form-utils): handle empty field arrays
-chore(cli): update bin entry point
+feat(button): adds an outline variant
+fix(form-utils): accepts empty field arrays
+chore(cli): renames the bin entry point to pragma
 ```
 
 Use the module or feature area as scope in a single-package repo.
 ```
-feat(auth): add session refresh
-fix(api): handle 429 rate-limit responses
-refactor(router): split route definitions
+feat(auth): adds session refresh
+fix(api): retries requests that return 429
+refactor(router): splits route definitions into one file per domain
 ```
 
-Omit the scope for changes that span the whole project.
+Use `monorepo` for root files that belong to no package and `ci` for workflows and actions.
 ```
-chore: update CI node version to 24
-docs: add contributing guide
-ci: add PR lint workflow
+chore(monorepo): pins Bun to 1.4.2 in the root package.json
+docs(monorepo): adds a contributing guide
+ci(ci): runs the pull request title lint on every edit
 ```
 
 ### Don't
 
 Use file names or paths as scopes — name the domain instead.
 ```
-fix(src/utils/format.ts): handle null input   # Wrong: use domain name
-fix(format): handle null input                # Correct
+fix(src/utils/format.ts): returns an empty string for null input   # Wrong: use domain name
+fix(format): returns an empty string for null input                # Correct
 ```
 
 Use inconsistent names for the same package or domain — pick one and use it consistently.
 ```
-feat(ds-button): add variant        # One commit says "ds-button"
-fix(button): fix hover state        # Another says "button"
+feat(ds-button): adds an outline variant           # One commit says "ds-button"
+fix(button): restores the hover state colour        # Another says "button"
 ```
 
 Use overly broad scopes that don't narrow the change.
 ```
-fix(app): fix validation        # "app" is too broad
-fix(checkout): fix validation   # Specific domain
+fix(app): rejects an empty postcode        # "app" is too broad
+fix(checkout): rejects an empty postcode   # Specific domain
 ```
 
 ---
@@ -416,7 +419,7 @@ git add deploy-key.pem
 
 **Identifier:** `cs:git.tag.versioning`
 
-Release tags must follow semantic versioning prefixed with `v` (e.g. `v1.2.3`). Tags must be annotated (not lightweight) so they carry metadata for tooling. Pre-release versions use a hyphenated identifier after the patch number. Automated tooling (Lerna, changesets, etc.) should derive version bumps from conventional commit types: `feat` → minor, `fix` → patch, `BREAKING CHANGE` → major.
+Release tags must follow semantic versioning prefixed with `v` (e.g. `v1.2.3`). Tags must be annotated (not lightweight) so they carry metadata for tooling. Pre-release versions use a hyphenated identifier after the patch number. Automated tooling (Lerna, changesets, etc.) should derive version bumps from conventional commit types: `feat` → minor, `fix` → patch, `BREAKING CHANGE` → major. Before 1.0, a breaking change (`!`) bumps the minor (0.43.0 → 0.44.0). Version 1.0.0 is a maintainers' decision made by hand, never produced by a `!` title.
 
 ### Do
 
@@ -448,6 +451,7 @@ Let conventional commits drive version bumps.
 feat → minor bump (1.0.0 → 1.1.0)
 fix  → patch bump (1.0.0 → 1.0.1)
 feat! / BREAKING CHANGE → major bump (1.0.0 → 2.0.0)
+feat! / BREAKING CHANGE before 1.0 → minor bump (0.43.0 → 0.44.0)
 ```
 
 ### Don't
