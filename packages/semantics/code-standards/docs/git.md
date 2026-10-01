@@ -71,7 +71,7 @@ feat/Add-Search           # Wrong: capitalized
 
 **Identifier:** `cs:git.commit.message`
 
-Commits on the main branch follow Conventional Commits: `type(scope): subject`. The subject is one third-person verb phrase stating what the change does, a claim the diff can prove wrong. A change that cannot be stated in one such phrase is split.
+Commits on the main branch follow Conventional Commits: `type(scope): subject`. The subject is a third-person verb phrase. It states what the change does. The reviewer checks the diff against it. A change that needs more than one phrase is split.
 
 ### Do
 
@@ -87,7 +87,7 @@ ci(ci): adds a staging deployment workflow
 perf(queries): adds an index for user lookup
 ```
 
-State one checkable claim; give `fixes` and `refactors` their object.
+Say what the change does. Give `fixes` and `refactors` their object.
 ```
 feat(button): adds a loading state
 fix(form): prevents double submission on Enter
@@ -120,7 +120,7 @@ update dependencies
 
 Name an activity without a claim, list several things, or write a fragment.
 ```
-feat(ui): improves the button                        # Wrong: cannot be proven wrong
+feat(ui): improves the button                        # Wrong: says nothing about the change
 fix(form): fixes a bug                               # Wrong: names no defect
 feat(table): adds sorting, paging and a filter bar   # Wrong: a list; split the PR
 docs(api): rate-limiting headers                     # Wrong: noun fragment
