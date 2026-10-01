@@ -154,9 +154,7 @@ describe("implementation list — the declared filters", () => {
     ]);
   });
 
-  it("--library keeps only that library's rows", {
-    timeout: 25_000,
-  }, async () => {
+  it("--library keeps only that library's rows", async () => {
     expect(
       pairs(await rows(listVerb, { library: "@canonical/react-ds-global" })),
     ).toEqual([

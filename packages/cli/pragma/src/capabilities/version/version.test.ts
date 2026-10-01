@@ -55,9 +55,7 @@ describe("version — one value, two spellings of the same read", () => {
     });
   });
 
-  it("the verb and the flag print the SAME bytes through the shipped entry", {
-    timeout: 25_000,
-  }, () => {
+  it("the verb and the flag print the SAME bytes through the shipped entry", () => {
     const fromVerb = runCli(["version"]);
     const fromFlag = runCli(["--version"]);
     expect(fromVerb.exitCode).toBe(0);

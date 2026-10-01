@@ -148,9 +148,7 @@ describe("MCP lifecycle — config_set is visible to the next read (E2, C2)", ()
 });
 
 describe("MCP lifecycle — discovery from a cold store (E2)", () => {
-  it("the capabilities catalog resolves cold, then browse -> inspect works once warm", {
-    timeout: 25_000,
-  }, async () => {
+  it("the capabilities catalog resolves cold, then browse -> inspect works once warm", async () => {
     const cwd = coldProject(DEFAULT_PACK_TTL);
     mcp = await projectMcp(capabilities, cwd);
 

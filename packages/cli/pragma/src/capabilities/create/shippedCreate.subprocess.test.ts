@@ -124,31 +124,22 @@ function create(
 
 describe("shipped pragma create (PROTECTED)", () => {
   for (const { label, args, seed } of CASES) {
-    // 25 s: each case runs BOTH the shipped entry and the source tree, and
-    // under a full parallel run both compete with the worker pool for the
-    // CPU — byte-equality is quick alone, but vitest's 5 s default
-    // measures contention, not the diff.
-    it(
-      `${label}: shipped entry ≡ source run, byte-for-byte`,
-      { timeout: 25_000 },
-      () => {
-        // (1) The shipped entry, exactly as a consumer's `pragma` runs it.
-        const shipped = create(process.execPath, [shippedEntry], args, seed);
-        // (2) A source run — the reference output.
-        const source = create("bun", [sourceEntry], args, seed);
+    it(`${label}: shipped entry ≡ source run, byte-for-byte`, () => {
+      // (1) The shipped entry, exactly as a consumer's `pragma` runs it.
+      const shipped = create(process.execPath, [shippedEntry], args, seed);
+      // (2) A source run — the reference output.
+      const source = create("bun", [sourceEntry], args, seed);
 
-        // Wrote something. Before the distribution stopped shipping a compiled
-        // binary, `package` and `application` wrote NOTHING here — they refused.
-        expect(shipped.size).toBeGreaterThan(0);
-        // Same file set …
-        expect([...shipped.keys()].sort()).toEqual([...source.keys()].sort());
-        // … and byte-identical contents.
-        for (const [path, content] of shipped) {
-          expect(source.get(path), `content of ${path}`).toBe(content);
-        }
-      },
-      180_000,
-    );
+      // Wrote something. Before the distribution stopped shipping a compiled
+      // binary, `package` and `application` wrote NOTHING here — they refused.
+      expect(shipped.size).toBeGreaterThan(0);
+      // Same file set …
+      expect([...shipped.keys()].sort()).toEqual([...source.keys()].sort());
+      // … and byte-identical contents.
+      for (const [path, content] of shipped) {
+        expect(source.get(path), `content of ${path}`).toBe(content);
+      }
+    }, 180_000);
   }
 });
 

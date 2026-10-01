@@ -2860,9 +2860,7 @@ describe("setup — a converged machine is reported, never asked", () => {
     expect(outcome.stdout).toContain(DRY_RUN_HINT);
   });
 
-  it("a PARTIALLY converged plan is NOT short-circuited", {
-    timeout: 25_000,
-  }, async () => {
+  it("a PARTIALLY converged plan is NOT short-circuited", async () => {
     // One actionable row is enough: the run goes through `execute` as before,
     // so the wizard is still reachable on a machine with something to do.
     const cwd = tmp("pragma-setup-proj-");

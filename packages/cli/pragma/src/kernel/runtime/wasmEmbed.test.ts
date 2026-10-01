@@ -55,14 +55,7 @@ const runBinary = (args: string[]) =>
   });
 
 describe("oxigraph WASM + embedded pack load from the shipped entry (PROTECTED)", () => {
-  // This test spawns the shipped entry through `spawnSync`, which blocks for
-  // as long as the child takes: under a full parallel, coverage-instrumented
-  // run that can exceed vitest's 5 s default several times over — the spawn
-  // succeeds, the clock just runs out. 25 s matches the budget the
-  // behavioural `runCli` suites use for the same shipped-entry spawns.
-  it("the shipped entry boots the embedded store via __store-probe (needsStore path)", {
-    timeout: 25_000,
-  }, () => {
+  it("the shipped entry boots the embedded store via __store-probe (needsStore path)", () => {
     const run = runBinary(["__store-probe"]);
     expect(run.status, run.stderr).toBe(0);
     const out = JSON.parse(run.stdout.trim()) as {
@@ -78,9 +71,7 @@ describe("oxigraph WASM + embedded pack load from the shipped entry (PROTECTED)"
     expect(out.entities).toBeGreaterThan(0);
   });
 
-  it("the shipped entry runs storeless sources status", {
-    timeout: 25_000,
-  }, () => {
+  it("the shipped entry runs storeless sources status", () => {
     const run = runBinary(["sources", "status", "--format", "json"]);
     expect(run.status, run.stderr).toBe(0);
     const envelope = JSON.parse(run.stdout.trim()) as {
@@ -98,9 +89,7 @@ describe("oxigraph WASM + embedded pack load from the shipped entry (PROTECTED)"
   // exercise it through the real entry. This case also writes a real
   // `pragma.config.ts`, which the shipped entry loads through node's TypeScript
   // type stripping: the one test that exercises that path end-to-end.
-  it("the shipped entry runs sources update end-to-end (build + point + status)", {
-    timeout: 25_000,
-  }, () => {
+  it("the shipped entry runs sources update end-to-end (build + point + status)", () => {
     const pkg = join(workdir, "pkg");
     const proj = join(workdir, "proj");
     mkdirSync(join(pkg, "definitions"), { recursive: true });

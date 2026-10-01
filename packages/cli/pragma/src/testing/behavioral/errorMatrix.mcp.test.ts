@@ -85,7 +85,6 @@ afterAll(async () => {
 describe("lookup miss — total miss fails the call (B3, adapted)", () => {
   it.each(lookupVerbs.map((v) => v.noun))(
     "%s_lookup: a single unknown name fails with ENTITY_NOT_FOUND",
-    { timeout: 25_000 },
     async (noun) => {
       const result = await mcp.callTool(`${noun}_lookup`, {
         name: ["zzz-definitely-not-a-real-entity"],

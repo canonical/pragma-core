@@ -177,9 +177,7 @@ describe("block list — channel visibility is gone too (B9)", () => {
 });
 
 describe("block list — the row shape the declared columns emit (B9)", () => {
-  it("derives name/type/tier in SPARQL, and leaves an untiered block's tier unset", {
-    timeout: 25_000,
-  }, async () => {
+  it("derives name/type/tier in SPARQL, and leaves an untiered block's tier unset", async () => {
     const fixture = await bootWith(CANONICAL_CONFIG);
     const out = await executeVerb(
       listVerb,

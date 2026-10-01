@@ -309,9 +309,7 @@ describe("default-pack journey — ontology list/show, populated and empty (E1)"
     ]);
   });
 
-  it("ontology lookup ds surfaces the two block domain classes", {
-    timeout: 25_000,
-  }, async () => {
+  it("ontology lookup ds surfaces the two block domain classes", async () => {
     const fixture = await boot(DEFAULT_PACK_TTL, DEFAULT_PACK_CONFIG);
     const envelope = await readVerb(
       ontologyLookupVerb,
@@ -331,9 +329,7 @@ describe("default-pack journey — ontology list/show, populated and empty (E1)"
     expect(envelope.data).toEqual([]);
   });
 
-  it("ontology lookup of an unknown prefix is NOT_FOUND, not a crash", {
-    timeout: 25_000,
-  }, async () => {
+  it("ontology lookup of an unknown prefix is NOT_FOUND, not a crash", async () => {
     const fixture = await boot(DEFAULT_PACK_TTL, DEFAULT_PACK_CONFIG);
     await expect(
       executeVerb(
@@ -435,9 +431,7 @@ describe("default-pack journey — real-data shapes the clean fixture masked (E1
   // ----- HAND-OFFS (A1, A2): lane A's fixes have landed in this branch, so the
   // former `it.fails` pins are now LIVE regression guards. -----
 
-  it("A1: info's entity total must not exceed the distinct entity count (owl:NamedIndividual double-count)", {
-    timeout: 25_000,
-  }, async () => {
+  it("A1: info's entity total must not exceed the distinct entity count (owl:NamedIndividual double-count)", async () => {
     const fixture = await boot(DEFAULT_PACK_TTL, DEFAULT_PACK_CONFIG);
     const index = await activeIndex(fixture);
     // `entityTotal` (the figure `info`/`doctor` report) once SUMMED per-type

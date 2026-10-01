@@ -24,7 +24,20 @@ type TestConfig = NonNullable<ViteUserConfig["test"]>;
 const SHARED_TEST_OPTIONS: TestConfig = {
   globals: true,
   environment: "node",
-  maxWorkers: "100%",
+  // Half the cores: the full monorepo run multiplies the runner's package
+  // concurrency by this cap, and these suites boot real stores and spawn the
+  // shipped entry — an every-core default showed up as multi-GB RSS peaks
+  // while costing the suite nothing on wall clock.
+  maxWorkers: "50%",
+  // This suite is spawn-heavy by nature: most files either run the shipped
+  // entry or boot a real fixture pack, and under the full parallel,
+  // coverage-instrumented run that work competes for the CPU. vitest's 5 s
+  // default measured contention, not the code — 25 s sits above runCli's 20 s
+  // kill budget so a slow spawn reports the helper's captured-output
+  // diagnosis instead of a bare clock. Cells that genuinely need longer
+  // (the pack builder's 60 s, the perf harness's 120 s) override this per
+  // test, and they are the only timeouts that still name a number.
+  testTimeout: 25_000,
   globalSetup: [
     "./src/testing/perf/globalSetup.ts",
     "./src/testing/tempRoot.globalSetup.ts",

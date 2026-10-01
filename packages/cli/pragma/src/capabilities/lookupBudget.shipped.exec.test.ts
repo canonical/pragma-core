@@ -21,7 +21,7 @@
  * list budget does it, for the reasons given there.
  */
 
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { DETAIL_LEVELS, type DetailLevel } from "../constants.js";
 import { MAX_LIST_WINDOW } from "../kernel/packs/paging.js";
 import {
@@ -36,13 +36,6 @@ import type { CapabilityModule, VerbSpec } from "../kernel/spec/types.js";
 import { TEST_FLAGS } from "../testing/helpers/projectCli.js";
 import { declaredStories, storyModules } from "./distribution.js";
 import { graphModule } from "./graph/index.js";
-
-// Every test here spawns the shipped entry or boots a real fixture pack, and
-// under a full parallel, coverage-instrumented run that competes for the CPU —
-// the work is quick in isolation, but vitest's 5 s default measures contention.
-// 25 s matches the budget the behavioural `runCli` suites use for the same
-// spawns (whose helper kills a hung child at 20 s).
-vi.setConfig({ testTimeout: 25_000 });
 
 /**
  * The ceiling on ONE looked-up entity, in bytes, per level.

@@ -185,9 +185,7 @@ describe("the committed embedded pack (PROTECTED)", () => {
     // intermittent one.
   }, 60_000);
 
-  it("is self-consistent: complete, content-addressed, and non-empty", {
-    timeout: 25_000,
-  }, async () => {
+  it("is self-consistent: complete, content-addressed, and non-empty", async () => {
     // No network, so CI runs it: the committed strings really do materialize a
     // bootable pack whose parts agree with each other.
     const dir = await materializeEmbeddedPack();

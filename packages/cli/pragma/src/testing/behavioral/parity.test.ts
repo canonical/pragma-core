@@ -239,7 +239,6 @@ describe("read-noun parity — every list/lookup/extra verb (B5)", () => {
 
   it.each(lookupVerbs)(
     "$noun lookup: CLI --format json == MCP, for a known name",
-    { timeout: 25_000 },
     async (v) => {
       const name = firstNameByNoun.get(v.noun);
       if (!name) return;

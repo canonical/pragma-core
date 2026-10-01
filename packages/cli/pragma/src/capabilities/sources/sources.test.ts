@@ -15,7 +15,7 @@ import type { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { runTask } from "@canonical/task/node";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { VERSION } from "../../constants.js";
 import type {
   ConfigLayers,
@@ -46,13 +46,6 @@ import { collectStatus } from "./collectStatus.js";
 import { sourcesModule } from "./index.js";
 import { buildUpdateTask } from "./runUpdate.js";
 import { renderSourcesStatusPlain } from "./status.render.js";
-
-// Every test here spawns the shipped entry or boots a real fixture pack, and
-// under a full parallel, coverage-instrumented run that competes for the CPU —
-// the work is quick in isolation, but vitest's 5 s default measures contention.
-// 25 s matches the budget the behavioural `runCli` suites use for the same
-// spawns (whose helper kills a hung child at 20 s).
-vi.setConfig({ testTimeout: 25_000 });
 
 const FLAGS: GlobalFlags = {
   llm: false,
@@ -253,9 +246,7 @@ describe("sources update round-trip (PROTECTED)", () => {
 });
 
 describe("sources update — package-declared prefixes (M1)", () => {
-  it("compacts a package's own namespace to its declared prefix in the index", {
-    timeout: 25_000,
-  }, async () => {
+  it("compacts a package's own namespace to its declared prefix in the index", async () => {
     // The fixture TTL declares `@prefix ex: <https://ex.test/#>`, but the config
     // carries NO `ex` prefix. Without harvesting the package's own prologue, the
     // index falls back to full URIs (breaking prefixed-type completion and PR3
@@ -983,9 +974,7 @@ describe("sources update — installs package skills (U10)", () => {
     expect(readlinkSync(link)).toBe(staleTarget); // the target it always had
   });
 
-  it("undoes a prune whose forward delete never ran, rather than failing EEXIST", {
-    timeout: 25_000,
-  }, async () => {
+  it("undoes a prune whose forward delete never ran, rather than failing EEXIST", async () => {
     const pkg = skillPackage("specify-component");
     const root = installedRoot();
     const staleTarget = danglingLink(root, "component-specifier");
@@ -1162,9 +1151,7 @@ describe("sources update — converges the global scope (converge-only)", () => 
     expect(readlinkSync(join(dir, "dropped"))).toBe(backup);
   });
 
-  it("is idempotent — a second update re-links nothing", {
-    timeout: 25_000,
-  }, async () => {
+  it("is idempotent — a second update re-links nothing", async () => {
     const dir = harnessDir();
     const cwd = tmp("pragma-proj-");
     const pkg = skillPackage("stable");
