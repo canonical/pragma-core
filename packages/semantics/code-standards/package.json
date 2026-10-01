@@ -4,8 +4,8 @@
   "description": "Code standards ontology and documentation generator",
   "type": "module",
   "scripts": {
-    "build": "echo 'No build step yet' && exit 0",
-    "check": "biome check && tsc --noEmit",
+    "build": "bun run docs",
+    "check": "biome check && tsc --noEmit && bun run docs:check",
     "check:fix": "biome check --write",
     "check:ts": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
