@@ -6,7 +6,7 @@ Standards documentation generated from the code-standards ontology.
 
 - [Code](./code.md) (10)
 - [CSS](./css.md) (15)
-- [Git](./git.md) (7)
+- [Git](./git.md) (8)
 - [Icons](./icons.md) (8)
 - [Lit](./lit.md) (13)
 - [Packaging](./packaging.md) (8)
