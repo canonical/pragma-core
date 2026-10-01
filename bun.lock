@@ -279,6 +279,14 @@
         "vitest": "^4.0.18",
       },
     },
+    "packages/skills/contribute": {
+      "name": "@canonical/skills-contribute",
+      "version": "0.43.0",
+      "devDependencies": {
+        "@biomejs/biome": "2.5.14",
+        "@canonical/biome-config": "^0.43.0",
+      },
+    },
     "packages/skills/pragma": {
       "name": "@canonical/skills-pragma",
       "version": "0.43.0",
@@ -652,6 +660,8 @@
     "@canonical/pragma-cli": ["@canonical/pragma-cli@workspace:packages/cli/pragma"],
 
     "@canonical/renovate-config": ["@canonical/renovate-config@workspace:configs/renovate"],
+
+    "@canonical/skills-contribute": ["@canonical/skills-contribute@workspace:packages/skills/contribute"],
 
     "@canonical/skills-pragma": ["@canonical/skills-pragma@workspace:packages/skills/pragma"],
 

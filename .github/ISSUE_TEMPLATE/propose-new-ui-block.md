@@ -1,7 +1,7 @@
 ---
 name: Propose new UI Block
 about: Contribute new component or pattern
-title: "feat(design-system): "
+title: ''
 labels: ''
 assignees: ''
 

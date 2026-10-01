@@ -194,6 +194,7 @@ say so. A tool that builds run on our own code (`webarchitect`) is `tools`, even
 
 | Folder | npm name |
 |---|---|
+| `packages/skills/contribute` | `@canonical/skills-contribute` |
 | `packages/skills/pragma` | `@canonical/skills-pragma` |
 
 **Belongs here:** a package of agent skills — `skills/<name>/SKILL.md` folders — plus the tests that
