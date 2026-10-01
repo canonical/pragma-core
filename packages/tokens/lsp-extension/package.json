@@ -94,7 +94,7 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.14",
+    "@biomejs/biome": "2.5.15",
     "@canonical/biome-config": "^0.43.0",
     "@canonical/terrazzo-lsp": "^0.43.0",
     "@canonical/typescript-config": "^0.43.0",
