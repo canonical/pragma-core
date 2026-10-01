@@ -14,5 +14,5 @@ The tool answers store-backed reads offline from a committed snapshot of those p
 
 - **Never edit the embedded `*.generated.ts` files by hand.** Rebuild them with `bun run bundle` from `packages/cli/pragma`.
 - **`check:packs` guards the snapshot.** It runs in the package's own `check` and its test suite runs in the package's `test`, so the root gate covers it. It fails when the snapshot cannot be shown to match the declared sources: a pack pinned to a tag or commit must record exactly that commit, and every declared pack must have one provenance entry.
-- **The parity check stays a package concern.** It lives in the package's `scripts/` and rides the package's targets; it does not earn a shared workflow step (the `change-ci` skill).
+- **The parity check stays a package concern.** It lives in the package's `scripts/` and rides the package's targets; it does not earn a shared workflow step ([`docs/contributing/ci.md`](../docs/contributing/ci.md#where-a-check-belongs)).
 - **Every declared pack follows `main`**, the code-standards pack included. None is pinned to a release tag, so `sources update` gives users each pack as it is on `main`.
