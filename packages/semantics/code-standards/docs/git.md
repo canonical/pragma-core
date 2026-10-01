@@ -71,7 +71,7 @@ feat/Add-Search           # Wrong: capitalized
 
 **Identifier:** `cs:git.commit.message`
 
-Commits that land on the main branch must follow the Conventional Commits specification. The format is `type(scope): subject`. The type communicates the nature of the change. The required scope names the package the change belongs to. The subject is a third-person present verb phrase that states what the change does. It is the contract the reviewer checks the diff against. A verb is contractual when the title can be proven wrong against the diff. Verbs that only name an activity are not contractual on their own: does, updates (without the target), improves, changes, tweaks, handles, addresses, cleans up, enhances, reworks. `fixes` and `refactors` are contractual only with their object: `fixes <the defect>`, `refactors <the unit> into <the shape>`. The subject is never a list of several things and never a noun fragment. A change whose title cannot be one verb phrase holds more than one concern and is split. This enables automated changelog generation, semantic version bumping, and scannable git history.
+Commits on the main branch follow Conventional Commits: `type(scope): subject`. The subject is one third-person verb phrase stating what the change does, a claim the diff can prove wrong. A change that cannot be stated in one such phrase is split.
 
 ### Do
 
@@ -87,7 +87,7 @@ ci(ci): adds a staging deployment workflow
 perf(queries): adds an index for user lookup
 ```
 
-Write the subject as one third-person present verb phrase that the diff can prove wrong. Give `fixes` and `refactors` their object.
+State one checkable claim; give `fixes` and `refactors` their object.
 ```
 feat(button): adds a loading state
 fix(form): prevents double submission on Enter
@@ -118,7 +118,7 @@ fix bug in login
 update dependencies
 ```
 
-Name only an activity, list several things, write a noun fragment, or use another mood or tense.
+Name an activity without a claim, list several things, or write a fragment.
 ```
 feat(ui): improves the button                        # Wrong: cannot be proven wrong
 fix(form): fixes a bug                               # Wrong: names no defect
@@ -146,7 +146,7 @@ feat(search): adds fuzzy matching with a configurable threshold and falls back t
 
 **Identifier:** `cs:git.commit.scope`
 
-The scope in a conventional commit is required. In a monorepo, it is the workspace package name without the `@canonical/` prefix. A change that belongs to no package takes exactly one of `deps` (dependencies), `monorepo` (root files that belong to no package), `constitution` or `ci` (workflows and actions). Several scopes are comma-separated only when a change cannot be separated. In a single-package repo, the scope is the module or feature area. Consistent scopes make `git log --grep` useful and enable per-package changelogs.
+The scope is required: the workspace package name without `@canonical/`, or `deps`, `monorepo`, `constitution` or `ci` for a change that belongs to no package. Comma-separate scopes only when a change cannot be split.
 
 ### Do
 
