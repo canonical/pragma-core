@@ -15,9 +15,10 @@ Standards documentation generated from the code-standards ontology.
 - [Storybook](./storybook.md) (11)
 - [Styling](./styling.md) (4)
 - [Svelte](./svelte.md) (15)
-- [Testing](./testing.md) (8)
+- [Testing](./testing.md) (14)
   - Coverage
   - Integration Testing
+  - Performance Considerations in Testing
   - Regression Testing
   - Unit Testing
 - [TSDoc](./tsdoc.md) (3)
