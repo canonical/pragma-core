@@ -199,7 +199,8 @@ say so. A tool that builds run on our own code (`webarchitect`) is `tools`, even
 
 **Belongs here:** a package of agent skills — `skills/<name>/SKILL.md` folders — plus the tests that
 check them. `skills-pragma` holds the skills people use through the `pragma` command-line tool, which
-declares it as a pack and ships a snapshot of it.
+declares it as a pack and ships a snapshot of it. `skills-contribute` holds the skills for working on
+the pragma repositories themselves; it is not a pack, so the command-line tool never installs it.
 
 **Does not belong here:** the models and data a skill teaches (they are `semantics`), and the
 command that finds and installs skills (it is `cli`). A skills package holds no library code and no
