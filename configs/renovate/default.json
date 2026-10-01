@@ -3,6 +3,7 @@
   "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
   "schedule": ["before 9am on monday"],
   "semanticCommits": "enabled",
+  "commitMessageAction": "bumps",
   "packageRules": [
     {
       "description": "Group Biome toolchain",

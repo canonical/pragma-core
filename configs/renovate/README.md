@@ -34,7 +34,7 @@ Or if published to npm:
 - **DevDep automerge** — patch and minor updates for devDependencies
 - **Labels** — none applied directly; the `chore` type label is derived from the
   `chore(deps): ...` title by the `pr-lint` workflow
-- **Semantic commits** — `chore(deps): ...` format
+- **Semantic commits** — `chore(deps): bumps <dependency> to <version>`, the third-person verb the PR title rule asks for
 
 ## Adding domain-specific groups
 
