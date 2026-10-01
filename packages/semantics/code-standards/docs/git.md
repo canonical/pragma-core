@@ -419,7 +419,7 @@ git add deploy-key.pem
 
 **Identifier:** `cs:git.tag.versioning`
 
-Release tags must follow semantic versioning prefixed with `v` (e.g. `v1.2.3`). Tags must be annotated (not lightweight) so they carry metadata for tooling. Pre-release versions use a hyphenated identifier after the patch number. Automated tooling (Lerna, changesets, etc.) should derive version bumps from conventional commit types: `feat` → minor, `fix` → patch, `BREAKING CHANGE` → major. Before 1.0, a breaking change (`!`) bumps the minor (0.43.0 → 0.44.0). Version 1.0.0 is a maintainers' decision made by hand, never produced by a `!` title.
+Release tags must follow semantic versioning prefixed with `v` (e.g. `v1.2.3`). Tags must be annotated (not lightweight) so they carry metadata for tooling. Pre-release versions use a hyphenated identifier after the patch number. Automated tooling (Lerna, changesets, etc.) should derive version bumps from conventional commit types: `feat` → minor, `fix` → patch, `BREAKING CHANGE` → major. Before 1.0, `!` bumps the minor; 1.0.0 is set by hand.
 
 ### Do
 
