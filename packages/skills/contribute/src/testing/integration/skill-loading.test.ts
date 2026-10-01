@@ -6,8 +6,9 @@
  * skills are for the two pragma repositories only, so each description names both, and
  * each body stays under the 500 lines Anthropic's authoring guidance sets.
  */
-import { readdirSync, readFileSync } from "node:fs";
+
 import { describe, expect, it } from "bun:test";
+import { readdirSync, readFileSync } from "node:fs";
 
 const SKILLS_DIR = new URL("../../../skills/", import.meta.url);
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---\r?\n/;
