@@ -33,7 +33,7 @@ mkdir -p .claude/skills
 ln -sf "${BUN_INSTALL:-$HOME/.bun}"/install/global/node_modules/@canonical/skills-contribute/skills/* .claude/skills/
 ```
 
-Start a new agent session afterwards: the skills appear in its list of skills. An agent started inside a worktree under `.claude/worktrees/` may not look above that worktree; link the skills into its `.claude/skills/` as well, or start the agent at the main checkout. An agent without them installed can read a skill directly from [`skills/`](skills/).
+Start a new agent session afterwards: the skills appear in its list of skills. A worktree under `.claude/worktrees/` has no `.claude/skills/` of its own, so Claude Code 2.1.277 or later loads the main checkout's links there; other agents may need the same links in the worktree. An agent without them installed can read a skill directly from [`skills/`](skills/).
 
 ## Changing a skill
 

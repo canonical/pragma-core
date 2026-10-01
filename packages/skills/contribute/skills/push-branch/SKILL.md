@@ -45,8 +45,7 @@ bun run build        # only when the change affects build artifacts or a publish
 
 ## 3. Push
 
-- Push with `git push -u origin <branch>`. A rebased branch is pushed with `--force-with-lease`, and only as step 1 allows.
-
+- Push with `git push -u origin <branch>`.
 - Never push speculative "maybe this fixes CI" commits: fix the cause, run the gate, then push.
 - Never use plain `--force`.
 

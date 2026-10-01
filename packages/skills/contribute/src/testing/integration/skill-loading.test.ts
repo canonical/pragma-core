@@ -14,7 +14,11 @@ const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---\r?\n/;
 const MAX_DESCRIPTION = 1024;
 const MAX_LINES = 500;
 
-/** Read a skill's `SKILL.md` and the YAML block that opens it, if there is one. */
+/**
+ * Read a skill's `SKILL.md` and the YAML block that opens it, if there is one.
+ *
+ * @note Impure: reads the file from disk, which is what the test checks.
+ */
 function readSkill(folder: string): { text: string; yaml: string | undefined } {
   const text = readFileSync(new URL(`${folder}/SKILL.md`, SKILLS_DIR), "utf-8");
   return { text, yaml: text.match(FRONTMATTER)?.at(1) };
@@ -22,7 +26,9 @@ function readSkill(folder: string): { text: string; yaml: string | undefined } {
 
 /** Parse a skill's frontmatter, or return an empty record when there is none. */
 function parseFrontmatter(yaml: string | undefined): Record<string, unknown> {
-  return yaml === undefined ? {} : (Bun.YAML.parse(yaml) as Record<string, unknown>);
+  return yaml === undefined
+    ? {}
+    : (Bun.YAML.parse(yaml) as Record<string, unknown>);
 }
 
 const folders = readdirSync(SKILLS_DIR, { withFileTypes: true })
@@ -47,7 +53,9 @@ describe("skill loading", () => {
       });
 
       it("has a description that names both repositories", () => {
-        const description = String(parseFrontmatter(readSkill(folder).yaml).description ?? "");
+        const description = String(
+          parseFrontmatter(readSkill(folder).yaml).description ?? "",
+        );
         expect(description.length).toBeGreaterThan(0);
         expect(description.length).toBeLessThanOrEqual(MAX_DESCRIPTION);
         expect(description).toContain("canonical/pragma-core");
@@ -55,7 +63,9 @@ describe("skill loading", () => {
       });
 
       it(`stays under ${MAX_LINES} lines`, () => {
-        expect(readSkill(folder).text.split("\n").length).toBeLessThan(MAX_LINES);
+        expect(readSkill(folder).text.split("\n").length).toBeLessThan(
+          MAX_LINES,
+        );
       });
     });
   }
