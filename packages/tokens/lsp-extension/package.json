@@ -100,7 +100,7 @@
     "@canonical/typescript-config": "^0.43.0",
     "@types/node": "^26.4.1",
     "@types/vscode": "~1.91.0",
-    "@vscode/vsce": "^3.9.2",
+    "@vscode/vsce": "^4.0.0",
     "typescript": "^7.0.2",
     "vscode-languageclient": "^10.1.1"
   },
