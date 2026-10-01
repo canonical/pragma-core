@@ -31,7 +31,7 @@
  * Exact numbers live in `connect.test.ts`, over a fixture this repo authors.
  */
 
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { verbKey } from "../../kernel/packs/uniqueness.js";
 import { bootRuntime } from "../../kernel/runtime/boot.js";
 import { ROSTER_THRESHOLD } from "../../kernel/runtime/readEntity.js";
@@ -43,6 +43,13 @@ import type { VerbSpec } from "../../kernel/spec/types.js";
 import { TEST_FLAGS } from "../../testing/helpers/projectCli.js";
 import type { ConnectPath, ConnectResult } from "./connect.types.js";
 import { graphModule } from "./index.js";
+
+// Every test here spawns the shipped entry or boots a real fixture pack, and
+// under a full parallel, coverage-instrumented run that competes for the CPU —
+// the work is quick in isolation, but vitest's 5 s default measures contention.
+// 25 s matches the budget the behavioural `runCli` suites use for the same
+// spawns (whose helper kills a hung child at 20 s).
+vi.setConfig({ testTimeout: 25_000 });
 
 const connect = graphModule.verbs.find(
   (v) => verbKey(v.path) === "graph connect",

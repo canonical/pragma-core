@@ -309,7 +309,9 @@ describe("default-pack journey — ontology list/show, populated and empty (E1)"
     ]);
   });
 
-  it("ontology lookup ds surfaces the two block domain classes", async () => {
+  it("ontology lookup ds surfaces the two block domain classes", {
+    timeout: 25_000,
+  }, async () => {
     const fixture = await boot(DEFAULT_PACK_TTL, DEFAULT_PACK_CONFIG);
     const envelope = await readVerb(
       ontologyLookupVerb,

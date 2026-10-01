@@ -29,7 +29,7 @@
  * would be a test of the wrong thing.
  */
 
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { compileStoryModule } from "../kernel/packs/compile.js";
 import { MAX_LIST_WINDOW } from "../kernel/packs/paging.js";
 import {
@@ -45,6 +45,13 @@ import type { PragmaRuntime } from "../kernel/runtime/types.js";
 import type { CapabilityModule, VerbSpec } from "../kernel/spec/types.js";
 import { TEST_FLAGS } from "../testing/helpers/projectCli.js";
 import { declaredLookups, declaredStories } from "./distribution.js";
+
+// Every test here spawns the shipped entry or boots a real fixture pack, and
+// under a full parallel, coverage-instrumented run that competes for the CPU —
+// the work is quick in isolation, but vitest's 5 s default measures contention.
+// 25 s matches the budget the behavioural `runCli` suites use for the same
+// spawns (whose helper kills a hung child at 20 s).
+vi.setConfig({ testTimeout: 25_000 });
 
 const SOURCE = distributionSource("pragma.conf.ts");
 

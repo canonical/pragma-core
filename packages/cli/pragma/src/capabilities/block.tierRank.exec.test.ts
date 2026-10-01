@@ -26,7 +26,7 @@
  * upstream, rename one, retire a duplicate, and these assertions follow.
  */
 
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { MAX_LIST_WINDOW } from "../kernel/packs/paging.js";
 import type { PackPage } from "../kernel/packs/types.js";
 import { verbKey } from "../kernel/packs/uniqueness.js";
@@ -35,6 +35,13 @@ import type { PragmaRuntime } from "../kernel/runtime/types.js";
 import type { VerbSpec } from "../kernel/spec/types.js";
 import { TEST_FLAGS } from "../testing/helpers/projectCli.js";
 import { declaredStories, storyModules } from "./distribution.js";
+
+// Every test here spawns the shipped entry or boots a real fixture pack, and
+// under a full parallel, coverage-instrumented run that competes for the CPU —
+// the work is quick in isolation, but vitest's 5 s default measures contention.
+// 25 s matches the budget the behavioural `runCli` suites use for the same
+// spawns (whose helper kills a hung child at 20 s).
+vi.setConfig({ testTimeout: 25_000 });
 
 const story = declaredStories.get("block");
 if (!story?.lookup)
@@ -164,7 +171,9 @@ describe("a shared block name reaches every block that carries it (PROTECTED)", 
     expect((await collisions()).size).toBeGreaterThan(1);
   });
 
-  it("answers `button` with the GLOBAL Button, and names the other", async () => {
+  it("answers `button` with the GLOBAL Button, and names the other", {
+    timeout: 25_000,
+  }, async () => {
     // The reported defect, exactly as reported. Two components of equal kind,
     // separated by their tiers alone: Global is depth 1, Apps/Launchpad depth 2.
     const out = await lookup("button");

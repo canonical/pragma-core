@@ -47,6 +47,13 @@ import { sourcesModule } from "./index.js";
 import { buildUpdateTask } from "./runUpdate.js";
 import { renderSourcesStatusPlain } from "./status.render.js";
 
+// Every test here spawns the shipped entry or boots a real fixture pack, and
+// under a full parallel, coverage-instrumented run that competes for the CPU —
+// the work is quick in isolation, but vitest's 5 s default measures contention.
+// 25 s matches the budget the behavioural `runCli` suites use for the same
+// spawns (whose helper kills a hung child at 20 s).
+vi.setConfig({ testTimeout: 25_000 });
+
 const FLAGS: GlobalFlags = {
   llm: false,
   autoLlm: false,
