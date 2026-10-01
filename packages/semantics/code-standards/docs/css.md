@@ -82,34 +82,35 @@ popover.addEventListener('toggle', (e) => {
 
 **Identifier:** `cs:css.coexistence.territories`
 
-When the design system runs beside another CSS framework in one page, every element has exactly one owner. A subtree rooted at an element carrying `ds` is the design system's (`cs:css.selectors.namespace`), and the other framework never applies inside it; everything else is that framework's.
+When the design system runs beside Vanilla in one page, every element has exactly one owner. An element carrying `ds`, and everything inside it, is the design system's (`cs:css.selectors.namespace`); everything else is Vanilla's.
 
-What makes the split real is which stylesheets the page loads, not what its markup says. The host loads the adapter, which brings two things: one `all: revert` rule in a `boundary` layer that keeps the other framework's declarations out of the design system's regions, and a confined copy of the design system's element-level layers, scoped to those same regions so they do not reach the rest of the document (`cs:css.layers.scope`). No class on any document root marks anything, in either direction — there is nothing to add to turn coexistence on and nothing to remove to turn it off. Six rules follow.
+What makes the split real is which stylesheets the page loads, not a class on the root. The page loads the Vanilla adapter (`@canonical/styles-vanilla-adapter`) in place of the whole of `@canonical/styles`. The adapter brings its own order statement (`cs:css.layers.order`), an `all: revert` rule in a `boundary` layer that keeps Vanilla's declarations out of `ds` regions, four counters in `vanilla.escapes` for the Vanilla `!important` rules that reach inside one, a confined copy of pragma's element layers (`cs:css.layers.scope`), and a theme bridge in `ds.adapter`. A pragma page and a mixed page carry the same root classes, and `ds` never goes on `<html>` while Vanilla is in the page. Six rules follow.
 
-**No markup from the other framework inside `ds`, at any depth.** Not one of its classes, not one of its components, not a wrapper that lets one back in. The boundary reverts every declaration of theirs inside the region, so such markup renders with browser defaults; it is not a supported state. Migrate the content first, or keep its container theirs until you can.
+**No Vanilla markup inside `ds`.** No `p-*`, `u-*`, `l-*` or `is-*` class at any depth, no legacy component, no wrapper that lets Vanilla back in: the boundary reverts it to browser defaults. The one exception is a root that also carries `ds-permeable`: its territory stops at itself, so a layout component such as a grid can arrange Vanilla content. `ds-permeable` only narrows a territory; it never lets Vanilla classes onto a `ds` element.
 
-**One owner per element.** Never one of their classes on a `ds` root, never `ds` on their markup. Wrap instead. The wrapper is not optional inside one of their containers that styles its direct children — a grid row, an inline form — because a `ds` root placed there loses its placement.
+**One owner per element.** Never a Vanilla class on a `ds` root, never `ds` on Vanilla markup. Wrap instead. The wrapper is required inside a Vanilla container that styles its direct children, such as `.row` or `.p-form--inline`, because a `ds` root placed there loses its placement.
 
-**Inside-out adoption.** A region gets `ds` only when nothing of theirs remains inside it. The last step is not a change to the markup: when nothing of theirs is left anywhere, the host drops the adapter and loads the design system's plain layers, and the whole document is styled as an ordinary page. `ds` stays where it is throughout — it is the component and territory marker, not a switch.
+**Inside-out adoption.** Controls first, then groups, then containers, then page shells; a region gets `ds` once nothing Vanilla is left inside it. When nothing Vanilla is left anywhere, the page drops Vanilla and the adapter together and loads `@canonical/styles` whole. Nothing in the markup changes.
 
-**No transform between authoring and the browser.** Both halves of the confinement are written where they belong and read as they run: the `all: revert` rule in the `boundary` layer, and the adapter's copy of the element layers inside `@scope`, bound to the source by a test rather than produced by a build step. If a prefixing pass or a rewrite seems to be needed to keep the two systems apart, something is outside its territory.
+**No transform between authoring and the browser.** The boundary and the confined copy are written as they run; the copy is bound to the source by a test, not produced by a build step. If a prefixing pass or a rewrite seems needed, something is outside its territory.
 
-**One source of truth for theme.** Theme is activated by a class on a container either way (`cs:css.themes.activation`); while both systems run, the container is the host's. The design system's scheme is derived at each region root by one bridge declaration that reads the host's theme classes, and a design-system theme class placed on such a root is ignored — the bridge sits in a higher layer than the one those classes act in, which is what makes driving theme from both ends impossible rather than merely discouraged.
+**One source of truth for theme.** While both systems run, Vanilla's mode classes decide light or dark (`cs:css.themes.activation`). The bridge derives pragma's `color-scheme` at each outermost `ds` root from them, and a `light` or `dark` class on a `ds` root inside the page has no effect. A region that needs its own mode declares `color-scheme` from `app`.
 
-**Never `!important` to settle a fight between the two** (`cs:css.declarations.important`): with the other framework in the lowest layer, its important declarations already beat everything above them, and adding more only moves the fight lower.
+**Never `!important` to settle a fight between the two** (`cs:css.declarations.important`): with Vanilla in the lowest layer, its important declarations already beat everything above them.
 
 ### Do
 
-Author both halves of the boundary: one revert rule above the other framework's layer, and one bridge that derives the scheme from the host's theme.
+The adapter's boundary: one revert rule above Vanilla's layer, stopped at a `ds-permeable` root's children, and one bridge that derives the scheme from Vanilla's theme.
 ```css
-/* abridged: the shipped file lists every WebKit form part Vanilla styles,
-   then each Gecko form part in a rule of its own */
+/* abridged: the shipped file also lists the WebKit and Gecko form parts */
 @layer boundary {
-  :where(.ds, .ds *):where(:not(svg, svg *), svg a),
-  :where(.ds, .ds *):where(:not(svg, svg *), svg a)::before,
-  :where(.ds, .ds *):where(:not(svg, svg *), svg a)::after,
-  :where(.ds, .ds *)::placeholder {
-    all: revert;
+  @scope (.ds) to (:scope.ds-permeable > *, .ds-permeable > *) {
+    :where(:scope, :scope *):where(:not(svg, svg *), svg a),
+    :where(:scope, :scope *):where(:not(svg, svg *), svg a)::before,
+    :where(:scope, :scope *):where(:not(svg, svg *), svg a)::after,
+    :where(:scope, :scope *)::placeholder {
+      all: revert;
+    }
   }
 }
 
@@ -120,7 +121,7 @@ Author both halves of the boundary: one revert rule above the other framework's 
 }
 ```
 
-Wrap a design-system root placed in one of their containers, and let the host's theme classes decide the theme. The root carries no marker.
+Wrap a root placed in a Vanilla container, let Vanilla's classes decide the theme, and mark a layout root that arranges Vanilla content `ds-permeable`.
 ```html
 <html class="site comfortable light">
   <body class="is-dark">
@@ -129,18 +130,23 @@ Wrap a design-system root placed in one of their containers, and let the host's 
         <div class="ds card">…</div>
       </div>
     </div>
+
+    <div class="ds grid ds-permeable">
+      <div class="col-6 p-card">…Vanilla, unchanged…</div>
+      <div class="ds card">…an ordinary pragma component…</div>
+    </div>
   </body>
 </html>
 ```
 
 ### Don't
 
-Mix the two systems on one element, put their markup inside the region, or drop a root straight into a container that styles its children.
+Mix the two systems on one element, put Vanilla markup inside a region, drop a root straight into a container that styles its children, or theme a root from pragma's classes.
 ```html
-<!-- Bad: two owners on one element; the legacy classes will not apply -->
+<!-- Bad: two owners on one element; the Vanilla classes will not apply -->
 <div class="ds card p-card--highlighted u-no-margin--bottom">…</div>
 
-<!-- Bad: their markup inside the region renders with browser defaults -->
+<!-- Bad: Vanilla markup inside the region renders with browser defaults -->
 <div class="ds card">
   <form class="p-form">…</form>
 </div>
@@ -151,9 +157,13 @@ Mix the two systems on one element, put their markup inside the region, or drop 
   <div class="ds card col-6">…</div>
 </div>
 
-<!-- Bad: a design-system theme class on a root inside their page is
-     ignored; the host's theme classes are the only source of truth -->
+<!-- Bad: a pragma theme class on a root inside a Vanilla page has no
+     effect; Vanilla's mode classes decide -->
 <div class="ds card dark">…</div>
+
+<!-- Bad: `ds` on the document root makes the whole page an island, and the
+     boundary reverts every Vanilla rule in it -->
+<html class="ds site comfortable light">
 ```
 
 ---
@@ -296,6 +306,8 @@ Layers decide who wins (`cs:css.layers.order`), and for an important declaration
 
 When a rule does not win, the fix is the layer it sits in, not a louder declaration. When the fight is between selectors inside one layer, `cs:css.selectors.specificity` applies. When it is between a component and something a host page ships, the boundary of `cs:css.coexistence.territories` applies.
 
+The one exception is the Vanilla adapter's four counters, in `vanilla.escapes`. Vanilla ships important rules that reach inside a `ds` region, and only an important declaration from a lower layer can answer one.
+
 ### Do
 
 Let the layer settle it; the declaration does not have to shout.
@@ -391,24 +403,21 @@ Reset elements the package does not own. The tier that was meant to arbitrate th
 
 **Identifier:** `cs:css.layers.components`
 
-Component layers follow the design system's tier tree, one layer per tier, and they are flat: `ds.components` and then a single segment naming the tier. The order statement (`cs:css.layers.order`) names the second level in full — `ds.components.global`, `ds.components.sites`, `ds.components.documentation`, `ds.components.stores`, `ds.components.apps` — so their order relative to one another is a decision the design system has made rather than one a bundler makes.
+Component layers follow the design system's tier tree, one layer per tier, and they are flat: `ds.components` and then one segment naming the tier. The order statement (`cs:css.layers.order`) names the second level in full: `ds.components.global`, `ds.components.sites`, `ds.components.documentation`, `ds.components.stores`, `ds.components.apps`. A package in one of those tiers wraps its stylesheets in its tier's layer and does nothing else.
 
-The segment is the tier's own id, not the context word a page puts on its root. `app`, `site` and `docs` are context classes (`cs:css.selectors.reserved_names`); `apps`, `sites` and `documentation` are tiers. The two vocabularies look alike and are not the same, and a layer named for the wrong one will not be the layer anybody meant.
+The segment is the tier's id, not the context class a page puts on its root. `app`, `site` and `docs` are context classes (`cs:css.selectors.reserved_names`); `apps`, `sites` and `documentation` are tiers.
 
-Below the second level, a package carries its own order guarantee instead of relying on the page's. Its CSS entry does three things in order: import the design system's statement-only entry, `@canonical/styles/layers.css` — the same statement its other entries open with; declare the package's own layer, `@layer ds.components.apps-lxd;`; then import the sheets. Nothing central has to list the name.
+A package below the second level, such as one application's own tier, writes its CSS entry in two steps: name its own flat layer (`@layer ds.components.apps-lxd;`), then import its stylesheets. The order statement comes from the application loading `@canonical/styles` first. The package's name is new, so it is appended after the statement's names inside `ds.components`, where it sorts above every tier. Nothing central has to list it.
 
-The first of those three is what makes the order hold, and it was learned by measurement. A layer takes its place at first mention, so a package that declared its own name with nothing in front of it anchors that name first whenever a bundler emits the package's CSS before the design system's. The second level is then appended *above* it, and the tier the package extends beats the package — exactly backwards. Over four emission orders that is what happened in one. With the statement imported first the second level always exists before the package names anything, so the appended name sorts above the tier it extends in all four. Repeating the statement costs nothing: a statement can add names but never reorder the ones that exist, so on a page that has already read it the second import changes nothing at all.
+The name is flat, `ds.components.apps-lxd` and not `ds.components.apps.lxd`. A rule written directly into a layer sits in that layer's implicit final sublayer, above every sublayer it names, so under a nested name the `apps` tier's own rules would beat the deeper tier. Flat names make the two siblings, and the deeper one is named later.
 
-The name is flat — `ds.components.apps-lxd`, not `ds.components.apps.lxd` — and the reason is the same fact that makes writing into a parent layer a mistake. A rule written directly into a layer sits in that layer's implicit final sublayer, above every sublayer it names, so under a nested name `@layer ds.components.apps { … }` would beat `ds.components.apps.lxd`: the shallower tier would win, which is backwards. Flat names make the two siblings, ordered by when each is first named, and the deeper one is named later.
-
-Three rules close it off. `ds.components` is never written into directly, for that same reason — every rule in it belongs to a tier. A component stylesheet is never left unlayered, because an unlayered rule beats every layer (`cs:css.layers.membership`). And a component never escalates its selector to win against another component: the tier decides, and `cs:css.selectors.specificity` already fixes the selector shape a component is allowed to use.
+Three rules close it off. Nothing is written directly into `ds.components`, for the same reason: every rule in it belongs to a tier. A component stylesheet is never unlayered (`cs:css.layers.membership`). And a component never escalates its selector to win against another component: the tier decides, and `cs:css.selectors.specificity` fixes the selector shape.
 
 ### Do
 
 Wrap the component's stylesheet in the layer for its tier, which the statement has already placed.
 ```css
-/* packages/react-ds-global/src/ui/Button/styles.css
-   ds.components.global is named in the order statement; this only joins it */
+/* packages/react/ds-global/src/ui/Button/styles.css */
 @layer ds.components.global {
   .ds.button {
     padding: var(--button-padding);
@@ -417,39 +426,19 @@ Wrap the component's stylesheet in the layer for its tier, which the statement h
 }
 ```
 
-Below the second level, the package's entry imports the statement, declares its own layer, then imports its sheets.
+Below the second level, the package's entry names its own layer, then imports its stylesheets.
 ```css
-/* packages/react-ds-apps-lxd/src/index.css */
+/* the CSS entry of an application's own component package */
 
-/* 1. the design system's statement, so the second level exists and is
-      ordered before this package names anything — whatever order a bundler
-      emitted the two packages in. A no-op on a page that has read it */
-@import url("@canonical/styles/layers.css");
-
-/* 2. this package's own layer, appended after the second level and so
-      above the tier it extends */
+/* 1. name your layer */
 @layer ds.components.apps-lxd;
 
-/* 3. the sheets, each wrapping its rules in that layer */
-@import url("./button.css");
-@import url("./card.css");
+/* 2. then import your stylesheets, each wrapped in that layer */
+@import url("./Button/styles.css");
+@import url("./Card/styles.css");
 ```
 
 ### Don't
-
-Declare the package's layer with nothing in front of it, and leave it to the bundler whether the order holds.
-```css
-/* packages/react-ds-apps-lxd/src/index.css */
-
-/* Bad: no statement in front of it. Emitted before the design system's own
-   CSS, this name is anchored first and the second level is then appended
-   ABOVE it, so ds.components.apps beats the package that extends it.
-   Measured across four emission orders: wrong in one of them, right in the
-   other three, which is the worst kind of bug to be handed */
-@layer ds.components.apps-lxd;
-
-@import url("./button.css");
-```
 
 Nest a sub-tier name, or write into the parent layer. Both lose to the layer that should have lost to them.
 ```css
@@ -488,26 +477,44 @@ Escalate a selector to beat another component when the tier already decides it.
 
 **Identifier:** `cs:css.layers.membership`
 
-Every rule a package ships sits inside a named cascade layer (`@layer`). A normal declaration in an unlayered rule beats the same declaration in every layer, whatever it says and whatever its specificity, so a single rule left outside a layer silently outranks the entire system, and no amount of care inside the layers can bring it back. (An important declaration is the mirror image and no safer: see `cs:css.declarations.important`.)
+Every rule a package or an application ships sits inside a named cascade layer (`@layer`). A normal declaration in an unlayered rule beats the same declaration in every layer, whatever its specificity, so one rule left outside a layer outranks the whole system, and no layer order can bring it back. (An important declaration is no safer: see `cs:css.declarations.important`.)
 
-Three at-rules may stay outside a layer: `@font-face`, `@property` and `@keyframes`. They define a name rather than declare style, so leaving them unlayered creates none of the hazard above — there is nothing in them for an unlayered rule to win with. Layer order does sort them, in the one way it can: when two of them define the same name, the higher layer wins. **The rule for a package is therefore: leave them unlayered, as pragma does. Layering them is harmless and buys nothing.**
+Among at-rules, only `@font-face` stays outside a layer. It registers a font name rather than styling an element, and each face is declared once, so no layer has anything to order it against. `@keyframes` go inside the layer, beside the rules that use them. `@property` is not exempt either: pragma ships no registration, and a package that ships one puts it in its layer, because layers do order two registrations of the same name. `@charset`, `@import` and the order statement (`cs:css.layers.order`) come before any layer block by definition.
 
-Two more are outside a layer whether you like it or not: `@charset` and `@import` must appear before other rules, so neither can sit inside a layer block. A layer statement can — `@layer a { @layer b; }` declares the sublayer `a.b` — but the order statement of `cs:css.layers.order` is first in the file by definition, so in practice it never does.
+Three things are exempt on purpose:
 
-Everything that declares style — resets, tokens, typography, modifiers, surfaces, states, components, and an application's own CSS — names its layer. Which layer, and in what order, is fixed by the one order statement (`cs:css.layers.order`); component stylesheets have a rule of their own (`cs:css.layers.components`).
+- Lit components' stylesheets. They apply inside a shadow root, where the document's layers do not reach, and they are deliberately not layered.
+- Debug overlays (`@canonical/styles-debug`). They are deliberately unlayered, because an overlay must win over every layered rule.
+- `@font-face`, as above.
 
-A third-party stylesheet that cannot be edited is layered at its import: `@import url("…") layer(name)`. Not by wrapping the import in an `@layer` block — an `@import` must precede every rule but `@charset` and layer statements, so a nested one is dropped and the stylesheet disappears with no error. (Sass is the apparent exception: a Sass `@import` inside `@layer vanilla { … }` is inlined at compile time and never reaches the browser as an import at all.)
+Which layer a rule goes in, and in what order, is fixed by the order statement (`cs:css.layers.order`); component stylesheets have a rule of their own (`cs:css.layers.components`). A third-party stylesheet that cannot be edited is layered at its import, `@import url("…") layer(lib)`, never by wrapping the import in an `@layer` block: an `@import` after a rule is dropped, and the stylesheet disappears with no error.
 
 ### Do
 
-Layer every entry, including the ones you did not write.
+Layer everything a page loads: the design system brings its own layers, a library goes in `lib`, the application's CSS in `app`.
 ```css
-@import url("@canonical/styles-vanilla-adapter/layers.css");
-@import url("./fonts.css");                        /* your @font-face under pragma's names */
-@import url("./vanilla.css") layer(vanilla);       /* Vanilla compiled to a file */
-@import url("@canonical/styles-vanilla-adapter/adapter.css");
-@import url("@canonical/react-ds-global-form/dist/esm/index.css");
-@layer app { /* your pragma-era CSS */ }
+@import url("@canonical/styles");
+@import url("@canonical/styles/fonts");               /* @font-face only */
+@import url("./vendor/table-tool.css") layer(lib);    /* a library you cannot edit */
+
+@layer app {
+  .report-summary {
+    padding: var(--spacing-vertical-medium);
+  }
+}
+```
+
+Put `@keyframes` inside the layer, beside the rule that uses them.
+```css
+@layer ds.components.global {
+  @keyframes ds-spinner-rotate {
+    to { transform: rotate(360deg); }
+  }
+
+  .ds.spinner {
+    animation: ds-spinner-rotate var(--spinner-duration) linear infinite;
+  }
+}
 ```
 
 ### Don't
@@ -520,7 +527,7 @@ Leave a rule unlayered. It beats every layered rule that sets the same property 
   padding: 0;
 }
 
-@layer ds.components.apps {
+@layer app {
   .report-summary {
     padding: var(--spacing-vertical-medium);
   }
@@ -533,36 +540,56 @@ Leave a rule unlayered. It beats every layered rule that sets the same property 
 
 **Identifier:** `cs:css.layers.order`
 
-Exactly one `@layer` statement names every layer the package opens, and it is the first rule the browser sees. Nothing precedes it but `@charset` — an entry that opens by importing the file the statement lives in still satisfies that, because the import resolves to the statement.
+One `@layer` statement fixes the order of every layer, and it is the first rule the browser sees. Layer order is settled by first appearance: a layer that first appears in whichever file loads earliest takes a position nobody chose, and a later statement can add names but never reorder the ones that exist.
 
-The reason is that layer order is settled by first appearance. A layer that first appears in whatever file happens to load earliest takes a position nobody chose, and once a layer exists a later statement can add layers after it but can never reorder it. One statement, first, is the only arrangement in which the order is a decision rather than an accident.
+Pragma's statement lives in `@canonical/styles/layers.css`, and every entry of `@canonical/styles` imports it first. Lowest first: `normalize, ds.tokens, ds.reset, ds.typography, ds.modifiers, ds.surfaces, ds.states, ds.components, ds.components.global, ds.components.sites, ds.components.documentation, ds.components.stores, ds.components.apps, lib, app`. The later a layer is named, the higher it sits.
 
-A sublayer follows the same rule when its position is a central decision. Every such sublayer is named in the statement by its dotted name, never left to an `@layer … { … }` block somewhere in the tree and placed by whichever file loads first. Pragma names all five of its component tiers there for exactly that reason.
+`app` and `lib` are the only layer names outside `normalize` and `ds.*`, and both have fixed places at the top: `lib` for a library outside the design system, such as documentation tooling, and `app` above it for an application's own CSS. Nothing else opens a top-level layer of its own.
 
-There is one deliberate exception, and it is the same mechanism used on purpose rather than by accident. A component package below the second tier level declares its own layer, and it is safe on one condition: the package imports the statement itself, at the top of its own entry, so that the level it is appending to always exists before it names anything (`cs:css.layers.components`). A name appended after the statement sorts above the ones the statement named, which is what a deeper tier should do; a name appended before it does not, and a package cannot assume the page read the statement first. The test is what kind of decision the position is. Where two layers' relative order is a decision the design system owns, the statement makes it; where the answer is always "the deeper one", a package can append and be right without anybody enumerating it centrally — provided it brings the statement with it.
+An application's entry imports `@canonical/styles` first, before anything that imports a component, so that the statement is the first thing the browser reads. The application then writes its CSS in `@layer app`, which the statement has already placed; it does not restate the order.
 
-This is why one entry of a package's public surface should be the statement alone. Importing it is a no-op wherever it has already been read, because a statement can add names but never reorder the ones that exist, so a package can import it unconditionally and stop depending on what a bundler emitted first.
+A sublayer whose position matters is named in the statement, never left to whichever file opens it first. That is why all five component tiers are there. The one name appended later on purpose is a sub-tier package's own flat layer, which sorts above the tiers because the statement was read first (`cs:css.layers.components`).
 
-The canonical order for pragma, lowest first: `normalize, ds.tokens, ds.reset, ds.typography, ds.modifiers, ds.surfaces, ds.states, ds.components, ds.components.global, ds.components.sites, ds.components.documentation, ds.components.stores, ds.components.apps`. The later a layer is named, the higher it sits: components beat states, states beat surfaces, and so on back down to the reset.
-
-A layer meant to sit between two sublayers of a parent has to be a sublayer of that parent itself. Sublayers sort inside their parent, and the parent is anchored where it is first named, so a top-level layer is never between two of them — it is above the whole parent or below it. Naming a top-level `adapter` to slot it between `ds.states` and `ds.components` does not place it there: it places it above every `ds` sublayer, component tiers included. Measured, a component's own `color-scheme: dark` in `ds.components.global` lost to it. The name has to be `ds.adapter`.
-
-Every application adds `app` at the top for its own CSS, whether or not it runs anything else. An application that also runs a legacy framework adds three more: that framework's layer at the very bottom, `boundary` directly above it, and `ds.adapter` in the middle, between `ds.states` and `ds.components` — low enough that a component's own declarations still beat it, high enough to fill in what a component leaves to inheritance (`cs:css.coexistence.territories`). A consumer who must interleave prepends a statement of their own; nothing else may reorder.
+On a page that also runs Vanilla, the Vanilla adapter's statement comes first instead. It is pragma's list with four names of its own: `vanilla.escapes`, `vanilla` and `boundary` below `normalize`, and `ds.adapter` between `ds.states` and `ds.components` (`cs:css.coexistence.territories`). Pragma's statement, read after it, adds nothing.
 
 ### Do
 
-Open with the statement, lowest layer first. This is pragma's own; an application appends `app` for its CSS.
+Pragma's statement, the first rule the browser sees. It lives in `@canonical/styles/layers.css`.
 ```css
-/* the first rule of the first stylesheet the browser sees */
-@layer normalize, ds.tokens, ds.reset, ds.typography, ds.modifiers,
-  ds.surfaces, ds.states, ds.components, ds.components.global,
-  ds.components.sites, ds.components.documentation, ds.components.stores,
-  ds.components.apps;
+@layer normalize,
+  ds.tokens,
+  ds.reset,
+  ds.typography,
+  ds.modifiers,
+  ds.surfaces,
+  ds.states,
+  ds.components,
+  ds.components.global,
+  ds.components.sites,
+  ds.components.documentation,
+  ds.components.stores,
+  ds.components.apps,
+  lib,
+  app;
 ```
 
-Where a legacy framework shares the page, one statement still names every layer both systems use.
+In an application, import `@canonical/styles` first, then put the application's CSS in `@layer app`.
+```typescript
+// src/client/entry.tsx — the stylesheet before any component import
+import "./styles/index.css"; // @import url("@canonical/styles") is its first import
+import { App } from "./App.js";
+
+/* src/styles/app.css — no statement of its own:
+   @layer app {
+     .app-shell { padding-inline: var(--grid-gap); }
+   }
+*/
+```
+
+On a page that also runs Vanilla, the adapter's statement comes first.
 ```css
-@layer vanilla,
+@layer vanilla.escapes,
+  vanilla,
   boundary,
   normalize,
   ds.tokens,
@@ -578,18 +605,29 @@ Where a legacy framework shares the page, one statement still names every layer 
   ds.components.documentation,
   ds.components.stores,
   ds.components.apps,
+  lib,
   app;
 ```
 
 ### Don't
 
-Let a layer take its position from where it first appears, or write a second statement to reorder one.
+Import a component before the stylesheet: the component's layer comes first and takes the lowest position.
+```typescript
+// Bad: App imports components, whose layers the browser now reads before
+// pragma's statement
+import { App } from "./App.js";
+import "./styles/index.css";
+```
+
+Open a top-level layer the statement does not name, leave a second-level tier to first appearance, or write a second statement to reorder.
 ```css
-/* Bad: a second-level component tier the statement does not name. Created
-   here, it sorts after every tier the statement did name, so it outranks
-   all of them — deterministically, and not in an order anybody chose. A
-   tier at this level belongs in the statement; only a package below it
-   appends its own name (cs:css.layers.components) */
+/* Bad: only `lib` and `app` exist outside normalize and ds.* */
+@layer vendor {
+  .chart { color: var(--color-text); }
+}
+
+/* Bad: a second-level tier the statement does not name. It sorts after
+   every tier the statement named, in an order nobody chose */
 @layer ds.components.marketing {
   .ds.card { padding: var(--card-padding); }
 }
@@ -604,52 +642,24 @@ Let a layer take its position from where it first appears, or write a second sta
 
 **Identifier:** `cs:css.layers.scope`
 
-The layers that style bare elements — `normalize`, `ds.reset`, `ds.typography` and `ds.states` — are written plain in the design system's own stylesheet: ordinary element selectors, no wrapper, no scope, no marker class. `:where(html) { … }` and `p { … }` are what the file says and what the browser runs.
+The three layers that style bare elements — `normalize`, `ds.reset` and `ds.typography` — are written plain in the design system's own stylesheet: ordinary element selectors, no `@scope`, no marker class. They style the whole page because the stylesheet is loaded. Nothing on the document root turns them on or off.
 
-The reason is that a page that runs the design system alone is the common case, and it should cost nothing. No class on the document root, nothing in the markup to keep in step with the stylesheet, and no browser floor from a feature that case does not need. A design system's stylesheet knows nothing about any host: it does not ask who else is on the page, and it has no branch for the answer.
+The confinement a page that also runs Vanilla needs lives only in the Vanilla adapter. Its `elements.css` is a copy of those three layers, rule for rule, with each layer's rules wrapped in `@scope (.ds) to (:scope.ds-permeable > *, .ds-permeable > *)`, so they reach only the elements carrying `ds` and what is inside them. A mixed page loads that copy instead of pragma's `elements.css`. A test in the adapter binds the copy to pragma's source, so the two cannot drift. `@scope` therefore appears only in the adapter, and its browser floor binds mixed pages only.
 
-Confinement belongs to the adapter, not to the source. Where a host also runs another CSS framework, the adapter owns a copy of those same layers wrapped in `@scope (.ds)`, so they reach only the regions the design system owns, and the host loads that copy instead of the plain one. A test binds the copy to the source, declaration for declaration, so the two cannot drift — which is the whole of what makes a copy safe. `@scope` therefore appears in the adapter's copy only, and its browser floor binds mixed pages and no others.
+Three things change when a rule is copied into the scope. A scoped selector never matches its own root, so the source's `html` rule names `:scope` in the copy, qualified as `:where(:scope:not(.ds *))`: every component carries `ds` and is a scoping root of its own, and a bare `:scope` would put the baseline on every one of them. The one rule with universal reach, border-box sizing, stays outside the scope block as `:where(.ds, .ds *)`, because a scoped universal rule costs a scope check on every element of the page. And `:where()` keeps every root selector at zero specificity, so a single class in a higher layer overrides it.
 
-No marker class on any document root, in either direction. There is no class that turns the design system on for a document and none that turns it off. Which stylesheet a page loads is the entire decision, and no markup has to agree with it.
-
-Three things change when a rule is copied into the scope, and they are worth knowing before writing either half. First, a scoped selector is relative to its scoping root and never matches that root, so the source's `html` rule has to name `:scope` — but not bare. Every component carries `ds` on its own root, so every component is a scoping root of its own, and `:where(:scope)` would put the baseline on all of them: an icon inside a coloured link would lose the link's colour. The copy writes `:where(:scope:not(.ds *))`, the outermost region root and nothing else, and everything inside inherits from it.
-
-Second, a rule with universal reach comes out of the scope block altogether. `*` inside the block relativises to the root's descendants and misses the root, and naming `:scope` as well fixes the reach but not the cost: every element on the page is a candidate for such a rule, and inside the block each candidate pays a scope-activation check — about 135 ms of a 200 ms style-recalculation regression on a 10,000-element page. Written outside the block as `:where(.ds, .ds *)` it has the same match set, the same specificity and the same layer, and none of that cost.
-
-Third, a pseudo-element is not valid inside `:where()` or `:is()`, whose lists are forgiving: named there it is dropped, leaving a rule that quietly does less than it reads, so it is attached to the outside of the `:where()` instead. `:where()` itself is for specificity, not for reach: these are defaults, and a single class in a higher layer has to be able to override one without escalating.
-
-An exclusion that looks inert in the source can be load-bearing in the copy, and is kept anyway for that reason. The source's `white-space` rule excludes `pre`, `textarea`, `select` and their kin, which changes nothing on a document root the browser already handles; in the copy the same rule lands on a region root that may itself be one of those elements. The two are kept identical so the test that binds them stays meaningful.
-
-The layers that carry custom properties — `ds.tokens`, `ds.modifiers`, `ds.surfaces` — need no copy, because a custom property does nothing until a rule reads it, and the rules that read it are already namespaced. Component stylesheets need none either: their selectors carry the `.ds` namespace (`cs:css.selectors.namespace`) and their internals are governed by `cs:css.component.encapsulation`.
+The layers that hold custom properties need no copy: a custom property does nothing until a rule reads it, and the rules that read one match a design-system class. Component stylesheets need none either: their selectors carry `.ds` (`cs:css.selectors.namespace`).
 
 ### Do
 
-Write the source plain: element selectors, no scope, nothing about any host.
+Write pragma's element layers plain: element selectors, no scope, nothing about any host.
 ```css
+/* packages/styles/main/src/reset.css */
 @layer ds.reset {
-  :where(html) {
+  :where(html:not(pre, code, kbd, samp)) {
     font-family: var(--typography-text-primary-font-family);
-    color: var(--color-text);
-    line-height: normal;
-    font-weight: normal;
-    /* the style longhand, not the `text-wrap` shorthand, which would also
-       reset text-wrap-mode and let a long <select> option wrap */
-    text-wrap-style: auto;
-    -webkit-font-smoothing: auto;
   }
 
-  /* whether text wraps, which text-wrap-style does not cover. The exclusions
-     are inert here — the browser's own rule for a <pre> or a <select> beats
-     an inherited value — and load-bearing in the adapter's copy, where this
-     rule lands on a region root that may itself be one of them. Kept
-     identical so the two cannot drift */
-  :where(html:not(pre, textarea, select, code, kbd, samp, [contenteditable])) {
-    white-space: normal;
-  }
-
-  /* the one rule with universal reach: no :where(), because the universal
-     selector carries no specificity, and one rule rather than three,
-     because an extra matching pass here is measurable on a large page */
   *,
   ::before,
   ::after {
@@ -658,44 +668,19 @@ Write the source plain: element selectors, no scope, nothing about any host.
 }
 ```
 
-Confine in the adapter's copy, where `@scope` and its browser floor belong, and bind the copy to the source with a test.
+Confine only in the adapter's copy, and bind the copy to the source with a test.
 ```css
+/* packages/styles/vanilla-adapter/src/elements.css */
 @layer ds.reset {
-  @scope (.ds) {
-    /* the OUTERMOST region root, and only that one: every component carries
-       `ds` and so is a scoping root of its own, and a bare :where(:scope)
-       would put the baseline on every one of them */
-    :where(:scope:not(.ds *)) {
+  @scope (.ds) to (:scope.ds-permeable > *, .ds-permeable > *) {
+    /* the outermost island root only; nested components inherit from it */
+    :where(:scope:not(.ds *, pre, code, kbd, samp)) {
       font-family: var(--typography-text-primary-font-family);
-      color: var(--color-text);
-      line-height: normal;
-      font-weight: normal;
-      text-wrap-style: auto;
-      -webkit-font-smoothing: auto;
-    }
-
-    /* the source's exclusions, load-bearing here: the region root may itself
-       be one of these elements, a <select class="ds …"> in a host page */
-    :where(
-        :scope:not(
-          .ds *,
-          pre,
-          textarea,
-          select,
-          code,
-          kbd,
-          samp,
-          [contenteditable]
-        )
-      ) {
-      white-space: normal;
     }
   }
 
-  /* the universal-reach rule stays outside the scope block: same match set,
-     same specificity, same layer, without the scope-activation check every
-     element on the page would otherwise pay. The pseudo-elements hang off
-     the outside of the :where(), where a forgiving list would drop them */
+  /* universal reach stays outside the scope block: same match set, same
+     specificity, same layer, without a scope check on every element */
   :where(.ds, .ds *),
   :where(.ds, .ds *)::before,
   :where(.ds, .ds *)::after {
@@ -706,22 +691,20 @@ Confine in the adapter's copy, where `@scope` and its browser floor belong, and 
 
 ### Don't
 
-Put the scope in the source, or ask the markup to say which case a page is.
+Put `@scope` in pragma's own stylesheet, or a marker class on the document root.
 ```css
-/* Bad: the source now carries a coexistence concern, and every page that
-   loads it pays @scope's browser floor for a problem it does not have */
+/* Bad: every page that loads pragma now pays @scope's browser floor for a
+   problem only a mixed page has */
 @layer ds.reset {
   @scope (.ds) {
     :where(:scope) { color: var(--color-text); }
   }
 }
 
-/* Bad: a marker class on the document root, in either direction. The
-   stylesheet a page loads is the decision; markup that has to agree with
-   it is a second source of truth that will disagree */
+/* Bad: a class on the root that switches the reset. Which stylesheet a page
+   loads is the decision; `ds` is never a root class */
 @layer ds.reset {
   html.ds :where(*) { box-sizing: border-box; }
-  html:not(.coexist) { color: var(--color-text); }
 }
 ```
 
@@ -1045,7 +1028,7 @@ Use PascalCase or other formats in CSS class names:
 
 **Identifier:** `cs:css.selectors.reserved_names`
 
-Seventeen bare class names belong to the design system on any element, and an application must not use any of them for anything else.
+Nineteen bare class names belong to the design system on any element, and an application must not use any of them for anything else.
 
 Six declare properties on the element that carries them, so putting one on an element of your own changes how that element renders, today:
 
@@ -1053,19 +1036,20 @@ Six declare properties on the element that carries them, so putting one on an el
 - `light`, `dark` — the theme classes, which set `color-scheme`
 - `grid`, `subgrid` — the layout presets, which set `display` and the grid template
 
-The other eleven declare nothing on their carrier. They set custom properties that only the design system's own rules read, their declarations target descendants, or they change which elements a rule selects rather than what it declares:
+The other thirteen declare nothing on their carrier. They set custom properties that only the design system's own rules read, their declarations target descendants, or they change which elements a rule selects rather than what it declares:
 
-- `ds` — the component and territory marker (`cs:css.selectors.namespace`). The design system's own stylesheet never targets it alone: component rules compound with it, as `.ds.button`. What it marks is a region, and where a host runs another framework the adapter's confined copy of the element layers takes it as their scoping root, so a stray `ds` there opens a region that declares the baseline on itself (`cs:css.layers.scope`)
+- `ds` — the component and territory marker (`cs:css.selectors.namespace`). The design system's own stylesheet never targets it alone: component rules compound with it, as `.ds.button`. On a page that also runs Vanilla, the adapter takes it as the root of a region, so a stray `ds` there opens a region that reverts Vanilla and declares the baseline on itself (`cs:css.coexistence.territories`)
 - `app`, `site`, `docs` — the context classes, and `comfortable`, `dense` — the density classes: custom properties only
 - `surface`, `contrasted`, `modal` — the surfaces: custom properties only, which the components inside them read
 - `editorial` — a typography class whose rules all target descendants
+- `responsive`, `intrinsic` — layout presets that set custom properties only, which `grid` reads
 - `content-flow` — a layout preset whose one declaration targets the carrier's last child
 
 The reservation is the same for both groups, and it does not rest on what a name does today: the design system may reassign the meaning of any of these names at any release. A class that sets only custom properties in one release can set declarations in the next; a class that styles a child today can style its carrier tomorrow. An application that gives one of them its own meaning has not chosen a name — it has agreed to a merge conflict with a stylesheet it does not control, on a date it does not pick. Name application classes for what they are (`cs:css.selectors.semantics`); the design system will not take a name that describes an application's own domain.
 
-None of the seventeen is a marker a document root has to carry. A page that runs the design system alone declares its context, its density and its theme on the root and nothing else; a page that shares its document with another framework declares the same and no more, because confinement is a matter of which stylesheet it loads (`cs:css.coexistence.territories`).
+None of the nineteen is a marker a document root has to carry, and `ds` never goes there. A page declares its context, its density and optionally its theme on the root and nothing else, whether or not it also runs another framework, because confinement is a matter of which stylesheet it loads (`cs:css.coexistence.territories`).
 
-Checked on 2026-09-01 against Vanilla Framework's SCSS and the three consumers' templates: none of the seventeen appears there as a bare class selector. One appears in a compound — `small.dense` and `.p-text--small.dense` (`vanilla-framework/scss/_base_typography.scss:73`) — so `<small class="dense">` is Vanilla markup that also carries pragma's density modifier. It is harmless today, because pragma's `dense` is in the group that sets custom properties only and nothing outside pragma territory reads them; it is recorded here rather than left to be discovered.
+Checked on 2026-09-01 against Vanilla Framework's SCSS and the three consumers' templates: none of the seventeen names then listed appears there as a bare class selector, and `responsive` and `intrinsic` do not appear in Vanilla's SCSS either. One appears in a compound — `small.dense` and `.p-text--small.dense` (`vanilla-framework/scss/_base_typography.scss:73`) — so `<small class="dense">` is Vanilla markup that also carries pragma's density modifier. It is harmless today, because pragma's `dense` is in the group that sets custom properties only and nothing outside pragma territory reads them; it is recorded here rather than left to be discovered.
 
 ### Do
 
