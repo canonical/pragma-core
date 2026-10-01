@@ -235,9 +235,9 @@ jobs:
 
 Write a PR title that reads as a conventional commit since it will become the commit on main.
 ```
-feat(search): add fuzzy matching
-fix(auth): handle expired refresh tokens
-chore(deps): bump vitest to 3.2
+feat(search): adds fuzzy matching
+fix(auth): rejects expired refresh tokens
+chore(deps): bumps vitest to 3.2
 ```
 
 ### Don't
@@ -295,13 +295,13 @@ squash_merge_commit_title: PR_TITLE   # Use PR title as commit message
 
 Ensure the squashed commit message follows conventional commits — the PR title becomes the commit on main.
 ```
-feat(search): add fuzzy matching          ← PR title = commit on main
-fix(auth): handle expired refresh tokens  ← PR title = commit on main
+feat(search): adds fuzzy matching         ← PR title = commit on main
+fix(auth): rejects expired refresh tokens ← PR title = commit on main
 ```
 
 Use the PR description body for additional context that will appear in the commit body.
 ```
-feat(search): add fuzzy matching
+feat(search): adds fuzzy matching
 
 Implements Levenshtein distance with configurable threshold.
 Falls back to exact match when no fuzzy results exceed the minimum score.
