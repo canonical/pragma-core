@@ -7,6 +7,9 @@ export default defineConfig({
     // Worker reuse across files; the per-file fork respawn is pure overhead.
     // Subprocess-spawning tests are unaffected: they fork their own children.
     isolate: false,
+    // The full monorepo run multiplies the runner's concurrency by this cap;
+    // half the cores bounds the fan-out without costing these suites wall clock.
+    maxWorkers: "50%",
     // The subprocess suites spawn `bun src/bin.tsx`, which executes
     // summon-core's and task's BUILT dists (exports-map resolution + the
     // fixtures' hard-coded dist entries). The gate rebuilds stale dep dists

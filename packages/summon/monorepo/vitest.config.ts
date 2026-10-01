@@ -5,6 +5,9 @@ export default defineConfig({
     include: ["src/**/*.test.ts"],
     // Worker reuse across files; the per-file fork respawn is pure overhead.
     isolate: false,
+    // The full monorepo run multiplies the runner's concurrency by this cap;
+    // half the cores bounds the fan-out without costing these suites wall clock.
+    maxWorkers: "50%",
     coverage: {
       provider: "v8",
       include: ["src/**/*.ts"],

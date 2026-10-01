@@ -9,6 +9,9 @@ export default defineConfig({
     // paths, and a hoisted mock cannot replace a module another file in a
     // shared worker already evaluated.
     isolate: true,
+    // The full monorepo run multiplies the runner's concurrency by this cap;
+    // half the cores bounds the fan-out without costing these suites wall clock.
+    maxWorkers: "50%",
     coverage: {
       provider: "v8",
       include: ["src/**/*.ts"],
