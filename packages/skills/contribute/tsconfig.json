@@ -1,8 +1,0 @@
-{
-  "extends": "@canonical/typescript-config",
-  "include": ["src/**/*.ts"],
-  "compilerOptions": {
-    "types": ["node"],
-    "skipLibCheck": true
-  }
-}
