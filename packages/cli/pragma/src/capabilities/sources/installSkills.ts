@@ -1,11 +1,12 @@
 /**
  * Plan the symlink install of package-provided skills (U10).
  *
- * Packs ship a top-level `skills/<name>/SKILL.md`, but skill
- * discovery only scans the project root and the installed-skills root — never a
- * resolved package's clone/dir. So `sources update` INSTALLS each package's
- * skills into the installed-skills root (`$XDG_DATA_HOME/<bin>/skills`) as
- * symlinks, exactly the root `discoverSkills` already reads. Precedence is
+ * A pack that ships skills keeps them in a top-level `skills/<name>/SKILL.md`,
+ * but skill discovery only scans the project root and the installed-skills
+ * root — never a resolved package's clone/dir. So `sources update` INSTALLS
+ * each package's skills into the installed-skills root
+ * (`$XDG_DATA_HOME/<bin>/skills`) as symlinks, exactly the root
+ * `discoverSkills` already reads. Precedence is
  * preserved (a project `.<bin>/skills` entry still wins — it is discovered
  * first), and the update Task stays reversible (each created link carries an
  * unlink undo).

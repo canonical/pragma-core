@@ -48,8 +48,8 @@ describe("defaults — the validated distribution config (pragma.conf.ts)", () =
   // load-bearing, not decoration: a package like `@canonical/token-ontology`
   // lives inside a monorepo, and a git source names a repository — without
   // `:packages/semantics/token-ontology` the clone would succeed against a root
-  // that has no `definitions/` or `data/` and the pack would contribute
-  // nothing, silently.
+  // that has none of the pack's `definitions/`, `data/` or `skills/`, and the
+  // pack would contribute nothing, silently.
   it("ships the six canonical default packs (all git+https)", () => {
     expect(
       defaults.packs?.map((pack) =>
