@@ -7,8 +7,9 @@
  * each body stays under the 500 lines Anthropic's authoring guidance sets.
  */
 
-import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
+import { describe, expect, it } from "vitest";
+import { parse } from "yaml";
 
 const SKILLS_DIR = new URL("../../../skills/", import.meta.url);
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---\r?\n/;
@@ -27,9 +28,7 @@ function readSkill(folder: string): { text: string; yaml: string | undefined } {
 
 /** Parse a skill's frontmatter, or return an empty record when there is none. */
 function parseFrontmatter(yaml: string | undefined): Record<string, unknown> {
-  return yaml === undefined
-    ? {}
-    : (Bun.YAML.parse(yaml) as Record<string, unknown>);
+  return yaml === undefined ? {} : (parse(yaml) as Record<string, unknown>);
 }
 
 const folders = readdirSync(SKILLS_DIR, { withFileTypes: true })
