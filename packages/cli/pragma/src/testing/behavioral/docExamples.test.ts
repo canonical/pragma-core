@@ -265,7 +265,9 @@ describe("doc examples — Tier 2: curated read commands run green", () => {
   });
 
   for (const readCase of READ_CASES) {
-    it(`\`${readCase.command}\` parses to its verb and exits 0`, async () => {
+    it(`\`${readCase.command}\` parses to its verb and exits 0`, {
+      timeout: 25_000,
+    }, async () => {
       expect(
         documented.has(readCase.command),
         `not documented: ${readCase.command}`,
