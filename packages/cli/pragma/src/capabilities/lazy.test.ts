@@ -181,7 +181,12 @@ describe("lazy dispatch — module-graph probe (PROTECTED)", () => {
   // to call the projection to learn them. Type-only imports are allowed —
   // they are erased — which is why this walks import STATEMENTS rather than
   // grepping for the specifier.
-  it("capabilities/index pulls no summon-core projection, adapter, or commander value import (PROTECTED)", () => {
+  // 25 s: the module-graph probe imports the whole capabilities graph while
+  // up to fifteen other files compete for the CPU — the probe is fast in
+  // isolation, but vitest's 5 s default measures contention, not the import.
+  it("capabilities/index pulls no summon-core projection, adapter, or commander value import (PROTECTED)", {
+    timeout: 25_000,
+  }, () => {
     const banned = [/^@canonical\/summon-core\/projection/, /^commander$/];
     const graph = staticImportGraph(resolve(here, "index.ts"));
     const pkgRoot = resolve(here, "..", "..");

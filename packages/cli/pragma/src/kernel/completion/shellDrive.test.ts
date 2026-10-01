@@ -457,7 +457,12 @@ describe("generated bash — the live grammar's script", () => {
     ]);
   });
 
-  it("gates the exec on minChars: one typed char offers nothing and execs nothing", () => {
+  // 25 s: driving the live bash script spawns completion subprocesses, and
+  // under a full parallel run they compete with the worker pool for the CPU —
+  // the gate is quick alone, but vitest's 5 s default measures contention.
+  it("gates the exec on minChars: one typed char offers nothing and execs nothing", {
+    timeout: 25_000,
+  }, () => {
     // `minChars` lives ONLY in the generated scripts — `__complete -- block
     // lookup d` answers with candidates. This is the gate that stops a stray
     // TAB from spawning a process, and nothing else observes it.

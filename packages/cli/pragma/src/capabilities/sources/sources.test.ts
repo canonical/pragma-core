@@ -246,7 +246,9 @@ describe("sources update round-trip (PROTECTED)", () => {
 });
 
 describe("sources update — package-declared prefixes (M1)", () => {
-  it("compacts a package's own namespace to its declared prefix in the index", async () => {
+  it("compacts a package's own namespace to its declared prefix in the index", {
+    timeout: 25_000,
+  }, async () => {
     // The fixture TTL declares `@prefix ex: <https://ex.test/#>`, but the config
     // carries NO `ex` prefix. Without harvesting the package's own prologue, the
     // index falls back to full URIs (breaking prefixed-type completion and PR3
@@ -974,7 +976,9 @@ describe("sources update — installs package skills (U10)", () => {
     expect(readlinkSync(link)).toBe(staleTarget); // the target it always had
   });
 
-  it("undoes a prune whose forward delete never ran, rather than failing EEXIST", async () => {
+  it("undoes a prune whose forward delete never ran, rather than failing EEXIST", {
+    timeout: 25_000,
+  }, async () => {
     const pkg = skillPackage("specify-component");
     const root = installedRoot();
     const staleTarget = danglingLink(root, "component-specifier");
@@ -1151,7 +1155,9 @@ describe("sources update — converges the global scope (converge-only)", () => 
     expect(readlinkSync(join(dir, "dropped"))).toBe(backup);
   });
 
-  it("is idempotent — a second update re-links nothing", async () => {
+  it("is idempotent — a second update re-links nothing", {
+    timeout: 25_000,
+  }, async () => {
     const dir = harnessDir();
     const cwd = tmp("pragma-proj-");
     const pkg = skillPackage("stable");

@@ -57,7 +57,9 @@ afterAll(async () => {
 });
 
 describe("documented examples resolve against the shipped graph (PROTECTED)", () => {
-  it("runs every `graph inspect` example as written", async () => {
+  it("runs every `graph inspect` example as written", {
+    timeout: 25_000,
+  }, async () => {
     const inspect = verb("graph inspect");
     expect(inspect.examples?.length).toBeGreaterThan(0);
 

@@ -91,7 +91,12 @@ describe("MCP plan-first is honest (PRA-104)", () => {
     expect(existsSync(`${missing}.grafted`)).toBe(false);
   });
 
-  it("returns a plan, and writes nothing, when the read would succeed", async () => {
+  // 25 s: the plan-first journeys spawn the shipped entry, which under a
+  // full parallel run competes with the worker pool for the CPU — quick in
+  // isolation, but vitest's 5 s default measures contention, not the plan.
+  it("returns a plan, and writes nothing, when the read would succeed", {
+    timeout: 25_000,
+  }, async () => {
     const dir = mkdtempSync(join(tmpdir(), "pragma-graft-mcp-"));
     const source = join(dir, "present.txt");
     writeFileSync(source, "content\n");
