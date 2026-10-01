@@ -6,6 +6,7 @@ const ROOT = resolve(import.meta.dirname, "..");
 const manifest = JSON.parse(
   readFileSync(resolve(ROOT, "package.json"), "utf8"),
 ) as {
+  bin: Record<string, string>;
   files: string[];
   exports: Record<string, unknown>;
   dependencies: Record<string, string>;
@@ -23,13 +24,17 @@ describe("what the package ships", () => {
   });
 
   it("declares yaml as a runtime dependency, not a dev one", () => {
-    // src/parse.ts loads it — the value grammar runs over the parsed
-    // document — and design-system calls this package in process.
+    // src/document/parseAnatomyDocument.ts loads it — the value grammar runs
+    // over the parsed document — and design-system calls this package in
+    // process.
     expect(manifest.dependencies.yaml).toBeDefined();
     expect(manifest.devDependencies.yaml).toBeUndefined();
-    expect(readFileSync(resolve(ROOT, "src", "parse.ts"), "utf8")).toContain(
-      'from "yaml"',
-    );
+    expect(
+      readFileSync(
+        resolve(ROOT, "src", "document", "parseAnatomyDocument.ts"),
+        "utf8",
+      ),
+    ).toContain('from "yaml"');
   });
 
   it("keeps the generators out of the published build", () => {
@@ -74,5 +79,18 @@ describe("what the package ships", () => {
     }
     expect(existsSync(resolve(ROOT, "src", "stylesheet.ts"))).toBe(false);
     expect(existsSync(resolve(ROOT, "src", "census.ts"))).toBe(false);
+  });
+
+  it("ships the check command as a built bin", () => {
+    // The bin points into dist/, so it runs under node from an installed
+    // package, and it exists only while the build compiles src/cli.ts.
+    expect(manifest.bin["anatomy-dsl"]).toBe("./dist/esm/cli.js");
+    const build = JSON.parse(
+      readFileSync(resolve(ROOT, "tsconfig.build.json"), "utf8"),
+    ) as { exclude: string[] };
+    expect(build.exclude).not.toContain("src/cli.ts");
+    expect(readFileSync(resolve(ROOT, "src", "cli.ts"), "utf8")).toMatch(
+      /^#!\/usr\/bin\/env node\n/,
+    );
   });
 });

@@ -9,7 +9,7 @@ In your repository's `renovate.json`:
 ```json
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>canonical/pragma//configs/renovate"]
+  "extends": ["github>canonical/pragma-core//configs/renovate"]
 }
 ```
 

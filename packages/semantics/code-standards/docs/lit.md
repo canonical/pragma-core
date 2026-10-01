@@ -349,7 +349,7 @@ import '@lit-labs/ssr-client/lit-element-hydrate-support.js'; // too late
 
 **Identifier:** `cs:lit.component.structure.folder`
 
-Each web component must reside in its own PascalCase-named folder. Component-specific files are prefixed with the component name (`[MyComponent].ts`, `[MyComponent].stories.ts`, `[MyComponent].tests.ts`). Domain-level files use generic names without the prefix (`index.ts`, `types.ts`, `styles.css`, `constants.ts`) — the folder name already provides the namespace. Subcomponents reside in a `common/` subfolder.
+Each web component must reside in its own PascalCase-named folder. Component-specific files are prefixed with the component name (`[MyComponent].ts`, `[MyComponent].stories.ts`, `[MyComponent].test.ts`). Domain-level files use generic names without the prefix (`index.ts`, `types.ts`, `styles.css`, `constants.ts`) — the folder name already provides the namespace. Subcomponents reside in a `common/` subfolder.
 
 ### Do
 
@@ -358,7 +358,7 @@ Place all component-related files within a single folder named after the compone
 MyComponent/
   ├── MyComponent.ts           # Component-specific
   ├── MyComponent.stories.ts   # Component-specific
-  ├── MyComponent.tests.ts     # Component-specific
+  ├── MyComponent.test.ts      # Component-specific
   ├── index.ts                 # Domain-level
   ├── types.ts                 # Domain-level
   ├── constants.ts             # Domain-level

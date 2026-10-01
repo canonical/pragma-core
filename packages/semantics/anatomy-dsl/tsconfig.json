@@ -1,11 +1,12 @@
 {
   "extends": "@canonical/typescript-config",
   "compilerOptions": {
+    "types": ["node"],
     "declaration": true,
     "noUncheckedIndexedAccess": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "isolatedModules": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "testing/**/*.ts"]
 }

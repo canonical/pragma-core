@@ -181,7 +181,7 @@ packages/my-package/
 │   ├── lib/
 │   │   ├── Button/
 │   │   │   ├── Button.tsx
-│   │   │   ├── Button.tests.tsx
+│   │   │   ├── Button.test.tsx
 │   │   │   ├── types.ts
 │   │   │   └── index.ts       # Barrel: exports Button public API
 │   │   ├── hooks/
@@ -751,5 +751,105 @@ import { readConfig } from "#config/readConfig.js";
 
 // Good: import through the barrel
 import { readConfig } from "#config";
+    """
+    ] .
+
+# Declared Runtime Floor Standard
+cs:packaging.manifest.engines a cs:CodeStandard ;
+    rdfs:label "Manifests declare the runtime floor"@en ;
+    cs:hasCategory cs:packaging ;
+    cs:description "A published package must declare `engines.node` covering the highest runtime floor its own dependencies impose, and move that declaration in the same change that raises the floor." ;
+    cs:do [
+        cs:description "Declare `engines.node` covering the highest floor among the package's runtime dependencies — here `commander@15` requires Node >=22.12" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "name": "@scope/my-cli",
+  "dependencies": {
+    "commander": "^15.0.0"
+  },
+  "engines": {
+    "node": ">=22.18 <23 || >=23.6"
+  }
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Raise the floor in the same change that raises the dependency, so the manifest and the dependency tree never disagree" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "dependencies": {
+    "commander": "^15.0.0"
+  },
+  "engines": {
+    "node": ">=22.18 <23 || >=23.6"
+  }
+}
+    """
+    ] ;
+    cs:do [
+        cs:description "Use one range across sibling packages in a monorepo, so a consumer installing several of them cannot be handed conflicting floors" ;
+        cs:language "bash" ;
+        cs:code """
+# Every publishable package resolves to the same declared floor
+$ grep -h '"node"' packages/*/package.json | sort -u
+    "node": ">=22.18 <23 || >=23.6"
+    """
+    ] ;
+    cs:dont [
+        cs:description "Depend on a package with a runtime floor while declaring no `engines` at all — the install is silent and the failure lands at runtime" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "name": "@scope/my-cli",
+  "dependencies": {
+    "commander": "^15.0.0"
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Declare a floor lower than a dependency requires — the manifest states support the package cannot deliver" ;
+        cs:language "json" ;
+        cs:code """
+{
+  "dependencies": {
+    "commander": "^15.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Treat the declaration as settled once written. A dependency can raise its own floor in a version your range already accepts, so a floor that was correct when measured goes stale with no change to your manifest." ;
+        cs:language "json" ;
+        cs:code """
+{
+  "dependencies": {
+    // Written when 15.0.0 required Node >=22.12. If 15.1.0 raises that to
+    // >=24, this range accepts it and the declared floor below becomes a
+    // claim the package can no longer honour — with nothing in the diff to
+    // show it. Verify the floor rather than assuming it holds.
+    "commander": "^15.0.0"
+  },
+  "engines": {
+    "node": ">=22.18 <23 || >=23.6"
+  }
+}
+    """
+    ] ;
+    cs:dont [
+        cs:description "Rely on the dependency's own `engines` to warn the consumer — package managers report the transitive package, naming a dependency the consumer never chose" ;
+        cs:language "bash" ;
+        cs:code """
+# The warning names commander, not the package that pulled it in
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: 'commander@15.0.0',
+npm warn EBADENGINE   required: { node: '>=22.12.0' },
+npm warn EBADENGINE   current: { node: 'v20.19.0' }
+npm warn EBADENGINE }
     """
     ] .

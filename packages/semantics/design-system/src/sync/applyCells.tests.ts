@@ -1,8 +1,19 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { ColumnMetadata, TableRow } from "../providers/index.js";
+import type {
+  ColumnMetadata,
+  MutationStatus,
+  RowUpdateResult,
+  TableRow,
+} from "../providers/index.js";
 import type { AnatomyTable } from "./anatomyTable.js";
 import applyCells, { type CellWriter } from "./applyCells.js";
-import { SETTLE_MS, THROTTLE_MS } from "./constants.js";
+import {
+  MUTATION_POLL_MAX_MS,
+  MUTATION_POLL_START_MS,
+  MUTATION_TIMEOUT_MS,
+  SETTLE_MS,
+  THROTTLE_MS,
+} from "./constants.js";
 import type { CellUpdate } from "./planCells.js";
 
 const TABLE: AnatomyTable = {
@@ -32,16 +43,28 @@ interface Recorded {
   cells: Record<string, string>;
 }
 
+interface FakeOptions {
+  /** The API takes the write, answers 202, and the cell never changes. */
+  swallow?: boolean;
+  drop?: boolean;
+  columns?: string[];
+  /** The document never reports the mutation applied. */
+  neverCompletes?: boolean;
+  /** The write comes back without a `requestId`, so there is nothing to poll. */
+  noRequestId?: boolean;
+  /** The status call itself fails — an expired id answers 400, for one. */
+  statusFails?: boolean;
+}
+
 /**
  * A stateful fake document: an update lands, and a read sees it.
  *
  * Stateful because the reconcile is the half worth testing — a fake that never
  * changed would make every apply report a mismatch and a converged run untestable.
- * It keeps the rule the real API imposes: a write is addressed by column ID.
+ * It keeps the two rules the real API imposes: a write is addressed by column ID,
+ * and it is answered with a `requestId` whose mutation is completed separately.
  */
-function fake(
-  options: { swallow?: boolean; drop?: boolean; columns?: string[] } = {},
-) {
+function fake(options: FakeOptions = {}) {
   const rows: TableRow[] = [
     {
       _codaId: "i-button",
@@ -50,25 +73,44 @@ function fake(
     },
   ];
   const writes: Recorded[] = [];
-  const provider: CellWriter & { writes: Recorded[] } = {
+  const polled: string[] = [];
+  const provider: CellWriter & { writes: Recorded[]; polled: string[] } = {
     writes,
+    polled,
     async fetchTable(): Promise<TableRow[]> {
       return options.drop === true ? [] : rows;
     },
     async fetchTableColumns(): Promise<ColumnMetadata[]> {
       return columns(options.columns ?? ["uri", "anatomy_dsl", "name"]);
     },
-    async updateRow(_document, _table, rowId, cells) {
+    async updateRow(_document, _table, rowId, cells): Promise<RowUpdateResult> {
       writes.push({ rowId, cells });
+      const accepted = {
+        id: rowId,
+        requestId: `r-${writes.length}`,
+      } as RowUpdateResult;
+      if (options.noRequestId === true) {
+        // Not a documented shape, but a write reported as unfollowable beats a
+        // crash in the middle of a batch.
+        return {} as RowUpdateResult;
+      }
       if (options.swallow === true) {
-        // What the API does when a write is keyed wrongly: 202, and nothing changes.
-        return {};
+        // What the API does when the document will not take the content: 202, a
+        // request id, a mutation that completes, and nothing changed.
+        return accepted;
       }
       const row = rows.find((candidate) => candidate._codaId === rowId);
       for (const [column, value] of Object.entries(cells)) {
         (row as TableRow)[column.replace(/^c-/, "")] = value;
       }
-      return {};
+      return accepted;
+    },
+    async getMutationStatus(requestId): Promise<MutationStatus> {
+      polled.push(requestId);
+      if (options.statusFails === true) {
+        throw new Error("Coda API error: 400 Bad Request");
+      }
+      return { completed: options.neverCompletes !== true };
     },
   };
   return provider;
@@ -106,20 +148,45 @@ describe("applyCells", () => {
     expect(provider.writes).toEqual([
       { rowId: "i-button", cells: { "c-anatomy_dsl": UPDATE.after } },
     ]);
-    expect(outcome).toEqual({ writes: 1, mismatches: [] });
+    expect(outcome).toEqual({
+      writes: 1,
+      mutations: [
+        {
+          uri: "global.component.button",
+          rowId: "i-button",
+          requestId: "r-1",
+          completed: true,
+          waitedMs: 0,
+          error: null,
+        },
+      ],
+      mismatches: [],
+    });
+    // A mutation already applied by the time the batch ended costs one status call
+    // and no wait at all.
+    expect(provider.polled).toEqual(["r-1"]);
     expect(slept).toEqual([THROTTLE_MS, SETTLE_MS]);
   });
 
-  it("paces every write and waits the queue out once before it reads back", async () => {
-    // One throttle per call — an unthrottled batch trips a 429 — and one settle for
-    // the batch, because what it waits for is the document catching up at all.
-    const { slept } = await run(fake(), [UPDATE, UPDATE]);
+  it("paces every write and follows each one's own mutation", async () => {
+    // One throttle per call — an unthrottled batch trips a 429 — then every write's
+    // requestId asked about in turn, and one settle: `completed` is the document
+    // having applied the mutation, not a promise the next read is served it.
+    const provider = fake();
+    const { slept, outcome } = await run(provider, [UPDATE, UPDATE]);
+    expect(provider.polled).toEqual(["r-1", "r-2"]);
+    expect(outcome.mutations.map((mutation) => mutation.requestId)).toEqual([
+      "r-1",
+      "r-2",
+    ]);
     expect(slept).toEqual([THROTTLE_MS, THROTTLE_MS, SETTLE_MS]);
   });
 
-  it("reports a cell the document accepted and never changed", async () => {
-    // The silent failure this whole re-read exists for: 202, queued, and the cell
-    // still says what it said. Nothing else would report it.
+  it("reports a cell the document accepted, applied and never changed", async () => {
+    // The silent failure this whole re-read exists for: 202, a mutation the document
+    // says it completed, and the cell still says what it said. Nothing else would
+    // report it, and the completed mutation is what says the document itself is
+    // refusing the content rather than running late.
     const { outcome } = await run(fake({ swallow: true }));
 
     expect(outcome.writes).toBe(1);
@@ -129,8 +196,65 @@ describe("applyCells", () => {
         rowId: "i-button",
         expected: UPDATE.after,
         found: "the old literal",
+        mutation: {
+          uri: "global.component.button",
+          rowId: "i-button",
+          requestId: "r-1",
+          completed: true,
+          waitedMs: 0,
+          error: null,
+        },
       },
     ]);
+  });
+
+  it("gives up on a mutation the document never completes, and says how long it waited", async () => {
+    const provider = fake({ swallow: true, neverCompletes: true });
+    const { outcome, slept } = await run(provider);
+
+    expect(outcome.mutations[0].completed).toBe(false);
+    // The bound is time slept, so it is the same on a fake clock as on a real one,
+    // and it is the sixty seconds the report names rather than a doubling more.
+    expect(outcome.mutations[0].waitedMs).toBe(MUTATION_TIMEOUT_MS);
+    const waits = slept.slice(1, -1);
+    expect(waits[0]).toBe(MUTATION_POLL_START_MS);
+    expect(Math.max(...waits)).toBe(MUTATION_POLL_MAX_MS);
+    expect(waits.reduce((total, wait) => total + wait, 0)).toBe(
+      MUTATION_TIMEOUT_MS,
+    );
+    // One more status call than waits: the first is asked before anything is slept
+    // and the last after the bound is spent.
+    expect(provider.polled).toHaveLength(waits.length + 1);
+    expect(outcome.mismatches[0].mutation.completed).toBe(false);
+  });
+
+  it("follows nothing when the write came back without a request id", async () => {
+    const provider = fake({ noRequestId: true, swallow: true });
+    const { outcome, slept } = await run(provider);
+
+    expect(provider.polled).toEqual([]);
+    expect(outcome.mutations[0]).toEqual({
+      uri: "global.component.button",
+      rowId: "i-button",
+      requestId: null,
+      completed: false,
+      waitedMs: 0,
+      error: null,
+    });
+    expect(slept).toEqual([THROTTLE_MS, SETTLE_MS]);
+  });
+
+  it("records a failed status call against the mutation and still reconciles", async () => {
+    // The writes have been issued by the time the poll runs, so a status call that
+    // throws must not take the re-read down with it: the re-read is the only thing
+    // that can say what the document actually holds.
+    const provider = fake({ statusFails: true });
+    const { outcome, slept } = await run(provider);
+
+    expect(outcome.mutations[0].error).toBe("Coda API error: 400 Bad Request");
+    expect(outcome.mutations[0].completed).toBe(false);
+    expect(outcome.mismatches).toEqual([]);
+    expect(slept).toEqual([THROTTLE_MS, SETTLE_MS]);
   });
 
   it("reports a row that is no longer there as holding nothing", async () => {
@@ -143,7 +267,8 @@ describe("applyCells", () => {
     const { outcome, slept } = await run(provider, []);
 
     expect(provider.writes).toEqual([]);
-    expect(outcome).toEqual({ writes: 0, mismatches: [] });
+    expect(provider.polled).toEqual([]);
+    expect(outcome).toEqual({ writes: 0, mutations: [], mismatches: [] });
     expect(slept).toEqual([SETTLE_MS]);
   });
 
@@ -190,6 +315,19 @@ describe("applyCells", () => {
     });
     await vi.runAllTimersAsync();
 
-    expect(await settled).toEqual({ writes: 1, mismatches: [] });
+    expect(await settled).toEqual({
+      writes: 1,
+      mutations: [
+        {
+          uri: "global.component.button",
+          rowId: "i-button",
+          requestId: "r-1",
+          completed: true,
+          waitedMs: 0,
+          error: null,
+        },
+      ],
+      mismatches: [],
+    });
   });
 });

@@ -35,12 +35,12 @@
     "@types/jsonld": "^1.5.15",
     "@types/n3": "^1.26.1",
     "@types/node": "^24.10.1",
-    "@vitest/coverage-v8": "^4.1.9",
+    "@vitest/coverage-v8": "^5.0.0",
     "openapi-typescript": "^7.12.0",
     "typescript": "^7.0.2",
     "vite": "^7.2.6",
     "vite-tsconfig-paths": "^6.1.0",
-    "vitest": "^4.1.9"
+    "vitest": "^5.0.0"
   },
   "dependencies": {
     "@canonical/anatomy-dsl": "^0.43.0",

@@ -71,4 +71,4 @@ We include Svelte-specific overrides because Biome does not yet support "cross-l
 
 These lint overrides are temporary and should be removed once [biomejs/biome#8590](https://github.com/biomejs/biome/issues/8590) is resolved.
 
-We keep these overrides directly in `@canonical/biome-config` (rather than in a separate Svelte-specific config package) because Biome config extension is not transitive. For additional context, see [PR #449](https://github.com/canonical/pragma/pull/449).
+We keep these overrides directly in `@canonical/biome-config` (rather than in a separate Svelte-specific config package) because Biome config extension is not transitive. For additional context, see [PR #449](https://github.com/canonical/pragma-web/pull/449).

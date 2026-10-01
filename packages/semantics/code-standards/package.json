@@ -4,8 +4,8 @@
   "description": "Code standards ontology and documentation generator",
   "type": "module",
   "scripts": {
-    "build": "echo 'No build step yet' && exit 0",
-    "check": "biome check && tsc --noEmit",
+    "build": "bun run docs",
+    "check": "biome check && tsc --noEmit && bun run docs:check",
     "check:fix": "biome check --write",
     "check:ts": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
@@ -18,7 +18,7 @@
     "@canonical/typescript-config": "^0.43.0",
     "@types/bun": "latest",
     "typescript": "^7.0.2",
-    "vitest": "^4.0.18"
+    "vitest": "^5.0.0"
   },
   "repository": {
     "type": "git",

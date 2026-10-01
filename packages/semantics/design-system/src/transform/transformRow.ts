@@ -41,6 +41,46 @@ function toLiteralString(value: unknown): string {
 }
 
 /**
+ * Predicates whose object is a document rather than a label.
+ *
+ * These are the canvas columns — an anatomy, a usage narrative, a guidelines or
+ * concept body — and their text is content, so every byte of it is significant.
+ * `anatomies write` compares an authored file against the cell it would go in byte
+ * for byte, modulo one trailing newline (see sync/planCells.sameCell), and the
+ * anatomy body is YAML, where leading whitespace carries meaning. A document is
+ * therefore emitted exactly as the document holds it.
+ *
+ * They are recognised by the predicate the table's `@context` maps the column to,
+ * and not by the column's format: the extract hands the transform bare rows with no
+ * column metadata, so the context mapping is the only description of a column the
+ * transform has — and it is already how sync/anatomyTable finds the anatomy column.
+ */
+const VERBATIM_PREDICATES: ReadonlySet<string> = new Set([
+  `${NAMESPACES.ds}anatomyDsl`,
+  `${NAMESPACES.ds}anatomyClassic`,
+  `${NAMESPACES.ds}usage`,
+  `${NAMESPACES.ds}guidelines`,
+  `${NAMESPACES.ds}content`,
+]);
+
+/**
+ * The text a cell contributes as a literal, less the whitespace it carries from the
+ * document.
+ *
+ * A cell typed into the document keeps whatever spaces the author left around the
+ * text, and `ds:name "Timeline "` is not the name anyone looks a block up by: the
+ * lookup misses, and then offers the padded name back as its own suggestion. A label
+ * is the thing it names, so the padding is never significant and is dropped here, at
+ * the single place a row's cell becomes a literal — plain text everywhere (`name`,
+ * `summary`, a property's `default`, an inline blank node's fields), with the
+ * document bodies of {@link VERBATIM_PREDICATES} left as they are.
+ */
+function literalText(value: unknown, predicateUri: string): string {
+  const text = toLiteralString(value);
+  return VERBATIM_PREDICATES.has(predicateUri) ? text : text.trim();
+}
+
+/**
  * Check if a context value indicates an object property (URI reference)
  */
 function isObjectProperty(contextValue: ContextValue): boolean {
@@ -178,10 +218,11 @@ function addInlineBlankNodes(
     for (const [column, predicate] of Object.entries(inlineConfig.properties)) {
       const value = rowData[column];
       if (value === null || value === undefined || value === "") continue;
+      const propertyUri = prefixes.expand(predicate);
       store.addLiteralFromBlankNode(
         bn,
-        prefixes.expand(predicate),
-        toLiteralString(value),
+        propertyUri,
+        literalText(value, propertyUri),
       );
     }
   }
@@ -326,7 +367,11 @@ export default function transformRow(
           }
           store.addQuad(subjectUri, predicateUri, prefixes.expand(String(val)));
         } else {
-          store.addLiteral(subjectUri, predicateUri, toLiteralString(val));
+          store.addLiteral(
+            subjectUri,
+            predicateUri,
+            literalText(val, predicateUri),
+          );
         }
       }
     } else {
@@ -351,7 +396,7 @@ export default function transformRow(
         store.addLiteral(
           subjectUri,
           predicateUri,
-          toLiteralString(resolvedValue),
+          literalText(resolvedValue, predicateUri),
         );
       }
     }
@@ -367,10 +412,11 @@ export default function transformRow(
           const rawValue = row[columnName];
           if (rawValue === null || rawValue === undefined || rawValue === "")
             continue;
+          const classPropertyUri = prefixes.expand(predicate);
           store.addLiteral(
             subjectUri,
-            prefixes.expand(predicate),
-            toLiteralString(rawValue),
+            classPropertyUri,
+            literalText(rawValue, classPropertyUri),
           );
         }
       }

@@ -5,6 +5,9 @@
   "type": "module",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
+  "bin": {
+    "anatomy-dsl": "./dist/esm/cli.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
@@ -44,7 +47,7 @@
     "n3": "^1.26.0",
     "rdf-validate-shacl": "^0.6.5",
     "typescript": "^7.0.2",
-    "vitest": "^4.0.18"
+    "vitest": "^5.0.0"
   },
   "repository": {
     "type": "git",
