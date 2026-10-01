@@ -41,7 +41,7 @@ not, and the npm name of every package beside its folder.
 | `packages/semantics` | The design system's models (ontologies, data) | the `ds:` ontology and Coda-synchronised data, the anatomy DSL, the code-standards corpus, the `dt:` token ontology |
 | `packages/summon` | Code generation, its engine and generators | `summon-core` and the generators |
 | `packages/cli` | The commands people and agents use to reach the system | the `pragma` and `summon` binaries, and pragma's MCP server |
-| `packages/skills` | Agent skills, as packages | the skills people use through `pragma` |
+| `packages/skills` | Agent skills, as packages | the skills people use through `pragma`, and the skills for working on the pragma repositories |
 
 Four of these were copied in from repositories that are now archived. Their commit history stays
 in those archives, read-only; this repository starts from a plain copy of each:
