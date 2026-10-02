@@ -520,3 +520,29 @@ git add .env
 git add deploy-key.pem
     """
     ] .
+
+# Workflow Scripts
+cs:git.workflow.script a cs:CodeStandard ;
+    rdfs:label "Workflow logic in script files"@en ;
+    cs:hasCategory cs:git ;
+    cs:description "A CI workflow step runs a script kept in its own file; it does not embed the script in the YAML. A file is linted, tested and run locally, has no YAML quoting or escaping hazards, is reused across workflows and is reviewed as code." ;
+    cs:do [
+        cs:description "Call the script file from the step." ;
+        cs:language "yaml" ;
+        cs:code """
+- name: Compute the allowed scopes
+  run: bash .github/actions/pr-scopes/pr-scopes.sh
+    """
+    ] ;
+    cs:dont [
+        cs:description "Embed the script in a `run: |` block." ;
+        cs:language "yaml" ;
+        cs:code """
+- name: Compute the allowed scopes
+  run: |
+    names="$(jq -r '.workspaces[]' package.json | xargs -I{} sh -c 'cat {}/package.json' | jq -r .name)"
+    echo "scopes<<EOF" >> "$GITHUB_OUTPUT"
+    echo "$names" >> "$GITHUB_OUTPUT"
+    echo "EOF" >> "$GITHUB_OUTPUT"
+    """
+    ] .
