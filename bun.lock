@@ -57,7 +57,7 @@
         "@modelcontextprotocol/sdk": "^1.12.0",
         "chalk": "^6.0.0",
         "commander": "^15.0.0",
-        "graphql": "17.0.0-rc.0",
+        "graphql": "17.0.2",
         "oxigraph": "^0.5.0",
         "zod": "^3.25.0",
       },
@@ -134,7 +134,7 @@
       "version": "0.43.0",
       "dependencies": {
         "dataloader": "^2.2.3",
-        "graphql": "17.0.0-rc.0",
+        "graphql": "17.0.2",
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.15",
@@ -1903,7 +1903,7 @@
 
     "grapheme-splitter": ["grapheme-splitter@1.0.4", "", {}, "sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ=="],
 
-    "graphql": ["graphql@17.0.0-rc.0", "", {}, "sha512-cQpxqmx0r8JOp4fH6CCDPZxV4Eh2e33Q4uWDzCL8JLsKb2FUMwKOC2Gzo+khYaLL1Ui9hQdhNwTm6YlbmkHHQQ=="],
+    "graphql": ["graphql@17.0.2", "", {}, "sha512-FRWbddMxfkjiB7z+aQDWIR+E34xo9I8c9mtK2RPv8PmMzKRvrdsreHL/Ui/TmwHJfhHChEtsFPyMHKI+xuarQQ=="],
 
     "handlebars": ["handlebars@4.7.9", "", { "dependencies": { "minimist": "^1.2.5", "neo-async": "^2.6.2", "source-map": "^0.6.1", "wordwrap": "^1.0.0" }, "optionalDependencies": { "uglify-js": "^3.1.4" }, "bin": { "handlebars": "bin/handlebars" } }, "sha512-4E71E0rpOaQuJR2A3xDZ+GM1HyWYv1clR58tC8emQNeQe3RH7MAzSbat+V0wG78LQBo6m6bzSG/L4pBuCsgnUQ=="],
 
