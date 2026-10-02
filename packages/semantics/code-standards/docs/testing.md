@@ -202,307 +202,6 @@ it("calls validateCart then applyDiscount then chargePayment", () => {
 
 ---
 
-# Performance Considerations in Testing
-
-> **Scope:** Targets TypeScript/JavaScript projects using vitest in a monorepo where many packages run tests at once.
-
-## happy-dom by default, jsdom per file only
-
-**Identifier:** `cs:testing.performance.happy_dom_default`
-
-DOM test suites run on happy-dom as the environment default: it boots and runs materially lighter and faster than jsdom (measured on the heaviest DOM suite in the monorepo: 18.1 s to 6.4 s wall for the same 101 files and 580 tests). happy-dom is pinned to an exact patched version (20.8.9) — a caret silently resolved to 20.14.5, which broke lit's `adoptedStyleSheets` under vitest's environment adapter, so the caret is deliberately avoided. A file that strictly needs jsdom keeps it per file with exactly the `// @vitest-environment jsdom` docblock on the first line; the docblock beats the project environment and the CLI flag. Confirmed jsdom-inherent needs: CSSOM style normalization (`color: red` read back as `rgb(255, 0, 0)`), `document.cookie` jar semantics (overwrite and clear), the `matchMedia` override surface, `<details>`/`<summary>` toggle behaviour (happy-dom toggles natively; jsdom does not, which is what a disabled-guard test observes), and `setSelectionRange` on an unfocused input.
-
-### Do
-
-Run the suite on happy-dom and declare the pinned devDependency; keep jsdom per file where strictly needed.
-```typescript
-// vitest.config.ts — the suite default.
-export default defineConfig({
-  test: { environment: "happy-dom" },
-});
-
-// package.json — pinned, not a caret: 20.14.5 broke lit's
-// adoptedStyleSheets under the vitest environment adapter.
-// "happy-dom": "20.8.9"
-
-// src/lib/component/Button/Button.tests.tsx — a file that strictly needs
-// jsdom's CSSOM normalization keeps it with exactly this first line:
-// @vitest-environment jsdom
-import { render, screen } from "@testing-library/react";
-```
-
-### Don't
-
-Keep the whole suite on jsdom because one file needs it, or let the happy-dom version float.
-```typescript
-// Bad: package-wide jsdom for one file's CSSOM assertion.
-export default defineConfig({
-  test: { environment: "jsdom" }, // the whole suite pays for one file
-});
-
-// Bad: a caret can resolve to a version that breaks the suites.
-// "happy-dom": "^20.8.9"   // silently became 20.14.5 and broke lit
-```
-
----
-
-## Classify files for worker reuse, in the mock preference order
-
-**Identifier:** `cs:testing.performance.isolation_classification`
-
-A file may run in the worker-reuse project only if it does none of: hoisted `vi.mock`/`vi.hoisted`; `vi.stubGlobal`/`vi.stubEnv` without restoration; module-level mutable state; prototype patching; listeners on `process`; fake timers it does not restore; leaving DOM or storage state behind. To get an otherwise-disqualified file into reuse, use in order: (1) dependency injection or pure functions; (2) `vi.spyOn` on the real module or object, restored after each test (`vi.restoreAllMocks`); (3) otherwise add the file to the mock-heavy list and let it run isolated. Treat `vi.doMock` as needing isolation unless shown that nothing else imports the mocked module's consumers. A file that mixes mock-heavy and clean tests splits into a `.shared.test.ts` (clean) and an `.isolated.test.ts` (mock-heavy) pair. A shared setup file cleans DOM, storage, timers and globals after every test in the reuse project — per-file cleanup stays primary, the sweep is the belt to its braces.
-
-### Do
-
-Prefer injection, then a restored spy on the real module, before reaching for the mock-heavy list.
-```typescript
-// (1) Injection: pass the seam in, no module registry to fight over.
-it("renders with the injected clock", () => {
-  render(<Clock now={() => new Date("2024-01-01")} />);
-});
-
-// (2) Restored spy: the real module stays in the shared worker's registry.
-afterEach(() => vi.restoreAllMocks());
-it("retries on failure", async () => {
-  vi.spyOn(client, "fetch").mockRejectedValueOnce(new Error("boom"));
-  await expect(run()).resolves.toBeDefined();
-});
-```
-
-Restore everything a file stubs, and sweep the rest in a shared reuse setup.
-```typescript
-// src/testing/setupReuseHygiene.ts — runs after every test in `reused`.
-afterEach(() => {
-  vi.restoreAllMocks();
-  vi.unstubAllEnvs();
-  vi.unstubAllGlobals();
-  vi.useRealTimers();
-  document.documentElement.innerHTML = "";
-  localStorage.clear();
-});
-```
-
-### Don't
-
-Hoist a mock, stub a global without restoring it, or leave module-level state in a file that runs on a shared worker.
-```typescript
-// Bad: a hoisted mock over a module other files import — belongs in
-// MOCK_HEAVY_FILES, or reworked per the preference order.
-vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() }));
-
-// Bad: stubbed without restoration — leaks to the next file in the worker.
-it("reads the flag", () => {
-  vi.stubEnv("PRAGMA_COMPLETE_DEBUG", "1");
-});
-
-// Bad: module-level mutable state survives the file that mutated it.
-let cache = new Map();
-```
-
----
-
-## vi.resetModules is not mock cleanup
-
-**Identifier:** `cs:testing.performance.reset_modules_not_mock_cleanup`
-
-`vi.resetModules()` clears the module REGISTRY — the next import re-evaluates the module — but it does NOT clear the mock registry, and under `isolate: false` a mock can leak into other files that share a transitively imported module. Do not treat `resetModules` as mock cleanup: a test that mocks a module and then calls `resetModules` has disposed of the real module instances but kept the mock, and the next file in the worker that imports a consumer of the mocked module still sees the mock. A file that needs a fresh module instance (`vi.resetModules()` followed by a dynamic import for a clean-state assertion) may still run in the reuse project, provided it mocks nothing — the fresh instance is file-local, the registry is repopulated on demand. Mock cleanup is: `vi.restoreAllMocks()` (spies), `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()` (stubs), and per-file isolation (hoisted mocks).
-
-### Do
-
-Use resetModules for a fresh module instance, and restore mocks separately.
-```typescript
-afterEach(() => vi.restoreAllMocks());
-
-it("renders the undeclared verb without the suite's checking hooks", async () => {
-  // A fresh module instance for the unchecked state; no mocks involved.
-  vi.resetModules();
-  const fresh = await import("./call.js");
-  expect(fresh.renderCall({ verb: "widget list" })).toBeDefined();
-});
-```
-
-### Don't
-
-Reach for resetModules to clean up a mock, or assume it stops a mock reaching other files.
-```typescript
-// Bad: resetModules does not touch the mock registry — the hoisted mock of
-// ./loadSession.js still answers the next file that imports it transitively.
-vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() }));
-afterEach(() => vi.resetModules()); // not mock cleanup
-```
-
----
-
-## Verify a performance change against a baseline, not by it passing
-
-**Identifier:** `cs:testing.performance.verification_protocol`
-
-A passing run is not proof of safety for a worker-reuse or environment change. Before and after the change, measure and compare: wall clock, peak memory of the whole run, peak process or worker count, test and coverage numbers. Confirm project membership — every test file lands in exactly one project (`vitest list --filesOnly --project <name>`), with the union across projects equal to all files and no overlap. Confirm order independence — the reuse project alone, shuffled, on at least two different seeds, must produce the same results as unshuffled; a file whose outcome depends on which file ran before it in the shared worker has a leak, not a flake. Confirm per-file environment overrides actually apply (the jsdom docblock wins over a `--environment` CLI flag). A test that fails only under load (external CPU bursts) is re-run on a quiet host and in isolation before being judged; only failures that survive a quiet-host rerun count as real. Acceptance: no test or coverage loss, peak memory and wall clock no worse than baseline, the reuse project stable across seeds.
-
-### Do
-
-Record the same metrics before and after, and prove membership, order independence and overrides.
-```typescript
-# Baseline and after: wall, peak RSS, worker count, test and coverage numbers.
-/usr/bin/time -v vitest run --coverage
-
-# Membership: exactly one project per file; union = all files, overlap = none.
-vitest list --filesOnly --project reused | sort > reused.txt
-vitest list --filesOnly --project isolated | sort > isolated.txt
-comm -12 reused.txt isolated.txt   # must be empty
-
-# Order independence: shuffle the reuse project on two seeds.
-vitest run --project reused --sequence.shuffle --sequence.seed=101
-vitest run --project reused --sequence.shuffle --sequence.seed=202
-
-# Overrides: the docblock must win over a CLI flag.
-vitest run --environment happy-dom src/lib/component/Button/Button.tests.tsx
-```
-
-### Don't
-
-Accept a green run as proof, or judge a failure from a single run under external load.
-```typescript
-# Bad: the run passed, so the split is safe — no membership, shuffle or
-# before/after memory comparison was made.
-
-# Bad: four spawn-based tests timed out while the host's load average was
-# 46 from an unrelated burst, so the tests are broken — they were never
-# re-run on a quiet host or in isolation.
-```
-
----
-
-## Cap test workers explicitly — the full run multiplies them
-
-**Identifier:** `cs:testing.performance.worker_caps`
-
-Every vitest config sets `maxWorkers` explicitly. In a monorepo where the test command fans out across packages (Lerna/Nx run the root `test` target on every affected package), the worst-case worker count is the runner's package concurrency multiplied by the per-package `maxWorkers`, and peak memory and process count matter as much as wall clock — a full run must not push the host into swapping or CPU thrashing. Capping at half the cores (`maxWorkers:
-
-### Do
-
-Set maxWorkers explicitly in every config, consistently across a config's projects.
-```typescript
-// vitest.config.ts — both projects share the same cap: vitest refuses two
-// projects that share a scheduling group but disagree on the worker cap.
-const SHARED_TEST_OPTIONS = { maxWorkers: "50%" };
-// Worst case on a 16-core host with Lerna default concurrency (16):
-// 16 packages × 8 workers = 128, not 16 × 16 = 256.
-```
-
-### Don't
-
-Leave maxWorkers unset (the default is every core), or cap the runner instead of the workers.
-```typescript
-// Bad: unset — every worker slot defaults to the CPU count, and the full
-// monorepo run multiplies that by the number of packages testing at once.
-export default defineConfig({ test: { globals: true } });
-
-// Bad: compensating in lerna.json — that gate belongs to the package
-// configs, and editing the runner is a monorepo-wide change.
-```
-
----
-
-## Split the suite into reused and isolated projects behind a hoisted-mock list
-
-**Identifier:** `cs:testing.performance.worker_reuse`
-
-Vitest's default isolation forks a fresh worker for every test file, so a suite pays one worker spawn per file per run. Suites that do not need per-file isolation split into two projects defined by one shared list of mock-heavy files: a `reused` project (isolate: false) that excludes the list and keeps its worker across files, and an `isolated` project (isolate: true) that includes exactly the list — a hoisted `vi.mock` cannot replace a module another file in the shared worker already evaluated, so those files keep per-file isolation. The single list is the only source for both projects, so a file can never be matched by both or dropped by both, and a guard test fails the run when a file that hoists `vi.mock`/`vi.hoisted` is missing from the list or an entry stops resolving to a real file. Tests that spawn the shipped entry or subprocesses are unaffected by worker reuse and stay in `reused`; a spawn-heavy suite carries a suite-wide `testTimeout` in the config (25 s — above the spawn helper's 20 s kill budget), because vitest's 5 s default under a full parallel run measures CPU contention, not the code. Only timeouts that differ from that default name a number per test (the pack builder's 60 s, the perf harness's 120 s). Under vitest 5, inline projects inherit the root config's test options and concatenate its arrays, so a projects config keeps no test options at the root — shared options are spelled once and spread into both projects, and only coverage (a root-level option whose results merge across projects) sits at the root.
-
-### Do
-
-Define both projects from one exported list, and guard the list with a test.
-```typescript
-// src/testing/mockHeavyFiles.ts — the single source for BOTH projects.
-export const MOCK_HEAVY_FILES = [
-  "src/identity.test.ts",
-  "src/kernel/runtime/store.test.ts",
-] as const;
-
-// vitest.config.ts — the reuse project excludes exactly the list, the
-// isolation project includes exactly the list.
-import { MOCK_HEAVY_FILES } from "./src/testing/mockHeavyFiles.js";
-
-const SHARED_TEST_OPTIONS = {
-  globals: true,
-  environment: "node",
-  maxWorkers: "50%",
-  globalSetup: ["./src/testing/tempRoot.globalSetup.ts"],
-  setupFiles: ["./src/testing/setupXdgIsolation.ts"],
-};
-
-export default defineConfig({
-  test: {
-    projects: [
-      {
-        test: {
-          name: "reused",
-          ...SHARED_TEST_OPTIONS,
-          isolate: false,
-          include: ["src/**/*.test.ts"],
-          exclude: [...configDefaults.exclude, ...MOCK_HEAVY_FILES],
-        },
-      },
-      {
-        test: {
-          name: "isolated",
-          ...SHARED_TEST_OPTIONS,
-          isolate: true,
-          include: [...MOCK_HEAVY_FILES],
-          exclude: [...configDefaults.exclude],
-        },
-      },
-    ],
-    // Coverage is a ROOT-level option: both projects merge into one gate.
-    coverage: { provider: "v8", include: ["src/**/*.ts"] },
-  },
-});
-```
-
-Guard the list: fail when a hoisting file runs in `reused`, or when an entry stops resolving.
-```typescript
-// src/testing/mockHeavyGuard.test.ts
-const HOISTED_MOCK_PATTERN = /vi\.(mock|hoisted)\s*\(/;
-
-it("every file that hoists vi.mock/vi.hoisted is in MOCK_HEAVY_FILES", () => {
-  const offenders = allTestFiles
-    .filter((file) => !MOCK_HEAVY_FILES.includes(file))
-    .filter((file) =>
-      readFileSync(join(ROOT, file), "utf8").match(HOISTED_MOCK_PATTERN),
-    );
-  expect(offenders).toEqual([]);
-});
-
-it("every MOCK_HEAVY_FILES entry resolves to a real test file", () => {
-  const missing = MOCK_HEAVY_FILES.filter(
-    (file) => !existsSync(join(ROOT, file)),
-  );
-  expect(missing).toEqual([]);
-});
-```
-
-### Don't
-
-Repeat the file list in both projects, or put test options at the root of a projects config on vitest 5.
-```typescript
-// Bad: two hand-maintained lists drift; a file lands in both projects or neither.
-const REUSE_EXCLUDE = ["src/identity.test.ts"];
-const ISOLATED_INCLUDE = ["src/identity.test.ts", "src/store.test.ts"]; // drift
-
-// Bad on vitest 5: root test options are INHERITED by inline projects and
-// root arrays are CONCATENATED — this root include silently reaches every
-// project, so the isolated project swallows the whole suite.
-export default defineConfig({
-  test: {
-    include: ["src/**/*.test.ts"], // leaks into every project
-    projects: [{ test: { name: "isolated", isolate: true } }],
-  },
-});
-```
-
----
-
 # Regression Testing
 
 > **Scope:** Targets TypeScript/JavaScript projects.
@@ -550,6 +249,194 @@ Use unnumbered or vague names that lose the landing-order record.
 // Bad: no number, no order, no description of the bug
 src/testing/regression/crash.test.ts
 src/testing/regression/bugfix.test.ts
+```
+
+---
+
+# Test Performance
+
+> **Scope:** Targets TypeScript/JavaScript projects using vitest in a monorepo where many packages run tests at once.
+
+## happy-dom by default, jsdom per file
+
+**Identifier:** `cs:testing.performance.happy_dom_default`
+
+DOM suites default to happy-dom and pin the devDependency to an exact version — a caret resolved to one that broke lit's `adoptedStyleSheets`. A file that strictly needs jsdom keeps it with exactly `// @vitest-environment jsdom` on its first line; the docblock overrides the project environment and CLI flags. Typical strict needs: CSSOM style normalization, cookie-jar semantics, the matchMedia surface, `<details>`/`<summary>` toggling, `setSelectionRange` on an unfocused input.
+
+### Do
+
+Run the suite on happy-dom with an exact pin; keep jsdom per file.
+```typescript
+// vitest.config.ts — the suite default.
+export default defineConfig({ test: { environment: "happy-dom" } });
+// package.json — exact pin, not a caret: "happy-dom": "20.8.9"
+
+// Button.tests.tsx — a file that strictly needs jsdom:
+// @vitest-environment jsdom
+import { render } from "@testing-library/react";
+```
+
+### Don't
+
+Keep the whole suite on jsdom because one file needs it, or float the version.
+```typescript
+// Bad: the whole suite pays jsdom's boot cost for one file's CSSOM assertion.
+export default defineConfig({ test: { environment: "jsdom" } });
+```
+
+---
+
+## Classify files for worker reuse in the mock preference order
+
+**Identifier:** `cs:testing.performance.isolation_classification`
+
+A file may run in `reused` only if it does none of: hoisted `vi.mock`/`vi.hoisted`; unrestored `vi.stubGlobal`/`vi.stubEnv`; module-level mutable state; prototype patching; `process` listeners; unrestored fake timers; DOM or storage state left behind. To qualify an otherwise-disqualified file, use in order: dependency injection or pure functions; a `vi.spyOn` on the real module, restored after each test; otherwise the mock-heavy list. Treat `vi.doMock` as isolated unless nothing else imports the mocked module's consumers. A file mixing mock-heavy and clean tests splits into `.shared`/`.isolated` siblings. A shared setup file restores mocks, stubs, timers and globals after every test.
+
+### Do
+
+Prefer injection, then a restored spy, before the mock-heavy list.
+```typescript
+// (1) Injection — no module registry to fight over.
+render(<Clock now={() => new Date("2024-01-01")} />);
+
+// (2) Restored spy on the real module.
+afterEach(() => vi.restoreAllMocks());
+vi.spyOn(client, "fetch").mockRejectedValueOnce(new Error("boom"));
+```
+
+### Don't
+
+Leave a hoisted mock or an unrestored stub in a file that runs on a shared worker.
+```typescript
+// Bad: both leak to the next file in the worker.
+vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() }));
+it("reads the flag", () => {
+  vi.stubEnv("PRAGMA_COMPLETE_DEBUG", "1"); // never restored
+});
+```
+
+---
+
+## vi.resetModules is not mock cleanup
+
+**Identifier:** `cs:testing.performance.reset_modules_not_mock_cleanup`
+
+`vi.resetModules()` clears the module registry — the next import re-evaluates the module — but not the mock registry: under `isolate: false` a mock still leaks into files that share a transitively imported module. Use it only for a fresh module instance in a file that mocks nothing. Mock cleanup is `vi.restoreAllMocks()` (spies), `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()` (stubs), or per-file isolation (hoisted mocks).
+
+### Do
+
+Use resetModules for a fresh module instance, and clean mocks separately.
+```typescript
+it("renders without the suite's checking hooks", async () => {
+  vi.resetModules();
+  const fresh = await import("./call.js"); // fresh instance, no mocks
+  expect(fresh.renderCall({ verb: "widget list" })).toBeDefined();
+});
+```
+
+### Don't
+
+Reach for resetModules to clean up a mock.
+```typescript
+// Bad: the hoisted mock of ./loadSession.js still answers the next file
+// that transitively imports it.
+vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() }));
+afterEach(() => vi.resetModules());
+```
+
+---
+
+## Verify a reuse change against a baseline
+
+**Identifier:** `cs:testing.performance.verification_protocol`
+
+A passing run is not proof. Measure wall clock, peak memory, worker count, and test and coverage numbers before and after. Confirm membership: every file in exactly one project, union = all files, overlap = none. Run the reuse project shuffled on two seeds — a file whose outcome depends on file order has a leak, not a flake. Confirm per-file environment overrides beat CLI flags. Re-run on a quiet host before judging a failure: only one that survives a quiet rerun is real.
+
+### Do
+
+Run the protocol before merging the change.
+```bash
+/usr/bin/time -v vitest run --coverage      # before AND after
+vitest list --filesOnly --project reused    # union = all files, overlap = none
+vitest run --project reused --sequence.shuffle --sequence.seed=101
+vitest run --project reused --sequence.shuffle --sequence.seed=202
+vitest run --environment happy-dom <jsdom-file>  # the docblock must win
+```
+
+### Don't
+
+Accept a green run as proof, or judge a failure from one run under external load.
+```typescript
+// Bad: it passed, so the split is safe — no membership, shuffle or
+// before/after memory comparison was made.
+```
+
+---
+
+## Cap test workers explicitly
+
+**Identifier:** `cs:testing.performance.worker_caps`
+
+Every vitest config sets `maxWorkers` explicitly. In a monorepo whose test command fans out across packages, the worst case is the runner's package concurrency multiplied by each package's cap — an unset cap defaults to every core. `"50%"` bounds the fan-out without costing wall clock; all projects in a config share the same cap so vitest schedules them in one group. Cap the package configs, never the runner (lerna.json).
+
+### Do
+
+Set the same cap in every project of the config.
+```typescript
+// vitest.config.ts — every project shares the cap.
+const SHARED = { maxWorkers: "50%" };
+// Worst case on a 16-core host with 16-way runner concurrency: 128, not 256.
+```
+
+### Don't
+
+Leave maxWorkers unset, or cap the runner instead of the workers.
+```typescript
+// Bad: every core, multiplied by every package testing at once.
+export default defineConfig({ test: { globals: true } });
+```
+
+---
+
+## Reuse workers behind a hoisted-mock split
+
+**Identifier:** `cs:testing.performance.worker_reuse`
+
+Suites without per-file isolation needs split into two projects driven by ONE mock-heavy list: a `reused` project (`isolate: false`) excluding the list, an `isolated` project including exactly it — a hoisted `vi.mock` cannot replace a module another file in the shared worker already evaluated. The list is the single source for both projects; a guard test fails the run when a hoisting file is missing from it or an entry stops resolving. Spawn-heavy suites set a suite-wide `testTimeout` above the helper's kill budget. On vitest 5 keep no root test options: inline projects inherit them and concatenate root arrays.
+
+### Do
+
+Define both projects from one exported list; keep only coverage (a root-level option) at the root.
+```typescript
+// src/testing/mockHeavyFiles.ts — one list drives BOTH projects.
+export const MOCK_HEAVY_FILES = ["src/store.test.ts"] as const;
+
+// vitest.config.ts
+export default defineConfig({
+  test: {
+    projects: [
+      { test: { name: "reused", ...shared, isolate: false,
+          include: ["src/**/*.test.ts"],
+          exclude: [...configDefaults.exclude, ...MOCK_HEAVY_FILES] } },
+      { test: { name: "isolated", ...shared, isolate: true, include: [...MOCK_HEAVY_FILES] } },
+    ],
+    coverage: { provider: "v8" }, // root-level: merges both projects
+  },
+});
+```
+
+### Don't
+
+Put test options at the root of a projects config on vitest 5.
+```typescript
+// Bad: inline projects INHERIT root options and CONCATENATE root arrays —
+// the root include silently reaches every project.
+export default defineConfig({
+  test: {
+    include: ["src/**/*.test.ts"],
+    projects: [{ test: { name: "isolated", isolate: true } }],
+  },
+});
 ```
 
 ---

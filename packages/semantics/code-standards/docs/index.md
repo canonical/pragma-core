@@ -18,8 +18,8 @@ Standards documentation generated from the code-standards ontology.
 - [Testing](./testing.md) (14)
   - Coverage
   - Integration Testing
-  - Performance Considerations in Testing
   - Regression Testing
+  - Test Performance
   - Unit Testing
 - [TSDoc](./tsdoc.md) (3)
 - [Turtle](./turtle.md) (4)
