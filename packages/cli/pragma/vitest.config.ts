@@ -7,36 +7,17 @@ import { MOCK_HEAVY_FILES } from "./src/testing/mockHeavyFiles.js";
 type TestConfig = NonNullable<ViteUserConfig["test"]>;
 
 /**
- * What every project in this config shares.
- *
- * Vitest 5 inline projects inherit the root config's test options and
- * CONCATENATE its arrays (`include`/`exclude`), so this config keeps NO test
- * options at the root: each option is spelled once here and spread into both
- * projects, and the root holds only `coverage` — a root-level option that
- * merges both projects' results into the one threshold gate. Nothing can
- * concatenate, inherit, or drift between the two projects by accident.
- *
- * globalSetup is spread into both projects: both projects' workers spawn the
- * shipped entry and allocate inside the run root, so both need the emit
- * gate, the run-level temp root (which is REFCOUNTED for exactly this
- * two-holder case), and the shared-cache seed.
+ * What every project shares. Vitest 5 inline projects inherit the root
+ * config's test options and CONCATENATE root arrays, so no test options live
+ * at the root — the root holds only `coverage`, which merges both projects'
+ * results into the one threshold gate.
  */
 const SHARED_TEST_OPTIONS: TestConfig = {
   globals: true,
   environment: "node",
-  // Half the cores: the full monorepo run multiplies the runner's package
-  // concurrency by this cap, and these suites boot real stores and spawn the
-  // shipped entry — an every-core default showed up as multi-GB RSS peaks
-  // while costing the suite nothing on wall clock.
-  maxWorkers: "50%",
-  // This suite is spawn-heavy by nature: most files either run the shipped
-  // entry or boot a real fixture pack, and under the full parallel,
-  // coverage-instrumented run that work competes for the CPU. vitest's 5 s
-  // default measured contention, not the code — 25 s sits above runCli's 20 s
-  // kill budget so a slow spawn reports the helper's captured-output
-  // diagnosis instead of a bare clock. Cells that genuinely need longer
-  // (the pack builder's 60 s, the perf harness's 120 s) override this per
-  // test, and they are the only timeouts that still name a number.
+  // Spawn-heavy suite: 25 s sits above runCli's 20 s kill budget, so a slow
+  // spawn reports the helper's diagnosis instead of a bare clock. Only cells
+  // needing longer (60 s pack builder, 120 s perf harness) name a number.
   testTimeout: 25_000,
   globalSetup: [
     "./src/testing/perf/globalSetup.ts",
@@ -58,24 +39,15 @@ export default defineConfig({
         test: {
           name: "reused",
           ...SHARED_TEST_OPTIONS,
-          // Worker reuse across test files: the per-file fork respawn is pure
-          // overhead this suite paid ~170 times per run. Subprocess-spawning
-          // tests are unaffected (they fork their own children), and the
-          // per-file setup files — XDG isolation included — still re-run per
-          // file.
+          // Worker reuse: the per-file fork respawn is pure overhead;
+          // subprocess-spawning tests fork their own children, and the
+          // per-file setup files still re-run per file.
           isolate: false,
-          // The perf-budget TIMING tests (src/testing/perf/**) are isolated
-          // into their own SERIAL pass (vitest.perf.config.ts / the
-          // `test:perf` script): spawning + timing the shipped entry inside
-          // this parallel, coverage-instrumented run measures CPU contention,
-          // not the binary, so the ceilings flake red. They stay ENFORCED,
-          // just out of this pass.
-          //
-          // safety.test.ts's storeless-guarantee guards spawn the shipped
-          // entry — a correctness check (exit/stdout), not a timing one, so
-          // it belongs in this pass. The perf suite's globalSetup provisions
-          // the emit once if missing so a clean `test:vitest` doesn't fail
-          // with a null exit status.
+          // The perf-budget TIMING tests run in their own SERIAL pass
+          // (`test:perf`, vitest.perf.config.ts) — timing inside this
+          // parallel, coverage-instrumented run measures contention, not the
+          // binary. safety.test.ts's correctness guards stay here, and the
+          // perf globalSetup provisions the emit if missing.
           include: ["src/**/*.test.ts"],
           exclude: [
             ...configDefaults.exclude,
@@ -88,10 +60,7 @@ export default defineConfig({
         test: {
           name: "isolated",
           ...SHARED_TEST_OPTIONS,
-          // Per-file isolation for the hoisted-mock files (see
-          // MOCK_HEAVY_FILES). The same maxWorkers as the reuse project keeps
-          // both in one scheduling group — vitest refuses two projects that
-          // share a group order but disagree on the worker cap.
+          // Per-file isolation for the hoisted-mock files (MOCK_HEAVY_FILES).
           isolate: true,
           include: [...MOCK_HEAVY_FILES],
           exclude: [...configDefaults.exclude],
@@ -110,11 +79,8 @@ export default defineConfig({
         "**/types.ts",
         "**/bin.ts",
         "src/testing/**",
-        // The embedded pack's generated modules are DATA, not logic: an
-        // 11.4 MB n-quads payload inlined as a string literal (~5 statements
-        // across four files) that the shared-cache seed keeps out of the
-        // workers entirely. Counting them made the v8 report parse and remap
-        // 13 MB of generated text per run for no measurement it can use.
+        // The embedded pack's generated modules are inlined DATA, not
+        // logic; the shared-cache seed keeps them out of the workers.
         "src/kernel/runtime/graphpack/embedded/**",
       ],
       // Ratcheted to the measured floor, rounded down. The gate sat at 50

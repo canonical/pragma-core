@@ -13,9 +13,6 @@ export default mergeConfig(
             // Worker reuse across files; the per-file fork respawn is pure overhead.
             // The inline project does not inherit root options, so it is set here.
             isolate: false,
-            // The full monorepo run multiplies the runner's concurrency by this cap;
-            // half the cores bounds the fan-out without costing these suites wall clock.
-            maxWorkers: "50%",
             // include vite globals for terser test code
             globals: true,
             include: ["src/**/*.tests.ts", "src/**/*.test.ts"],

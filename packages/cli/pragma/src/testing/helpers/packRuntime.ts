@@ -68,14 +68,10 @@ export async function buildFixtureRuntime(
     },
   );
 
-  // MEMOIZED like the production handle (`createLazyStore`), on purpose: the
-  // facade calls `store.get()` for every query, and this runtime's verbs run
-  // dozens of queries per suite — an unmemoized `get()` booted a fresh
-  // oxigraph store, ke-GraphQL compile, and index parse PER VERB CALL, and the
-  // suites' `afterAll` dispose then removed a session nobody had used. One
-  // session per runtime is also what makes `dispose()` in a suite's `afterAll`
-  // dispose the store the suite actually ran on — under worker reuse an
-  // undisposed session is native memory that outlives the file.
+  // MEMOIZED like the production handle: an unmemoized `get()` booted a fresh
+  // oxigraph store and GraphQL compile per verb call, and `afterAll` dispose
+  // then removed a session nobody had used — native memory that under worker
+  // reuse outlives the file.
   let sessionPromise: Promise<StoreSession> | undefined;
   let booted = false;
   const store: LazyStore = {

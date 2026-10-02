@@ -354,11 +354,10 @@ describe("default-pack journey — error paths (E1)", () => {
   it("a torn (emptied) schema.json boots to STORE_UNAVAILABLE with the update recovery", async () => {
     const fixture = await boot(DEFAULT_PACK_TTL, DEFAULT_PACK_CONFIG);
     const active = readActivePack(fixture.cwd) ?? "";
-    // Simulate a torn/evicted extraction: truncate schema.json in the pack cache.
-    // The cache is content-addressed and shared by the whole run, so the wreck
-    // dies here: the real bytes are captured and restored whatever the
-    // assertions say — `packIsComplete` cannot see non-empty garbage, so a pack
-    // left truncated would fail the NEXT build of the same content instead.
+    // The shared content-addressed cache means this wreck must not outlive
+    // the cell — `packIsComplete` cannot see it, so the next build of the
+    // same content would fail instead. Restore the real bytes whatever the
+    // assertions say.
     const schemaPath = join(packDir(active), SCHEMA_FILE);
     const realSchema = readFileSync(schemaPath, "utf-8");
     try {

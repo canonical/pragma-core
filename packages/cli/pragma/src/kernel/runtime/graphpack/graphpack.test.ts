@@ -72,12 +72,9 @@ afterAll(() => {
 
 describe("graphpack round-trip (PROTECTED)", () => {
   it("builds the five artifact files and reuses a cached pack", async () => {
-    // The cache is forced COLD first: this cell asserts the MISS branch of
-    // the build (`reused: false`), and any earlier build of the same fixture
-    // — in this file or in a file that shared this worker — would have
-    // warmed the file-level cache and turned the miss into a hit. A private
-    // directory makes the cell's first build the first build, whatever order
-    // the file's cells run in.
+    // Cell-private cache: this cell asserts the MISS branch, which any earlier
+    // build of the same fixture — here or in a file sharing this worker —
+    // would have turned into a hit.
     const cellCache = mkdtempSync(join(tmpdir(), "pragma-graphpack-cell-"));
     const cellCacheHome = process.env.XDG_CACHE_HOME;
     process.env.XDG_CACHE_HOME = cellCache;
@@ -297,11 +294,9 @@ describe("graphpack carried stories (PROTECTED)", () => {
     // `Ignored story undefined: …` — a diagnostic naming no file, repeated on
     // every command. Records are checked, so a corrupt entry simply is not one.
     //
-    // The pack is built in a cell-private cache: this cell WRITES garbage into
-    // `stories.json` to prove the reader rejects it, and a pack wrecked this
-    // way is still reusable by content hash — `packIsComplete` cannot see
-    // valid-JSON garbage. A private directory means the wreck dies with the
-    // cell instead of poisoning whichever cell builds the same pack next.
+    // Cell-private cache: this cell WRITES garbage into `stories.json`, and a
+    // pack wrecked that way is still reusable by content hash — the wreck dies
+    // with the cell instead of poisoning the next one to build this pack.
     const cellCache = mkdtempSync(join(tmpdir(), "pragma-graphpack-cell-"));
     const cellCacheHome = process.env.XDG_CACHE_HOME;
     process.env.XDG_CACHE_HOME = cellCache;

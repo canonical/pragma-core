@@ -1,41 +1,17 @@
 /**
- * Vitest global setup: one temp root for the whole RUN, allocated before any
- * worker starts and removed when the last HOLDER finishes with it.
+ * One temp root for the whole RUN, allocated before any worker starts and
+ * removed by the last holder's `teardown` — skipped files and torn-down
+ * workers cannot strand it, and a full disk fails once, here, with a
+ * message naming the disk.
  *
- * WHY THE ROOT IS RUN-LEVEL AND NOT PER-FILE. Per-file allocation cannot meet
- * either half of what this fix is for. A file whose every test is skipped runs
- * no `afterAll`, and a worker torn down mid-file runs no hook at all, so a
- * per-file scheme always leaves residue behind and has to reclaim it on some
- * LATER run — which means a run is never actually clean, only eventually
- * clean. And a per-file allocation fails per FILE: on a full disk every worker
- * throws while importing its test file, which is the hundred-failures-no-
- * assertions silhouette this whole change exists to abolish, reproduced by
- * the cure.
+ * `globalSetup` runs once PER PROJECT and this config defines two, so the
+ * root is REFCOUNTED (a file inside the root): `setup` adopts the root the
+ * environment variable already names when live and bumps the count,
+ * `teardown` decrements it, and the holder reaching zero removes the tree.
+ * Without the refcount, two uncoordinated setups orphan the first root —
+ * exactly the residue this file exists to prevent.
  *
- * Run-level fixes both by construction. `setup` runs in the main process,
- * before a single worker exists: a disk that cannot fit one directory fails
- * here, once, with a message that names the disk. `teardown` runs after the
- * last holder's workers exit, whatever happened inside them — skipped files,
- * thrown files, torn-down workers — so one removal reclaims the run's whole
- * footprint and the net is zero, not "zero after the next run sweeps".
- *
- * The path reaches the workers through the environment, which they inherit
- * from this process. `setupXdgIsolation.ts` reads it, takes a per-file
- * subdirectory inside it, and points `TMPDIR` there.
- *
- * WHY THE ROOT IS REFCOUNTED. `globalSetup` is a PROJECT option, and this
- * package's config defines TWO projects (a worker-reuse one and a
- * per-file-isolation one — see `vitest.config.ts`), so this file's `setup`
- * runs once per project. Two uncoordinated setups race on the one environment
- * variable: both allocate, the second write wins, and the first root is
- * orphaned inside the real system temp directory for good — one leaked root
- * per run, the exact residue class this file exists to abolish. So `setup`
- * ADOPTS the root the variable already names when it is live, and every
- * holder counts itself in a refcount file inside the root: each `setup` bumps
- * it, each `teardown` decrements it, and only the holder whose decrement
- * reaches zero removes the tree. A `--project` run holds the root once; a
- * full run holds it twice; the last holder out closes the door, whichever
- * project that is.
+ * `setupXdgIsolation.ts` gives each file a subdirectory inside the root.
  */
 
 import {

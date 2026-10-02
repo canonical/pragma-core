@@ -1,23 +1,9 @@
 /**
- * Guard for the two-project worker-reuse split in `vitest.config.ts`.
- *
- * Under `isolate: false` the worker's module registry survives across test
- * files, so a hoisted `vi.mock`/`vi.hoisted` in one file can leak its mock
- * into any other file in the same worker that imports the mocked module
- * transitively. The `isolated` project exists to keep exactly those files
- * away from the shared workers, and this guard keeps the two in lockstep:
- *
- * 1. FAILS when a test file hoists `vi.mock`/`vi.hoisted` calls but is not
- *    listed in `MOCK_HEAVY_FILES` — the file would run in `reused` and could
- *    leak its mock into the worker's registry.
- * 2. FAILS when a `MOCK_HEAVY_FILES` entry stops resolving to a real file —
- *    the `isolated` project would silently run fewer files and the reuse
- *    project would run a file whose only reason for isolation vanished.
- *
- * `vi.doMock` is deliberately NOT matched: it is not hoisted (it takes effect
- * at the next `import`), so it cannot replace a module a file in the same
- * worker already evaluated. A `vi.doMock` file may still need isolation for
- * other reasons, but that is a per-file judgement, not this guard's.
+ * Guard for the worker-reuse split: fails when a file that hoists
+ * `vi.mock`/`vi.hoisted` is missing from `MOCK_HEAVY_FILES` (it would leak
+ * its mock into the shared worker's registry), or when an entry stops
+ * resolving to a real file. `vi.doMock` is deliberately not matched — it is
+ * not hoisted, so it cannot replace an already-evaluated module.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -43,14 +29,8 @@ function collectTestFiles(dir: string): string[] {
 
 const allTestFiles = collectTestFiles(join(ROOT, "src"));
 
-/**
- * A hoisted mock is a `vi.mock`/`vi.hoisted` call at module top level, i.e.
- * before the first `describe`/`it` runs. Matching the CALL TEXT (rather than
- * the AST) is deliberate: a `vi.mock` call inside a callback is not hoisted,
- * but a file that mocks at all inside callbacks still usually needs
- * isolation — and a mock named in a comment is the one false positive worth
- * having: anyone writing that is describing a mock.
- */
+// CALL TEXT, not AST: a mock named in a comment is the false positive worth
+// having — anyone writing that is describing a mock.
 const HOISTED_MOCK_PATTERN = /vi\.(mock|hoisted)\s*\(/;
 
 describe("worker-reuse guard", () => {

@@ -48,9 +48,7 @@ const waitForFrame = async (
 
 describe("App — the interactive preview reads the real disk", () => {
   const previous = process.cwd();
-  // Every preview cwd this file creates, removed after the run — each is
-  // abandoned otherwise, and a worker shared across files keeps whatever a
-  // file leaves behind visible to the run's residue, not just this file.
+  // Preview cwds are abandoned otherwise; swept so nothing strands in /tmp.
   const previewDirs: string[] = [];
   beforeEach(() => {
     const dir = mkdtempSync(join(tmpdir(), "summon-preview-"));
