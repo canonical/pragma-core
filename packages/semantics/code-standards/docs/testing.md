@@ -271,7 +271,7 @@ Run the suite on happy-dom with an exact pin; keep jsdom per file.
 export default defineConfig({ test: { environment: "happy-dom" } });
 // package.json — exact pin, not a caret: "happy-dom": "20.8.9"
 
-// Button.tests.tsx — a file that strictly needs jsdom:
+// Button.test.tsx — a file that strictly needs jsdom:
 // @vitest-environment jsdom
 import { render } from "@testing-library/react";
 ```
@@ -290,7 +290,7 @@ export default defineConfig({ test: { environment: "jsdom" } });
 
 **Identifier:** `cs:testing.performance.run_hygiene`
 
-What keeps `isolate: false` safe, not just tidy: a test file leaves the run as it found it — temp directories swept in `afterAll` (or under a run-level temp root), and the file's own spies and stubs restored (`vi.restoreAllMocks()` restores spies; `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()` unstub). A hoisted module mock cannot be undone from inside a shared worker — a file that needs one belongs in `isolated`. `vi.resetModules()` is neither: it clears the module registry, not the mock registry or the spies, so a hoisted mock still leaks into files sharing a transitively imported module.
+What keeps `isolate: false` safe, not just tidy: a test file leaves the run as it found it — temp directories swept in `afterAll` (or under a run-level temp root), and the file's own spies and stubs restored (`vi.restoreAllMocks()` restores spies; `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()` unstub). A hoisted module mock cannot undo what other files in the worker already evaluated — a file that needs one belongs in the `isolated` project (see `cs:testing.performance.worker_reuse`). `vi.resetModules()` is not cleanup: it clears the module registry, not the mock registry or the spies, so a hoisted mock still leaks into files sharing a transitively imported module.
 
 ### Do
 
@@ -347,7 +347,7 @@ export default defineConfig({
   test: {
     projects: [
       { test: { name: "reused", ...shared, isolate: false,
-          include: ["src/**/*.test.ts"],
+          include: ["src/**/*.test.{ts,tsx}"],
           exclude: [...configDefaults.exclude, ...MOCK_HEAVY_FILES] } },
       { test: { name: "isolated", ...shared, isolate: true, include: [...MOCK_HEAVY_FILES] } },
     ],
@@ -361,9 +361,12 @@ Prefer injection, then a restored spy, before the mock-heavy list.
 // (1) Injection — no module registry to fight over.
 render(<Clock now={() => new Date("2024-01-01")} />);
 
-// (2) Restored spy on the real module.
+// (2) Restored spy on the real module, created inside the test.
 afterEach(() => vi.restoreAllMocks());
-vi.spyOn(client, "fetch").mockRejectedValueOnce(new Error("boom"));
+it("retries on failure", async () => {
+  vi.spyOn(client, "fetch").mockRejectedValueOnce(new Error("boom"));
+  await expect(run()).resolves.toBeDefined();
+});
 ```
 
 ### Don't
@@ -374,7 +377,7 @@ Put test options at the root of a projects config on vitest 5.
 // the root include silently reaches every project.
 export default defineConfig({
   test: {
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/*.test.{ts,tsx}"],
     projects: [{ test: { name: "isolated", isolate: true } }],
   },
 });
