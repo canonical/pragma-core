@@ -15,7 +15,7 @@ Standards documentation generated from the code-standards ontology.
 - [Storybook](./storybook.md) (11)
 - [Styling](./styling.md) (4)
 - [Svelte](./svelte.md) (15)
-- [Testing](./testing.md) (14)
+- [Testing](./testing.md) (13)
   - Coverage
   - Integration Testing
   - Regression Testing

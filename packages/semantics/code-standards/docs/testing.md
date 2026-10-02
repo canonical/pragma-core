@@ -373,31 +373,6 @@ Accept a green run as proof, or judge a failure from one run under external load
 
 ---
 
-## Cap test workers explicitly
-
-**Identifier:** `cs:testing.performance.worker_caps`
-
-Every vitest config sets `maxWorkers` explicitly. In a monorepo whose test command fans out across packages, the worst case is the runner's package concurrency multiplied by each package's cap — an unset cap defaults to every core. `"50%"` bounds the fan-out without costing wall clock; all projects in a config share the same cap so vitest schedules them in one group. Cap the package configs, never the runner (lerna.json).
-
-### Do
-
-Set the same cap in every project of the config.
-```typescript
-// vitest.config.ts — every project shares the cap.
-const SHARED = { maxWorkers: "50%" };
-// Worst case on a 16-core host with 16-way runner concurrency: 128, not 256.
-```
-
-### Don't
-
-Leave maxWorkers unset, or cap the runner instead of the workers.
-```typescript
-// Bad: every core, multiplied by every package testing at once.
-export default defineConfig({ test: { globals: true } });
-```
-
----
-
 ## Reuse workers behind a hoisted-mock split
 
 **Identifier:** `cs:testing.performance.worker_reuse`

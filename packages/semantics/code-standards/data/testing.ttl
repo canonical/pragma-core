@@ -574,29 +574,6 @@ export default defineConfig({ test: { environment: "jsdom" } });
         """
     ] .
 
-# Worker Caps Standard
-cs:testing.performance.worker_caps a cs:CodeStandard ;
-    rdfs:label "Cap test workers explicitly"@en ;
-    cs:hasCategory cs:testing.performance ;
-    cs:description """Every vitest config sets `maxWorkers` explicitly. In a monorepo whose test command fans out across packages, the worst case is the runner's package concurrency multiplied by each package's cap — an unset cap defaults to every core. `"50%"` bounds the fan-out without costing wall clock; all projects in a config share the same cap so vitest schedules them in one group. Cap the package configs, never the runner (lerna.json).""" ;
-    cs:do [
-        cs:description "Set the same cap in every project of the config." ;
-        cs:language "typescript" ;
-        cs:code """
-// vitest.config.ts — every project shares the cap.
-const SHARED = { maxWorkers: "50%" };
-// Worst case on a 16-core host with 16-way runner concurrency: 128, not 256.
-        """
-    ] ;
-    cs:dont [
-        cs:description "Leave maxWorkers unset, or cap the runner instead of the workers." ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: every core, multiplied by every package testing at once.
-export default defineConfig({ test: { globals: true } });
-        """
-    ] .
-
 # Verification Protocol Standard
 cs:testing.performance.verification_protocol a cs:CodeStandard ;
     rdfs:label "Verify a reuse change against a baseline"@en ;
