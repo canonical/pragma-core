@@ -42,7 +42,7 @@
     "catalogue": "bun run src/catalogue.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.14",
+    "@biomejs/biome": "2.5.15",
     "@canonical/biome-config": "^0.43.0",
     "@canonical/design-tokens": "^0.43.0",
     "@canonical/typescript-config": "^0.43.0",
