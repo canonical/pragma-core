@@ -72,26 +72,37 @@ afterAll(() => {
 
 describe("graphpack round-trip (PROTECTED)", () => {
   it("builds the five artifact files and reuses a cached pack", async () => {
-    const result = await build([{ path: "a.ttl", content: TTL }]);
-    expect(result.reused).toBe(false);
-    for (const file of [
-      DATA_FILE,
-      SCHEMA_FILE,
-      INDEX_FILE,
-      STORIES_FILE,
-      MANIFEST_FILE,
-    ]) {
-      expect(existsSync(join(result.dir, file))).toBe(true);
-    }
-    // Written even when the packages ship none — an OPTIONAL artifact would put
-    // the same condition in all three modules that name the set, which is how a
-    // pack ends up claiming stories its directory does not hold.
-    expect(readFileSync(join(result.dir, STORIES_FILE), "utf-8")).toBe("[]");
+    // Cell-private cache: this cell asserts the MISS branch, which any earlier
+    // build of the same fixture — here or in a file sharing this worker —
+    // would have turned into a hit.
+    const cellCache = mkdtempSync(join(tmpdir(), "pragma-graphpack-cell-"));
+    const cellCacheHome = process.env.XDG_CACHE_HOME;
+    process.env.XDG_CACHE_HOME = cellCache;
+    try {
+      const result = await build([{ path: "a.ttl", content: TTL }]);
+      expect(result.reused).toBe(false);
+      for (const file of [
+        DATA_FILE,
+        SCHEMA_FILE,
+        INDEX_FILE,
+        STORIES_FILE,
+        MANIFEST_FILE,
+      ]) {
+        expect(existsSync(join(result.dir, file))).toBe(true);
+      }
+      // Written even when the packages ship none — an OPTIONAL artifact would put
+      // the same condition in all three modules that name the set, which is how a
+      // pack ends up claiming stories its directory does not hold.
+      expect(readFileSync(join(result.dir, STORIES_FILE), "utf-8")).toBe("[]");
 
-    // A second build over identical inputs is a pure cache hit — no rebuild.
-    const again = await build([{ path: "a.ttl", content: TTL }]);
-    expect(again.reused).toBe(true);
-    expect(again.contentHash).toBe(result.contentHash);
+      // A second build over identical inputs is a pure cache hit — no rebuild.
+      const again = await build([{ path: "a.ttl", content: TTL }]);
+      expect(again.reused).toBe(true);
+      expect(again.contentHash).toBe(result.contentHash);
+    } finally {
+      process.env.XDG_CACHE_HOME = cellCacheHome;
+      rmSync(cellCache, { recursive: true, force: true });
+    }
   });
 
   it("boots the pack: SPARQL data + an executable schema + the entity index", async () => {
@@ -143,15 +154,31 @@ describe("the committed embedded pack (PROTECTED)", () => {
     // only some of those yields a pack whose content hash claims more than its
     // directory holds — which the next build then reuses, silently dropping the
     // difference. Comparing the two directories catches that on the day it lands.
-    const built = await build([{ path: "a.ttl", content: TTL }]);
-    expect(readdirSync(await materializeEmbeddedPack()).sort()).toEqual(
-      readdirSync(built.dir).sort(),
+    //
+    // The cache is forced COLD first: the run's shared cache is seeded with
+    // the embedded pack before any worker starts (see
+    // testing/sharedCacheSeed.globalSetup.ts), so an ordinary call takes the
+    // warm branch and writes nothing. This cell is the one place the MISS
+    // branch — import the payload, write the files, rename into place — runs
+    // under coverage, and the comparison is only honest against what THIS
+    // materialisation wrote.
+    const savedCacheHome = process.env.XDG_CACHE_HOME;
+    process.env.XDG_CACHE_HOME = mkdtempSync(
+      join(tmpdir(), "pragma-embed-cold-"),
     );
+    try {
+      const built = await build([{ path: "a.ttl", content: TTL }]);
+      expect(readdirSync(await materializeEmbeddedPack()).sort()).toEqual(
+        readdirSync(built.dir).sort(),
+      );
+    } finally {
+      process.env.XDG_CACHE_HOME = savedCacheHome;
+    }
     // 60s, not the 5s default. This test does real work twice: it BUILDS a
-    // pack from source, and it materialises the embedded one — which on a cold
-    // cache takes the miss branch and imports the multi-megabyte payload. Both
-    // costs grow with the pack, and the pack grows whenever a source is added.
-    // A default that a pack size can outgrow turns a real assertion into an
+    // pack from source, and it materialises the embedded one — which takes
+    // the miss branch and imports the multi-megabyte payload. Both costs grow
+    // with the pack, and the pack grows whenever a source is added. A default
+    // that a pack size can outgrow turns a real assertion into an
     // intermittent one.
   }, 60_000);
 
@@ -266,23 +293,35 @@ describe("graphpack carried stories (PROTECTED)", () => {
     // record used to be cast straight through and reported as
     // `Ignored story undefined: …` — a diagnostic naming no file, repeated on
     // every command. Records are checked, so a corrupt entry simply is not one.
-    const { dir } = await build([{ path: "a.ttl", content: TTL }], [STORY]);
-    writeFileSync(
-      join(dir, STORIES_FILE),
-      JSON.stringify([
-        1,
-        null,
-        { source: "x" },
-        { source: 1, content: 2 },
-        {
-          source: STORY.path,
-          content: STORY.content,
-        },
-      ]),
-    );
-    expect(activeStories({ kind: "pack", dir, contentHash: "z" })).toEqual([
-      { source: STORY.path, content: STORY.content },
-    ]);
+    //
+    // Cell-private cache: this cell WRITES garbage into `stories.json`, and a
+    // pack wrecked that way is still reusable by content hash — the wreck dies
+    // with the cell instead of poisoning the next one to build this pack.
+    const cellCache = mkdtempSync(join(tmpdir(), "pragma-graphpack-cell-"));
+    const cellCacheHome = process.env.XDG_CACHE_HOME;
+    process.env.XDG_CACHE_HOME = cellCache;
+    try {
+      const { dir } = await build([{ path: "a.ttl", content: TTL }], [STORY]);
+      writeFileSync(
+        join(dir, STORIES_FILE),
+        JSON.stringify([
+          1,
+          null,
+          { source: "x" },
+          { source: 1, content: 2 },
+          {
+            source: STORY.path,
+            content: STORY.content,
+          },
+        ]),
+      );
+      expect(activeStories({ kind: "pack", dir, contentHash: "z" })).toEqual([
+        { source: STORY.path, content: STORY.content },
+      ]);
+    } finally {
+      process.env.XDG_CACHE_HOME = cellCacheHome;
+      rmSync(cellCache, { recursive: true, force: true });
+    }
   });
 });
 

@@ -20,11 +20,17 @@
  */
 
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readdirSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(here, "../..");
@@ -33,7 +39,18 @@ const summonBin = join(packageRoot, "src/bin.tsx");
 const taskDist = join(repoRoot, "shared/task/dist/esm/index.js");
 const coreDist = join(repoRoot, "summon/core/dist/esm/index.js");
 
-const freshCwd = (): string => mkdtempSync(join(tmpdir(), "summon-inter-"));
+// Every temp dir this file creates, removed after the run.
+const tempRoots: string[] = [];
+const tempDir = (prefix: string): string => {
+  const dir = mkdtempSync(join(tmpdir(), prefix));
+  tempRoots.push(dir);
+  return dir;
+};
+afterAll(() => {
+  for (const dir of tempRoots) rmSync(dir, { recursive: true, force: true });
+});
+
+const freshCwd = (): string => tempDir("summon-inter-");
 
 /**
  * A fixture generator tree served via `--generators`: one `gadget` generator
@@ -41,7 +58,7 @@ const freshCwd = (): string => mkdtempSync(join(tmpdir(), "summon-inter-"));
  * shapes the builtin generators (all-defaulted) cannot exercise.
  */
 function writeFixtureGenerators(): string {
-  const dir = mkdtempSync(join(tmpdir(), "summon-fixture-gen-"));
+  const dir = tempDir("summon-fixture-gen-");
   mkdirSync(join(dir, "gadget"));
   writeFileSync(
     join(dir, "gadget", "index.js"),

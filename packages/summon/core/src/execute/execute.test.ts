@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -17,7 +17,7 @@ import {
   writeFile,
 } from "@canonical/task";
 import { runTask } from "@canonical/task/node";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import autoPrompt from "../prompt/autoPrompt.js";
 import type { PromptEffect, PromptHandler } from "../prompt/types.js";
 import runGeneratorTask from "../run/runGeneratorTask.js";
@@ -29,6 +29,17 @@ import execute, {
   invalidAnswersError,
   isInvalidAnswersError,
 } from "./execute.js";
+
+// Every temp dir this file creates, removed after the run.
+const tempRoots: string[] = [];
+const tempDir = (prefix: string): string => {
+  const dir = mkdtempSync(join(tmpdir(), prefix));
+  tempRoots.push(dir);
+  return dir;
+};
+afterAll(() => {
+  for (const dir of tempRoots) rmSync(dir, { recursive: true, force: true });
+});
 
 const fixture: GeneratorDefinition = {
   meta: { name: "fix", displayName: "fix", description: "d", version: "1.0.0" },
@@ -62,7 +73,7 @@ describe("execute — the summon↔pragma seam", () => {
   });
 
   it("performs the generation for real, honouring provided params", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "exec-"));
+    const dir = tempDir("exec-");
     const params = { path: "out.txt", flavor: "b" };
     const result = await runGeneratorTask(
       execute(fixture, { prompt: autoPrompt(params), params }),
@@ -237,7 +248,7 @@ describe("execute — generate() re-interpretation parity (no single-use gen() u
   // pragma's create/setup generators compose with re-runnable combinators
   // (sequence_/when), never a single-use gen(). These pin that invariant.
   it("interprets a generate() result twice (dryRun then real) with identical effects", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "gen-parity-"));
+    const dir = tempDir("gen-parity-");
     const answers = { path: "out.txt", flavor: "a" };
     const built = fixture.generate(answers);
 
@@ -344,7 +355,7 @@ describe("execute — the seam task itself is re-interpretable", () => {
           yield* $(writeFile("second.txt", "two\n"));
         }),
     };
-    const dir = mkdtempSync(join(tmpdir(), "execute-gen-"));
+    const dir = tempDir("execute-gen-");
 
     await runGeneratorTask(
       execute(genFixture, {
