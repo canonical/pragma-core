@@ -454,11 +454,11 @@ src/testing/regression/bugfix.test.ts
 cs:testing.performance.worker_reuse a cs:CodeStandard ;
     rdfs:label "Split worker-reuse suites behind a hoisted-mock list"@en ;
     cs:hasCategory cs:testing.performance ;
-    cs:description """Suites without per-file isolation needs split into two projects from ONE mock-heavy list — `reused` (`isolate: false`) excludes the list, `isolated` includes exactly it: a hoisted `vi.mock` cannot replace a module another file in the shared worker already evaluated. The one list guarantees exact membership; a guard test fails the run when a hoisting file is missing from it or an entry stops resolving.
+    cs:description """Suites without per-file isolation needs split into two projects from ONE mock-heavy list — `reused` (`isolate: false`) excludes the list, `isolated` includes exactly it — a hoisted `vi.mock` cannot replace a module another file in the shared worker already evaluated. The list lives in one module both projects and the guard import; membership is exact by construction, and the guard fails the run when a hoisting file is missing from it or an entry stops resolving.
 
-A file may run in `reused` only if it does none of: hoisted `vi.mock`/`vi.hoisted`; unrestored `vi.stubGlobal`/`vi.stubEnv`; module-level mutable state; prototype patching; `process` listeners; unrestored fake timers; leftover DOM/storage state. To qualify one, prefer in order: injection or pure functions, a restored `vi.spyOn`, the list. Treat `vi.doMock` as isolated unless nothing else imports the mocked module's consumers; a file mixing mock-heavy and clean tests splits into `.shared`/`.isolated` siblings.
+A file may run in `reused` only if it does none of: hoisted `vi.mock`/`vi.hoisted`; unrestored `vi.stubGlobal`/`vi.stubEnv`; mutable state in a source or helper module (singletons, caches, registries) the file mutates or depends on; prototype patching; `process` listeners; unrestored fake timers; leftover DOM/storage state. To qualify one, prefer in order: injection or pure functions, a restored `vi.spyOn`, the list. Treat `vi.doMock` as isolated — proving no other file imports the mocked module is impractical; a file mixing mock-heavy and clean tests splits into `.shared`/`.isolated` siblings.
 
-On vitest 5, no root test options: inline projects inherit them and concatenate root arrays. A spawn-heavy suite's suite-wide `testTimeout` clears its helper's kill budget. A failure that appears only under file-order shuffling is a leak, not a flake — hunt the state, don't rerun.""" ;
+On vitest 5, no root test options: inline projects inherit them and concatenate root arrays. A suite whose tests spawn subprocesses sets a suite-wide `testTimeout` above the spawn helper's kill timeout, so a slow spawn fails with the helper's diagnosis, not a bare clock. A failure that appears only under file-order shuffling is a leak, not a flake — hunt the state, don't rerun.""" ;
     cs:do [
         cs:description "Define both projects from one exported list; keep only coverage (a root-level option) at the root." ;
         cs:language "typescript" ;
@@ -466,7 +466,13 @@ On vitest 5, no root test options: inline projects inherit them and concatenate 
 // src/testing/mockHeavyFiles.ts — one list drives BOTH projects.
 export const MOCK_HEAVY_FILES = ["src/store.test.ts"] as const;
 
-// vitest.config.ts — shared options spread into both projects.
+// vitest.config.ts
+import { configDefaults, defineConfig } from "vitest/config";
+import { MOCK_HEAVY_FILES } from "./src/testing/mockHeavyFiles.js";
+
+// Options every project shares — the suite-wide timeout lives here.
+const shared = { globals: true, testTimeout: 25_000 };
+
 export default defineConfig({
   test: {
     projects: [
@@ -515,7 +521,7 @@ vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() })); // hoisted
 it("reads the flag", () => {
   vi.stubEnv("PRAGMA_COMPLETE_DEBUG", "1"); // never restored
 });
-const cache = new Map(); // module-level mutable state
+settings.theme = "dark"; // mutates a source-module singleton
         """
     ] .
 
@@ -523,7 +529,7 @@ const cache = new Map(); // module-level mutable state
 cs:testing.performance.run_hygiene a cs:CodeStandard ;
     rdfs:label "Clean up what a test creates"@en ;
     cs:hasCategory cs:testing.performance ;
-    cs:description """A test file leaves the run as it found it: every temp directory it creates is swept in `afterAll` (or lives under a run-level temp root), and mocks and stubs are restored after use. `vi.resetModules()` is not mock cleanup — it clears the module registry, not the mock registry, so under `isolate: false` a hoisted mock still leaks into files sharing a transitively imported module. Mock cleanup is `vi.restoreAllMocks()`, `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()`, or per-file isolation.""" ;
+    cs:description """What keeps `isolate: false` safe, not just tidy: a test file leaves the run as it found it — temp directories swept in `afterAll` (or under a run-level temp root), and the file's own spies and stubs restored (`vi.restoreAllMocks()` restores spies; `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()` unstub). A hoisted module mock cannot be undone from inside a shared worker — a file that needs one belongs in `isolated`. `vi.resetModules()` is neither: it clears the module registry, not the mock registry or the spies, so a hoisted mock still leaks into files sharing a transitively imported module.""" ;
     cs:do [
         cs:description "Register what a file creates and sweep it in afterAll." ;
         cs:language "typescript" ;
