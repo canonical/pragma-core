@@ -286,37 +286,6 @@ export default defineConfig({ test: { environment: "jsdom" } });
 
 ---
 
-## Classify files for worker reuse in the mock preference order
-
-**Identifier:** `cs:testing.performance.isolation_classification`
-
-A file may run in `reused` only if it does none of: hoisted `vi.mock`/`vi.hoisted`; unrestored `vi.stubGlobal`/`vi.stubEnv`; module-level mutable state; prototype patching; `process` listeners; unrestored fake timers; DOM or storage state left behind. To qualify an otherwise-disqualified file, use in order: dependency injection or pure functions; a `vi.spyOn` on the real module, restored after each test; otherwise the mock-heavy list. Treat `vi.doMock` as isolated unless nothing else imports the mocked module's consumers. A file mixing mock-heavy and clean tests splits into `.shared`/`.isolated` siblings. A shared setup file restores mocks, stubs, timers and globals after every test.
-
-### Do
-
-Prefer injection, then a restored spy, before the mock-heavy list.
-```typescript
-// (1) Injection — no module registry to fight over.
-render(<Clock now={() => new Date("2024-01-01")} />);
-
-// (2) Restored spy on the real module.
-afterEach(() => vi.restoreAllMocks());
-vi.spyOn(client, "fetch").mockRejectedValueOnce(new Error("boom"));
-```
-
-### Don't
-
-Leave a hoisted mock or an unrestored stub in a file that runs on a shared worker.
-```typescript
-// Bad: both leak to the next file in the worker.
-vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() }));
-it("reads the flag", () => {
-  vi.stubEnv("PRAGMA_COMPLETE_DEBUG", "1"); // never restored
-});
-```
-
----
-
 ## Clean up what a test creates
 
 **Identifier:** `cs:testing.performance.run_hygiene`
@@ -350,38 +319,15 @@ afterEach(() => vi.resetModules());
 
 ---
 
-## Verify a reuse change against a baseline
-
-**Identifier:** `cs:testing.performance.verification_protocol`
-
-A passing run is not proof. Measure wall clock, peak memory, worker count, and test and coverage numbers before and after. Confirm membership: every file in exactly one project, union = all files, overlap = none. Run the reuse project shuffled on two seeds — a file whose outcome depends on file order has a leak, not a flake. Confirm per-file environment overrides beat CLI flags. Re-run on a quiet host before judging a failure: only one that survives a quiet rerun is real.
-
-### Do
-
-Run the protocol before merging the change.
-```bash
-/usr/bin/time -v vitest run --coverage      # before AND after
-vitest list --filesOnly --project reused    # union = all files, overlap = none
-vitest run --project reused --sequence.shuffle --sequence.seed=101
-vitest run --project reused --sequence.shuffle --sequence.seed=202
-vitest run --environment happy-dom <jsdom-file>  # the docblock must win
-```
-
-### Don't
-
-Accept a green run as proof, or judge a failure from one run under external load.
-```typescript
-// Bad: it passed, so the split is safe — no membership, shuffle or
-// before/after memory comparison was made.
-```
-
----
-
-## Reuse workers behind a hoisted-mock split
+## Split worker-reuse suites behind a hoisted-mock list
 
 **Identifier:** `cs:testing.performance.worker_reuse`
 
-Suites without per-file isolation needs split into two projects driven by ONE mock-heavy list: a `reused` project (`isolate: false`) excluding the list, an `isolated` project including exactly it — a hoisted `vi.mock` cannot replace a module another file in the shared worker already evaluated. The list is the single source for both projects; a guard test fails the run when a hoisting file is missing from it or an entry stops resolving. Spawn-heavy suites set a suite-wide `testTimeout` above the helper's kill budget. On vitest 5 keep no root test options: inline projects inherit them and concatenate root arrays.
+Suites without per-file isolation needs split into two projects from ONE mock-heavy list — `reused` (`isolate: false`) excludes the list, `isolated` includes exactly it: a hoisted `vi.mock` cannot replace a module another file in the shared worker already evaluated. The one list guarantees exact membership; a guard test fails the run when a hoisting file is missing from it or an entry stops resolving.
+
+A file may run in `reused` only if it does none of: hoisted `vi.mock`/`vi.hoisted`; unrestored `vi.stubGlobal`/`vi.stubEnv`; module-level mutable state; prototype patching; `process` listeners; unrestored fake timers; leftover DOM/storage state. To qualify one, prefer in order: injection or pure functions, a restored `vi.spyOn`, the list. Treat `vi.doMock` as isolated unless nothing else imports the mocked module's consumers; a file mixing mock-heavy and clean tests splits into `.shared`/`.isolated` siblings.
+
+On vitest 5, no root test options: inline projects inherit them and concatenate root arrays. A spawn-heavy suite's suite-wide `testTimeout` clears its helper's kill budget. A failure that appears only under file-order shuffling is a leak, not a flake — hunt the state, don't rerun.
 
 ### Do
 
@@ -390,7 +336,7 @@ Define both projects from one exported list; keep only coverage (a root-level op
 // src/testing/mockHeavyFiles.ts — one list drives BOTH projects.
 export const MOCK_HEAVY_FILES = ["src/store.test.ts"] as const;
 
-// vitest.config.ts
+// vitest.config.ts — shared options spread into both projects.
 export default defineConfig({
   test: {
     projects: [
@@ -402,6 +348,16 @@ export default defineConfig({
     coverage: { provider: "v8" }, // root-level: merges both projects
   },
 });
+```
+
+Prefer injection, then a restored spy, before the mock-heavy list.
+```typescript
+// (1) Injection — no module registry to fight over.
+render(<Clock now={() => new Date("2024-01-01")} />);
+
+// (2) Restored spy on the real module.
+afterEach(() => vi.restoreAllMocks());
+vi.spyOn(client, "fetch").mockRejectedValueOnce(new Error("boom"));
 ```
 
 ### Don't
@@ -416,6 +372,16 @@ export default defineConfig({
     projects: [{ test: { name: "isolated", isolate: true } }],
   },
 });
+```
+
+Leave a hoisted mock or an unrestored stub in a file that runs on a shared worker.
+```typescript
+// Bad: each of these disqualifies the file from `reused`.
+vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() })); // hoisted
+it("reads the flag", () => {
+  vi.stubEnv("PRAGMA_COMPLETE_DEBUG", "1"); // never restored
+});
+const cache = new Map(); // module-level mutable state
 ```
 
 ---
