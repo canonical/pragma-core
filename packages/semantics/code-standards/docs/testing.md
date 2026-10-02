@@ -317,29 +317,33 @@ it("reads the flag", () => {
 
 ---
 
-## vi.resetModules is not mock cleanup
+## Clean up what a test creates
 
-**Identifier:** `cs:testing.performance.reset_modules_not_mock_cleanup`
+**Identifier:** `cs:testing.performance.run_hygiene`
 
-`vi.resetModules()` clears the module registry — the next import re-evaluates the module — but not the mock registry: under `isolate: false` a mock still leaks into files that share a transitively imported module. Use it only for a fresh module instance in a file that mocks nothing. Mock cleanup is `vi.restoreAllMocks()` (spies), `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()` (stubs), or per-file isolation (hoisted mocks).
+A test file leaves the run as it found it: every temp directory it creates is swept in `afterAll` (or lives under a run-level temp root), and mocks and stubs are restored after use. `vi.resetModules()` is not mock cleanup — it clears the module registry, not the mock registry, so under `isolate: false` a hoisted mock still leaks into files sharing a transitively imported module. Mock cleanup is `vi.restoreAllMocks()`, `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()`, or per-file isolation.
 
 ### Do
 
-Use resetModules for a fresh module instance, and clean mocks separately.
+Register what a file creates and sweep it in afterAll.
 ```typescript
-it("renders without the suite's checking hooks", async () => {
-  vi.resetModules();
-  const fresh = await import("./call.js"); // fresh instance, no mocks
-  expect(fresh.renderCall({ verb: "widget list" })).toBeDefined();
+const tempRoots: string[] = [];
+const tempDir = (prefix: string): string => {
+  const dir = mkdtempSync(join(tmpdir(), prefix));
+  tempRoots.push(dir); // register for the sweep below
+  return dir;
+};
+afterAll(() => {
+  for (const dir of tempRoots) rmSync(dir, { recursive: true, force: true });
 });
 ```
 
 ### Don't
 
-Reach for resetModules to clean up a mock.
+Strand a temp dir, or reach for resetModules as mock cleanup.
 ```typescript
-// Bad: the hoisted mock of ./loadSession.js still answers the next file
-// that transitively imports it.
+// Bad: resetModules does not touch the mock registry — the hoisted mock of
+// ./loadSession.js still answers the next file that transitively imports it.
 vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() }));
 afterEach(() => vi.resetModules());
 ```
