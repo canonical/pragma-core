@@ -72,6 +72,7 @@
     "@canonical/biome-config": "^0.43.0",
     "@canonical/code-standards": "^0.43.0",
     "@canonical/design-system": "^0.43.0",
+    "@canonical/skills-pragma": "^0.43.0",
     "@canonical/summon": "^0.43.0",
     "@canonical/token-ontology": "^0.43.0",
     "@canonical/typescript-config": "^0.43.0",

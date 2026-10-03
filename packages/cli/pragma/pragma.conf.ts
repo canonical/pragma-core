@@ -2055,6 +2055,14 @@ Made by the Canonical Webteam — https://canonical.com.`,
         "git+https://github.com/canonical/pragma-core.git#main:packages/semantics/code-standards",
       stories: codeStandardsStories,
     },
+    // The skills people use through this CLI. Skills only, no graph data:
+    // the package has no `definitions/` or `data/`, so it adds nothing to the
+    // store, and `sources update` installs its `skills/*`.
+    {
+      name: "@canonical/skills-pragma",
+      source:
+        "git+https://github.com/canonical/pragma-core.git#main:packages/skills/pragma",
+    },
     // The implementation graph: ds:ImplementationLibrary / ds:ImplementationObject
     // nodes collected from `@implements` annotations across the component
     // packages of canonical/pragma-web (regenerated each release into that

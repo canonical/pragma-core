@@ -161,7 +161,6 @@ code-standards/
 │   ├── tsdoc.ttl
 │   └── turtle.ttl
 ├── docs/
-├── skills/
 └── src/scripts/generate-docs.ts
 ```
 

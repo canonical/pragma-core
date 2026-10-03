@@ -322,7 +322,6 @@ design-system/
 │   ├── sites/                # Sites tier
 │   └── ...                   # Other tiers
 ├── specs/                    # Drafted block specs — not read by build or sync
-├── skills/                   # Agent skills (installed via pragma sources update)
 ├── src/                      # Build, sync, and collector source (TypeScript)
 ├── examples/                 # Example files (sync target projection)
 └── README.md                 # This file

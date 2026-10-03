@@ -10,7 +10,7 @@ import type { SkillLookup } from "./verbs.js";
 
 /** Empty-state guidance (U5) — where skills come from now that packs ship them. */
 function describeEmpty(surface: Surface): string {
-  return `No skills found.\nSkills come from design-system packs — add one to the project config's packs, build the store, then link the skills. ${renderNextStep(BUILD_STORE_CALL, surface)} ${renderNextStep(LINK_SKILLS_CALL, surface)}`;
+  return `No skills found.\nSkills come from packs — add one to the project config's packs, build the store, then link the skills. ${renderNextStep(BUILD_STORE_CALL, surface)} ${renderNextStep(LINK_SKILLS_CALL, surface)}`;
 }
 
 export const skillListFormatters: Formatters<DiscoveredSkill[]> = {

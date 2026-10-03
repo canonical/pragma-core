@@ -113,8 +113,8 @@ const manifestOutPath = join(embeddedDir, "pack.manifest.generated.ts");
  * writes has to live where git holds it — exactly as `pack.generated.ts` does.
  * `src/` is wrong because `tsc` copies no non-TS file into `dist/`, and because
  * biome's include list covers everything under `src`, which would start linting
- * whatever JSON an upstream skill happens to ship. The package root is the same place a design-system
- * pack puts its own `skills/`, which is the layout this is a snapshot OF.
+ * whatever JSON an upstream skill happens to ship. The package root is the same
+ * place a pack puts its own `skills/`, which is the layout this is a snapshot OF.
  * `package.json`'s `files` allowlists the directory by name.
  */
 const skillsOutDir = join(packageRoot, "bundled-skills");
@@ -165,8 +165,8 @@ function treeBytes(dir: string): number {
  * Copy every resolved pack's `skills/*` into the committed `bundled-skills/`
  * root, replacing whatever was there.
  *
- * ALL FOUR DECLARED PACKS contribute, for the same reason the graph snapshot
- * takes all four: the packs are the distribution's declared content, and a
+ * EVERY DECLARED PACK contributes, for the same reason the graph snapshot
+ * takes every one: the packs are the distribution's declared content, and a
  * subset would mean the shipped skills and the shipped graph disagreed about
  * which packs this release is. (`@canonical/anatomy-dsl` resolves through
  * {@link SOURCE_OVERRIDES} from `node_modules` here, so its skills — if it ever

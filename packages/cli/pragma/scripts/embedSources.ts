@@ -38,6 +38,7 @@ export const SOURCE_OVERRIDES: Readonly<Record<string, PackDeclaration>> = {
   // rather than cloning.
   "@canonical/design-system": { name: "@canonical/design-system" },
   "@canonical/code-standards": { name: "@canonical/code-standards" },
+  "@canonical/skills-pragma": { name: "@canonical/skills-pragma" },
 };
 
 /**

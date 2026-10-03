@@ -69,11 +69,11 @@ modelling convention is what is at issue — a pseudo-element drawn by the style
 modifier family a component supports — this SKILL.md is the authority, and it says so
 at each of those places. The authored corpus follows this file.
 
-**And this file, in the design-system repository, is the authority over the copy
-`pragma skill lookup anatomy-author` prints.** That copy is bundled into a pragma
-release and lags the repository until the next one, so a sentence you find there and
-cannot find here is old text, not a second opinion. Read the repository file when the
-two differ.
+**And this file, `packages/skills/pragma/skills/anatomy-author/SKILL.md` in
+canonical/pragma-core, is the authority over the copy `pragma skill lookup anatomy-author`
+prints.** That copy is bundled into a pragma release and lags the repository until the
+next one, so a sentence you find there and cannot find here is old text, not a second
+opinion. Read the repository file when the two differ.
 
 ## Opening move: ask, or offer the tutorial
 
@@ -1923,7 +1923,7 @@ If this skill leads somewhere broken — a command that errors, guidance that
 contradicts what the live system answers, a gap the flow cannot cover — you are not
 stuck:
 
-- Raise an issue in the pragma repo: https://github.com/canonical/pragma/issues —
+- Raise an issue in the pragma-core repo: https://github.com/canonical/pragma-core/issues —
   include the skill name, what was run, and expected vs. actual outcome.
 - Or contact the design-system team owners directly through your organization's
   professional messaging channels for assistance.

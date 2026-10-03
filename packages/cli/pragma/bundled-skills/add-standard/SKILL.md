@@ -221,16 +221,13 @@ Standards are organized by category in `data/`:
 code-standards/
 ├── definitions/
 │   └── CodeStandard.ttl    # Ontology schema
-├── data/
-│   ├── react.ttl           # React standards
-│   ├── css.ttl             # CSS standards
-│   ├── styling.ttl         # Styling standards
-│   ├── code.ttl            # General code standards
-│   ├── storybook.ttl       # Storybook standards
-│   └── icons.ttl           # Icon standards
-└── skills/
-    └── standards-guide/
-        └── SKILL.md
+└── data/
+    ├── react.ttl           # React standards
+    ├── css.ttl             # CSS standards
+    ├── styling.ttl         # Styling standards
+    ├── code.ttl            # General code standards
+    ├── storybook.ttl       # Storybook standards
+    └── icons.ttl           # Icon standards
 ```
 
 Add new standards to the file matching their category.

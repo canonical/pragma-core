@@ -139,7 +139,8 @@ export function classifyUnresolved(
  * `color/text/muted` and `shadow/card?` are retired; `color.text.muted` is a symbol
  * and `1 / -1` is a grid line, and neither matches. The parser refuses the notation
  * outright, which is what X16's `retired-slash-path` counts; the skill's own examples
- * are held to the same expression in `skill.tests.ts`.
+ * are held to the same expression in `@canonical/skills-pragma`'s
+ * `anatomy-author-examples.test.ts`.
  */
 export const RETIRED_PATH = /^[A-Za-z0-9-]+(\/[A-Za-z0-9-]+)+\??$/;
 

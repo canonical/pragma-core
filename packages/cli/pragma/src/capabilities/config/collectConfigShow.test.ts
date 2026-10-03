@@ -38,6 +38,7 @@ describe("config show payload", () => {
       "@canonical/anatomy-dsl",
       "@canonical/token-ontology",
       "@canonical/code-standards",
+      "@canonical/skills-pragma",
       "@canonical/ds-implementations",
     ]);
     for (const pack of data.config.packs ?? []) {

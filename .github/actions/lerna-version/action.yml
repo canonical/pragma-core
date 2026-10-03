@@ -65,10 +65,11 @@ runs:
       # nothing when the resolved upstream inputs are unchanged, so a release
       # with no upstream movement produces no diff.
       #
-      # UNCONDITIONAL here, unlike in pragma. The four packs that live in this
+      # UNCONDITIONAL here, unlike in pragma. The packs that live in this
       # repository are workspace members the bundler resolves from node_modules
-      # through SOURCE_OVERRIDES, and the fifth is a public repository, so there
-      # is nothing to authenticate and a real failure fails the release.
+      # through SOURCE_OVERRIDES, and the other, ds-implementations, is a public
+      # repository, so there is nothing to authenticate and a real failure fails
+      # the release.
     - name: Refresh the CLI embedded pack
       shell: bash
       run: ${{ github.action_path }}/refresh-pack.sh

@@ -315,11 +315,12 @@ pragma skill lookup anatomy-author
 ```
 
 **Read the repository's copy, not only the printed one, and prefer it where they
-differ.** `skills/anatomy-author/SKILL.md` in canonical/design-system is the authority;
-the copy `pragma skill lookup` prints is bundled into a pragma release and lags the
-repository until the next one. So a section this step names and the printout does not
-show is old text in the printout, not a section that is missing — open the repository
-file before concluding anything is absent.
+differ.** `packages/skills/pragma/skills/anatomy-author/SKILL.md` in
+canonical/pragma-core is the authority; the copy `pragma skill lookup` prints is
+bundled into a pragma release and lags the repository until the next one. So a
+section this step names and the printout does not show is old text in the printout,
+not a section that is missing — open the repository file before concluding anything
+is absent.
 
 The skill covers named and anonymous nodes, edges with cardinality, slot names, and
 CTI-inspired style keys; the full ANATOMY_DSL_SPEC ships beside it as
@@ -437,7 +438,7 @@ If this skill leads somewhere broken — a command that errors, guidance that
 contradicts what the live system answers, a gap the flow cannot cover — you are not
 stuck:
 
-- Raise an issue in the pragma repo: https://github.com/canonical/pragma/issues —
+- Raise an issue in the pragma-core repo: https://github.com/canonical/pragma-core/issues —
   include the skill name, what was run, and expected vs. actual outcome.
 - Or contact the design-system team owners directly through your organization's
   professional messaging channels for assistance.

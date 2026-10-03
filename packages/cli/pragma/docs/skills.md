@@ -1,6 +1,6 @@
 # Skills
 
-A *skill* is a `SKILL.md` file — a named, self-contained set of instructions an agent can load on demand. pragma discovers skills from the design-system packages and makes them available to both the CLI and any AI harness.
+A *skill* is a `SKILL.md` file — a named, self-contained set of instructions an agent can load on demand. pragma discovers skills from its packs and makes them available to both the CLI and any AI harness.
 
 ## Discover skills
 
