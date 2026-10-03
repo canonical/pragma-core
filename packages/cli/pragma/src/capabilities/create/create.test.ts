@@ -675,7 +675,7 @@ describe("projection fidelity — the committed surface IS the live generators (
       "name",
       "type",
       "description",
-      "withReact",
+      "framework",
       "withStorybook",
       "withCli",
       "withPrTemplate",
