@@ -64,7 +64,7 @@
     "commander": "^15.0.0",
     "graphql": "17.0.0-rc.0",
     "oxigraph": "^0.5.0",
-    "zod": "^3.25.0"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
