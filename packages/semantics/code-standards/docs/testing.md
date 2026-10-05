@@ -253,6 +253,148 @@ src/testing/regression/bugfix.test.ts
 
 ---
 
+# Test Performance
+
+> **Scope:** Targets TypeScript/JavaScript projects using vitest in a monorepo where many packages run tests at once.
+
+## happy-dom by default, jsdom per file
+
+**Identifier:** `cs:testing.performance.happy_dom_default`
+
+DOM suites default to happy-dom and pin the devDependency to an exact version — a caret resolved to one that broke lit's `adoptedStyleSheets`. A file that strictly needs jsdom keeps it with exactly `// @vitest-environment jsdom` on its first line; the docblock overrides the project environment and CLI flags. Typical strict needs: CSSOM style normalization, cookie-jar semantics, the matchMedia surface, `<details>`/`<summary>` toggling, `setSelectionRange` on an unfocused input.
+
+### Do
+
+Run the suite on happy-dom with an exact pin; keep jsdom per file.
+```typescript
+// vitest.config.ts — the suite default.
+export default defineConfig({ test: { environment: "happy-dom" } });
+// package.json — exact pin, not a caret: "happy-dom": "20.8.9"
+
+// Button.test.tsx — a file that strictly needs jsdom:
+// @vitest-environment jsdom
+import { render } from "@testing-library/react";
+```
+
+### Don't
+
+Keep the whole suite on jsdom because one file needs it, or float the version.
+```typescript
+// Bad: the whole suite pays jsdom's boot cost for one file's CSSOM assertion.
+export default defineConfig({ test: { environment: "jsdom" } });
+```
+
+---
+
+## Clean up what a test creates
+
+**Identifier:** `cs:testing.performance.run_hygiene`
+
+What keeps `isolate: false` safe, not just tidy: a test file leaves the run as it found it — temp directories swept in `afterAll` (or under a run-level temp root), and the file's own spies and stubs restored (`vi.restoreAllMocks()` restores spies; `vi.unstubAllEnvs()`/`vi.unstubAllGlobals()` unstub). A hoisted module mock cannot undo what other files in the worker already evaluated — a file that needs one belongs in the `isolated` project (see `cs:testing.performance.worker_reuse`). `vi.resetModules()` is not cleanup: it clears the module registry, not the mock registry or the spies, so a hoisted mock still leaks into files sharing a transitively imported module.
+
+### Do
+
+Register what a file creates and sweep it in afterAll.
+```typescript
+const tempRoots: string[] = [];
+const tempDir = (prefix: string): string => {
+  const dir = mkdtempSync(join(tmpdir(), prefix));
+  tempRoots.push(dir); // register for the sweep below
+  return dir;
+};
+afterAll(() => {
+  for (const dir of tempRoots) rmSync(dir, { recursive: true, force: true });
+});
+```
+
+### Don't
+
+Strand a temp dir, or reach for resetModules as mock cleanup.
+```typescript
+// Bad: resetModules does not touch the mock registry — the hoisted mock of
+// ./loadSession.js still answers the next file that transitively imports it.
+vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() }));
+afterEach(() => vi.resetModules());
+```
+
+---
+
+## Split worker-reuse suites behind a hoisted-mock list
+
+**Identifier:** `cs:testing.performance.worker_reuse`
+
+Suites without per-file isolation needs split into two projects from ONE mock-heavy list — `reused` (`isolate: false`) excludes the list, `isolated` includes exactly it — a hoisted `vi.mock` cannot replace a module another file in the shared worker already evaluated. The list lives in one module both projects and the guard import; membership is exact by construction, and the guard fails the run when a hoisting file is missing from it or an entry stops resolving.
+
+A file may run in `reused` only if it does none of: hoisted `vi.mock`/`vi.hoisted`; unrestored `vi.stubGlobal`/`vi.stubEnv`; mutable state in a source or helper module (singletons, caches, registries) the file mutates or depends on; prototype patching; `process` listeners; unrestored fake timers; leftover DOM/storage state. To qualify one, prefer in order: injection or pure functions, a restored `vi.spyOn`, the list. Treat `vi.doMock` as isolated — proving no other file imports the mocked module is impractical; a file mixing mock-heavy and clean tests splits into `.shared`/`.isolated` siblings.
+
+On vitest 5, no root test options: inline projects inherit them and concatenate root arrays. A suite whose tests spawn subprocesses sets a suite-wide `testTimeout` above the spawn helper's kill timeout, so a slow spawn fails with the helper's diagnosis, not a bare clock. A failure that appears only under file-order shuffling is a leak, not a flake — hunt the state, don't rerun.
+
+### Do
+
+Define both projects from one exported list; keep only coverage (a root-level option) at the root.
+```typescript
+// src/testing/mockHeavyFiles.ts — one list drives BOTH projects.
+export const MOCK_HEAVY_FILES = ["src/store.test.ts"] as const;
+
+// vitest.config.ts
+import { configDefaults, defineConfig } from "vitest/config";
+import { MOCK_HEAVY_FILES } from "./src/testing/mockHeavyFiles.js";
+
+// Options every project shares — the suite-wide timeout lives here.
+const shared = { globals: true, testTimeout: 25_000 };
+
+export default defineConfig({
+  test: {
+    projects: [
+      { test: { name: "reused", ...shared, isolate: false,
+          include: ["src/**/*.test.{ts,tsx}"],
+          exclude: [...configDefaults.exclude, ...MOCK_HEAVY_FILES] } },
+      { test: { name: "isolated", ...shared, isolate: true, include: [...MOCK_HEAVY_FILES] } },
+    ],
+    coverage: { provider: "v8" }, // root-level: merges both projects
+  },
+});
+```
+
+Prefer injection, then a restored spy, before the mock-heavy list.
+```typescript
+// (1) Injection — no module registry to fight over.
+render(<Clock now={() => new Date("2024-01-01")} />);
+
+// (2) Restored spy on the real module, created inside the test.
+afterEach(() => vi.restoreAllMocks());
+it("retries on failure", async () => {
+  vi.spyOn(client, "fetch").mockRejectedValueOnce(new Error("boom"));
+  await expect(run()).resolves.toBeDefined();
+});
+```
+
+### Don't
+
+Put test options at the root of a projects config on vitest 5.
+```typescript
+// Bad: inline projects INHERIT root options and CONCATENATE root arrays —
+// the root include silently reaches every project.
+export default defineConfig({
+  test: {
+    include: ["src/**/*.test.{ts,tsx}"],
+    projects: [{ test: { name: "isolated", isolate: true } }],
+  },
+});
+```
+
+Leave a hoisted mock or an unrestored stub in a file that runs on a shared worker.
+```typescript
+// Bad: each of these disqualifies the file from `reused`.
+vi.mock("./loadSession.js", () => ({ loadSession: vi.fn() })); // hoisted
+it("reads the flag", () => {
+  vi.stubEnv("PRAGMA_COMPLETE_DEBUG", "1"); // never restored
+});
+settings.theme = "dark"; // mutates a source-module singleton
+```
+
+---
+
 # Unit Testing
 
 > **Scope:** Targets TypeScript/JavaScript projects using vitest.
