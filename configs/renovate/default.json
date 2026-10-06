@@ -93,6 +93,19 @@
       ]
     },
     {
+      "description": "Bun patch entries are compatibility work that must be reviewed manually; a version bump without re-checking the patch can leave a stale patchedDependencies mapping behind",
+      "matchManagers": ["bun"],
+      "matchDepTypes": ["patchedDependencies"],
+      "automerge": false,
+      "prBodyNotes": [
+        "### Bun patch review — required before merge",
+        "This package is managed via `patchedDependencies`. Before approving:",
+        "- [ ] the patch still applies to the new version",
+        "- [ ] the patch file and the `patchedDependencies` entry are both still needed",
+        "- [ ] the lockfile resolves cleanly and no stale patch mapping remains"
+      ]
+    },
+    {
       "description": "One pull request per pragma-core release: its packages are published together at one version, so their updates land together and are reviewed rather than merged automatically",
       "matchSourceUrls": ["https://github.com/canonical/pragma-core"],
       "groupName": "pragma-core",
