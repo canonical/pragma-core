@@ -15,7 +15,7 @@ import type { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { runTask } from "@canonical/task/node";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { VERSION } from "../../constants.js";
 import type {
   ConfigLayers,
