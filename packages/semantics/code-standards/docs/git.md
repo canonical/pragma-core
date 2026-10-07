@@ -478,3 +478,31 @@ git tag -a v1.3.0 -m "v1.3.0"   # Was this a feat or fix? Let tooling decide.
 ```
 
 ---
+
+## Workflow logic in script files
+
+**Identifier:** `cs:git.workflow.script`
+
+A CI workflow step runs a script kept in its own file; it does not embed the script in the YAML. A file is linted, tested and run locally, has no YAML quoting or escaping hazards, is reused across workflows and is reviewed as code.
+
+### Do
+
+Call the script file from the step.
+```yaml
+- name: Compute the allowed scopes
+  run: bash .github/actions/pr-scopes/pr-scopes.sh
+```
+
+### Don't
+
+Embed the script in a `run: |` block.
+```yaml
+- name: Compute the allowed scopes
+  run: |
+    names="$(jq -r '.workspaces[]' package.json | xargs -I{} sh -c 'cat {}/package.json' | jq -r .name)"
+    echo "scopes<<EOF" >> "$GITHUB_OUTPUT"
+    echo "$names" >> "$GITHUB_OUTPUT"
+    echo "EOF" >> "$GITHUB_OUTPUT"
+```
+
+---
