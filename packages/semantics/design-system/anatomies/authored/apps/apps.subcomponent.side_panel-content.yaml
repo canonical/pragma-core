@@ -1,0 +1,41 @@
+---
+# Authored 2026-10-11 from @canonical/react-ds-app
+# src/lib/SidePanel/common/Content/styles.css on .ds.side-panel-content.
+# Supersedes the retired-notation cell the block carried.
+node:
+  uri: apps.subcomponent.side_panel-content
+  styles:
+    # Natural height by default: the footer follows the content, so its
+    # actions stay next to the text they refer to instead of being pushed to
+    # the bottom edge of a short panel. The `fill` prop opts into the space
+    # the header and footer leave (flex-grow: 1); a prop variant is not an
+    # interaction state, so the opt-in is a comment rather than a binding.
+    layout.flex.grow: 0
+    layout.flex.shrink: 1
+    layout.flex.basis: auto
+    # The scroll region, and the only one: the header and footer sit outside
+    # it in the panel's flex column, so they stay visible without sticky
+    # positioning. Block-axis only, and overscroll-behavior keeps the page
+    # behind from taking over once the pane bottoms out — no roster key
+    # models either refinement.
+    layout.overflow: auto
+    spacing.internal.block.start: dimension.200   # --side-panel-content-padding-block
+    spacing.internal.block.end: dimension.200     # --side-panel-content-padding-block
+    # Inline padding, not margin: the pane spans the full panel width so its
+    # scrollbar hugs the edge and the focus ring below reaches it, while the
+    # padding keeps the text clear. --side-panel-padding-inline, shared with
+    # the header and the footer.
+    spacing.internal.inline.start: dimension.300
+    spacing.internal.inline.end: dimension.300
+    # The pane is a tab stop so a keyboard user can scroll it. :focus-visible
+    # draws the ring inside the pane — the panel clips its overflow, so an
+    # outset ring would be cut off — and the offset is the width negated; the
+    # roster cannot spell the calc, so only the width and colour are bound.
+    appearance.outline.width@focus: dimension.stroke.thickness.large
+    appearance.outline.color@focus: color.focusRing
+  edges:
+    - node:
+        role: content
+      relation:
+        cardinality: "1"
+        slotName: default
