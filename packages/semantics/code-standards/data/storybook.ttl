@@ -505,3 +505,45 @@ export const TestCase1: Story = {  // Bad: Non-descriptive name
 };
     """
     ] .
+
+# Iframed Docs Previews for Container-Escaping Elements Standard
+cs:storybook.docs.iframe_overlay a cs:CodeStandard ;
+    rdfs:label "Iframe docs previews for container-escaping elements"@en ;
+    cs:hasCategory cs:storybook ;
+    cs:description "Stories that render container-escaping elements — top-layer dialogs and popovers, `position: fixed` elements or portalled content — must set `parameters.docs.story.inline` to `false` with an explicit `iframeHeight`, so the docs preview renders in its own iframe." ;
+    cs:do [
+        cs:description "Render container-escaping stories as iframed previews." ;
+        cs:language "typescript" ;
+        cs:code """
+const meta = {
+  title: "patterns/Modal",
+  component: Modal,
+  parameters: {
+    docs: {
+      story: {
+        inline: false,
+        iframeHeight: "480px",
+      },
+    },
+  },
+} satisfies Meta<typeof Modal>;
+    """
+    ] ;
+    cs:dont [
+        cs:description "Render container-escaping stories inline." ;
+        cs:language "typescript" ;
+        cs:code """
+const meta = {
+  title: "patterns/Modal",
+  component: Modal,
+  // Bad: the modal escapes into the docs page's top layer
+  parameters: {
+    docs: {
+      story: {
+        inline: true,
+      },
+    },
+  },
+} satisfies Meta<typeof Modal>;
+    """
+    ] .

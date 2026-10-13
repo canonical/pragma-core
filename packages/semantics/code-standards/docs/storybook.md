@@ -2,6 +2,50 @@
 
 Standards for storybook development.
 
+## Iframe docs previews for container-escaping elements
+
+**Identifier:** `cs:storybook.docs.iframe_overlay`
+
+Stories that render container-escaping elements — top-layer dialogs and popovers, `position: fixed` elements or portalled content — must set `parameters.docs.story.inline` to `false` with an explicit `iframeHeight`, so the docs preview renders in its own iframe.
+
+### Do
+
+Render container-escaping stories as iframed previews.
+```typescript
+const meta = {
+  title: "patterns/Modal",
+  component: Modal,
+  parameters: {
+    docs: {
+      story: {
+        inline: false,
+        iframeHeight: "480px",
+      },
+    },
+  },
+} satisfies Meta<typeof Modal>;
+```
+
+### Don't
+
+Render container-escaping stories inline.
+```typescript
+const meta = {
+  title: "patterns/Modal",
+  component: Modal,
+  // Bad: the modal escapes into the docs page's top layer
+  parameters: {
+    docs: {
+      story: {
+        inline: true,
+      },
+    },
+  },
+} satisfies Meta<typeof Modal>;
+```
+
+---
+
 ## Documentation from TSDoc
 
 **Identifier:** `cs:storybook.documentation.source`
