@@ -6,28 +6,15 @@ Standards for storybook development.
 
 **Identifier:** `cs:storybook.docs.iframe_overlay`
 
-Stories whose component escapes every containing box must render their docs previews in an iframe by setting `parameters.docs.story.inline` to `false` and giving the frame an explicit `iframeHeight`.
-
-Three mechanisms escape a container, and all qualify:
-1. The browser's top layer: a `<dialog>` opened with `showModal()` — or any element shown through the native `popover` attribute — renders in the document's top layer, which is above everything, sized to the viewport, and cannot be clipped or repositioned by any container.
-2. Viewport-anchored positioning: elements styled `position: fixed` (e.g. a panel docked to a viewport edge with `inset-block: 0`, or a menu positioned against its trigger) are sized and anchored against the viewport, not against the story's preview box.
-3. Portalled content: a menu or popup rendered through a portal into `document.body` leaves the preview's DOM subtree altogether — in an inline preview it lands in the docs page's document, positioned against it and free to overlap other previews. Portal and fixed positioning usually travel together, and either one alone is enough to qualify.
-
-Autodocs renders inline previews inside the docs page itself, so the viewport, the top layer and the body they share are the docs page's. With several open stories on one page, every overlay stacks on the same viewport or top layer at once — modals cover the docs page and each other, fixed panels all dock at the same edge of the page, and portalled menus land in the page's body. An iframe gives each story its own viewport, its own top layer and its own body, so each preview stays contained.
-
-The rule applies whenever the story renders the escaping element visibly — including stories that open the overlay on mount so the preview is a complete picture of the pattern. Components that merely overflow or scroll within their box do not qualify: iframing those needlessly costs an extra document per preview.
+Stories that render container-escaping elements — top-layer dialogs and popovers, `position: fixed` elements or portalled content — must set `parameters.docs.story.inline` to `false` with an explicit `iframeHeight`, so the docs preview renders in its own iframe.
 
 ### Do
 
-Serve container-escaping stories as iframed previews with an explicit height.
+Render container-escaping stories as iframed previews.
 ```typescript
 const meta = {
   title: "patterns/Modal",
-  component: Component,
-  // Docs previews render in an iframe: showModal() puts the dialog in the
-  // page's top layer, which escapes every container — inside an iframe the
-  // top layer is the preview window itself, so each story's open modal stays
-  // contained instead of stacking over the docs page.
+  component: Modal,
   parameters: {
     docs: {
       story: {
@@ -36,52 +23,17 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof Component>;
-
-// Same rule, different mechanism: a `position: fixed; inset-block: 0` panel
-// is as tall as the viewport it renders into — inside its own iframe that
-// viewport is the frame itself.
-const panelMeta = {
-  title: "components/SidePanel",
-  component: Component,
-  parameters: {
-    docs: {
-      story: {
-        inline: false,
-        iframeHeight: "30rem",
-      },
-    },
-  },
-} satisfies Meta<typeof Component>;
-
-// And again: the open menu is portalled and `position: fixed`, so it escapes
-// every container — inside an iframe the preview window is its own viewport
-// and the menu stays contained in its story.
-const menuMeta = {
-  title: "components/ContextualMenu",
-  component: Component,
-  parameters: {
-    docs: {
-      story: {
-        inline: false,
-        iframeHeight: "480px",
-      },
-    },
-  },
-} satisfies Meta<typeof Component>;
+} satisfies Meta<typeof Modal>;
 ```
 
 ### Don't
 
-Let a container-escaping story render inline in the docs page.
+Render container-escaping stories inline.
 ```typescript
 const meta = {
   title: "patterns/Modal",
-  component: Component,
-  // Bad: no iframed preview — every open modal in the docs page shares the
-  // page's top layer and stacks over the docs and over the other previews;
-  // a fixed panel would dock at the docs page's own edge, and a portalled
-  // menu would land in the docs page's body.
+  component: Modal,
+  // Bad: the modal escapes into the docs page's top layer
   parameters: {
     docs: {
       story: {
@@ -89,7 +41,7 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof Component>;
+} satisfies Meta<typeof Modal>;
 ```
 
 ---
