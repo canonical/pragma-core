@@ -103,7 +103,7 @@ function zodForParam(param: ParamSpec): z.ZodTypeAny {
  * @returns A zod raw shape keyed by param name.
  */
 export function buildZodSchema(params: readonly ParamSpec[]): z.ZodRawShape {
-  const shape: z.ZodRawShape = {};
+  const shape: Record<string, z.ZodRawShape[string]> = {};
   for (const param of params) {
     let field = zodForParam(param);
     if (param.doc) field = field.describe(param.doc);
@@ -335,7 +335,9 @@ function mutateHandler(verb: VerbSpec, runtime: PragmaRuntime) {
  * example and recovery against the schema an agent's call actually meets.
  */
 export function buildToolShape(verb: VerbSpec): z.ZodRawShape {
-  const shape = buildZodSchema(verb.params);
+  const shape: Record<string, z.ZodRawShape[string]> = {
+    ...buildZodSchema(verb.params),
+  };
   // A verb with progressive disclosure gains a `detail` enum param derived from
   // its DisclosureSpec (Risk2 — NO new VerbSpec field). The handler seeds
   // globalFlags.detail from it per call, so MCP and CLI share one resolveDetail.
