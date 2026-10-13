@@ -12,7 +12,7 @@ Standards documentation generated from the code-standards ontology.
 - [Packaging](./packaging.md) (8)
 - [React](./react.md) (16)
 - [Rust](./rust.md) (11)
-- [Storybook](./storybook.md) (11)
+- [Storybook](./storybook.md) (12)
 - [Styling](./styling.md) (4)
 - [Svelte](./svelte.md) (15)
 - [Testing](./testing.md) (8)
