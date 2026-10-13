@@ -81,31 +81,32 @@ feat/Add-Search           # Wrong: capitalized
 cs:git.commit.message a cs:CodeStandard ;
     rdfs:label "Conventional commit messages"@en ;
     cs:hasCategory cs:git ;
-    cs:description "Commits that land on the main branch must follow the Conventional Commits specification. The format is `type(scope): description` where the type communicates the nature of the change, the optional scope narrows it to a package or module, and the description completes the sentence 'this commit will...'. This enables automated changelog generation, semantic version bumping, and scannable git history." ;
+    cs:description "Commits on the main branch follow Conventional Commits: `type(scope): subject`. The subject is a third-person verb phrase. It states what the change does. The reviewer checks the diff against it. A change that needs more than one phrase is split." ;
     cs:do [
-        cs:description "Structure commit messages as `type(scope): description`." ;
+        cs:description "Structure commit messages as `type(scope): subject`." ;
         cs:code """
-feat(auth): add OAuth2 login flow
-fix(csv-export): handle UTF-8 BOM in output
-chore(deps): bump vitest to 3.2
-docs(api): document rate-limiting headers
-refactor(router): extract middleware chain
-test(auth): add integration tests for token refresh
-ci(deploy): add staging environment workflow
-perf(queries): add index for user lookup
+feat(auth): adds the OAuth2 login flow
+fix(csv-export): strips the UTF-8 BOM from the output
+chore(deps): bumps vitest to 3.2
+docs(api): documents the rate-limiting headers
+refactor(router): extracts the middleware chain into its own module
+test(auth): covers token refresh with integration tests
+ci(ci): adds a staging deployment workflow
+perf(queries): adds an index for user lookup
     """
     ] ;
     cs:do [
-        cs:description """Use imperative mood in the description — complete the sentence "this commit will...".""" ;
+        cs:description "Say what the change does. Give `fixes` and `refactors` their object." ;
         cs:code """
-feat(button): add loading state        # "this commit will add loading state"
-fix(form): prevent double submission   # "this commit will prevent double submission"
+feat(button): adds a loading state
+fix(form): prevents double submission on Enter
+refactor(router): refactors route matching into a lookup table
     """
     ] ;
     cs:do [
         cs:description "Add a body separated by a blank line for non-trivial changes, and a footer for breaking changes." ;
         cs:code """
-feat(api)!: change pagination response shape
+feat(api)!: renames the pagination response fields
 
 The `results` field is now `items` and `total` is replaced by `hasMore`.
 Clients must update their response handlers.
@@ -116,7 +117,7 @@ BREAKING CHANGE: pagination response fields renamed
     cs:do [
         cs:description "Keep the subject line under 72 characters." ;
         cs:code """
-feat(search): add fuzzy matching with configurable threshold
+feat(search): adds fuzzy matching with a configurable threshold
     """
     ] ;
     cs:dont [
@@ -128,11 +129,13 @@ update dependencies
     """
     ] ;
     cs:dont [
-        cs:description "Use past tense or non-imperative mood." ;
+        cs:description "Name an activity without a claim, list several things, or write a fragment." ;
         cs:code """
-feat(auth): added OAuth2 login       # Wrong: "added" → "add"
-fix(form): fixed double submit       # Wrong: "fixed" → "prevent double submission"
-feat(ui): adds loading spinner       # Wrong: "adds" → "add"
+feat(ui): improves the button                        # Wrong: says nothing about the change
+fix(form): fixes a bug                               # Wrong: names no defect
+feat(table): adds sorting, paging and a filter bar   # Wrong: a list; split the PR
+docs(api): rate-limiting headers                     # Wrong: noun fragment
+feat(auth): add OAuth2 login                         # Wrong: imperative, use "adds"
     """
     ] ;
     cs:dont [
@@ -147,7 +150,7 @@ refactor: clean up
     cs:dont [
         cs:description "Exceed 72 characters in the subject line." ;
         cs:code """
-feat(search): add fuzzy matching with configurable threshold and fallback to exact match when score is below minimum
+feat(search): adds fuzzy matching with a configurable threshold and falls back to exact match when the score is below the minimum
     """
     ] .
 
@@ -155,50 +158,50 @@ feat(search): add fuzzy matching with configurable threshold and fallback to exa
 cs:git.commit.scope a cs:CodeStandard ;
     rdfs:label "Scope commits by package"@en ;
     cs:hasCategory cs:git ;
-    cs:description "The scope in a conventional commit should identify the package, module, or domain affected by the change. In a monorepo, the scope is typically the package name (without the namespace prefix). In a single-package repo, it is the module or feature area. Consistent scopes make `git log --grep` useful and enable per-package changelogs." ;
+    cs:description "The scope is required: the workspace package name without `@canonical/`, or `deps`, `monorepo`, `constitution` or `ci` for a change that belongs to no package. Comma-separate scopes only when a change cannot be split." ;
     cs:do [
         cs:description "Use the package name (without namespace) as scope in a monorepo." ;
         cs:code """
-feat(button): add outline variant
-fix(form-utils): handle empty field arrays
-chore(cli): update bin entry point
+feat(button): adds an outline variant
+fix(form-utils): accepts empty field arrays
+chore(cli): renames the bin entry point to pragma
     """
     ] ;
     cs:do [
         cs:description "Use the module or feature area as scope in a single-package repo." ;
         cs:code """
-feat(auth): add session refresh
-fix(api): handle 429 rate-limit responses
-refactor(router): split route definitions
+feat(auth): adds session refresh
+fix(api): retries requests that return 429
+refactor(router): splits route definitions into one file per domain
     """
     ] ;
     cs:do [
-        cs:description "Omit the scope for changes that span the whole project." ;
+        cs:description "Use `monorepo` for root files that belong to no package and `ci` for workflows and actions." ;
         cs:code """
-chore: update CI node version to 24
-docs: add contributing guide
-ci: add PR lint workflow
+chore(monorepo): pins Bun to 1.4.2 in the root package.json
+docs(monorepo): adds a contributing guide
+ci(ci): runs the pull request title lint on every edit
     """
     ] ;
     cs:dont [
         cs:description "Use file names or paths as scopes — name the domain instead." ;
         cs:code """
-fix(src/utils/format.ts): handle null input   # Wrong: use domain name
-fix(format): handle null input                # Correct
+fix(src/utils/format.ts): returns an empty string for null input   # Wrong: use domain name
+fix(format): returns an empty string for null input                # Correct
     """
     ] ;
     cs:dont [
         cs:description "Use inconsistent names for the same package or domain — pick one and use it consistently." ;
         cs:code """
-feat(ds-button): add variant        # One commit says "ds-button"
-fix(button): fix hover state        # Another says "button"
+feat(ds-button): adds an outline variant           # One commit says "ds-button"
+fix(button): restores the hover state colour        # Another says "button"
     """
     ] ;
     cs:dont [
         cs:description "Use overly broad scopes that don't narrow the change." ;
         cs:code """
-fix(app): fix validation        # "app" is too broad
-fix(checkout): fix validation   # Specific domain
+fix(app): rejects an empty postcode        # "app" is too broad
+fix(checkout): rejects an empty postcode   # Specific domain
     """
     ] .
 
@@ -358,7 +361,7 @@ Added a thing
 cs:git.tag.versioning a cs:CodeStandard ;
     rdfs:label "Annotated SemVer release tags"@en ;
     cs:hasCategory cs:git ;
-    cs:description "Release tags must follow semantic versioning prefixed with `v` (e.g. `v1.2.3`). Tags must be annotated (not lightweight) so they carry metadata for tooling. Pre-release versions use a hyphenated identifier after the patch number. Automated tooling (Lerna, changesets, etc.) should derive version bumps from conventional commit types: `feat` → minor, `fix` → patch, `BREAKING CHANGE` → major." ;
+    cs:description "Release tags must follow semantic versioning prefixed with `v` (e.g. `v1.2.3`). Tags must be annotated (not lightweight) so they carry metadata for tooling. Pre-release versions use a hyphenated identifier after the patch number. Automated tooling (Lerna, changesets, etc.) should derive version bumps from conventional commit types: `feat` → minor, `fix` → patch, `BREAKING CHANGE` → major. Before 1.0, `!` bumps the minor; 1.0.0 is set by hand." ;
     cs:do [
         cs:description "Use the `v` prefix with semantic versioning for tags." ;
         cs:language "bash" ;
@@ -394,6 +397,7 @@ git tag -a v2.0.0-experimental.5 -m "v2.0.0-experimental.5"
 feat → minor bump (1.0.0 → 1.1.0)
 fix  → patch bump (1.0.0 → 1.0.1)
 feat! / BREAKING CHANGE → major bump (1.0.0 → 2.0.0)
+feat! / BREAKING CHANGE before 1.0 → minor bump (0.43.0 → 0.44.0)
     """
     ] ;
     cs:dont [
