@@ -18,11 +18,14 @@
 //   - Plugin API exposure via store.api()
 // =============================================================================
 
+import { createHash, randomUUID } from "node:crypto";
 import {
   existsSync,
   globSync,
   mkdirSync,
   readFileSync,
+  renameSync,
+  rmSync,
   writeFileSync,
 } from "node:fs";
 import { dirname, extname, resolve } from "node:path";
@@ -648,7 +651,11 @@ function loadSource(
 // Cache invalidation is manual: consumers call `store.reload({ force: true })`
 // or delete the cache file. Automatic invalidation (e.g., mtime checking)
 // may be added in a future version.
+//
+// The dump is written atomically, with a sha256 sidecar beside it.
 // ---------------------------------------------------------------------------
+
+const CHECKSUM_SUFFIX = ".sha256";
 
 /**
  * Try to load the store from a serialized N-Quads cache file.
@@ -662,7 +669,13 @@ function tryLoadCache(oxStore: OxStore, cachePath: string): boolean {
 
   try {
     const data = readFileSync(absPath, "utf-8");
-    oxStore.load(data, { format: "application/n-quads" });
+    let lenient = false;
+    const checksumPath = `${absPath}${CHECKSUM_SUFFIX}`;
+    if (existsSync(checksumPath)) {
+      // Lenient only on bytes proven identical to writeCache's own dump.
+      lenient = readFileSync(checksumPath, "utf-8").trim() === checksumOf(data);
+    }
+    oxStore.load(data, { format: "application/n-quads", lenient });
     return true;
   } catch {
     // Cache is corrupted or unreadable — fall through to normal loading.
@@ -683,7 +696,22 @@ function writeCache(oxStore: OxStore, cachePath: string): void {
     mkdirSync(dir, { recursive: true });
   }
   const data = oxStore.dump({ format: "application/n-quads" });
-  writeFileSync(absPath, data, "utf-8");
+  const tempPath = `${absPath}.${randomUUID()}.tmp`;
+  try {
+    writeFileSync(tempPath, data, "utf-8");
+    renameSync(tempPath, absPath);
+  } finally {
+    rmSync(tempPath, { force: true });
+  }
+  try {
+    writeFileSync(`${absPath}${CHECKSUM_SUFFIX}`, checksumOf(data), "utf-8");
+  } catch {
+    // Best-effort — a failed write only means a strict next boot.
+  }
+}
+
+function checksumOf(data: string): string {
+  return createHash("sha256").update(data).digest("hex");
 }
 
 // ---------------------------------------------------------------------------

@@ -206,6 +206,8 @@ const store = await createStore({
 await store.reload({ force: true });
 ```
 
+The cache is written atomically (temp file + rename) with a sha256 sidecar file (`${cache}.sha256`) beside it. On boot, a verified checksum lets the N-Quads load skip parser validation; a mismatched or missing sidecar falls back to strict parsing. The sidecar detects accidental corruption, not tampering — anything that can write the cache file can write a matching sidecar too. A cache whose checksum verifies may therefore contain IRIs strict parsing would reject; the sidecar's job is only to make the dumps ke itself wrote cheap to trust.
+
 ## HTTP handler
 
 ke runs in-process by default, but the SPARQL Protocol handler at `@canonical/ke/http` exposes the store over HTTP when needed:

@@ -28,6 +28,7 @@
  * it needs no asset step in any build, and no file lookup at run time.
  */
 
+import { createHash } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
@@ -45,6 +46,7 @@ import { packIsComplete } from "./manifest.js";
 import { manifestSchema } from "./schemas.js";
 import {
   DATA_FILE,
+  DATA_FILE_SHA256,
   INDEX_FILE,
   MANIFEST_FILE,
   type Manifest,
@@ -88,6 +90,10 @@ export async function materializeEmbeddedPack(): Promise<string> {
   const temp = mkdtempSync(join(packsCacheDir(), ".embed-"));
   try {
     writeFileSync(join(temp, DATA_FILE), dataNq);
+    writeFileSync(
+      join(temp, DATA_FILE_SHA256),
+      createHash("sha256").update(dataNq).digest("hex"),
+    );
     writeFileSync(join(temp, SCHEMA_FILE), schemaJson);
     writeFileSync(join(temp, INDEX_FILE), indexJson);
     writeFileSync(join(temp, STORIES_FILE), storiesJson);

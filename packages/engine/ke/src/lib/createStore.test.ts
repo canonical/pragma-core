@@ -1,4 +1,12 @@
-import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -838,6 +846,190 @@ describe("Cache edge cases", () => {
 
       expect(existsSync(cachePath)).toBe(true);
       store.dispose();
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it("writes a checksum sidecar matching the cache contents", async () => {
+    const tmpDir = mkdtempSync(join(tmpdir(), "ke-cache-"));
+    const ttlFile = join(tmpDir, "data.ttl");
+    writeFileSync(ttlFile, MINIMAL_TTL, "utf-8");
+    const cachePath = join(tmpDir, ".cache.nq");
+
+    try {
+      const store = await createStore({
+        sources: [ttlFile],
+        cache: cachePath,
+      });
+      store.dispose();
+
+      const data = readFileSync(cachePath, "utf-8");
+      const digest = createHash("sha256").update(data).digest("hex");
+      const sidecar = readFileSync(`${cachePath}.sha256`, "utf-8").trim();
+      expect(sidecar).toBe(digest);
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it("boots despite a failed sidecar write", async () => {
+    const tmpDir = mkdtempSync(join(tmpdir(), "ke-cache-"));
+    const ttlFile = join(tmpDir, "data.ttl");
+    writeFileSync(ttlFile, MINIMAL_TTL, "utf-8");
+    const cachePath = join(tmpDir, ".cache.nq");
+
+    // A directory at the sidecar path makes its write fail.
+    mkdirSync(`${cachePath}.sha256`);
+
+    try {
+      const store = await createStore({
+        sources: [ttlFile],
+        cache: cachePath,
+      });
+      const result = await store.query(
+        sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
+      );
+      expect((result as AskResult).result).toBe(true);
+      expect(existsSync(cachePath)).toBe(true);
+      store.dispose();
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it("loads bytes strict parsing rejects when the checksum verifies", async () => {
+    const tmpDir = mkdtempSync(join(tmpdir(), "ke-cache-"));
+    const cachePath = join(tmpDir, ".cache.nq");
+
+    // oxigraph 0.5.6 lenient accepts non-absolute IRIs (stored unvalidated);
+    // some other error classes still throw.
+    const data =
+      '<http://example.org/a> <http://example.org/p> "valid" .\n' +
+      '<http://example.org/b> <not-absolute> "skipped" .\n';
+    writeFileSync(cachePath, data, "utf-8");
+    const digest = createHash("sha256").update(data).digest("hex");
+    writeFileSync(`${cachePath}.sha256`, digest, "utf-8");
+
+    try {
+      const store = await createStore({
+        sources: [],
+        cache: cachePath,
+      });
+
+      const valid = await store.query(
+        sparql`ASK { <http://example.org/a> <http://example.org/p> "valid" }`,
+      );
+      expect((valid as AskResult).result).toBe(true);
+      const unvalidated = await store.query(
+        sparql`ASK { <http://example.org/b> ?p "skipped" }`,
+      );
+      expect((unvalidated as AskResult).result).toBe(true);
+      store.dispose();
+
+      rmSync(`${cachePath}.sha256`, { force: true });
+      const strict = await createStore({
+        sources: [],
+        cache: cachePath,
+      });
+      const result = await strict.query(
+        sparql`ASK { <http://example.org/a> <http://example.org/p> "valid" }`,
+      );
+      expect((result as AskResult).result).toBe(false);
+      strict.dispose();
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it("rejects unverified bytes that lenient parsing would accept", async () => {
+    const tmpDir = mkdtempSync(join(tmpdir(), "ke-cache-"));
+    const cachePath = join(tmpDir, ".cache.nq");
+
+    const data =
+      '<http://example.org/a> <http://example.org/p> "valid" .\n' +
+      '<http://example.org/b> <not-absolute> "skipped" .\n';
+    writeFileSync(cachePath, data, "utf-8");
+    writeFileSync(
+      `${cachePath}.sha256`,
+      createHash("sha256").update("different bytes").digest("hex"),
+      "utf-8",
+    );
+
+    try {
+      const store = await createStore({
+        sources: [],
+        cache: cachePath,
+      });
+      const result = await store.query(
+        sparql`ASK { <http://example.org/a> <http://example.org/p> "valid" }`,
+      );
+      expect((result as AskResult).result).toBe(false);
+      store.dispose();
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it("falls back to strict parsing when the checksum does not match", async () => {
+    const tmpDir = mkdtempSync(join(tmpdir(), "ke-cache-"));
+    const ttlFile = join(tmpDir, "data.ttl");
+    writeFileSync(ttlFile, MINIMAL_TTL, "utf-8");
+    const cachePath = join(tmpDir, ".cache.nq");
+
+    try {
+      const store1 = await createStore({
+        sources: [ttlFile],
+        cache: cachePath,
+      });
+      store1.dispose();
+
+      const appended =
+        readFileSync(cachePath, "utf-8") +
+        '<http://example.org/extra> <http://example.org/p> "added" .\n';
+      writeFileSync(cachePath, appended, "utf-8");
+
+      const store2 = await createStore({
+        sources: [],
+        cache: cachePath,
+      });
+      const original = await store2.query(
+        sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
+      );
+      expect((original as AskResult).result).toBe(true);
+      const extra = await store2.query(
+        sparql`ASK { <http://example.org/extra> <http://example.org/p> "added" }`,
+      );
+      expect((extra as AskResult).result).toBe(true);
+      store2.dispose();
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it("loads strictly when no sidecar exists", async () => {
+    const tmpDir = mkdtempSync(join(tmpdir(), "ke-cache-"));
+    const ttlFile = join(tmpDir, "data.ttl");
+    writeFileSync(ttlFile, MINIMAL_TTL, "utf-8");
+    const cachePath = join(tmpDir, ".cache.nq");
+
+    try {
+      const store1 = await createStore({
+        sources: [ttlFile],
+        cache: cachePath,
+      });
+      store1.dispose();
+      rmSync(`${cachePath}.sha256`, { force: true });
+
+      const store2 = await createStore({
+        sources: [],
+        cache: cachePath,
+      });
+      const result = await store2.query(
+        sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
+      );
+      expect((result as AskResult).result).toBe(true);
+      store2.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
     }
