@@ -34,6 +34,11 @@
 
 /** The n-quads store dump — ke boots it via `createStore({ cache })`. */
 export const DATA_FILE = "data.nq";
+/**
+ * The sha256 of `data.nq`, in ke's `${cache}.sha256` sidecar role.
+ * Regenerable from the dump, so `packIsComplete` does not gate on it.
+ */
+export const DATA_FILE_SHA256 = "data.nq.sha256";
 /** The serialized ke-graphql extraction — boots via `compileFromExtraction`. */
 export const SCHEMA_FILE = "schema.json";
 /** The storeless entity index (PR-C's dynamic-completion contract). */

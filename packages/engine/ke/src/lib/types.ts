@@ -158,6 +158,9 @@ export interface StoreConfig {
    * 2. On subsequent boots: load from cache (skipping source resolution)
    * This dramatically speeds up boot time for large datasets.
    * Use `store.reload({ force: true })` to bypass the cache.
+   *
+   * A `${cache}.sha256` sidecar file is written beside the cache; the cache
+   * loads without parser validation only when the checksum verifies.
    */
   cache?: string;
 
