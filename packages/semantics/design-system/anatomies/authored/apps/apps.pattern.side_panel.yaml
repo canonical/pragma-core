@@ -1,20 +1,60 @@
 ---
-# TODO implementation: no reference — the tier has no implementation to derive from
+# Authored 2026-10-11 from @canonical/react-ds-app
+# src/lib/SidePanel/styles.css on .ds.side-panel, which IS the <dialog>
+# element: the sections hang directly off the root. Re-derived once the tier
+# had an implementation to read; the previous text was authored from the
+# roster alone, before any implementation existed.
 node:
   uri: apps.pattern.side_panel
   styles:
-    layout.type: flex   # was stack
-    layout.direction: column   # was vertical
+    # Declared only on [open], because a closed <dialog> is display: none by
+    # user-agent rule and an unconditional display would leave it visible.
+    layout.type: flex
+    layout.direction: column
+    # The panel is the scroll frame; only the content pane scrolls.
+    layout.overflow: hidden
+    # Docked to the inline-end edge: inset-block 0 and inset-inline-end 0,
+    # with inset-inline-start auto. Full viewport height comes from the block
+    # insets, avoiding mobile viewport-unit games.
     layout.position: fixed
     size.height: fill
-    # was spacing.internal.horizontal: spacing/medium (--dimension-300); the
-    # roster's inline padding is per side, so the one axis becomes two
-    spacing.internal.inline.start: dimension.300
-    spacing.internal.inline.end: dimension.300
-    appearance.background: surface.color.background   # was color/surface/default
-    appearance.radius: dimension.radius.medium        # was radius/medium
-    # was interaction.transition.duration: motion/duration/medium (slide-in/out); no
-    # stratum declares motion.duration.medium
+    # `inline-size: min(var(--side-panel-inline-size), 100vw)`. The custom
+    # property is a literal — 29.0625rem (465px) at the default `medium`
+    # size, overridden to 40rem (640px) by the `large` one — because
+    # design-tokens ships no size/* token; size.inline takes a token only, so
+    # neither width is bound. The `size` prop itself ("medium" | "large",
+    # default "medium") is a ds:Property of the block, not an anatomy fact:
+    # the variant changes a value, never the tree.
+    # Padding stays on the header, content and footer, never here, so the
+    # content pane spans the full panel width and its scrollbar hugs the
+    # panel edge rather than sitting inside the padding.
+    spacing.internal.block.start: 0
+    spacing.internal.block.end: 0
+    spacing.internal.inline.start: 0
+    spacing.internal.inline.end: 0
+    # The user-agent stylesheet gives <dialog> a medium solid border, so
+    # `none` is written explicitly rather than left undeclared.
+    appearance.border.style: none
+    appearance.radius: dimension.radius.medium
+    # The surface channels are read with the plain tokens as their var()
+    # fallbacks, so the chains are transcribed as the implementation reads
+    # them.
+    appearance.background: [surface.color.background, color.background]
+    typography.color: [surface.color.text, color.text]
+    # The panel is focused when it opens, but a ring drawn for a pointer
+    # click would read as a border, so only :focus-visible draws one — the
+    # panel's own, inset by its own width so it is never clipped at the
+    # viewport edge. The negative outline-offset is a calc the roster cannot
+    # spell, so only the width and colour are bound.
+    appearance.outline.width@focus: dimension.stroke.thickness.large
+    appearance.outline.color@focus: color.focusRing
+    # The slide in/out reads --side-panel-transition-duration
+    # (--motion-duration-medium) with --motion-easing-decelerate on enter and
+    # --motion-easing-accelerate on exit; no stratum declares
+    # motion.duration.medium or either easing symbol, so the bindings are
+    # dropped and this comment is the record. The box shadow
+    # (0 0 32px rgba(0,0,0,0.2)) and the z-index (1000) are literals too: no
+    # roster key models either.
   edges:
     - node:
         uri: apps.subcomponent.side_panel-header

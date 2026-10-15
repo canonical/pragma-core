@@ -1,0 +1,46 @@
+---
+# Authored 2026-10-11 from @canonical/react-ds-app
+# src/lib/SidePanel/common/Footer/styles.css on .ds.side-panel-footer.
+# Supersedes the retired-notation cell the block carried: the actions now
+# align to the inline-start edge with the primary action first, and the
+# hairline runs edge to edge — the footer insets its actions with padding
+# rather than insetting itself with margin.
+node:
+  uri: apps.subcomponent.side_panel-footer
+  styles:
+    layout.type: flex
+    layout.direction: row
+    # Actions line up at the inline-start edge, and the consumer renders the
+    # primary action first: order in the markup is order on screen. The DSL
+    # has no ordering construct, so the rule lives here and in the block's
+    # usage prose, not in the edges.
+    layout.justify: flex-start
+    layout.align: center
+    layout.wrap: wrap            # more actions than fit on one line wrap
+    # Never shrinks: only the content pane gives way.
+    layout.flex.grow: 0
+    layout.flex.shrink: 0
+    layout.flex.basis: auto
+    spacing.gap: dimension.200                    # --side-panel-footer-gap, between actions
+    spacing.internal.block.start: dimension.200   # --side-panel-footer-padding-block
+    spacing.internal.block.end: dimension.200     # --side-panel-footer-padding-block
+    # Inline padding, not margin: a border spans the padding box, so padding
+    # keeps the hairline full panel width while the actions stay in the text
+    # column. --side-panel-padding-inline, shared with the header and the
+    # content.
+    spacing.internal.inline.start: dimension.300
+    spacing.internal.inline.end: dimension.300
+    # Closes the scroll region, marking where the content pane ends and the
+    # actions begin; the counterpart of the header's hairline, and the same
+    # recipe. The colour is the panel's --side-panel-color-border, declared
+    # once in the panel's :root block, where it resolves to
+    # color.border.muted.
+    appearance.border.style: solid
+    appearance.border.top.width: dimension.stroke.thickness.medium
+    appearance.border.block.start.color: color.border.muted
+  edges:
+    - node:
+        uri: global.component.button
+      relation:
+        cardinality: "0..*"
+        slotName: default
