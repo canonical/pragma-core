@@ -20,6 +20,7 @@
 import {
   mkdirSync,
   mkdtempSync,
+  readFileSync,
   rmSync,
   truncateSync,
   writeFileSync,
@@ -353,23 +354,34 @@ describe("default-pack journey — error paths (E1)", () => {
   it("a torn (emptied) schema.json boots to STORE_UNAVAILABLE with the update recovery", async () => {
     const fixture = await boot(DEFAULT_PACK_TTL, DEFAULT_PACK_CONFIG);
     const active = readActivePack(fixture.cwd) ?? "";
-    // Simulate a torn/evicted extraction: truncate schema.json in the pack cache.
-    truncateSync(join(packDir(active), SCHEMA_FILE), 0);
-    // A brand-new runtime (fresh store memo) boots against the now-incomplete pack.
-    let caught: unknown;
+    // The shared content-addressed cache means this wreck must not outlive
+    // the cell — `packIsComplete` cannot see it, so the next build of the
+    // same content would fail instead. Restore the real bytes whatever the
+    // assertions say.
+    const schemaPath = join(packDir(active), SCHEMA_FILE);
+    const realSchema = readFileSync(schemaPath, "utf-8");
     try {
-      await executeVerb(
-        blockListVerb,
-        {},
-        NO_MUTATION,
-        bootRuntime(JSON_FLAGS, fixture.cwd),
+      truncateSync(schemaPath, 0);
+      // A brand-new runtime (fresh store memo) boots against the now-incomplete pack.
+      let caught: unknown;
+      try {
+        await executeVerb(
+          blockListVerb,
+          {},
+          NO_MUTATION,
+          bootRuntime(JSON_FLAGS, fixture.cwd),
+        );
+      } catch (error) {
+        caught = error;
+      }
+      expect(caught).toBeInstanceOf(PragmaError);
+      expect((caught as PragmaError).code).toBe("STORE_UNAVAILABLE");
+      expect((caught as PragmaError).recovery?.cli).toBe(
+        "pragma sources update",
       );
-    } catch (error) {
-      caught = error;
+    } finally {
+      writeFileSync(schemaPath, realSchema);
     }
-    expect(caught).toBeInstanceOf(PragmaError);
-    expect((caught as PragmaError).code).toBe("STORE_UNAVAILABLE");
-    expect((caught as PragmaError).recovery?.cli).toBe("pragma sources update");
   });
 });
 
@@ -459,21 +471,31 @@ describe("default-pack journey — real-data shapes the clean fixture masked (E1
   it("corrupt (non-empty, invalid) schema.json currently surfaces an UNCLASSIFIED error (known gap)", async () => {
     const fixture = await boot(DEFAULT_PACK_TTL, DEFAULT_PACK_CONFIG);
     const active = readActivePack(fixture.cwd) ?? "";
-    writeFileSync(join(packDir(active), SCHEMA_FILE), "{ not valid json ]");
-    let caught: unknown;
+    const schemaPath = join(packDir(active), SCHEMA_FILE);
+    // The pack cache is SHARED across the whole run, and this corruption is
+    // the kind `packIsComplete` cannot see (non-empty garbage passes the size
+    // gate), so the next build of the same content would REUSE the wrecked
+    // pack. Restore the real bytes whatever the assertions say.
+    const realSchema = readFileSync(schemaPath, "utf-8");
     try {
-      await executeVerb(
-        blockListVerb,
-        {},
-        NO_MUTATION,
-        bootRuntime(JSON_FLAGS, fixture.cwd),
-      );
-    } catch (error) {
-      caught = error;
+      writeFileSync(schemaPath, "{ not valid json ]");
+      let caught: unknown;
+      try {
+        await executeVerb(
+          blockListVerb,
+          {},
+          NO_MUTATION,
+          bootRuntime(JSON_FLAGS, fixture.cwd),
+        );
+      } catch (error) {
+        caught = error;
+      }
+      // It throws — but as a raw, unclassified error, NOT a PragmaError. Assert the
+      // gap explicitly so a future classification fix in read.ts trips this guard.
+      expect(caught).toBeInstanceOf(Error);
+      expect(caught).not.toBeInstanceOf(PragmaError);
+    } finally {
+      writeFileSync(schemaPath, realSchema);
     }
-    // It throws — but as a raw, unclassified error, NOT a PragmaError. Assert the
-    // gap explicitly so a future classification fix in read.ts trips this guard.
-    expect(caught).toBeInstanceOf(Error);
-    expect(caught).not.toBeInstanceOf(PragmaError);
   });
 });
