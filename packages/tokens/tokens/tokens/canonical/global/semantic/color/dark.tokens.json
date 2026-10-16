@@ -5,17 +5,17 @@
     "backdrop": {
       "$value": {
         "colorSpace": {
-          "$ref": "#/color/palette/white/$value/colorSpace"
+          "$ref": "#/color/palette/gray/700/$value/colorSpace"
         },
         "components": [
           {
-            "$ref": "#/color/palette/white/$value/components/0"
+            "$ref": "#/color/palette/gray/700/$value/components/0"
           },
           {
-            "$ref": "#/color/palette/white/$value/components/1"
+            "$ref": "#/color/palette/gray/700/$value/components/1"
           },
           {
-            "$ref": "#/color/palette/white/$value/components/2"
+            "$ref": "#/color/palette/gray/700/$value/components/2"
           }
         ],
         "alpha": {
