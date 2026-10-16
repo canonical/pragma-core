@@ -6853,8 +6853,20 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.border ;
+    dt:coordinate dt:coordinate.anticipation.default ;
+    dt:derivedFrom dt:color.border .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.border ;
     dt:coordinate dt:coordinate.anticipation.destructive ;
     dt:derivedFrom dt:color.border.destructive .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.border ;
+    dt:coordinate dt:coordinate.criticality.default ;
+    dt:derivedFrom dt:color.border .
 
 []
     a dt:ResolvedValue ;
@@ -6889,6 +6901,12 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.border ;
+    dt:coordinate dt:coordinate.emphasis.default ;
+    dt:derivedFrom dt:color.border .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.border ;
     dt:coordinate dt:coordinate.emphasis.muted ;
     dt:derivedFrom dt:color.border.muted .
 
@@ -6897,6 +6915,12 @@
     dt:forSymbol dt:modifier.color.border ;
     dt:coordinate dt:coordinate.lifecycle.completed ;
     dt:derivedFrom dt:color.border.success .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.border ;
+    dt:coordinate dt:coordinate.lifecycle.default ;
+    dt:derivedFrom dt:color.border .
 
 []
     a dt:ResolvedValue ;
@@ -6931,6 +6955,12 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.border ;
+    dt:coordinate dt:coordinate.release.default ;
+    dt:derivedFrom dt:color.border .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.border ;
     dt:coordinate dt:coordinate.release.experimental ;
     dt:derivedFrom dt:color.border.warning .
 
@@ -6955,8 +6985,20 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.focusRing ;
+    dt:coordinate dt:coordinate.anticipation.default ;
+    dt:derivedFrom dt:color.focusRing .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.focusRing ;
     dt:coordinate dt:coordinate.anticipation.destructive ;
     dt:derivedFrom dt:color.focusRing.destructive .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.focusRing ;
+    dt:coordinate dt:coordinate.criticality.default ;
+    dt:derivedFrom dt:color.focusRing .
 
 []
     a dt:ResolvedValue ;
@@ -6985,6 +7027,12 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.foreground.ghost ;
+    dt:coordinate dt:coordinate.anticipation.default ;
+    dt:derivedFrom dt:color.foreground.ghost .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.ghost ;
     dt:coordinate dt:coordinate.anticipation.destructive ;
     dt:derivedFrom dt:color.foreground.ghost.destructive .
 
@@ -6993,6 +7041,18 @@
     dt:forSymbol dt:modifier.color.foreground.ghost ;
     dt:coordinate dt:coordinate.emphasis.branded ;
     dt:derivedFrom dt:color.foreground.ghost.branded .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.ghost ;
+    dt:coordinate dt:coordinate.emphasis.default ;
+    dt:derivedFrom dt:color.foreground.ghost .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.input ;
+    dt:coordinate dt:coordinate.criticality.default ;
+    dt:derivedFrom dt:color.foreground.input .
 
 []
     a dt:ResolvedValue ;
@@ -7027,8 +7087,20 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.foreground.primary ;
+    dt:coordinate dt:coordinate.anticipation.default ;
+    dt:derivedFrom dt:color.foreground.primary .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.primary ;
     dt:coordinate dt:coordinate.anticipation.destructive ;
     dt:derivedFrom dt:color.foreground.primary.destructive .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.primary ;
+    dt:coordinate dt:coordinate.criticality.default ;
+    dt:derivedFrom dt:color.foreground.primary .
 
 []
     a dt:ResolvedValue ;
@@ -7062,9 +7134,27 @@
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.primary ;
+    dt:coordinate dt:coordinate.emphasis.default ;
+    dt:derivedFrom dt:color.foreground.primary .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.foreground.secondary ;
     dt:coordinate dt:coordinate.anticipation.caution ;
     dt:derivedFrom dt:color.foreground.secondary.warning .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.secondary ;
+    dt:coordinate dt:coordinate.anticipation.default ;
+    dt:derivedFrom dt:color.foreground.secondary .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.secondary ;
+    dt:coordinate dt:coordinate.criticality.default ;
+    dt:derivedFrom dt:color.foreground.secondary .
 
 []
     a dt:ResolvedValue ;
@@ -7099,8 +7189,20 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.foreground.secondary ;
+    dt:coordinate dt:coordinate.emphasis.default ;
+    dt:derivedFrom dt:color.foreground.secondary .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.secondary ;
     dt:coordinate dt:coordinate.lifecycle.completed ;
     dt:derivedFrom dt:color.foreground.secondary.success .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.secondary ;
+    dt:coordinate dt:coordinate.lifecycle.default ;
+    dt:derivedFrom dt:color.foreground.secondary .
 
 []
     a dt:ResolvedValue ;
@@ -7135,6 +7237,12 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.foreground.secondary ;
+    dt:coordinate dt:coordinate.release.default ;
+    dt:derivedFrom dt:color.foreground.secondary .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.foreground.secondary ;
     dt:coordinate dt:coordinate.release.experimental ;
     dt:derivedFrom dt:color.foreground.secondary.warning .
 
@@ -7159,8 +7267,20 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.icon ;
+    dt:coordinate dt:coordinate.anticipation.default ;
+    dt:derivedFrom dt:color.icon .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.icon ;
     dt:coordinate dt:coordinate.anticipation.destructive ;
     dt:derivedFrom dt:color.icon.destructive .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.icon ;
+    dt:coordinate dt:coordinate.criticality.default ;
+    dt:derivedFrom dt:color.icon .
 
 []
     a dt:ResolvedValue ;
@@ -7195,6 +7315,12 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.icon ;
+    dt:coordinate dt:coordinate.emphasis.default ;
+    dt:derivedFrom dt:color.icon .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.icon ;
     dt:coordinate dt:coordinate.emphasis.muted ;
     dt:derivedFrom dt:color.icon.muted .
 
@@ -7203,6 +7329,12 @@
     dt:forSymbol dt:modifier.color.icon ;
     dt:coordinate dt:coordinate.lifecycle.completed ;
     dt:derivedFrom dt:color.icon.success .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.icon ;
+    dt:coordinate dt:coordinate.lifecycle.default ;
+    dt:derivedFrom dt:color.icon .
 
 []
     a dt:ResolvedValue ;
@@ -7237,6 +7369,12 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.icon ;
+    dt:coordinate dt:coordinate.release.default ;
+    dt:derivedFrom dt:color.icon .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.icon ;
     dt:coordinate dt:coordinate.release.experimental ;
     dt:derivedFrom dt:color.icon.warning .
 
@@ -7261,8 +7399,20 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.text ;
+    dt:coordinate dt:coordinate.anticipation.default ;
+    dt:derivedFrom dt:color.text .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.text ;
     dt:coordinate dt:coordinate.anticipation.destructive ;
     dt:derivedFrom dt:color.text.destructive .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.text ;
+    dt:coordinate dt:coordinate.criticality.default ;
+    dt:derivedFrom dt:color.text .
 
 []
     a dt:ResolvedValue ;
@@ -7297,6 +7447,12 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.text ;
+    dt:coordinate dt:coordinate.emphasis.default ;
+    dt:derivedFrom dt:color.text .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.text ;
     dt:coordinate dt:coordinate.emphasis.muted ;
     dt:derivedFrom dt:color.text.muted .
 
@@ -7305,6 +7461,12 @@
     dt:forSymbol dt:modifier.color.text ;
     dt:coordinate dt:coordinate.lifecycle.completed ;
     dt:derivedFrom dt:color.text.success .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.text ;
+    dt:coordinate dt:coordinate.lifecycle.default ;
+    dt:derivedFrom dt:color.text .
 
 []
     a dt:ResolvedValue ;
@@ -7339,6 +7501,12 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.text ;
+    dt:coordinate dt:coordinate.release.default ;
+    dt:derivedFrom dt:color.text .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.text ;
     dt:coordinate dt:coordinate.release.experimental ;
     dt:derivedFrom dt:color.text.warning .
 
@@ -7347,6 +7515,12 @@
     dt:forSymbol dt:modifier.color.text ;
     dt:coordinate dt:coordinate.release.stable ;
     dt:derivedFrom dt:color.text.success .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:modifier.color.text.onForegroundSecondary ;
+    dt:coordinate dt:coordinate.criticality.default ;
+    dt:derivedFrom dt:color.text.onForegroundSecondary .
 
 []
     a dt:ResolvedValue ;
