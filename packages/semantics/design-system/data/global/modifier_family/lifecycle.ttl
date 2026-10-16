@@ -6,4 +6,4 @@ ds:global.modifier_family.lifecycle a ds:ModifierFamily;
     ds:name "Lifecycle";
     ds:summary "";
     ds:tier ds:global;
-    ds:hasModifier ds:global.modifier.failed, ds:global.modifier.completed, ds:global.modifier.in_progress, ds:global.modifier.planned.
+    ds:hasModifier ds:global.modifier.failed, ds:global.modifier.completed, ds:global.modifier.in_progress, ds:global.modifier.planned, ds:global.modifier.default.

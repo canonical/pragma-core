@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.modifier.default a ds:Modifier;
+    ds:name "Default";
+    ds:summary "The default modifier opts a block out of an inherited modifier context: the modifier classes it applies rebind every channel to the block's own base tokens, so an ancestor's modifier no longer cascades into it. It belongs to the colour-channel families that generated CSS rebinds (anticipation, criticality, emphasis, lifecycle and release), and is an explicit choice rather than the absence of a modifier.";
+    ds:modifierFamily ds:global.modifier_family.anticipation, ds:global.modifier_family.criticality, ds:global.modifier_family._emphasis, ds:global.modifier_family.lifecycle, ds:global.modifier_family.release.
