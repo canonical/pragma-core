@@ -666,6 +666,12 @@ dt:coordinate.anticipation.constructive
     dt:concept ds:global.modifier.constructive .
 dt:context.anticipation.constructive dt:encodes dt:coordinate.anticipation.constructive .
 
+dt:coordinate.anticipation.default
+    a dt:Coordinate ;
+    dt:family ds:global.modifier_family.anticipation ;
+    dt:concept ds:global.modifier.default .
+dt:context.anticipation.default dt:encodes dt:coordinate.anticipation.default .
+
 dt:coordinate.anticipation.destructive
     a dt:Coordinate ;
     dt:family ds:global.modifier_family.anticipation ;
@@ -676,6 +682,12 @@ dt:coordinate.anticipation.none
     a dt:Coordinate ;
     dt:family ds:global.modifier_family.anticipation .
 dt:context.anticipation.none dt:encodes dt:coordinate.anticipation.none .
+
+dt:coordinate.criticality.default
+    a dt:Coordinate ;
+    dt:family ds:global.modifier_family.criticality ;
+    dt:concept ds:global.modifier.default .
+dt:context.criticality.default dt:encodes dt:coordinate.criticality.default .
 
 dt:coordinate.criticality.error
     a dt:Coordinate ;
@@ -710,6 +722,12 @@ dt:coordinate.emphasis.branded
     a dt:Coordinate ;
     dt:family ds:global.modifier_family._emphasis .
 dt:context.emphasis.branded dt:encodes dt:coordinate.emphasis.branded .
+
+dt:coordinate.emphasis.default
+    a dt:Coordinate ;
+    dt:family ds:global.modifier_family._emphasis ;
+    dt:concept ds:global.modifier.default .
+dt:context.emphasis.default dt:encodes dt:coordinate.emphasis.default .
 
 dt:coordinate.emphasis.highlighted
     a dt:Coordinate ;
@@ -757,6 +775,12 @@ dt:coordinate.lifecycle.completed
     dt:concept ds:global.modifier.completed .
 dt:context.lifecycle.completed dt:encodes dt:coordinate.lifecycle.completed .
 
+dt:coordinate.lifecycle.default
+    a dt:Coordinate ;
+    dt:family ds:global.modifier_family.lifecycle ;
+    dt:concept ds:global.modifier.default .
+dt:context.lifecycle.default dt:encodes dt:coordinate.lifecycle.default .
+
 dt:coordinate.lifecycle.failed
     a dt:Coordinate ;
     dt:family ds:global.modifier_family.lifecycle ;
@@ -791,6 +815,12 @@ dt:coordinate.release.beta
     dt:family ds:global.modifier_family.release ;
     dt:concept ds:global.modifier.beta .
 dt:context.release.beta dt:encodes dt:coordinate.release.beta .
+
+dt:coordinate.release.default
+    a dt:Coordinate ;
+    dt:family ds:global.modifier_family.release ;
+    dt:concept ds:global.modifier.default .
+dt:context.release.default dt:encodes dt:coordinate.release.default .
 
 dt:coordinate.release.experimental
     a dt:Coordinate ;

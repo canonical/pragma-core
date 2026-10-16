@@ -6,4 +6,4 @@ ds:global.modifier_family.release a ds:ModifierFamily;
     ds:name "Release";
     ds:summary "";
     ds:tier ds:global;
-    ds:hasModifier ds:global.modifier.stable, ds:global.modifier.beta, ds:global.modifier.alpha, ds:global.modifier.experimental.
+    ds:hasModifier ds:global.modifier.stable, ds:global.modifier.beta, ds:global.modifier.alpha, ds:global.modifier.experimental, ds:global.modifier.default.

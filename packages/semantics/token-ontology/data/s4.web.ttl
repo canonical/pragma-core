@@ -69,6 +69,36 @@
     dt-web:selector ".dark" ;
     dt:selectsCoordinate dt:coordinate.mode.dark .
 
+<cond/layer-ds-modifiers/default/modifiers-anticipation>
+    a dt:Condition ;
+    dt-web:inAtRule ( "@layer ds.modifiers" ) ;
+    dt-web:selector ".default" ;
+    dt:selectsCoordinate dt:coordinate.anticipation.default .
+
+<cond/layer-ds-modifiers/default/modifiers-criticality>
+    a dt:Condition ;
+    dt-web:inAtRule ( "@layer ds.modifiers" ) ;
+    dt-web:selector ".default" ;
+    dt:selectsCoordinate dt:coordinate.criticality.default .
+
+<cond/layer-ds-modifiers/default/modifiers-emphasis>
+    a dt:Condition ;
+    dt-web:inAtRule ( "@layer ds.modifiers" ) ;
+    dt-web:selector ".default" ;
+    dt:selectsCoordinate dt:coordinate.emphasis.default .
+
+<cond/layer-ds-modifiers/default/modifiers-lifecycle>
+    a dt:Condition ;
+    dt-web:inAtRule ( "@layer ds.modifiers" ) ;
+    dt-web:selector ".default" ;
+    dt:selectsCoordinate dt:coordinate.lifecycle.default .
+
+<cond/layer-ds-modifiers/default/modifiers-release>
+    a dt:Condition ;
+    dt-web:inAtRule ( "@layer ds.modifiers" ) ;
+    dt-web:selector ".default" ;
+    dt:selectsCoordinate dt:coordinate.release.default .
+
 <cond/layer-ds-modifiers/destructive>
     a dt:Condition ;
     dt-web:inAtRule ( "@layer ds.modifiers" ) ;
@@ -9218,6 +9248,14 @@
         dt:computedFrom <--color-border-warning> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-anticipation> ;
+        dt:emits "var(--color-border)" ;
+        dt:at "modifiers.anticipation.css:28" ;
+        dt:references ( <--color-border> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-border> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/success> ;
         dt:emits "var(--color-border-success)" ;
         dt:at "modifiers.criticality.css:4" ;
@@ -9250,6 +9288,14 @@
         dt:computedFrom <--color-border-information> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-border)" ;
+        dt:at "modifiers.criticality.css:52" ;
+        dt:references ( <--color-border> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-border> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/muted> ;
         dt:emits "var(--color-border-muted)" ;
         dt:at "modifiers.emphasis.css:4" ;
@@ -9264,6 +9310,14 @@
         dt:references ( <--color-border-branded> ) ;
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-border-branded> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-emphasis> ;
+        dt:emits "var(--color-border)" ;
+        dt:at "modifiers.emphasis.css:17" ;
+        dt:references ( <--color-border> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-border> ] ,
     [
         a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/planned> ;
@@ -9298,6 +9352,14 @@
         dt:computedFrom <--color-border-error> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-lifecycle> ;
+        dt:emits "var(--color-border)" ;
+        dt:at "modifiers.lifecycle.css:28" ;
+        dt:references ( <--color-border> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-border> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/experimental> ;
         dt:emits "var(--color-border-warning)" ;
         dt:at "modifiers.release.css:4" ;
@@ -9327,7 +9389,15 @@
         dt:at "modifiers.release.css:22" ;
         dt:references ( <--color-border-success> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-border-success> ] .
+        dt:computedFrom <--color-border-success> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-release> ;
+        dt:emits "var(--color-border)" ;
+        dt:at "modifiers.release.css:28" ;
+        dt:references ( <--color-border> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-border> ] .
 
 <--modifier-color-focus-ring>
     a dt:Variable ;
@@ -9361,6 +9431,14 @@
         dt:computedFrom <--color-focus-ring-warning> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-anticipation> ;
+        dt:emits "var(--color-focus-ring)" ;
+        dt:at "modifiers.anticipation.css:29" ;
+        dt:references ( <--color-focus-ring> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-focus-ring> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/success> ;
         dt:emits "var(--color-focus-ring-success)" ;
         dt:at "modifiers.criticality.css:5" ;
@@ -9382,7 +9460,15 @@
         dt:at "modifiers.criticality.css:31" ;
         dt:references ( <--color-focus-ring-warning> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-focus-ring-warning> ] .
+        dt:computedFrom <--color-focus-ring-warning> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-focus-ring)" ;
+        dt:at "modifiers.criticality.css:53" ;
+        dt:references ( <--color-focus-ring> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-focus-ring> ] .
 
 <--modifier-color-foreground-checkbox-unselected>
     a dt:Variable ;
@@ -9412,7 +9498,15 @@
         dt:at "modifiers.criticality.css:32" ;
         dt:references ( <--color-foreground-input-warning> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-foreground-input-warning> ] .
+        dt:computedFrom <--color-foreground-input-warning> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-foreground-checkbox-unselected)" ;
+        dt:at "modifiers.criticality.css:54" ;
+        dt:references ( <--color-foreground-checkbox-unselected> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-checkbox-unselected> ] .
 
 <--modifier-color-foreground-ghost>
     a dt:Variable ;
@@ -9438,12 +9532,28 @@
         dt:computedFrom <--color-foreground-ghost-destructive> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-anticipation> ;
+        dt:emits "var(--color-foreground-ghost)" ;
+        dt:at "modifiers.anticipation.css:30" ;
+        dt:references ( <--color-foreground-ghost> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-ghost> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/branded> ;
         dt:emits "var(--color-foreground-ghost-branded)" ;
         dt:at "modifiers.emphasis.css:10" ;
         dt:references ( <--color-foreground-ghost-branded> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-foreground-ghost-branded> ] .
+        dt:computedFrom <--color-foreground-ghost-branded> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-emphasis> ;
+        dt:emits "var(--color-foreground-ghost)" ;
+        dt:at "modifiers.emphasis.css:20" ;
+        dt:references ( <--color-foreground-ghost> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-ghost> ] .
 
 <--modifier-color-foreground-input>
     a dt:Variable ;
@@ -9474,7 +9584,15 @@
         dt:at "modifiers.criticality.css:33" ;
         dt:references ( <--color-foreground-input-warning> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-foreground-input-warning> ] .
+        dt:computedFrom <--color-foreground-input-warning> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-foreground-input)" ;
+        dt:at "modifiers.criticality.css:55" ;
+        dt:references ( <--color-foreground-input> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-input> ] .
 
 <--modifier-color-foreground-primary>
     a dt:Variable ;
@@ -9506,6 +9624,14 @@
         dt:references ( <--color-foreground-primary-warning> ) ;
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-foreground-primary-warning> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-anticipation> ;
+        dt:emits "var(--color-foreground-primary)" ;
+        dt:at "modifiers.anticipation.css:31" ;
+        dt:references ( <--color-foreground-primary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-primary> ] ,
     [
         a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/success> ;
@@ -9540,12 +9666,28 @@
         dt:computedFrom <--color-foreground-primary-information> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-foreground-primary)" ;
+        dt:at "modifiers.criticality.css:56" ;
+        dt:references ( <--color-foreground-primary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-primary> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/branded> ;
         dt:emits "var(--color-foreground-primary-branded)" ;
         dt:at "modifiers.emphasis.css:11" ;
         dt:references ( <--color-foreground-primary-branded> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-foreground-primary-branded> ] .
+        dt:computedFrom <--color-foreground-primary-branded> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-emphasis> ;
+        dt:emits "var(--color-foreground-primary)" ;
+        dt:at "modifiers.emphasis.css:21" ;
+        dt:references ( <--color-foreground-primary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-primary> ] .
 
 <--modifier-color-foreground-radio-unselected>
     a dt:Variable ;
@@ -9575,7 +9717,15 @@
         dt:at "modifiers.criticality.css:35" ;
         dt:references ( <--color-foreground-input-warning> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-foreground-input-warning> ] .
+        dt:computedFrom <--color-foreground-input-warning> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-foreground-radio-unselected)" ;
+        dt:at "modifiers.criticality.css:57" ;
+        dt:references ( <--color-foreground-radio-unselected> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-radio-unselected> ] .
 
 <--modifier-color-foreground-secondary>
     a dt:Variable ;
@@ -9591,6 +9741,14 @@
         dt:references ( <--color-foreground-secondary-warning> ) ;
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-foreground-secondary-warning> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-anticipation> ;
+        dt:emits "var(--color-foreground-secondary)" ;
+        dt:at "modifiers.anticipation.css:34" ;
+        dt:references ( <--color-foreground-secondary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-secondary> ] ,
     [
         a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/success> ;
@@ -9625,12 +9783,28 @@
         dt:computedFrom <--color-foreground-secondary-information> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-foreground-secondary)" ;
+        dt:at "modifiers.criticality.css:58" ;
+        dt:references ( <--color-foreground-secondary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-secondary> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/branded> ;
         dt:emits "var(--color-foreground-secondary-branded)" ;
         dt:at "modifiers.emphasis.css:12" ;
         dt:references ( <--color-foreground-secondary-branded> ) ;
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-foreground-secondary-branded> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-emphasis> ;
+        dt:emits "var(--color-foreground-secondary)" ;
+        dt:at "modifiers.emphasis.css:22" ;
+        dt:references ( <--color-foreground-secondary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-secondary> ] ,
     [
         a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/planned> ;
@@ -9665,6 +9839,14 @@
         dt:computedFrom <--color-foreground-secondary-error> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-lifecycle> ;
+        dt:emits "var(--color-foreground-secondary)" ;
+        dt:at "modifiers.lifecycle.css:29" ;
+        dt:references ( <--color-foreground-secondary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-secondary> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/experimental> ;
         dt:emits "var(--color-foreground-secondary-warning)" ;
         dt:at "modifiers.release.css:5" ;
@@ -9694,7 +9876,15 @@
         dt:at "modifiers.release.css:23" ;
         dt:references ( <--color-foreground-secondary-success> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-foreground-secondary-success> ] .
+        dt:computedFrom <--color-foreground-secondary-success> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-release> ;
+        dt:emits "var(--color-foreground-secondary)" ;
+        dt:at "modifiers.release.css:29" ;
+        dt:references ( <--color-foreground-secondary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-foreground-secondary> ] .
 
 <--modifier-color-icon>
     a dt:Variable ;
@@ -9726,6 +9916,14 @@
         dt:references ( <--color-icon-warning> ) ;
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-icon-warning> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-anticipation> ;
+        dt:emits "var(--color-icon)" ;
+        dt:at "modifiers.anticipation.css:32" ;
+        dt:references ( <--color-icon> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-icon> ] ,
     [
         a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/success> ;
@@ -9760,6 +9958,14 @@
         dt:computedFrom <--color-icon-information> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-icon)" ;
+        dt:at "modifiers.criticality.css:59" ;
+        dt:references ( <--color-icon> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-icon> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/muted> ;
         dt:emits "var(--color-icon-muted)" ;
         dt:at "modifiers.emphasis.css:5" ;
@@ -9774,6 +9980,14 @@
         dt:references ( <--color-icon-branded> ) ;
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-icon-branded> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-emphasis> ;
+        dt:emits "var(--color-icon)" ;
+        dt:at "modifiers.emphasis.css:18" ;
+        dt:references ( <--color-icon> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-icon> ] ,
     [
         a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/planned> ;
@@ -9808,6 +10022,14 @@
         dt:computedFrom <--color-icon-error> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-lifecycle> ;
+        dt:emits "var(--color-icon)" ;
+        dt:at "modifiers.lifecycle.css:30" ;
+        dt:references ( <--color-icon> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-icon> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/experimental> ;
         dt:emits "var(--color-icon-warning)" ;
         dt:at "modifiers.release.css:6" ;
@@ -9837,7 +10059,15 @@
         dt:at "modifiers.release.css:24" ;
         dt:references ( <--color-icon-success> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-icon-success> ] .
+        dt:computedFrom <--color-icon-success> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-release> ;
+        dt:emits "var(--color-icon)" ;
+        dt:at "modifiers.release.css:30" ;
+        dt:references ( <--color-icon> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-icon> ] .
 
 <--modifier-color-icon-on-foreground-secondary>
     a dt:Variable ;
@@ -9875,7 +10105,15 @@
         dt:at "modifiers.criticality.css:47" ;
         dt:references ( <--color-text-on-foreground-secondary-information> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-text-on-foreground-secondary-information> ] .
+        dt:computedFrom <--color-text-on-foreground-secondary-information> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-icon-on-foreground-secondary)" ;
+        dt:at "modifiers.criticality.css:60" ;
+        dt:references ( <--color-icon-on-foreground-secondary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-icon-on-foreground-secondary> ] .
 
 <--modifier-color-text>
     a dt:Variable ;
@@ -9907,6 +10145,14 @@
         dt:references ( <--color-text-warning> ) ;
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-text-warning> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-anticipation> ;
+        dt:emits "var(--color-text)" ;
+        dt:at "modifiers.anticipation.css:33" ;
+        dt:references ( <--color-text> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-text> ] ,
     [
         a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/success> ;
@@ -9941,6 +10187,14 @@
         dt:computedFrom <--color-text-information> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-text)" ;
+        dt:at "modifiers.criticality.css:61" ;
+        dt:references ( <--color-text> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-text> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/muted> ;
         dt:emits "var(--color-text-muted)" ;
         dt:at "modifiers.emphasis.css:6" ;
@@ -9955,6 +10209,14 @@
         dt:references ( <--color-text-branded> ) ;
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-text-branded> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-emphasis> ;
+        dt:emits "var(--color-text)" ;
+        dt:at "modifiers.emphasis.css:19" ;
+        dt:references ( <--color-text> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-text> ] ,
     [
         a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/planned> ;
@@ -9989,6 +10251,14 @@
         dt:computedFrom <--color-text-error> ] ,
     [
         a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-lifecycle> ;
+        dt:emits "var(--color-text)" ;
+        dt:at "modifiers.lifecycle.css:31" ;
+        dt:references ( <--color-text> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-text> ] ,
+    [
+        a dt:Declaration ;
         dt:under <cond/layer-ds-modifiers/experimental> ;
         dt:emits "var(--color-text-warning)" ;
         dt:at "modifiers.release.css:7" ;
@@ -10018,7 +10288,15 @@
         dt:at "modifiers.release.css:25" ;
         dt:references ( <--color-text-success> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-text-success> ] .
+        dt:computedFrom <--color-text-success> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-release> ;
+        dt:emits "var(--color-text)" ;
+        dt:at "modifiers.release.css:31" ;
+        dt:references ( <--color-text> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-text> ] .
 
 <--modifier-color-text-on-foreground-secondary>
     a dt:Variable ;
@@ -10057,7 +10335,15 @@
         dt:at "modifiers.criticality.css:49" ;
         dt:references ( <--color-text-on-foreground-secondary-information> ) ;
         dt:derives dt:derivation.channel-modifier ;
-        dt:computedFrom <--color-text-on-foreground-secondary-information> ] .
+        dt:computedFrom <--color-text-on-foreground-secondary-information> ] ,
+    [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-modifiers/default/modifiers-criticality> ;
+        dt:emits "var(--color-text-on-foreground-secondary)" ;
+        dt:at "modifiers.criticality.css:62" ;
+        dt:references ( <--color-text-on-foreground-secondary> ) ;
+        dt:derives dt:derivation.channel-modifier ;
+        dt:computedFrom <--color-text-on-foreground-secondary> ] .
 
 <--number-chroma-disabled>
     a dt:Variable ;

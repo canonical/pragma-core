@@ -109,7 +109,7 @@ describe("KNOWN_CHANNELS partitions the channel variables", () => {
 
 describe("the six laws", () => {
   it("L1 records every declaration, and one foreign property", () => {
-    expect(findings.l1.declarations).toBe(1904);
+    expect(findings.l1.declarations).toBe(1936);
     expect(findings.l1.files).toBe(11);
     // `color-scheme` is not a custom property, so no term holds it. Pinned so
     // a second foreign property is a decision rather than a surprise.
@@ -117,18 +117,19 @@ describe("the six laws", () => {
   });
 
   it("L2 mints a distinct slug per condition", () => {
-    expect(findings.l2.conditions).toBe(31);
+    expect(findings.l2.conditions).toBe(36);
     expect(findings.l2.slugs).toBe(findings.l2.conditions);
   });
 
   it("L3 joins every symbol-bearing declaration to a resolved value", () => {
     // Zero missing is the law. `matched` rose from 1,204 to 1,369 when the 25
     // channels gained dt:ofSymbol and S3 gained their 165 positions, and
-    // `no-symbol` fell by the same 165.
+    // `no-symbol` fell by the same 165. It rose again to 1,398 when the five
+    // `default` contexts added their 29 covered-channel rows.
     expect(findings.l3.missing).toBe(0);
     expect(findings.l3.declined).toBe(0);
-    expect(findings.l3.matched).toBe(1369);
-    expect(findings.l3.noSymbol).toBe(796);
+    expect(findings.l3.matched).toBe(1398);
+    expect(findings.l3.noSymbol).toBe(799);
     // The typography slots, PRA-157: artifact ids that are not symbols, so
     // they carry no dt:ofSymbol rather than a dangling IRI.
     expect(findings.l3.phantoms).toBe(187);
@@ -136,7 +137,7 @@ describe("the six laws", () => {
 
   it("L4 names no coordinate S2 does not have", () => {
     expect(findings.l4.unknown).toEqual([]);
-    expect(findings.l4.named).toBe(23);
+    expect(findings.l4.named).toBe(28);
   });
 
   it("L5 leaves no referenced variable outside the catalogue", () => {
@@ -269,6 +270,7 @@ describe("the CSS the build emits, as this grammar reads it", () => {
           ],
           selector: ":root",
           slug: "layer-ds-modifiers/media-prefers-color-scheme-dark/root",
+          file: "sample.css",
         },
         value: "var(--color-palette-neutral-100)",
         file: "sample.css",
