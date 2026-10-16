@@ -46,6 +46,15 @@ exports[`build output snapshots > modifiers.anticipation.css matches snapshot 1`
 		--modifier-color-icon: var(--color-icon-warning);
 		--modifier-color-text: var(--color-text-warning);
 	}
+	.default {
+		--modifier-color-border: var(--color-border);
+		--modifier-color-focus-ring: var(--color-focus-ring);
+		--modifier-color-foreground-ghost: var(--color-foreground-ghost);
+		--modifier-color-foreground-primary: var(--color-foreground-primary);
+		--modifier-color-icon: var(--color-icon);
+		--modifier-color-text: var(--color-text);
+		--modifier-color-foreground-secondary: var(--color-foreground-secondary);
+	}
 }
 "
 `;
@@ -101,6 +110,19 @@ exports[`build output snapshots > modifiers.criticality.css matches snapshot 1`]
 		--modifier-color-text: var(--color-text-information);
 		--modifier-color-text-on-foreground-secondary: var(--color-text-on-foreground-secondary-information);
 	}
+	.default {
+		--modifier-color-border: var(--color-border);
+		--modifier-color-focus-ring: var(--color-focus-ring);
+		--modifier-color-foreground-checkbox-unselected: var(--color-foreground-checkbox-unselected);
+		--modifier-color-foreground-input: var(--color-foreground-input);
+		--modifier-color-foreground-primary: var(--color-foreground-primary);
+		--modifier-color-foreground-radio-unselected: var(--color-foreground-radio-unselected);
+		--modifier-color-foreground-secondary: var(--color-foreground-secondary);
+		--modifier-color-icon: var(--color-icon);
+		--modifier-color-icon-on-foreground-secondary: var(--color-icon-on-foreground-secondary);
+		--modifier-color-text: var(--color-text);
+		--modifier-color-text-on-foreground-secondary: var(--color-text-on-foreground-secondary);
+	}
 }
 "
 `;
@@ -120,6 +142,14 @@ exports[`build output snapshots > modifiers.emphasis.css matches snapshot 1`] = 
 		--modifier-color-foreground-secondary: var(--color-foreground-secondary-branded);
 		--modifier-color-icon: var(--color-icon-branded);
 		--modifier-color-text: var(--color-text-branded);
+	}
+	.default {
+		--modifier-color-border: var(--color-border);
+		--modifier-color-icon: var(--color-icon);
+		--modifier-color-text: var(--color-text);
+		--modifier-color-foreground-ghost: var(--color-foreground-ghost);
+		--modifier-color-foreground-primary: var(--color-foreground-primary);
+		--modifier-color-foreground-secondary: var(--color-foreground-secondary);
 	}
 }
 "
@@ -158,6 +188,12 @@ exports[`build output snapshots > modifiers.lifecycle.css matches snapshot 1`] =
 		--modifier-color-icon: var(--color-icon-error);
 		--modifier-color-text: var(--color-text-error);
 	}
+	.default {
+		--modifier-color-border: var(--color-border);
+		--modifier-color-foreground-secondary: var(--color-foreground-secondary);
+		--modifier-color-icon: var(--color-icon);
+		--modifier-color-text: var(--color-text);
+	}
 }
 "
 `;
@@ -188,6 +224,12 @@ exports[`build output snapshots > modifiers.release.css matches snapshot 1`] = `
 		--modifier-color-foreground-secondary: var(--color-foreground-secondary-success);
 		--modifier-color-icon: var(--color-icon-success);
 		--modifier-color-text: var(--color-text-success);
+	}
+	.default {
+		--modifier-color-border: var(--color-border);
+		--modifier-color-foreground-secondary: var(--color-foreground-secondary);
+		--modifier-color-icon: var(--color-icon);
+		--modifier-color-text: var(--color-text);
 	}
 }
 "
@@ -34865,6 +34907,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.anticipation.css",
+        "line": 27,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".success",
         "file": "modifiers.criticality.css",
         "line": 3,
@@ -34909,6 +34962,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 51,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".muted",
         "file": "modifiers.emphasis.css",
         "line": 3,
@@ -34923,6 +34987,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".branded",
         "file": "modifiers.emphasis.css",
         "line": 8,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.emphasis.css",
+        "line": 16,
         "atRules": [
           {
             "name": "layer",
@@ -34975,6 +35050,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.lifecycle.css",
+        "line": 27,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".experimental",
         "file": "modifiers.release.css",
         "line": 3,
@@ -35011,6 +35097,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".stable",
         "file": "modifiers.release.css",
         "line": 21,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.release.css",
+        "line": 27,
         "atRules": [
           {
             "name": "layer",
@@ -35066,6 +35163,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.anticipation.css",
+        "line": 28,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".success",
         "file": "modifiers.criticality.css",
         "line": 4,
@@ -35091,6 +35199,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".warning",
         "file": "modifiers.criticality.css",
         "line": 30,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 52,
         "atRules": [
           {
             "name": "layer",
@@ -35135,9 +35254,31 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.anticipation.css",
+        "line": 29,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".branded",
         "file": "modifiers.emphasis.css",
         "line": 9,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.emphasis.css",
+        "line": 19,
         "atRules": [
           {
             "name": "layer",
@@ -35193,6 +35334,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.anticipation.css",
+        "line": 30,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".success",
         "file": "modifiers.criticality.css",
         "line": 7,
@@ -35237,9 +35389,31 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 55,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".branded",
         "file": "modifiers.emphasis.css",
         "line": 10,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.emphasis.css",
+        "line": 20,
         "atRules": [
           {
             "name": "layer",
@@ -35295,6 +35469,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.anticipation.css",
+        "line": 31,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".success",
         "file": "modifiers.criticality.css",
         "line": 10,
@@ -35339,6 +35524,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 58,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".muted",
         "file": "modifiers.emphasis.css",
         "line": 4,
@@ -35353,6 +35549,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".branded",
         "file": "modifiers.emphasis.css",
         "line": 12,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.emphasis.css",
+        "line": 17,
         "atRules": [
           {
             "name": "layer",
@@ -35405,6 +35612,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.lifecycle.css",
+        "line": 29,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".experimental",
         "file": "modifiers.release.css",
         "line": 5,
@@ -35441,6 +35659,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".stable",
         "file": "modifiers.release.css",
         "line": 23,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.release.css",
+        "line": 29,
         "atRules": [
           {
             "name": "layer",
@@ -35496,6 +35725,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.anticipation.css",
+        "line": 32,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".success",
         "file": "modifiers.criticality.css",
         "line": 12,
@@ -35540,6 +35780,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 60,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".muted",
         "file": "modifiers.emphasis.css",
         "line": 5,
@@ -35554,6 +35805,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".branded",
         "file": "modifiers.emphasis.css",
         "line": 13,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.emphasis.css",
+        "line": 18,
         "atRules": [
           {
             "name": "layer",
@@ -35606,6 +35868,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.lifecycle.css",
+        "line": 30,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".experimental",
         "file": "modifiers.release.css",
         "line": 6,
@@ -35648,6 +35921,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
             "prelude": "ds.modifiers"
           }
         ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.release.css",
+        "line": 30,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
       }
     ]
   },
@@ -35667,6 +35951,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".caution",
         "file": "modifiers.anticipation.css",
         "line": 22,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.anticipation.css",
+        "line": 33,
         "atRules": [
           {
             "name": "layer",
@@ -35719,9 +36014,31 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 57,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".branded",
         "file": "modifiers.emphasis.css",
         "line": 11,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.emphasis.css",
+        "line": 21,
         "atRules": [
           {
             "name": "layer",
@@ -35774,6 +36091,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
+        "selector": ".default",
+        "file": "modifiers.lifecycle.css",
+        "line": 28,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
         "selector": ".experimental",
         "file": "modifiers.release.css",
         "line": 4,
@@ -35810,6 +36138,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".stable",
         "file": "modifiers.release.css",
         "line": 22,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.release.css",
+        "line": 28,
         "atRules": [
           {
             "name": "layer",
@@ -35856,6 +36195,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".warning",
         "file": "modifiers.criticality.css",
         "line": 31,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 53,
         "atRules": [
           {
             "name": "layer",
@@ -35909,6 +36259,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
             "prelude": "ds.modifiers"
           }
         ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 54,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
       }
     ]
   },
@@ -35949,6 +36310,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".warning",
         "file": "modifiers.criticality.css",
         "line": 34,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 56,
         "atRules": [
           {
             "name": "layer",
@@ -36012,6 +36384,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
             "prelude": "ds.modifiers"
           }
         ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 59,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
       }
     ]
   },
@@ -36064,6 +36447,17 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         "selector": ".information",
         "file": "modifiers.criticality.css",
         "line": 48,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.modifiers"
+          }
+        ]
+      },
+      {
+        "selector": ".default",
+        "file": "modifiers.criticality.css",
+        "line": 61,
         "atRules": [
           {
             "name": "layer",

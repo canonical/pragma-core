@@ -1,6 +1,10 @@
 import { makeDerivedArtifactToken } from "../../artifact/index.js";
 import type { Artifact } from "../../artifact/types.js";
-import { printRules } from "../../css-ast/index.js";
+import {
+  createDeclaration,
+  createRule,
+  printRules,
+} from "../../css-ast/index.js";
 import type { CSSNode } from "../../css-ast/types.js";
 import { wrapInLayer } from "../../layers/index.js";
 import type { ResolvedLayerConfig } from "../../layers/types.js";
@@ -9,7 +13,7 @@ import {
   computeModifierContext,
 } from "../../modifiers/index.js";
 import type { OverlayToken } from "../../modifiers/types.js";
-import { convertTokenIdToCssVar } from "../../naming.js";
+import { convertTokenIdToCssVar, prefixVar } from "../../naming.js";
 import { HEADER } from "../constants/header.js";
 import type EmittedPropertyRegistry from "../emittedPropertyRegistry.js";
 import { loadModifierData } from "../modifierIo.js";
@@ -40,9 +44,16 @@ export default function buildModifierFamily(
   }
 
   const allNodes: CSSNode[] = [];
+  const tokenIdByChannel = new Map(
+    Object.keys(baseTokens).map((id) => [
+      prefixVar(convertTokenIdToCssVar(id), "modifier"),
+      id,
+    ]),
+  );
+  const defaultTokenIds: string[] = [];
 
   for (const context of Object.keys(familyMod.contexts)) {
-    if (context === "none") {
+    if (context === "none" || context === "default") {
       continue;
     }
     const { descriptions } = loadModifierData(tokensDir, family, context);
@@ -60,6 +71,10 @@ export default function buildModifierFamily(
     allNodes.push(...buildModifierContextCSS(modifierContext));
 
     for (const declaration of modifierContext.declarations) {
+      const tokenId = tokenIdByChannel.get(declaration.property);
+      if (tokenId && !defaultTokenIds.includes(tokenId)) {
+        defaultTokenIds.push(tokenId);
+      }
       emittedProperties.register(
         declaration.property,
         `derived:${declaration.property}`,
@@ -84,6 +99,24 @@ export default function buildModifierFamily(
         description: descByChannelVar[declaration.property],
       });
     }
+  }
+
+  // The "default" context rebinds every channel the family emits back to its
+  // own base token, so an element opting into it overrides inherited channels
+  // instead of falling through to them.
+  if ("default" in familyMod.contexts && defaultTokenIds.length > 0) {
+    allNodes.push(
+      createRule(
+        [".default"],
+        defaultTokenIds.map((id) => {
+          const cssVar = convertTokenIdToCssVar(id);
+          return createDeclaration(
+            prefixVar(cssVar, "modifier"),
+            `var(${cssVar})`,
+          );
+        }),
+      ),
+    );
   }
 
   const wrapped = wrapInLayer(layers.modifiers, allNodes);
