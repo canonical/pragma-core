@@ -48,7 +48,7 @@
     "@canonical/typescript-config": "^0.43.0",
     "@canonical/webarchitect": "^0.43.0",
     "@terrazzo/cli": "2.9.0",
-    "@terrazzo/parser": "2.7.1",
+    "@terrazzo/parser": "2.9.0",
     "@types/node": "^26.4.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
