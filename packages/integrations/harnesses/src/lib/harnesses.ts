@@ -666,6 +666,52 @@ const harnesses: readonly HarnessDefinition[] = [
     // `mcp.json` (docs/mcp.md "Replace the built-in MCP support"); so does
     // `"extensions": ["-builtin:mcp"]` in pi's settings.
   },
+  {
+    id: "junie",
+    name: "Junie",
+    version: "*",
+    // Junie is JetBrains' coding agent: a plugin in every JetBrains IDE
+    // (PyCharm, IntelliJ IDEA, WebStorm, …) and a standalone `junie` CLI. It is
+    // the ONE MCP client in a JetBrains IDE that keeps its servers in a
+    // documented file. AI Assistant, the other one, stores them only through
+    // its settings page, so there is nothing for pragma to write there.
+    //
+    // Both bands are read by the plugin AND the CLI, under `mcpServers`:
+    // project `.junie/mcp/mcp.json` and user `~/.junie/mcp/mcp.json` — the user
+    // file is what Settings | Tools | Junie | MCP Settings saves to, and it is
+    // shared by every JetBrains IDE on the machine —
+    // https://junie.jetbrains.com/docs/junie-cli-mcp-configuration.html
+    // (2026-10-19). A project-only row would be skipped by setup's DEFAULT
+    // global band, so: both.
+    scope: "both",
+    detect: [
+      // Junie's own directories: the project one holds the `.junie/mcp/mcp.json`
+      // this row writes, the user one holds the global file.
+      { type: "directory", path: ".junie" },
+      { type: "directory", path: "~/.junie" },
+      // The JetBrains per-user configuration root, one directory per platform
+      // in the three prefix forms `resolveFsPath` resolves. Every JetBrains IDE
+      // creates its `<Product><version>/` directory under it on first launch,
+      // so this is how a PyCharm install with no Junie state yet is found.
+      // The user file is read by Junie in any of those IDEs, so the root, not
+      // one product's directory, is the right signal. A snap install
+      // (`pycharm`, `pycharm-professional`, `pycharm-community`, …) is found
+      // the same way: the JetBrains snaps are CLASSIC confinement, so their
+      // home is the real one and they write the same `~/.config/JetBrains`.
+      { type: "directory", path: "$XDG_CONFIG_HOME/JetBrains" },
+      { type: "directory", path: "~/Library/Application Support/JetBrains" },
+      { type: "directory", path: "%APPDATA%/JetBrains" },
+      { type: "process", name: "junie" },
+    ],
+    configPath: (root) => `${root}/.junie/mcp/mcp.json`,
+    homeConfigPath: (p) => `${userHome(p)}/.junie/mcp/mcp.json`,
+    configFormat: "json",
+    mcpKey: "mcpServers",
+    // No `mcpEntry` column: Junie's stdio entry is the plain
+    // `{command, args?, env?}` shape under `mcpServers` — what
+    // `defaultMcpEntry` emits.
+    skillsPath: (root) => `${root}/.agents/skills`,
+  },
 ];
 
 export default harnesses;
