@@ -534,6 +534,89 @@ describe("Pi config (.pi/mcp.json)", () => {
   });
 });
 
+describe("Junie config (.junie/mcp/mcp.json)", () => {
+  const junie = findHarnessById("junie") as (typeof harnesses)[number];
+
+  it("writes the plain stdio shape under `mcpServers` in the project band", () => {
+    const result = dryRunWith(
+      writeMcpConfig(junie, "/project", "pragma", {
+        command: "pragma",
+        args: ["mcp"],
+        cwd: "/project",
+      }),
+      buildMocks({
+        Exists: existsMock(() => false),
+        MakeDir: mkdirMock,
+        WriteFile: writeMock,
+      }),
+    );
+
+    const writeEffects = filterEffects(result.effects, "WriteFile");
+    expect(writeEffects.length).toBe(1);
+    expect(writeEffects[0].path).toBe("/project/.junie/mcp/mcp.json");
+
+    const written = JSON.parse(writeEffects[0].content);
+    expect(written.mcpServers.pragma).toEqual({
+      command: "pragma",
+      args: ["mcp"],
+      cwd: "/project",
+    });
+  });
+
+  it("merges into an existing file, preserving the other servers", () => {
+    const existingConfig = JSON.stringify({
+      mcpServers: {
+        context7: { command: "npx", args: ["-y", "@upstash/context7-mcp"] },
+      },
+    });
+
+    const result = dryRunWith(
+      writeMcpConfig(junie, "/project", "pragma", {
+        command: "pragma",
+        args: ["mcp"],
+      }),
+      buildMocks({
+        Exists: existsMock(() => true),
+        ReadFile: readFileMock(existingConfig),
+        WriteFile: writeMock,
+      }),
+    );
+
+    const written = JSON.parse(
+      filterEffects(result.effects, "WriteFile")[0].content,
+    );
+    expect(written.mcpServers.context7).toEqual({
+      command: "npx",
+      args: ["-y", "@upstash/context7-mcp"],
+    });
+    expect(written.mcpServers.pragma).toEqual({
+      command: "pragma",
+      args: ["mcp"],
+    });
+  });
+
+  it("writes the global band into the user file every JetBrains IDE shares", () => {
+    const result = dryRunWith(
+      writeMcpConfig(
+        junie,
+        "/project",
+        "pragma",
+        { command: "pragma" },
+        "global",
+        PLATFORM,
+      ),
+      buildMocks({
+        Exists: existsMock(() => false),
+        MakeDir: mkdirMock,
+        WriteFile: writeMock,
+      }),
+    );
+    expect(filterEffects(result.effects, "WriteFile")[0].path).toBe(
+      "/home/tester/.junie/mcp/mcp.json",
+    );
+  });
+});
+
 describe("removeMcpConfig", () => {
   it("is a no-op when config file does not exist", () => {
     const result = dryRunWith(

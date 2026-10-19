@@ -712,3 +712,76 @@ describe("detectHarnesses — Pi signals", () => {
     expect(result.value).toEqual([]);
   });
 });
+
+/**
+ * Junie's signal set. The JetBrains config root is the point: a PyCharm (or
+ * any other JetBrains IDE) install must be found before Junie has written any
+ * state of its own, on each platform's own config base.
+ */
+describe("detectHarnesses — Junie signals", () => {
+  /** Exists true for exactly one path; every other effect left unmocked. */
+  const only = (wanted: string): Map<string, (effect: Effect) => unknown> =>
+    new Map([
+      [
+        "Exists",
+        (effect: Effect): unknown =>
+          (effect as Effect & { _tag: "Exists"; path: string }).path === wanted,
+      ],
+    ]);
+
+  it("detects Junie from the project .junie directory alone, at high confidence", () => {
+    const result = dryRunWith(
+      detectHarnesses("/project", PLATFORM),
+      only("/project/.junie"),
+    );
+
+    expect(result.value.map((d) => d.harness.id)).toEqual(["junie"]);
+    expect(result.value[0]?.confidence).toBe("high");
+    expect(result.value[0]?.configPath).toBe("/project/.junie/mcp/mcp.json");
+  });
+
+  it("detects a PyCharm install on linux from the JetBrains config root", () => {
+    const result = dryRunWith(
+      detectHarnesses("/project", PLATFORM),
+      only("/home/tester/.config/JetBrains"),
+    );
+
+    expect(result.value.map((d) => d.harness.id)).toEqual(["junie"]);
+    expect(result.value[0]?.confidence).toBe("high");
+    expect(result.value[0]?.configExists).toBe(false);
+  });
+
+  it("follows $XDG_CONFIG_HOME to the JetBrains config root", () => {
+    const result = dryRunWith(
+      detectHarnesses("/project", {
+        ...PLATFORM,
+        env: { ...PLATFORM.env, XDG_CONFIG_HOME: "/xdg" },
+      }),
+      only("/xdg/JetBrains"),
+    );
+
+    expect(result.value.map((d) => d.harness.id)).toEqual(["junie"]);
+  });
+
+  it("detects a PyCharm install on macOS from Application Support", () => {
+    const result = dryRunWith(
+      detectHarnesses("/project", { ...PLATFORM, platform: "darwin" }),
+      only("/home/tester/Library/Application Support/JetBrains"),
+    );
+
+    expect(result.value.map((d) => d.harness.id)).toEqual(["junie"]);
+  });
+
+  it("detects a PyCharm install on Windows from %APPDATA%", () => {
+    const result = dryRunWith(
+      detectHarnesses("/project", {
+        ...PLATFORM,
+        platform: "win32",
+        env: { ...PLATFORM.env, APPDATA: "/home/tester/AppData/Roaming" },
+      }),
+      only("/home/tester/AppData/Roaming/JetBrains"),
+    );
+
+    expect(result.value.map((d) => d.harness.id)).toEqual(["junie"]);
+  });
+});

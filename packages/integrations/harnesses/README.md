@@ -104,8 +104,11 @@ The registry is pure data — adding a new harness is adding an entry, not writi
 | VS Code Insiders | `vscode-insiders` | `.vscode/mcp.json` · `<user dir>/Code - Insiders/User/mcp.json` | JSON | `servers` | `.agents/skills/` |
 | VSCodium | `vscodium` | `.vscode/mcp.json` · `<user dir>/VSCodium/User/mcp.json` | JSON | `servers` | `.agents/skills/` |
 | Pi | `pi` | `.pi/mcp.json` · `~/.pi/agent/mcp.json` | JSON | `mcpServers` | `.agents/skills/` |
+| Junie | `junie` | `.junie/mcp/mcp.json` · `~/.junie/mcp/mcp.json` | JSON | `mcpServers` | `.agents/skills/` |
 
 The three VS Code products share the project file under one `servers` key, so the `(path, mcpKey)` write-dedup writes it once however many of them are detected; per user they are three separate directories. `<user dir>` is `vscodeUserDir`'s platform base: `$XDG_CONFIG_HOME` on Linux, `~/Library/Application Support` on macOS, `%APPDATA%` on Windows. Only the `vscode` row keys on `.vscode/` — the directory and the `mcp.json` in it belong to VS Code itself and name no product, so keying the forks on either would detect three editors on a machine with one.
+
+Junie is the MCP client in PyCharm and the other JetBrains IDEs, and its user file is shared by all of them. The row also detects the JetBrains per-user config root (`<user dir>/JetBrains`), so an installed IDE is found before Junie has written anything. JetBrains AI Assistant keeps its MCP servers only in its settings page, with no file to write.
 
 Each entry includes a `version` field (semver range) to support config format changes across harness versions. Multiple entries can exist for the same harness ID with different version ranges.
 

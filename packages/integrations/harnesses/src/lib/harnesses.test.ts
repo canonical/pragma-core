@@ -7,7 +7,7 @@ import { checkSignal } from "./signals.js";
 
 describe("harnesses registry", () => {
   it("contains all known harnesses", () => {
-    expect(harnesses).toHaveLength(17);
+    expect(harnesses).toHaveLength(18);
     const ids = harnesses.map((h) => h.id);
     expect(ids).toEqual([
       "claude-code",
@@ -27,6 +27,7 @@ describe("harnesses registry", () => {
       "crush",
       "oh-my-pi",
       "pi",
+      "junie",
     ]);
   });
 
@@ -494,6 +495,32 @@ describe("harnesses registry", () => {
       "path" in s ? [s.path] : [],
     );
     expect(paths.some((p) => p.includes(".omp"))).toBe(false);
+  });
+
+  it("junie is dual-scope: project .junie/mcp/mcp.json, user ~/.junie/mcp/mcp.json", () => {
+    const junie = harnesses.find((h) => h.id === "junie");
+    expect(junie?.scope).toBe("both");
+    expect(junie?.configPath("/project")).toBe("/project/.junie/mcp/mcp.json");
+    expect(junie?.homeConfigPath?.(PLATFORM)).toBe(
+      "/home/tester/.junie/mcp/mcp.json",
+    );
+    expect(junie?.mcpKey).toBe("mcpServers");
+    // Junie takes the plain stdio shape, so the default serializer serves it.
+    expect(junie?.mcpEntry).toBeUndefined();
+  });
+
+  it("junie is detectable from any JetBrains IDE's config root, on every platform", () => {
+    const junie = harnesses.find((h) => h.id === "junie");
+    expect(junie?.detect).toEqual(
+      expect.arrayContaining([
+        { type: "directory", path: ".junie" },
+        { type: "directory", path: "~/.junie" },
+        { type: "directory", path: "$XDG_CONFIG_HOME/JetBrains" },
+        { type: "directory", path: "~/Library/Application Support/JetBrains" },
+        { type: "directory", path: "%APPDATA%/JetBrains" },
+        { type: "process", name: "junie" },
+      ]),
+    );
   });
 
   it("roo-code skillsPath", () => {
