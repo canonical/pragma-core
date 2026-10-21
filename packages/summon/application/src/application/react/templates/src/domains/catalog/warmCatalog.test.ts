@@ -1,5 +1,5 @@
 import { createMockEnvironment, MockPayloadGenerator } from "relay-test-utils";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { setPrefetchEnvironment } from "#relay/prefetchEnvironment.js";
 import { PAGE_SIZE } from "./ProductList.js";
 import warmCatalog from "./warmCatalog.js";
@@ -10,14 +10,20 @@ const startWarm = (signal = new AbortController().signal) =>
 
 afterEach(() => {
   setPrefetchEnvironment(undefined);
+  vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
 });
 
 describe("warmCatalog", () => {
-  it("issues nothing while no prefetch environment is published", async () => {
-    const environment = createMockEnvironment();
+  it("fetches nothing while no prefetch environment is published", async () => {
+    vi.stubEnv("VITE_GRAPHQL_URL", "https://api.example.test/graphql");
+    const fetch = vi.fn(async () => {
+      throw new Error("The warm reached the network");
+    });
+    vi.stubGlobal("fetch", fetch);
 
     await expect(startWarm()).resolves.toBeUndefined();
-    expect(environment.mock.getAllOperations()).toEqual([]);
+    expect(fetch).not.toHaveBeenCalled();
   });
 
   it("fetches the first catalog page into the published environment", async () => {
