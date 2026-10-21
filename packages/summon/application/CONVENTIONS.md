@@ -142,7 +142,7 @@ export default function GuidePage({
 | A4.2 | Routes pass components directly to `content` | `content: PageComponent` (not `content: () => <Page />`) |
 | A4.3 | Route files are `.ts` not `.tsx` (no JSX in route definitions) | extension is `.ts` |
 | A4.4 | Route objects use `as const` assertion | `as const` present |
-| A4.5 | `warm()` is fire-and-forget — it does not return data | no data threading |
+| A4.5 | `warm()` never threads data to the page: it fills a store the page reads. It may return a promise, which the server awaits before rendering (A7.8) and the client never waits on | no data threading |
 | A4.6 | No `.error` on routes — use React error boundaries | no `error` property |
 | A4.7 | Search params use Standard Schema validation (`~standard`) | schema protocol used |
 
@@ -225,6 +225,7 @@ rather than `hydrateRoot`.
 | A7.5 | Router created inside entry server component from URL | `createStaticRouter` in component |
 | A7.6 | URL passed as serializable `initialData` | `{ url: string }` in initialData |
 | A7.7 | Production uses platform adapters (Vercel, Cloudflare), not dev servers | servers are dev-only |
+| A7.8 | Under `--relay`, before rendering, the server awaits the matched route's own `warm` against a request-scoped prefetch environment, bounded by a 5 s deadline, and serializes that environment's store records into `__INITIAL_DATA__.relayRecords`. Wrapper warms are not awaited. Without `--relay` there is no store to fill, so nothing is awaited | `prefetchRouteData` in `src/server/entry.tsx` |
 
 ---
 
@@ -279,7 +280,8 @@ Present only when the application is scaffolded with `--relay`.
 | A11.4 | Data requirements are colocated: containers use `useLazyLoadQuery`, leaf components own their `useFragment`, parents just spread it | fragment per component |
 | A11.5 | Query subtrees pair `Suspense` (pending state) with an `ErrorBoundary` (failure state) | both boundaries wrap the subtree |
 | A11.6 | Query subtrees guard on `typeof document` / a store `check()` so the server renders them only from prefetched data (vacuously true under `--rendering spa`, where there is no server) | guard present on query subtrees |
-| A11.7 | One Relay environment per browser session (module scope in the client entry); under `--rendering ssr`, additionally a fresh environment per request in the server entry | environment creation sites |
+| A11.7 | One Relay environment per browser session (module scope in the client entry), published as the prefetch environment; under `--rendering ssr`, the server additionally creates one environment per request for the matched route's warm and one per render, seeded from the records the warm fetched | environment creation sites |
+| A11.8 | A `warm` reads `getPrefetchEnvironment()` synchronously, before its first `await` — the server publishes the request's environment only for the synchronous part of the call | the read precedes every `await` |
 
 ### ClientOnly (emitted, unused)
 

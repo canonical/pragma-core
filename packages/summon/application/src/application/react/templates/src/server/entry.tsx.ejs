@@ -9,12 +9,15 @@ import { documentAttrs, isSupportedLocale } from "@canonical/i18n-core";
 <% } -%>
 import type { ServerEntrypointProps } from "@canonical/react-ssr/renderer";
 import {
+<% if (relay) { -%>
+  type AnyRoute,
+<% } -%>
   createRouter,
   createServerAdapter,
   StatusResponse,
 } from "@canonical/router-core";
 <% if (relay) { -%>
-import { fetchQuery } from "react-relay";
+import type { IEnvironment } from "relay-runtime";
 <% } -%>
 <% if (intl) { -%>
 import { i18nConfig } from "#i18n/index.js";
@@ -22,19 +25,17 @@ import { i18nConfig } from "#i18n/index.js";
 import Shell from "#lib/Shell/index.js";
 <% if (relay) { -%>
 import { createEnvironment } from "#relay/environment.js";
+import {
+  getPrefetchEnvironment,
+  setPrefetchEnvironment,
+} from "#relay/prefetchEnvironment.js";
+import type { RelayRecords } from "#relay/types.js";
 <% } -%>
 import {
   appRoutes,
   getAuthRedirectForMatch,
   middleware,
   notFoundRoute,
-<% if (relay) { -%>
-  resolveRelayPayloads,
-<% } -%>
-  type SerializedRelayPayload,
-<% if (relay) { -%>
-  serverQueries,
-<% } -%>
 } from "../routes.js";
 
 interface InitialData extends Record<string, unknown> {
@@ -49,13 +50,15 @@ interface InitialData extends Record<string, unknown> {
   readonly kind?: "route" | "not-found";
   readonly routeId?: string | null;
   readonly status?: number;
+<% if (relay) { -%>
   /**
-   * Server-captured GraphQL responses for the matched route (see
-   * `prefetchRouteData`), replayed into the Relay store on both the server
-   * render and the client. A dedicated nested key — the router state is
-   * flat-spread into this same object, so nesting avoids any collision.
+   * The Relay store records the matched route's warm fetched (see
+   * `prefetchRouteData`), seeded into the store of both the server render
+   * and the client. A dedicated nested key — the router state is flat-spread
+   * into this same object, so nesting avoids any collision.
    */
-  readonly relayPayloads?: readonly SerializedRelayPayload[];
+  readonly relayRecords?: RelayRecords;
+<% } -%>
 <% if (intl) { -%>
   /** Locale negotiated from the request cookie / Accept-Language, if any. */
   readonly locale?: string;
@@ -140,95 +143,177 @@ export function resolveRouteDisposition(url: string): RouteDisposition {
   };
 }
 
-/**
- * Execute the matched route's declared server query (if any) and return the
- * captured responses in serializable form. Fetch-then-render: the payloads
- * exist before the renderer is constructed, so they ride the fixed
- * `__INITIAL_DATA__` bootstrap script. On any failure the request degrades —
- * render without payloads, the client fetches after hydration — a data
- * hiccup must never take the page down.
- */
-const SSR_PREFETCH_TIMEOUT_MS = 5_000;
-
-export async function prefetchRouteData(
-  disposition: RouteDisposition,
-): Promise<readonly SerializedRelayPayload[] | undefined> {
 <% if (relay) { -%>
-  if (disposition.kind !== "render") {
-    return undefined;
-  }
-
-  const routeId = disposition.dehydratedState?.routeId;
-  const serverQuery = routeId
-    ? serverQueries[routeId as keyof typeof serverQueries]
-    : undefined;
-
-  if (!serverQuery) {
-    return undefined;
-  }
-
-  const captured: SerializedRelayPayload[] = [];
+/**
+ * Start a route's warm against `environment`, published as the prefetch
+ * environment for the synchronous part of the call only: the previous value
+ * is restored before this returns. A warm reads the holder before its first
+ * `await`, so it captures this request's environment, and no other request
+ * can observe it.
+ *
+ * @note Impure: writes, then restores, the module-scope prefetch environment,
+ * and starts whatever side effects the warm performs.
+ */
+function startRouteWarm(
+  route: AnyRoute,
+  match: { readonly params: unknown; readonly search: unknown },
+  environment: IEnvironment,
+  signal: AbortSignal,
+): void | Promise<void> {
+  const previous = getPrefetchEnvironment();
+  setPrefetchEnvironment(environment);
 
   try {
-    // A fresh, request-scoped environment: nothing leaks across requests,
-    // and the capture tee records exactly the responses this route needs.
-    const environment = createEnvironment({
-      captureResponse: (entry) => {
-        captured.push(entry);
-      },
-    });
+    return route.warm?.(match.params, match.search, { signal });
+  } finally {
+    setPrefetchEnvironment(previous);
+  }
+}
 
-    // Bound the prefetch: an endpoint that never settles must not hold the
-    // whole SSR response hostage. On timeout the subscription is cancelled
-    // and rendering proceeds without payloads.
-    await new Promise<void>((resolve, reject) => {
-      const timer = setTimeout(() => {
-        subscription.unsubscribe();
-        reject(
-          new Error(
-            `SSR data prefetch exceeded ${SSR_PREFETCH_TIMEOUT_MS}ms`,
-          ),
-        );
-      }, SSR_PREFETCH_TIMEOUT_MS);
-      const subscription = fetchQuery(
-        environment,
-        serverQuery.query,
-        serverQuery.variables,
-        { fetchPolicy: "network-only" },
-      ).subscribe({
-        complete: () => {
-          clearTimeout(timer);
-          resolve();
-        },
-        error: (error: unknown) => {
-          clearTimeout(timer);
-          reject(error);
-        },
+/**
+ * Settle as `pending` does, or reject with the abort reason as soon as
+ * `signal` aborts, whichever comes first.
+ *
+ * @note Impure: subscribes to the signal's `abort` event.
+ */
+function raceAbort(
+  pending: void | Promise<void>,
+  signal: AbortSignal,
+): Promise<void> {
+  return Promise.race([
+    pending,
+    new Promise<never>((_resolve, reject) => {
+      signal.addEventListener("abort", () => reject(signal.reason), {
+        once: true,
       });
-    });
+    }),
+  ]);
+}
+
+/** How long the server waits for a route's warm before rendering without it. */
+const SSR_PREFETCH_TIMEOUT_MS = 5_000;
+
+/**
+ * Start the prefetch deadline: the returned signal aborts, with an error
+ * naming the limit, once `SSR_PREFETCH_TIMEOUT_MS` pass, unless `clear` is
+ * called first.
+ *
+ * @note Impure: schedules a timer, which `clear` cancels.
+ */
+function startPrefetchDeadline(): {
+  readonly signal: AbortSignal;
+  readonly clear: () => void;
+} {
+  const controller = new AbortController();
+  const timer = setTimeout(() => {
+    controller.abort(
+      new Error(`SSR data prefetch exceeded ${SSR_PREFETCH_TIMEOUT_MS}ms`),
+    );
+  }, SSR_PREFETCH_TIMEOUT_MS);
+
+  return { signal: controller.signal, clear: () => clearTimeout(timer) };
+}
+
+/**
+ * Run a route's warm against `environment` and settle as it does, or reject
+ * once the prefetch deadline passes, whichever comes first. The warm receives
+ * the deadline's signal, so a warm that honours it stops fetching then.
+ *
+ * @note Impure: starts the warm and its deadline timer, and clears the timer
+ * once either settles.
+ */
+async function awaitRouteWarm(
+  route: AnyRoute,
+  match: { readonly params: unknown; readonly search: unknown },
+  environment: IEnvironment,
+): Promise<void> {
+  const deadline = startPrefetchDeadline();
+
+  try {
+    await raceAbort(
+      startRouteWarm(route, match, environment, deadline.signal),
+      deadline.signal,
+    );
+  } finally {
+    deadline.clear();
+  }
+}
+
+/**
+ * Await the matched route's `warm` against a fresh, request-scoped Relay
+ * environment and return that environment's store records in serializable
+ * form. Fetch-then-render: the records exist before the renderer is
+ * constructed, so they ride the fixed `__INITIAL_DATA__` bootstrap script.
+ *
+ * Only the route's own warm is awaited. Wrapper warms are not: the router
+ * fires them when the client loads.
+ *
+ * The prefetch is bounded by `SSR_PREFETCH_TIMEOUT_MS`: on the deadline the
+ * warm's signal aborts and the page renders without records. A warm that
+ * ignores the signal keeps fetching into the discarded environment, but the
+ * response no longer waits for it. On any failure the request degrades the
+ * same way — render without records, the client fetches after hydration — so
+ * a data hiccup never takes the page down.
+ *
+ * @note Impure: performs whatever I/O the route's warm performs, and logs a
+ * warning when the prefetch fails.
+ */
+export async function prefetchRouteData(
+  disposition: RouteDisposition,
+): Promise<RelayRecords | undefined> {
+  if (
+    disposition.kind !== "render" ||
+    disposition.dehydratedState?.kind !== "route"
+  ) {
+    return undefined;
+  }
+
+  const match = dispositionMatcher.match(disposition.dehydratedState.href);
+
+  if (match?.kind !== "route" || !match.route.warm) {
+    return undefined;
+  }
+
+  const environment = createEnvironment();
+
+  try {
+    await awaitRouteWarm(match.route, match, environment);
   } catch (error) {
     console.warn(
-      "SSR data prefetch failed; rendering without payloads (the client will fetch).",
+      "SSR data prefetch failed; rendering without server data (the client will fetch).",
       error,
     );
 
     return undefined;
   }
 
-  return captured.length > 0 ? captured : undefined;
+  return environment.getStore().getSource().toJSON();
+}
 <% } else { -%>
-  // No data layer scaffolded: nothing to prefetch, every route renders
-  // without payloads. The uniform signature keeps the server files (plain
-  // copies shared by all flag combinations) unconditional.
+/**
+ * Resolve the data the server embeds for a route. No data layer is
+ * scaffolded, so there is none: every route renders without server data.
+ * The signature matches the one the Relay data layer emits, so the renderer
+ * and the dev servers call it the same way in every flag combination.
+ */
+export async function prefetchRouteData(
+  disposition: RouteDisposition,
+): Promise<undefined> {
   void disposition;
 
   return undefined;
-<% } -%>
 }
+<% } -%>
 
 export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
   const initialData = props.initialData ?? {};
   const url = initialData.url ?? "/";
+<% if (relay) { -%>
+  // A server-adapter router fires the matched route's warm at construction.
+  // No prefetch environment is published outside `prefetchRouteData`'s
+  // synchronous call, so that warm finds nothing to fill: this render reads
+  // the records `prefetchRouteData` already serialized.
+<% } -%>
   const router = createRouter(appRoutes, {
     middleware: [...middleware],
     notFound: notFoundRoute,
@@ -261,13 +346,13 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
 <% if (relay) { -%>
 
   // A fresh Relay environment per server render, so no store state leaks
-  // between requests — seeded with the same serialized payloads the client
-  // will replay, so server markup and first client render read identical
-  // data. Without payloads (no server query, or the prefetch failed) a
-  // querying component suspends and fetches through this request's own
-  // environment instead.
+  // between requests, seeded with the records the matched route's warm
+  // fetched — the same records the client seeds its store with, so server
+  // markup and first client render read identical data. Without records (the
+  // route has no warm, or the prefetch failed) a querying component renders
+  // its fallback and the client fetches after hydration.
   const relayEnvironment = createEnvironment({
-    payloads: resolveRelayPayloads(initialData.relayPayloads),
+    records: initialData.relayRecords,
   });
 <% } -%>
 

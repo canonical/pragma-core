@@ -192,11 +192,14 @@ after editing a `graphql` tag or the schema, run `bun run relay` (or keep
 `useLazyLoadQuery` fetches (and suspends) on mount: the catalog page shows its
 Suspense fallback, then renders once the operation resolves.
 <% } else { -%>
-**SSR prefetches declared queries.** `src/routes.tsx` declares `serverQueries`
-per route; the server awaits the matched route's query before rendering and
-serializes the captured operations into `__INITIAL_DATA__.relayPayloads`, which
-the client entry replays into the browser store — so the catalog page arrives
-server-rendered and does not refetch on hydration.
+**SSR awaits the route's warm.** Before rendering, the server awaits the
+matched route's `warm` (the catalog's is `warmCatalog`) against a fresh,
+per-request environment, published for the warm through
+`src/relay/prefetchEnvironment.ts`. It serializes that environment's store into
+`__INITIAL_DATA__.relayRecords`, and both the server render and the client
+entry seed their store from those records — so the catalog page arrives
+server-rendered and does not refetch on hydration. A warm reads the prefetch
+environment before its first `await`.
 <% } -%>
 
 <% if (standalone) { -%>

@@ -6,9 +6,18 @@ import viteConfig from "./vite.config.js";
 export default mergeConfig(
   viteConfig({ command: "serve", mode: "test" }),
   defineConfig({
+    // Vitest resolves dependencies the way Node does, which ignores a
+    // package's "module" entry; some @canonical/* packages declare only that
+    // entry (no "main"/"exports"), so a test that imports the route map (and
+    // through it every page) could not resolve them without this.
+    resolve: { mainFields: ["module"] },
     test: {
       // Browser-like environment for component tests
       environment: "jsdom",
+      // Transform @canonical/* through Vite rather than loading them with
+      // Node: their built output imports CSS as a side effect, which Node
+      // cannot load. The same reason vite.config.ts bundles them for SSR.
+      server: { deps: { inline: [/@canonical\//] } },
       // Vitest globals (describe/it/expect) without imports
       globals: true,
       // Extend matchers and clean up the DOM between tests

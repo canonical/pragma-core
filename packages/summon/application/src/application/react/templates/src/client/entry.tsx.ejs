@@ -26,47 +26,51 @@ import { i18nConfig } from "#i18n/index.js";
 <% } -%>
 import Shell from "#lib/Shell/index.js";
 <% if (relay) { -%>
-import { getBrowserEnvironment } from "#relay/environment.js";
+import { createEnvironment } from "#relay/environment.js";
+import { setPrefetchEnvironment } from "#relay/prefetchEnvironment.js";
 <% } -%>
-<%# Only the SSR relay arm pulls the two payload symbols; without them the -%>
-<%# three base names fit on one line and the formatter requires them there. -%>
 <% if (relay && !spa) { -%>
-import {
-  appRoutes,
-  middleware,
-  notFoundRoute,
-  resolveRelayPayloads,
-  type SerializedRelayPayload,
-} from "../routes.js";
-<% } else { -%>
-import { appRoutes, middleware, notFoundRoute } from "../routes.js";
+import type { RelayRecords } from "#relay/types.js";
 <% } -%>
+import { appRoutes, middleware, notFoundRoute } from "../routes.js";
 <% if (relay && spa) { -%>
 
-// Claim the browser-session Relay environment FIRST — before the router exists
-// — so the first `useLazyLoadQuery` and any warm hook fired during router
-// construction share one store. A client-only app has no server-captured
-// payload to seed from, so the store starts empty and the first query fetches.
-const relayEnvironment = getBrowserEnvironment();
+// Create the browser-session Relay environment and publish it as the prefetch
+// environment FIRST — before the router exists — so the warm fired during
+// router construction fills the store the first `useLazyLoadQuery` reads. A
+// client-only app has no server records to seed from, so the store starts
+// empty and the first warm or query fetches.
+const relayEnvironment = createEnvironment();
+setPrefetchEnvironment(relayEnvironment);
 <% } -%>
 <% if (relay && !spa) { -%>
 
-// Seed the browser-session Relay environment FIRST — before the router exists
-// — from the server-captured payloads riding __INITIAL_DATA__ (SSR pages) so
-// the first `useLazyLoadQuery` reads the store instead of refetching. In the
-// SPA cells there is no payload and the environment starts empty. Order
-// matters: the first getBrowserEnvironment() caller wins, and router
-// construction below can fire warm hooks that reach for the environment.
-const embeddedRelayPayloads = (
-  window as {
-    __INITIAL_DATA__?: {
-      relayPayloads?: readonly SerializedRelayPayload[];
-    };
-  }
-).__INITIAL_DATA__?.relayPayloads;
-const relayEnvironment = getBrowserEnvironment({
-  payloads: resolveRelayPayloads(embeddedRelayPayloads),
+/**
+ * Whether a value read off `window.__INITIAL_DATA__` can seed a Relay store:
+ * the server embeds the records as a plain object keyed by record id. The
+ * value crosses a page boundary, so anything else is ignored rather than
+ * trusted.
+ */
+function isRelayRecords(value: unknown): value is RelayRecords {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+// Create the browser-session Relay environment FIRST — before the router
+// exists — seeded from the store records riding __INITIAL_DATA__ (SSR pages),
+// so the first `useLazyLoadQuery` reads the store instead of refetching. In
+// the SPA cells there are no records and the store starts empty. It is
+// published as the prefetch environment before the router is created, because
+// router construction can fire the matched route's warm, which must fill this
+// same store.
+const embeddedRelayRecords = (
+  window as { __INITIAL_DATA__?: { relayRecords?: unknown } }
+).__INITIAL_DATA__?.relayRecords;
+const relayEnvironment = createEnvironment({
+  records: isRelayRecords(embeddedRelayRecords)
+    ? embeddedRelayRecords
+    : undefined,
 });
+setPrefetchEnvironment(relayEnvironment);
 <% } -%>
 
 <% if (spa) { -%>

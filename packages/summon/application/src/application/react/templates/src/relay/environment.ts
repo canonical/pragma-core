@@ -1,26 +1,8 @@
-/**
- * Relay environment factory.
- *
- * Builds the app's Relay `Environment` on top of `relay-runtime-network`'s
- * middleware-driven fetch pipeline, in one of two modes:
- *
- * - **local (default)** — a `localGraphExecutor` resolves every operation
- *   in-process against the mock catalog schema (`./schema.ts`), so the
- *   boilerplate runs with zero backend.
- * - **endpoint** — when `VITE_GRAPHQL_URL` is set (or a URL is passed
- *   explicitly), an `httpExecutor` + `urlMiddleware` posts operations to a
- *   real GraphQL server.
- */
-
 import {
-  createOperationDescriptor,
   Environment,
   type FetchFunction,
   type GraphQLResponse,
-  type GraphQLTaggedNode,
-  getRequest,
   Network,
-  type PayloadData,
   RecordSource,
   Store,
 } from "relay-runtime";
@@ -33,45 +15,32 @@ import {
   type RelayRuntimeFetch,
   urlMiddleware,
 } from "relay-runtime-network";
-
-/**
- * A server-captured operation ready to replay: the resolved query node plus
- * the variables and raw response `data` captured when the server executed it.
- */
-export interface RelaySeedPayload {
-  readonly query: GraphQLTaggedNode;
-  readonly variables: Record<string, unknown>;
-  readonly data: Record<string, unknown>;
-}
-
-/** A response observed by the network, in the serializable wire shape. */
-export interface CapturedResponse {
-  readonly id: string;
-  readonly variables: Record<string, unknown>;
-  readonly data: Record<string, unknown>;
-}
+import type { RelayRecords } from "./types.js";
 
 /** Options for {@link createEnvironment}. */
-export interface CreateEnvironmentOptions {
+interface CreateEnvironmentOptions {
   /**
    * GraphQL endpoint URL. Overrides the `VITE_GRAPHQL_URL` env var; when
    * neither is set the environment executes against the local mock schema.
    */
   readonly graphqlUrl?: string;
   /**
-   * Server-captured operations replayed into the store at construction via
-   * Relay's public `commitPayload` — only these operations' data ever crosses
-   * the SSR boundary (no whole-store serialization, nothing to scrub). Each
-   * replayed operation is retained, so the seeded data cannot be GC'd before
-   * its first reader mounts.
+   * Records to seed the store with, as another environment serialized them.
+   * Operations those records answer read as available, so they render
+   * without a fetch.
+   *
+   * Nothing retains the seeded records: the records do not say which
+   * operations they answer, so there is no operation to retain. They stay
+   * because Relay collects unretained records only when a released operation
+   * overflows the store's release buffer (ten operations by default) or goes
+   * stale, and no `queryCacheExpirationTime` is set, so nothing goes stale.
+   * The first reader of a seeded page mounts during hydration and retains
+   * its operation from then on; until it does, the records survive while no
+   * more than ten queries have been released. An app that can release more
+   * before a seeded page's reader mounts must retain that page's operation
+   * itself.
    */
-  readonly payloads?: readonly RelaySeedPayload[];
-  /**
-   * Observe each successful single response the environment's network
-   * returns. The SSR prefetch uses this to tee responses into the
-   * serializable payload list while `fetchQuery` normalizes them as usual.
-   */
-  readonly captureResponse?: (captured: CapturedResponse) => void;
+  readonly records?: RelayRecords;
 }
 
 /** Reads the endpoint URL from Vite's env, treating the empty string as unset. */
@@ -179,10 +148,25 @@ const toFetchFunction =
   };
 
 /**
- * Creates a Relay `Environment` for the app.
+ * Creates a Relay `Environment` for the app, its store seeded with
+ * `options.records` when given.
  *
- * Call once per browser session (module scope in the client entry) and once
- * per request on the server, so no store state leaks across requests.
+ * The network runs on `relay-runtime-network`'s middleware-driven fetch
+ * pipeline, in one of two modes:
+ *
+ * - **local (default)** — a `localGraphExecutor` resolves every operation
+ *   in-process against the mock catalog schema (`./schema.ts`), so the
+ *   boilerplate runs with zero backend.
+ * - **endpoint** — when `VITE_GRAPHQL_URL` is set (or `options.graphqlUrl`
+ *   is passed), an `httpExecutor` + `urlMiddleware` posts operations to a
+ *   real GraphQL server.
+ *
+ * Call once per browser session (module scope in the client entry) and, on
+ * the server, once per request for the matched route's warm and once per
+ * render, so no store state leaks across requests.
+ *
+ * @note Impure: reads `VITE_GRAPHQL_URL` from Vite's env when no URL is
+ * passed, and builds a network that performs I/O on every operation.
  */
 export const createEnvironment = (
   options: CreateEnvironmentOptions = {},
@@ -192,76 +176,8 @@ export const createEnvironment = (
     ? createHttpNetwork(graphqlUrl)
     : createLocalNetwork();
 
-  // toFetchFunction always yields a promise (see its cast); the narrower
-  // alias lets the capture wrapper await it without widening back into
-  // FetchFunction's observable-bearing return union.
-  const baseFetch = toFetchFunction(network.fetch) as (
-    ...args: Parameters<FetchFunction>
-  ) => Promise<GraphQLResponse>;
-  const capture = options.captureResponse;
-  const fetchFn: FetchFunction = capture
-    ? async (params, variables, cacheConfig, uploadables) => {
-        const response = await baseFetch(
-          params,
-          variables,
-          cacheConfig,
-          uploadables,
-        );
-        // Batched responses are never produced by either executor; capture
-        // only well-formed single responses that carry data and a name.
-        if (
-          !Array.isArray(response) &&
-          "data" in response &&
-          response.data &&
-          params.name
-        ) {
-          capture({
-            id: params.name,
-            variables,
-            data: response.data as unknown as Record<string, unknown>,
-          });
-        }
-
-        return response;
-      }
-    : baseFetch;
-
-  const environment = new Environment({
-    network: Network.create(fetchFn),
-    store: new Store(new RecordSource()),
+  return new Environment({
+    network: Network.create(toFetchFunction(network.fetch)),
+    store: new Store(new RecordSource(options.records)),
   });
-
-  for (const seed of options.payloads ?? []) {
-    const operation = createOperationDescriptor(
-      getRequest(seed.query),
-      seed.variables,
-    );
-
-    environment.commitPayload(operation, seed.data as PayloadData);
-    // Explicit retention — seeded data must survive until its first reader
-    // mounts and takes over the retain; no reliance on GC timing.
-    environment.retain(operation);
-  }
-
-  return environment;
-};
-
-let browserEnvironment: Environment | null = null;
-
-/**
- * The browser-session Relay environment, created lazily on first use.
- *
- * Module scope so the client entry's provider and route-level `warm` hooks
- * share one normalized store — a navigation-time cache warm lands in the same
- * store `useLazyLoadQuery` reads from. The FIRST caller's options win (the
- * client entry seeds SSR payloads before anything else runs); later calls
- * reuse the existing environment. Server code must keep using
- * `createEnvironment()` (fresh per request).
- */
-export const getBrowserEnvironment = (
-  options?: CreateEnvironmentOptions,
-): Environment => {
-  browserEnvironment ??= createEnvironment(options);
-
-  return browserEnvironment;
 };

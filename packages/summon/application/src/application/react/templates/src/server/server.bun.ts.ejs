@@ -88,10 +88,10 @@ Bun.serve({
         });
       }
 
-      // Fetch-then-render: run the matched route's declared server query so
-      // its captured responses ride the bootstrap script (fixed at stream
-      // start); absent or failed, the client fetches after hydration.
-      const relayPayloads = await prefetchRouteData(disposition);
+      // Fetch-then-render: await the matched route's warm so the records it
+      // fetched ride the bootstrap script (fixed at stream start); absent or
+      // failed, the client fetches after hydration.
+      const relayRecords = await prefetchRouteData(disposition);
       const { JSXRenderer } = await vite.ssrLoadModule(
         "@canonical/react-ssr/renderer",
       );
@@ -126,7 +126,7 @@ Bun.serve({
 <% if (intl) { -%>
           locale,
 <% } -%>
-          ...(relayPayloads ? { relayPayloads } : {}),
+          ...(relayRecords ? { relayRecords } : {}),
           ...(disposition.dehydratedState ?? {}),
         },
 <% if (intl) { -%>

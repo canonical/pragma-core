@@ -1,4 +1,8 @@
-import { fetchQuery } from "relay-runtime";
+import {
+  createOperationDescriptor,
+  fetchQuery,
+  getRequest,
+} from "relay-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import productListQueryNode, {
   type ProductListQuery,
@@ -83,5 +87,38 @@ describe("createEnvironment", () => {
     expect(second.getStore().getSource().getRecordIDs()).toEqual([
       "client:root",
     ]);
+  });
+
+  it("seeds the store from another environment's serialized records", async () => {
+    const source = createEnvironment();
+    await fetchProductList(source);
+    const fetchSpy = vi.fn<
+      (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+    >(async () => Response.json(ENDPOINT_PAYLOAD, { status: 200 }));
+    vi.stubGlobal("fetch", fetchSpy);
+
+    // Through JSON, as the records cross the SSR boundary.
+    const seeded = createEnvironment({
+      graphqlUrl: "https://api.example.test/graphql",
+      records: JSON.parse(
+        JSON.stringify(source.getStore().getSource().toJSON()),
+      ),
+    });
+    const operation = createOperationDescriptor(
+      getRequest(productListQueryNode),
+      { count: 2 },
+    );
+
+    expect(seeded.check(operation).status).toBe("available");
+
+    const data = await fetchQuery<ProductListQuery>(
+      seeded,
+      productListQueryNode,
+      { count: 2 },
+      { fetchPolicy: "store-or-network" },
+    ).toPromise();
+
+    expect(data?.viewer.name).toBe("Ada Lovelace");
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 });

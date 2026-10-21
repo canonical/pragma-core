@@ -338,6 +338,8 @@ describe("application/react generator", () => {
     expect(filePaths).toContain("my-app/src/relay/schema.test.ts");
     expect(filePaths).toContain("my-app/src/relay/environment.ts");
     expect(filePaths).toContain("my-app/src/relay/environment.test.ts");
+    expect(filePaths).toContain("my-app/src/relay/prefetchEnvironment.ts");
+    expect(filePaths).toContain("my-app/src/relay/types.ts");
     expect(filePaths).toContain(
       "my-app/src/relay/__generated__/ProductCard_product.graphql.ts",
     );
@@ -360,6 +362,10 @@ describe("application/react generator", () => {
       "my-app/src/domains/catalog/ErrorBoundary.test.tsx",
     );
     expect(filePaths).toContain("my-app/src/domains/catalog/routes.ts");
+    expect(filePaths).toContain("my-app/src/domains/catalog/warmCatalog.ts");
+    expect(filePaths).toContain(
+      "my-app/src/domains/catalog/warmCatalog.test.ts",
+    );
 
     // ClientOnly SSR guard (relay is its only consumer today)
     expect(filePaths).toContain("my-app/src/lib/ClientOnly/ClientOnly.tsx");
@@ -457,6 +463,11 @@ describe("application/react generator", () => {
       [],
     );
     expect(filePaths).not.toContain("my-app/relay.config.json");
+    // The catalog's warm and the server's prefetch tests need the data layer.
+    expect(filePaths).not.toContain(
+      "my-app/src/domains/catalog/warmCatalog.ts",
+    );
+    expect(filePaths).not.toContain("my-app/src/server/entry.test.ts");
   });
 
   it('includes the server, sitemap and ClientOnly when rendering="ssr"', () => {
@@ -479,6 +490,7 @@ describe("application/react generator", () => {
       );
 
     expect(filePaths).toContain("my-app/src/server/entry.tsx");
+    expect(filePaths).toContain("my-app/src/server/entry.test.ts");
     expect(filePaths).toContain("my-app/src/server/renderer.tsx");
     expect(filePaths).toContain("my-app/src/server/server.express.ts");
     expect(filePaths).toContain("my-app/src/server/server.bun.ts");

@@ -346,3 +346,56 @@ describe("the rendered application renders one provider nest", () => {
     }
   }
 });
+
+/**
+ * The client's prefetch environment, asserted on the rendered text.
+ *
+ * Creating the router fires the matched route's warm, and a warm fills the
+ * environment published when it runs. The client entry must publish its
+ * environment before it creates the router, or that first warm finds nothing
+ * to fill and the first query fetches on its own. Moving the call below the
+ * router is no syntax error, so the order is checked here.
+ */
+describe("the client publishes its prefetch environment before routing", () => {
+  for (const combo of combos.filter(({ relay }) => relay)) {
+    it(`${label(combo)}: setPrefetchEnvironment runs before createRouter`, () => {
+      const client = renderTemplate("src/client/entry.tsx.ejs", combo);
+      const published = client.indexOf("setPrefetchEnvironment(");
+
+      expect(published).toBeGreaterThan(-1);
+      expect(published).toBeLessThan(client.indexOf("createRouter("));
+    });
+  }
+});
+
+/**
+ * The server's records reach the client's store, asserted on the rendered text.
+ *
+ * The server embeds the records its warm fetched under one `__INITIAL_DATA__`
+ * key and seeds its own render from them; the client must read that same key
+ * and seed its store from it, or it hydrates with an empty store and refetches
+ * the page the server already rendered. A renamed key or a dropped `records`
+ * option is no syntax error, so the hand-off is checked on both sides here.
+ */
+describe("the client seeds its store from the server's records", () => {
+  for (const combo of combos.filter(({ relay, spa }) => relay && !spa)) {
+    it(`${label(combo)}: both entries hand the relayRecords key to createEnvironment`, () => {
+      const server = renderTemplate("src/server/entry.tsx.ejs", combo);
+      const client = renderTemplate("src/client/entry.tsx.ejs", combo);
+      const embedded = client
+        .match(/^const (\w+) = \([^;]*?\)\.__INITIAL_DATA__\?\.relayRecords;$/m)
+        ?.at(1);
+
+      expect(server).toContain("readonly relayRecords?: RelayRecords;");
+      expect(server).toMatch(
+        /createEnvironment\(\{\s*records: initialData\.relayRecords,\s*\}\)/,
+      );
+      expect(embedded).toBeDefined();
+      expect(client).toMatch(
+        new RegExp(
+          `createEnvironment\\(\\{\\s*records: isRelayRecords\\(${embedded}\\)\\s*\\?\\s*${embedded}\\s*:\\s*undefined,\\s*\\}\\)`,
+        ),
+      );
+    });
+  }
+});

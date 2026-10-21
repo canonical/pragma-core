@@ -226,21 +226,21 @@ describe("server matrix (2×3) serves correctly", () => {
 <% } -%>
 <% if (!spa) { -%>
           // SSR cells serialize Relay data across the boundary (when the app
-          // was scaffolded with --relay): the catalog page arrives with
-          // server-rendered product markup and carries the captured operation
-          // payloads for the client to replay. Without --relay there is no
-          // /catalog route (404), so the assertions self-disable — this file
-          // is a plain copy shared by every flag combination.
+          // was scaffolded with --relay): the server awaits the catalog
+          // route's warm, so the page arrives with server-rendered product
+          // markup and carries the store records for the client to seed its
+          // store with. A route without a warm carries none. Without --relay
+          // there is no /catalog route (404), so the assertions self-disable.
           if (cell.ssr) {
             const catalog = await fetch(`${server.base}/catalog`);
             if (catalog.status === 200) {
               const catalogHtml = await catalog.text();
               expect(catalogHtml).toContain("Vanguard Workstation");
-              expect(catalogHtml).toContain("relayPayloads");
+              expect(catalogHtml).toContain("relayRecords");
             }
 
             const home = await fetch(`${server.base}/`);
-            expect(await home.text()).not.toContain("relayPayloads");
+            expect(await home.text()).not.toContain("relayRecords");
           }
 <% } -%>
         } finally {

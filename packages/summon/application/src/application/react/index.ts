@@ -428,6 +428,9 @@ fallback.`,
               vars,
             }),
           ),
+          // The prefetch tests exercise the catalog route's warm, so they ride
+          // --relay as well as the SSR arm.
+          when(!spa && answers.relay, copy("src/server/entry.test.ts")),
           when(!spa, copy("src/server/preview.express.ts")),
           when(!spa, copy("src/server/preview.bun.ts")),
 
@@ -485,13 +488,16 @@ fallback.`,
           when(answers.forms, copy("src/domains/contact/routes.ts")),
 
           // Relay data layer (when --relay is enabled): environment factory +
-          // executable mock schema, the catalog example domain, and the
-          // ClientOnly SSR guard (whose only consumer today is the catalog page).
+          // executable mock schema, the prefetch environment route warms fill,
+          // the catalog example domain, and the ClientOnly SSR guard (whose
+          // only consumer today is the catalog page).
           when(answers.relay, copy("src/relay/schema.graphql")),
           when(answers.relay, copy("src/relay/schema.ts")),
           when(answers.relay, copy("src/relay/schema.test.ts")),
           when(answers.relay, copy("src/relay/environment.ts")),
           when(answers.relay, copy("src/relay/environment.test.ts")),
+          when(answers.relay, copy("src/relay/prefetchEnvironment.ts")),
+          when(answers.relay, copy("src/relay/types.ts")),
           // Committed relay-compiler artifacts — deterministic outputs of the
           // committed schema + the catalog queries; `bun run relay` regenerates
           // them in the scaffolded app after any schema or graphql-tag edit.
@@ -555,6 +561,8 @@ fallback.`,
             }),
           ),
           when(answers.relay, copy("src/domains/catalog/routes.ts")),
+          when(answers.relay, copy("src/domains/catalog/warmCatalog.ts")),
+          when(answers.relay, copy("src/domains/catalog/warmCatalog.test.ts")),
 
           // Standalone dependency patches (when --relay is enabled): a
           // standalone app cannot inherit a workspace's patches/, so they ship
