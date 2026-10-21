@@ -371,14 +371,30 @@ describe("the client publishes its prefetch environment before routing", () => {
 /**
  * The server's records reach the client's store, asserted on the rendered text.
  *
- * The server embeds the records its warm fetched under one `__INITIAL_DATA__`
- * key and seeds its own render from them; the client must read that same key
- * and seed its store from it, or it hydrates with an empty store and refetches
- * the page the server already rendered. A renamed key or a dropped `records`
- * option is no syntax error, so the hand-off is checked on both sides here.
+ * Each server (the compiled renderer and the Bun and Express dev servers)
+ * embeds the records its warm fetched under one `__INITIAL_DATA__` key, and the
+ * server entry seeds its own render from them; the client must read that same
+ * key and seed its store from it, or it hydrates with an empty store and
+ * refetches the page the server already rendered. A renamed key or a dropped
+ * `records` option is no syntax error, so the hand-off is checked on every
+ * side here.
  */
 describe("the client seeds its store from the server's records", () => {
   for (const combo of combos.filter(({ relay, spa }) => relay && !spa)) {
+    it(`${label(combo)}: every server embeds its records under relayRecords`, () => {
+      const producers = [
+        "src/server/renderer.tsx.ejs",
+        "src/server/server.bun.ts.ejs",
+        "src/server/server.express.ts.ejs",
+      ];
+
+      for (const rel of producers) {
+        expect(renderTemplate(rel, combo), rel).toContain(
+          "...(relayRecords ? { relayRecords } : {}),",
+        );
+      }
+    });
+
     it(`${label(combo)}: both entries hand the relayRecords key to createEnvironment`, () => {
       const server = renderTemplate("src/server/entry.tsx.ejs", combo);
       const client = renderTemplate("src/client/entry.tsx.ejs", combo);
