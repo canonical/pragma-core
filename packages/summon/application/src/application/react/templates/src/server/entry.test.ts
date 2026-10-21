@@ -6,7 +6,11 @@ import { createEnvironment } from "#relay/environment.js";
 import { getPrefetchEnvironment } from "#relay/prefetchEnvironment.js";
 import { executeLocalOperation } from "#relay/schema.js";
 import type { RelayRecords } from "#relay/types.js";
-import { prefetchRouteData, resolveRouteDisposition } from "./entry.js";
+import {
+  prefetchRouteData,
+  type RouteDisposition,
+  resolveRouteDisposition,
+} from "./entry.js";
 
 // The router copies each route record when it is created, so a test cannot
 // swap a matched route's warm afterwards. The catalog warm is wrapped in a
@@ -63,6 +67,7 @@ afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
+  vi.clearAllMocks();
   vi.restoreAllMocks();
 });
 
@@ -88,6 +93,29 @@ describe("prefetchRouteData", () => {
     await expect(
       prefetchRouteData(resolveRouteDisposition("/home")),
     ).resolves.toBeUndefined();
+  });
+
+  it("returns nothing for a URL no route matches", async () => {
+    const disposition = resolveRouteDisposition("/no-such-page");
+
+    expect(disposition).toMatchObject({
+      kind: "render",
+      dehydratedState: { kind: "not-found" },
+    });
+    await expect(prefetchRouteData(disposition)).resolves.toBeUndefined();
+    expect(warmCatalog).not.toHaveBeenCalled();
+  });
+
+  it("returns nothing for a render without router state", async () => {
+    // What `resolveRouteDisposition` answers when a search schema rejects.
+    const disposition: RouteDisposition = {
+      kind: "render",
+      status: 400,
+      dehydratedState: null,
+    };
+
+    await expect(prefetchRouteData(disposition)).resolves.toBeUndefined();
+    expect(warmCatalog).not.toHaveBeenCalled();
   });
 
   it("leaves no prefetch environment published", async () => {
