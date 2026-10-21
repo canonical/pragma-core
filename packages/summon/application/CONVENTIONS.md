@@ -1,7 +1,7 @@
 # Application Conventions
 
 > From `@canonical/summon-application`
-> Last updated: 2026-09-01
+> Last updated: 2026-10-21
 
 ## Taxonomy Key
 
@@ -33,6 +33,7 @@
 | A1.5 | Styles live in `src/styles/` | `src/styles/index.css` exists |
 | A1.6 | Root route map lives at `src/routes.tsx` | `src/routes.tsx` exists |
 | A1.7 | `src/formatDocumentTitle.ts` holds the document title template | file present |
+| A1.8 | The provider nest lives in `src/lib/Shell/`, and every emitted entry renders it — client, and server unless `--rendering spa` | `<Shell` in each entry, no provider of its own |
 
 ### Application Layout
 
@@ -55,6 +56,7 @@ src/
 │       └── routes.ts
 ├── lib/                        # A1.4  Shared components
 │   ├── Navigation/
+│   ├── Shell/                  # A1.8  Provider nest both entries render
 │   └── SidebarLayout/
 ├── styles/                     # A1.5  CSS
 │   ├── index.css
@@ -233,7 +235,7 @@ rather than `hydrateRoot`.
 | A8.1 | Head management uses `@canonical/react-head` | `Head` import present |
 | A8.2 | `<Head>` rendered by every page component | element present per page |
 | A8.3 | One owner per document: only a route's content renders `<Head>`, never a layout or an entry | no `<Head>` outside route content |
-| A8.4 | `HeadProvider titleTemplate={formatDocumentTitle}` wraps the app in every emitted entry — client, and server unless `--rendering spa` | provider present |
+| A8.4 | `HeadProvider titleTemplate={formatDocumentTitle}` wraps the app inside `Shell`, which every emitted entry renders (A1.8) | provider present in `Shell` |
 | A8.5 | The application name lives in `src/formatDocumentTitle.ts`, not in page titles | pages pass a bare title |
 | A8.6 | The HTML shell carries no `<title>` unless `--rendering spa` | `index.html` yields to the page |
 | A8.7 | The shell owns only tags no page declares — the server emits its head tags first, so a page's copy of one would lose | no overlap between `index.html` and `<Head>` |

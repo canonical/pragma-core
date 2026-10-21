@@ -6,26 +6,23 @@
 import "#styles/app.css";
 <% if (intl) { -%>
 import { documentAttrs, isSupportedLocale } from "@canonical/i18n-core";
-import { I18nProvider } from "@canonical/i18n-react";
 <% } -%>
-import { HeadProvider } from "@canonical/react-head";
 import type { ServerEntrypointProps } from "@canonical/react-ssr/renderer";
 import {
   createRouter,
   createServerAdapter,
   StatusResponse,
 } from "@canonical/router-core";
-import { Outlet, RouterProvider } from "@canonical/router-react";
 <% if (relay) { -%>
-import { fetchQuery, RelayEnvironmentProvider } from "react-relay";
+import { fetchQuery } from "react-relay";
 <% } -%>
 <% if (intl) { -%>
-import { catalogs, i18nConfig } from "#i18n/index.js";
+import { i18nConfig } from "#i18n/index.js";
 <% } -%>
+import Shell from "#lib/Shell/index.js";
 <% if (relay) { -%>
 import { createEnvironment } from "#relay/environment.js";
 <% } -%>
-import formatDocumentTitle from "../formatDocumentTitle.js";
 import {
   appRoutes,
   getAuthRedirectForMatch,
@@ -299,7 +296,6 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
   // Context, density and the theme are the whole of the root contract. Nothing
   // on this element declares the design system itself: its stylesheet applies
   // to the page as it stands.
-<% if (relay) { -%>
   return (
 <% if (intl) { -%>
     <html
@@ -324,74 +320,23 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
       </head>
       <body>
         <div id="root">
-<% if (intl) { -%>
-          <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
-            <HeadProvider titleTemplate={formatDocumentTitle}>
-              <RelayEnvironmentProvider environment={relayEnvironment}>
-                <RouterProvider router={router}>
-                  <Outlet fallback={<p>Loading…</p>} />
-                </RouterProvider>
-              </RelayEnvironmentProvider>
-            </HeadProvider>
-          </I18nProvider>
+<% if (relay && intl) { -%>
+          <Shell
+            router={router}
+            environment={relayEnvironment}
+            locale={locale}
+          />
+<% } else if (relay) { -%>
+          <Shell router={router} environment={relayEnvironment} />
+<% } else if (intl) { -%>
+          <Shell router={router} locale={locale} />
 <% } else { -%>
-          <HeadProvider titleTemplate={formatDocumentTitle}>
-            <RelayEnvironmentProvider environment={relayEnvironment}>
-              <RouterProvider router={router}>
-                <Outlet fallback={<p>Loading…</p>} />
-              </RouterProvider>
-            </RelayEnvironmentProvider>
-          </HeadProvider>
+          <Shell router={router} />
 <% } -%>
         </div>
       </body>
     </html>
   );
-<% } else { -%>
-  return (
-<% if (intl) { -%>
-    <html
-      lang={lang}
-      dir={dir}
-      className={["app comfortable", initialData.theme]
-        .filter(Boolean)
-        .join(" ")}
-    >
-<% } else { -%>
-    <html
-      lang={props.lang}
-      className={["app comfortable", initialData.theme]
-        .filter(Boolean)
-        .join(" ")}
-    >
-<% } -%>
-      <head>
-        {props.otherHeadElements}
-        {props.scriptElements}
-        {props.linkElements}
-      </head>
-      <body>
-        <div id="root">
-<% if (intl) { -%>
-          <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
-            <HeadProvider titleTemplate={formatDocumentTitle}>
-              <RouterProvider router={router}>
-                <Outlet fallback={<p>Loading…</p>} />
-              </RouterProvider>
-            </HeadProvider>
-          </I18nProvider>
-<% } else { -%>
-          <HeadProvider titleTemplate={formatDocumentTitle}>
-            <RouterProvider router={router}>
-              <Outlet fallback={<p>Loading…</p>} />
-            </RouterProvider>
-          </HeadProvider>
-<% } -%>
-        </div>
-      </body>
-    </html>
-  );
-<% } -%>
 }
 
 export type { InitialData };

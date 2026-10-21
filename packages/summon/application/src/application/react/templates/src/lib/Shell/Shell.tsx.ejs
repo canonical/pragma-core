@@ -1,0 +1,85 @@
+<% if (intl) { -%>
+import { I18nProvider } from "@canonical/i18n-react";
+<% } -%>
+import { HeadProvider } from "@canonical/react-head";
+import type { AnyRoute, RouteMap } from "@canonical/router-core";
+import { Outlet, RouterProvider } from "@canonical/router-react";
+import type { ReactElement } from "react";
+<% if (relay) { -%>
+import { RelayEnvironmentProvider } from "react-relay";
+<% } -%>
+<% if (intl) { -%>
+import { catalogs, i18nConfig } from "#i18n/index.js";
+<% } -%>
+import formatDocumentTitle from "../../formatDocumentTitle.js";
+import type { ShellProps } from "./types.js";
+
+/**
+ * The application's provider nest: every context a route's content reads,
+ * wrapped around the router's `Outlet`, with the document-title template.
+<% if (spa) { -%>
+ * The client entry mounts it.
+<% } else { -%>
+ * The client entry and the server entry both render it, so the hydrated tree
+ * and the server markup share one nest.
+<% } -%>
+ *
+ * Generic over the route map rather than bound to `AppRoutes`, because the
+ * route map imports components from `src/lib/`.
+ *
+ * `import Shell from "#lib/Shell/index.js";`
+ */
+export default function Shell<
+  TRoutes extends RouteMap,
+  TNotFound extends AnyRoute | undefined = undefined,
+<%# The destructured props fit on one line unless both flag-gated props are -%>
+<%# present; with both, the formatter puts each on its own line. -%>
+<% if (relay && intl) { -%>
+>({
+  router,
+  environment,
+  locale,
+}: ShellProps<TRoutes, TNotFound>): ReactElement {
+<% } else if (relay) { -%>
+>({ router, environment }: ShellProps<TRoutes, TNotFound>): ReactElement {
+<% } else if (intl) { -%>
+>({ router, locale }: ShellProps<TRoutes, TNotFound>): ReactElement {
+<% } else { -%>
+>({ router }: ShellProps<TRoutes, TNotFound>): ReactElement {
+<% } -%>
+  return (
+<% if (relay && intl) { -%>
+    <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
+      <HeadProvider titleTemplate={formatDocumentTitle}>
+        <RelayEnvironmentProvider environment={environment}>
+          <RouterProvider router={router}>
+            <Outlet fallback={<p>Loading…</p>} />
+          </RouterProvider>
+        </RelayEnvironmentProvider>
+      </HeadProvider>
+    </I18nProvider>
+<% } else if (relay) { -%>
+    <HeadProvider titleTemplate={formatDocumentTitle}>
+      <RelayEnvironmentProvider environment={environment}>
+        <RouterProvider router={router}>
+          <Outlet fallback={<p>Loading…</p>} />
+        </RouterProvider>
+      </RelayEnvironmentProvider>
+    </HeadProvider>
+<% } else if (intl) { -%>
+    <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
+      <HeadProvider titleTemplate={formatDocumentTitle}>
+        <RouterProvider router={router}>
+          <Outlet fallback={<p>Loading…</p>} />
+        </RouterProvider>
+      </HeadProvider>
+    </I18nProvider>
+<% } else { -%>
+    <HeadProvider titleTemplate={formatDocumentTitle}>
+      <RouterProvider router={router}>
+        <Outlet fallback={<p>Loading…</p>} />
+      </RouterProvider>
+    </HeadProvider>
+<% } -%>
+  );
+}

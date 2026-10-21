@@ -11,55 +11,35 @@ import { negotiateLocale } from "@canonical/i18n-core";
 <% } else { -%>
 import { isSupportedLocale, negotiateLocale } from "@canonical/i18n-core";
 <% } -%>
-import { I18nProvider } from "@canonical/i18n-react";
 <% } -%>
-import { HeadProvider } from "@canonical/react-head";
 import { createBrowserAdapter, createRouter } from "@canonical/router-core";
-<%# Without readDehydratedState the specifier list fits on one line, which is -%>
-<%# what the formatter insists on — so the SPA arm cannot share this block. -%>
-<% if (spa) { -%>
-import { Outlet, RouterProvider } from "@canonical/router-react";
-<% } else { -%>
-import {
-  Outlet,
-<% if (intl) { -%>
-  RouterProvider,
-<% } -%>
-  readDehydratedState,
-<% if (!intl) { -%>
-  RouterProvider,
-<% } -%>
-} from "@canonical/router-react";
+<% if (!spa) { -%>
+import { readDehydratedState } from "@canonical/router-react";
 <% } -%>
 <% if (spa) { -%>
 import { createRoot } from "react-dom/client";
 <% } else { -%>
 import { hydrateRoot } from "react-dom/client";
 <% } -%>
-<% if (relay) { -%>
-import { RelayEnvironmentProvider } from "react-relay";
-<% } -%>
 <% if (intl) { -%>
-import { catalogs, i18nConfig } from "#i18n/index.js";
+import { i18nConfig } from "#i18n/index.js";
 <% } -%>
+import Shell from "#lib/Shell/index.js";
 <% if (relay) { -%>
 import { getBrowserEnvironment } from "#relay/environment.js";
 <% } -%>
-import formatDocumentTitle from "../formatDocumentTitle.js";
-<%# Same story: the SPA arm never pulls the two SSR payload symbols, so the three -%>
-<%# base names fit on one line and the formatter requires them there. -%>
-<% if (spa) { -%>
-import { appRoutes, middleware, notFoundRoute } from "../routes.js";
-<% } else { -%>
+<%# Only the SSR relay arm pulls the two payload symbols; without them the -%>
+<%# three base names fit on one line and the formatter requires them there. -%>
+<% if (relay && !spa) { -%>
 import {
   appRoutes,
   middleware,
   notFoundRoute,
-<% if (relay) { -%>
   resolveRelayPayloads,
   type SerializedRelayPayload,
-<% } -%>
 } from "../routes.js";
+<% } else { -%>
+import { appRoutes, middleware, notFoundRoute } from "../routes.js";
 <% } -%>
 <% if (relay && spa) { -%>
 
@@ -154,53 +134,39 @@ if (!root) {
   throw new Error('Root element "#root" not found');
 }
 
-<%# One mount site, four provider stacks. The stacks differ only by nesting -%>
-<%# depth, so they cannot share a body without changing every indent. -%>
+<%# One mount site. The formatter keeps the Shell inline in the mount call -%>
+<%# while it fits, and breaks it onto its own lines once the props do not. -%>
+<% if (relay && intl) { -%>
 <% if (spa) { -%>
 createRoot(root).render(
 <% } else { -%>
 hydrateRoot(
   root,
 <% } -%>
-<% if (relay && intl) { -%>
-  <I18nProvider
-    config={i18nConfig}
-    catalogs={catalogs}
+  <Shell
+    router={router}
+    environment={relayEnvironment}
     locale={resolveInitialLocale()}
-  >
-    <HeadProvider titleTemplate={formatDocumentTitle}>
-      <RelayEnvironmentProvider environment={relayEnvironment}>
-        <RouterProvider router={router}>
-          <Outlet fallback={<p>Loading…</p>} />
-        </RouterProvider>
-      </RelayEnvironmentProvider>
-    </HeadProvider>
-  </I18nProvider>,
-<% } else if (relay) { -%>
-  <HeadProvider titleTemplate={formatDocumentTitle}>
-    <RelayEnvironmentProvider environment={relayEnvironment}>
-      <RouterProvider router={router}>
-        <Outlet fallback={<p>Loading…</p>} />
-      </RouterProvider>
-    </RelayEnvironmentProvider>
-  </HeadProvider>,
-<% } else if (intl) { -%>
-  <I18nProvider
-    config={i18nConfig}
-    catalogs={catalogs}
-    locale={resolveInitialLocale()}
-  >
-    <HeadProvider titleTemplate={formatDocumentTitle}>
-      <RouterProvider router={router}>
-        <Outlet fallback={<p>Loading…</p>} />
-      </RouterProvider>
-    </HeadProvider>
-  </I18nProvider>,
-<% } else { -%>
-  <HeadProvider titleTemplate={formatDocumentTitle}>
-    <RouterProvider router={router}>
-      <Outlet fallback={<p>Loading…</p>} />
-    </RouterProvider>
-  </HeadProvider>,
-<% } -%>
+  />,
 );
+<% } else if (relay) { -%>
+<% if (spa) { -%>
+createRoot(root).render(
+  <Shell router={router} environment={relayEnvironment} />,
+);
+<% } else { -%>
+hydrateRoot(root, <Shell router={router} environment={relayEnvironment} />);
+<% } -%>
+<% } else if (intl) { -%>
+<% if (spa) { -%>
+createRoot(root).render(
+  <Shell router={router} locale={resolveInitialLocale()} />,
+);
+<% } else { -%>
+hydrateRoot(root, <Shell router={router} locale={resolveInitialLocale()} />);
+<% } -%>
+<% } else if (spa) { -%>
+createRoot(root).render(<Shell router={router} />);
+<% } else { -%>
+hydrateRoot(root, <Shell router={router} />);
+<% } -%>

@@ -8,12 +8,12 @@
  * itself consistently with the rest of the app.
 <% if (spa) { -%>
  *
- * `HeadProvider` in the client entry is what installs it.
+ * `Shell` (`src/lib/Shell/`) installs it through `HeadProvider`.
 <% } else { -%>
  *
- * The client and the server entries must pass the same function to
- * `HeadProvider`, or the server-rendered title would not match the one the
- * client renders after hydration; both import this module for that reason.
+ * `Shell` (`src/lib/Shell/`) installs it through `HeadProvider`, and both the
+ * client and the server entries render `Shell`, so the server-rendered title
+ * matches the one the client renders after hydration.
 <% } -%>
  */
 export default function formatDocumentTitle(pageTitle: string): string {

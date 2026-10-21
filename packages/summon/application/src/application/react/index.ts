@@ -376,15 +376,15 @@ fallback.`,
           copy("src/styles/app.css"),
 
           // Document title template (EJS — carries the app name). Shared by the
-          // client entry, the server entry and the Storybook decorator so every
-          // one of them composes page titles the same way.
+          // Shell and the Storybook decorator so both compose page titles the
+          // same way.
           template({
             source: src("src/formatDocumentTitle.ts.ejs"),
             dest: dest("src/formatDocumentTitle.ts"),
             vars,
           }),
 
-          // Client (EJS — RelayEnvironmentProvider only when --relay)
+          // Client entry (EJS — renders the Shell; its props differ by flag)
           template({
             source: src("src/client/entry.tsx.ejs"),
             dest: dest("src/client/entry.tsx"),
@@ -394,7 +394,8 @@ fallback.`,
           // Server (omitted by the SPA arm) — dev (Vite + HMR) and preview (compiled)
           // servers each route between the app + sitemap renderers; the renderers
           // stay routing-agnostic.
-          // Server entry (EJS — a per-request RelayEnvironmentProvider only when --relay)
+          // Server entry (EJS — renders the Shell with a per-request Relay
+          // environment when --relay)
           when(
             !spa,
             template({
@@ -637,6 +638,26 @@ fallback.`,
           when(answers.intl, copy("src/i18n/ar.ts")),
           when(answers.intl, copy("src/i18n/index.ts")),
           when(answers.intl, copy("src/i18n/negotiation.test.ts")),
+
+          // Lib: Shell, the provider nest both entries render (EJS — the
+          // I18nProvider only when --intl, the RelayEnvironmentProvider only
+          // when --relay)
+          template({
+            source: src("src/lib/Shell/Shell.tsx.ejs"),
+            dest: dest("src/lib/Shell/Shell.tsx"),
+            vars,
+          }),
+          template({
+            source: src("src/lib/Shell/Shell.test.tsx.ejs"),
+            dest: dest("src/lib/Shell/Shell.test.tsx"),
+            vars,
+          }),
+          template({
+            source: src("src/lib/Shell/types.ts.ejs"),
+            dest: dest("src/lib/Shell/types.ts"),
+            vars,
+          }),
+          copy("src/lib/Shell/index.ts"),
 
           // Lib: ExampleComponent
           copy("src/lib/ExampleComponent/ExampleComponent.tsx"),

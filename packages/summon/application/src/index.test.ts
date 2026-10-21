@@ -66,6 +66,10 @@ describe("application/react generator", () => {
     expect(filePaths).toContain("my-app/src/routes.tsx");
     expect(filePaths).toContain("my-app/src/lib/Navigation/Navigation.tsx");
     expect(filePaths).toContain("my-app/src/lib/Navigation/index.ts");
+    expect(filePaths).toContain("my-app/src/lib/Shell/Shell.tsx");
+    expect(filePaths).toContain("my-app/src/lib/Shell/Shell.test.tsx");
+    expect(filePaths).toContain("my-app/src/lib/Shell/index.ts");
+    expect(filePaths).toContain("my-app/src/lib/Shell/types.ts");
     expect(filePaths).toContain("my-app/src/lib/index.ts");
     expect(filePaths).toContain("my-app/src/vite-env.d.ts");
     expect(filePaths).toContain("my-app/src/styles/index.css");

@@ -69,6 +69,14 @@ const label = (c: {
 }) =>
   `${c.spa ? "spa" : "ssr"}${c.forms ? " +forms" : ""}${c.intl ? " +intl" : ""}${c.relay ? " +relay" : ""}`;
 
+/** Render the template at `rel` (relative to the templates dir) for `combo`. */
+function renderTemplate(rel: string, combo: (typeof combos)[number]): string {
+  return renderString(
+    readFileSync(path.join(templatesDir, rel), "utf8"),
+    varsFor(combo),
+  );
+}
+
 describe("rendered template output is well-formed in every combination", () => {
   for (const combo of combos) {
     it(`${label(combo)}: every emitted file renders, parses, and is valid`, () => {
@@ -136,15 +144,9 @@ describe("the rendered application declares its context and density", () => {
   /** The class list every rendered `<html>` must carry. */
   const ROOT_CLASSES = "app comfortable";
 
-  const render = (rel: string, combo: (typeof combos)[number]) =>
-    renderString(
-      readFileSync(path.join(templatesDir, rel), "utf8"),
-      varsFor(combo),
-    );
-
   for (const combo of combos) {
     it(`${label(combo)}: <html> carries \`${ROOT_CLASSES}\` and no \`ds\``, () => {
-      const html = render("index.html.ejs", combo);
+      const html = renderTemplate("index.html.ejs", combo);
       expect(html).toContain(`<html lang="en" class="${ROOT_CLASSES}">`);
 
       // The SPA arm has no server entry to render.
@@ -154,7 +156,7 @@ describe("the rendered application declares its context and density", () => {
       // gives it — a bare `/<html/` would also match the prose in the comment
       // above it. Each rendered root carries the classes, with the theme
       // appended at runtime.
-      const server = render("src/server/entry.tsx.ejs", combo);
+      const server = renderTemplate("src/server/entry.tsx.ejs", combo);
       const roots = [...server.matchAll(/^\s*<html$/gm)];
       expect(roots.length).toBeGreaterThan(0);
       expect(
@@ -169,21 +171,21 @@ describe("the rendered application declares its context and density", () => {
       // statement has to reach the page before any component's rules do.
       const firstImport = (source: string) => source.match(/^import .*$/m)?.[0];
 
-      expect(firstImport(render("src/client/entry.tsx.ejs", combo))).toBe(
-        'import "#styles/index.css";',
-      );
-      expect(firstImport(render(".storybook/preview.ts.ejs", combo))).toBe(
-        'import "../src/styles/index.css";',
-      );
+      expect(
+        firstImport(renderTemplate("src/client/entry.tsx.ejs", combo)),
+      ).toBe('import "#styles/index.css";');
+      expect(
+        firstImport(renderTemplate(".storybook/preview.ts.ejs", combo)),
+      ).toBe('import "../src/styles/index.css";');
       if (!combo.spa) {
-        expect(firstImport(render("src/server/entry.tsx.ejs", combo))).toBe(
-          'import "#styles/app.css";',
-        );
+        expect(
+          firstImport(renderTemplate("src/server/entry.tsx.ejs", combo)),
+        ).toBe('import "#styles/app.css";');
       }
     });
 
     it(`${label(combo)}: the stylesheet imports the fonts and the components`, () => {
-      const styles = render("src/styles/index.css.ejs", combo);
+      const styles = renderTemplate("src/styles/index.css.ejs", combo);
       const imports = [...styles.matchAll(/^@import url\("(.+?)"\);$/gm)].map(
         ([, specifier]) => specifier,
       );
@@ -211,20 +213,14 @@ describe("the rendered application declares its context and density", () => {
  * error: a `<Head>` added to an entry or a layout, or a `<title>` restored to
  * the HTML shell that the server renderer re-emits ahead of the hoisted tags.
  *
- * So: pages own the title, entries own the template that composes it, and the
- * shell owns a title only in the client-only arm, where React inserts the
- * page's ahead of it.
+ * So: pages own the title, the `Shell` provider nest owns the template that
+ * composes it, the entries own neither, and the HTML shell owns a title only
+ * in the client-only arm, where React inserts the page's ahead of it.
  */
 describe("the rendered application has one document-title owner", () => {
   /** Occurrences of the `Head` element — `HeadProvider` deliberately excluded. */
   const countHead = (source: string) =>
     [...source.matchAll(/<Head[\s/>]/g)].length;
-
-  const render = (rel: string, combo: (typeof combos)[number]) =>
-    renderString(
-      readFileSync(path.join(templatesDir, rel), "utf8"),
-      varsFor(combo),
-    );
 
   const pageTemplates = templates.filter((rel) =>
     /^src\/domains\/.+Page\.tsx\.ejs$/.test(rel),
@@ -237,7 +233,7 @@ describe("the rendered application has one document-title owner", () => {
   for (const combo of combos) {
     it(`${label(combo)}: every page renders exactly one <Head>`, () => {
       for (const rel of pageTemplates) {
-        expect(countHead(render(rel, combo)), `${rel}`).toBe(1);
+        expect(countHead(renderTemplate(rel, combo)), `${rel}`).toBe(1);
       }
     });
 
@@ -247,7 +243,7 @@ describe("the rendered application has one document-title owner", () => {
       // second owner. Counting is not enough — moving the `<Head>` up into
       // `publicLayout` would keep the count at one — so the assertion also
       // says where it may appear: only from the not-found route onwards.
-      const rendered = render("src/routes.tsx.ejs", combo);
+      const rendered = renderTemplate("src/routes.tsx.ejs", combo);
       const notFound = rendered.search(
         /^(?:function NotFoundPage|const notFoundRoute)/m,
       );
@@ -257,26 +253,37 @@ describe("the rendered application has one document-title owner", () => {
       expect(countHead(rendered)).toBe(1);
     });
 
-    it(`${label(combo)}: the entries install the template and own no title`, () => {
+    it(`${label(combo)}: the entries render the Shell and own no title`, () => {
       const entries = combo.spa
         ? ["src/client/entry.tsx.ejs"]
         : ["src/client/entry.tsx.ejs", "src/server/entry.tsx.ejs"];
 
       for (const rel of entries) {
-        const rendered = render(rel, combo);
+        const rendered = renderTemplate(rel, combo);
 
         expect(rendered, rel).toContain(
-          'import formatDocumentTitle from "../formatDocumentTitle.js";',
+          'import Shell from "#lib/Shell/index.js";',
         );
-        expect(rendered, rel).toContain(
-          "<HeadProvider titleTemplate={formatDocumentTitle}>",
-        );
+        expect(rendered, rel).toContain("<Shell");
+        expect(rendered, rel).not.toContain("HeadProvider");
         expect(countHead(rendered), rel).toBe(0);
       }
     });
 
+    it(`${label(combo)}: the Shell installs the template and owns no title`, () => {
+      const rendered = renderTemplate("src/lib/Shell/Shell.tsx.ejs", combo);
+
+      expect(rendered).toContain(
+        'import formatDocumentTitle from "../../formatDocumentTitle.js";',
+      );
+      expect(rendered).toContain(
+        "<HeadProvider titleTemplate={formatDocumentTitle}>",
+      );
+      expect(countHead(rendered)).toBe(0);
+    });
+
     it(`${label(combo)}: the title template carries the application name`, () => {
-      expect(render("src/formatDocumentTitle.ts.ejs", combo)).toContain(
+      expect(renderTemplate("src/formatDocumentTitle.ts.ejs", combo)).toContain(
         `\`\${pageTitle} — my-app\``,
       );
     });
@@ -284,12 +291,58 @@ describe("the rendered application has one document-title owner", () => {
     it(`${label(combo)}: the HTML shell titles itself only without a server`, () => {
       // Comments stripped first: both arms explain the rule in one, and the
       // explanation names the very element being looked for.
-      const markup = render("index.html.ejs", combo).replace(
+      const markup = renderTemplate("index.html.ejs", combo).replace(
         /<!--[\s\S]*?-->/g,
         "",
       );
 
       expect(markup.includes("<title>")).toBe(combo.spa);
     });
+  }
+});
+
+/**
+ * One provider nest, asserted on the rendered text.
+ *
+ * The client and the server entries must wrap the routes in the same
+ * providers, in the same order, or the server markup and the hydrated tree
+ * diverge. `Shell` is the one place that nest is written; an entry that grows
+ * its own provider again would reintroduce the second copy without any syntax
+ * error, so the entries are checked for the providers' absence as much as the
+ * Shell is checked for their presence.
+ */
+describe("the rendered application renders one provider nest", () => {
+  for (const combo of combos) {
+    it(`${label(combo)}: the Shell holds the providers its flags select`, () => {
+      const shell = renderTemplate("src/lib/Shell/Shell.tsx.ejs", combo);
+
+      expect(shell.includes("<I18nProvider")).toBe(combo.intl);
+      expect(shell.includes("<RelayEnvironmentProvider")).toBe(combo.relay);
+      expect(shell).toContain("<RouterProvider");
+      expect(shell).toContain("<Outlet");
+    });
+
+    it(`${label(combo)}: the entries hold no provider of their own`, () => {
+      const entries = combo.spa
+        ? ["src/client/entry.tsx.ejs"]
+        : ["src/client/entry.tsx.ejs", "src/server/entry.tsx.ejs"];
+
+      for (const rel of entries) {
+        const rendered = renderTemplate(rel, combo);
+
+        expect(rendered, rel).not.toContain("<I18nProvider");
+        expect(rendered, rel).not.toContain("<RelayEnvironmentProvider");
+        expect(rendered, rel).not.toContain("<RouterProvider");
+      }
+    });
+
+    if (!combo.spa) {
+      it(`${label(combo)}: the server renders the Shell inside #root`, () => {
+        const server = renderTemplate("src/server/entry.tsx.ejs", combo);
+        const root = server.match(/<div id="root">([\s\S]*?)<\/div>/)?.at(1);
+
+        expect(root).toContain("<Shell");
+      });
+    }
   }
 });

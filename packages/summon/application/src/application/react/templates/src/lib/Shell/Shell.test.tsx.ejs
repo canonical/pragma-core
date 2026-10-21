@@ -1,0 +1,104 @@
+<% if (intl) { -%>
+import { createTranslator } from "@canonical/i18n-core";
+import { useTranslation } from "@canonical/i18n-react";
+<% } -%>
+import { Head } from "@canonical/react-head";
+import {
+  createMemoryAdapter,
+  createRouter,
+  route,
+} from "@canonical/router-core";
+import { render, screen } from "@testing-library/react";
+import type { ReactElement } from "react";
+<% if (relay) { -%>
+import { useRelayEnvironment } from "react-relay";
+<% } -%>
+import { describe, expect, it } from "vitest";
+<% if (intl) { -%>
+import { catalogs } from "#i18n/index.js";
+<% } -%>
+<% if (relay) { -%>
+import { createEnvironment } from "#relay/environment.js";
+<% } -%>
+import formatDocumentTitle from "../../formatDocumentTitle.js";
+import Shell from "./Shell.js";
+<% if (relay) { -%>
+
+const environment = createEnvironment();
+<% } -%>
+
+/** Route content that reads every context the nest provides. */
+function Probe(): ReactElement {
+<% if (intl) { -%>
+  const { t } = useTranslation();
+<% } -%>
+<% if (relay) { -%>
+  const provided = useRelayEnvironment();
+<% } -%>
+<% if (intl || relay) { -%>
+
+<% } -%>
+  return (
+    <section>
+      <Head title="Probe" />
+      <h1>Probe content</h1>
+<% if (relay) { -%>
+      <p>{provided === environment ? "Environment provided" : "Other"}</p>
+<% } -%>
+<% if (intl) { -%>
+      <p>{t("nav.home")}</p>
+<% } -%>
+    </section>
+  );
+}
+
+const renderShell = () =>
+  render(
+    <Shell
+      router={createRouter(
+        { probe: route({ url: "/", content: Probe }) },
+        { adapter: createMemoryAdapter("/") },
+      )}
+<% if (relay) { -%>
+      environment={environment}
+<% } -%>
+<% if (intl) { -%>
+      locale="fr"
+<% } -%>
+    />,
+  );
+
+describe("Shell", () => {
+  it("renders the matched route's content through the outlet", async () => {
+    renderShell();
+
+    expect(
+      await screen.findByRole("heading", { name: "Probe content" }),
+    ).toBeInTheDocument();
+  });
+
+  it("composes the page's title with the document title template", async () => {
+    renderShell();
+    await screen.findByRole("heading", { name: "Probe content" });
+
+    expect(document.title).toBe(formatDocumentTitle("Probe"));
+  });
+<% if (relay) { -%>
+
+  it("provides the Relay environment it is given", async () => {
+    renderShell();
+
+    expect(await screen.findByText("Environment provided")).toBeInTheDocument();
+  });
+<% } -%>
+<% if (intl) { -%>
+
+  it("translates with the locale it is given", async () => {
+    renderShell();
+
+    const translate = createTranslator("fr", catalogs.fr);
+
+    expect(await screen.findByText(translate("nav.home"))).toBeInTheDocument();
+  });
+<% } -%>
+});

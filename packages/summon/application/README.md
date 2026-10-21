@@ -40,6 +40,7 @@ my-app/
 │   │   ├── contact/          # ContactPage, routes (omitted with --no-forms)
 │   │   └── catalog/          # CatalogPage, ProductList, ProductCard (--relay only)
 │   ├── lib/
+│   │   ├── Shell/            # Provider nest (I18n, Head, Relay environment, Router)
 │   │   ├── Navigation/
 │   │   ├── ThemeSelector/
 │   │   ├── ExampleComponent/
@@ -136,8 +137,10 @@ The `--relay` flag (off by default) mirrors the boilerplate's Relay data layer:
   `relay-runtime-network@0.1.0` (fixes its broken package `imports` map —
   temporary until the fixed upstream release lands, advl/lit-relay#32, after
   which the patch and its `patchedDependencies` entry can be dropped).
-- **Wiring** — `RelayEnvironmentProvider` in both entries (one environment
-  per browser session on the client, a fresh one per request on the server),
+- **Wiring** — `RelayEnvironmentProvider` in the `Shell`
+  (`src/lib/Shell/`), which both entries render with their own environment
+  (one per browser session on the client, a fresh one per request on the
+  server),
   `vite-plugin-relay-lite` in `vite.config.ts` (`codegen: false`; artifacts
   are committed), the `relay` / `relay:watch` scripts, catalog route, nav
   link, and sitemap entries, and the relay addon via `extraAddons` in
