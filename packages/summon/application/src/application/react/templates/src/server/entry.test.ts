@@ -1,3 +1,4 @@
+import { createRouter, createServerAdapter } from "@canonical/router-core";
 import { createOperationDescriptor, getRequest } from "relay-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { PAGE_SIZE, productListQuery } from "#domains/catalog/ProductList.js";
@@ -6,6 +7,7 @@ import { createEnvironment } from "#relay/environment.js";
 import { getPrefetchEnvironment } from "#relay/prefetchEnvironment.js";
 import { executeLocalOperation } from "#relay/schema.js";
 import type { RelayRecords } from "#relay/types.js";
+import { appRoutes, middleware, notFoundRoute } from "../routes.js";
 import {
   prefetchRouteData,
   type RouteDisposition,
@@ -143,6 +145,24 @@ describe("prefetchRouteData", () => {
     await vi.waitFor(() => {
       expect(replies).toHaveLength(2);
     });
+
+    // While both fetches are pending, a render's server-adapter router fires
+    // the catalog warm at construction; it must find no environment to fill.
+    expect(getPrefetchEnvironment()).toBeUndefined();
+    const environmentsSeen: unknown[] = [];
+    vi.mocked(warmCatalog).mockImplementationOnce(async () => {
+      environmentsSeen.push(getPrefetchEnvironment());
+    });
+    const renderRouter = createRouter(appRoutes, {
+      middleware: [...middleware],
+      notFound: notFoundRoute,
+      adapter: createServerAdapter("/catalog"),
+    });
+    await vi.waitFor(() => {
+      expect(environmentsSeen).toEqual([undefined]);
+    });
+    renderRouter.dispose();
+
     replies.at(0)?.("Katherine Johnson");
     replies.at(1)?.("Grace Hopper");
 
