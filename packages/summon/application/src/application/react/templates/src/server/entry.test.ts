@@ -172,4 +172,24 @@ describe("prefetchRouteData", () => {
     expect(context?.signal.aborted).toBe(true);
     expect(countPrefetchWarnings(warn)).toBe(1);
   });
+
+  it("returns nothing at the deadline when the warm ignores its signal", async () => {
+    vi.useFakeTimers();
+    vi.mocked(warmCatalog).mockImplementationOnce(
+      () => new Promise<void>(() => {}),
+    );
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const settled = vi.fn();
+
+    void prefetchRouteData(resolveRouteDisposition("/catalog")).then(settled);
+
+    await vi.advanceTimersByTimeAsync(4_999);
+
+    expect(settled).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(1);
+
+    expect(settled).toHaveBeenCalledWith(undefined);
+    expect(countPrefetchWarnings(warn)).toBe(1);
+  });
 });
