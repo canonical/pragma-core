@@ -421,15 +421,17 @@ Design decisions about the generated output that are not yet settled:
   would hold `@canonical/react-ssr` as a dependency for otherwise-dead code.
   **Open:** whether SEO-facing SPAs should get a build-time sitemap emitter.
 
-- **Pinned pragma version is fetched at summon time.** Generated apps pin the pragma
-  workspace packages (`react-ds-global`, `router-core`, `styles`, …) at `^<latest>`, where
-  `<latest>` is queried from the npm registry when the app is scaffolded
-  (`resolvePragmaVersion` in `src/shared/versions.ts`, via `npm view`). If the registry is
-  unreachable it falls back to `^<installed generator version>` — safe because
-  `@canonical/summon-application` is released in lockstep with those packages. Note
-  `@canonical/design-tokens` is versioned separately and is *not* covered here (it arrives
-  transitively via `@canonical/styles`). **Open:** whether to cache the lookup or let users
-  pin explicitly for reproducible offline scaffolding.
+- **Pinned versions are fixed when the generator is released.** Generated apps pin the
+  `@canonical/*` packages they depend on directly to the release line of the repository
+  that publishes them (`resolvePragmaVersion` in `src/shared/versions.ts`). The
+  pragma-web packages (`react-ds-global`, `router-core`, `styles`, …) take
+  `^PRAGMA_WEB_VERSION`, the pragma-web release the templates are written against, which
+  Renovate keeps current. The pragma-core packages (`biome-config`) take
+  `^<installed generator version>`, since `@canonical/summon-application` is released in
+  lockstep with them. No lookup happens at summon time, so scaffolding is offline and
+  reproducible. Note `@canonical/design-tokens` is versioned separately and is *not*
+  covered here (it arrives transitively via `@canonical/styles`). **Open:** whether to let
+  users pin explicitly.
 
 - **Two static-asset folders (`src/assets/` + `public/`).** The generated app ships both,
   and `.storybook/main.ts` lists `staticDirs: ["../src/assets", "../public"]` to match the

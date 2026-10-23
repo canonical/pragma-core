@@ -1,6 +1,12 @@
 import { readFileSync } from "node:fs";
+import { dryRun } from "@canonical/task";
 import { describe, expect, it } from "vitest";
-import { ownVersion, readVersion } from "./versions.js";
+import {
+  ownVersion,
+  PRAGMA_WEB_VERSION,
+  readVersion,
+  resolvePragmaVersion,
+} from "./versions.js";
 
 const SEMVER = /^\d+\.\d+\.\d+/;
 
@@ -22,5 +28,15 @@ describe("versions", () => {
 
   it('answers "unknown" for a package that is not installed', () => {
     expect(readVersion("@canonical/definitely-not-installed")).toBe("unknown");
+  });
+
+  it("pins pragma-web to its own release line, not the generator's", () => {
+    const { value } = dryRun(resolvePragmaVersion());
+
+    expect(PRAGMA_WEB_VERSION).toMatch(SEMVER);
+    expect(value).toEqual({
+      core: `^${ownVersion()}`,
+      web: `^${PRAGMA_WEB_VERSION}`,
+    });
   });
 });

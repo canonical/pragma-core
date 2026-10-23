@@ -5,11 +5,17 @@ import type { Task } from "@canonical/task";
 import { info, map } from "@canonical/task";
 
 /**
- * Resolve the pragma workspace version range that a generated app should pin
- * for the @canonical/* packages it depends on directly — react-ds-global(-form),
- * react-head, react-hooks, react-ssr, router-core, router-react, styles,
- * storybook-config, biome-config, typescript-config-react. These share one
- * lerna-managed release line, so a single range covers all of them.
+ * Resolve the version ranges that a generated app pins for the @canonical/*
+ * packages it depends on directly. Those packages come from two repositories,
+ * each released on its own version line:
+ *
+ * - **pragma-web** — everything that renders and runs in the app:
+ *   react-ds-global(-form), react-ds-app, react-head, react-hooks, react-ssr,
+ *   router-core, router-react, i18n-*, ds-*, styles, storybook-*,
+ *   typescript-config-react. Pinned to `PRAGMA_WEB_VERSION`.
+ * - **pragma-core** — the toolchain this generator ships with, of which the app
+ *   depends only on biome-config. Pinned to this generator's own version, since
+ *   summon-application is released in lockstep with the rest of pragma-core.
  *
  * Scope notes:
  * - Third-party deps (react, express, vite…) keep their own ranges.
@@ -17,12 +23,19 @@ import { info, map } from "@canonical/task";
  *   it reaches the app transitively via `@canonical/styles`, which owns its range.
  *
  * Resolution is fully offline, by design: `pragma create` performs no network
- * calls. The generator pins the version of the release line it belongs to —
- * summon-application is published in lockstep with the workspace packages an
- * app depends on, so `^<own version>` is always release-correct, and two
- * scaffolds of the same generator are byte-identical (a registry lookup here
- * once made concurrent scaffolds race the network and diverge).
+ * calls, and two scaffolds of the same generator are byte-identical (a registry
+ * lookup here once made concurrent scaffolds race the network and diverge).
  */
+
+/**
+ * The pragma-web release the templates are written against. The templates
+ * import from these packages (the application shell's `SelectInput`, say), so
+ * this is the oldest release they build with, and the caret range keeps a
+ * generated app on that minor line. Renovate tracks it through
+ * `@canonical/react-ds-global`, one of the packages released at this version;
+ * a bump is reviewed against the templates rather than merged on sight.
+ */
+export const PRAGMA_WEB_VERSION = "0.45.0";
 
 const OWN_PACKAGE = "@canonical/summon-application";
 
@@ -111,29 +124,39 @@ export function ownVersion(): string {
 }
 
 /**
- * The generator's own release-line version, used as the pinned range.
- * summon-application is published in lockstep with the workspace packages an app
- * depends on, so `^<own version>` is a safe, non-stale default. The module
- * always sits inside its own package, so the walk cannot miss in practice; the
- * "latest" escape survives only as a last resort for a mangled installation.
+ * The generator's own release-line version, used as the range for the
+ * pragma-core packages. The module always sits inside its own package, so the
+ * walk cannot miss in practice; the "latest" escape survives only as a last
+ * resort for a mangled installation.
  */
-function pinnedRange(): string {
+function coreRange(): string {
   const own = ownVersion();
   return own === "unknown" ? "latest" : `^${own}`;
 }
 
+/** The version range pinned for each repository's packages. */
+export interface PinnedRanges {
+  /** Range for the pragma-core packages (the generator's release line). */
+  readonly core: string;
+  /** Range for the pragma-web packages (`PRAGMA_WEB_VERSION`). */
+  readonly web: string;
+}
+
 /**
- * Resolve the version range as a Task so the decision is visible in the
- * generator pipeline (dry-run included). Deterministic and offline: the range
- * comes from the installed generator's own release line.
+ * Resolve the version ranges as a Task so the decision is visible in the
+ * generator pipeline (dry-run included). Deterministic and offline.
  */
-export function resolvePragmaVersion(): Task<string> {
-  const pinned = pinnedRange();
+export function resolvePragmaVersion(): Task<PinnedRanges> {
+  const ranges: PinnedRanges = {
+    core: coreRange(),
+    web: `^${PRAGMA_WEB_VERSION}`,
+  };
   return map(
     info(
-      `Pinning @canonical/* packages to ${pinned} (the installed generator's release line).`,
+      `Pinning @canonical/* packages: pragma-web to ${ranges.web}, ` +
+        `pragma-core to ${ranges.core} (the installed generator's release line).`,
     ),
-    () => pinned,
+    () => ranges,
   );
 }
 
