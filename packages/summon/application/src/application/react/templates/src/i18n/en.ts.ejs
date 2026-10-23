@@ -10,6 +10,8 @@ import type { Messages } from "@canonical/i18n-core";
  * `vars.count` through `Intl.PluralRules`.
  */
 const en = {
+  "app.name": "<%= name %>",
+  "app.loading": "Loading…",
   "nav.label": "Main",
   "nav.home": "Home",
   "nav.guide": "Guide",
@@ -64,6 +66,14 @@ const en = {
   "catalog.rating": "rated {rating} / 5",
   "catalog.inStock": "in stock",
   "catalog.outOfStock": "out of stock",
+  "home.exampleBody":
+    "A plain component scaffolded alongside the app. It ships with a Storybook story (`ExampleComponent.stories.tsx`) and a test — the starting point for your own components.",
+  "home.exampleGreeting": "Hello from ExampleComponent",
+  "home.streamingBody":
+    "`LazyComponent` reads a synthetic delayed fetch with React 19 `use()`, so it suspends. Inside this `Suspense` boundary the server streams the page shell first, shows the fallback, then flushes the resolved content in — no full client round-trip.",
+  "home.streamed": "Streamed in after a delay",
+  "catalog.intro":
+    "This page demonstrates the Relay data layer. `ProductList` issues a `useLazyLoadQuery`, each `ProductCard` reads its own `useFragment`, and the environment resolves operations against the local mock schema in `src/relay/schema.ts` — set `VITE_GRAPHQL_URL` to point it at a real endpoint instead.",
 } satisfies Messages;
 
 /** Every message key the app can translate. */

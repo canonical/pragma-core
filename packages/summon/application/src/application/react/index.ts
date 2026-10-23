@@ -27,6 +27,7 @@ import { packageVersion } from "../../shared/packageVersion.js";
 import { validateAppPath } from "../../shared/validators.js";
 import { resolvePragmaVersion } from "../../shared/versions.js";
 import { findEnclosingWorkspaceRoot } from "../../shared/workspace.js";
+import { textHelpers } from "./textHelpers.js";
 
 export interface ApplicationReactAnswers {
   readonly appPath: string;
@@ -147,7 +148,8 @@ export const generator: GeneratorDefinition<ApplicationReactAnswers> = {
   - Contact domain with form components (on by default; omit with --no-forms)
   - Relay (GraphQL) data layer with a local mock schema, catalog example
     domain, and Storybook mocking (when --relay is enabled)
-  - Navigation, ThemeSelector, ExampleComponent
+  - A top bar on every page with the demo navigation and the theme selector
+  - ExampleComponent, LazyComponent, LoadingMessage, CodeMessage
   - Storybook with router decorator
   - Biome + TypeScript configuration
 
@@ -242,6 +244,8 @@ fallback.`,
           spa,
           standalone,
           pragmaVersion,
+          // a reader-facing string renders as a catalog lookup or as English
+          ...textHelpers(answers.intl),
         });
 
         // Detect an available package manager for both the (optional) install
@@ -611,6 +615,65 @@ fallback.`,
             vars,
           }),
           copy("src/lib/Navigation/index.ts"),
+          template({
+            source: src("src/lib/Navigation/Navigation.test.tsx.ejs"),
+            dest: dest("src/lib/Navigation/Navigation.test.tsx"),
+            vars,
+          }),
+
+          // Lib: TopBar — the application's name and the demo navigation above
+          // every page layout
+          template({
+            source: src("src/lib/TopBar/TopBar.tsx.ejs"),
+            dest: dest("src/lib/TopBar/TopBar.tsx"),
+            vars,
+          }),
+          template({
+            source: src("src/lib/TopBar/TopBar.test.tsx.ejs"),
+            dest: dest("src/lib/TopBar/TopBar.test.tsx"),
+            vars,
+          }),
+          template({
+            source: src("src/lib/TopBar/TopBar.stories.tsx.ejs"),
+            dest: dest("src/lib/TopBar/TopBar.stories.tsx"),
+            vars,
+          }),
+          copy("src/lib/TopBar/types.ts"),
+          copy("src/lib/TopBar/styles.css"),
+          copy("src/lib/TopBar/index.ts"),
+
+          // Lib: LoadingMessage — the route fallback both entries render
+          template({
+            source: src("src/lib/LoadingMessage/LoadingMessage.tsx.ejs"),
+            dest: dest("src/lib/LoadingMessage/LoadingMessage.tsx"),
+            vars,
+          }),
+          template({
+            source: src("src/lib/LoadingMessage/LoadingMessage.test.tsx.ejs"),
+            dest: dest("src/lib/LoadingMessage/LoadingMessage.test.tsx"),
+            vars,
+          }),
+          copy("src/lib/LoadingMessage/index.ts"),
+
+          // Lib: CodeMessage — a paragraph whose backticked names render as code
+          copy("src/lib/CodeMessage/CodeMessage.tsx"),
+          copy("src/lib/CodeMessage/CodeMessage.test.tsx"),
+          copy("src/lib/CodeMessage/types.ts"),
+          copy("src/lib/CodeMessage/index.ts"),
+
+          // Test helpers: the providers both entries mount, the route names the
+          // app links to, and the browser APIs jsdom lacks
+          template({
+            source: src("src/testing/renderWithProviders.tsx.ejs"),
+            dest: dest("src/testing/renderWithProviders.tsx"),
+            vars,
+          }),
+          template({
+            source: src("src/testing/fixtures.ts.ejs"),
+            dest: dest("src/testing/fixtures.ts"),
+            vars,
+          }),
+          copy("src/testing/browserStubs.ts"),
 
           // Lib: ThemeSelector
           template({
@@ -621,7 +684,14 @@ fallback.`,
           copy("src/lib/ThemeSelector/index.ts"),
 
           // Lib: LocaleSelector (when --intl is enabled)
-          when(answers.intl, copy("src/lib/LocaleSelector/LocaleSelector.tsx")),
+          when(
+            answers.intl,
+            template({
+              source: src("src/lib/LocaleSelector/LocaleSelector.tsx.ejs"),
+              dest: dest("src/lib/LocaleSelector/LocaleSelector.tsx"),
+              vars,
+            }),
+          ),
           when(
             answers.intl,
             copy("src/lib/LocaleSelector/LocaleSelector.test.tsx"),
@@ -632,9 +702,31 @@ fallback.`,
           // locale, negotiation tests
           when(answers.intl, copy("src/i18n/config.ts")),
           when(answers.intl, copy("src/i18n/catalogs.ts")),
-          when(answers.intl, copy("src/i18n/en.ts")),
-          when(answers.intl, copy("src/i18n/fr.ts")),
-          when(answers.intl, copy("src/i18n/ar.ts")),
+          // catalogs (EJS — they carry the app's name)
+          when(
+            answers.intl,
+            template({
+              source: src("src/i18n/en.ts.ejs"),
+              dest: dest("src/i18n/en.ts"),
+              vars,
+            }),
+          ),
+          when(
+            answers.intl,
+            template({
+              source: src("src/i18n/fr.ts.ejs"),
+              dest: dest("src/i18n/fr.ts"),
+              vars,
+            }),
+          ),
+          when(
+            answers.intl,
+            template({
+              source: src("src/i18n/ar.ts.ejs"),
+              dest: dest("src/i18n/ar.ts"),
+              vars,
+            }),
+          ),
           when(answers.intl, copy("src/i18n/index.ts")),
           when(answers.intl, copy("src/i18n/negotiation.test.ts")),
 
@@ -647,7 +739,11 @@ fallback.`,
           copy("src/lib/ExampleComponent/styles.css"),
 
           // Lib: LazyComponent
-          copy("src/lib/LazyComponent/LazyComponent.tsx"),
+          template({
+            source: src("src/lib/LazyComponent/LazyComponent.tsx.ejs"),
+            dest: dest("src/lib/LazyComponent/LazyComponent.tsx"),
+            vars,
+          }),
           copy("src/lib/LazyComponent/LazyComponent.stories.tsx"),
           copy("src/lib/LazyComponent/index.ts"),
 

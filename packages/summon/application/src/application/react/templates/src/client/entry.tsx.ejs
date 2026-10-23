@@ -42,6 +42,7 @@ import { RelayEnvironmentProvider } from "react-relay";
 <% if (intl) { -%>
 import { catalogs, i18nConfig } from "#i18n/index.js";
 <% } -%>
+import LoadingMessage from "#lib/LoadingMessage/index.js";
 <% if (relay) { -%>
 import { getBrowserEnvironment } from "#relay/environment.js";
 <% } -%>
@@ -171,7 +172,7 @@ hydrateRoot(
     <HeadProvider titleTemplate={formatDocumentTitle}>
       <RelayEnvironmentProvider environment={relayEnvironment}>
         <RouterProvider router={router}>
-          <Outlet fallback={<p>Loading…</p>} />
+          <Outlet fallback={<LoadingMessage />} />
         </RouterProvider>
       </RelayEnvironmentProvider>
     </HeadProvider>
@@ -180,7 +181,7 @@ hydrateRoot(
   <HeadProvider titleTemplate={formatDocumentTitle}>
     <RelayEnvironmentProvider environment={relayEnvironment}>
       <RouterProvider router={router}>
-        <Outlet fallback={<p>Loading…</p>} />
+        <Outlet fallback={<LoadingMessage />} />
       </RouterProvider>
     </RelayEnvironmentProvider>
   </HeadProvider>,
@@ -192,14 +193,14 @@ hydrateRoot(
   >
     <HeadProvider titleTemplate={formatDocumentTitle}>
       <RouterProvider router={router}>
-        <Outlet fallback={<p>Loading…</p>} />
+        <Outlet fallback={<LoadingMessage />} />
       </RouterProvider>
     </HeadProvider>
   </I18nProvider>,
 <% } else { -%>
   <HeadProvider titleTemplate={formatDocumentTitle}>
     <RouterProvider router={router}>
-      <Outlet fallback={<p>Loading…</p>} />
+      <Outlet fallback={<LoadingMessage />} />
     </RouterProvider>
   </HeadProvider>,
 <% } -%>

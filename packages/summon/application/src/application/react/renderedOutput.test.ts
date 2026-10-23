@@ -25,6 +25,7 @@ import { fileURLToPath } from "node:url";
 import { renderString, withHelpers } from "@canonical/summon-core";
 import { describe, expect, it } from "vitest";
 import { formatWithBiome } from "../../testing/formatWithBiome.js";
+import { textHelpers } from "./textHelpers.js";
 
 const templatesDir = fileURLToPath(new URL("./templates", import.meta.url));
 
@@ -49,6 +50,7 @@ function varsFor(combo: {
     // exercised because the combination list below flips it with `relay`.
     standalone: true,
     pragmaVersion: "^0.0.0-test",
+    ...textHelpers(combo.intl),
   });
 }
 

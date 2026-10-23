@@ -1,0 +1,45 @@
+<% if (intl) { -%>
+import { useTranslation } from "@canonical/i18n-react";
+<% } -%>
+import { Link } from "@canonical/router-react";
+import type { ReactElement } from "react";
+import Navigation from "../Navigation/index.js";
+import type { TopBarProps } from "./types.js";
+import "./styles.css";
+
+const componentCssClassName = "ds top-bar";
+
+/**
+ * The bar across the top of every page: the application's name, then the
+ * demo navigation — one link per area of the scaffold, followed by the
+ * theme selector<% if (intl) { %> and the language selector<% } %>. It is scaffolding for
+ * exploring what the scaffold ships; an application replaces the links with
+ * its own.
+ *
+ * It sits above every page layout. It is a `.surface`, so the selectors read
+ * the surface channels the design system's inputs expect.
+ *
+ * `import { TopBar } from "#lib/index.js";`
+ */
+export default function TopBar({
+  className,
+  ...props
+}: TopBarProps): ReactElement {
+<% if (intl) { -%>
+  const { t } = useTranslation();
+
+<% } -%>
+  return (
+    <header
+      {...props}
+      className={[componentCssClassName, "surface", className]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <Link className="name" to="home">
+        <%- msg("app.name", name) %>
+      </Link>
+      <Navigation />
+    </header>
+  );
+}

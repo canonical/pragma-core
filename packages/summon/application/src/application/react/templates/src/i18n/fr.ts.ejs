@@ -6,6 +6,8 @@ import type { MessageKey } from "./en.js";
  * never drift apart silently.
  */
 const fr: Record<MessageKey, MessageValue> = {
+  "app.name": "<%= name %>",
+  "app.loading": "Chargement…",
   "nav.label": "Principale",
   "nav.home": "Accueil",
   "nav.guide": "Guide",
@@ -64,6 +66,14 @@ const fr: Record<MessageKey, MessageValue> = {
   "catalog.rating": "noté {rating} / 5",
   "catalog.inStock": "en stock",
   "catalog.outOfStock": "en rupture de stock",
+  "home.exampleBody":
+    "Un composant simple généré avec l'application. Il est livré avec une story Storybook (`ExampleComponent.stories.tsx`) et un test : le point de départ de vos propres composants.",
+  "home.exampleGreeting": "Bonjour de la part d'ExampleComponent",
+  "home.streamingBody":
+    "`LazyComponent` lit une requête simulée et retardée avec `use()` de React 19 ; il se met donc en suspens. Dans cette limite `Suspense`, le serveur envoie d'abord la structure de la page, affiche le contenu de repli, puis y insère le contenu résolu, sans aller-retour complet côté client.",
+  "home.streamed": "Diffusé après un délai",
+  "catalog.intro":
+    "Cette page présente la couche de données Relay. `ProductList` lance un `useLazyLoadQuery`, chaque `ProductCard` lit son propre `useFragment`, et l'environnement résout les opérations avec le schéma simulé local de `src/relay/schema.ts`. Définissez `VITE_GRAPHQL_URL` pour le diriger vers un vrai point d'accès.",
 };
 
 export default fr;

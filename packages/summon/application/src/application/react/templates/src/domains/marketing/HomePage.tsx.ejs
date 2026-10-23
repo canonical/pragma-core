@@ -3,7 +3,11 @@ import { useTranslation } from "@canonical/i18n-react";
 <% } -%>
 import { Head } from "@canonical/react-head";
 import { type ReactElement, Suspense } from "react";
+<% if (intl) { -%>
+import { CodeMessage, ExampleComponent, LazyComponent } from "#lib/index.js";
+<% } else { -%>
 import { ExampleComponent, LazyComponent } from "#lib/index.js";
+<% } -%>
 
 export default function HomePage(): ReactElement {
 <% if (intl) { -%>
@@ -25,13 +29,17 @@ export default function HomePage(): ReactElement {
 <% if (intl) { -%>
       <h2>{t("home.exampleHeading")}</h2>
       {/*
-        The explanatory paragraphs below are developer documentation rather
-        than user-facing copy — they reference file names and APIs — so they
-        stay out of the message catalogs deliberately.
+        The explanatory paragraphs name files and APIs. They are translated
+        like the rest of the page; the names themselves sit between backticks
+        in every catalog, and CodeMessage renders them as code.
       */}
+      <CodeMessage message={t("home.exampleBody")} />
+      <ExampleComponent>{t("home.exampleGreeting")}</ExampleComponent>
+
+      <h2>{t("home.streamingHeading")}</h2>
+      <CodeMessage message={t("home.streamingBody")} />
 <% } else { -%>
       <h2>Example component</h2>
-<% } -%>
       <p>
         A plain component scaffolded alongside the app. It ships with a
         Storybook story (<code>ExampleComponent.stories.tsx</code>) and a test —
@@ -39,19 +47,16 @@ export default function HomePage(): ReactElement {
       </p>
       <ExampleComponent>Hello from ExampleComponent</ExampleComponent>
 
-<% if (intl) { -%>
-      <h2>{t("home.streamingHeading")}</h2>
-<% } else { -%>
       <h2>Streaming with Suspense</h2>
 <% } -%>
-<% if (spa) { -%>
+<% if (spa && !intl) { -%>
       <p>
         <code>LazyComponent</code> reads a synthetic delayed fetch with React 19{" "}
         <code>use()</code>, so it suspends. Inside this <code>Suspense</code>{" "}
         boundary the rest of the page renders immediately and the fallback
         stands in until the resolved content swaps itself back in.
       </p>
-<% } else { -%>
+<% } else if (!intl) { -%>
       <p>
         <code>LazyComponent</code> reads a synthetic delayed fetch with React 19{" "}
         <code>use()</code>, so it suspends. Inside this <code>Suspense</code>{" "}

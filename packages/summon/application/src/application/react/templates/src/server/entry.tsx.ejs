@@ -22,6 +22,7 @@ import { fetchQuery, RelayEnvironmentProvider } from "react-relay";
 <% if (intl) { -%>
 import { catalogs, i18nConfig } from "#i18n/index.js";
 <% } -%>
+import LoadingMessage from "#lib/LoadingMessage/index.js";
 <% if (relay) { -%>
 import { createEnvironment } from "#relay/environment.js";
 <% } -%>
@@ -329,7 +330,7 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
             <HeadProvider titleTemplate={formatDocumentTitle}>
               <RelayEnvironmentProvider environment={relayEnvironment}>
                 <RouterProvider router={router}>
-                  <Outlet fallback={<p>Loading…</p>} />
+                  <Outlet fallback={<LoadingMessage />} />
                 </RouterProvider>
               </RelayEnvironmentProvider>
             </HeadProvider>
@@ -338,7 +339,7 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
           <HeadProvider titleTemplate={formatDocumentTitle}>
             <RelayEnvironmentProvider environment={relayEnvironment}>
               <RouterProvider router={router}>
-                <Outlet fallback={<p>Loading…</p>} />
+                <Outlet fallback={<LoadingMessage />} />
               </RouterProvider>
             </RelayEnvironmentProvider>
           </HeadProvider>
@@ -376,14 +377,14 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
           <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
             <HeadProvider titleTemplate={formatDocumentTitle}>
               <RouterProvider router={router}>
-                <Outlet fallback={<p>Loading…</p>} />
+                <Outlet fallback={<LoadingMessage />} />
               </RouterProvider>
             </HeadProvider>
           </I18nProvider>
 <% } else { -%>
           <HeadProvider titleTemplate={formatDocumentTitle}>
             <RouterProvider router={router}>
-              <Outlet fallback={<p>Loading…</p>} />
+              <Outlet fallback={<LoadingMessage />} />
             </RouterProvider>
           </HeadProvider>
 <% } -%>
