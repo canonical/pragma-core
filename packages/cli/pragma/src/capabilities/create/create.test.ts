@@ -688,6 +688,7 @@ describe("projection fidelity — the committed surface IS the live generators (
     expect(createVerbs.application.params.map((p) => p.name)).toEqual([
       "appPath",
       "forms",
+      "appShell",
       "intl",
       "rendering",
       "relay",

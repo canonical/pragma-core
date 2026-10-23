@@ -1,3 +1,7 @@
+<% if (appShell) { -%>
+export { default as ApplicationShell } from "./ApplicationShell/index.js";
+export { default as CanonicalLogo } from "./CanonicalLogo/index.js";
+<% } -%>
 <% if (relay && !spa) { -%>
 export { default as ClientOnly } from "./ClientOnly/index.js";
 <% } -%>
@@ -9,5 +13,8 @@ export { default as LoadingMessage } from "./LoadingMessage/index.js";
 export { default as LocaleSelector } from "./LocaleSelector/index.js";
 <% } -%>
 export { default as Navigation } from "./Navigation/index.js";
+<% if (appShell) { -%>
+export { default as RouterLink } from "./RouterLink/index.js";
+<% } -%>
 export { default as ThemeSelector } from "./ThemeSelector/index.js";
 export { default as TopBar } from "./TopBar/index.js";

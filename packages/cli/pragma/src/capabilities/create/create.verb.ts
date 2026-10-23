@@ -540,16 +540,17 @@ export const createVerbs: Record<
   ),
   application: createVerb(
     "application",
-    "Scaffold a full React application with routing, and either server-side rendering or a client-only SPA.",
+    "Scaffold a full React application with routing, an application shell with a dashboard, and either server-side rendering or a client-only SPA.",
     applicationParams,
     [
       { cmd: `${BIN_NAME} create application react my-app` },
       { cmd: `${BIN_NAME} create application react my-app --relay` },
       { cmd: `${BIN_NAME} create application react my-app --rendering spa` },
+      { cmd: `${BIN_NAME} create application react my-app --no-app-shell` },
     ],
     {
       useWhen:
-        "when asked to start a new React application, server-rendered or client-only",
+        "when asked to start a new React application, server-rendered or client-only, with or without an application shell",
       example: { appPath: "my-app" },
     },
   ),

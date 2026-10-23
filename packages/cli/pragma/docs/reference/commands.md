@@ -325,9 +325,9 @@ The `create` surface is a PROJECTION of the summon generator tree: `pragma creat
 
 ### pragma create application
 
-Scaffold a full React application with routing, and either server-side rendering or a client-only SPA.
+Scaffold a full React application with routing, an application shell with a dashboard, and either server-side rendering or a client-only SPA.
 
-Use when asked to start a new React application, server-rendered or client-only.
+Use when asked to start a new React application, server-rendered or client-only, with or without an application shell.
 
 ```
 pragma create application react [app-path] [options]
@@ -344,6 +344,7 @@ pragma create application react [app-path] [options]
 | Flag | Value | Description |
 | --- | --- | --- |
 | `--no-forms` | — | Include form components. (default: true) |
+| `--no-app-shell` | — | Include the application shell and its dashboard. (default: true) |
 | `--intl` | — | Include internationalisation (locale negotiation, translated UI, locale switcher). (default: false) |
 | `--rendering` | `<ssr\|spa>` | Rendering — ssr keeps the server layer (SSR servers and sitemap), spa is client-only. (one of: ssr, spa) (default: ssr) |
 | `--relay` | — | Include a Relay (GraphQL) data layer with a local mock schema. (default: false) |
@@ -359,6 +360,7 @@ pragma create application react [app-path] [options]
 pragma create application react my-app
 pragma create application react my-app --relay
 pragma create application react my-app --rendering spa
+pragma create application react my-app --no-app-shell
 ```
 
 ### pragma create component

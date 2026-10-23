@@ -240,6 +240,7 @@ describe("surface conformance — capabilities ⊆ covenant (PROTECTED)", () => 
         // a value and never as a negation.
         flags: [
           "--no-forms",
+          "--no-app-shell",
           "--intl",
           "--rendering",
           "--relay",

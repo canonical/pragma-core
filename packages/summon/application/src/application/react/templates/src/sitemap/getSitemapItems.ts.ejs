@@ -28,6 +28,11 @@ export default async function getSitemapItems(): Promise<SitemapItem[]> {
 <% if (forms) { -%>
     { loc: "/contact", changefreq: "monthly", priority: 0.7 },
 <% } -%>
+<% if (appShell) { -%>
+    { loc: "/dashboard", changefreq: "weekly", priority: 0.6 },
+    { loc: "/dashboard/instances", changefreq: "weekly", priority: 0.5 },
+    { loc: "/dashboard/settings", changefreq: "monthly", priority: 0.4 },
+<% } -%>
     { loc: "/account", changefreq: "monthly", priority: 0.5 },
     { loc: "/login", changefreq: "yearly", priority: 0.3 },
   ];

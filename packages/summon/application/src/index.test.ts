@@ -20,6 +20,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: false,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: false,
@@ -106,6 +107,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: false,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: false,
@@ -183,6 +185,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: true,
+        appShell: true,
         intl: true,
         rendering: "ssr",
         relay: true,
@@ -211,6 +214,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: true,
+        appShell: true,
         intl: true,
         rendering: "ssr",
         relay: true,
@@ -251,6 +255,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: true,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: false,
@@ -285,6 +290,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: false,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: false,
@@ -306,11 +312,87 @@ describe("application/react generator", () => {
     expect(filePaths).not.toContain("my-app/src/domains/contact/routes.ts");
   });
 
+  it("includes the application shell and the dashboard when appShell=true", () => {
+    const result = dryRun(
+      generators["application/react"].generate({
+        appPath: "my-app",
+        forms: true,
+        appShell: true,
+        intl: false,
+        rendering: "ssr",
+        relay: false,
+        runInstall: false,
+      }),
+    );
+
+    const filePaths = result.effects
+      .filter((e) => e._tag === "WriteFile" || e._tag === "CopyFile")
+      .map(
+        (e) =>
+          (e as { path?: string; dest?: string }).path ??
+          (e as { dest?: string }).dest,
+      );
+
+    expect(filePaths).toContain(
+      "my-app/src/lib/ApplicationShell/ApplicationShell.tsx",
+    );
+    expect(filePaths).toContain("my-app/src/lib/RouterLink/RouterLink.tsx");
+    expect(filePaths).toContain(
+      "my-app/src/lib/CanonicalLogo/CanonicalLogo.tsx",
+    );
+    expect(filePaths).toContain("my-app/src/domains/dashboard/routes.ts");
+    expect(filePaths).toContain(
+      "my-app/src/domains/dashboard/DashboardLayout.tsx",
+    );
+    expect(filePaths).toContain("my-app/src/domains/dashboard/OverviewPage.tsx");
+    expect(filePaths).toContain(
+      "my-app/src/domains/dashboard/InstancesPage.tsx",
+    );
+    expect(filePaths).toContain("my-app/src/domains/dashboard/SettingsPage.tsx");
+    expect(filePaths).toContain(
+      "my-app/src/domains/dashboard/hooks/useDashboardNavigation.ts",
+    );
+  });
+
+  it("excludes the application shell and the dashboard when appShell=false", () => {
+    const result = dryRun(
+      generators["application/react"].generate({
+        appPath: "my-app",
+        forms: true,
+        appShell: false,
+        intl: false,
+        rendering: "ssr",
+        relay: false,
+        runInstall: false,
+      }),
+    );
+
+    const filePaths = result.effects
+      .filter((e) => e._tag === "WriteFile" || e._tag === "CopyFile")
+      .map(
+        (e) =>
+          (e as { path?: string; dest?: string }).path ??
+          (e as { dest?: string }).dest,
+      );
+
+    expect(filePaths.some((p) => p?.includes("/ApplicationShell/"))).toBe(
+      false,
+    );
+    expect(filePaths.some((p) => p?.includes("/RouterLink/"))).toBe(false);
+    expect(filePaths.some((p) => p?.includes("/CanonicalLogo/"))).toBe(false);
+    expect(filePaths.some((p) => p?.includes("/domains/dashboard/"))).toBe(
+      false,
+    );
+    // The top bar stays: it is every page's frame, with or without the shell.
+    expect(filePaths).toContain("my-app/src/lib/TopBar/TopBar.tsx");
+  });
+
   it("includes the relay layer, catalog domain, and patches when relay=true", () => {
     const result = dryRun(
       generators["application/react"].generate({
         appPath: "my-app",
         forms: false,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: true,
@@ -392,6 +474,7 @@ describe("application/react generator", () => {
         generators["application/react"].generate({
           appPath,
           forms: false,
+          appShell: true,
           intl: false,
           rendering: "ssr",
           relay: true,
@@ -424,6 +507,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: true,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: false,
@@ -460,6 +544,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: true,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: true,
@@ -491,6 +576,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: true,
+        appShell: true,
         intl: false,
         rendering: "spa",
         relay: true,
@@ -529,6 +615,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: false,
+        appShell: true,
         intl: true,
         rendering: "ssr",
         relay: false,
@@ -558,6 +645,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "my-app",
         forms: false,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: false,
@@ -584,6 +672,7 @@ describe("application/react generator", () => {
       generators["application/react"].generate({
         appPath: "custom-app",
         forms: false,
+        appShell: true,
         intl: false,
         rendering: "ssr",
         relay: false,
@@ -609,6 +698,7 @@ describe("application/react generator", () => {
     const task = generators["application/react"].generate({
       appPath: "my-app",
       forms: false,
+      appShell: true,
       intl: false,
       rendering: "ssr",
       relay: false,

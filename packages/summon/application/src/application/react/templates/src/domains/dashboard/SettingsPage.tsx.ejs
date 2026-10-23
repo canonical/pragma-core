@@ -1,0 +1,138 @@
+<% if (intl) { -%>
+import { useTranslation } from "@canonical/i18n-react";
+<% } -%>
+import { ContentLayout, ViewLayout } from "@canonical/react-ds-app";
+import { Button, Modal } from "@canonical/react-ds-global";
+<% if (forms) { -%>
+import { Field, Form } from "@canonical/react-ds-global-form";
+<% } -%>
+import { Head } from "@canonical/react-head";
+import { type ReactElement, useRef } from "react";
+import { PROJECT_NAME } from "./constants.js";
+import DashboardBreadcrumbs from "./DashboardBreadcrumbs.js";
+import "./styles.css";
+<% if (forms) { -%>
+
+/** The project's current settings, prefilled into the form. */
+const SETTINGS_DEFAULTS = {
+  bridge: "lxdbr0",
+  ipv6: true,
+  max_instances: 50,
+  snapshots: true,
+};
+
+const BRIDGE_OPTIONS = [
+  { value: "lxdbr0", label: "lxdbr0" },
+  { value: "ovn-1", label: "ovn-1" },
+];
+
+function handleSave(data: Record<string, unknown>) {
+  console.log("Settings saved:", data);
+}
+<% } -%>
+
+export default function SettingsPage(): ReactElement {
+<% if (intl) { -%>
+  const { t } = useTranslation();
+<% } -%>
+  const modalRef = useRef<HTMLDialogElement>(null);
+
+  function closeModal() {
+    modalRef.current?.close();
+  }
+
+  return (
+    <ViewLayout className="dashboard-view">
+      <ContentLayout>
+        <Head title=<%- attr("dashboard.settings.title", "Settings") %> />
+        <header className="titlebar">
+          <div>
+            <DashboardBreadcrumbs />
+            <h1><%- msg("dashboard.settings.heading", "Settings") %></h1>
+          </div>
+        </header>
+<% if (forms) { -%>
+
+        <section aria-labelledby="project-title" className="section narrow">
+          <h2 id="project-title"><%- msg("dashboard.settings.project", "Project") %></h2>
+          <Form defaultValues={SETTINGS_DEFAULTS} onSubmit={handleSave}>
+            <Field
+              inputType="select"
+              label=<%- attr("dashboard.settings.bridge", "Default bridge") %>
+              name="bridge"
+              options={BRIDGE_OPTIONS}
+            />
+            <Field
+              controlLabel=<%- attr("dashboard.settings.ipv6Control", "Enable IPv6 NAT") %>
+              inputType="switch"
+              isOptional
+              label=<%- attr("dashboard.settings.ipv6", "IPv6") %>
+              name="ipv6"
+            />
+            <Field
+              inputType="number"
+              label=<%- attr("dashboard.settings.maxInstances", "Maximum instances") %>
+              name="max_instances"
+            />
+            <Field
+              controlLabel=<%- attr("dashboard.settings.snapshotsControl", "Enabled") %>
+              inputType="switch"
+              isOptional
+              label=<%- attr("dashboard.settings.snapshots", "Nightly snapshots") %>
+              name="snapshots"
+            />
+            <div className="actions">
+              <Button importance="primary" type="submit">
+                <%- msg("dashboard.settings.save", "Save changes") %>
+              </Button>
+            </div>
+          </Form>
+        </section>
+<% } -%>
+
+        <section aria-labelledby="danger-title" className="section narrow">
+          <h2 id="danger-title"><%- msg("dashboard.settings.danger", "Danger zone") %></h2>
+          <p className="muted"><%- msg("dashboard.settings.dangerBody", "These actions cannot be undone.") %></p>
+          <div className="actions">
+            <Button
+              anticipation="destructive"
+              icon="delete"
+              importance="primary"
+              onClick={() => modalRef.current?.showModal()}
+            >
+              <%- msg("dashboard.settings.delete", "Delete project") %>
+            </Button>
+          </div>
+        </section>
+      </ContentLayout>
+
+      <Modal closeOnBackdropClick ref={modalRef}>
+        <Modal.Header dismissLabel=<%- attr("dashboard.close", "Close") %>>
+          <%- msg("dashboard.settings.confirmTitle", "Delete project?") %>
+        </Modal.Header>
+        <Modal.Content>
+          <p>
+<% if (intl) { -%>
+            {t("dashboard.settings.confirmBody", { project: PROJECT_NAME })}
+<% } else { -%>
+            {`This permanently deletes the ${PROJECT_NAME} project, its instances and their storage. This cannot be undone.`}
+<% } -%>
+          </p>
+        </Modal.Content>
+        <Modal.Footer>
+          <Button importance="tertiary" onClick={closeModal}>
+            <%- msg("dashboard.cancel", "Cancel") %>
+          </Button>
+          <Button
+            anticipation="destructive"
+            icon="delete"
+            importance="primary"
+            onClick={closeModal}
+          >
+            <%- msg("dashboard.settings.delete", "Delete project") %>
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </ViewLayout>
+  );
+}

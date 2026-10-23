@@ -10,7 +10,7 @@
  * This closes that gap for the class it can close hermetically: every emitted
  * TypeScript file must PARSE, and every emitted JSON file must be JSON. It
  * needs no dependency resolution, so it runs anywhere the package's own tests
- * run, and it covers all 16 combinations rather than the two the fixtures pin.
+ * run, and it covers all 32 combinations rather than the two the fixtures pin.
  *
  * What it deliberately does NOT cover is type errors and build failures: those
  * need the generated app's dependencies resolved, and a scaffolded app pins
@@ -39,6 +39,7 @@ const templates = readdirSync(templatesDir, { recursive: true })
 /** The generator's own variable set, minus the parts that do not affect syntax. */
 function varsFor(combo: {
   forms: boolean;
+  appShell: boolean;
   intl: boolean;
   relay: boolean;
   spa: boolean;
@@ -54,22 +55,25 @@ function varsFor(combo: {
   });
 }
 
-/** All 16 combinations of the four booleans the templates branch on. */
+/** All 32 combinations of the five booleans the templates branch on. */
 const combos = [false, true].flatMap((forms) =>
-  [false, true].flatMap((intl) =>
-    [false, true].flatMap((relay) =>
-      [false, true].map((spa) => ({ forms, intl, relay, spa })),
+  [false, true].flatMap((appShell) =>
+    [false, true].flatMap((intl) =>
+      [false, true].flatMap((relay) =>
+        [false, true].map((spa) => ({ forms, appShell, intl, relay, spa })),
+      ),
     ),
   ),
 );
 
 const label = (c: {
   forms: boolean;
+  appShell: boolean;
   intl: boolean;
   relay: boolean;
   spa: boolean;
 }) =>
-  `${c.spa ? "spa" : "ssr"}${c.forms ? " +forms" : ""}${c.intl ? " +intl" : ""}${c.relay ? " +relay" : ""}`;
+  `${c.spa ? "spa" : "ssr"}${c.forms ? " +forms" : ""}${c.appShell ? " +app-shell" : ""}${c.intl ? " +intl" : ""}${c.relay ? " +relay" : ""}`;
 
 describe("rendered template output is well-formed in every combination", () => {
   for (const combo of combos) {

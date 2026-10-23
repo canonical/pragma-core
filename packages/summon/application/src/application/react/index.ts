@@ -32,6 +32,7 @@ import { textHelpers } from "./textHelpers.js";
 export interface ApplicationReactAnswers {
   readonly appPath: string;
   readonly forms: boolean;
+  readonly appShell: boolean;
   readonly intl: boolean;
   readonly rendering: "ssr" | "spa";
   readonly relay: boolean;
@@ -62,6 +63,16 @@ const prompts: PromptDefinition[] = [
     name: "forms",
     type: "confirm",
     message: "Include form components?",
+    default: true,
+    group: "Application",
+  },
+  // The application shell: the design system's ApplicationLayout with its
+  // SideNavigation, shown on a dashboard of three pages. On by default, as
+  // the reference app ships it; `--no-app-shell` keeps the public pages only.
+  {
+    name: "appShell",
+    type: "confirm",
+    message: "Include the application shell and its dashboard?",
     default: true,
     group: "Application",
   },
@@ -146,6 +157,9 @@ export const generator: GeneratorDefinition<ApplicationReactAnswers> = {
   - Head management with @canonical/react-head (SSR-visible <title>/<meta>)
   - Two domains (marketing + account) with pages
   - Contact domain with form components (on by default; omit with --no-forms)
+  - An application shell — the design system's ApplicationLayout and
+    SideNavigation — with a three-page dashboard at /dashboard (on by
+    default; omit with --no-app-shell)
   - Relay (GraphQL) data layer with a local mock schema, catalog example
     domain, and Storybook mocking (when --relay is enabled)
   - A top bar on every page with the demo navigation and the theme selector
@@ -163,6 +177,7 @@ fallback.`,
     examples: [
       "summon application/react my-app",
       "summon application/react --no-forms my-app",
+      "summon application/react --no-app-shell my-app",
       "summon application/react --relay my-app",
       "summon application/react --rendering spa my-app",
       "summon application/react --no-forms --relay my-app",
@@ -239,6 +254,7 @@ fallback.`,
         const vars = withHelpers({
           name,
           forms: answers.forms,
+          appShell: answers.appShell,
           intl: answers.intl,
           relay: answers.relay,
           spa,
@@ -475,6 +491,90 @@ fallback.`,
             vars,
           }),
           copy("src/domains/account/routes.ts"),
+
+          // Lib: the application shell and what it needs — RouterLink, which
+          // lets design-system components navigate through the router, and the
+          // brand of the side navigation (when the app shell is on)
+          when(
+            answers.appShell,
+            template({
+              source: src("src/lib/ApplicationShell/ApplicationShell.tsx.ejs"),
+              dest: dest("src/lib/ApplicationShell/ApplicationShell.tsx"),
+              vars,
+            }),
+          ),
+          when(
+            answers.appShell,
+            template({
+              source: src(
+                "src/lib/ApplicationShell/ApplicationShell.test.tsx.ejs",
+              ),
+              dest: dest("src/lib/ApplicationShell/ApplicationShell.test.tsx"),
+              vars,
+            }),
+          ),
+          when(
+            answers.appShell,
+            copy("src/lib/ApplicationShell/ApplicationShell.stories.tsx"),
+          ),
+          when(answers.appShell, copy("src/lib/ApplicationShell/types.ts")),
+          when(answers.appShell, copy("src/lib/ApplicationShell/styles.css")),
+          when(answers.appShell, copy("src/lib/ApplicationShell/index.ts")),
+          when(answers.appShell, copy("src/lib/RouterLink/RouterLink.tsx")),
+          when(
+            answers.appShell,
+            copy("src/lib/RouterLink/RouterLink.test.tsx"),
+          ),
+          when(answers.appShell, copy("src/lib/RouterLink/index.ts")),
+          when(
+            answers.appShell,
+            template({
+              source: src("src/lib/CanonicalLogo/CanonicalLogo.tsx.ejs"),
+              dest: dest("src/lib/CanonicalLogo/CanonicalLogo.tsx"),
+              vars,
+            }),
+          ),
+          when(answers.appShell, copy("src/lib/CanonicalLogo/types.ts")),
+          when(answers.appShell, copy("src/lib/CanonicalLogo/styles.css")),
+          when(answers.appShell, copy("src/lib/CanonicalLogo/index.ts")),
+
+          // Domain: dashboard (when the app shell is on) — three pages under
+          // the shell, one navigation tree the side navigation renders and
+          // the breadcrumbs are projected from, and sample data
+          ...[
+            "types.ts",
+            "constants.ts",
+            "DashboardLayout.tsx",
+            "DashboardBreadcrumbs.tsx",
+            "hooks/useDashboardNavigation.ts",
+            "OverviewPage.tsx",
+            "OverviewPage.test.tsx",
+            "InstancesPage.tsx",
+            "InstancesPage.test.tsx",
+            "SettingsPage.tsx",
+            "SettingsPage.test.tsx",
+          ].map((file) =>
+            when(
+              answers.appShell,
+              template({
+                source: src(`src/domains/dashboard/${file}.ejs`),
+                dest: dest(`src/domains/dashboard/${file}`),
+                vars,
+              }),
+            ),
+          ),
+          ...[
+            "routes.ts",
+            "projectBreadcrumbs.ts",
+            "projectBreadcrumbs.test.ts",
+            "selectRelativeTime.ts",
+            "selectRelativeTime.test.ts",
+            "styles.css",
+            "hooks/index.ts",
+            "hooks/types.ts",
+          ].map((file) =>
+            when(answers.appShell, copy(`src/domains/dashboard/${file}`)),
+          ),
 
           // Domain: contact (when forms is on)
           when(

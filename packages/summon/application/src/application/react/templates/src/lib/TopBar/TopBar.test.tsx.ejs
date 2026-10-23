@@ -32,16 +32,27 @@ describe("TopBar", () => {
     );
   });
 
+<% if (appShell) { -%>
+  it("holds the demo navigation, with a link to the dashboard", () => {
+    renderWithProviders(<TopBar />);
+
+    const navigation = screen.getByRole("navigation", { name: "Main" });
+
+    expect(
+      within(navigation).getByRole("link", { name: "Dashboard" }),
+    ).toHaveAttribute("href", "/dashboard");
+  });
+<% } else { -%>
   it("holds the demo navigation", () => {
     renderWithProviders(<TopBar />);
 
     const navigation = screen.getByRole("navigation", { name: "Main" });
 
-    expect(within(navigation).getByRole("link", { name: "Home" })).toHaveAttribute(
-      "href",
-      "/",
-    );
+    expect(
+      within(navigation).getByRole("link", { name: "Home" }),
+    ).toHaveAttribute("href", "/");
   });
+<% } -%>
 <% if (forms) { -%>
 
   it("holds the theme selector, with the input chrome", () => {

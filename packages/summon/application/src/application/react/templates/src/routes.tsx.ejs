@@ -26,6 +26,10 @@ import catalogRoutes from "#domains/catalog/routes.js";
 <% if (forms) { -%>
 import contactRoutes from "#domains/contact/routes.js";
 <% } -%>
+<% if (appShell) { -%>
+import DashboardLayout from "#domains/dashboard/DashboardLayout.js";
+import dashboardRoutes from "#domains/dashboard/routes.js";
+<% } -%>
 import marketingRoutes from "#domains/marketing/routes.js";
 import TopBar from "#lib/TopBar/index.js";
 <% if (relay && !spa) { -%>
@@ -119,6 +123,14 @@ const publicLayout = wrapper<ReactElement>({
     <main className="subgrid public-content surface">{children}</main>
   ),
 });
+<% if (appShell) { -%>
+
+/** The dashboard's layout: the application shell and its side navigation. */
+const applicationLayout = wrapper<ReactElement>({
+  id: "application-layout",
+  component: DashboardLayout,
+});
+<% } -%>
 
 <% if (intl) { -%>
 function NotFoundPage(): ReactElement {
@@ -173,6 +185,17 @@ const [catalog] = group(
 );
 
 <% } -%>
+<% if (appShell) { -%>
+const [dashboard, dashboardInstances, dashboardSettings] = group(
+  topBarLayout,
+  group(applicationLayout, [
+    dashboardRoutes.dashboard,
+    dashboardRoutes.dashboardInstances,
+    dashboardRoutes.dashboardSettings,
+  ] as const),
+);
+
+<% } -%>
 <% if (spa) { -%>
 // Static redirect route: matched entirely from the URL, no content — the
 // router resolves it client-side. There is no server to answer a cold request
@@ -200,6 +223,11 @@ const appRoutes = {
 <% } -%>
 <% if (relay) { -%>
   catalog,
+<% } -%>
+<% if (appShell) { -%>
+  dashboard,
+  dashboardInstances,
+  dashboardSettings,
 <% } -%>
 } as const;
 
