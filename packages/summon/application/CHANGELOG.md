@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
+
+### Bug Fixes
+
+* **summon-application:** generate React application tests as *.test.ts(x) ([#67](https://github.com/canonical/pragma-core/issues/67)) ([223f980](https://github.com/canonical/pragma-core/commit/223f9806f4dc704917451f67c1a907863d1b4bb3))
+
+
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 **Note:** Version bump only for package @canonical/summon-application

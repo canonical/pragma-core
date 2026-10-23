@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
+
+### Bug Fixes
+
+* **anatomy-dsl:** reject anatomy YAML with syntax errors ([#69](https://github.com/canonical/pragma-core/issues/69)) ([b01e6d4](https://github.com/canonical/pragma-core/commit/b01e6d4ae6484172b265bbb5ad4bf0aa86169207))
+* **design-system:** report every anatomy the sync skips, on every run ([#71](https://github.com/canonical/pragma-core/issues/71)) ([34aba1d](https://github.com/canonical/pragma-core/commit/34aba1d8cf56160ddbecfc3b8ae39e3c6cf065dd))
+* **design-system:** skip and report an anatomy that does not parse instead of blocking the sync ([#52](https://github.com/canonical/pragma-core/issues/52)) ([baeb84f](https://github.com/canonical/pragma-core/commit/baeb84f453620258810c020d43c873b3e2ca563f))
+* **transform:** trim the whitespace a text cell carries from the document ([#53](https://github.com/canonical/pragma-core/issues/53)) ([009cc5c](https://github.com/canonical/pragma-core/commit/009cc5ccba0d69f0db5c69fe5045d198432fea74))
+
+### Features
+
+* **design-system:** follow each write to its mutation status before reconciling ([#54](https://github.com/canonical/pragma-core/issues/54)) ([4230939](https://github.com/canonical/pragma-core/commit/423093987433df1ea0788b6394cf95cf7a4a5f0b))
+
+
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 **Note:** Version bump only for package @canonical/design-system

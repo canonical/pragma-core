@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
+
+### Bug Fixes
+
+* **terrazzo-lsp-extension:** keep @types/vscode at the VS Code floor the extension supports ([#45](https://github.com/canonical/pragma-core/issues/45)) ([a28a237](https://github.com/canonical/pragma-core/commit/a28a2375e17556235108ee29398794c22234cd54))
+
+
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 **Note:** Version bump only for package @canonical/terrazzo-lsp-extension

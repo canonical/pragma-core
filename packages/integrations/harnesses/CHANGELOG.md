@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
+
+### Features
+
+* **harnesses:** adds Junie, detected from any JetBrains IDE ([#107](https://github.com/canonical/pragma-core/issues/107)) ([ca69fc2](https://github.com/canonical/pragma-core/commit/ca69fc2f92e07266b7d87ec51eaf9e76355dc40e))
+* **harnesses:** register pi as an MCP harness ([#39](https://github.com/canonical/pragma-core/issues/39)) ([8ea3d3b](https://github.com/canonical/pragma-core/commit/8ea3d3bae6498e01adeea4504eb4b04d0c128f0f))
+
+
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 **Note:** Version bump only for package @canonical/harnesses

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
+
+### Features
+
+* **ke,pragma-cli:** adds a sha256 sidecar that lets verified store caches load leniently ([#100](https://github.com/canonical/pragma-core/issues/100)) ([b9777eb](https://github.com/canonical/pragma-core/commit/b9777eb7e0fa7c03679e5e4d4259c165118b3d0e))
+
+
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 **Note:** Version bump only for package @canonical/ke

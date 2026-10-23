@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
+
+### Bug Fixes
+
+* **deps:** bumps dependency ink to v8 ([#89](https://github.com/canonical/pragma-core/issues/89)) ([1733c7a](https://github.com/canonical/pragma-core/commit/1733c7a577ccf88881d7dd6f1542a872ae98c2c9))
+
+
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 **Note:** Version bump only for package @canonical/summon

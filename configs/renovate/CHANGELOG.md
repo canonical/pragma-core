@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
+
+### Bug Fixes
+
+* **renovate-config:** keeps Biome and its config in one pull request ([#93](https://github.com/canonical/pragma-core/issues/93)) ([7b58916](https://github.com/canonical/pragma-core/commit/7b58916898ea30d9e598a0722e7ab3dcf0dbfc13))
+
+
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 ### Features
