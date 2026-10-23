@@ -1,7 +1,7 @@
 # Application Conventions
 
 > From `@canonical/summon-application`
-> Last updated: 2026-09-01
+> Last updated: 2026-10-23
 
 ## Taxonomy Key
 
@@ -19,6 +19,7 @@
 | `A10` | Types | Type registration and safety |
 | `A11` | Data | Relay (GraphQL) data layer (when `--relay` is enabled) |
 | `A12` | i18n | Locale negotiation and message catalogs (when `--intl` is enabled) |
+| `A13` | Shell | The top bar and the application shell (the shell is omitted with `--no-app-shell`) |
 
 ---
 
@@ -315,6 +316,24 @@ Present only when the application is scaffolded with `--intl`.
 
 ---
 
+## A13 — Shell
+
+The top bar is always present; the application shell and the dashboard are
+present unless the application is scaffolded with `--no-app-shell`.
+
+| ID | Rule | Gate |
+|----|------|------|
+| A13.1 | Layouts are router wrappers applied with `group()` in `src/routes.tsx`; a page never renders its own frame | no layout markup in a page |
+| A13.2 | Every page except the 404 sits under `topBarLayout`; under it a route takes exactly one page layout (`publicLayout` or `applicationLayout`) | each `group()` nests `topBarLayout` outside |
+| A13.3 | Each page region is one `.surface` — the top bar, the public column, the shell, the 404 — never nested | one `surface` class per layout root |
+| A13.4 | The application shell is `ApplicationShell` in `src/lib/`: the design system's `ApplicationLayout` with its `SideNavigation`, the page in `<main id="main-content">` | `ApplicationShell` renders both |
+| A13.5 | A dashboard page renders `ViewLayout` then `ContentLayout` inside the shell, with one `<Head>` | `ViewLayout` > `ContentLayout` per page |
+| A13.6 | The side navigation's tree is built once, by a hook in the domain (`useDashboardNavigation`); the breadcrumbs are projected from the same tree (`projectBreadcrumbs`), so a page never states its own position | one tree, two projections |
+| A13.7 | Design-system components that render their own links take `RouterLink` as `LinkComponent`, so navigation goes through the router | `LinkComponent={RouterLink}` |
+| A13.8 | A reader-facing string is stated once in a template, beside its catalog key, through the `msg`/`attr`/`str` helpers; with `--intl` it renders as a lookup, otherwise as English | no duplicated `intl` branches for plain strings |
+
+---
+
 ## Quick Gate Checklist
 
 Use this as a pass/fail gate for new domains and pages:
@@ -334,4 +353,6 @@ Use this as a pass/fail gate for new domains and pages:
 [ ] A8.3  No <Head> in a layout or an entry
 [ ] A10.1 Routes registered via declare module
 [ ] A10.3 No as casts
+[ ] A13.2 Every page under topBarLayout, then one page layout
+[ ] A13.5 Dashboard pages render ViewLayout then ContentLayout
 ```

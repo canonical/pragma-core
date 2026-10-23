@@ -344,11 +344,15 @@ describe("application/react generator", () => {
     expect(filePaths).toContain(
       "my-app/src/domains/dashboard/DashboardLayout.tsx",
     );
-    expect(filePaths).toContain("my-app/src/domains/dashboard/OverviewPage.tsx");
+    expect(filePaths).toContain(
+      "my-app/src/domains/dashboard/OverviewPage.tsx",
+    );
     expect(filePaths).toContain(
       "my-app/src/domains/dashboard/InstancesPage.tsx",
     );
-    expect(filePaths).toContain("my-app/src/domains/dashboard/SettingsPage.tsx");
+    expect(filePaths).toContain(
+      "my-app/src/domains/dashboard/SettingsPage.tsx",
+    );
     expect(filePaths).toContain(
       "my-app/src/domains/dashboard/hooks/useDashboardNavigation.ts",
     );

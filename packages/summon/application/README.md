@@ -6,11 +6,12 @@ Summon generators for scaffolding application structure: full applications, doma
 
 ### `summon application/react <name>`
 
-Scaffolds a complete React application with routing, Storybook, and two starter domains — server-rendered by default, or client-only with `--rendering spa`.
+Scaffolds a complete React application with routing, Storybook, starter domains and an application shell with a dashboard — server-rendered by default, or client-only with `--rendering spa`.
 
 ```bash
 summon application/react my-app
 summon application/react --no-forms my-app
+summon application/react --no-app-shell my-app
 summon application/react --intl my-app
 summon application/react --relay my-app
 summon application/react --rendering spa my-app
@@ -38,16 +39,25 @@ my-app/
 │   │   ├── marketing/        # HomePage, GuidePage, routes
 │   │   ├── account/          # AccountPage, LoginPage, routes
 │   │   ├── contact/          # ContactPage, routes (omitted with --no-forms)
+│   │   ├── dashboard/        # Overview, Instances, Settings on the application shell (omitted with --no-app-shell)
 │   │   └── catalog/          # CatalogPage, ProductList, ProductCard (--relay only)
 │   ├── lib/
+│   │   ├── TopBar/           # The app's name and the demo navigation, above every page
 │   │   ├── Navigation/
 │   │   ├── ThemeSelector/
+│   │   ├── LocaleSelector/   # (--intl only)
+│   │   ├── ApplicationShell/ # ApplicationLayout + SideNavigation (omitted with --no-app-shell)
+│   │   ├── RouterLink/       # Router navigation for design-system links (omitted with --no-app-shell)
+│   │   ├── CanonicalLogo/    # The side navigation's brand (omitted with --no-app-shell)
+│   │   ├── LoadingMessage/
+│   │   ├── CodeMessage/
 │   │   ├── ExampleComponent/
 │   │   ├── LazyComponent/
 │   │   └── ClientOnly/       # SSR query guard (--relay only; omitted with --rendering spa)
 │   ├── i18n/                 # Locale config, message catalogs (--intl only)
 │   ├── relay/                # Environment factory, mock schema, __generated__ (--relay only)
 │   ├── styles/
+│   ├── testing/              # Providers, route stubs and jsdom stubs the tests share
 │   ├── routes.tsx
 │   └── vite-env.d.ts
 ├── biome.json
@@ -59,6 +69,30 @@ my-app/
 ```
 
 Form components are ON by default: the contact domain and its `contactRoutes` wiring in `routes.tsx` ship unless `--no-forms` is passed.
+
+#### `--no-app-shell`: the application shell and its dashboard
+
+On by default. Every page sits under a top bar — the app's name, one link per
+area of the scaffold, and the theme selector (with `--intl`, the language
+selector too) — as an outer router wrapper the public pages' constrained
+column nests inside. Under the same bar the dashboard at `/dashboard` takes a
+second layout: `ApplicationShell`, the design system's `ApplicationLayout` with
+its `SideNavigation`, and each of its three pages renders `ViewLayout` and
+`ContentLayout` inside it — an overview with status tiles, release cards and an
+activity feed, an instances page with a details aside and a create side panel,
+and a settings page with a form and a confirm modal. The side navigation and
+the breadcrumbs are two views of one tree of navigation items, so a page never
+states its own position; `RouterLink` lets design-system components that
+render their own links navigate through the router. Its sample data is
+modelled on LXD.
+
+`--no-app-shell` keeps the top bar and the public pages and omits the shell,
+the dashboard domain, `RouterLink`, `CanonicalLogo` and the
+`@canonical/react-ds-app`, `ds-types` and `ds-utils` dependencies. Without
+`--forms` the dashboard keeps its pages and drops its forms: the instances page
+lists and inspects instances without creating one, and the settings page keeps
+its danger zone. Without `--intl` the dashboard's labels and sample data are
+English.
 
 #### `--intl`: internationalisation
 
@@ -267,9 +301,19 @@ src/
 │       ├── ProductCard.tsx
 │       ├── ErrorBoundary.tsx
 │       └── routes.ts
+│   └── dashboard/          # Omitted with --no-app-shell
+│       ├── DashboardLayout.tsx
+│       ├── DashboardBreadcrumbs.tsx
+│       ├── OverviewPage.tsx
+│       ├── InstancesPage.tsx
+│       ├── SettingsPage.tsx
+│       ├── hooks/useDashboardNavigation.ts
+│       └── routes.ts
 ├── lib/                    # Shared components
+│   ├── TopBar/             # Above every page
 │   ├── Navigation/
-│   └── SidebarLayout/
+│   ├── ApplicationShell/   # Omitted with --no-app-shell
+│   └── RouterLink/         # Omitted with --no-app-shell
 ├── relay/                  # When --relay is enabled
 │   ├── environment.ts      # Environment factory (local executor / HTTP)
 │   ├── schema.graphql      # Mock SDL (relay-compiler validates against it)

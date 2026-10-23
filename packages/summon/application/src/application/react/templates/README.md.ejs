@@ -145,7 +145,14 @@ src/
 ├── server/         Server entry, compiled renderer, dev servers, sitemap
 <% } -%>
 ├── domains/        Feature domains (each owns its routes and pages)
-├── lib/            Shared components
+<% if (appShell) { -%>
+│   └── dashboard/  An LXD-style application: side navigation, views,
+│                   a side panel and a modal
+<% } -%>
+├── lib/            Shared components (TopBar<% if (appShell) { %>, ApplicationShell<% } %>, …)
+<% if (intl) { -%>
+├── i18n/           Locale configuration and message catalogs (en/fr/ar)
+<% } -%>
 <% if (relay) { -%>
 ├── relay/          Relay environment factory, executable mock schema,
 │                   and generated artifacts (__generated__/)
@@ -165,6 +172,31 @@ Domains are the unit of feature organisation: each owns its routes and pages, so
 adding a feature is adding a domain rather than threading changes through shared
 files. This app ships both `src/assets/` (assets imported in code) and `public/`
 (files served by fixed URL); either may be removed if the app uses only one.
+
+### Page layouts
+
+Layouts are router wrappers, applied to routes with `group()` in
+`src/routes.tsx`, so a page never renders its own frame. Every page except the
+404 sits under `topBarLayout`: a top bar with the app's name, one link per area
+of the scaffold, and the theme<% if (intl) { %> and language<% } %> selector<% if (intl) { %>s<% } %>. The links are demo
+navigation for exploring what the scaffold ships — replace them with your own.
+<% if (appShell) { -%>
+Under the top bar a page takes one of two layouts:
+
+- `publicLayout` — the public pages: one constrained column.
+- `applicationLayout` — the dashboard: `ApplicationShell` from `src/lib`,
+  which is the design system's `ApplicationLayout` with its `SideNavigation`.
+  Each dashboard page renders `ViewLayout` and `ContentLayout` inside it.
+
+The dashboard's navigation is one tree of navigation items, built in
+`src/domains/dashboard/hooks/useDashboardNavigation.ts`. The side navigation
+renders it, and the breadcrumbs are projected from it: a page's trail is its
+path in the tree, so a page never states its own position. `RouterLink` is the
+`LinkComponent` that lets design-system components which render their own links
+navigate through the router.
+<% } else { -%>
+Under the top bar every page takes `publicLayout`: one constrained column.
+<% } -%>
 <% if (relay) { -%>
 
 ## Data layer (Relay)
