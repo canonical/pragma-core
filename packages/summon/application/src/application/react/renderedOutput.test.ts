@@ -51,6 +51,7 @@ function varsFor(combo: {
     // exercised because the combination list below flips it with `relay`.
     standalone: true,
     pragmaVersion: "^0.0.0-test",
+    pragmaWebVersion: "^0.0.0-web-test",
     ...textHelpers(combo.intl),
   });
 }
@@ -296,6 +297,39 @@ describe("the rendered application has one document-title owner", () => {
       );
 
       expect(markup.includes("<title>")).toBe(combo.spa);
+    });
+  }
+});
+
+/**
+ * Each @canonical/* dependency is pinned to the release line of the repository
+ * that publishes it. pragma-web and pragma-core version independently, so a
+ * web package pinned to the generator's own (pragma-core) version resolves to
+ * an older minor line that lacks what the templates import.
+ */
+describe("the rendered package.json pins each repository's release line", () => {
+  /** The only pragma-core packages a generated application depends on. */
+  const CORE_PACKAGES = new Set(["@canonical/biome-config"]);
+
+  for (const combo of combos) {
+    it(`${label(combo)}: web packages take the web range, core the core range`, () => {
+      const manifest = JSON.parse(
+        renderString(
+          readFileSync(path.join(templatesDir, "package.json.ejs"), "utf8"),
+          varsFor(combo),
+        ),
+      ) as Record<string, Record<string, string> | undefined>;
+      const pinned = Object.entries({
+        ...manifest.dependencies,
+        ...manifest.devDependencies,
+      }).filter(([name]) => name.startsWith("@canonical/"));
+
+      expect(pinned.length).toBeGreaterThan(0);
+      for (const [name, range] of pinned) {
+        expect(range, name).toBe(
+          CORE_PACKAGES.has(name) ? "^0.0.0-test" : "^0.0.0-web-test",
+        );
+      }
     });
   }
 });

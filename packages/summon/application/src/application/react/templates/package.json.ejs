@@ -65,35 +65,35 @@
 <% } -%>
   },
   "dependencies": {
-    "@canonical/ds-assets": "<%= pragmaVersion %>",
+    "@canonical/ds-assets": "<%= pragmaWebVersion %>",
 <% if (appShell) { -%>
-    "@canonical/ds-types": "<%= pragmaVersion %>",
-    "@canonical/ds-utils": "<%= pragmaVersion %>",
+    "@canonical/ds-types": "<%= pragmaWebVersion %>",
+    "@canonical/ds-utils": "<%= pragmaWebVersion %>",
 <% } -%>
 <% if (intl) { -%>
-    "@canonical/i18n-core": "<%= pragmaVersion %>",
-    "@canonical/i18n-react": "<%= pragmaVersion %>",
+    "@canonical/i18n-core": "<%= pragmaWebVersion %>",
+    "@canonical/i18n-react": "<%= pragmaWebVersion %>",
 <% } -%>
 <% if (appShell) { -%>
-    "@canonical/react-ds-app": "<%= pragmaVersion %>",
+    "@canonical/react-ds-app": "<%= pragmaWebVersion %>",
 <% } -%>
-    "@canonical/react-ds-global": "<%= pragmaVersion %>",
+    "@canonical/react-ds-global": "<%= pragmaWebVersion %>",
 <% if (forms) { -%>
-    "@canonical/react-ds-global-form": "<%= pragmaVersion %>",
+    "@canonical/react-ds-global-form": "<%= pragmaWebVersion %>",
 <% } -%>
-    "@canonical/react-head": "<%= pragmaVersion %>",
-    "@canonical/react-hooks": "<%= pragmaVersion %>",
+    "@canonical/react-head": "<%= pragmaWebVersion %>",
+    "@canonical/react-hooks": "<%= pragmaWebVersion %>",
 <% if (!spa) { -%>
-    "@canonical/react-ssr": "<%= pragmaVersion %>",
+    "@canonical/react-ssr": "<%= pragmaWebVersion %>",
 <% } -%>
-    "@canonical/router-core": "<%= pragmaVersion %>",
-    "@canonical/router-react": "<%= pragmaVersion %>",
+    "@canonical/router-core": "<%= pragmaWebVersion %>",
+    "@canonical/router-react": "<%= pragmaWebVersion %>",
 <% if (relay) { -%>
-    "@canonical/storybook-addon-relay": "<%= pragmaVersion %>",
+    "@canonical/storybook-addon-relay": "<%= pragmaWebVersion %>",
 <% } -%>
-    "@canonical/storybook-addon-utils": "<%= pragmaVersion %>",
-    "@canonical/storybook-config": "<%= pragmaVersion %>",
-    "@canonical/styles": "<%= pragmaVersion %>",
+    "@canonical/storybook-addon-utils": "<%= pragmaWebVersion %>",
+    "@canonical/storybook-config": "<%= pragmaWebVersion %>",
+    "@canonical/styles": "<%= pragmaWebVersion %>",
 <% if (!spa) { -%>
     "express": "^5.2.1",
 <% } -%>
@@ -109,7 +109,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
     "@canonical/biome-config": "<%= pragmaVersion %>",
-    "@canonical/typescript-config-react": "<%= pragmaVersion %>",
+    "@canonical/typescript-config-react": "<%= pragmaWebVersion %>",
 <% if (intl) { -%>
     "@chromatic-com/storybook": "^5.0.1",
 <% } -%>

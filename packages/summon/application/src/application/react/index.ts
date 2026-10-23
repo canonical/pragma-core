@@ -247,10 +247,10 @@ fallback.`,
             "directory or remove it first.",
         });
       }
-      // Resolve the @canonical/* version range (latest from npm, with an
-      // offline fallback), then build the rest of the pipeline with it baked
-      // into the template vars.
-      return flatMap(resolvePragmaVersion(), (pragmaVersion) => {
+      // Resolve the @canonical/* version ranges (pragma-web's and
+      // pragma-core's release lines), then build the rest of the pipeline with
+      // them baked into the template vars.
+      return flatMap(resolvePragmaVersion(), (ranges) => {
         const vars = withHelpers({
           name,
           forms: answers.forms,
@@ -259,7 +259,8 @@ fallback.`,
           relay: answers.relay,
           spa,
           standalone,
-          pragmaVersion,
+          pragmaVersion: ranges.core,
+          pragmaWebVersion: ranges.web,
           // a reader-facing string renders as a catalog lookup or as English
           ...textHelpers(answers.intl),
         });

@@ -1,6 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["local>canonical/pragma-core//configs/renovate/default.json"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "The pragma-web release that summon-application's templates pin generated apps to; tracked through @canonical/react-ds-global, which is released at that version",
+      "managerFilePatterns": [
+        "/^packages/summon/application/src/shared/versions\\.ts$/"
+      ],
+      "matchStrings": [
+        "export const PRAGMA_WEB_VERSION = \"(?<currentValue>[^\"]+)\";"
+      ],
+      "depNameTemplate": "@canonical/react-ds-global",
+      "datasourceTemplate": "npm"
+    }
+  ],
   "packageRules": [
     {
       "description": "@types/vscode tracks the oldest VS Code the extension supports (engines.vscode), not the newest; raising it is a decision to drop older editors, made in engines.vscode first",
