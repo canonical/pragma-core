@@ -95,9 +95,13 @@ export default function InstancesPage(): ReactElement {
 
   const details = (
     <section aria-labelledby="details-title" className="panel">
+<% if (intl) { -%>
       <h2 id="details-title">
-        {selected ? selected.name : <%- str("dashboard.instances.details", "Details") %>}
+        {selected ? selected.name : t("dashboard.instances.details")}
       </h2>
+<% } else { -%>
+      <h2 id="details-title">{selected ? selected.name : "Details"}</h2>
+<% } -%>
       {selected ? (
         <dl className="details">
           <dt><%- msg("dashboard.instances.status", "Status") %></dt>
@@ -122,9 +126,7 @@ export default function InstancesPage(): ReactElement {
 <% } -%>
         </dl>
       ) : (
-        <p className="muted">
-          <%- msg("dashboard.instances.selectHint", "Select an instance to see its details.") %>
-        </p>
+        <p className="muted"><%- msg("dashboard.instances.selectHint", "Select an instance to see its details.") %></p>
       )}
     </section>
   );
@@ -136,10 +138,16 @@ export default function InstancesPage(): ReactElement {
         <header className="titlebar">
           <div>
             <DashboardBreadcrumbs />
+<% if (intl) { -%>
             <h1>
-              <%- msg("dashboard.instances.heading", "Instances") %>{" "}
+              {t("dashboard.instances.heading")}{" "}
               <Badge value={instances.length} />
             </h1>
+<% } else { -%>
+            <h1>
+              Instances <Badge value={instances.length} />
+            </h1>
+<% } -%>
           </div>
 <% if (forms) { -%>
           <div className="actions">
@@ -154,10 +162,14 @@ export default function InstancesPage(): ReactElement {
 <% } -%>
         </header>
 
+<% if (intl) { -%>
         <section
-          aria-label=<%- attr("dashboard.instances.heading", "Instances") %>
+          aria-label={t("dashboard.instances.heading")}
           className="section"
         >
+<% } else { -%>
+        <section aria-label="Instances" className="section">
+<% } -%>
           <ul className="tiles">
             {instances.map((instance) => (
               <li key={instance.name}>
@@ -246,9 +258,13 @@ export default function InstancesPage(): ReactElement {
           </Form>
         </SidePanel.Content>
         <SidePanel.Footer>
+<% if (intl) { -%>
           <Button onClick={() => panelRef.current?.close()}>
-            <%- msg("dashboard.cancel", "Cancel") %>
+            {t("dashboard.cancel")}
           </Button>
+<% } else { -%>
+          <Button onClick={() => panelRef.current?.close()}>Cancel</Button>
+<% } -%>
           <Button
             anticipation="constructive"
             form="create-instance"

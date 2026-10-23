@@ -189,9 +189,7 @@ export async function prefetchRouteData(
       const timer = setTimeout(() => {
         subscription.unsubscribe();
         reject(
-          new Error(
-            `SSR data prefetch exceeded ${SSR_PREFETCH_TIMEOUT_MS}ms`,
-          ),
+          new Error(`SSR data prefetch exceeded ${SSR_PREFETCH_TIMEOUT_MS}ms`),
         );
       }, SSR_PREFETCH_TIMEOUT_MS);
       const subscription = fetchQuery(

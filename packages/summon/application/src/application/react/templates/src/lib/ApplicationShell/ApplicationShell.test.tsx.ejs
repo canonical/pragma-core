@@ -8,6 +8,8 @@ import {
 import renderWithProviders from "../../testing/renderWithProviders.js";
 import ApplicationShell from "./ApplicationShell.js";
 
+const APP_NAME = "<%= name %>";
+
 const root: NavRoot = {
   key: "root",
   items: [
@@ -61,7 +63,7 @@ describe("ApplicationShell", () => {
     expect(
       screen.getByRole("navigation", { name: "Dashboard" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("<%= name %>")).toBeInTheDocument();
+    expect(screen.getByText(APP_NAME)).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Dashboard overview" }),
     ).toHaveAttribute("href", "/dashboard");

@@ -38,6 +38,9 @@ const CWD = process.cwd();
 // Readiness budgets: dev* boots straight away; preview* builds the client +
 // renderer before serving, so it needs a larger budget.
 <% } -%>
+/** The application's name, which every page title ends with. */
+const APP_NAME = "<%= name %>";
+
 const DEV_READY_MS = 20_000;
 const PREVIEW_READY_MS = 90_000;
 const TEST_TIMEOUT_MS = PREVIEW_READY_MS + 30_000;
@@ -124,7 +127,7 @@ describe("server matrix (2×3) serves correctly", () => {
             const head = html.slice(0, html.indexOf("</head>"));
 
             expect(head.match(/<title>/g)?.length ?? 0).toBe(1);
-            expect(head).toContain("<title>Home — <%= name %></title>");
+            expect(head).toContain(`<title>Home — ${APP_NAME}</title>`);
           }
 
           // 5. SSR cells render /sitemap.xml as XML from the sitemap renderer —
@@ -260,7 +263,7 @@ describe("server matrix (2×3) serves correctly", () => {
 
             expect(dashboardHead.match(/<title>/g)?.length ?? 0).toBe(1);
             expect(dashboardHead).toContain(
-              "<title>Dashboard — <%= name %></title>",
+              `<title>Dashboard — ${APP_NAME}</title>`,
             );
             expect(dashboardHtml).toContain('class="ds top-bar surface"');
             expect(dashboardHtml).toContain(

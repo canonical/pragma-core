@@ -33,7 +33,9 @@ describe("SettingsPage", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Settings" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Settings", { selector: "[aria-current]" })).toBeInTheDocument();
+    expect(
+      screen.getByText("Settings", { selector: "[aria-current]" }),
+    ).toBeInTheDocument();
   });
 <% } -%>
 

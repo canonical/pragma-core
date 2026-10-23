@@ -8,6 +8,8 @@ import { installMatchMedia } from "../../testing/browserStubs.js";
 import renderWithProviders from "../../testing/renderWithProviders.js";
 import TopBar from "./TopBar.js";
 
+const APP_NAME = "<%= name %>";
+
 beforeAll(() => {
   installMatchMedia();
 });
@@ -26,7 +28,7 @@ describe("TopBar", () => {
   it("renders the app's name as a link home", () => {
     renderWithProviders(<TopBar />);
 
-    expect(screen.getByRole("link", { name: "<%= name %>" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: APP_NAME })).toHaveAttribute(
       "href",
       "/",
     );

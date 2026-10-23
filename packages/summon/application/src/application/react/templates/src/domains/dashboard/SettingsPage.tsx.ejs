@@ -107,9 +107,13 @@ export default function SettingsPage(): ReactElement {
       </ContentLayout>
 
       <Modal closeOnBackdropClick ref={modalRef}>
-        <Modal.Header dismissLabel=<%- attr("dashboard.close", "Close") %>>
-          <%- msg("dashboard.settings.confirmTitle", "Delete project?") %>
+<% if (intl) { -%>
+        <Modal.Header dismissLabel={t("dashboard.close")}>
+          {t("dashboard.settings.confirmTitle")}
         </Modal.Header>
+<% } else { -%>
+        <Modal.Header dismissLabel="Close">Delete project?</Modal.Header>
+<% } -%>
         <Modal.Content>
           <p>
 <% if (intl) { -%>

@@ -13,11 +13,13 @@ import {
   wrapper,
 } from "@canonical/router-core";
 import type { ReactElement, ReactNode } from "react";
-import accountRoutes from "#domains/account/routes.js";
 <%# getRequest and the ProductList pair exist only for serverQueries and -%>
 <%# resolveRelayPayloads, which the SPA arm omits; catalogRoutes is always used. -%>
 <% if (relay && !spa) { -%>
 import { getRequest } from "relay-runtime";
+<% } -%>
+import accountRoutes from "#domains/account/routes.js";
+<% if (relay && !spa) { -%>
 import { PAGE_SIZE, productListQuery } from "#domains/catalog/ProductList.js";
 <% } -%>
 <% if (relay) { -%>

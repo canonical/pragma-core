@@ -22,12 +22,18 @@ export default function DashboardLayout({
   const { root, footerRoot } = useDashboardNavigation({ legalUrl: LEGAL_URL });
 
   return (
+<% if (intl) { -%>
     <ApplicationShell
       footerRoot={footerRoot}
-      label=<%- attr("dashboard.nav.label", "Dashboard") %>
+      label={t("dashboard.nav.label")}
       root={root}
     >
       {children}
     </ApplicationShell>
+<% } else { -%>
+    <ApplicationShell footerRoot={footerRoot} label="Dashboard" root={root}>
+      {children}
+    </ApplicationShell>
+<% } -%>
   );
 }

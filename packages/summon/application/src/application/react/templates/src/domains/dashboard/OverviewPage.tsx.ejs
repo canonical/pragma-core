@@ -192,14 +192,19 @@ export default function OverviewPage(): ReactElement {
 <% } else { -%>
                     <p>{release.summary}</p>
                     <p className="muted">
-                      {CHANNEL_LABELS[release.channel]} · kernel {release.kernel}
+                      {CHANNEL_LABELS[release.channel]} · kernel{" "}
+                      {release.kernel}
                     </p>
 <% } -%>
                   </Card.Content>
                   <Card.Footer>
+<% if (intl) { -%>
                     <Button importance="secondary">
-                      <%- msg("dashboard.overview.releaseNotes", "Release notes") %>
+                      {t("dashboard.overview.releaseNotes")}
                     </Button>
+<% } else { -%>
+                    <Button importance="secondary">Release notes</Button>
+<% } -%>
                     <Button
                       icon="plus"
                       importance="primary"
