@@ -1,0 +1,281 @@
+<% if (intl) { -%>
+import { useFormatters, useTranslation } from "@canonical/i18n-react";
+<% } -%>
+<% if (forms) { -%>
+import {
+  ContentLayout,
+  SidePanel,
+  type SidePanelHandle,
+  ViewLayout,
+} from "@canonical/react-ds-app";
+<% } else { -%>
+import { ContentLayout, ViewLayout } from "@canonical/react-ds-app";
+<% } -%>
+import { Badge, Button, Tile } from "@canonical/react-ds-global";
+<% if (forms) { -%>
+import { Field, Form } from "@canonical/react-ds-global-form";
+<% } -%>
+import { Head } from "@canonical/react-head";
+<% if (forms) { -%>
+import { type ReactElement, useRef, useState } from "react";
+<% } else { -%>
+import { type ReactElement, useState } from "react";
+<% } -%>
+<% if (intl && forms) { -%>
+import { INSTANCES, RELEASE_OPTIONS, STATUS_KEYS } from "./constants.js";
+<% } else if (intl) { -%>
+import { INSTANCES, STATUS_KEYS } from "./constants.js";
+<% } else if (forms) { -%>
+import { INSTANCES, RELEASE_OPTIONS, STATUS_LABELS } from "./constants.js";
+<% } else { -%>
+import { INSTANCES, STATUS_LABELS } from "./constants.js";
+<% } -%>
+import DashboardBreadcrumbs from "./DashboardBreadcrumbs.js";
+<% if (forms) { -%>
+import type { Instance } from "./types.js";
+<% } -%>
+import "./styles.css";
+<% if (!intl) { -%>
+
+// The app has one language, so the formatter is fixed to it.
+const number = new Intl.NumberFormat("en");
+<% } -%>
+<% if (forms) { -%>
+
+/** The create form's prefilled values: a second web server on 24.04. */
+const CREATE_DEFAULTS = {
+  instance_name: "web-03",
+  release: "noble",
+  enable_pro: true,
+  cloud_init: "#cloud-config\npackages:\n  - nginx",
+};
+
+/**
+ * Builds the instance a submitted create form describes. A new instance is
+ * starting and has no address yet.
+ */
+function createInstance(data: Record<string, unknown>): Instance {
+  const release = RELEASE_OPTIONS.find(
+    (option) => option.value === data.release,
+  );
+
+  return {
+    name: String(data.instance_name ?? ""),
+    status: "starting",
+    release: release?.label ?? String(data.release ?? ""),
+    ipv4: "",
+    memoryGib: 4,
+  };
+}
+<% } -%>
+
+export default function InstancesPage(): ReactElement {
+<% if (intl) { -%>
+  const { t } = useTranslation();
+  const formatters = useFormatters();
+<% } -%>
+<% if (forms) { -%>
+  const panelRef = useRef<SidePanelHandle>(null);
+  const [instances, setInstances] = useState<readonly Instance[]>(INSTANCES);
+<% } else { -%>
+  const instances = INSTANCES;
+<% } -%>
+  const [selectedName, setSelectedName] = useState<string | null>(null);
+  const selected = instances.find((instance) => instance.name === selectedName);
+<% if (forms) { -%>
+
+  function handleCreate(data: Record<string, unknown>) {
+    const instance = createInstance(data);
+
+    setInstances((current) => [...current, instance]);
+    setSelectedName(instance.name);
+    panelRef.current?.close();
+  }
+<% } -%>
+
+  const details = (
+    <section aria-labelledby="details-title" className="panel">
+<% if (intl) { -%>
+      <h2 id="details-title">
+        {selected ? selected.name : t("dashboard.instances.details")}
+      </h2>
+<% } else { -%>
+      <h2 id="details-title">{selected ? selected.name : "Details"}</h2>
+<% } -%>
+      {selected ? (
+        <dl className="details">
+          <dt><%- msg("dashboard.instances.status", "Status") %></dt>
+<% if (intl) { -%>
+          <dd>{t(STATUS_KEYS[selected.status])}</dd>
+<% } else { -%>
+          <dd>{STATUS_LABELS[selected.status]}</dd>
+<% } -%>
+          <dt><%- msg("dashboard.instances.release", "Ubuntu release") %></dt>
+          <dd>{selected.release}</dd>
+          <dt><%- msg("dashboard.instances.address", "IPv4 address") %></dt>
+          <dd>{selected.ipv4 || "—"}</dd>
+          <dt><%- msg("dashboard.instances.memory", "Memory") %></dt>
+<% if (intl) { -%>
+          <dd>
+            {t("dashboard.instances.memoryValue", {
+              value: formatters.number(selected.memoryGib),
+            })}
+          </dd>
+<% } else { -%>
+          <dd>{number.format(selected.memoryGib)} GiB</dd>
+<% } -%>
+        </dl>
+      ) : (
+        <p className="muted"><%- msg("dashboard.instances.selectHint", "Select an instance to see its details.") %></p>
+      )}
+    </section>
+  );
+
+  return (
+    <ViewLayout aside={details} className="dashboard-view">
+      <ContentLayout>
+        <Head title=<%- attr("dashboard.instances.title", "Instances") %> />
+        <header className="titlebar">
+          <div>
+            <DashboardBreadcrumbs />
+<% if (intl) { -%>
+            <h1>
+              {t("dashboard.instances.heading")}{" "}
+              <Badge value={instances.length} />
+            </h1>
+<% } else { -%>
+            <h1>
+              Instances <Badge value={instances.length} />
+            </h1>
+<% } -%>
+          </div>
+<% if (forms) { -%>
+          <div className="actions">
+            <Button
+              icon="plus"
+              importance="primary"
+              onClick={() => panelRef.current?.open()}
+            >
+              <%- msg("dashboard.instances.create", "Create instance") %>
+            </Button>
+          </div>
+<% } -%>
+        </header>
+
+<% if (intl) { -%>
+        <section
+          aria-label={t("dashboard.instances.heading")}
+          className="section"
+        >
+<% } else { -%>
+        <section aria-label="Instances" className="section">
+<% } -%>
+          <ul className="tiles">
+            {instances.map((instance) => (
+              <li key={instance.name}>
+                <Tile>
+                  <Tile.Header>{instance.name}</Tile.Header>
+                  <Tile.Content>
+                    <p className="muted">
+<% if (intl) { -%>
+                      {t("dashboard.instances.summary", {
+                        status: t(STATUS_KEYS[instance.status]),
+                        release: instance.release,
+                      })}
+<% } else { -%>
+                      {STATUS_LABELS[instance.status]} · {instance.release}
+<% } -%>
+                    </p>
+                    <Button
+<% if (intl) { -%>
+                      aria-label={t("dashboard.instances.show", {
+                        name: instance.name,
+                      })}
+<% } else { -%>
+                      aria-label={`Show details of ${instance.name}`}
+<% } -%>
+                      aria-pressed={instance.name === selectedName}
+                      importance="tertiary"
+                      onClick={() => setSelectedName(instance.name)}
+                    >
+                      <%- msg("dashboard.instances.details", "Details") %>
+                    </Button>
+                  </Tile.Content>
+                </Tile>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </ContentLayout>
+<% if (forms) { -%>
+
+      <SidePanel ref={panelRef}>
+        <SidePanel.Header dismissLabel=<%- attr("dashboard.instances.closePanel", "Close panel") %>>
+          <%- msg("dashboard.instances.create", "Create instance") %>
+        </SidePanel.Header>
+        <SidePanel.Content>
+          <Form
+            defaultValues={CREATE_DEFAULTS}
+            id="create-instance"
+            onSubmit={handleCreate}
+          >
+            <Field
+              inputType="text"
+              label=<%- attr("dashboard.instances.name", "Instance name") %>
+              name="instance_name"
+              registerProps={{
+                required: <%- str("dashboard.instances.nameRequired", "Instance name is required") %>,
+              }}
+            />
+            <Field
+              inputType="select"
+              label=<%- attr("dashboard.instances.release", "Ubuntu release") %>
+              name="release"
+              options={RELEASE_OPTIONS}
+            />
+            <Field
+              controlLabel=<%- attr("dashboard.instances.pro", "Enable Ubuntu Pro") %>
+<% if (intl) { -%>
+              description={t("dashboard.instances.proDescription")}
+<% } else { -%>
+              description="Security and compliance coverage for your instances, including extended support for the packages you care about."
+<% } -%>
+              inputType="checkbox"
+              isOptional
+              name="enable_pro"
+            />
+            <Field
+<% if (intl) { -%>
+              description={t("dashboard.instances.cloudInitDescription")}
+<% } else { -%>
+              description="Configuration to run on first boot: packages to install, users to create, commands to run."
+<% } -%>
+              inputType="textarea"
+              isOptional
+              label=<%- attr("dashboard.instances.cloudInit", "Cloud-init user data") %>
+              name="cloud_init"
+            />
+          </Form>
+        </SidePanel.Content>
+        <SidePanel.Footer>
+<% if (intl) { -%>
+          <Button onClick={() => panelRef.current?.close()}>
+            {t("dashboard.cancel")}
+          </Button>
+<% } else { -%>
+          <Button onClick={() => panelRef.current?.close()}>Cancel</Button>
+<% } -%>
+          <Button
+            anticipation="constructive"
+            form="create-instance"
+            importance="primary"
+            type="submit"
+          >
+            <%- msg("dashboard.instances.create", "Create instance") %>
+          </Button>
+        </SidePanel.Footer>
+      </SidePanel>
+<% } -%>
+    </ViewLayout>
+  );
+}

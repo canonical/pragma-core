@@ -38,6 +38,9 @@ const CWD = process.cwd();
 // Readiness budgets: dev* boots straight away; preview* builds the client +
 // renderer before serving, so it needs a larger budget.
 <% } -%>
+/** The application's name, which every page title ends with. */
+const APP_NAME = "<%= name %>";
+
 const DEV_READY_MS = 20_000;
 const PREVIEW_READY_MS = 90_000;
 const TEST_TIMEOUT_MS = PREVIEW_READY_MS + 30_000;
@@ -124,7 +127,7 @@ describe("server matrix (2×3) serves correctly", () => {
             const head = html.slice(0, html.indexOf("</head>"));
 
             expect(head.match(/<title>/g)?.length ?? 0).toBe(1);
-            expect(head).toContain("<title>Home — <%= name %></title>");
+            expect(head).toContain(`<title>Home — ${APP_NAME}</title>`);
           }
 
           // 5. SSR cells render /sitemap.xml as XML from the sitemap renderer —
@@ -241,6 +244,39 @@ describe("server matrix (2×3) serves correctly", () => {
 
             const home = await fetch(`${server.base}/`);
             expect(await home.text()).not.toContain("relayPayloads");
+          }
+<% } -%>
+<% if (appShell && !spa) { -%>
+
+          // SSR cells render the dashboard under the top bar, inside the
+          // application shell, each a surface: its own title in <head>, the
+          // side navigation with the current page marked, and the design
+          // system's icons served at /icons, which its items reference.
+          if (cell.ssr) {
+            const dashboard = await fetch(`${server.base}/dashboard`);
+            expect(dashboard.status).toBe(200);
+            const dashboardHtml = await dashboard.text();
+            const dashboardHead = dashboardHtml.slice(
+              0,
+              dashboardHtml.indexOf("</head>"),
+            );
+
+            expect(dashboardHead.match(/<title>/g)?.length ?? 0).toBe(1);
+            expect(dashboardHead).toContain(
+              `<title>Dashboard — ${APP_NAME}</title>`,
+            );
+            expect(dashboardHtml).toContain('class="ds top-bar surface"');
+            expect(dashboardHtml).toContain(
+              'class="ds application-shell surface"',
+            );
+            expect(dashboardHtml).toContain('class="ds side-navigation"');
+            expect(dashboardHtml).toContain(
+              'aria-current="page" class="row" href="/dashboard"',
+            );
+
+            const icon = await fetch(`${server.base}/icons/containers.svg`);
+            expect(icon.status).toBe(200);
+            expect(icon.headers.get("content-type")).toMatch(/svg/);
           }
 <% } -%>
         } finally {

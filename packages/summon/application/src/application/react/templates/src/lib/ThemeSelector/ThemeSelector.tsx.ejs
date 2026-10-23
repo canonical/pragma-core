@@ -1,9 +1,21 @@
 <% if (intl) { -%>
 import { useTranslation } from "@canonical/i18n-react";
 <% } -%>
+<% if (forms) { -%>
+import { SelectInput } from "@canonical/react-ds-global-form";
+<% } -%>
 import { usePreferredTheme } from "@canonical/react-hooks";
 import type { ChangeEvent, ReactElement } from "react";
 
+<% if (forms) { -%>
+/**
+ * Colour-scheme picker driving `usePreferredTheme`. Built on the form
+ * package's standalone `SelectInput`, so it wears the design system's input
+ * chrome.
+ */
+<% } else { -%>
+/** Colour-scheme picker driving `usePreferredTheme`. */
+<% } -%>
 export default function ThemeSelector(): ReactElement {
   const { value, source, set, reset } = usePreferredTheme();
 <% if (intl) { -%>
@@ -23,24 +35,27 @@ export default function ThemeSelector(): ReactElement {
   const selectValue = source === "system" ? "system" : value;
 
   return (
-    <select
-<% if (intl) { -%>
-      aria-label={t("theme.label")}
+<% if (forms) { -%>
+    <SelectInput
+      aria-label=<%- attr("theme.label", "Color theme") %>
+      onChange={handleChange}
+      options={[
+        { value: "system", label: <%- str("theme.system", "System") %> },
+        { value: "light", label: <%- str("theme.light", "Light") %> },
+        { value: "dark", label: <%- str("theme.dark", "Dark") %> },
+      ]}
+      value={selectValue}
+    />
 <% } else { -%>
-      aria-label="Color theme"
-<% } -%>
+    <select
+      aria-label=<%- attr("theme.label", "Color theme") %>
       onChange={handleChange}
       value={selectValue}
     >
-<% if (intl) { -%>
-      <option value="system">{t("theme.system")}</option>
-      <option value="light">{t("theme.light")}</option>
-      <option value="dark">{t("theme.dark")}</option>
-<% } else { -%>
-      <option value="system">System</option>
-      <option value="light">Light</option>
-      <option value="dark">Dark</option>
-<% } -%>
+      <option value="system"><%- msg("theme.system", "System") %></option>
+      <option value="light"><%- msg("theme.light", "Light") %></option>
+      <option value="dark"><%- msg("theme.dark", "Dark") %></option>
     </select>
+<% } -%>
   );
 }

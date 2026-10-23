@@ -145,7 +145,7 @@ Mutation — plan-first (set `confirm: true` to apply).
 
 ### create_application
 
-Use when asked to start a new React application, server-rendered or client-only. Example: create_application { appPath: "my-app" }.
+Use when asked to start a new React application, server-rendered or client-only, with or without an application shell. Example: create_application { appPath: "my-app" }.
 
 Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
 
@@ -155,6 +155,7 @@ Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
 | --- | --- | --- | --- |
 | `appPath` | string | no | Application directory name. (default: my-app) |
 | `forms` | boolean | no | Include form components. (default: true) |
+| `appShell` | boolean | no | Include the application shell and its dashboard. (default: true) |
 | `intl` | boolean | no | Include internationalisation (locale negotiation, translated UI, locale switcher). (default: false) |
 | `rendering` | enum(ssr, spa) | no | Rendering — ssr keeps the server layer (SSR servers and sitemap), spa is client-only. (one of: ssr, spa) (default: ssr) |
 | `relay` | boolean | no | Include a Relay (GraphQL) data layer with a local mock schema. (default: false) |

@@ -58,6 +58,7 @@ describe("reference docs drift-guard — emitReference == committed (PROTECTED)"
       "| `--no-with-stories` |",
       "| `--no-with-ssr-tests` |",
       "| `--no-forms` |",
+      "| `--no-app-shell` |",
       "| `--no-run-install` |",
     ]) {
       expect(chapter).toContain(token);

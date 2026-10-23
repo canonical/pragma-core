@@ -1,0 +1,224 @@
+<% if (intl) { -%>
+import { useFormatters, useTranslation } from "@canonical/i18n-react";
+<% } -%>
+import { ContentLayout, ViewLayout } from "@canonical/react-ds-app";
+import { Button, Card, Tile, Timeline } from "@canonical/react-ds-global";
+import { Head } from "@canonical/react-head";
+import { useRouter } from "@canonical/router-react";
+import type { ReactElement } from "react";
+import {
+  ACTIVITY,
+<% if (intl) { -%>
+  CHANNEL_KEYS,
+<% } else { -%>
+  CHANNEL_LABELS,
+<% } -%>
+  OVERVIEW_FIGURES,
+  RELEASES,
+  TERABYTES,
+} from "./constants.js";
+import DashboardBreadcrumbs from "./DashboardBreadcrumbs.js";
+import selectRelativeTime from "./selectRelativeTime.js";
+import "./styles.css";
+<% if (!intl) { -%>
+
+// The app has one language, so the formatters are fixed to it.
+const number = new Intl.NumberFormat("en");
+const terabytes = new Intl.NumberFormat("en", TERABYTES);
+const relativeTime = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
+function formatRelative(minutesAgo: number): string {
+  const { value, unit } = selectRelativeTime(minutesAgo);
+  return relativeTime.format(value, unit);
+}
+<% } -%>
+
+export default function OverviewPage(): ReactElement {
+<% if (intl) { -%>
+  const { t } = useTranslation();
+  const formatters = useFormatters();
+
+  function formatRelative(minutesAgo: number): string {
+    const { value, unit } = selectRelativeTime(minutesAgo);
+    return formatters.relativeTime(value, unit, { numeric: "auto" });
+  }
+<% } -%>
+  const router = useRouter();
+
+  const activity = (
+    <section aria-labelledby="activity-title" className="panel">
+      <h2 id="activity-title"><%- msg("dashboard.activity.heading", "Activity") %></h2>
+      <Timeline>
+        <Timeline.Content>
+          {ACTIVITY.map((event) => (
+            <Timeline.Event
+<% if (intl) { -%>
+              actor={
+                "name" in event.actor ? event.actor.name : t(event.actor.key)
+              }
+<% } else { -%>
+              actor={event.actor}
+<% } -%>
+              criticality={event.criticality}
+              datetime={formatRelative(event.minutesAgo)}
+              key={event.key}
+            >
+<% if (intl) { -%>
+              {t(event.messageKey, event.values)}
+<% } else { -%>
+              {event.message}
+<% } -%>
+            </Timeline.Event>
+          ))}
+        </Timeline.Content>
+      </Timeline>
+    </section>
+  );
+
+  return (
+    <ViewLayout aside={activity} className="dashboard-view">
+      <ContentLayout>
+        <Head title=<%- attr("dashboard.overview.title", "Dashboard") %> />
+        <header className="titlebar">
+          <div>
+            <DashboardBreadcrumbs />
+            <h1><%- msg("dashboard.overview.heading", "Overview") %></h1>
+          </div>
+          <div className="actions">
+            <Button
+              icon="plus"
+              importance="primary"
+              onClick={() => router.navigate("dashboardInstances")}
+            >
+              <%- msg("dashboard.instances.create", "Create instance") %>
+            </Button>
+          </div>
+        </header>
+
+        <section aria-labelledby="status-title" className="section">
+          <h2 id="status-title"><%- msg("dashboard.overview.status", "Status") %></h2>
+          <ul className="tiles">
+            <li>
+              <Tile>
+                <Tile.Header><%- msg("dashboard.overview.running", "Running") %></Tile.Header>
+                <Tile.Content>
+                  <p className="figure">
+<% if (intl) { -%>
+                    {formatters.number(OVERVIEW_FIGURES.running)}
+<% } else { -%>
+                    {number.format(OVERVIEW_FIGURES.running)}
+<% } -%>
+                  </p>
+                </Tile.Content>
+              </Tile>
+            </li>
+            <li>
+              <Tile>
+                <Tile.Header><%- msg("dashboard.overview.stopped", "Stopped") %></Tile.Header>
+                <Tile.Content>
+                  <p className="figure">
+<% if (intl) { -%>
+                    {formatters.number(OVERVIEW_FIGURES.stopped)}
+<% } else { -%>
+                    {number.format(OVERVIEW_FIGURES.stopped)}
+<% } -%>
+                  </p>
+                </Tile.Content>
+              </Tile>
+            </li>
+            <li>
+              <Tile>
+                <Tile.Header><%- msg("dashboard.overview.storage", "Storage") %></Tile.Header>
+                <Tile.Content>
+<% if (intl) { -%>
+                  <p className="figure">
+                    {formatters.number(
+                      OVERVIEW_FIGURES.storageUsedTb,
+                      TERABYTES,
+                    )}
+                  </p>
+                  <p className="muted">
+                    {t("dashboard.overview.storageOf", {
+                      total: formatters.number(
+                        OVERVIEW_FIGURES.storageTotalTb,
+                        TERABYTES,
+                      ),
+                    })}
+                  </p>
+<% } else { -%>
+                  <p className="figure">
+                    {terabytes.format(OVERVIEW_FIGURES.storageUsedTb)}
+                  </p>
+                  <p className="muted">
+                    of {terabytes.format(OVERVIEW_FIGURES.storageTotalTb)} used
+                  </p>
+<% } -%>
+                </Tile.Content>
+              </Tile>
+            </li>
+            <li>
+              <Tile>
+                <Tile.Header><%- msg("dashboard.overview.alerts", "Alerts") %></Tile.Header>
+                <Tile.Content>
+                  <p className="figure">
+<% if (intl) { -%>
+                    {formatters.number(OVERVIEW_FIGURES.alerts)}
+<% } else { -%>
+                    {number.format(OVERVIEW_FIGURES.alerts)}
+<% } -%>
+                  </p>
+                </Tile.Content>
+              </Tile>
+            </li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="releases-title" className="section">
+          <h2 id="releases-title"><%- msg("dashboard.overview.releases", "Releases") %></h2>
+          <ul className="cards">
+            {RELEASES.map((release) => (
+              <li key={release.name}>
+                <Card>
+                  <Card.Header>{release.name}</Card.Header>
+                  <Card.Content>
+<% if (intl) { -%>
+                    <p>{t(release.summaryKey)}</p>
+                    <p className="muted">
+                      {t("dashboard.releases.detail", {
+                        channel: t(CHANNEL_KEYS[release.channel]),
+                        kernel: release.kernel,
+                      })}
+                    </p>
+<% } else { -%>
+                    <p>{release.summary}</p>
+                    <p className="muted">
+                      {CHANNEL_LABELS[release.channel]} · kernel{" "}
+                      {release.kernel}
+                    </p>
+<% } -%>
+                  </Card.Content>
+                  <Card.Footer>
+<% if (intl) { -%>
+                    <Button importance="secondary">
+                      {t("dashboard.overview.releaseNotes")}
+                    </Button>
+<% } else { -%>
+                    <Button importance="secondary">Release notes</Button>
+<% } -%>
+                    <Button
+                      icon="plus"
+                      importance="primary"
+                      onClick={() => router.navigate("dashboardInstances")}
+                    >
+                      <%- msg("dashboard.overview.launch", "Launch") %>
+                    </Button>
+                  </Card.Footer>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </ContentLayout>
+    </ViewLayout>
+  );
+}

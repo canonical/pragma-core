@@ -22,13 +22,8 @@ import { Outlet, RouterProvider } from "@canonical/router-react";
 <% } else { -%>
 import {
   Outlet,
-<% if (intl) { -%>
   RouterProvider,
-<% } -%>
   readDehydratedState,
-<% if (!intl) { -%>
-  RouterProvider,
-<% } -%>
 } from "@canonical/router-react";
 <% } -%>
 <% if (spa) { -%>
@@ -42,24 +37,23 @@ import { RelayEnvironmentProvider } from "react-relay";
 <% if (intl) { -%>
 import { catalogs, i18nConfig } from "#i18n/index.js";
 <% } -%>
+import LoadingMessage from "#lib/LoadingMessage/index.js";
 <% if (relay) { -%>
 import { getBrowserEnvironment } from "#relay/environment.js";
 <% } -%>
 import formatDocumentTitle from "../formatDocumentTitle.js";
-<%# Same story: the SPA arm never pulls the two SSR payload symbols, so the three -%>
-<%# base names fit on one line and the formatter requires them there. -%>
-<% if (spa) { -%>
-import { appRoutes, middleware, notFoundRoute } from "../routes.js";
-<% } else { -%>
+<%# Only the SSR arm with Relay pulls the two payload symbols; every other arm's -%>
+<%# three base names fit on one line, and the formatter requires them there. -%>
+<% if (relay && !spa) { -%>
 import {
   appRoutes,
   middleware,
   notFoundRoute,
-<% if (relay) { -%>
   resolveRelayPayloads,
   type SerializedRelayPayload,
-<% } -%>
 } from "../routes.js";
+<% } else { -%>
+import { appRoutes, middleware, notFoundRoute } from "../routes.js";
 <% } -%>
 <% if (relay && spa) { -%>
 
@@ -171,7 +165,7 @@ hydrateRoot(
     <HeadProvider titleTemplate={formatDocumentTitle}>
       <RelayEnvironmentProvider environment={relayEnvironment}>
         <RouterProvider router={router}>
-          <Outlet fallback={<p>Loading…</p>} />
+          <Outlet fallback={<LoadingMessage />} />
         </RouterProvider>
       </RelayEnvironmentProvider>
     </HeadProvider>
@@ -180,7 +174,7 @@ hydrateRoot(
   <HeadProvider titleTemplate={formatDocumentTitle}>
     <RelayEnvironmentProvider environment={relayEnvironment}>
       <RouterProvider router={router}>
-        <Outlet fallback={<p>Loading…</p>} />
+        <Outlet fallback={<LoadingMessage />} />
       </RouterProvider>
     </RelayEnvironmentProvider>
   </HeadProvider>,
@@ -192,14 +186,14 @@ hydrateRoot(
   >
     <HeadProvider titleTemplate={formatDocumentTitle}>
       <RouterProvider router={router}>
-        <Outlet fallback={<p>Loading…</p>} />
+        <Outlet fallback={<LoadingMessage />} />
       </RouterProvider>
     </HeadProvider>
   </I18nProvider>,
 <% } else { -%>
   <HeadProvider titleTemplate={formatDocumentTitle}>
     <RouterProvider router={router}>
-      <Outlet fallback={<p>Loading…</p>} />
+      <Outlet fallback={<LoadingMessage />} />
     </RouterProvider>
   </HeadProvider>,
 <% } -%>

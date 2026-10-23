@@ -35,6 +35,13 @@ export const CREATE_SURFACE: Readonly<Record<string, SurfaceCommand>> = {
         "group": "Application"
       },
       {
+        "name": "appShell",
+        "type": "confirm",
+        "message": "Include the application shell and its dashboard?",
+        "default": true,
+        "group": "Application"
+      },
+      {
         "name": "intl",
         "type": "confirm",
         "message": "Include internationalisation (locale negotiation, translated UI, locale switcher)?",
@@ -304,6 +311,11 @@ export const CREATE_CLI_SYNTAX: Readonly<
       "flag": "--no-forms",
       "takesValue": false,
       "kebabName": "forms"
+    },
+    "appShell": {
+      "flag": "--no-app-shell",
+      "takesValue": false,
+      "kebabName": "app-shell"
     },
     "intl": {
       "flag": "--intl",

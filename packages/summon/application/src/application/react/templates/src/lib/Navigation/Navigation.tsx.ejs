@@ -42,6 +42,9 @@ export default function Navigation(): ReactElement {
       <Link to="contact">Contact</Link>
 <% } -%>
 <% } -%>
+<% if (appShell) { -%>
+      <Link to="dashboard"><%- msg("nav.dashboard", "Dashboard") %></Link>
+<% } -%>
       <Link search={{ auth: "1" }} to="account">
 <% if (intl) { -%>
         {t("nav.signIn")}

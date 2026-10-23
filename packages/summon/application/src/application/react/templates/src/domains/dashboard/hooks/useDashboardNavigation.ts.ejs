@@ -1,0 +1,94 @@
+<% if (intl) { -%>
+import { useTranslation } from "@canonical/i18n-react";
+<% } -%>
+import { createHelpItem } from "@canonical/react-ds-app";
+import type {
+  UseDashboardNavigationProps,
+  UseDashboardNavigationResult,
+} from "./types.js";
+
+/**
+ * Builds the dashboard's side navigation<% if (intl) { %>, labelled in the active locale<% } %>.
+ *
+ * The first group holds the dashboard's three pages. The second shows how an
+ * area without pages yet appears: its items are disabled, so they render
+ * without a link and nothing leads to a missing page. The last group is the
+ * Help item every application's side navigation carries. The footer links to
+ * the router guide, a public page outside the dashboard.
+ */
+export default function useDashboardNavigation({
+  legalUrl,
+}: UseDashboardNavigationProps): UseDashboardNavigationResult {
+<% if (intl) { -%>
+  const { t } = useTranslation();
+
+<% } -%>
+  return {
+    root: {
+      key: "dashboard",
+      items: [
+        {
+          key: "pages",
+          items: [
+            {
+              url: "/dashboard",
+              label: <%- str("dashboard.nav.overview", "Overview") %>,
+              icon: "switcher-dashboard",
+            },
+            {
+              url: "/dashboard/instances",
+              label: <%- str("dashboard.nav.instances", "Instances") %>,
+              icon: "containers",
+            },
+            {
+              url: "/dashboard/settings",
+              label: <%- str("dashboard.nav.settings", "Settings") %>,
+              icon: "settings",
+            },
+          ],
+        },
+        {
+          key: "networking",
+          label: <%- str("dashboard.nav.networking", "Networking") %>,
+          items: [
+            {
+              key: "networks",
+              label: <%- str("dashboard.nav.networks", "Networks") %>,
+              icon: "connected",
+              disabled: true,
+            },
+            {
+              key: "storage",
+              label: <%- str("dashboard.nav.storage", "Storage pools") %>,
+              icon: "pods",
+              disabled: true,
+            },
+          ],
+        },
+        {
+          key: "help-group",
+<% if (intl) { -%>
+          items: [
+            createHelpItem(legalUrl, {
+              label: t("dashboard.nav.help"),
+              legalLabel: t("dashboard.nav.legal"),
+            }),
+          ],
+<% } else { -%>
+          items: [createHelpItem(legalUrl)],
+<% } -%>
+        },
+      ],
+    },
+    footerRoot: {
+      key: "dashboard-footer",
+      items: [
+        {
+          url: "/guides/router-core",
+          label: <%- str("dashboard.nav.guide", "Router guide") %>,
+          icon: "book",
+        },
+      ],
+    },
+  };
+}

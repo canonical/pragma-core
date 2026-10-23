@@ -1,4 +1,10 @@
+<% if (intl) { -%>
+import { useTranslation } from "@canonical/i18n-react";
+<% } -%>
 import { type ReactElement, use } from "react";
+<% if (intl) { -%>
+import type { MessageKey } from "#i18n/en.js";
+<% } -%>
 
 /**
  * Demonstrates streaming SSR with Suspense.
@@ -14,19 +20,39 @@ import { type ReactElement, use } from "react";
  * Replace `createDelayedData` with a real data source in your own routes.
  */
 
+<% if (intl) { -%>
+/**
+ * Synthetic data source — resolves after `delayMs` to simulate a slow fetch.
+ * It resolves to a catalog key, so the streamed text renders in the active
+ * locale.
+ */
+function createDelayedData(delayMs = 1000): Promise<MessageKey> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve("home.streamed"), delayMs);
+  });
+}
+<% } else { -%>
 /** Synthetic data source — resolves after `delayMs` to simulate a slow fetch. */
 function createDelayedData(delayMs = 1000): Promise<string> {
   return new Promise((resolve) => {
     setTimeout(() => resolve("Streamed in after a delay"), delayMs);
   });
 }
+<% } -%>
 
 // Created once at module load so re-renders reuse the same promise rather
 // than restarting the "fetch" (and re-suspending) on every render.
 const dataPromise = createDelayedData();
 
 export default function LazyComponent(): ReactElement {
+<% if (intl) { -%>
+  const { t } = useTranslation();
+  const messageKey = use(dataPromise);
+
+  return <p>{t(messageKey)}</p>;
+<% } else { -%>
   const message = use(dataPromise);
 
   return <p>{message}</p>;
+<% } -%>
 }
