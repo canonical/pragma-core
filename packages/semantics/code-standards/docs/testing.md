@@ -253,6 +253,62 @@ src/testing/regression/bugfix.test.ts
 
 ---
 
+# Structure Testing
+
+> **Scope:** Targets TypeScript/JavaScript projects with a declared folder/architecture law.
+
+## Structure Parity Fences
+
+**Identifier:** `cs:testing.structure.parity_fence`
+
+A package's declared structure law — where each kind of file must live, which seams are the only import path, which anatomy a provider must follow — must be kept true by MECHANICAL fence tests that assert the law over the real tree. Author each fence in a two-layer planted-twin idiom: a positive assertion over the LIVE tree PLUS a deliberately-nonconforming planted twin that proves the fence actually reds when the law is violated — a fence that never fails guards nothing. Where the current tree is not yet conformant, ship the fence allowlisted or skip-gated so it merges green without front-running the migration, then tighten as the tree conforms. A structure law written only in prose drifts silently the moment an implementer places a file wrong, and a green suite then ships a violated law; parity fences make the law EXECUTABLE so drift reds a build instead of accreting. The planted-twin twin is what makes the fence trustworthy — it witnesses its own failure mode. Example fences (illustrative, not exhaustive): rendered-UI-only-in-blocks, barrel-seam-only imports, every-domain-has-its-public-seam, provider-conforms-to-context-anatomy, kind-barrel-completeness. The durable rule is the discipline: fence the law, prove the fence reds via a planted twin, allowlist during migration.
+
+### Do
+
+Assert the law over the LIVE tree AND plant a deliberately-nonconforming twin that proves the fence reds — a fence that can never fail guards nothing.
+```typescript
+// fence: only rendered UI (returns JSX) may live under blocks/
+test("every file under blocks/ renders UI", () => {
+  for (const file of glob("src/**/blocks/**/*.{ts,tsx}"))
+    expect(rendersJsx(file), file).toBe(true);   // positive: the live tree
+});
+
+test("the fence reds on a non-rendering file planted in blocks/", () => {
+  const planted = "src/testing/twins/blocks/notARender.ts";  // no JSX
+  expect(() => assertOnlyRenderersInBlocks([planted])).toThrow();
+});
+```
+
+Ship a fence allowlisted / skip-gated while the tree is mid-migration, so it merges green without front-running the move; tighten as the tree conforms.
+```typescript
+// migration allowlist — shrinks to empty as the tree conforms
+const NOT_YET_MOVED = new Set(["domains/room/RoomView.tsx"]);
+for (const file of renderingFilesAtSpine())
+  if (!NOT_YET_MOVED.has(file))
+    expect.fail(`rendering file at spine: ${file} — move to blocks/`);
+```
+
+### Don't
+
+State the structure law only in prose (a doc / README) with no mechanical fence — it drifts the moment a file is placed wrong and a green suite ships the violation.
+```
+// Bad: the law lives only in AGENTS.md; nothing asserts it.
+// An implementer drops RoomView.tsx at the spine, the suite stays green,
+// and the shipped tree silently violates its own structure law.
+```
+
+Write a positive-only fence with no planted-twin witness — a fence that never reds proves nothing about the law it claims to guard.
+```typescript
+// Bad: asserts the live tree but never proves it can FAIL.
+// If the predicate is silently vacuous (empty glob, wrong path),
+// the fence is green forever and guards nothing.
+test("blocks are fine", () => {
+  for (const f of glob("src/**/blocks/**")) expect(ok(f)).toBe(true);
+});
+```
+
+---
+
 # Unit Testing
 
 > **Scope:** Targets TypeScript/JavaScript projects using vitest.
