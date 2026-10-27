@@ -4,13 +4,13 @@
  * instead of failing the preview as if the disk were empty.
  */
 
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { GeneratorDefinition } from "@canonical/summon-core";
 import { exists, fail, ifElseM, writeFile } from "@canonical/task";
 import { render } from "ink-testing-library";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 import { App } from "./App.js";
 
 const addsTo: GeneratorDefinition = {
@@ -48,8 +48,16 @@ const waitForFrame = async (
 
 describe("App — the interactive preview reads the real disk", () => {
   const previous = process.cwd();
+  // Preview cwds are abandoned otherwise; swept so nothing strands in /tmp.
+  const previewDirs: string[] = [];
   beforeEach(() => {
-    process.chdir(mkdtempSync(join(tmpdir(), "summon-preview-")));
+    const dir = mkdtempSync(join(tmpdir(), "summon-preview-"));
+    previewDirs.push(dir);
+    process.chdir(dir);
+  });
+  afterAll(() => {
+    for (const dir of previewDirs)
+      rmSync(dir, { recursive: true, force: true });
   });
   afterEach(() => {
     process.chdir(previous);

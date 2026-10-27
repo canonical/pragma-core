@@ -170,17 +170,6 @@ describe("lazy dispatch — module-graph probe (PROTECTED)", () => {
     }
   });
 
-  // The create surface's registration machinery — summon-core's projection
-  // helpers, its Commander adapter, and Commander itself — must stay behind
-  // the mount's dynamic import: `--help` and `__complete` both import this
-  // barrel and neither registers a single create command, so an eager edge
-  // here taxes every fast-path spawn for work only a dispatched `create`
-  // invocation performs. The registered flag/positional spellings the fast
-  // paths DO need (completion tokens, reference syntax) are baked into
-  // `createSurface.generated.ts` at build time, so nothing on this graph has
-  // to call the projection to learn them. Type-only imports are allowed —
-  // they are erased — which is why this walks import STATEMENTS rather than
-  // grepping for the specifier.
   it("capabilities/index pulls no summon-core projection, adapter, or commander value import (PROTECTED)", () => {
     const banned = [/^@canonical\/summon-core\/projection/, /^commander$/];
     const graph = staticImportGraph(resolve(here, "index.ts"));
