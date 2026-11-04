@@ -310,6 +310,7 @@ styles:
 | `expanded` | A disclosure is open | `[open]`, `aria-expanded`, MD3 *expanded* |
 | `indeterminate` | A checkbox or progress is mixed, on neither setting | CSS `:indeterminate`, `aria-checked="mixed"` |
 | `invalid` | Validation has failed | CSS `:invalid`, `aria-invalid` |
+| `editing` | An inline-editable value has its edit open | custom element `:state(editing)`, otherwise `[data-editing]`; no ARIA equivalent |
 
 Every mature system governs states as closed-with-registry (Spectrum's states
 registry, ARIA's list of ten, SLDS's linted grammar). Candidate additions —
@@ -322,6 +323,10 @@ exists. A disclosure header that takes a different background while open is
 the first; the panel that exists only while open is the second, and stays the
 Switch construct's territory — so `expanded` is a state and the panel's
 presence is not. `open` is not admitted as a second spelling of `expanded`.
+`editing` entered on the same line: an inline-editable value re-values the
+fill and border of the part being edited while its edit is open, so it is a
+state. Swapping what is shown, a label for an input, changes what exists and
+stays the Switch construct's job; `editing` never carries that swap.
 
 **Rules:**
 
@@ -753,7 +758,7 @@ over raw text.
 Binding    = Key ("@" State)? Value       ; a mapping entry: the key scalar, then the value node
 Key        = Path                         ; the registry closes the roster (§3.7)
 State      = "hover" | "active" | "focus" | "disabled" | "selected"
-           | "expanded" | "indeterminate" | "invalid"
+           | "expanded" | "indeterminate" | "invalid" | "editing"
 Value      = Symbol | Primitive | List
 List       = Symbol+ (Symbol | Primitive) ; a sequence of two or more scalars, in fallback order
 Symbol     = Path

@@ -196,14 +196,17 @@ styles:
 ```
 
 The state vocabulary is **closed and registry-governed**: `hover`, `active`,
-`focus`, `disabled`, `selected`, `expanded`, `indeterminate`, `invalid`.
+`focus`, `disabled`, `selected`, `expanded`, `indeterminate`, `invalid`,
+`editing`.
 Naming follows the industry consensus where systems diverge — `active`
 subsumes Material's *pressed* and Spectrum's *down* (and matches Canonical's
 own token tree); `focus` maps to CSS `:focus-visible` (Spectrum's
 *key-focus*); `expanded` is a disclosure's open state (`[open]`,
 `aria-expanded`); `indeterminate` is a mixed checkbox or progress bar, on
 neither setting; `invalid` is a failed validation (`:invalid`,
-`aria-invalid`). `@default` is not admitted — absence is the default.
+`aria-invalid`); `editing` is an inline-editable value while its edit is
+open, re-valuing the edited part's fill or border (swapping a label for an
+input is still a `switch`). `@default` is not admitted — absence is the default.
 Candidate additions (`checked`, `visited`, `dragged`, `pending`, `error`,
 `read-only`) go through the registry, never by loosening the schema.
 

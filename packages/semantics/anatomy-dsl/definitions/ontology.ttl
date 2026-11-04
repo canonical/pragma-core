@@ -340,17 +340,19 @@ anatomy:styleState a owl:DatatypeProperty ;
     rdfs:range xsd:string ;
     skos:definition """Interaction state this style value applies in. Absent
     means the default state. Closed vocabulary (hover, active, focus,
-    disabled, selected, expanded, indeterminate, invalid), governed by
+    disabled, selected, expanded, indeterminate, invalid, editing), governed by
     registry — 'active' subsumes Material's 'pressed' and Spectrum's 'down';
     'focus' maps to CSS :focus-visible (Spectrum's 'key-focus'); 'expanded'
     is a disclosure's open state ([open], aria-expanded); 'indeterminate' is
     a mixed checkbox or progress bar; 'invalid' is a failed validation
-    (:invalid, aria-invalid). States re-value style channels only: they never
+    (:invalid, aria-invalid); 'editing' is an inline-editable value while
+    its edit is open (the part re-valued, not the label swapped for an
+    input). States re-value style channels only: they never
     add structure (that is the Switch construct) and never define transitions
     or interaction logic (state machines stay out of scope). Authored as an
     @state suffix on the style key.""" ;
     skos:example "hover" , "active" , "focus" , "disabled" , "selected" ,
-                 "expanded" , "indeterminate" , "invalid" .
+                 "expanded" , "indeterminate" , "invalid" , "editing" .
 
 anatomy:projectionType a owl:DatatypeProperty ;
     rdfs:label "projection type" ;
