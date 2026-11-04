@@ -1,0 +1,139 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# The root is an unclipped row: the body, which holds the parts, and beside it the remove
+# control. Neither the root nor the body is a button; a Segment is a button once scripts run,
+# and only when it has onActivate.
+# The `unity` property chooses the body: `separated`, the default, where each Segment is its
+# own target, or `joined`, where the chip is one target. The body's gap separates the parts:
+# 2 px of the surface under `separated`, 1 px of the line colour under `joined`. The
+# implementation reads each component token first and the value bound here as its fallback.
+node:
+  uri: global_dataviews.component.query_chip
+  styles:
+    layout.type: inline-flex
+    layout.align: center
+    # Between the body and the remove control: 8 px, so the body's ring, which reaches 5 px
+    # past the body, never draws over the remove control.
+    spacing.gap: dimension.100
+    typography.font: typography.text.secondary
+    typography.whiteSpace: nowrap
+  edges:
+    - switch:
+        on: props
+        cases:
+          - node:
+              # unity: separated. Once scripts run, and while a part is interactive, it
+              # carries role="group", named by `label`. It paints nothing, so the surface
+              # beneath shows through the gap between parts.
+              role: separated body
+              styles:
+                layout.type: inline-flex
+                layout.align: center
+                # The ends of the first and last parts are rounded by clipping the body:
+                # no key sets one corner. --query-chip-radius
+                appearance.radius: dimension.radius.full
+                layout.overflow: hidden
+                # --query-chip-background
+                appearance.background: transparent
+                # --query-chip-gap
+                spacing.gap: dimension.025
+                # 24 px, the minimum target size of WCAG 2.5.8. --query-chip-min-height
+                size.min.height: dimension.300
+                # One ring around the clause while focus is within the body; @focus stands
+                # for :focus-within here, which the DSL does not name. The 3 px ring sits
+                # 2 px outside the body, so it is drawn against the surface beneath the chip,
+                # not the selected fill: 4.93:1 (light) and 5.00:1 (dark) on
+                # color.background, and 4.64:1 (light) or 5.52:1 (dark) on
+                # color.foreground.input, where an inset ring on
+                # color.foreground.secondary.active would give 3.33:1 and 2.97:1.
+                appearance.outline.style@focus: solid
+                appearance.outline.color@focus: color.focusRing
+                appearance.outline.width@focus: dimension.stroke.thickness.large
+                appearance.outline.offset@focus: dimension.025
+              edges:
+                - node:
+                    uri: global_dataviews.subcomponent.query_chip-segment
+                  relation:
+                    cardinality: "1..*"
+                    slotName: default
+                - node:
+                    uri: global_dataviews.subcomponent.query_chip-entry
+                  relation:
+                    # At most one: the part being typed.
+                    cardinality: "0..1"
+                    slotName: default
+          - node:
+              # unity: joined. The body's fill is the line colour, which shows through its
+              # 1 px gap as a line between parts; the chip is one target, so hover, selected
+              # and invalid show on every part at once.
+              role: joined body
+              styles:
+                layout.type: inline-flex
+                layout.align: center
+                appearance.radius: dimension.radius.full
+                layout.overflow: hidden
+                # No symbol declares the reference design's line colour.
+                # --query-chip-line-color
+                appearance.background: "#c5c5c5"
+                appearance.background@invalid: color.border.error
+                spacing.gap: dimension.stroke.thickness.medium
+                appearance.border.style: solid
+                appearance.border.width: dimension.stroke.thickness.medium
+                appearance.border.color: "#c5c5c5"
+                appearance.border.color@invalid: color.border.error
+                # 26 px, which no symbol declares.
+                size.min.height: 1.625rem
+                # The same outside ring as the separated body.
+                appearance.outline.style@focus: solid
+                appearance.outline.color@focus: color.focusRing
+                appearance.outline.width@focus: dimension.stroke.thickness.large
+                appearance.outline.offset@focus: dimension.025
+              edges:
+                - node:
+                    uri: global_dataviews.subcomponent.query_chip-segment
+                  relation:
+                    cardinality: "1..*"
+                    slotName: default
+                - node:
+                    uri: global_dataviews.subcomponent.query_chip-entry
+                  relation:
+                    cardinality: "0..1"
+                    slotName: default
+      relation:
+        cardinality: "1"
+    - node:
+        # Present when the host passes onRemove or removeHref: a native <button>, or a link
+        # to removeHref, named by removeLabel. It sits beside the body, outside its
+        # clipping, so its focus ring shows whole. Its target is at least 24 by 24 px. On a
+        # read-only chip in a roving context it is the chip's roving item.
+        role: remove control
+        styles:
+          layout.type: inline-flex
+          layout.align: center
+          layout.justify: center
+          size.min.width: dimension.300
+          size.min.height: dimension.300
+          appearance.radius: dimension.radius.full
+          # The plain fill, not the modifier channel: the remove control stays neutral on a
+          # refused chip, on the fill its icon symbol is paired with.
+          appearance.background: color.foreground.secondary
+          appearance.background@hover: color.foreground.secondary.hover
+          appearance.background@active: color.foreground.secondary.active
+          interaction.cursor: pointer
+          appearance.outline.style@focus: solid
+          appearance.outline.color@focus: color.focusRing
+          appearance.outline.width@focus: dimension.stroke.thickness.large
+          appearance.outline.offset@focus: dimension.025
+        edges:
+          - node:
+              uri: global.component.icon
+              props:
+                icon: close
+              styles:
+                size.width: dimension.200
+                size.height: dimension.200
+                typography.color: color.icon.onForegroundSecondary
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "0..1"

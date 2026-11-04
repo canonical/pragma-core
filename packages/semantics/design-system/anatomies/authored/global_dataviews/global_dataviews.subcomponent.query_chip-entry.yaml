@@ -1,0 +1,70 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# The part being typed: a native <input>, never a <textarea>, which admits no combobox
+# role. It renders only once scripts run, takes role="combobox", and reads QueryInput's
+# suggestions through QueryInput's context. It has its own look, an input fill with an
+# underline, so the chip needs no editing state. The chip's body draws the focus ring
+# around the clause.
+node:
+  uri: global_dataviews.subcomponent.query_chip-entry
+  styles:
+    layout.type: inline-flex
+    layout.align: center
+    layout.position: relative
+    size.min.width: 4ch
+    size.min.height: dimension.300
+    spacing.internal.inline.start: 0.375rem
+    spacing.internal.inline.end: 0.375rem
+    appearance.background: [surface.color.foreground.input, color.foreground.input]
+    appearance.border.style: solid
+    appearance.border.width: 0
+    appearance.border.bottom.width: dimension.stroke.thickness.medium
+    appearance.border.bottom.color: color.border.highlighted
+    appearance.border.bottom.color@invalid: color.border.error
+    typography.font: typography.text.secondary
+    typography.color: color.text
+  edges:
+    - node:
+        # The remaining props reach it.
+        role: entry input
+        styles:
+          layout.flex.grow: 1
+          size.min.width: 1ch
+          appearance.native: none
+          appearance.border.style: none
+          appearance.background: transparent
+          appearance.outline.style: none
+          typography.font: typography.text.secondary
+          typography.color: inherit
+          spacing.internal.block.start: 0
+          spacing.internal.block.end: 0
+          spacing.internal.inline.start: 0
+          spacing.internal.inline.end: 0
+        edges:
+          - node:
+              # Drawn as ::placeholder.
+              role: placeholder
+              styles:
+                typography.color: color.text.muted
+            relation:
+              cardinality: "0..1"
+      relation:
+        cardinality: "1"
+    - node:
+        # An aria-hidden template behind the typed text: YYYY-MM-DD, or a range. The muted
+        # text symbol keeps the untyped part above 4.5:1.
+        role: format template
+        styles:
+          layout.position: absolute
+          interaction.pointerEvents: none
+          typography.whiteSpace: pre
+          typography.color: color.text.muted
+      relation:
+        cardinality: "0..1"
+    - node:
+        # Text after the typed text, such as a unit ("GiB"), from `suffix`.
+        role: suffix
+        styles:
+          typography.color: color.text.muted
+      relation:
+        cardinality: "0..1"

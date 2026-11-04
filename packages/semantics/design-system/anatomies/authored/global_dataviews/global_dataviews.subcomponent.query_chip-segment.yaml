@@ -1,0 +1,95 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# Tone: a Segment reads the modifier channels. The host sets the operator Segment's
+# `condition`. Each Condition value has its own positions, which alias today to two tones:
+# Inclusion, Match, Range and Presence to the Information symbols, and Exclusion to a
+# negation tone that no symbol declares yet, so it reads the Information symbols until one
+# does. The invalid state binds the error symbols directly.
+# Element: once scripts run, and when it has onActivate, a Segment is a native <button>, so a
+# click, Enter or Space activates it. Otherwise, and before scripts run, it is plain text;
+# when its label differs from its text, the text is aria-hidden and the label is visually
+# hidden text beside it. It draws no focus ring of its own: the chip's body draws one ring
+# around the clause while focus is within it.
+# Selected: a selected chip sets @selected on all its Segments. Under `joined`, the chip's
+# hover and invalid reach every Segment the same way, from the chip's data attributes.
+# Refused: the chip's Criticality value is `error` and its Segments carry no Condition
+# value, so the channels give every Segment the error tone; Error's glyph shows on the first
+# Segment. Other Criticality values tint only. Invalid: the Segment at fault takes
+# @invalid, which wins over the channels, and shows the glyph.
+# Hover and the text cursor apply only while the Segment is a button.
+node:
+  uri: global_dataviews.subcomponent.query_chip-segment
+  styles:
+    layout.type: inline-flex
+    layout.align: center
+    # 24 by 24 px at least, whatever the text, so a one-glyph operator is a full target.
+    size.min.width: dimension.300
+    size.min.height: dimension.300
+    layout.justify: center
+    # A native <button> does not inherit the chip's font, so it is set here.
+    typography.font: typography.text.secondary
+    # 6 px, which no symbol declares. --query-chip-segment-padding-inline
+    spacing.internal.inline.start: 0.375rem
+    spacing.internal.inline.end: 0.375rem
+    spacing.internal.block.start: dimension.025
+    spacing.internal.block.end: dimension.025
+    interaction.cursor: text
+    # The secondary fills have no Surface positions yet, so the fill does not follow the
+    # layer beneath the chip. --query-chip-segment-background
+    appearance.background: [modifier.color.foreground.secondary, color.foreground.secondary]
+    appearance.background@hover: color.foreground.secondary.hover
+    # @selected is drawn from a data attribute, never aria-selected, which a button does
+    # not support; selection reaches assistive technology through focus.
+    appearance.background@selected: color.foreground.secondary.active
+    appearance.background@disabled: color.foreground.secondary.disabled
+    appearance.background@invalid: color.foreground.secondary.error
+    # --query-chip-segment-text
+    typography.color:
+      - modifier.color.text.onForegroundSecondary
+      - color.text.onForegroundSecondary
+    typography.color@disabled: color.text.onForegroundSecondary.disabled
+    typography.color@invalid: color.text.onForegroundSecondary.error
+  edges:
+    - node:
+        # Present on the Segment at fault of an invalid chip, and on the first Segment of a
+        # refused chip, only. The glyph follows the modifier, as the colours do: Criticality
+        # Error's own glyph is `error`, and @canonical/styles maps each Criticality value to
+        # the glyph of the same name. No channel carries a glyph yet, so the Error value's
+        # glyph is written here until one does.
+        uri: global.component.icon
+        props:
+          icon: error
+        styles:
+          size.width: dimension.200
+          size.height: dimension.200
+          typography.color: color.icon.onForegroundSecondary.error
+          spacing.external.inline.end: dimension.050
+      relation:
+        cardinality: "0..1"
+    - node:
+        # Present on a Segment with a `condition`, before its text, for every Condition
+        # value. Its glyph is the Condition value's; no channel carries a glyph yet, so only
+        # colour is bound. No channel routes the on-secondary icon symbols per value yet, so
+        # the colour is the paired symbol. aria-hidden: the Segment's label speaks the
+        # operator.
+        role: condition mark
+        styles:
+          size.width: dimension.200
+          size.height: dimension.200
+          typography.color: color.icon.onForegroundSecondary
+          spacing.external.inline.end: dimension.050
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: segment text
+        styles:
+          typography.overflow: ellipsis
+      relation:
+        cardinality: "1"
+        slotName: default
+    - node:
+        # The `label`, as visually hidden text, while the Segment is plain text and its
+        # label differs from its text; the text is then aria-hidden.
+        role: spoken label
+      relation:
+        cardinality: "0..1"
