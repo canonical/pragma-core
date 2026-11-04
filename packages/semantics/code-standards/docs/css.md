@@ -11,6 +11,7 @@ Use scroll-driven animations (`animation-timeline`, `scroll()`, `view()`) instea
 ### Do
 
 Bind animation progress to scroll with CSS.
+
 ```css
 .progress {
   animation: fill linear;
@@ -18,16 +19,21 @@ Bind animation progress to scroll with CSS.
 }
 
 @keyframes fill {
-  from { scale: 0 1; }
-  to { scale: 1 1; }
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
 }
 ```
 
 ### Don't
 
 Drive scroll-linked motion only from JavaScript when scroll-driven CSS can express it.
+
 ```javascript
-window.addEventListener('scroll', () => {
+window.addEventListener("scroll", () => {
   progress.style.transform = `scaleX(${window.scrollY / 600})`;
 });
 ```
@@ -43,6 +49,7 @@ Use `@starting-style` for entry transitions when an element is inserted or toggl
 ### Do
 
 Define the starting state in CSS for entry transitions.
+
 ```css
 [popover] {
   opacity: 0;
@@ -63,17 +70,18 @@ Define the starting state in CSS for entry transitions.
 ### Don't
 
 Drive entry animations only from JavaScript when `@starting-style` can be used.
+
 ```javascript
-const popover = document.querySelector('[popover]');
-popover.addEventListener('toggle', (e) => {
+const popover = document.querySelector("[popover]");
+popover.addEventListener("toggle", (e) => {
   if (e.newState === "open") {
-    popover.classList.add('animate-in');
-    popover.classList.remove('animate-out');
+    popover.classList.add("animate-in");
+    popover.classList.remove("animate-out");
   } else {
-    popover.classList.remove('animate-in');
-    popover.classList.add('animate-out');
+    popover.classList.remove("animate-in");
+    popover.classList.add("animate-out");
   }
-})
+});
 ```
 
 ---
@@ -87,10 +95,11 @@ Component styles must be encapsulated using the component's root class as a boun
 ### Do
 
 Scope internal element styles using the component's namespace.
+
 ```css
 .ds.button {
   /* Component root styles */
-  
+
   & > .icon {
     /* Internal element styles */
     margin-right: var(--button-icon-spacing);
@@ -101,6 +110,7 @@ Scope internal element styles using the component's namespace.
 ### Don't
 
 Don't style internal elements without the component namespace.
+
 ```css
 /* Bad: Internal element not scoped to component */
 .icon {
@@ -119,6 +129,7 @@ Component states must be handled using attribute selectors for native states and
 ### Do
 
 Use attribute selectors for native element states.
+
 ```css
 .ds.button {
   &[disabled] {
@@ -130,6 +141,7 @@ Use attribute selectors for native element states.
 ### Don't
 
 Use class modifiers for native states.
+
 ```css
 /* Bad: Using class for native state */
 .ds.button.disabled {
@@ -148,22 +160,26 @@ Use container queries (`container-type` and `@container`) for responsive styling
 ### Do
 
 Use a query container and adapt styles with @container rules.
+
 ```css
 .card-grid {
   container-type: inline-size;
 }
 
 @container (min-width: 40rem) {
-  .card { grid-template-columns: 1fr 1fr; }
+  .card {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 ```
 
 ### Don't
 
 Use ResizeObserver for width-based layout changes that container queries can express.
+
 ```javascript
 const ro = new ResizeObserver(([entry]) => {
-  card.classList.toggle('wide', entry.contentRect.width >= 640);
+  card.classList.toggle("wide", entry.contentRect.width >= 640);
 });
 ro.observe(card);
 ```
@@ -179,19 +195,23 @@ Use the `scripting` media feature when hydration gating would cause a FOUC-like 
 ### Do
 
 When hydration gating causes first-paint flash, hide JS-only affordances by default and reveal them when scripting is enabled.
+
 ```css
 .menu-button {
   display: none;
 }
 
 @media (scripting: enabled) {
-  .menu-button { display: inline-flex; }
+  .menu-button {
+    display: inline-flex;
+  }
 }
 ```
 
 ### Don't
 
 Allow JS-only affordances to flash on first paint when they are hydration-gated.
+
 ```html
 <button hidden class="menu-button">Menu</button>
 
@@ -211,17 +231,26 @@ Prefer CSS anchor positioning (`anchor-name`, `position-anchor`, `anchor()`, and
 ### Do
 
 Start from static positioning and layer anchor positioning.
+
 ```css
-.tooltip { position: absolute; top: 100%; }
-.trigger { anchor-name: --t; }
-.tooltip { top: anchor(--t bottom); }
+.tooltip {
+  position: absolute;
+  top: 100%;
+}
+.trigger {
+  anchor-name: --t;
+}
+.tooltip {
+  top: anchor(--t bottom);
+}
 ```
 
 ### Don't
 
 Default to JavaScript positioning without attempting anchor positioning.
+
 ```javascript
-window.addEventListener('scroll', () => reposition(tooltip, trigger));
+window.addEventListener("scroll", () => reposition(tooltip, trigger));
 ```
 
 ---
@@ -235,6 +264,7 @@ CSS properties must use design tokens for design decisions (see cs:styling.token
 ### Do
 
 Use design tokens for design decisions.
+
 ```css
 .ds.button {
   /* Design decision uses token */
@@ -243,19 +273,21 @@ Use design tokens for design decisions.
 ```
 
 Use raw values for unthemable properties (independent of design decisions).
+
 ```css
 .ds.skip-link {
-    visibility: hidden;
+  visibility: hidden;
 }
 ```
 
 ### Don't
 
 Use raw values for design decisions.
+
 ```css
 .ds.button {
   /* Bad: Design decision using raw value */
-  background: #0066CC;
+  background: #0066cc;
 }
 ```
 
@@ -270,6 +302,7 @@ Child elements within components must use simple, role-based class names (e.g., 
 ### Do
 
 Use simple role-based class names scoped by the parent.
+
 ```css
 .ds.accordion-item {
   & > .header {
@@ -303,6 +336,7 @@ Use simple role-based class names scoped by the parent.
 ### Don't
 
 Use verbose prefixed class names that repeat the component name.
+
 ```css
 /* Bad: Redundant component prefix in child class names */
 .ds.accordion-item .accordion-item-header {
@@ -329,16 +363,22 @@ Use `:has()` to style a component from descendant or sibling state (checked, emp
 ### Do
 
 Style a field wrapper from the input's native state with no JavaScript class toggling.
+
 ```css
-.field:has(input:user-invalid) { --label-color: var(--ds-color-negative); }
-.field:has(input:focus) { outline: 2px solid var(--ds-color-focus); }
+.field:has(input:user-invalid) {
+  --label-color: var(--ds-color-negative);
+}
+.field:has(input:focus) {
+  outline: 2px solid var(--ds-color-focus);
+}
 ```
 
 ### Don't
 
 Mirror child state onto a parent class with JavaScript when :has() expresses it directly.
+
 ```javascript
-input.addEventListener('invalid', () => field.classList.add('is-invalid'));
+input.addEventListener("invalid", () => field.classList.add("is-invalid"));
 ```
 
 ---
@@ -352,6 +392,7 @@ All component selectors must be prefixed with the `.ds` namespace (e.g., `.ds.bu
 ### Do
 
 Prefix all component selectors with `.ds`.
+
 ```css
 /* Component root with namespace */
 .ds.button {
@@ -362,6 +403,7 @@ Prefix all component selectors with `.ds`.
 ### Don't
 
 Omit the `.ds` namespace from component selectors.
+
 ```css
 /* Bad: Missing .ds namespace */
 .button {
@@ -376,6 +418,7 @@ Omit the `.ds` namespace from component selectors.
 **Identifier:** `cs:css.selectors.naming_convention`
 
 Convert PascalCase component names to kebab-case for CSS classes:
+
 - `MyComponent` -> `.ds.my-component`
 - `UserProfile` -> `.ds.user-profile`
 - `Button` -> `.ds.button`
@@ -383,6 +426,7 @@ Convert PascalCase component names to kebab-case for CSS classes:
 ### Do
 
 Convert PascalCase component names to kebab-case for CSS classes:
+
 - `MyComponent` -> `.ds.my-component`
 - `UserProfile` -> `.ds.user-profile`
 - `Button` -> `.ds.button`
@@ -390,6 +434,7 @@ Convert PascalCase component names to kebab-case for CSS classes:
 ### Don't
 
 Use PascalCase or other formats in CSS class names:
+
 - `.ds.MyComponent` (Bad: Not kebab-case)
 - `.ds.user_profile` (Bad: Not kebab-case)
 
@@ -404,6 +449,7 @@ CSS class names must describe the purpose or state of an element, not its appear
 ### Do
 
 Use semantic modifier classes to represent component variations.
+
 ```css
 /* Semantic modifier for a primary button */
 .ds.button.primary {
@@ -414,6 +460,7 @@ Use semantic modifier classes to represent component variations.
 ### Don't
 
 Use non-semantic or presentational class names.
+
 ```css
 /* Bad: 'big' describes appearance, not purpose */
 .ds.button.big {
@@ -428,6 +475,7 @@ Use non-semantic or presentational class names.
 **Identifier:** `cs:css.selectors.specificity`
 
 CSS selectors must follow a strict specificity pattern:
+
 - Component root must use namespace + component name (.ds.button)
 - Single modifier class for variants (.ds.button.primary)
 - Single attribute for states (.ds.button[disabled])
@@ -435,6 +483,7 @@ CSS selectors must follow a strict specificity pattern:
 ### Do
 
 Use a single modifier class for component variants.
+
 ```css
 .ds.button.primary {
   /* Variant: root + modifier (3 classes) */
@@ -445,6 +494,7 @@ Use a single modifier class for component variants.
 ### Don't
 
 Combine multiple modifiers or mix states with variants.
+
 ```css
 /* Bad: Mixing variant with state */
 .ds.button.primary[disabled].large {
@@ -463,6 +513,7 @@ Theme tokens must be activated through CSS classes on container elements. See cs
 ### Do
 
 Define semantic tokens within theme classes.
+
 ```css
 .canonical {
   --spacing-vertical-medium: var(--spacing-unit-2x);
@@ -473,6 +524,7 @@ Define semantic tokens within theme classes.
 ### Don't
 
 Hardcode theme names in component styles.
+
 ```css
 /* Bad: Component locked to specific theme */
 .ds.button {

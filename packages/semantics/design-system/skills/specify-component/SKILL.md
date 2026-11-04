@@ -1,4 +1,5 @@
 ---
+
 name: specify-component
 description: Specify a new design-system component with the knowledge graph, from graph search to a sync-safe spec file; also runs as a guided tutorial on a worked example
 ---

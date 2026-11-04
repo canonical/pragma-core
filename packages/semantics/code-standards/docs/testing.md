@@ -13,6 +13,7 @@ Unit test files must be colocated with the source they test, using the `.test.ts
 ### Do
 
 Colocate test files next to the source they test, with shared infrastructure in `testing/`.
+
 ```
 packages/my-package/
 ├── src/
@@ -29,6 +30,7 @@ packages/my-package/
 ```
 
 Place integration tests in `src/testing/integration/`.
+
 ```
 packages/my-package/
 ├── src/
@@ -40,6 +42,7 @@ packages/my-package/
 ### Don't
 
 Place test files in a separate `__tests__/` or `tests/` directory mirroring the source tree, or use `.spec.ts`.
+
 ```
 packages/my-package/
 ├── src/
@@ -65,6 +68,7 @@ New packages with runtime code must enforce 100% coverage thresholds using vites
 ### Do
 
 Configure vitest with v8 coverage provider and 100% thresholds with standard exclusions.
+
 ```typescript
 // vitest.config.ts
 export default defineConfig({
@@ -73,11 +77,11 @@ export default defineConfig({
       provider: "v8",
       include: ["src/**/*.ts"],
       exclude: [
-        "**/index.ts",       // barrel re-exports
-        "**/*.test.ts",      // test files
-        "**/*.test.tsx",     // component test files
-        "**/*.d.ts",         // type declarations
-        "**/types.ts",       // type-only files
+        "**/index.ts", // barrel re-exports
+        "**/*.test.ts", // test files
+        "**/*.test.tsx", // component test files
+        "**/*.d.ts", // type declarations
+        "**/types.ts", // type-only files
       ],
       thresholds: {
         statements: 100,
@@ -93,6 +97,7 @@ export default defineConfig({
 ### Don't
 
 Omit coverage thresholds or use thresholds below 100%.
+
 ```typescript
 // vitest.config.ts
 export default defineConfig({
@@ -107,14 +112,15 @@ export default defineConfig({
 ```
 
 Add source files to `exclude` to avoid writing tests for them.
+
 ```typescript
 // vitest.config.ts
 export default defineConfig({
   test: {
     coverage: {
       exclude: [
-        "src/hardToTest.ts",   // Bad: skipping testable source
-        "src/legacy/**/*.ts",  // Bad: blanket exclusion of source
+        "src/hardToTest.ts", // Bad: skipping testable source
+        "src/legacy/**/*.ts", // Bad: blanket exclusion of source
       ],
     },
   },
@@ -132,6 +138,7 @@ export default defineConfig({
 ### Do
 
 Include a `--` comment explaining why the branch is structurally unreachable.
+
 ```typescript
 /* v8 ignore next 7 -- Bun.Glob branch; only reachable under Bun runtime */
 if (typeof Bun !== "undefined" && Bun.Glob) {
@@ -140,6 +147,7 @@ if (typeof Bun !== "undefined" && Bun.Glob) {
 ```
 
 Use `v8 ignore` for exhaustive switch defaults that TypeScript guarantees are unreachable.
+
 ```typescript
 switch (kind) {
   case "add": return handleAdd(effect);
@@ -152,9 +160,12 @@ switch (kind) {
 ### Don't
 
 Use `v8 ignore` without an explanation, or to suppress a testable branch.
+
 ```typescript
 /* v8 ignore next */
-if (modified) { result = modified; }
+if (modified) {
+  result = modified;
+}
 ```
 
 ---
@@ -172,6 +183,7 @@ Integration tests that exercise multiple modules together must live in `src/test
 ### Do
 
 Place integration tests in `src/testing/integration/` and test observable outcomes.
+
 ```typescript
 // src/testing/integration/checkout-flow.test.ts
 describe("checkout flow", () => {
@@ -187,6 +199,7 @@ describe("checkout flow", () => {
 ### Don't
 
 Place integration tests next to unit tests or test internal wiring instead of outcomes.
+
 ```typescript
 // Bad: integration test sitting next to unit tests
 // src/checkout/checkout.integration.test.ts
@@ -215,6 +228,7 @@ A regression test pins a specific, once-broken behaviour so it can never silentl
 ### Do
 
 Place numbered regression reproducers in `src/testing/regression/`, named `NNNN-slug.test.ts`.
+
 ```
 packages/my-package/
 ├── src/
@@ -230,6 +244,7 @@ packages/my-package/
 ```
 
 Number by landing order, zero-padded, with a descriptive kebab slug — the filename is the record.
+
 ```
 0001-empty-cart-crash.test.ts        # first regression pinned
 0002-discount-rounding.test.ts       # second
@@ -239,12 +254,14 @@ Number by landing order, zero-padded, with a descriptive kebab slug — the file
 ### Don't
 
 Colocate a cross-cutting reproducer next to a single source file as if it were a unit test.
+
 ```
 // Bad: a cross-cutting reproducer masquerading as a unit test
 src/checkout/checkout.empty-cart-crash.test.ts
 ```
 
 Use unnumbered or vague names that lose the landing-order record.
+
 ```
 // Bad: no number, no order, no description of the bug
 src/testing/regression/crash.test.ts
@@ -266,44 +283,67 @@ Test files must use hierarchical `describe` blocks that mirror the module's publ
 ### Do
 
 Use hierarchical `describe` blocks mirroring the module's public API.
+
 ```typescript
 // parseThing.test.ts
 describe("parseThing", () => {
   describe("with valid input", () => {
-    it("parses a simple value", () => { /* ... */ });
-    it("handles optional fields", () => { /* ... */ });
+    it("parses a simple value", () => {
+      /* ... */
+    });
+    it("handles optional fields", () => {
+      /* ... */
+    });
   });
 
   describe("with invalid input", () => {
-    it("throws on empty string", () => { /* ... */ });
-    it("throws on malformed structure", () => { /* ... */ });
+    it("throws on empty string", () => {
+      /* ... */
+    });
+    it("throws on malformed structure", () => {
+      /* ... */
+    });
   });
 
   describe("edge cases", () => {
-    it("handles unicode characters", () => { /* ... */ });
-    it("handles maximum length input", () => { /* ... */ });
+    it("handles unicode characters", () => {
+      /* ... */
+    });
+    it("handles maximum length input", () => {
+      /* ... */
+    });
   });
 });
 ```
 
 Use a top-level `describe` per export when a file exports multiple functions.
+
 ```typescript
 // formatEffects.test.ts
-describe("formatLogEffect", () => { /* ... */ });
-describe("formatPromptEffect", () => { /* ... */ });
-describe("formatFileEffect", () => { /* ... */ });
+describe("formatLogEffect", () => {
+  /* ... */
+});
+describe("formatPromptEffect", () => {
+  /* ... */
+});
+describe("formatFileEffect", () => {
+  /* ... */
+});
 ```
 
 ### Don't
 
 Use `test()` instead of `it()`, or create deeply nested describe trees.
+
 ```typescript
 // Bad: mixing test() and it(), deeply nested
 describe("parseThing", () => {
   describe("valid", () => {
     describe("simple", () => {
       describe("strings", () => {
-        test("parses a string", () => { /* ... */ }); // Bad: test() instead of it()
+        test("parses a string", () => {
+          /* ... */
+        }); // Bad: test() instead of it()
       });
     });
   });
@@ -321,6 +361,7 @@ Test fixtures must be defined in `testing/fixtures.ts` as named exports. Factory
 ### Do
 
 Define static fixtures as named exports in `testing/fixtures.ts`.
+
 ```typescript
 // testing/fixtures.ts
 export const testUser: User = {
@@ -341,6 +382,7 @@ export const multiServerConfig = {
 ```
 
 Place factory helpers that create stateful objects in their own files in `testing/`.
+
 ```typescript
 // testing/createTestDb.ts
 export function createTestDb(seed: Record<string, unknown>[]): Database {
@@ -353,6 +395,7 @@ export function createTestDb(seed: Record<string, unknown>[]): Database {
 ### Don't
 
 Inline large fixture data directly in test files or use JSON fixture files.
+
 ```typescript
 // Bad: large fixture inlined in test file
 const seedData = [
@@ -377,6 +420,7 @@ Prefer real execution over mocks. Mock only at system boundaries where real exec
 ### Do
 
 Use a factory helper to create real test dependencies instead of mocking them.
+
 ```typescript
 // testing/createTestDb.ts
 export function createTestDb(seed: Record<string, unknown>[]): Database {
@@ -387,6 +431,7 @@ export function createTestDb(seed: Record<string, unknown>[]): Database {
 ```
 
 Mock only at genuine system boundaries like the filesystem.
+
 ```typescript
 import { vi } from "vitest";
 import * as fs from "node:fs/promises";
@@ -403,6 +448,7 @@ it("discovers config files in directory", async () => {
 ### Don't
 
 Mock internal modules within the same package to simplify test setup.
+
 ```typescript
 // Bad: mocking an internal module hides contract breakage
 vi.mock("./parseConfig");

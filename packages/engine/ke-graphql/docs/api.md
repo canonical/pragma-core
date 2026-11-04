@@ -12,47 +12,56 @@ Exhaustive types ship in the `.d.ts`; this document is the callable surface grou
 ## Compiler
 
 ### `compile(query, prefixes, options?)`
+
 ```ts
 compile(query: QueryFn, prefixes: Readonly<Record<string,string>>, options?: SchemaPluginOptions): Promise<CompilerResult>
 ```
 Run the full pipeline (Pass 1 executes SPARQL through `query`). Throws `CompilationError` whenever the compile produces any error-severity diagnostic; warnings and infos surface in `result.diagnostics`. Most consumers use `createSchemaPlugin` instead and never call this directly.
 
 ### `compileFromExtraction(artifact, options?, { assumeValid? }?)`
+
 ```ts
 compileFromExtraction(artifact: string | SerializedExtraction, options?: SchemaPluginOptions, opts?: { assumeValid?: boolean }): CompilerResult
 ```
 Boot the schema from a precomputed extraction **without touching the store** (passes 2–7 only). `assumeValid` (default `true`) also skips `validateSchema`/SDL printing. Pair with `hashSources` to check freshness.
 
 ### `createSchemaPlugin(options?)`
+
 ```ts
 createSchemaPlugin(options?: SchemaPluginOptions & SchemaPluginExtra): Plugin<SchemaPluginApi>
 ```
 The ke plugin. Compiles on `onReady`, recompiles on `onReload`, registers `SchemaPluginApi` under `"ke-graphql"`. `SchemaPluginExtra.extraction` boots from an artifact (path or parsed) when its `sourcesHash` matches the loaded TTL.
 
 ```ts
-const graphql = createSchemaPlugin({ mappings: { "lib:authored": { graphqlName: "works" } } });
+const graphql = createSchemaPlugin({
+  mappings: { "lib:authored": { graphqlName: "works" } },
+});
 const store = await createStore({ sources, prefixes, plugins: [graphql] });
 const { schema, createContext } = store.api<SchemaPluginApi>("ke-graphql")!;
 ```
 
 ### `createStoreQueryFn(store)`
+
 ```ts
 createStoreQueryFn(store: Store): QueryFn
 ```
 Adapt a ke `Store` to the `QueryFn` the compiler expects.
 
 ### `createContextFactory(mapped, options)`
+
 ```ts
 createContextFactory(mapped: MappedIR, options: SchemaPluginOptions): ContextFactory
 ```
 Build the per-request `CompilerContext` factory (fresh DataLoaders, or shared `"process"` caches). `factory(store)` → context; `factory.clearCache()` drops shared caches. Usually obtained as `result.createContext`.
 
 ### `CompilationError`
+
 Thrown by `compile` when the compile produces any error-severity diagnostic (or composition yields no schema). Carries `.diagnostics: Diagnostic[]` — the full list, not only the fatal ones.
 
 Any error-severity diagnostic refuses the compile: a schema minus silently dropped fields must never be served, so a boot dies loudly instead. Warnings and infos surface in `result.diagnostics` while the schema builds, and the consumer picks its policy for those. `DiagnosticCode` is stable and append-only: `E001`, `A001–A008`, `B001–B005`, `V001–V016`, **`M001–M006`**, `X002–X003`, `W001`, `C001–C003`. The annotation band is the `graphql:` vocabulary's: `A001` conflicting values, never tiebroken (error), `A002` a foreign or unknown target (error), `A003` a malformed value (error), `A004` an unrecognized term or inapplicable target, ignored, `A005` a consumer config key shadowing an annotation — config wins, `A006` `mode: "auto"` noting present-but-unconsulted assertions (info), `A007` the `mode: "explicit"` dropped-class aggregate (info), `A008` a field omitted because its range class is unexposed. `B005` closes the build band: two namespaces resolving to one prefix with no declaration in play — an **error** naming the registration remedy, because that collision needs no annotation to construct and an `A001` there would send an operator hunting for assertions that do not exist. It was a warning until the 2026-08-30 ruling escalated it, and the escalation is load-bearing: `NamespaceInfo` is keyed by prefix, so a surviving warning meant one claimant silently overwrote the other, `ontologies` omitted it, and `toFull()` resolved the shared prefix to whichever won. Treat it as fatal — the compile refuses, and the remedy is one line of `StoreConfig.prefixes`. The naming band reads: `M001` duplicate type or field name (the later claimant is dropped, error), `M002` illegal class local name sanitized, `M003` mapping references nothing, `M004` type-name collision auto-resolved by namespace prefixing, `M005` property claims a structural field name — `uri` or `_meta` — and is dropped (error), `M006` one union name minted with two different member sets (the later definition is dropped, error). `W001` is the Relay-wiring band: two root query fields claiming one name (the later field is dropped, error). `M001`/`M005` name the offending IRIs and the remedies; none of them ever renames anything silently. See the README's diagnostics table for the full list.
 
 ### Result & key option shapes
+
 - **`CompilerResult`** — `{ schema, sdl, diagnostics, nameMap, mapped, extraction, createContext, clearLoaderCache }`. `extraction` is the Pass 1 output (`RawExtraction`) — the value `serializeExtraction` turns into a boot artifact.
 - **`SchemaPluginApi`** — `{ schema, diagnostics, nameMap, sdl, createContext, clearLoaderCache }` (the `store.api("ke-graphql")` surface).
 - **`SchemaPluginOptions`** — `mappings` (deprecated — prefer the `graphql:` annotations; a key shadowing an annotation wins with `A005`), `extensions`, `relay`, `incremental`, `sdlOutput`, `nonNullOverrides` (deprecated — prefer `graphql:nonNull`, OR-merged), `prefixing` (`"none"`|`"all"`), `mode` (`"auto"`|`"annotated"`|`"explicit"`), `provider`, `revision`, `standardVocabFields` (deprecated), `onRuntimeWarning`, `loaderCache` (`"request"`|`"process"`), `processCacheSize`.
@@ -66,6 +75,7 @@ Any error-severity diagnostic refuses the compile: a schema minus silently dropp
 ## Artifact
 
 ### `serializeExtraction(extraction, sourcesHash)` / `deserializeExtraction(artifact)`
+
 ```ts
 serializeExtraction(extraction: RawExtraction, sourcesHash: string): string
 deserializeExtraction(artifact: string | SerializedExtraction): { extraction: RawExtraction; sourcesHash: string }
@@ -75,12 +85,14 @@ Codec for the boot artifact. `deserializeExtraction` throws if `version !== ARTI
 The `graphqlAnnotations` field is still optional on the wire, but that tolerance applies only **within v2**: a current-format object that omits it — an extraction assembled by hand rather than by `serializeExtraction` — deserializes the field as `[]` and boots. `sourcesHash` covers the rest, forcing a live recompile the moment the sources gain an annotation the artifact has not seen.
 
 ### `hashSources(contents)`
+
 ```ts
 hashSources(contents: Iterable<string>): string
 ```
 FNV-1a fingerprint of the loaded TTL sources — the freshness key for `compileFromExtraction`.
 
 ### `ARTIFACT_VERSION`
+
 The artifact format version (a number); bump invalidates old artifacts.
 
 ---
@@ -88,27 +100,32 @@ The artifact format version (a number); bump invalidates old artifacts.
 ## Local execution & incremental delivery
 
 ### `executeLocal(args)`
+
 ```ts
 executeLocal(args: { schema, source: string, document?: DocumentNode, variableValues?, contextValue: CompilerContext, operationName? }): Promise<LocalExecutionResult>
 ```
 In-process execution (no HTTP). Plain documents return an `ExecutionResult`; `@defer`/`@stream` (or any incremental-capable schema) return `IncrementalResults`. Pass `document` to skip an internal parse.
 
 ### `mergeIncremental(results)` / `isIncrementalResults(result)`
+
 Drain an `IncrementalResults` stream into one complete `{ data, errors }`; the type guard distinguishes a stream from a plain result.
 
 ### `relayFormatAdapter(results)`
+
 ```ts
 relayFormatAdapter(results: IncrementalResults): AsyncGenerator<RelayLegacyPayload>
 ```
 Translate v17 incremental payloads to Relay's legacy `path`/`label`/`is_final` shape. **`@experimental`** — coupled to the graphql v17-RC payload format.
 
 ### `extractStatic(options)`
+
 ```ts
 extractStatic(options: { schema, mapped, context, queries: StaticQuery[] }): Promise<Map<string, ExecutionResult>>
 ```
 Build-time static extraction: run a fixed query set, keyed by name (queries with a single `uri` variable run once per instance, keyed `"name:uri"`). Throws on non-enumerable variables.
 
 ### `createPersistedManifest(operations)` / `sha256Hex(text)`
+
 ```ts
 createPersistedManifest(operations: Iterable<string>): Promise<Record<string,string>>
 sha256Hex(text: string): Promise<string>
@@ -174,6 +191,7 @@ The exported IR and value types: `RawExtraction`, `OntologyIR`, `MappedIR`, `Cla
 ## `@canonical/ke-graphql/http`
 
 ### `createGraphQLHandler(schema, options)`
+
 ```ts
 createGraphQLHandler(schema: GraphQLSchema, options: GraphQLHandlerOptions): (request: Request) => Promise<Response>
 ```
@@ -183,10 +201,12 @@ A framework-free GraphQL-over-HTTP handler: GET (query param) / POST JSON, persi
 `context` (required, per-request `CompilerContext`), `graphiql`, `cors`, `maxQueryLength`, `maxDepth` (default `DEFAULT_MAX_QUERY_DEPTH`, 0 disables), `validationRules`, `introspection`, `persistedQueries` (`{ get, allowArbitraryQueries? }`), `hideFieldSuggestions`, `formatError`, `maskErrors` (default: production), `onOperation`, `incremental`, `incrementalFormat` (`"graphql17"`|`"relay-legacy"`), `graphiqlHtml`. Defaults are dev-vs-production aware (`NODE_ENV`; hardened where `process` is absent).
 
 ### `graphiqlHtml(endpoint)`
+
 ```ts
 graphiqlHtml(endpoint: string): string
 ```
 The default GraphiQL page (version-pinned UMD assets from unpkg). Override via `GraphQLHandlerOptions.graphiqlHtml` for air-gapped/vendored deployments.
 
 ### `OperationEvent`
+
 The `onOperation` payload: `{ operation, duration, errors, persisted }`.

@@ -46,19 +46,19 @@ The Anatomy DSL is a YAML-based language for describing the structural anatomy o
 
 ### Intended Usage
 
-| Usage           | Description                                                                                         |
-|-----------------|-----------------------------------------------------------------------------------------------------|
-| Documentation   | Implementation primitive for markup and style bindings.                                             |
-| Specification   | Tree-based DSL to identify entities to implement and/or reuse.                                      |
-| Discussion      | Shared vocabulary for design system conversations (e.g. "these nodes should be siblings").           |
-| Inference       | Supports automated auditing of a codebase against its specifications, or code generation.           |
+| Usage         | Description                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------ |
+| Documentation | Implementation primitive for markup and style bindings.                                    |
+| Specification | Tree-based DSL to identify entities to implement and/or reuse.                             |
+| Discussion    | Shared vocabulary for design system conversations (e.g. "these nodes should be siblings"). |
+| Inference     | Supports automated auditing of a codebase against its specifications, or code generation.  |
 
 ### Out of Scope
 
 The Anatomy DSL describes **structure**, [projected](#310-projection) **graph-data bindings**, and [pinned](#311-prop) **prop values**. The following concerns are explicitly outside its scope:
 
 - **Prop surface definition** — which props a component accepts, their types and optionality. These live in the design system ontology; the DSL only [pins values](#311-prop).
-- **State machines** — transitions, triggers, and interaction logic. Appearance *per* interaction state is in scope (see [Interaction States](#37-styles)); structural state variation is the [Switch construct](#10-switch-construct)'s job.
+- **State machines** — transitions, triggers, and interaction logic. Appearance _per_ interaction state is in scope (see [Interaction States](#37-styles)); structural state variation is the [Switch construct](#10-switch-construct)'s job.
 - **Modifier descriptions** — only design token references are supported; semantic modifier definitions are not modelled (for now).
 
 ### Normative Language
@@ -102,16 +102,16 @@ The children one-to-many relation is structured following inspiration by the [Re
 
 The root of every anatomy file. Contains exactly one top-level named node.
 
-| Field  | Type      | Required | Description                          |
-|--------|-----------|----------|--------------------------------------|
-| `node` | NamedNode | Yes      | The root component being described.  |
+| Field  | Type      | Required | Description                         |
+| ------ | --------- | -------- | ----------------------------------- |
+| `node` | NamedNode | Yes      | The root component being described. |
 
 ```yaml
 ---
 node:
   uri: global.component.card
   styles: { ... }
-  edges: [ ... ]
+  edges: [...]
 ```
 
 ### 3.2 Node
@@ -126,13 +126,13 @@ Node = NamedNode | AnonymousNode
 
 A node representing an identifiable component in the design system — something a consumer can instantiate in code.
 
-| Field    | Type   | Required | Description                                                       |
-|----------|--------|----------|-------------------------------------------------------------------|
-| `uri`    | string | Yes      | Unique identifier. See [URI Encoding Convention](#4-uri-encoding-convention). |
-| `projection` | Projection | No | Graph-data binding. See [Projection](#310-projection).        |
-| `props`  | Props  | No       | Pinned prop values. See [Prop](#311-prop). Named nodes only.      |
-| `styles` | Styles | No       | Platform-agnostic style properties.                               |
-| `edges`  | Edge[] | No       | Child nodes and their relationships.                              |
+| Field        | Type       | Required | Description                                                                   |
+| ------------ | ---------- | -------- | ----------------------------------------------------------------------------- |
+| `uri`        | string     | Yes      | Unique identifier. See [URI Encoding Convention](#4-uri-encoding-convention). |
+| `projection` | Projection | No       | Graph-data binding. See [Projection](#310-projection).                        |
+| `props`      | Props      | No       | Pinned prop values. See [Prop](#311-prop). Named nodes only.                  |
+| `styles`     | Styles     | No       | Platform-agnostic style properties.                                           |
+| `edges`      | Edge[]     | No       | Child nodes and their relationships.                                          |
 
 ```yaml
 node:
@@ -148,12 +148,12 @@ node:
 
 A structural element without design system identity — not directly instantiated by users.
 
-| Field    | Type   | Required | Description                                     |
-|----------|--------|----------|-------------------------------------------------|
-| `role`   | string | Yes      | Human-readable description of the node's purpose.|
-| `projection` | Projection | No | Graph-data binding. See [Projection](#310-projection). |
-| `styles` | Styles | No       | Platform-agnostic style properties.              |
-| `edges`  | Edge[] | No       | Child nodes and their relationships.             |
+| Field        | Type       | Required | Description                                            |
+| ------------ | ---------- | -------- | ------------------------------------------------------ |
+| `role`       | string     | Yes      | Human-readable description of the node's purpose.      |
+| `projection` | Projection | No       | Graph-data binding. See [Projection](#310-projection). |
+| `styles`     | Styles     | No       | Platform-agnostic style properties.                    |
+| `edges`      | Edge[]     | No       | Child nodes and their relationships.                   |
 
 ```yaml
 node:
@@ -167,11 +167,11 @@ node:
 
 Represents a parent-child relationship in the anatomy tree. An edge contains either a `node` or a `switch` (mutually exclusive), plus a `relation`.
 
-| Field      | Type     | Required | Description                                                         |
-|------------|----------|----------|---------------------------------------------------------------------|
-| `node`     | Node     | No*      | A single child node (named or anonymous).                           |
-| `switch`   | Switch   | No*      | A polymorphic position. See [Switch Construct](#10-switch-construct).|
-| `relation` | Relation | Yes      | Cardinality and slot metadata.                                      |
+| Field      | Type     | Required | Description                                                           |
+| ---------- | -------- | -------- | --------------------------------------------------------------------- |
+| `node`     | Node     | No*      | A single child node (named or anonymous).                             |
+| `switch`   | Switch   | No*      | A polymorphic position. See [Switch Construct](#10-switch-construct). |
+| `relation` | Relation | Yes      | Cardinality and slot metadata.                                        |
 
 > \* Exactly one of `node` or `switch` MUST be present.
 
@@ -194,11 +194,11 @@ edges:
 
 Metadata about the parent-child relationship carried by an edge.
 
-| Field         | Type   | Required | Description                                                                    |
-|---------------|--------|----------|--------------------------------------------------------------------------------|
-| `cardinality` | string | Yes      | Instance count constraint. See [Cardinality Notation](#6-cardinality-notation). |
-| `slotName`    | string | No       | Target slot in the parent component. See [Slot Mapping](#7-slot-mapping).       |
-| `projection`  | RelationProjection | No | Traversal populating the slot. See [Projection](#310-projection). |
+| Field         | Type               | Required | Description                                                                     |
+| ------------- | ------------------ | -------- | ------------------------------------------------------------------------------- |
+| `cardinality` | string             | Yes      | Instance count constraint. See [Cardinality Notation](#6-cardinality-notation). |
+| `slotName`    | string             | No       | Target slot in the parent component. See [Slot Mapping](#7-slot-mapping).       |
+| `projection`  | RelationProjection | No       | Traversal populating the slot. See [Projection](#310-projection).               |
 
 ```yaml
 relation:
@@ -217,11 +217,11 @@ Styles = Record<StyleKey, StyleValue>
 StyleValue = Symbol | Primitive | [Symbol, ...(Symbol | Primitive)]
 ```
 
-| Value Type | Example | Description |
-|---|---|---|
-| Symbol | `dimension.100`, `color.text`, `modifier.color.text` | The dotted name of a token symbol, verbatim. See [§5](#5-symbols-and-the-value-grammar). |
-| Primitive | `flow`, `0`, `2px`, `#ccc`, `"1 / -1"` | A literal the implementation writes as it stands. |
-| List | `[modifier.color.text, color.text]` | The fallback order — the implementation's own `var()` chain, terminal literal included. See [§11](#11-the-fallback-list). |
+| Value Type | Example                                              | Description                                                                                                               |
+| ---------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Symbol     | `dimension.100`, `color.text`, `modifier.color.text` | The dotted name of a token symbol, verbatim. See [§5](#5-symbols-and-the-value-grammar).                                  |
+| Primitive  | `flow`, `0`, `2px`, `#ccc`, `"1 / -1"`               | A literal the implementation writes as it stands.                                                                         |
+| List       | `[modifier.color.text, color.text]`                  | The fallback order — the implementation's own `var()` chain, terminal literal included. See [§11](#11-the-fallback-list). |
 
 **The key roster is closed.** Keys are declared one `anatomy:StyleKey`
 individual each in `definitions/registry.ttl`, generated from the roster in
@@ -238,15 +238,15 @@ lowercase namespace then one or more segments, camelCase admitted
 (`typography.lineHeight`). The registry tells a key from a symbol, so the
 grammar does not have to.
 
-| Namespace | Typical keys | What a value is |
-|---|---|---|
-| `layout` | `layout.type`, `layout.direction`, `layout.align`, `layout.grid.column` | Primitives: structure does not vary by theme |
-| `spacing` | `spacing.gap`, `spacing.internal.inline.start`, `spacing.external.block.end` | `spacing.*` symbols, and `dimension.*` while the implementations still bind it |
-| `appearance` | `appearance.background`, `appearance.radius`, `appearance.border.color`, `appearance.outline.width` | `color.*` or `dimension.*` symbols, channels included |
-| `typography` | `typography.size`, `typography.weight`, `typography.color`, `typography.lineHeight` | `typography.*`, `dimension.*` or `color.*` symbols |
-| `size` | `size.width`, `size.height`, `size.max.width` | `dimension.*` symbols, or a primitive |
-| `interaction` | `interaction.cursor`, `interaction.select` | Primitives |
-| `motion` | `motion.property`, `motion.duration`, `motion.easing` | `motion.*` symbols — a namespace no stratum declares yet, so the binding is left out and the `#` comment on the line is the record (`# reads --motion-duration-fast; no symbol declares it`) |
+| Namespace     | Typical keys                                                                                        | What a value is                                                                                                                                                                              |
+| ------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `layout`      | `layout.type`, `layout.direction`, `layout.align`, `layout.grid.column`                             | Primitives: structure does not vary by theme                                                                                                                                                 |
+| `spacing`     | `spacing.gap`, `spacing.internal.inline.start`, `spacing.external.block.end`                        | `spacing.*` symbols, and `dimension.*` while the implementations still bind it                                                                                                               |
+| `appearance`  | `appearance.background`, `appearance.radius`, `appearance.border.color`, `appearance.outline.width` | `color.*` or `dimension.*` symbols, channels included                                                                                                                                        |
+| `typography`  | `typography.size`, `typography.weight`, `typography.color`, `typography.lineHeight`                 | `typography.*`, `dimension.*` or `color.*` symbols                                                                                                                                           |
+| `size`        | `size.width`, `size.height`, `size.max.width`                                                       | `dimension.*` symbols, or a primitive                                                                                                                                                        |
+| `interaction` | `interaction.cursor`, `interaction.select`                                                          | Primitives                                                                                                                                                                                   |
+| `motion`      | `motion.property`, `motion.duration`, `motion.easing`                                               | `motion.*` symbols — a namespace no stratum declares yet, so the binding is left out and the `#` comment on the line is the record (`# reads --motion-duration-fast; no symbol declares it`) |
 
 **Which of the three a key takes** is `anatomy:valueKind` on the key —
 `token`, `primitive` or `either` — and it was measured from the reference
@@ -267,30 +267,32 @@ spacing lands. Both are [§3.12](#312-token-binding)'s subject.
 
 A style key MAY take an `@state` suffix scoping its value to an interaction
 state. The unmarked key is the default state; `@default` is invalid (absence
-*is* the default). States re-value channels only — they never add structure.
+_is_ the default). States re-value channels only — they never add structure.
 
 ```yaml
 styles:
   interaction.cursor: pointer
   interaction.cursor@disabled: not-allowed
-  appearance.background: [modifier.color.foreground.primary, color.foreground.primary]
+  appearance.background:
+    [modifier.color.foreground.primary, color.foreground.primary]
   appearance.background@hover: color.foreground.primary.hover
   # A slot may read a channel only in one state.
-  appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing, currentColor]
+  appearance.outline.color@focus:
+    [modifier.color.focusRing, color.focusRing, currentColor]
 ```
 
 **Vocabulary (closed, registry-governed):**
 
-| State | Meaning | Cross-system mapping |
-|-------|---------|----------------------|
-| `hover` | Pointer over the element | universal |
-| `active` | Being pressed/activated | MD3 *pressed*, Spectrum *down*, CSS `:active` |
-| `focus` | Keyboard focus indication | Spectrum *key-focus*; web implementations map to `:focus-visible` |
-| `disabled` | Interaction unavailable | CSS `:disabled`, `aria-disabled` |
-| `selected` | Chosen within a set | `aria-selected`, SLDS/Spectrum *selected* |
-| `expanded` | A disclosure is open | `[open]`, `aria-expanded`, MD3 *expanded* |
-| `indeterminate` | A checkbox or progress is mixed, on neither setting | CSS `:indeterminate`, `aria-checked="mixed"` |
-| `invalid` | Validation has failed | CSS `:invalid`, `aria-invalid` |
+| State           | Meaning                                             | Cross-system mapping                                              |
+| --------------- | --------------------------------------------------- | ----------------------------------------------------------------- |
+| `hover`         | Pointer over the element                            | universal                                                         |
+| `active`        | Being pressed/activated                             | MD3 _pressed_, Spectrum _down_, CSS `:active`                     |
+| `focus`         | Keyboard focus indication                           | Spectrum _key-focus_; web implementations map to `:focus-visible` |
+| `disabled`      | Interaction unavailable                             | CSS `:disabled`, `aria-disabled`                                  |
+| `selected`      | Chosen within a set                                 | `aria-selected`, SLDS/Spectrum _selected_                         |
+| `expanded`      | A disclosure is open                                | `[open]`, `aria-expanded`, MD3 _expanded_                         |
+| `indeterminate` | A checkbox or progress is mixed, on neither setting | CSS `:indeterminate`, `aria-checked="mixed"`                      |
+| `invalid`       | Validation has failed                               | CSS `:invalid`, `aria-invalid`                                    |
 
 Every mature system governs states as closed-with-registry (Spectrum's states
 registry, ARIA's list of ten, SLDS's linted grammar). Candidate additions —
@@ -309,8 +311,8 @@ presence is not. `open` is not admitted as a second spelling of `expanded`.
 - States hold style values only. A state that changes the tree MUST be
   modelled as a `switch` (e.g. async-button's internal states), not a state.
 - The gate and the appearance are separate questions: `props: { disabled: true }`
-  (or the consumer) *puts* a node in the disabled state; `…@disabled` styles
-  say how it *looks* there.
+  (or the consumer) _puts_ a node in the disabled state; `…@disabled` styles
+  say how it _looks_ there.
 - A state-scoped value that differs from its base state's is REPORTED, never
   rejected — a **lint, not a constraint**. The reference does it: Button's
   `:disabled` reads `color.text.disabled`, a different symbol from its
@@ -337,24 +339,24 @@ In Turtle, the state is one optional dimension on the Style tuple:
 
 **Platform mapping examples**:
 
-| DSL Key                  | CSS                       | SwiftUI                           | Flutter                          |
-|--------------------------|---------------------------|-----------------------------------|----------------------------------|
-| `layout.type: flex`      | `display: flex`           | `VStack` / `HStack`              | `Column` / `Row`                 |
-| `layout.align: center`   | `align-items: center`     | `alignment: .center`             | `crossAxisAlignment: center`     |
-| `spacing.internal.inline.start` | `padding-inline-start` | `.padding(.leading)`       | `EdgeInsetsDirectional`          |
-| `spacing.gap`            | `gap`                     | `spacing` parameter              | `SizedBox` between               |
-| `appearance.background`  | `background`              | `.background()`                  | `Container` color                |
-| `appearance.radius`      | `border-radius`           | `.cornerRadius()`                | `BorderRadius`                   |
-| `size.width: 100%`       | `width: 100%`             | `.frame(maxWidth: .infinity)`    | `double.infinity`                |
+| DSL Key                         | CSS                    | SwiftUI                       | Flutter                      |
+| ------------------------------- | ---------------------- | ----------------------------- | ---------------------------- |
+| `layout.type: flex`             | `display: flex`        | `VStack` / `HStack`           | `Column` / `Row`             |
+| `layout.align: center`          | `align-items: center`  | `alignment: .center`          | `crossAxisAlignment: center` |
+| `spacing.internal.inline.start` | `padding-inline-start` | `.padding(.leading)`          | `EdgeInsetsDirectional`      |
+| `spacing.gap`                   | `gap`                  | `spacing` parameter           | `SizedBox` between           |
+| `appearance.background`         | `background`           | `.background()`               | `Container` color            |
+| `appearance.radius`             | `border-radius`        | `.cornerRadius()`             | `BorderRadius`               |
+| `size.width: 100%`              | `width: 100%`          | `.frame(maxWidth: .infinity)` | `double.infinity`            |
 
 ### 3.8 Switch
 
 Models a polymorphic position in the anatomy tree — a place that can be filled by one of several alternatives. Appears at the edge level, parallel to `node`.
 
-| Field   | Type                | Required | Description                                                                         |
-|---------|---------------------|----------|-------------------------------------------------------------------------------------|
+| Field   | Type                | Required | Description                                                                                        |
+| ------- | ------------------- | -------- | -------------------------------------------------------------------------------------------------- |
 | `on`    | SwitchDiscriminator | Yes      | What determines which case applies. See [Discriminator Vocabulary](#101-discriminator-vocabulary). |
-| `cases` | SwitchCase[]        | Yes      | The available alternatives.                                                         |
+| `cases` | SwitchCase[]        | Yes      | The available alternatives.                                                                        |
 
 ```yaml
 edges:
@@ -373,9 +375,9 @@ edges:
 
 An individual case within a switch. Supports both shorthand (`uri`) and full form (`node`).
 
-| Field  | Type   | Required | Description                          |
-|--------|--------|----------|--------------------------------------|
-| `uri`  | string | No*      | Shorthand for `node: { uri: ... }`.  |
+| Field  | Type   | Required | Description                             |
+| ------ | ------ | -------- | --------------------------------------- |
+| `uri`  | string | No*      | Shorthand for `node: { uri: ... }`.     |
 | `node` | Node   | No*      | Full node definition with styles/edges. |
 
 > \* Exactly one of `uri` or `node` MUST be present.
@@ -388,17 +390,17 @@ component carries its fragment.
 
 **On a node:**
 
-| Field   | Type   | Required | Description                                                                 |
-|---------|--------|----------|-----------------------------------------------------------------------------|
-| `on`    | string | No*      | GraphQL type condition — a type name from the provider schema (e.g. `Component`). |
+| Field   | Type   | Required | Description                                                                                                                        |
+| ------- | ------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `on`    | string | No*      | GraphQL type condition — a type name from the provider schema (e.g. `Component`).                                                  |
 | `field` | string | No*      | Dot-delimited GraphQL field path relative to the enclosing data context (e.g. `_meta.title`). The node renders this field's value. |
 
 > \* At least one of `on` or `field` MUST be present.
 
 **On a relation:**
 
-| Field   | Type   | Required | Description                                                     |
-|---------|--------|----------|-----------------------------------------------------------------|
+| Field   | Type   | Required | Description                                                              |
+| ------- | ------ | -------- | ------------------------------------------------------------------------ |
 | `field` | string | Yes      | The traversal populating the slot — a field of the current data context. |
 
 A relation projection MUST NOT carry `on`: type narrowing belongs on the child
@@ -421,11 +423,11 @@ node, never on the relation.
 **Cardinality mapping.** The relation's cardinality decomposes into two claims
 about the projected field, both checkable against the provider SDL:
 
-| Cardinality | Claim on the projected field                                     |
-|-------------|------------------------------------------------------------------|
-| `1`         | Non-null object or scalar field.                                 |
-| `0..1`      | Nullable object or scalar field.                                 |
-| `0..*`      | Connection or list, possibly empty.                              |
+| Cardinality | Claim on the projected field                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------- |
+| `1`         | Non-null object or scalar field.                                                                                    |
+| `0..1`      | Nullable object or scalar field.                                                                                    |
+| `0..*`      | Connection or list, possibly empty.                                                                                 |
 | `1..*`      | Connection or list, asserted non-empty — deliberately stronger than GraphQL can express; checkable only at runtime. |
 
 The **upper bound** maps to multiplicity (`..1` singular, `..*` plural); the
@@ -441,7 +443,7 @@ an anatomy fact. Anatomies MUST NOT spell out unwrapping paths such as
 when needed. An anatomy therefore survives a provider promoting a list to a
 connection unchanged.
 
-These two rules constrain projections against a *schema*, so they cannot be
+These two rules constrain projections against a _schema_, so they cannot be
 enforced by this package's SHACL shapes; enforcement belongs to a
 consumer-side checker holding the provider SDL.
 
@@ -461,24 +463,24 @@ node:
     - node:
         uri: global.component.chip
         projection:
-          field: _meta.title      # relative to the traversed entity
+          field: _meta.title # relative to the traversed entity
       relation:
         cardinality: "0..*"
         slotName: tags
         projection:
-          field: documentationStages  # a connection field on Component
+          field: documentationStages # a connection field on Component
 ```
 
 Field and type names are anchored to the GraphQL schema of the provider the
 consumer runs against; the committed provider SDL is the naming authority.
 
 **Name grammar.** Both fields carry schema names, and `ProjectionShape`
-constrains their *syntax* (never their existence):
+constrains their _syntax_ (never their existence):
 
-| Field   | Pattern                                                | Reads as                                             |
-|---------|--------------------------------------------------------|------------------------------------------------------|
-| `on`    | `^[A-Z][A-Za-z0-9_]*$`                                   | A single GraphQL type name (`Component`).             |
-| `field` | `^[_A-Za-z][_A-Za-z0-9]*(\.[_A-Za-z][_A-Za-z0-9]*)*$`     | Dot-delimited GraphQL field names (`_meta.title`).     |
+| Field   | Pattern                                               | Reads as                                           |
+| ------- | ----------------------------------------------------- | -------------------------------------------------- |
+| `on`    | `^[A-Z][A-Za-z0-9_]*$`                                | A single GraphQL type name (`Component`).          |
+| `field` | `^[_A-Za-z][_A-Za-z0-9]*(\.[_A-Za-z][_A-Za-z0-9]*)*$` | Dot-delimited GraphQL field names (`_meta.title`). |
 
 Whether the names so formed exist in the provider schema — and whether the
 field's shape matches the relation's cardinality — remains a consumer-side
@@ -528,16 +530,36 @@ Applied to `entity-card`:
 
 ```graphql
 fragment EntityCardAnatomy on Component {
-  _meta { title }                        # header node
-  summary                                # summary text node
-  documentationStages {                  # tags relation (connection per SDL)
-    edges { node { _meta { title } } }   #   chip node, traversed scope
+  _meta {
+    title
+  } # header node
+  summary # summary text node
+  documentationStages {
+    # tags relation (connection per SDL)
+    edges {
+      node {
+        _meta {
+          title
+        }
+      }
+    } #   chip node, traversed scope
   }
-  variants {                             # switch relation (interface-typed)
-    edges { node {
-      ... on Component { _meta { title } }   # variant case
-      ... on Pattern   { _meta { title } }   # pattern case
-    } }
+  variants {
+    # switch relation (interface-typed)
+    edges {
+      node {
+        ... on Component {
+          _meta {
+            title
+          }
+        } # variant case
+        ... on Pattern {
+          _meta {
+            title
+          }
+        } # pattern case
+      }
+    }
   }
 }
 ```
@@ -558,15 +580,15 @@ node:
     icon: chevron-down
 ```
 
-| Aspect  | Rule                                                                   |
-|---------|------------------------------------------------------------------------|
-| Keys    | Prop names as defined on the component in the design system ontology (camelCase). |
-| Values  | Scalars (string, number, boolean), coerced to strings. No token paths, no fallback arrays — pins are values, not styles. |
-| Nodes   | Named nodes only. Anonymous nodes have no prop surface; `props` under a `role` node MUST be rejected. |
+| Aspect | Rule                                                                                                                     |
+| ------ | ------------------------------------------------------------------------------------------------------------------------ |
+| Keys   | Prop names as defined on the component in the design system ontology (camelCase).                                        |
+| Values | Scalars (string, number, boolean), coerced to strings. No token paths, no fallback arrays — pins are values, not styles. |
+| Nodes  | Named nodes only. Anonymous nodes have no prop surface; `props` under a `role` node MUST be rejected.                    |
 
-**Definition vs pinning.** The DSL never *defines* a prop surface — a
+**Definition vs pinning.** The DSL never _defines_ a prop surface — a
 component's prop names, types, and optionality live in the design system
-ontology (`ds:hasProperty`). A pin *asserts one value at one position*.
+ontology (`ds:hasProperty`). A pin _asserts one value at one position_.
 Whether the pinned prop exists on the component, and whether the value is
 admissible (e.g. a glyph name present in the icon set), are consumer-side
 checks against the design system graph — the same enforcement posture as the
@@ -578,10 +600,10 @@ as a component whose glyph is a required prop
 usage in anatomies splits into exactly two cases and needs no icon-specific
 construct:
 
-| Case | Authoring |
-|------|-----------|
-| Consumer-filled icon slot (e.g. Button's `slotName: icon`) | Icon-component edge with a slot and **no pin** — the consumer chooses the glyph. |
-| Component-intrinsic icon (accordion chevron, modal close ×, status glyphs) | Icon-component node with `props: { icon: … }` — the spec fixes the glyph. |
+| Case                                                                       | Authoring                                                                        |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Consumer-filled icon slot (e.g. Button's `slotName: icon`)                 | Icon-component edge with a slot and **no pin** — the consumer chooses the glyph. |
+| Component-intrinsic icon (accordion chevron, modal close ×, status glyphs) | Icon-component node with `props: { icon: … }` — the spec fixes the glyph.        |
 
 **Static by design.** A data-driven value is a [projection](#310-projection)
 (`projection: { field: … }`); a state-driven one is a
@@ -609,25 +631,25 @@ node:
     typography.color: [modifier.color.text, color.text]
 ```
 
-| Aspect | Rule |
-|---|---|
-| Keys | One member of the closed roster in `definitions/registry.ttl`. |
-| Values | A symbol, a primitive, or a list that is the fallback order — symbols with at most one primitive, and only as the last element. |
-| Symbols | The `dt:` symbol's own dotted name, verbatim: `color.text`, `dimension.100`, `typography.weight.semiBold`. camelCase segments are the symbol's spelling and are not renamed. |
+| Aspect   | Rule                                                                                                                                                                                                                                                                 |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Keys     | One member of the closed roster in `definitions/registry.ttl`.                                                                                                                                                                                                       |
+| Values   | A symbol, a primitive, or a list that is the fallback order — symbols with at most one primitive, and only as the last element.                                                                                                                                      |
+| Symbols  | The `dt:` symbol's own dotted name, verbatim: `color.text`, `dimension.100`, `typography.weight.semiBold`. camelCase segments are the symbol's spelling and are not renamed.                                                                                         |
 | Channels | A channel is a symbol like any other: `modifier.color.text`, `surface.color.background`. The anatomy consumes it by name where the implementation reads the channel, and the semantic token by name where it reads the token. Nothing is inferred from the spelling. |
-| Order | The list is the fallback order: element 1 is the primary symbol, each next is what the implementation falls back to when the one before is undefined. |
-| Literals | A terminal literal the chain ends in (`currentColor`, `0`, `2px`) is kept as the last element. It is not a symbol and is consumed by nothing. |
+| Order    | The list is the fallback order: element 1 is the primary symbol, each next is what the implementation falls back to when the one before is undefined.                                                                                                                |
+| Literals | A terminal literal the chain ends in (`currentColor`, `0`, `2px`) is kept as the last element. It is not a symbol and is consumed by nothing.                                                                                                                        |
 
-**Definition versus binding.** The DSL never *defines* a token — a symbol's
+**Definition versus binding.** The DSL never _defines_ a token — a symbol's
 value, its coverage and its resolved values at each coordinate live in the
-token graph (`@canonical/token-ontology`, strata S1–S4). A binding *asserts
-which symbols one slot consumes*. Two consequences follow. Whether a symbol
+token graph (`@canonical/token-ontology`, strata S1–S4). A binding _asserts
+which symbols one slot consumes_. Two consequences follow. Whether a symbol
 exists at all is not asked by this package — and an undeclared name is not
 written into an anatomy either: where the implementation reads something no
 stratum declares, the binding is left out and the `#` comment on the line is
 the record of it (`# reads --motion-duration-fast; no symbol declares it`),
 because the programme represents what the implementations do and takes no new
-token decisions. And whether the symbol is *appropriate* for the key is the
+token decisions. And whether the symbol is _appropriate_ for the key is the
 registry's `anatomy:tokenNamespace`, which is a declaration and not a
 derivation.
 
@@ -637,14 +659,14 @@ grammar, the closed key roster, the shape of the `anatomy:consumes` list, and
 that the retired notation cannot reach the graph. A consumer holding the token
 graph checks the facts:
 
-| Check | Who | Outcome |
-|---|---|---|
-| the value parses, the key is in the roster | this package | parse error, or a SHACL violation |
-| every element of `consumes` is a `dt:` symbol IRI | this package (SHACL) | violation |
-| a token-kind key consumes at least one symbol | this package (SHACL) | violation |
-| the symbol RESOLVES in S1 or S2 | the consumer | a finding: an undeclared name should not have been written, and the `#` comment is its record |
-| the symbol is inside the key's `tokenNamespace` | the consumer | a finding: where a key really does admit a second namespace, the roster is what widens |
-| a state's value differs from its base state's | the consumer | a **lint**: reported with its ranks, never rejected |
+| Check                                             | Who                  | Outcome                                                                                       |
+| ------------------------------------------------- | -------------------- | --------------------------------------------------------------------------------------------- |
+| the value parses, the key is in the roster        | this package         | parse error, or a SHACL violation                                                             |
+| every element of `consumes` is a `dt:` symbol IRI | this package (SHACL) | violation                                                                                     |
+| a token-kind key consumes at least one symbol     | this package (SHACL) | violation                                                                                     |
+| the symbol RESOLVES in S1 or S2                   | the consumer         | a finding: an undeclared name should not have been written, and the `#` comment is its record |
+| the symbol is inside the key's `tokenNamespace`   | the consumer         | a finding: where a key really does admit a second namespace, the roster is what widens        |
+| a state's value differs from its base state's     | the consumer         | a **lint**: reported with its ranks, never rejected                                           |
 
 **The worked case.** Button's root reads, in the reference implementation:
 
@@ -657,7 +679,7 @@ graph checks the facts:
 }
 ```
 
-Two names, one chain: the text *channel* first — through which the anticipation
+Two names, one chain: the text _channel_ first — through which the anticipation
 and emphasis families reach the component without it knowing their members —
 then the plain text token. The component-local `--button-color-text` is
 followed through its own definition and replaced by what it consumes. So the
@@ -668,7 +690,7 @@ typography.color: [modifier.color.text, color.text]
 ```
 
 and that is correct at every importance, because the channel is what the slot
-reads; which symbol the channel is *worth* under a given importance is the
+reads; which symbol the channel is _worth_ under a given importance is the
 platform's business, not the anatomy's. A single symbol per key could not
 carry this, and a fallback declared once on the channel could not either:
 Button's background and Button's text fall back differently.
@@ -692,23 +714,22 @@ graph reifies the same fact one record per symbol per rank
 "which symbols does this component consume, and which arrive through a
 subcomponent".
 
-
 ---
 
 ## 4. URI Encoding Convention
 
 URIs follow Turtle-inspired conventions with dot-separated paths.
 
-| Symbol | Meaning                              | Example                           |
-|--------|--------------------------------------|-----------------------------------|
-| `.`    | Path hierarchy                       | `global.component.button`         |
-| `_`    | Word boundary (from PascalCase)      | `CardHeader` -> `card_header`     |
-| `-`    | Compound name (from dot in label)    | `Card.Header` -> `card-header`    |
+| Symbol | Meaning                           | Example                        |
+| ------ | --------------------------------- | ------------------------------ |
+| `.`    | Path hierarchy                    | `global.component.button`      |
+| `_`    | Word boundary (from PascalCase)   | `CardHeader` -> `card_header`  |
+| `-`    | Compound name (from dot in label) | `Card.Header` -> `card-header` |
 
 ### Examples
 
 | Component      | URI                                  |
-|----------------|--------------------------------------|
+| -------------- | ------------------------------------ |
 | Button         | `global.component.button`            |
 | Accordion.Item | `global.subcomponent.accordion-item` |
 | CardHeader     | `global.subcomponent.card_header`    |
@@ -718,7 +739,7 @@ URIs follow Turtle-inspired conventions with dot-separated paths.
 Subcomponents MUST reference their parent in the name:
 
 | Labelled Name        | Turtle URI                                  |
-|----------------------|---------------------------------------------|
+| -------------------- | ------------------------------------------- |
 | Timeline.Item        | `global.subcomponent.timeline-item`         |
 | Accordion.ItemHeader | `global.subcomponent.accordion-item_header` |
 
@@ -753,16 +774,16 @@ Quoted     = any other text               ; "1 / -1", "*" — a literal holding 
 
 ### Examples
 
-| Value | Reads as |
-|---|---|
-| `color.text` | one symbol |
-| `dimension.100` | one symbol; a numeric segment is a segment |
-| `typography.weight.semiBold` | one symbol; camelCase is the symbol's own spelling |
-| `modifier.color.text` | one symbol — a channel, consumed by name |
-| `[modifier.color.text, color.text]` | two symbols, in fallback order |
-| `[modifier.color.icon, modifier.color.text, currentColor]` | two symbols and the literal the chain ends in |
-| `flow` | one primitive, for a key whose `valueKind` admits one |
-| `"1 / -1"` | one primitive: a literal holding a slash is a literal, not a path |
+| Value                                                      | Reads as                                                          |
+| ---------------------------------------------------------- | ----------------------------------------------------------------- |
+| `color.text`                                               | one symbol                                                        |
+| `dimension.100`                                            | one symbol; a numeric segment is a segment                        |
+| `typography.weight.semiBold`                               | one symbol; camelCase is the symbol's own spelling                |
+| `modifier.color.text`                                      | one symbol — a channel, consumed by name                          |
+| `[modifier.color.text, color.text]`                        | two symbols, in fallback order                                    |
+| `[modifier.color.icon, modifier.color.text, currentColor]` | two symbols and the literal the chain ends in                     |
+| `flow`                                                     | one primitive, for a key whose `valueKind` admits one             |
+| `"1 / -1"`                                                 | one primitive: a literal holding a slash is a literal, not a path |
 
 **A key and a symbol are one shape.** Both are a `Path`; the registry tells
 them apart, which is why neither needs a sigil.
@@ -780,13 +801,13 @@ sequence is a fallback order and a literal resolves against nothing.
 
 **Rejections.** Each is a typed error naming the value and the rule:
 
-| Value | Rule |
-|---|---|
-| `spacing/medium`, `color/focus-ring` | the slash-delimited path is retired (§12) |
-| `color.surface.button?`, `color/surface/button?` | the trailing `?` marker is retired (§12) |
-| `$root`, `color.$root.text`, `color.root.text` | `root` and `$root` are not value segments |
-| `[2px, dimension.stroke.thickness.large]` | a primitive may only end a value |
-| `[color.text]` | a sequence is a fallback order and needs two or more elements |
+| Value                                            | Rule                                                          |
+| ------------------------------------------------ | ------------------------------------------------------------- |
+| `spacing/medium`, `color/focus-ring`             | the slash-delimited path is retired (§12)                     |
+| `color.surface.button?`, `color/surface/button?` | the trailing `?` marker is retired (§12)                      |
+| `$root`, `color.$root.text`, `color.root.text`   | `root` and `$root` are not value segments                     |
+| `[2px, dimension.stroke.thickness.large]`        | a primitive may only end a value                              |
+| `[color.text]`                                   | a sequence is a fallback order and needs two or more elements |
 
 A value that satisfies the grammar may still be a **placeholder**: a segment
 in `definitions/style-keys.yaml`'s `placeholders` list (`sth`, `tbd`, `xxx`,
@@ -812,7 +833,7 @@ range       = digit+ ".." ( digit+ | "*" )
 ```
 
 | Value    | Meaning                |
-|----------|------------------------|
+| -------- | ---------------------- |
 | `"1"`    | Exactly one (required) |
 | `"0..1"` | Zero or one (optional) |
 | `"0..*"` | Zero or more           |
@@ -827,14 +848,14 @@ Cardinality values MUST be quoted strings in YAML to avoid parsing ambiguity.
 
 The `slotName` field on a relation maps content to a named slot in the parent component.
 
-| Value       | Meaning                                                                 |
-|-------------|-------------------------------------------------------------------------|
-| `"default"` | Main content slot (`children` in React, default slot in Vue).           |
-| `"header"`  | Header slot.                                                            |
-| `"footer"`  | Footer slot.                                                            |
-| `"icon"`    | Icon placement.                                                         |
-| `"label"`   | Text label.                                                             |
-| *(custom)*  | Any application-specific slot name.                                     |
+| Value       | Meaning                                                       |
+| ----------- | ------------------------------------------------------------- |
+| `"default"` | Main content slot (`children` in React, default slot in Vue). |
+| `"header"`  | Header slot.                                                  |
+| `"footer"`  | Footer slot.                                                  |
+| `"icon"`    | Icon placement.                                               |
+| `"label"`   | Text label.                                                   |
+| _(custom)_  | Any application-specific slot name.                           |
 
 When `slotName` is omitted, the edge does not target a specific named slot.
 
@@ -843,7 +864,7 @@ When `slotName` is omitted, the edge does not target a specific named slot.
 ## 8. Named vs Anonymous Rule
 
 | Type      | Identifier | Use Case                                                    |
-|-----------|------------|-------------------------------------------------------------|
+| --------- | ---------- | ----------------------------------------------------------- |
 | Named     | `uri`      | User-instantiable components (things users compose in code) |
 | Anonymous | `role`     | Internal structural elements not directly instantiated      |
 
@@ -897,11 +918,11 @@ edges:
 
 ### 10.1 Discriminator Vocabulary
 
-| Value      | Meaning                                  | Use Case                                                   |
-|------------|------------------------------------------|------------------------------------------------------------|
-| `props`    | Consumer chooses via component props     | `<Field type="checkbox">` renders Checkbox vs Radio        |
-| `internal` | Component manages choice internally      | AsyncButton shows Loading/Success/Error based on state     |
-| `override` | Consumer can replace with custom component | Timeline accepts custom Event component via slot         |
+| Value      | Meaning                                    | Use Case                                               |
+| ---------- | ------------------------------------------ | ------------------------------------------------------ |
+| `props`    | Consumer chooses via component props       | `<Field type="checkbox">` renders Checkbox vs Radio    |
+| `internal` | Component manages choice internally        | AsyncButton shows Loading/Success/Error based on state |
+| `override` | Consumer can replace with custom component | Timeline accepts custom Event component via slot       |
 
 ### 10.2 Shorthand Expansion
 
@@ -944,7 +965,7 @@ cases:
 ## 11. The Fallback List
 
 **The list is the value form, not a special case of it.** A style value is a
-symbol, a primitive, or a list; where it is a list, the list *is* the fallback
+symbol, a primitive, or a list; where it is a list, the list _is_ the fallback
 order — a one-to-one transcription of the implementation's own `var()` chain.
 
 ```yaml
@@ -958,7 +979,7 @@ primary symbol; each next is what the implementation falls back to when the
 one before it is undefined. A terminal literal stays as the last element:
 
 ```yaml
-  typography.color: [modifier.color.icon, modifier.color.text, currentColor]
+typography.color: [modifier.color.icon, modifier.color.text, currentColor]
 ```
 
 Three reasons the list is the form rather than an option:
@@ -966,7 +987,7 @@ Three reasons the list is the form rather than an option:
 1. **The fallback is a per-slot choice.** Button's background falls back
    through the primary-foreground channel to the primary foreground token; its
    text falls back through the text channel to the plain text token; its
-   border falls back to a *highlighted* border that itself falls back to the
+   border falls back to a _highlighted_ border that itself falls back to the
    plain one. No rule declared once on a symbol can carry that, because the
    slots differ.
 2. **Some slots consume a channel and some the token.** Button's root colour
@@ -990,11 +1011,11 @@ Three notations this reference described before 0.4.0 are **retired**, and
 each is now a parse error and a SHACL violation. They are listed so a reader
 of an older anatomy knows what they are looking at.
 
-| Retired | Example | What to write | Why |
-|---|---|---|---|
-| The slash path | `spacing/medium` | the symbol's dotted name, `spacing.gap.field.block` | The paths named no symbols. Checked against the token graph, `color/fill/default` matched nothing, `spacing/small` matched nothing, `radius/button` matched nothing: the anatomy spoke a parallel vocabulary and nothing caught it. |
-| The optional marker | `color/surface/button?` | the symbol where it resolves; where it resolves nowhere, no binding at all and a `#` comment saying what the implementation reads | A sigil that means "may be undefined in some themes" is a rule the reader has to memorise, and it stated an exception in a place no validator could reconcile with the list of exceptions. |
-| The `$root` segment | `color/surface/$root` | the dotted name without it | It was an artefact of the token files' own shape, not part of a symbol's name. |
+| Retired             | Example                 | What to write                                                                                                                     | Why                                                                                                                                                                                                                                 |
+| ------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The slash path      | `spacing/medium`        | the symbol's dotted name, `spacing.gap.field.block`                                                                               | The paths named no symbols. Checked against the token graph, `color/fill/default` matched nothing, `spacing/small` matched nothing, `radius/button` matched nothing: the anatomy spoke a parallel vocabulary and nothing caught it. |
+| The optional marker | `color/surface/button?` | the symbol where it resolves; where it resolves nowhere, no binding at all and a `#` comment saying what the implementation reads | A sigil that means "may be undefined in some themes" is a rule the reader has to memorise, and it stated an exception in a place no validator could reconcile with the list of exceptions.                                          |
+| The `$root` segment | `color/surface/$root`   | the dotted name without it                                                                                                        | It was an artefact of the token files' own shape, not part of a symbol's name.                                                                                                                                                      |
 
 **The kebab-to-dotted bridge.** An older value migrates by splitting on `/`,
 dropping a trailing `root` or `$root`, stripping a trailing `?`, camelCasing
@@ -1009,11 +1030,11 @@ annotation on the value. A symbol's coverage is S2's (`dt:covers`: which
 families provision it, at which coordinates) and its resolved values are S3's
 (one row per symbol per coordinate per mode). So:
 
-- *does this symbol exist?* — is it a `dt:TokenSymbol` in S1, or a channel
+- _does this symbol exist?_ — is it a `dt:TokenSymbol` in S1, or a channel
   minted in S2;
-- *is it worth anything under this modifier?* — has S3 a resolved value for
+- _is it worth anything under this modifier?_ — has S3 a resolved value for
   it at that coordinate;
-- *which families reach this slot?* — follow the consumed channel's
+- _which families reach this slot?_ — follow the consumed channel's
   `dt:channelOf` to its base symbol, then S2's coverage.
 
 None of those is a fact the anatomy could have carried, and all of them are
@@ -1045,17 +1066,17 @@ of one notation, which is the drift this release exists to end. Read them in
 the repository; the worked case below is the one exception, because
 [§3.12](#312-token-binding) argues from it.
 
-| Example | Reference | Demonstrates |
-|---|---|---|
-| `accordion` | `react/ds-global` `Accordion` | nested named nodes at three depths, a repeating child (`1..*`), a surface fallback, `motion.*` bindings |
-| `card` | `react/ds-global` `Card` | four subgrid sections, a three-slot `border` split into width, style and colour, a quoted grid-line literal, an anonymous node |
-| `stateful-button` | `react/ds-global` `Button` | `@state` keys across default/hover/active/focus/disabled, three-rank chains, two channels then `currentColor` |
-| `field` | — | a `props` switch with URI-shorthand cases |
-| `async-button` | — | an `internal` switch with four cases |
-| `timeline` | — | an `override` switch with the reserved `$custom` |
-| `input-group` | `react/ds-global-form` `TextArea` | a switch with mixed cases, and a token-kind key that admits no bare primitive |
-| `entity-card` | — | projections on nodes, relations and switch cases, beside style bindings |
-| `status-header` | — | pinned props (intrinsic icons), a status switch, an unpinned consumer-filled slot |
+| Example           | Reference                         | Demonstrates                                                                                                                   |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `accordion`       | `react/ds-global` `Accordion`     | nested named nodes at three depths, a repeating child (`1..*`), a surface fallback, `motion.*` bindings                        |
+| `card`            | `react/ds-global` `Card`          | four subgrid sections, a three-slot `border` split into width, style and colour, a quoted grid-line literal, an anonymous node |
+| `stateful-button` | `react/ds-global` `Button`        | `@state` keys across default/hover/active/focus/disabled, three-rank chains, two channels then `currentColor`                  |
+| `field`           | —                                 | a `props` switch with URI-shorthand cases                                                                                      |
+| `async-button`    | —                                 | an `internal` switch with four cases                                                                                           |
+| `timeline`        | —                                 | an `override` switch with the reserved `$custom`                                                                               |
+| `input-group`     | `react/ds-global-form` `TextArea` | a switch with mixed cases, and a token-kind key that admits no bare primitive                                                  |
+| `entity-card`     | —                                 | projections on nodes, relations and switch cases, beside style bindings                                                        |
+| `status-header`   | —                                 | pinned props (intrinsic icons), a status switch, an unpinned consumer-filled slot                                              |
 
 ### The worked case: Button's root and icon
 
@@ -1069,17 +1090,21 @@ node:
     layout.type: inline-flex
     interaction.cursor: pointer
     interaction.cursor@disabled: not-allowed
-    appearance.background: [modifier.color.foreground.primary, color.foreground.primary]
-    appearance.border.color: [modifier.color.border, color.border.highlighted, color.border]
+    appearance.background:
+      [modifier.color.foreground.primary, color.foreground.primary]
+    appearance.border.color:
+      [modifier.color.border, color.border.highlighted, color.border]
     typography.color: [modifier.color.text, color.text]
     typography.color@disabled: color.text.disabled
     spacing.internal.inline.start: spacing.inset.action.inline
-    appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing, currentColor]
+    appearance.outline.color@focus:
+      [modifier.color.focusRing, color.focusRing, currentColor]
   edges:
     - node:
         uri: global.component.icon
         styles:
-          typography.color: [modifier.color.icon, modifier.color.text, currentColor]
+          typography.color:
+            [modifier.color.icon, modifier.color.text, currentColor]
       relation:
         cardinality: "0..1"
         slotName: icon
@@ -1139,7 +1164,7 @@ Derives: `_meta { title }`.
 
 #### Type condition and field together
 
-The node renders a field *and* asserts the type of what it renders — the
+The node renders a field _and_ asserts the type of what it renders — the
 combined form every switch case uses.
 
 ```yaml
@@ -1169,7 +1194,7 @@ chip. The anatomy never spells `edges.node`.
 - node:
     uri: global.component.chip
     projection:
-      field: _meta.title      # relative to the traversed Tag
+      field: _meta.title # relative to the traversed Tag
   relation:
     cardinality: "0..*"
     slotName: tags
@@ -1265,8 +1290,18 @@ Derives:
 ```graphql
 fragment ClassTreeAnatomy on OntologyClass {
   subclasses {
-    _meta { title }
-    instances { edges { node { _meta { title } } } }
+    _meta {
+      title
+    }
+    instances {
+      edges {
+        node {
+          _meta {
+            title
+          }
+        }
+      }
+    }
   }
 }
 ```
@@ -1439,13 +1474,13 @@ interface AnatomySpec {
 
 ## 15. Deferred Items
 
-| Item                 | Description                                                                        |
-|----------------------|------------------------------------------------------------------------------------|
+| Item                       | Description                                                                                                                                                                                                                                                                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | A JSON Schema for the YAML | `schemas/anatomy-dsl.schema.json` was DELETED in 0.4.0: it documented the retired notation — the slash path, the `?` marker — and an open key vocabulary, so the package would have shipped two contradictory statements of one notation. Generating a replacement from §5's grammar and the registry's roster is deferred until a consumer needs one. |
-| Pseudo elements      | Representation of CSS pseudo elements (`::before`, `::after`) in the anatomy tree. |
-| Portal nodes         | Representation of related nodes displayed in portals.                              |
-| Conditional display  | Representation of conditionality in display.                                       |
-| Style inheritance    | Inheritance reference for styles (e.g. "NetworkCard" inherits styles from "Card"). |
+| Pseudo elements            | Representation of CSS pseudo elements (`::before`, `::after`) in the anatomy tree.                                                                                                                                                                                                                                                                     |
+| Portal nodes               | Representation of related nodes displayed in portals.                                                                                                                                                                                                                                                                                                  |
+| Conditional display        | Representation of conditionality in display.                                                                                                                                                                                                                                                                                                           |
+| Style inheritance          | Inheritance reference for styles (e.g. "NetworkCard" inherits styles from "Card").                                                                                                                                                                                                                                                                     |
 
 ---
 

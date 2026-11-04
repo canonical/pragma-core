@@ -5,35 +5,35 @@
 
 ## Taxonomy Key
 
-| Prefix | Domain | Description |
-|--------|--------|-------------|
-| `A1` | Structure | Top-level directory layout |
-| `A2` | Domains | Feature domain organization |
-| `A3` | Pages | Page component patterns |
-| `A4` | Routes | Route definition patterns |
-| `A5` | Wrappers | Layout wrapper patterns |
-| `A6` | Middleware | Cross-cutting concern patterns |
-| `A7` | SSR | Server-side rendering (the default; omitted with `--rendering spa`) |
-| `A8` | Head | Document head management |
-| `A9` | Navigation | Client-side navigation |
-| `A10` | Types | Type registration and safety |
-| `A11` | Data | Relay (GraphQL) data layer (when `--relay` is enabled) |
-| `A12` | i18n | Locale negotiation and message catalogs (when `--intl` is enabled) |
-| `A13` | Shell | The top bar and the application shell (the shell is omitted with `--no-app-shell`) |
+| Prefix | Domain     | Description                                                                        |
+| ------ | ---------- | ---------------------------------------------------------------------------------- |
+| `A1`   | Structure  | Top-level directory layout                                                         |
+| `A2`   | Domains    | Feature domain organization                                                        |
+| `A3`   | Pages      | Page component patterns                                                            |
+| `A4`   | Routes     | Route definition patterns                                                          |
+| `A5`   | Wrappers   | Layout wrapper patterns                                                            |
+| `A6`   | Middleware | Cross-cutting concern patterns                                                     |
+| `A7`   | SSR        | Server-side rendering (the default; omitted with `--rendering spa`)                |
+| `A8`   | Head       | Document head management                                                           |
+| `A9`   | Navigation | Client-side navigation                                                             |
+| `A10`  | Types      | Type registration and safety                                                       |
+| `A11`  | Data       | Relay (GraphQL) data layer (when `--relay` is enabled)                             |
+| `A12`  | i18n       | Locale negotiation and message catalogs (when `--intl` is enabled)                 |
+| `A13`  | Shell      | The top bar and the application shell (the shell is omitted with `--no-app-shell`) |
 
 ---
 
 ## A1 — Structure
 
-| ID | Rule | Gate |
-|----|------|------|
-| A1.1 | Client entry point lives in `src/client/` | `src/client/entry.tsx` exists |
+| ID   | Rule                                                                      | Gate                                                   |
+| ---- | ------------------------------------------------------------------------- | ------------------------------------------------------ |
+| A1.1 | Client entry point lives in `src/client/`                                 | `src/client/entry.tsx` exists                          |
 | A1.2 | Server entry points live in `src/server/` (absent with `--rendering spa`) | `src/server/entry.tsx` exists unless `--rendering spa` |
-| A1.3 | Feature domains live in `src/domains/` | `src/domains/` dir exists |
-| A1.4 | Shared components live in `src/lib/` | `src/lib/` dir exists |
-| A1.5 | Styles live in `src/styles/` | `src/styles/index.css` exists |
-| A1.6 | Root route map lives at `src/routes.tsx` | `src/routes.tsx` exists |
-| A1.7 | `src/formatDocumentTitle.ts` holds the document title template | file present |
+| A1.3 | Feature domains live in `src/domains/`                                    | `src/domains/` dir exists                              |
+| A1.4 | Shared components live in `src/lib/`                                      | `src/lib/` dir exists                                  |
+| A1.5 | Styles live in `src/styles/`                                              | `src/styles/index.css` exists                          |
+| A1.6 | Root route map lives at `src/routes.tsx`                                  | `src/routes.tsx` exists                                |
+| A1.7 | `src/formatDocumentTitle.ts` holds the document title template            | file present                                           |
 
 ### Application Layout
 
@@ -68,13 +68,13 @@ src/
 
 ## A2 — Domains
 
-| ID | Rule | Gate |
-|----|------|------|
-| A2.1 | Each feature area has its own domain directory | `src/domains/{name}/` exists |
+| ID   | Rule                                           | Gate                                  |
+| ---- | ---------------------------------------------- | ------------------------------------- |
+| A2.1 | Each feature area has its own domain directory | `src/domains/{name}/` exists          |
 | A2.2 | Domain directories are lowercase or kebab-case | dirname matches `/^[a-z][a-z0-9-]*$/` |
-| A2.3 | Each domain has a `routes.ts` barrel | `routes.ts` exists in domain dir |
-| A2.4 | Domain routes barrel exports `default` | `export default routes` present |
-| A2.5 | Domain route barrels are `.ts` not `.tsx` | extension is `.ts` |
+| A2.3 | Each domain has a `routes.ts` barrel           | `routes.ts` exists in domain dir      |
+| A2.4 | Domain routes barrel exports `default`         | `export default routes` present       |
+| A2.5 | Domain route barrels are `.ts` not `.tsx`      | extension is `.ts`                    |
 
 ### Domain Structure
 
@@ -90,15 +90,15 @@ src/domains/billing/
 
 ## A3 — Pages
 
-| ID | Rule | Gate |
-|----|------|------|
-| A3.1 | Page components use `Page` suffix | name matches `*Page` |
-| A3.2 | Page components are PascalCase | name matches `/^[A-Z][a-zA-Z0-9]*Page$/` |
-| A3.3 | Page components are default exports | `export default function` present |
-| A3.4 | Page components render `<Head>` | `Head` import and element present |
-| A3.5 | Page components return `ReactElement` | return type annotated |
-| A3.6 | Pages receive `params` and/or `search` from the router, not `data` | no `data` prop |
-| A3.7 | Each page lives in its own file | one component per file |
+| ID   | Rule                                                               | Gate                                     |
+| ---- | ------------------------------------------------------------------ | ---------------------------------------- |
+| A3.1 | Page components use `Page` suffix                                  | name matches `*Page`                     |
+| A3.2 | Page components are PascalCase                                     | name matches `/^[A-Z][a-zA-Z0-9]*Page$/` |
+| A3.3 | Page components are default exports                                | `export default function` present        |
+| A3.4 | Page components render `<Head>`                                    | `Head` import and element present        |
+| A3.5 | Page components return `ReactElement`                              | return type annotated                    |
+| A3.6 | Pages receive `params` and/or `search` from the router, not `data` | no `data` prop                           |
+| A3.7 | Each page lives in its own file                                    | one component per file                   |
 
 ### Page Pattern
 
@@ -121,7 +121,9 @@ export default function InvoicesPage(): ReactElement {
 ```tsx
 export default function GuidePage({
   params,
-}: { params: { slug: string } }): ReactElement {
+}: {
+  params: { slug: string };
+}): ReactElement {
   return (
     <section aria-labelledby="guide-title">
       <Head title={params.slug} />
@@ -135,15 +137,15 @@ export default function GuidePage({
 
 ## A4 — Routes
 
-| ID | Rule | Gate |
-|----|------|------|
-| A4.1 | Routes use `route()` from `@canonical/router-core` | import present |
-| A4.2 | Routes pass components directly to `content` | `content: PageComponent` (not `content: () => <Page />`) |
-| A4.3 | Route files are `.ts` not `.tsx` (no JSX in route definitions) | extension is `.ts` |
-| A4.4 | Route objects use `as const` assertion | `as const` present |
-| A4.5 | `warm()` is fire-and-forget — it does not return data | no data threading |
-| A4.6 | No `.error` on routes — use React error boundaries | no `error` property |
-| A4.7 | Search params use Standard Schema validation (`~standard`) | schema protocol used |
+| ID   | Rule                                                           | Gate                                                     |
+| ---- | -------------------------------------------------------------- | -------------------------------------------------------- |
+| A4.1 | Routes use `route()` from `@canonical/router-core`             | import present                                           |
+| A4.2 | Routes pass components directly to `content`                   | `content: PageComponent` (not `content: () => <Page />`) |
+| A4.3 | Route files are `.ts` not `.tsx` (no JSX in route definitions) | extension is `.ts`                                       |
+| A4.4 | Route objects use `as const` assertion                         | `as const` present                                       |
+| A4.5 | `warm()` is fire-and-forget — it does not return data          | no data threading                                        |
+| A4.6 | No `.error` on routes — use React error boundaries             | no `error` property                                      |
+| A4.7 | Search params use Standard Schema validation (`~standard`)     | schema protocol used                                     |
 
 ### Route Definition Pattern
 
@@ -170,13 +172,13 @@ export default routes;
 
 ## A5 — Wrappers
 
-| ID | Rule | Gate |
-|----|------|------|
-| A5.1 | Layout components use `Layout` suffix | name matches `*Layout` |
-| A5.2 | Layout components live in `src/lib/{Name}Layout/` | directory exists |
-| A5.3 | Layout components accept `children` prop | `children: ReactNode` in props |
-| A5.4 | Wrapper composition uses `wrapper()` + `group()` | calls present in `routes.tsx` |
-| A5.5 | Layout components have barrel `index.ts` | barrel exists |
+| ID   | Rule                                              | Gate                           |
+| ---- | ------------------------------------------------- | ------------------------------ |
+| A5.1 | Layout components use `Layout` suffix             | name matches `*Layout`         |
+| A5.2 | Layout components live in `src/lib/{Name}Layout/` | directory exists               |
+| A5.3 | Layout components accept `children` prop          | `children: ReactNode` in props |
+| A5.4 | Wrapper composition uses `wrapper()` + `group()`  | calls present in `routes.tsx`  |
+| A5.5 | Layout components have barrel `index.ts`          | barrel exists                  |
 
 ### Wrapper Wiring Pattern
 
@@ -199,12 +201,12 @@ const [invoices, payments] = group(sidebarWrapper, [
 
 ## A6 — Middleware
 
-| ID | Rule | Gate |
-|----|------|------|
+| ID   | Rule                                                       | Gate                        |
+| ---- | ---------------------------------------------------------- | --------------------------- |
 | A6.1 | Cross-cutting concerns use middleware, not per-route logic | middleware function defined |
-| A6.2 | Middleware transforms routes via `RouteMiddleware` type | type annotation present |
-| A6.3 | Middleware wraps `warm`, not `content` | warm wrapping used |
-| A6.4 | Auth redirects use `redirect()` from router-core | `redirect()` call present |
+| A6.2 | Middleware transforms routes via `RouteMiddleware` type    | type annotation present     |
+| A6.3 | Middleware wraps `warm`, not `content`                     | warm wrapping used          |
+| A6.4 | Auth redirects use `redirect()` from router-core           | `redirect()` call present   |
 
 ---
 
@@ -215,54 +217,54 @@ whole server layer. A `--rendering spa` app has no `src/server/`, no `/sitemap.x
 no server-painted first paint; its client entry mounts with `createRoot`
 rather than `hydrateRoot`.
 
-| ID | Rule | Gate |
-|----|------|------|
-| A7.1 | Server entry renders full `<html>` document as `ServerEntrypoint` | `ServerEntrypointProps` used |
-| A7.2 | Express server uses `JSXRenderer.renderToPipeableStream()` | pipeable stream used |
-| A7.3 | Bun server uses `JSXRenderer.renderToReadableStream()` | readable stream used |
-| A7.4 | Both servers use Vite middleware mode for HMR | `createViteServer` with `middlewareMode` |
-| A7.5 | Router created inside entry server component from URL | `createStaticRouter` in component |
-| A7.6 | URL passed as serializable `initialData` | `{ url: string }` in initialData |
-| A7.7 | Production uses platform adapters (Vercel, Cloudflare), not dev servers | servers are dev-only |
+| ID   | Rule                                                                    | Gate                                     |
+| ---- | ----------------------------------------------------------------------- | ---------------------------------------- |
+| A7.1 | Server entry renders full `<html>` document as `ServerEntrypoint`       | `ServerEntrypointProps` used             |
+| A7.2 | Express server uses `JSXRenderer.renderToPipeableStream()`              | pipeable stream used                     |
+| A7.3 | Bun server uses `JSXRenderer.renderToReadableStream()`                  | readable stream used                     |
+| A7.4 | Both servers use Vite middleware mode for HMR                           | `createViteServer` with `middlewareMode` |
+| A7.5 | Router created inside entry server component from URL                   | `createStaticRouter` in component        |
+| A7.6 | URL passed as serializable `initialData`                                | `{ url: string }` in initialData         |
+| A7.7 | Production uses platform adapters (Vercel, Cloudflare), not dev servers | servers are dev-only                     |
 
 ---
 
 ## A8 — Head
 
-| ID | Rule | Gate |
-|----|------|------|
-| A8.1 | Head management uses `@canonical/react-head` | `Head` import present |
-| A8.2 | `<Head>` rendered by every page component | element present per page |
-| A8.3 | One owner per document: only a route's content renders `<Head>`, never a layout or an entry | no `<Head>` outside route content |
-| A8.4 | `HeadProvider titleTemplate={formatDocumentTitle}` wraps the app in every emitted entry — client, and server unless `--rendering spa` | provider present |
-| A8.5 | The application name lives in `src/formatDocumentTitle.ts`, not in page titles | pages pass a bare title |
-| A8.6 | The HTML shell carries no `<title>` unless `--rendering spa` | `index.html` yields to the page |
-| A8.7 | The shell owns only tags no page declares — the server emits its head tags first, so a page's copy of one would lose | no overlap between `index.html` and `<Head>` |
-| A8.8 | Head is separate from the router — no router dependency | no router imports in head |
+| ID   | Rule                                                                                                                                  | Gate                                         |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| A8.1 | Head management uses `@canonical/react-head`                                                                                          | `Head` import present                        |
+| A8.2 | `<Head>` rendered by every page component                                                                                             | element present per page                     |
+| A8.3 | One owner per document: only a route's content renders `<Head>`, never a layout or an entry                                           | no `<Head>` outside route content            |
+| A8.4 | `HeadProvider titleTemplate={formatDocumentTitle}` wraps the app in every emitted entry — client, and server unless `--rendering spa` | provider present                             |
+| A8.5 | The application name lives in `src/formatDocumentTitle.ts`, not in page titles                                                        | pages pass a bare title                      |
+| A8.6 | The HTML shell carries no `<title>` unless `--rendering spa`                                                                          | `index.html` yields to the page              |
+| A8.7 | The shell owns only tags no page declares — the server emits its head tags first, so a page's copy of one would lose                  | no overlap between `index.html` and `<Head>` |
+| A8.8 | Head is separate from the router — no router dependency                                                                               | no router imports in head                    |
 
 ---
 
 ## A9 — Navigation
 
-| ID | Rule | Gate |
-|----|------|------|
-| A9.1 | Links use `<Link>` from `@canonical/router-react` | `Link` import present |
-| A9.2 | Navigation is by route name, not by path | `to="routeName"` pattern |
-| A9.3 | Params and search are typed via route definition | TypeScript validates |
-| A9.4 | Client router uses `createBrowserRouter` | factory call present |
-| A9.5 | `useBlocker()` for navigation blocking on dirty forms | hook used when needed |
-| A9.6 | `setSearchParams()` for search param mutation | method used for filters/pagination |
+| ID   | Rule                                                  | Gate                               |
+| ---- | ----------------------------------------------------- | ---------------------------------- |
+| A9.1 | Links use `<Link>` from `@canonical/router-react`     | `Link` import present              |
+| A9.2 | Navigation is by route name, not by path              | `to="routeName"` pattern           |
+| A9.3 | Params and search are typed via route definition      | TypeScript validates               |
+| A9.4 | Client router uses `createBrowserRouter`              | factory call present               |
+| A9.5 | `useBlocker()` for navigation blocking on dirty forms | hook used when needed              |
+| A9.6 | `setSearchParams()` for search param mutation         | method used for filters/pagination |
 
 ---
 
 ## A10 — Types
 
-| ID | Rule | Gate |
-|----|------|------|
-| A10.1 | Routes registered via `declare module` augmentation | augmentation present in `routes.tsx` |
-| A10.2 | `AppRoutes` type exported from `routes.tsx` | type export present |
-| A10.3 | No `as` casts in route or page code | zero cast count |
-| A10.4 | No `@ts-ignore` or `@ts-expect-error` in generated code | zero suppression count |
+| ID    | Rule                                                    | Gate                                 |
+| ----- | ------------------------------------------------------- | ------------------------------------ |
+| A10.1 | Routes registered via `declare module` augmentation     | augmentation present in `routes.tsx` |
+| A10.2 | `AppRoutes` type exported from `routes.tsx`             | type export present                  |
+| A10.3 | No `as` casts in route or page code                     | zero cast count                      |
+| A10.4 | No `@ts-ignore` or `@ts-expect-error` in generated code | zero suppression count               |
 
 ---
 
@@ -270,15 +272,15 @@ rather than `hydrateRoot`.
 
 Present only when the application is scaffolded with `--relay`.
 
-| ID | Rule | Gate |
-|----|------|------|
-| A11.1 | The Relay layer lives in `src/relay/` (environment factory, mock schema, artifacts) | `src/relay/environment.ts` exists |
-| A11.2 | The environment factory defaults to the local in-process mock schema; `VITE_GRAPHQL_URL` (or an explicit URL) switches to an HTTP executor | `createEnvironment` branches on the URL |
-| A11.3 | Compiler artifacts in `src/relay/__generated__/` are committed, never rebuilt by the app build (`codegen: false`); regenerate explicitly with the `relay` script after any schema or `graphql` tag edit | committed artifacts match schema |
-| A11.4 | Data requirements are colocated: containers use `useLazyLoadQuery`, leaf components own their `useFragment`, parents just spread it | fragment per component |
-| A11.5 | Query subtrees pair `Suspense` (pending state) with an `ErrorBoundary` (failure state) | both boundaries wrap the subtree |
-| A11.6 | Query subtrees guard on `typeof document` / a store `check()` so the server renders them only from prefetched data (vacuously true under `--rendering spa`, where there is no server) | guard present on query subtrees |
-| A11.7 | One Relay environment per browser session (module scope in the client entry); under `--rendering ssr`, additionally a fresh environment per request in the server entry | environment creation sites |
+| ID    | Rule                                                                                                                                                                                                    | Gate                                    |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| A11.1 | The Relay layer lives in `src/relay/` (environment factory, mock schema, artifacts)                                                                                                                     | `src/relay/environment.ts` exists       |
+| A11.2 | The environment factory defaults to the local in-process mock schema; `VITE_GRAPHQL_URL` (or an explicit URL) switches to an HTTP executor                                                              | `createEnvironment` branches on the URL |
+| A11.3 | Compiler artifacts in `src/relay/__generated__/` are committed, never rebuilt by the app build (`codegen: false`); regenerate explicitly with the `relay` script after any schema or `graphql` tag edit | committed artifacts match schema        |
+| A11.4 | Data requirements are colocated: containers use `useLazyLoadQuery`, leaf components own their `useFragment`, parents just spread it                                                                     | fragment per component                  |
+| A11.5 | Query subtrees pair `Suspense` (pending state) with an `ErrorBoundary` (failure state)                                                                                                                  | both boundaries wrap the subtree        |
+| A11.6 | Query subtrees guard on `typeof document` / a store `check()` so the server renders them only from prefetched data (vacuously true under `--rendering spa`, where there is no server)                   | guard present on query subtrees         |
+| A11.7 | One Relay environment per browser session (module scope in the client entry); under `--rendering ssr`, additionally a fresh environment per request in the server entry                                 | environment creation sites              |
 
 ### ClientOnly (emitted, unused)
 
@@ -305,14 +307,14 @@ schema, run the `relay` script, and commit the regenerated artifacts.
 
 Present only when the application is scaffolded with `--intl`.
 
-| ID | Rule | Gate |
-|----|------|------|
-| A12.1 | Locale config and message catalogs live in `src/i18n/` (one module per locale, re-exported from a barrel) | `src/i18n/config.ts` exists |
-| A12.2 | Negotiation is a pure function over sources — cookie first, then the language list — never a runtime branch | `negotiateLocale(config, sources)` call sites |
-| A12.3 | The server negotiates from the request (cookie, `Accept-Language`) and publishes the result on `__INITIAL_DATA__`; the client reuses it so hydration cannot mismatch | server entry sets it, client entry reads it |
-| A12.4 | Under `--rendering spa` the same negotiation runs client-side against `document.cookie` and `navigator.languages` | client entry negotiates directly |
-| A12.5 | User-facing copy goes through `useTranslation()` under `--intl`. Developer-facing prose explaining the scaffold to whoever reads it stays as literals and out of the catalogs — the templates mark those passages | `t(...)` used for chrome and user copy |
-| A12.6 | Storybook exposes a locale toolbar via the `withI18n` decorator, so stories render in any catalog | decorator registered |
+| ID    | Rule                                                                                                                                                                                                              | Gate                                          |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| A12.1 | Locale config and message catalogs live in `src/i18n/` (one module per locale, re-exported from a barrel)                                                                                                         | `src/i18n/config.ts` exists                   |
+| A12.2 | Negotiation is a pure function over sources — cookie first, then the language list — never a runtime branch                                                                                                       | `negotiateLocale(config, sources)` call sites |
+| A12.3 | The server negotiates from the request (cookie, `Accept-Language`) and publishes the result on `__INITIAL_DATA__`; the client reuses it so hydration cannot mismatch                                              | server entry sets it, client entry reads it   |
+| A12.4 | Under `--rendering spa` the same negotiation runs client-side against `document.cookie` and `navigator.languages`                                                                                                 | client entry negotiates directly              |
+| A12.5 | User-facing copy goes through `useTranslation()` under `--intl`. Developer-facing prose explaining the scaffold to whoever reads it stays as literals and out of the catalogs — the templates mark those passages | `t(...)` used for chrome and user copy        |
+| A12.6 | Storybook exposes a locale toolbar via the `withI18n` decorator, so stories render in any catalog                                                                                                                 | decorator registered                          |
 
 ---
 
@@ -321,16 +323,16 @@ Present only when the application is scaffolded with `--intl`.
 The top bar is always present; the application shell and the dashboard are
 present unless the application is scaffolded with `--no-app-shell`.
 
-| ID | Rule | Gate |
-|----|------|------|
-| A13.1 | Layouts are router wrappers applied with `group()` in `src/routes.tsx`; a page never renders its own frame | no layout markup in a page |
-| A13.2 | Every page except the 404 sits under `topBarLayout`; under it a route takes exactly one page layout (`publicLayout` or `applicationLayout`) | each `group()` nests `topBarLayout` outside |
-| A13.3 | Each page region is one `.surface` — the top bar, the public column, the shell, the 404 — never nested | one `surface` class per layout root |
-| A13.4 | The application shell is `ApplicationShell` in `src/lib/`: the design system's `ApplicationLayout` with its `SideNavigation`, the page in `<main id="main-content">` | `ApplicationShell` renders both |
-| A13.5 | A dashboard page renders `ViewLayout` then `ContentLayout` inside the shell, with one `<Head>` | `ViewLayout` > `ContentLayout` per page |
-| A13.6 | The side navigation's tree is built once, by a hook in the domain (`useDashboardNavigation`); the breadcrumbs are projected from the same tree (`projectBreadcrumbs`), so a page never states its own position | one tree, two projections |
-| A13.7 | Design-system components that render their own links take `RouterLink` as `LinkComponent`, so navigation goes through the router | `LinkComponent={RouterLink}` |
-| A13.8 | A reader-facing string is stated once in a template, beside its catalog key, through the `msg`/`attr`/`str` helpers; with `--intl` it renders as a lookup, otherwise as English | no duplicated `intl` branches for plain strings |
+| ID    | Rule                                                                                                                                                                                                           | Gate                                            |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| A13.1 | Layouts are router wrappers applied with `group()` in `src/routes.tsx`; a page never renders its own frame                                                                                                     | no layout markup in a page                      |
+| A13.2 | Every page except the 404 sits under `topBarLayout`; under it a route takes exactly one page layout (`publicLayout` or `applicationLayout`)                                                                    | each `group()` nests `topBarLayout` outside     |
+| A13.3 | Each page region is one `.surface` — the top bar, the public column, the shell, the 404 — never nested                                                                                                         | one `surface` class per layout root             |
+| A13.4 | The application shell is `ApplicationShell` in `src/lib/`: the design system's `ApplicationLayout` with its `SideNavigation`, the page in `<main id="main-content">`                                           | `ApplicationShell` renders both                 |
+| A13.5 | A dashboard page renders `ViewLayout` then `ContentLayout` inside the shell, with one `<Head>`                                                                                                                 | `ViewLayout` > `ContentLayout` per page         |
+| A13.6 | The side navigation's tree is built once, by a hook in the domain (`useDashboardNavigation`); the breadcrumbs are projected from the same tree (`projectBreadcrumbs`), so a page never states its own position | one tree, two projections                       |
+| A13.7 | Design-system components that render their own links take `RouterLink` as `LinkComponent`, so navigation goes through the router                                                                               | `LinkComponent={RouterLink}`                    |
+| A13.8 | A reader-facing string is stated once in a template, beside its catalog key, through the `msg`/`attr`/`str` helpers; with `--intl` it renders as a lookup, otherwise as English                                | no duplicated `intl` branches for plain strings |
 
 ---
 

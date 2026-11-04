@@ -1,4 +1,5 @@
 ---
+
 name: anatomy-author
 description: Write component anatomy specifications using the Design System Anatomy DSL; also runs as a guided tutorial on a worked example
 ---
@@ -19,6 +20,7 @@ Write component anatomy specifications using the Design System Anatomy DSL. This
 ## Description
 
 The Anatomy DSL represents design system components as YAML trees with:
+
 - **Named nodes**: Components with URIs (`global.component.button`)
 - **Anonymous nodes**: Structural elements with roles (`content wrapper`)
 - **Edges**: Parent-child relationships with cardinality and slot names
@@ -295,6 +297,7 @@ Common prefixes (`ds:`, `cs:`, `dt:`) are applied automatically — no PREFIX pr
 needed.
 
 **Find components by tier:**
+
 ```bash
 pragma graph query "SELECT ?component ?name WHERE {
   ?component a ds:Component ;
@@ -304,6 +307,7 @@ pragma graph query "SELECT ?component ?name WHERE {
 ```
 
 **Find subcomponents of a component:**
+
 ```bash
 pragma graph query "SELECT ?sub ?name WHERE {
   ?sub a ds:Subcomponent ;
@@ -453,20 +457,20 @@ RelationProjection    (on a relation — the traversal filling the slot)
 
 URIs follow turtle conventions with dot-separated paths: `tier.type.name`
 
-| Symbol | Meaning | Example |
-|--------|---------|---------|
-| `.` | Path hierarchy | `global.component.button` |
-| `_` | Word boundary from PascalCase | `ChartLegend` → `chart_legend` |
-| `-` | Dot in compound names | `Card.Header` → `card-header` |
+| Symbol | Meaning                       | Example                        |
+| ------ | ----------------------------- | ------------------------------ |
+| `.`    | Path hierarchy                | `global.component.button`      |
+| `_`    | Word boundary from PascalCase | `ChartLegend` → `chart_legend` |
+| `-`    | Dot in compound names         | `Card.Header` → `card-header`  |
 
 **Examples:**
 
-| Component | URI |
-|-----------|-----|
-| `Button` | `global.component.button` |
+| Component        | URI                                  |
+| ---------------- | ------------------------------------ |
+| `Button`         | `global.component.button`            |
 | `Accordion.Item` | `global.subcomponent.accordion-item` |
-| `ChartLegend` | `global.subcomponent.chart_legend` |
-| `Card.Header` | `global.subcomponent.card-header` |
+| `ChartLegend`    | `global.subcomponent.chart_legend`   |
+| `Card.Header`    | `global.subcomponent.card-header`    |
 
 **Tiers and Types:**
 
@@ -474,13 +478,13 @@ The tier segment comes from the live tier set — run `pragma tier list` for the
 that exist today; never assign a tier from a remembered list. The type segment is one
 of the ontology's UIBlock classes:
 
-| Type | Use Case |
-|------|----------|
-| `component` | Standalone components |
-| `subcomponent` | Parts of components (user-instantiable) |
-| `pattern` | UX solutions combining components |
-| `layout` | Space-dividing containers |
-| `group` | Repeating series of ONE sibling block (the plural of a Component) |
+| Type           | Use Case                                                          |
+| -------------- | ----------------------------------------------------------------- |
+| `component`    | Standalone components                                             |
+| `subcomponent` | Parts of components (user-instantiable)                           |
+| `pattern`      | UX solutions combining components                                 |
+| `layout`       | Space-dividing containers                                         |
+| `group`        | Repeating series of ONE sibling block (the plural of a Component) |
 
 (`pragma block list` omits groups — read them from the graph:
 `pragma graph query "SELECT ?b ?name WHERE { ?b a ds:Group ; ds:name ?name }"`.)
@@ -489,17 +493,17 @@ of the ontology's UIBlock classes:
 
 Subcomponents must reference their parent in the name:
 
-| Labelled Name | Turtle URI |
-|---------------|------------|
-| `Timeline.Event` | `global.subcomponent.timeline-event` |
+| Labelled Name                 | Turtle URI                                         |
+| ----------------------------- | -------------------------------------------------- |
+| `Timeline.Event`              | `global.subcomponent.timeline-event`               |
 | `Timeline.ExpansionIndicator` | `global.subcomponent.timeline-expansion_indicator` |
 
 ### Named vs Anonymous
 
-| Type | Identifier | Use Case |
-|------|------------|----------|
-| Named | `uri` | User-instantiable components (things users compose in their code) |
-| Anonymous | `role` | Internal structural elements not directly instantiated by users |
+| Type      | Identifier | Use Case                                                          |
+| --------- | ---------- | ----------------------------------------------------------------- |
+| Named     | `uri`      | User-instantiable components (things users compose in their code) |
+| Anonymous | `role`     | Internal structural elements not directly instantiated by users   |
 
 **Rule of thumb:** Ask "Can/should a user write `<ComponentName>` in their code?" If yes, use `uri`. If no, use `role`.
 
@@ -515,7 +519,11 @@ edges:
       role: selection glyph
       styles:
         layout.position: absolute
-        appearance.background@selected: [surface.color.foreground.checkbox.checkmark, color.foreground.checkbox.checkmark]
+        appearance.background@selected:
+          [
+            surface.color.foreground.checkbox.checkmark,
+            color.foreground.checkbox.checkmark,
+          ]
     relation:
       cardinality: "1"
 ```
@@ -591,13 +599,13 @@ edges:
 
 ### Cardinality Notation
 
-| Notation | Meaning | Example Use |
-|----------|---------|-------------|
-| `"1"` or `"1..1"` | Exactly one (required) | Card body |
-| `"0..1"` | Zero or one (optional) | Card header, Card footer |
-| `"0..*"` | Zero or more | List items |
-| `"1..*"` | One or more | Accordion items (need at least one) |
-| `"2..5"` | Between 2 and 5 | Bounded repeats — live: KeyboardKeys' `"2..*"` (see the Group template below) |
+| Notation          | Meaning                | Example Use                                                                   |
+| ----------------- | ---------------------- | ----------------------------------------------------------------------------- |
+| `"1"` or `"1..1"` | Exactly one (required) | Card body                                                                     |
+| `"0..1"`          | Zero or one (optional) | Card header, Card footer                                                      |
+| `"0..*"`          | Zero or more           | List items                                                                    |
+| `"1..*"`          | One or more            | Accordion items (need at least one)                                           |
+| `"2..5"`          | Between 2 and 5        | Bounded repeats — live: KeyboardKeys' `"2..*"` (see the Group template below) |
 
 ### Switch Construct
 
@@ -612,7 +620,7 @@ edges:
       cases:
         - uri: <component-uri>
         - uri: <component-uri>
-        - uri: $custom   # reserved URI for user-provided components
+        - uri: $custom # reserved URI for user-provided components
     relation:
       cardinality: <cardinality>
       slotName: <slot>
@@ -620,11 +628,11 @@ edges:
 
 #### Discriminator Vocabulary
 
-| Value | Meaning | Use Case |
-|-------|---------|----------|
-| `props` | Consumer chooses via component props | `<Field type="checkbox">` renders Checkbox vs Radio |
-| `internal` | Component manages choice internally | AsyncButton shows Loading/Success/Error based on state (hypothetical — see the labelled example below) |
-| `override` | Consumer can replace with custom component | Timeline accepts custom Event component via slot |
+| Value      | Meaning                                    | Use Case                                                                                               |
+| ---------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `props`    | Consumer chooses via component props       | `<Field type="checkbox">` renders Checkbox vs Radio                                                    |
+| `internal` | Component manages choice internally        | AsyncButton shows Loading/Success/Error based on state (hypothetical — see the labelled example below) |
+| `override` | Consumer can replace with custom component | Timeline accepts custom Event component via slot                                                       |
 
 This enum is NORMATIVE. Live anatomies that predate it may carry qualified
 discriminators (`props/<prop>`) or a `with:` map in exploratory drafts — do not
@@ -668,7 +676,7 @@ The `$custom` URI indicates that the position accepts a user-provided component:
 ```yaml
 cases:
   - uri: global.subcomponent.timeline-event
-  - uri: $custom  # consumer can provide custom component
+  - uri: $custom # consumer can provide custom component
 ```
 
 #### Examples
@@ -737,32 +745,32 @@ places take one, and they mean different things.
 node:
   uri: global.component.entity-card
   projection:
-    on: Component              # type condition — this tree is a view over one Component
+    on: Component # type condition — this tree is a view over one Component
   edges:
     - node:
         uri: global.subcomponent.entity-card-header
         projection:
-          field: _meta.title   # this node RENDERS the entity's title
+          field: _meta.title # this node RENDERS the entity's title
       relation:
         cardinality: "1"
         slotName: header
     - node:
         uri: global.component.chip
         projection:
-          field: _meta.title   # relative to the TRAVERSED entity, not the root
+          field: _meta.title # relative to the TRAVERSED entity, not the root
       relation:
         cardinality: "0..*"
         slotName: tags
         projection:
-          field: documentationStages   # traversal populating the slot
+          field: documentationStages # traversal populating the slot
 ```
 
-| Position | Field | Means |
-|----------|-------|-------|
-| Root node | `on` | Establishes the data context — the anatomy is a view over one entity of that type. Children inherit it. |
-| Child node | `on` | Narrows the traversed entity's type — the analog of an inline fragment. |
-| Any node | `field` | This node renders that field's value. |
-| Relation | `field` | Traversal: the slot is populated from that field of the current context. Required, and never carries `on`. |
+| Position   | Field   | Means                                                                                                      |
+| ---------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| Root node  | `on`    | Establishes the data context — the anatomy is a view over one entity of that type. Children inherit it.    |
+| Child node | `on`    | Narrows the traversed entity's type — the analog of an inline fragment.                                    |
+| Any node   | `field` | This node renders that field's value.                                                                      |
+| Relation   | `field` | Traversal: the slot is populated from that field of the current context. Required, and never carries `on`. |
 
 A node projection needs at least one of `on` / `field`. Both are schema names:
 `on` matches `^[A-Z][A-Za-z0-9_]*$`, `field` is dot-delimited
@@ -801,11 +809,11 @@ node:
     icon: chevron-down
 ```
 
-| Aspect | Rule |
-|--------|------|
-| Keys | Prop names as defined on the component in the DS ontology (camelCase). |
-| Values | Scalars only — no token paths, no fallback arrays. Pins are values, not styles. |
-| Nodes | Named nodes ONLY. `props` under a `role` node is rejected by the parser and the schema. |
+| Aspect | Rule                                                                                    |
+| ------ | --------------------------------------------------------------------------------------- |
+| Keys   | Prop names as defined on the component in the DS ontology (camelCase).                  |
+| Values | Scalars only — no token paths, no fallback arrays. Pins are values, not styles.         |
+| Nodes  | Named nodes ONLY. `props` under a `role` node is rejected by the parser and the schema. |
 
 The DSL never DEFINES a prop surface — names, types and optionality live in the
 DS ontology (`ds:hasProperty`). A pin asserts one value at one position. Whether
@@ -815,10 +823,10 @@ graph: `pragma block lookup <Component>` lists the properties.
 **Icons are the canonical case**, and need no icon-specific construct. The icon
 is a component whose glyph is a required prop, so icon usage splits in two:
 
-| Case | Authoring |
-|------|-----------|
-| Consumer-filled icon slot (Button's `slotName: icon`) | Icon-component edge with a slot and NO pin — the consumer chooses the glyph, and the anatomy correctly says nothing. |
-| Component-intrinsic icon (accordion chevron, modal close ×, status glyph) | Icon-component node with `props: { icon: … }` — the spec fixes the glyph. |
+| Case                                                                      | Authoring                                                                                                            |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Consumer-filled icon slot (Button's `slotName: icon`)                     | Icon-component edge with a slot and NO pin — the consumer chooses the glyph, and the anatomy correctly says nothing. |
+| Component-intrinsic icon (accordion chevron, modal close ×, status glyph) | Icon-component node with `props: { icon: … }` — the spec fixes the glyph.                                            |
 
 **Pins are static by design.** A data-driven value is a projection
 (`projection: { field: … }`); a state-driven one is a `switch` whose cases pin
@@ -828,15 +836,15 @@ different values. If a value varies at runtime, it is not a pin.
 
 Common slot conventions:
 
-| Slot | Purpose |
-|------|---------|
+| Slot      | Purpose                                              |
+| --------- | ---------------------------------------------------- |
 | `default` | Main content area (React children, Vue default slot) |
-| `header` | Header content |
-| `footer` | Footer content |
-| `icon` | Icon placement |
-| `label` | Text label |
-| `media` | Image/video content |
-| `actions` | Action buttons |
+| `header`  | Header content                                       |
+| `footer`  | Footer content                                       |
+| `icon`    | Icon placement                                       |
+| `label`   | Text label                                           |
+| `media`   | Image/video content                                  |
+| `actions` | Action buttons                                       |
 
 **Convention:** `slotName: default` implies the main children slot (`children` in React, default slot in Vue).
 
@@ -855,18 +863,19 @@ styles:
   typography.color: [modifier.color.text, color.text]
   # A chain that ends in a literal keeps the literal: an implementation regenerated
   # from this anatomy has to be able to write the whole chain.
-  appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing, currentColor]
+  appearance.outline.color@focus:
+    [modifier.color.focusRing, color.focusRing, currentColor]
   # A primitive is a literal the implementation writes, and resolves against nothing.
   layout.type: inline-flex
 ```
 
 Three things that are **retired** and rejected by the parser:
 
-| Retired | Write instead |
-|---|---|
-| a slash path — `color/text/muted` | the symbol's dotted name — `color.text.muted` |
+| Retired                                | Write instead                                                                                       |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| a slash path — `color/text/muted`      | the symbol's dotted name — `color.text.muted`                                                       |
 | a trailing `?` marker — `shadow/card?` | nothing: a name no stratum declares is not written at all, and a `#` comment on the line records it |
-| `root` or `$root` inside a value | the dotted name without it — `color.text` |
+| `root` or `$root` inside a value       | the dotted name without it — `color.text`                                                           |
 
 **Consume the channel where the implementation reads the channel.** A modifier or
 surface family reaches a component through a channel variable, and the anatomy says so
@@ -954,13 +963,13 @@ A key outside the roster is rejected, and each key states what it admits:
 And each token-taking key admits ONE namespace, in three spellings — the family, its
 modifier channel and its surface channel:
 
-| Key family | Namespace it admits |
-|---|---|
-| `appearance.background`, `appearance.border.*.color`, `appearance.outline.color`, `typography.color` | `color.`, `modifier.color.`, `surface.color.` |
-| `appearance.border.width`, `appearance.outline.*`, `appearance.radius`, `layout.flex.basis`, `layout.offset.*`, `size.*`, `typography.letterSpacing`, `typography.size`, `typography.decoration.*` | `dimension.`, `modifier.dimension.`, `surface.dimension.` |
-| `spacing.gap*`, `spacing.internal.*`, `spacing.external.*` | `spacing.`, `modifier.spacing.`, `surface.spacing.` |
-| `typography.font`, `typography.fontFamily`, `typography.lineHeight`, `typography.weight` | `typography.`, `modifier.typography.`, `surface.typography.` |
-| `motion.duration`, `motion.easing` | `motion.`, `modifier.motion.`, `surface.motion.` |
+| Key family                                                                                                                                                                                         | Namespace it admits                                          |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `appearance.background`, `appearance.border.*.color`, `appearance.outline.color`, `typography.color`                                                                                               | `color.`, `modifier.color.`, `surface.color.`                |
+| `appearance.border.width`, `appearance.outline.*`, `appearance.radius`, `layout.flex.basis`, `layout.offset.*`, `size.*`, `typography.letterSpacing`, `typography.size`, `typography.decoration.*` | `dimension.`, `modifier.dimension.`, `surface.dimension.`    |
+| `spacing.gap*`, `spacing.internal.*`, `spacing.external.*`                                                                                                                                         | `spacing.`, `modifier.spacing.`, `surface.spacing.`          |
+| `typography.font`, `typography.fontFamily`, `typography.lineHeight`, `typography.weight`                                                                                                           | `typography.`, `modifier.typography.`, `surface.typography.` |
+| `motion.duration`, `motion.easing`                                                                                                                                                                 | `motion.`, `modifier.motion.`, `surface.motion.`             |
 
 Read the table as a summary of the roster, not as a substitute for it: where the two
 differ the roster is right and this table is stale. Note in particular that several
@@ -989,20 +998,21 @@ takes `either`, the choice is not taste: bind the symbol where the implementatio
 reads a variable, and write the literal where it writes a literal.
 
 #### Layout — primitives throughout
+
 ```yaml
-layout.type: inline-flex                  # the display type, as CSS spells it
+layout.type: inline-flex # the display type, as CSS spells it
 layout.direction: column
-layout.align: center                      # align-items, on the node that is the container
-layout.alignSelf: center                  # align-self, on the child that overrides it
-layout.alignContent: center               # align-content, on the container
+layout.align: center # align-items, on the node that is the container
+layout.alignSelf: center # align-self, on the child that overrides it
+layout.alignContent: center # align-content, on the container
 layout.justify: space-between
 layout.wrap: wrap
 layout.overflow: hidden
 layout.flex.grow: 1
-layout.flex.basis: 20rem                  # either: a dimension symbol or a literal
+layout.flex.basis: 20rem # either: a dimension symbol or a literal
 layout.position: relative
 layout.grid.columns: repeat(2, 1fr)
-layout.offset.top: dimension.100          # either: dimension.*
+layout.offset.top: dimension.100 # either: dimension.*
 ```
 
 **`layout.align` is `align-items` and nothing else.** The roster carries three keys
@@ -1015,13 +1025,14 @@ both take a primitive. Take the CSS property from the stylesheet and map it to t
 of the same name.
 
 #### Spacing — a `spacing.*` role, or the `dimension.*` the stylesheet reads
+
 ```yaml
-spacing.internal.inline.start: spacing.inset.action.inline   # padding, one side
+spacing.internal.inline.start: spacing.inset.action.inline # padding, one side
 spacing.internal.block.start: spacing.inset.surface.block
-spacing.external.block.end: spacing.inset.surface.block      # margin, one side
-spacing.gap: spacing.gap.mark.inline                         # gap between children
-spacing.gap.block: spacing.gap.group.block                   # token only
-spacing.internal.inline.end: dimension.200   # --dimension-200, read directly
+spacing.external.block.end: spacing.inset.surface.block # margin, one side
+spacing.gap: spacing.gap.mark.inline # gap between children
+spacing.gap.block: spacing.gap.group.block # token only
+spacing.internal.inline.end: dimension.200 # --dimension-200, read directly
 ```
 
 **A symmetric CSS shorthand becomes both keys, written out.** There is no key for
@@ -1039,45 +1050,51 @@ spacing.internal.inline.end: spacing.inset.action.inline
 ```
 
 #### Appearance — colour and dimension
+
 ```yaml
-appearance.background: [modifier.color.foreground.primary, color.foreground.primary]
+appearance.background:
+  [modifier.color.foreground.primary, color.foreground.primary]
 appearance.border.color: [modifier.color.border, color.border]
 appearance.border.width: dimension.stroke.thickness.medium
-appearance.border.style: solid            # primitive
+appearance.border.style: solid # primitive
 appearance.radius: dimension.radius.medium
-appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing, currentColor]
+appearance.outline.color@focus:
+  [modifier.color.focusRing, color.focusRing, currentColor]
 appearance.outline.width@focus: dimension.stroke.thickness.large
-appearance.opacity: 0.5                   # primitive
+appearance.opacity: 0.5 # primitive
 ```
 
 #### Size — a dimension symbol, or a literal where the size is structural
+
 ```yaml
-size.width: 100%                          # either: a literal is right here
+size.width: 100% # either: a literal is right here
 size.max.width: 60rem
-size.min.height: dimension.900            # token only
-size.inline: dimension.400                # token only
+size.min.height: dimension.900 # token only
+size.inline: dimension.400 # token only
 ```
 
 #### Typography
+
 ```yaml
-typography.font: typography.text.primary  # the composite
+typography.font: typography.text.primary # the composite
 typography.size: dimension.size.fontSize.200
 typography.weight: typography.weight.medium
 typography.lineHeight: typography.text.primary
 typography.color: [modifier.color.text, color.text]
 typography.letterSpacing: dimension.letterSpacing.wide
-typography.align: center                  # primitive
+typography.align: center # primitive
 ```
 
 #### Interaction and motion
+
 ```yaml
-interaction.cursor: pointer               # primitive
-interaction.select: none                  # primitive
-motion.property: background-color         # primitive
+interaction.cursor: pointer # primitive
+interaction.select: none # primitive
+motion.property: background-color # primitive
 # No stratum declares a motion.* symbol yet, so a duration or an easing the
 # stylesheet reads through a variable is not bound at all — a `#` comment on the
 # node says what it reads. A literal the stylesheet writes literally is written.
-motion.easing: ease-in-out                # either: a literal until the family lands
+motion.easing: ease-in-out # either: a literal until the family lands
 ```
 
 ### Interaction States (`@state`)
@@ -1091,21 +1108,21 @@ styles:
   interaction.cursor@disabled: not-allowed
   appearance.background: color.foreground.primary
   appearance.background@hover: color.foreground.primary.hover
-  appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing]   # a channel may exist only in a state
+  appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing] # a channel may exist only in a state
 ```
 
 **Vocabulary — closed, registry-governed.** Eight states, and only these:
 
-| State | Meaning | What the implementation keys off |
-|-------|---------|----------------------------------|
-| `hover` | Pointer over the element | `:hover` |
-| `active` | Being pressed or activated (MD3 *pressed*, Spectrum *down*) | `:active` |
-| `disabled` | Interaction unavailable | `:disabled`, `aria-disabled` |
-| `focus` | Keyboard focus indication | `:focus-visible` on the web |
-| `selected` | Chosen within a set | `aria-selected`, and `:checked` where the control is one of a set |
-| `expanded` | A disclosure is open | `[open]`, `aria-expanded` |
-| `indeterminate` | A checkbox or a progress is mixed, on neither setting | `:indeterminate`, `aria-checked="mixed"` |
-| `invalid` | Validation has failed | `:invalid`, `aria-invalid` |
+| State           | Meaning                                                     | What the implementation keys off                                  |
+| --------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
+| `hover`         | Pointer over the element                                    | `:hover`                                                          |
+| `active`        | Being pressed or activated (MD3 _pressed_, Spectrum _down_) | `:active`                                                         |
+| `disabled`      | Interaction unavailable                                     | `:disabled`, `aria-disabled`                                      |
+| `focus`         | Keyboard focus indication                                   | `:focus-visible` on the web                                       |
+| `selected`      | Chosen within a set                                         | `aria-selected`, and `:checked` where the control is one of a set |
+| `expanded`      | A disclosure is open                                        | `[open]`, `aria-expanded`                                         |
+| `indeterminate` | A checkbox or a progress is mixed, on neither setting       | `:indeterminate`, `aria-checked="mixed"`                          |
+| `invalid`       | Validation has failed                                       | `:invalid`, `aria-invalid`                                        |
 
 The last three are the newest, and how they arrived is the rule: candidates
 (`checked`, `visited`, `dragged`, `pending`, `error`, `read-only`) enter through
@@ -1174,19 +1191,19 @@ node:
     - node:
         uri: global.subcomponent.card-header
       relation:
-        cardinality: "0..1"        # optional
+        cardinality: "0..1" # optional
         slotName: header
 
     - node:
         uri: global.subcomponent.card-content
       relation:
-        cardinality: "1..1"        # required
+        cardinality: "1..1" # required
         slotName: default
 
     - node:
         uri: global.subcomponent.card-footer
       relation:
-        cardinality: "0..1"        # optional
+        cardinality: "0..1" # optional
         slotName: footer
 ```
 
@@ -1207,7 +1224,7 @@ node:
     - node:
         uri: global.subcomponent.accordion-item
       relation:
-        cardinality: "1..*"       # one or more items
+        cardinality: "1..*" # one or more items
         slotName: default
 ```
 
@@ -1272,7 +1289,7 @@ node:
     - node:
         uri: global.component.keyboard_key
       relation:
-        cardinality: "2..*"       # a group needs at least two keys
+        cardinality: "2..*" # a group needs at least two keys
         slotName: default
 ```
 
@@ -1289,7 +1306,7 @@ node:
 
   edges:
     - node:
-        role: backdrop overlay    # anonymous - no uri
+        role: backdrop overlay # anonymous - no uri
         styles:
           layout.type: block
           appearance.background: color.background.contrasted
@@ -1298,7 +1315,7 @@ node:
         cardinality: "1..1"
 
     - node:
-        role: content container   # anonymous wrapper
+        role: content container # anonymous wrapper
         styles:
           layout.type: flex
           size.max.width: 40rem
@@ -1413,6 +1430,7 @@ Two branches:
 ### 2. Gather Structural Requirements
 
 Ask:
+
 - What are the main parts? (header, body, footer, icon, label)
 - Which parts are required vs optional?
 - Can any parts repeat?
@@ -1446,18 +1464,19 @@ segment comes from the live tier set — run `pragma tier list` and pick from wh
 answers, never from a remembered list; the type segment is one of the ontology's
 UIBlock classes:
 
-| Question | Answer | Result |
-|----------|--------|--------|
-| Is it universal? | Yes | `global.component.{name}` |
-| Is it app-specific? | Yes | `{apps_tier}.component.{name}` — the app's own tier from `pragma tier list` (e.g. `apps_lxd`) |
-| Is it a subpart? | Yes | `{tier}.subcomponent.{parent}-{part}` |
-| Is it a UX solution? | Yes | `{tier}.pattern.{name}` |
-| Does it divide space? | Yes | `{tier}.layout.{name}` |
-| Is it many instances of ONE sibling block laid out together? | Yes | `{tier}.group.{name}` |
+| Question                                                     | Answer | Result                                                                                        |
+| ------------------------------------------------------------ | ------ | --------------------------------------------------------------------------------------------- |
+| Is it universal?                                             | Yes    | `global.component.{name}`                                                                     |
+| Is it app-specific?                                          | Yes    | `{apps_tier}.component.{name}` — the app's own tier from `pragma tier list` (e.g. `apps_lxd`) |
+| Is it a subpart?                                             | Yes    | `{tier}.subcomponent.{parent}-{part}`                                                         |
+| Is it a UX solution?                                         | Yes    | `{tier}.pattern.{name}`                                                                       |
+| Does it divide space?                                        | Yes    | `{tier}.layout.{name}`                                                                        |
+| Is it many instances of ONE sibling block laid out together? | Yes    | `{tier}.group.{name}`                                                                         |
 
 ### 4. Define Edges
 
 For each child:
+
 1. Is it named (in DS) or anonymous (structural wrapper)?
 2. What is its cardinality?
 3. Does it map to a slot?
@@ -1465,6 +1484,7 @@ For each child:
 ### 5. Apply Styles
 
 For each node, consider:
+
 - **Layout**: How is content arranged?
 - **Spacing**: Internal padding, gaps between children
 - **Appearance**: Background, borders, shadows, radius
@@ -1473,6 +1493,7 @@ For each node, consider:
 - **Interaction**: Cursor, transitions (for interactive nodes)
 
 **Rule of thumb**:
+
 - Structural values (`flex`, `center`, `100%`) = invariant
 - A symbol (spacing.inset.surface.block) = themeable
 
@@ -1520,6 +1541,7 @@ So read the list below as the author's own pass, and keep its items honest about
 kind they are: the ones the gate will confirm, and the ones only a reader can.
 
 Check your anatomy against:
+
 - [ ] Root node is named (has `uri`)
 - [ ] All cardinalities are valid notation
 - [ ] Every style key is in the roster — the gate confirms this one
@@ -1567,6 +1589,7 @@ When creating an anatomy, respond with:
 **Tier:** {tier} - {rationale}
 
 ### Structure Overview
+
 - {Part 1} (required/optional)
 - {Part 2} (required/optional)
 - ...
@@ -1578,10 +1601,12 @@ When creating an anatomy, respond with:
 \`\`\`
 
 ### Notes
+
 - {Design decision 1}
 - {Design decision 2}
 
 ### Next Steps
+
 1. Land the file at `anatomies/authored/{tier}/{uri}.yaml` in the design-system
    repository — never under `data/`, which the pull sync regenerates
 2. `bun src/cli.ts anatomies validate --authored` — exit 0, and no findings
@@ -1634,11 +1659,13 @@ This specification presents a DSL to represent design system anatomies, providin
 ### Requirements
 
 **General DSL Requirements:**
+
 - The DSL MUST optimize for readability
 - The DSL MUST be easy to get started with and use a familiar language
 - The scope of the DSL MUST be minimized to cover only the strict necessary - additional specification information being covered in the schema
 
 **Modelling Requirements:**
+
 - The children of a node MUST be modelled through a reified relation for annotation purposes
 - The DSL MUST support anonymous nodes (nodes that are not named components). In this case, the DSL should support role annotations
 - The DSL MUST support reified annotations of cardinality
@@ -1835,11 +1862,13 @@ interface AnatomySpec {
 ### Language Choice
 
 YAML is chosen as the markup language for its:
+
 - Indentation-based structure matching tree hierarchies
 - Readability over JSON's verbosity
 - Wide adoption and tooling support
 
 Alternatives considered and rejected:
+
 - JSON: Too verbose for deep nesting
 - TOML: Difficulty with deeply nested maps
 - SDLang/KDL: Promising but lacking wide adoption
@@ -1913,6 +1942,7 @@ node:
 ### Future Work
 
 The following features would require additional work:
+
 - Representation of related nodes displayed in portals
 - Representation of conditional display
 - Inheritance reference for styles (e.g., "NetworkCard inherits from Card")

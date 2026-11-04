@@ -12,7 +12,8 @@ node:
     layout.type: inline-flex
     layout.align: center
     spacing.internal.inline.start: spacing.inset.action.inline
-    appearance.background: [modifier.color.foreground.primary, color.foreground.primary]
+    appearance.background:
+      [modifier.color.foreground.primary, color.foreground.primary]
     appearance.radius: dimension.radius.medium
   edges:
     - node:
@@ -63,7 +64,7 @@ lens component carries its fragment.
 node:
   uri: global.component.entity-card
   projection:
-    on: Component            # type condition — the tree is a view over one Component
+    on: Component # type condition — the tree is a view over one Component
   edges:
     - node:
         uri: global.subcomponent.entity-card-header
@@ -80,7 +81,7 @@ node:
         cardinality: "0..*"
         slotName: tags
         projection:
-          field: documentationStages  # traversal populating the slot
+          field: documentationStages # traversal populating the slot
 ```
 
 Semantics:
@@ -122,16 +123,25 @@ example above reads as:
 
 ```graphql
 fragment EntityCardAnatomy on Component {
-  _meta { title }                        # header node
-  documentationStages {                  # tags relation (connection per SDL)
-    edges { node { _meta { title } } }   #   each chip
+  _meta {
+    title
+  } # header node
+  documentationStages {
+    # tags relation (connection per SDL)
+    edges {
+      node {
+        _meta {
+          title
+        }
+      }
+    } #   each chip
   }
 }
 ```
 
 The derivation rules (type conditions, dot-path expansion, connection
 unwrapping, inline fragments) are specified in the API reference §3.10
-*Derived fragment*; a worked gallery of every projection form is in §13, and
+_Derived fragment_; a worked gallery of every projection form is in §13, and
 `examples/yaml/entity-card.anatomy.yaml` is the golden example.
 
 ## Props (pinned values)
@@ -167,7 +177,7 @@ Semantics:
   name in the icon set), are consumer-side checks against the DS graph — the
   same posture as projection checking against the provider SDL.
 - Values are scalars, coerced to strings — no symbols and no fallback lists: a pin is a value, not a style.
-  Pins are *values with meaning*, not styles: a theme may reskin what
+  Pins are _values with meaning_, not styles: a theme may reskin what
   `chevron-down` looks like (asset layer), but never remap which glyph an
   anatomy means.
 - A **data-driven** value is a projection (`projection: { field: … }`), and a
@@ -188,19 +198,21 @@ key is the default state:
 styles:
   interaction.cursor: pointer
   interaction.cursor@disabled: not-allowed
-  appearance.background: [modifier.color.foreground.primary, color.foreground.primary]
+  appearance.background:
+    [modifier.color.foreground.primary, color.foreground.primary]
   appearance.background@hover: color.foreground.primary.hover
   appearance.background@disabled: color.foreground.primary.disabled
   # A slot may read a channel only in one state.
-  appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing, currentColor]
+  appearance.outline.color@focus:
+    [modifier.color.focusRing, color.focusRing, currentColor]
 ```
 
 The state vocabulary is **closed and registry-governed**: `hover`, `active`,
 `focus`, `disabled`, `selected`, `expanded`, `indeterminate`, `invalid`.
 Naming follows the industry consensus where systems diverge — `active`
-subsumes Material's *pressed* and Spectrum's *down* (and matches Canonical's
+subsumes Material's _pressed_ and Spectrum's _down_ (and matches Canonical's
 own token tree); `focus` maps to CSS `:focus-visible` (Spectrum's
-*key-focus*); `expanded` is a disclosure's open state (`[open]`,
+_key-focus_); `expanded` is a disclosure's open state (`[open]`,
 `aria-expanded`); `indeterminate` is a mixed checkbox or progress bar, on
 neither setting; `invalid` is a failed validation (`:invalid`,
 `aria-invalid`). `@default` is not admitted — absence is the default.
@@ -211,7 +223,7 @@ The boundaries that keep "state machines out of scope" true:
 
 - **States hold style values only.** A state that changes the tree is not a
   state — it is a `switch on: internal` case (async-button's
-  idle/loading/success/error). The DSL declares appearance *per* state, never
+  idle/loading/success/error). The DSL declares appearance _per_ state, never
   transitions, triggers, or logic.
 - **Gate vs appearance**: `props: { disabled: true }` (or the consumer) puts
   a node in the disabled state; `…@disabled` styles say how it looks there.
@@ -336,20 +348,20 @@ Pure function. Takes a `Specification`, returns a Turtle (RDF) string. No I/O, n
 
 All types mirror the [OWL ontology](definitions/ontology.ttl) exactly:
 
-| Type | Description |
-|------|-------------|
-| `Specification` | Root — contains exactly one `NamedNode` |
-| `NamedNode` | Design system entity with a `uri` |
-| `AnonymousNode` | Structural element with a `role` |
-| `Node` | `NamedNode \| AnonymousNode` (discriminated on `type`) |
-| `Edge` | Reified parent→child relationship |
-| `Relation` | Cardinality and optional slot name |
-| `Style` | Reified key-value tuple, with an optional interaction `state` dimension |
-| `Switch` | Polymorphic position (discriminator: `props \| internal \| override`) |
-| `SwitchCase` | One alternative within a switch |
-| `Projection` | Fragment-style graph binding on a node (`on` type condition and/or `field` path) |
-| `RelationProjection` | Traversal populating a slot (`field` required) |
-| `Prop` | Pinned prop value on a named node (reified name-value tuple) |
+| Type                 | Description                                                                      |
+| -------------------- | -------------------------------------------------------------------------------- |
+| `Specification`      | Root — contains exactly one `NamedNode`                                          |
+| `NamedNode`          | Design system entity with a `uri`                                                |
+| `AnonymousNode`      | Structural element with a `role`                                                 |
+| `Node`               | `NamedNode \| AnonymousNode` (discriminated on `type`)                           |
+| `Edge`               | Reified parent→child relationship                                                |
+| `Relation`           | Cardinality and optional slot name                                               |
+| `Style`              | Reified key-value tuple, with an optional interaction `state` dimension          |
+| `Switch`             | Polymorphic position (discriminator: `props \| internal \| override`)            |
+| `SwitchCase`         | One alternative within a switch                                                  |
+| `Projection`         | Fragment-style graph binding on a node (`on` type condition and/or `field` path) |
+| `RelationProjection` | Traversal populating a slot (`field` required)                                   |
+| `Prop`               | Pinned prop value on a named node (reified name-value tuple)                     |
 
 ## Repository Structure
 
@@ -397,9 +409,9 @@ Projections and pinned props reuse the same reification idiom (`hasProjection [ 
 
 ## Specification Status
 
-| Index   | Title                    | Status         |
-|---------|--------------------------|----------------|
-| [WD404](https://docs.google.com/document/d/1eFr-SNsAZyidnZzpWp1Jeegiat_SSM7mOW_G8p3nXo8/edit?tab=t.pndvuecem8cf)   | Anatomy DSL              | Approved       |
-| [WD404.1](https://docs.google.com/document/d/1eFr-SNsAZyidnZzpWp1Jeegiat_SSM7mOW_G8p3nXo8/edit?tab=t.pndvuecem8cf) | Anatomy DSL — Addendum 1 | Pending Review |
-| WD404.2 | Anatomy DSL — Projections | Draft (this repository) |
-| WD404.3 | Anatomy DSL — Prop pinning | Draft (this repository) |
+| Index                                                                                                              | Title                      | Status                  |
+| ------------------------------------------------------------------------------------------------------------------ | -------------------------- | ----------------------- |
+| [WD404](https://docs.google.com/document/d/1eFr-SNsAZyidnZzpWp1Jeegiat_SSM7mOW_G8p3nXo8/edit?tab=t.pndvuecem8cf)   | Anatomy DSL                | Approved                |
+| [WD404.1](https://docs.google.com/document/d/1eFr-SNsAZyidnZzpWp1Jeegiat_SSM7mOW_G8p3nXo8/edit?tab=t.pndvuecem8cf) | Anatomy DSL — Addendum 1   | Pending Review          |
+| WD404.2                                                                                                            | Anatomy DSL — Projections  | Draft (this repository) |
+| WD404.3                                                                                                            | Anatomy DSL — Prop pinning | Draft (this repository) |

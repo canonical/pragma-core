@@ -1,4 +1,5 @@
 ---
+
 name: design-auditor
 description: Audit design system coverage, consistency, and quality; also runs as a guided tutorial on a worked example
 ---
@@ -193,18 +194,23 @@ becomes a finding.
 ## Audit Dimensions
 
 ### 1. Coverage Audit
+
 What's documented vs. what's missing?
 
 ### 2. Consistency Audit
+
 Are similar components structured similarly?
 
 ### 3. Quality Audit
+
 How complete is the documentation?
 
 ### 4. Usage Audit
+
 What's connected vs. orphaned?
 
 ### 5. Standards Audit
+
 Do the implementations conform to the live code standards?
 
 An audit that stops at the graph misses the code. For each audited implementation,
@@ -218,6 +224,7 @@ proposed change to the standard — the standards are open to contribution, and 
 are where their gaps surface.
 
 ### 6. Token Audit
+
 Which symbols exist, which families rebind them, and which blocks consume them?
 
 The token graph is queryable, and a coverage question about tokens is answered there
@@ -480,25 +487,29 @@ Build the report from the live query results, structured as:
 ```markdown
 ## Design System Audit Report
 
-**Generated:** {date}   **Scope:** {tiers/dimensions agreed at the scope gate}
+**Generated:** {date} **Scope:** {tiers/dimensions agreed at the scope gate}
 
 ### Executive Summary
+
 Counts per UIBlock type and per tier, documentation coverage percentages, and the
 headline findings — with each "concern" label traced to a threshold the team agreed,
 not an imported one.
 
 ### Findings per dimension
+
 Coverage / Quality / Consistency / Usage — for each: the numbers, the specific blocks
 affected, and the open question or recommendation. Route each actionable gap to its
 skill: missing spec → specify-component / specify-pattern; missing anatomy →
 anatomy-author.
 
 ### Recommendations
+
 Prioritized WITH the person (decision gate 3). Mark which items are data-driven
 (e.g. "12 components have a blank summary") and which are judgment
 (e.g. "consider promoting X to global").
 
 ### Appendix
+
 The raw query results the findings rest on, in collapsible sections.
 ```
 
@@ -526,13 +537,13 @@ The raw query results the findings rest on, in collapsible sections.
 
 ### Targeted Audit
 
-| Concern | Queries to Run |
-|---------|----------------|
-| "Are we missing patterns?" | Coverage by tier, types distribution |
-| "Is documentation complete?" | All Quality queries |
-| "Are modifiers consistent?" | Modifier Family Usage, Components Without Modifiers |
-| "Any orphaned elements?" | Orphaned Subcomponents |
-| "What needs promotion?" | Promotion Candidates |
+| Concern                      | Queries to Run                                      |
+| ---------------------------- | --------------------------------------------------- |
+| "Are we missing patterns?"   | Coverage by tier, types distribution                |
+| "Is documentation complete?" | All Quality queries                                 |
+| "Are modifiers consistent?"  | Modifier Family Usage, Components Without Modifiers |
+| "Any orphaned elements?"     | Orphaned Subcomponents                              |
+| "What needs promotion?"      | Promotion Candidates                                |
 
 ## Interpreting Results
 

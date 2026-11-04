@@ -5,7 +5,7 @@ A code generator framework where generators are pure functions that return data,
 Write a generator once. Run it for real. Preview with `--dry-run`. Test without mocks. Same code, different interpreters.
 
 ```typescript
-generate: (answers) => writeFile(`src/${answers.name}.ts`, code)
+generate: (answers) => writeFile(`src/${answers.name}.ts`, code);
 // Returns a Task describing "write this file"
 // Not a file write. Data.
 ```
@@ -56,16 +56,16 @@ Every prompt becomes a CLI flag. Boolean prompts with `default: true` use the `-
 
 ### CLI Options
 
-| Flag | Description |
-|------|-------------|
-| `-d, --dry-run` | Preview without writing files |
-| `-y, --yes` | Skip confirmation prompts and preview |
-| `-v, --verbose` | Show debug output |
-| `--show-files` | Show file contents in dry-run |
-| `-l, --llm` | LLM mode: dry-run with markdown output, no prompts, no stamps |
-| `--format <type>` | Output format: `json` (implies dry-run, no prompts, no stamps) |
-| `--no-preview` | Skip the file preview |
-| `--no-generated-stamp` | Disable generated file stamp comments |
+| Flag                   | Description                                                    |
+| ---------------------- | -------------------------------------------------------------- |
+| `-d, --dry-run`        | Preview without writing files                                  |
+| `-y, --yes`            | Skip confirmation prompts and preview                          |
+| `-v, --verbose`        | Show debug output                                              |
+| `--show-files`         | Show file contents in dry-run                                  |
+| `-l, --llm`            | LLM mode: dry-run with markdown output, no prompts, no stamps  |
+| `--format <type>`      | Output format: `json` (implies dry-run, no prompts, no stamps) |
+| `--no-preview`         | Skip the file preview                                          |
+| `--no-generated-stamp` | Disable generated file stamp comments                          |
 
 **LLM Usage:** Summon treats LLMs as first-class CLI users. Use `--llm` for structured markdown output or `--format json` for machine-parseable JSON. Both imply `--dry-run --yes --show-files --no-generated-stamp`:
 
@@ -115,6 +115,7 @@ summon component react --comp<TAB>  # Completes to: --component-path
 ```
 
 Completion features:
+
 - **Generator names** - Navigate the command tree with TAB
 - **Generator flags** - All prompts become completable flags
 - **Confirm prompts** - Shows `--no-X` for prompts with `default: true`
@@ -175,7 +176,14 @@ interface ModuleAnswers {
 
 // src/module/generator.ts
 import type { GeneratorDefinition } from "@canonical/summon";
-import { debug, info, writeFile, mkdir, sequence_, when } from "@canonical/summon";
+import {
+  debug,
+  info,
+  writeFile,
+  mkdir,
+  sequence_,
+  when,
+} from "@canonical/summon";
 import type { ModuleAnswers } from "./types.js";
 
 export const generator = {
@@ -188,25 +196,38 @@ export const generator = {
   prompts: [
     // positional: true allows `summon module src/utils` instead of `--name=src/utils`
     { name: "name", type: "text", message: "Module name:", positional: true },
-    { name: "withTests", type: "confirm", message: "Include tests?", default: true },
+    {
+      name: "withTests",
+      type: "confirm",
+      message: "Include tests?",
+      default: true,
+    },
   ],
 
-  generate: (answers) => sequence_([
-    info(`Creating module: ${answers.name}`),
+  generate: (answers) =>
+    sequence_([
+      info(`Creating module: ${answers.name}`),
 
-    debug("Creating module directory"),
-    mkdir(`src/${answers.name}`),
+      debug("Creating module directory"),
+      mkdir(`src/${answers.name}`),
 
-    debug("Creating index file"),
-    writeFile(`src/${answers.name}/index.ts`, `export const ${answers.name} = {};\n`),
+      debug("Creating index file"),
+      writeFile(
+        `src/${answers.name}/index.ts`,
+        `export const ${answers.name} = {};\n`,
+      ),
 
-    when(answers.withTests, debug("Creating test file")),
-    when(answers.withTests,
-      writeFile(`src/${answers.name}/index.test.ts`, `test("works", () => {});\n`)
-    ),
+      when(answers.withTests, debug("Creating test file")),
+      when(
+        answers.withTests,
+        writeFile(
+          `src/${answers.name}/index.test.ts`,
+          `test("works", () => {});\n`,
+        ),
+      ),
 
-    info(`Created module at src/${answers.name}`),
-  ]),
+      info(`Created module at src/${answers.name}`),
+    ]),
 } as const satisfies GeneratorDefinition<ModuleAnswers>;
 
 // src/module/index.ts (barrel)
@@ -218,7 +239,7 @@ import type { AnyGenerator } from "@canonical/summon";
 import { generator as moduleGenerator } from "./module/index.js";
 
 export const generators = {
-  "module": moduleGenerator,
+  module: moduleGenerator,
 } as const satisfies Record<string, AnyGenerator>;
 ```
 
@@ -310,23 +331,27 @@ A monad is a design pattern for chaining operations that have some context (like
 ```typescript
 // Promise (async context)
 fetchUser(id)
-  .then(user => fetchOrders(user.id))    // chain
-  .then(orders => orders.length)          // transform
-  .catch(handleError);                    // recover
+  .then((user) => fetchOrders(user.id)) // chain
+  .then((orders) => orders.length) // transform
+  .catch(handleError); // recover
 
 // Task (effect context)
 task(readFile("config.json"))
-  .map(content => JSON.parse(content))    // transform
-  .flatMap(config => writeFile(           // chain
-    config.outputPath,
-    generateCode(config)
-  ))
-  .recover(err => pure(defaultConfig));   // recover
+  .map((content) => JSON.parse(content)) // transform
+  .flatMap((config) =>
+    writeFile(
+      // chain
+      config.outputPath,
+      generateCode(config),
+    ),
+  )
+  .recover((err) => pure(defaultConfig)); // recover
 ```
 
 ### The Task Type
 
 `Task<A>` represents a computation that:
+
 - Describes effects (file I/O, shell commands, etc.)
 - Eventually produces a value of type `A`
 - May fail with an error
@@ -348,48 +373,53 @@ import { task, pure } from "@canonical/summon";
 
 // Build a pipeline
 const pipeline = task(readFile("input.txt"))
-  .map(content => content.toUpperCase())           // Transform the value
-  .flatMap(upper => writeFile("output.txt", upper)) // Chain another effect
-  .andThen(info("Done!"))                          // Sequence (ignore previous value)
-  .recover(err => pure(void 0));                   // Handle errors
+  .map((content) => content.toUpperCase()) // Transform the value
+  .flatMap((upper) => writeFile("output.txt", upper)) // Chain another effect
+  .andThen(info("Done!")) // Sequence (ignore previous value)
+  .recover((err) => pure(void 0)); // Handle errors
 
 // pipeline is still just data — nothing has executed yet
 ```
 
 ### Key Operations
 
-| Operation | Description | Example |
-|-----------|-------------|---------|
-| `pure(value)` | Wrap a value in a Task | `pure(42)` |
-| `map(fn)` | Transform the result | `.map(x => x * 2)` |
-| `flatMap(fn)` | Chain with another Task | `.flatMap(x => writeFile(...))` |
-| `andThen(task)` | Sequence, discard previous | `.andThen(info("next"))` |
-| `recover(fn)` | Handle errors | `.recover(e => pure(default))` |
-| `tap(fn)` | Side effect, keep value | `.tap(x => debug(x))` |
+| Operation       | Description                | Example                         |
+| --------------- | -------------------------- | ------------------------------- |
+| `pure(value)`   | Wrap a value in a Task     | `pure(42)`                      |
+| `map(fn)`       | Transform the result       | `.map(x => x * 2)`              |
+| `flatMap(fn)`   | Chain with another Task    | `.flatMap(x => writeFile(...))` |
+| `andThen(task)` | Sequence, discard previous | `.andThen(info("next"))`        |
+| `recover(fn)`   | Handle errors              | `.recover(e => pure(default))`  |
+| `tap(fn)`       | Side effect, keep value    | `.tap(x => debug(x))`           |
 
 ### Why Monads for Generators?
 
 1. **Composable** — Small tasks combine into complex workflows
 2. **Predictable** — Errors propagate without explicit handling at each step
 3. **Testable** — The pipeline is data; inspect it without running effects
-4. **Declarative** — Describe *what* to do, not *how* to do it
+4. **Declarative** — Describe _what_ to do, not _how_ to do it
 
 ```typescript
 // Complex workflow, reads like a recipe
 const scaffoldFeature = (name: string) =>
   task(mkdir(`src/features/${name}`))
-    .andThen(template({
-      source: "templates/feature.ts.ejs",
-      dest: `src/features/${name}/index.ts`,
-      vars: { name },
-    }))
-    .andThen(when(config.withTests,
+    .andThen(
       template({
-        source: "templates/test.ts.ejs",
-        dest: `src/features/${name}/index.test.ts`,
+        source: "templates/feature.ts.ejs",
+        dest: `src/features/${name}/index.ts`,
         vars: { name },
-      })
-    ))
+      }),
+    )
+    .andThen(
+      when(
+        config.withTests,
+        template({
+          source: "templates/test.ts.ejs",
+          dest: `src/features/${name}/index.test.ts`,
+          vars: { name },
+        }),
+      ),
+    )
     .andThen(info(`Created feature: ${name}`))
     .unwrap();
 ```
@@ -457,7 +487,10 @@ interface TemplatingEngine {
   renderAsync(template: string, vars: Record<string, unknown>): Promise<string>;
 
   /** Render a template file asynchronously */
-  renderFile(templatePath: string, vars: Record<string, unknown>): Promise<string>;
+  renderFile(
+    templatePath: string,
+    vars: Record<string, unknown>,
+  ): Promise<string>;
 }
 ```
 

@@ -7,7 +7,7 @@ config files, installs dependencies, maybe initializes a git repository. The
 happy path works. Now answer three questions:
 
 1. **How do you test it** without actually creating files and running `npm install`?
-2. **How do you preview it** so users can see what *would* happen before it happens?
+2. **How do you preview it** so users can see what _would_ happen before it happens?
 3. **How do you undo it** when a user runs your tool by accident?
 
 The conventional answer is mocking. You wrap every I/O call in an interface,
@@ -15,9 +15,9 @@ build a fake filesystem, wire it all up, and pray you mocked the right things.
 It works, but it is fragile, verbose, and the mocks drift from reality over
 time.
 
-There is a better way. Instead of mocking the *implementation*, you change the
-*representation*. You make your program a **data structure** that *describes*
-what it wants to do, and you let a separate piece of code *decide how to do it*.
+There is a better way. Instead of mocking the _implementation_, you change the
+_representation_. You make your program a **data structure** that _describes_
+what it wants to do, and you let a separate piece of code _decide how to do it_.
 
 That is the Task pattern.
 
@@ -35,11 +35,11 @@ The description is inert. Nothing happens until an **interpreter** walks the
 description and decides what to do with each step. Different interpreters give
 you different behaviours from the same description:
 
-| Interpreter | What it does |
-|---|---|
-| `runTask` | Executes effects against real I/O |
-| `dryRun` | Collects effects, returns mock values, touches nothing |
-| `runUndo` | Walks the tree, collects undo steps, executes them in reverse |
+| Interpreter | What it does                                                  |
+| ----------- | ------------------------------------------------------------- |
+| `runTask`   | Executes effects against real I/O                             |
+| `dryRun`    | Collects effects, returns mock values, touches nothing        |
+| `runUndo`   | Walks the tree, collects undo steps, executes them in reverse |
 
 One task definition. Three capabilities for free.
 
@@ -67,16 +67,16 @@ A task is a tiny tree with three possible shapes:
 
 ```typescript
 type Task<A> =
-  | { _tag: "Pure"; value: A }                                    // done, here is the result
-  | { _tag: "Effect"; effect: Effect; cont: (r: unknown) => Task<A> }  // do this, then continue
-  | { _tag: "Fail"; error: string };                              // something went wrong
+  | { _tag: "Pure"; value: A } // done, here is the result
+  | { _tag: "Effect"; effect: Effect; cont: (r: unknown) => Task<A> } // do this, then continue
+  | { _tag: "Fail"; error: string }; // something went wrong
 ```
 
 - **Pure** means the computation is finished and holds a value.
 - **Effect** means "perform this effect, feed the result into `cont` to get the
   next step." This is where the magic lives — the continuation `cont` is what
-  makes tasks composable. Each effect says "do *this*, and when you have the
-  result, *here is what to do next*."
+  makes tasks composable. Each effect says "do _this_, and when you have the
+  result, _here is what to do next_."
 - **Fail** means something went wrong.
 
 ### Step 3: Smart constructors
@@ -84,17 +84,25 @@ type Task<A> =
 We never build task nodes by hand. Instead, we write small functions:
 
 ```typescript
-const pure = <A>(value: A): Task<A> =>
-  ({ _tag: "Pure", value });
+const pure = <A>(value: A): Task<A> => ({ _tag: "Pure", value });
 
-const readFile = (path: string): Task<string> =>
-  ({ _tag: "Effect", effect: { _tag: "ReadFile", path }, cont: (r) => pure(r as string) });
+const readFile = (path: string): Task<string> => ({
+  _tag: "Effect",
+  effect: { _tag: "ReadFile", path },
+  cont: (r) => pure(r as string),
+});
 
-const writeFile = (path: string, content: string): Task<void> =>
-  ({ _tag: "Effect", effect: { _tag: "WriteFile", path, content }, cont: () => pure(undefined) });
+const writeFile = (path: string, content: string): Task<void> => ({
+  _tag: "Effect",
+  effect: { _tag: "WriteFile", path, content },
+  cont: () => pure(undefined),
+});
 
-const log = (message: string): Task<void> =>
-  ({ _tag: "Effect", effect: { _tag: "Log", message }, cont: () => pure(undefined) });
+const log = (message: string): Task<void> => ({
+  _tag: "Effect",
+  effect: { _tag: "Log", message },
+  cont: () => pure(undefined),
+});
 ```
 
 ### Step 4: Sequencing with flatMap
@@ -105,13 +113,16 @@ you feed the result of one task into the next:
 ```typescript
 const flatMap = <A, B>(task: Task<A>, f: (a: A) => Task<B>): Task<B> => {
   switch (task._tag) {
-    case "Pure":   return f(task.value);
-    case "Fail":   return task as unknown as Task<B>;
-    case "Effect": return {
-      _tag: "Effect",
-      effect: task.effect,
-      cont: (result) => flatMap(task.cont(result), f),
-    };
+    case "Pure":
+      return f(task.value);
+    case "Fail":
+      return task as unknown as Task<B>;
+    case "Effect":
+      return {
+        _tag: "Effect",
+        effect: task.effect,
+        cont: (result) => flatMap(task.cont(result), f),
+      };
   }
 };
 ```
@@ -124,11 +135,9 @@ executed here. We are just building a bigger data structure.
 ### Step 5: Write a program
 
 ```typescript
-const program: Task<void> = flatMap(
-  readFile("name.txt"),
-  (name) => flatMap(
-    writeFile("greeting.txt", `Hello, ${name}!`),
-    () => log(`Greeted ${name}`),
+const program: Task<void> = flatMap(readFile("name.txt"), (name) =>
+  flatMap(writeFile("greeting.txt", `Hello, ${name}!`), () =>
+    log(`Greeted ${name}`),
   ),
 );
 ```
@@ -146,10 +155,12 @@ Walk the tree. When you hit an `Effect`, actually do it:
 ```typescript
 const runTask = async <A>(task: Task<A>): Promise<A> => {
   switch (task._tag) {
-    case "Pure": return task.value;
-    case "Fail": throw new Error(task.error);
+    case "Pure":
+      return task.value;
+    case "Fail":
+      throw new Error(task.error);
     case "Effect": {
-      const result = await executeEffect(task.effect);  // real I/O here
+      const result = await executeEffect(task.effect); // real I/O here
       return runTask(task.cont(result));
     }
   }
@@ -166,11 +177,13 @@ const dryRun = <A>(task: Task<A>): { value: A; effects: Effect[] } => {
 
   const run = <T>(t: Task<T>): T => {
     switch (t._tag) {
-      case "Pure": return t.value;
-      case "Fail": throw new Error(t.error);
+      case "Pure":
+        return t.value;
+      case "Fail":
+        throw new Error(t.error);
       case "Effect": {
         effects.push(t.effect);
-        const mock = mockFor(t.effect);         // fake result
+        const mock = mockFor(t.effect); // fake result
         return run(t.cont(mock) as Task<T>);
       }
     }
@@ -182,7 +195,7 @@ const dryRun = <A>(task: Task<A>): { value: A; effects: Effect[] } => {
 
 The mock function is trivial — `ReadFile` returns a placeholder string,
 `WriteFile` returns `undefined`, and so on. The task continues to completion
-using fake data, and you get back the full list of effects it *would* have
+using fake data, and you get back the full list of effects it _would_ have
 performed.
 
 ### The undo interpreter
@@ -194,7 +207,7 @@ type WriteFileEffect = {
   _tag: "WriteFile";
   path: string;
   content: string;
-  undo?: Task<void>;  // e.g. deleteFile(path)
+  undo?: Task<void>; // e.g. deleteFile(path)
 };
 ```
 
@@ -208,8 +221,10 @@ const runUndo = async <A>(task: Task<A>): Promise<number> => {
   // Phase 1: walk with mocks, collect undos
   const walk = <T>(t: Task<T>): T => {
     switch (t._tag) {
-      case "Pure": return t.value;
-      case "Fail": throw new Error(t.error);
+      case "Pure":
+        return t.value;
+      case "Fail":
+        throw new Error(t.error);
       case "Effect":
         if ("undo" in t.effect && t.effect.undo) undos.push(t.effect.undo);
         return walk(t.cont(mockFor(t.effect)) as Task<T>);
@@ -226,14 +241,14 @@ const runUndo = async <A>(task: Task<A>): Promise<number> => {
 ```
 
 The same task definition that creates files can undo its own work. No separate
-undo logic. No state files. The undo information lives *inside the task tree*.
+undo logic. No state files. The undo information lives _inside the task tree_.
 
 ## Why this matters in practice
 
 ### Testing without mocks
 
 Because `dryRun` gives you the complete list of effects, you can write tests
-that assert *what your program would do* without doing it:
+that assert _what your program would do_ without doing it:
 
 ```typescript
 const { effects } = dryRun(program);
@@ -245,7 +260,7 @@ assert(effects[1].path === "greeting.txt");
 ```
 
 No filesystem setup. No cleanup. No flaky tests from leftover state.
-Millisecond execution. And crucially, you are testing the *real program* — not
+Millisecond execution. And crucially, you are testing the _real program_ — not
 a simplified version wired to test doubles.
 
 ### Preview mode (dry run)
@@ -287,8 +302,8 @@ to produce the second). That is all it is. The Task type, together with `pure`
 and `flatMap`, forms a monad.
 
 The pattern matters not because of the name but because of the **separation it
-enforces**: the description of *what to do* is divorced from the decision of
-*how to do it*. That separation is what gives you testing, dry-run, and undo
+enforces**: the description of _what to do_ is divorced from the decision of
+_how to do it_. That separation is what gives you testing, dry-run, and undo
 without extra work.
 
 ## The real library
@@ -314,9 +329,9 @@ See the [README](./README.md) for the complete API reference.
 The idea of representing effects as data and interpreting them separately has
 deep roots in functional programming:
 
-- **Philip Wadler**, *Monads for functional programming* (1995) — the
+- **Philip Wadler**, _Monads for functional programming_ (1995) — the
   accessible introduction that brought monads to a wider audience
-- **Simon Peyton Jones**, *Tackling the Awkward Squad* (2001) — how Haskell's
+- **Simon Peyton Jones**, _Tackling the Awkward Squad_ (2001) — how Haskell's
   IO monad uses this exact pattern to handle I/O in a pure language
 - **Effect-TS** (effect.website) and **ZIO** (zio.dev) — modern, industrial
   implementations of the same idea in TypeScript and Scala, respectively

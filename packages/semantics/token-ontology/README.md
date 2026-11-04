@@ -4,15 +4,15 @@ The semantic model of the Canonical design tokens — the `dt:` ontology.
 
 ## Structure
 
-| Path | Nature | Contents |
-|---|---|---|
-| `definitions/` | **authored** | The T-Box: `w3c-tokens.ttl` (spec mirror), `dt.ttl` (Canonical semantics), `dt.shapes.ttl` (constraints), `dt.s4.ttl` + `dt.s4.shapes.ttl` (the platform catalogue) and `dt.s4.context.jsonld` (its JSON projection). |
-| `data/s1.ttl`, `s2.ttl`, `s3.ttl` | **generated** | The stratified A-Box. Never hand-edited — run `bun run populate`. |
-| `data/s4.web.ttl` | **generated** | The web platform catalogue. Never hand-edited — run `bun run catalogue` after building `packages/tokens`. |
-| `samples/` | **authored, non-normative** | Hand-written sample fragments for review. |
-| `src/populate.ts` | tooling | Reads the token documents, the resolver and `s4.web.ttl`'s channel routing; writes `s1`–`s3`. |
-| `src/catalogue.ts` | tooling | Reads the build's output; writes `s4.web` and runs its six laws. |
-| `S4.DESIGN.md` | **authored** | How the platform catalogue was designed: the orientations tried, eight rulings with the alternative each beat, and the first run of its laws. |
+| Path                              | Nature                      | Contents                                                                                                                                                                                                              |
+| --------------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `definitions/`                    | **authored**                | The T-Box: `w3c-tokens.ttl` (spec mirror), `dt.ttl` (Canonical semantics), `dt.shapes.ttl` (constraints), `dt.s4.ttl` + `dt.s4.shapes.ttl` (the platform catalogue) and `dt.s4.context.jsonld` (its JSON projection). |
+| `data/s1.ttl`, `s2.ttl`, `s3.ttl` | **generated**               | The stratified A-Box. Never hand-edited — run `bun run populate`.                                                                                                                                                     |
+| `data/s4.web.ttl`                 | **generated**               | The web platform catalogue. Never hand-edited — run `bun run catalogue` after building `packages/tokens`.                                                                                                             |
+| `samples/`                        | **authored, non-normative** | Hand-written sample fragments for review.                                                                                                                                                                             |
+| `src/populate.ts`                 | tooling                     | Reads the token documents, the resolver and `s4.web.ttl`'s channel routing; writes `s1`–`s3`.                                                                                                                         |
+| `src/catalogue.ts`                | tooling                     | Reads the build's output; writes `s4.web` and runs its six laws.                                                                                                                                                      |
+| `S4.DESIGN.md`                    | **authored**                | How the platform catalogue was designed: the orientations tried, eight rulings with the alternative each beat, and the first run of its laws.                                                                         |
 
 ## The generated data
 
@@ -26,12 +26,12 @@ are derived from the routing `s4.web.ttl` records, and again at the end because
 its own inputs include what `populate` writes. The chain converges: a second
 pass changes nothing.
 
-| Stratum | Holds | Standing |
-|---|---|---|
-| `s1.ttl` | 45 files, 1,311 token definitions, 720 symbols, 56 annotated groups, the resolver with its 10 axes and 44 contexts | complete; round-trips to the source documents except for key order, which RDF does not carry |
-| `s2.ttl` | one observed-coverage contract per non-empty axis, with the encoding bridge to `ds:`; the 25 channel symbols that coverage implies; the breakpoint axis is omitted now that it covers no semantic token | **a draft for review** — contracts are authored, not derived |
-| `s3.ttl` | 1,237 resolved values: 1,072 along mode — one per symbol at the all-defaults position, one more for each symbol the theme family covers — and 165 channel routings, one per (channel × coordinate) pair the platform provisions | the positions the graph chooses to materialise |
-| `s4.web.ttl` | 1,156 variables, 1,904 declarations under 31 conditions — every custom property the web build ships, verbatim, with the symbol it stands for and the coordinate its condition selects | one catalogue per platform; the bridge into `s3` is (symbol × position), verified complete for every variable that names a symbol |
+| Stratum      | Holds                                                                                                                                                                                                                           | Standing                                                                                                                          |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `s1.ttl`     | 45 files, 1,311 token definitions, 720 symbols, 56 annotated groups, the resolver with its 10 axes and 44 contexts                                                                                                              | complete; round-trips to the source documents except for key order, which RDF does not carry                                      |
+| `s2.ttl`     | one observed-coverage contract per non-empty axis, with the encoding bridge to `ds:`; the 25 channel symbols that coverage implies; the breakpoint axis is omitted now that it covers no semantic token                         | **a draft for review** — contracts are authored, not derived                                                                      |
+| `s3.ttl`     | 1,237 resolved values: 1,072 along mode — one per symbol at the all-defaults position, one more for each symbol the theme family covers — and 165 channel routings, one per (channel × coordinate) pair the platform provisions | the positions the graph chooses to materialise                                                                                    |
+| `s4.web.ttl` | 1,156 variables, 1,904 declarations under 31 conditions — every custom property the web build ships, verbatim, with the symbol it stands for and the coordinate its condition selects                                           | one catalogue per platform; the bridge into `s3` is (symbol × position), verified complete for every variable that names a symbol |
 
 Every symbol carries an `rdfs:label` holding its dotted name (745), and every
 variable one holding its custom-property name with the leading `--` stripped
