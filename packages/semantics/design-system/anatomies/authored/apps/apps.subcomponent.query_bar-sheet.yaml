@@ -1,0 +1,154 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# A native <dialog> opened modal, filling the viewport. The summary button opens it with
+# command="show-modal" and the close button closes it with command="close", so it opens
+# before scripts run. It closes natively on Escape and the back gesture, through the
+# dialog's close request, and adds no history entry. It keeps no state: with scripts each
+# change commits to the query state as it is made. It sits on the Modal surface, which
+# resolves its surface channel.
+node:
+  uri: apps.subcomponent.query_bar-sheet
+  styles:
+    layout.type: flex
+    layout.direction: column
+    # A modal <dialog> is capped short of the viewport and given a border and auto
+    # margins by the user agent; these undo that, so the sheet fills the viewport.
+    size.width: 100%
+    size.height: 100%
+    size.max.width: 100%
+    size.max.height: 100%
+    spacing.external.block.start: 0
+    spacing.external.block.end: 0
+    spacing.external.inline.start: 0
+    spacing.external.inline.end: 0
+    appearance.border.style: none
+    appearance.background: [surface.color.background, color.background]
+    typography.color: [surface.color.text, color.text]
+    spacing.internal.block.start: 0
+    spacing.internal.block.end: 0
+    spacing.internal.inline.start: 0
+    spacing.internal.inline.end: 0
+  edges:
+    - node:
+        # One form around the header, the body and the footer, so the footer's Apply
+        # submits it: a GET form when the navigation adapter provides href, a plain
+        # container otherwise.
+        role: form
+        styles:
+          layout.type: flex
+          layout.direction: column
+          layout.flex.grow: 1
+          size.min.height: 0
+        edges:
+          - node:
+              role: header
+              styles:
+                layout.type: flex
+                layout.align: center
+                layout.justify: space-between
+                spacing.internal.block.start: dimension.200
+                spacing.internal.block.end: dimension.200
+                spacing.internal.inline.start: dimension.200
+                spacing.internal.inline.end: dimension.200
+                appearance.border.style: solid
+                appearance.border.width: 0
+                appearance.border.bottom.width: dimension.stroke.thickness.medium
+                appearance.border.bottom.color: color.border.muted
+              edges:
+                - node:
+                    role: title
+                    styles:
+                      typography.font: typography.text.primary
+                      typography.weight: typography.weight.medium
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # Closes the sheet with command="close", named "Close filters". Nothing
+                    # is staged, so nothing is discarded. Icon-only; the graph has no icon
+                    # button, so Button carries the icon.
+                    uri: global.component.button
+                    props:
+                      icon: close
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: body
+              styles:
+                layout.type: flex
+                layout.direction: column
+                layout.flex.grow: 1
+                layout.overflow.block: auto
+                spacing.gap: dimension.200
+                spacing.internal.block.start: dimension.200
+                spacing.internal.block.end: dimension.200
+                spacing.internal.inline.start: dimension.200
+                spacing.internal.inline.end: dimension.200
+              edges:
+                - node:
+                    # Read-only chips: they pass onRemove or removeHref and no
+                    # onSegmentActivate, so their segments are plain text and each chip's
+                    # one tab stop is its remove control. No roving host is needed here.
+                    uri: global.group.query_chips
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    # "Add filter": absent before scripts run. Once they run, it walks
+                    # field, operator and value as full-width lists inside the sheet, not as
+                    # a popover, and commits its chip when the chip is complete.
+                    uri: global.component.button
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    # The filters' fields, inside the sheet's form. With scripts, each
+                    # control commits to the query state as it changes. Their implementation
+                    # has no block in the graph.
+                    role: filters fields
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+          - node:
+              role: footer
+              styles:
+                layout.type: flex
+                layout.justify: end
+                spacing.gap: dimension.100
+                spacing.internal.block.start: dimension.200
+                spacing.internal.block.end: dimension.200
+                spacing.internal.inline.start: dimension.200
+                spacing.internal.inline.end: dimension.200
+                appearance.border.style: solid
+                appearance.border.width: 0
+                appearance.border.top.width: dimension.stroke.thickness.medium
+                appearance.border.top.color: color.border.muted
+              edges:
+                - node:
+                    # Clear all: clears the filters only; the search stays. A link to the
+                    # address of the query without its filters when the navigation adapter
+                    # provides href.
+                    uri: global.component.button
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # Once scripts run, "Show N results", N being the live result count
+                    # derived from the query state, with its exactness ("Show 1,000+
+                    # results"); while no count is known it reads "Show results". It only
+                    # closes the dialog (command="close"). Before they run, and only when
+                    # the navigation adapter provides href, the GET form's Apply submit.
+                    uri: global.component.button
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # A visually hidden, polite, atomic role="status" region inside the
+                    # dialog, which stays in the accessibility tree while the page behind is
+                    # inert. The bar announces the result count after each commit here while
+                    # the sheet is open.
+                    role: status region
+                  relation:
+                    cardinality: "1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
