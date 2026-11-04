@@ -1,0 +1,271 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# The root is the field shell: the search icon, the content row that holds the chips and the
+# entry, the clear control and the suggestions. The field is not focusable itself; the entry
+# inside it takes focus. Before scripts run, and only when its host can spell addresses, the
+# entry is a plain search input in the host's GET form; otherwise it renders inert until
+# scripts run.
+node:
+  uri: global.subcomponent.query_input
+  styles:
+    layout.type: flex
+    layout.align: center
+    layout.position: relative
+    layout.flex.grow: 1
+    layout.flex.basis: 0%
+    size.min.width: 20rem
+    size.max.width: 42.25rem
+    spacing.gap: dimension.100
+    spacing.internal.inline.start: dimension.200
+    spacing.internal.inline.end: dimension.200
+    # 5 px keeps the field 34 px tall around a 24 px chip; no symbol declares 5 px,
+    # and the field height reads no declared symbol either.
+    spacing.internal.block.start: 0.3125rem
+    spacing.internal.block.end: 0.3125rem
+    appearance.background: [surface.color.foreground.input, color.foreground.input]
+    appearance.background@hover: color.foreground.input.hover
+    appearance.background@disabled: color.foreground.input.disabled
+    appearance.border.style: solid
+    appearance.border.width: dimension.stroke.thickness.medium
+    appearance.border.color: transparent
+    appearance.border.bottom.color: color.border
+    appearance.border.bottom.color@focus: color.border.highlighted
+    appearance.border.bottom.color@invalid: color.border.error
+    appearance.radius: dimension.radius.small
+    # The @focus bindings, the highlighted underline and this ring, stand for
+    # :focus-within, which the DSL does not name. A 3 px inset ring; the focus-ring
+    # symbol gives 4.67:1 on the field.
+    appearance.outline.style@focus: solid
+    appearance.outline.color@focus: color.focusRing
+    appearance.outline.width@focus: dimension.stroke.thickness.large
+    appearance.outline.offset@focus: -0.1875rem
+    typography.font: typography.text.secondary
+    typography.color: color.text
+    # Focused and wrapping, the field overlays what follows it at the height of one line;
+    # unfocused, it holds one line and fades its overflow with a mask. A mask and a z-index
+    # have no key.
+  edges:
+    - node:
+        uri: global.component.icon
+        props:
+          icon: search
+        styles:
+          size.width: dimension.200
+          size.height: dimension.200
+          typography.color: color.icon.muted
+      relation:
+        cardinality: "1"
+    - node:
+        # Once scripts run, role="toolbar", named by `label` and described by
+        # `description`: the chips' segments and the entry are its items, with one tab
+        # stop among them.
+        role: content
+        styles:
+          layout.type: flex
+          layout.wrap: wrap
+          layout.align: center
+          layout.flex.grow: 1
+          size.min.width: 0
+          spacing.gap: dimension.050
+        edges:
+          - node:
+              uri: global.group.query_chips
+            relation:
+              cardinality: "0..1"
+              slotName: default
+          - node:
+              # One entry. It sits here after the chips, or, while a segment is edited,
+              # in that segment's editor slot, where the host places it after reading it
+              # through QueryInput's context.
+              role: entry
+              styles:
+                layout.type: inline-flex
+                layout.align: center
+                layout.position: relative
+                layout.flex.grow: 1
+                size.min.width: 1ch
+              edges:
+                - node:
+                    # A native <input>, never a <textarea>, which admits no combobox role;
+                    # type="search" before scripts run, role="combobox" once they run. The
+                    # remaining props reach it. The field draws the focus ring.
+                    role: entry input
+                    styles:
+                      layout.flex.grow: 1
+                      size.min.width: 1ch
+                      appearance.native: none
+                      appearance.border.style: none
+                      appearance.background: transparent
+                      appearance.outline.style: none
+                      typography.font: typography.text.secondary
+                      typography.color: inherit
+                      spacing.internal.block.start: 0
+                      spacing.internal.block.end: 0
+                      spacing.internal.inline.start: 0
+                      spacing.internal.inline.end: 0
+                    edges:
+                      - node:
+                          # Drawn as ::placeholder; none while a segment is edited.
+                          role: placeholder
+                          styles:
+                            typography.color: color.text.muted
+                        relation:
+                          cardinality: "0..1"
+                  relation:
+                    cardinality: "1"
+                - node:
+                    # An aria-hidden template behind the typed text: YYYY-MM-DD, or a
+                    # range. The muted text symbol keeps the untyped part above 4.5:1.
+                    role: format template
+                    styles:
+                      layout.position: absolute
+                      interaction.pointerEvents: none
+                      typography.whiteSpace: pre
+                      typography.color: color.text.muted
+                  relation:
+                    cardinality: "0..1"
+                - node:
+                    # Text after the typed text, such as a unit ("GiB"), from `suffix`.
+                    role: suffix
+                    styles:
+                      typography.color: color.text.muted
+                  relation:
+                    cardinality: "0..1"
+            relation:
+              cardinality: "1"
+      relation:
+        cardinality: "1"
+    - node:
+        # Present when the host passes onClear or clearHref; named by clearLabel, and a link
+        # to clearHref before scripts run. Icon-only; the graph has no icon button, so Button
+        # carries the icon.
+        uri: global.component.button
+        props:
+          icon: close
+      relation:
+        cardinality: "0..1"
+    - node:
+        # The listbox the entry controls: a popover anchored to the entry, flipping above
+        # it when there is no room below and clamped to the viewport; CSS anchor
+        # positioning places it, which no key expresses. It sits on the Surface layer one
+        # above its host's (Surface2 on a page at Surface1), so its surface channel
+        # resolves to that layer.
+        role: suggestions
+        styles:
+          layout.type: flex
+          layout.direction: column
+          layout.position: absolute
+          appearance.background: [surface.color.background, color.background]
+          # The reference design rounds 2 px, which no radius symbol declares.
+          appearance.radius: dimension.radius.small
+          spacing.internal.block.start: dimension.050
+          spacing.internal.block.end: dimension.050
+          spacing.internal.inline.start: dimension.050
+          spacing.internal.inline.end: dimension.050
+          size.min.width: 13.75rem
+          size.max.width: 18.75rem
+          # The 0 0 16px rgba(0,0,0,.2) shadow has no key.
+        edges:
+          - node:
+              role: option list
+              styles:
+                layout.listStyle: none
+                layout.overflow.block: auto
+                # Ten rows of 36 px; no symbol declares 36 px.
+                size.max.height: 22.5rem
+              edges:
+                - node:
+                    role: option
+                    styles:
+                      layout.type: flex
+                      layout.align: center
+                      layout.justify: space-between
+                      spacing.gap: dimension.150
+                      spacing.internal.block.start: dimension.050
+                      spacing.internal.block.end: dimension.050
+                      spacing.internal.inline.start: dimension.100
+                      spacing.internal.inline.end: dimension.100
+                      appearance.radius: dimension.radius.small
+                      interaction.cursor: pointer
+                      # The keyboard highlight (aria-activedescendant) takes the hover
+                      # fill, as ComboboxInput's options do. The layer2 ghost hover is
+                      # bound until a surface-routed hover channel exists.
+                      appearance.background@hover: color.foreground.ghost.layer2.hover
+                      # A disabled option, and the option marked `current`, carry
+                      # aria-disabled; @selected is aria-selected, which the combobox keeps
+                      # for the highlighted option. A `current` option is also shown in
+                      # typography.weight.bold, which no state of the vocabulary separates
+                      # from other disabled options, so the weight is described here rather
+                      # than bound.
+                      typography.color@disabled: color.text.disabled
+                      interaction.cursor@disabled: not-allowed
+                    edges:
+                      - node:
+                          role: option label
+                          styles:
+                            layout.overflow: hidden
+                            typography.overflow: ellipsis
+                            typography.whiteSpace: nowrap
+                        relation:
+                          cardinality: "1"
+                      - node:
+                          # A count, or a symbol (≥). The muted text symbol keeps it
+                          # above 4.5:1.
+                          role: option hint
+                          styles:
+                            typography.font: typography.text.tertiary
+                            typography.color: color.text.muted
+                        relation:
+                          cardinality: "0..1"
+                  relation:
+                    cardinality: "0..*"
+                - node:
+                    # Between consecutive options of different groups; presentational.
+                    role: group divider
+                    styles:
+                      size.height: dimension.stroke.thickness.medium
+                      appearance.background: color.border.muted
+                      spacing.external.block.start: dimension.050
+                      spacing.external.block.end: dimension.050
+                  relation:
+                    cardinality: "0..*"
+            relation:
+              cardinality: "1"
+          - node:
+              # The emptyText. It and the spinner sit beside the listbox, which holds only
+              # options. Both are aria-hidden: the status region in the root announces
+              # them.
+              role: empty state
+              styles:
+                spacing.internal.inline.start: dimension.100
+                typography.color: color.text.muted
+            relation:
+              cardinality: "0..1"
+          - node:
+              uri: global.subcomponent.spinner
+            relation:
+              cardinality: "0..1"
+          - node:
+              # The host's `footer`, such as "Separate multiple values with commas".
+              role: footer hint
+              styles:
+                appearance.border.style: solid
+                appearance.border.width: 0
+                appearance.border.top.width: dimension.stroke.thickness.medium
+                appearance.border.top.color: color.border.muted
+                typography.font: typography.text.tertiary
+                typography.color: color.text.muted
+                spacing.internal.block.start: dimension.050
+                spacing.internal.inline.start: dimension.100
+                spacing.internal.inline.end: dimension.100
+            relation:
+              cardinality: "0..1"
+      relation:
+        cardinality: "0..1"
+    - node:
+        # A visually hidden, polite role="status" region, always rendered in the root,
+        # outside the popover, so that a change of its text is announced: loading, and no
+        # options.
+        role: status region
+      relation:
+        cardinality: "1"
