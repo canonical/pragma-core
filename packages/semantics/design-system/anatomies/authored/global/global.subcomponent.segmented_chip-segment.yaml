@@ -2,7 +2,7 @@
 # TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
 # Tone: a segment reads the modifier channels. The host sets the operator segment's
 # Condition value; Inclusion, Match, Range and Presence route to the Information symbols.
-# Exclusion's own tone is still open; it takes the Information symbols meanwhile.
+# Exclusion takes the Information symbols too; its mark carries the negation.
 # The invalid state binds the error symbols directly.
 # Editing: the closed state vocabulary has no `editing`. A segment being edited is the
 # segment chosen within its chip, so it takes @selected; a selected chip sets @selected on

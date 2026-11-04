@@ -75,6 +75,5 @@ blocks that take the family.
   `coordinate.condition.presence`, with `coordinate.condition.none`. None exists yet.
 - Inclusion, Match, Range and Presence route to `color.foreground.secondary.information` and
   `color.text.onForegroundSecondary.information`.
-- Exclusion needs a negation tone of its own, which no symbol declares; that is for the token
-  owners to decide. Until they do, it routes to the Information symbols, and its mark carries
-  the meaning.
+- Exclusion routes to the Information symbols too. Its mark and its words carry the negation,
+  and colour never carries a value alone, so a negation tone of its own would add no meaning.
