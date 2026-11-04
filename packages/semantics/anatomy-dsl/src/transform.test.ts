@@ -159,7 +159,7 @@ describe("interaction states", () => {
 
   it("parses every state the closed vocabulary admits", () => {
     // The closed set is the shapes' to enforce; this is the parser's half —
-    // each marker is split off the key and carried verbatim, the three
+    // each marker is split off the key and carried verbatim, the later
     // additions included.
     const states = [
       "hover",
@@ -170,6 +170,7 @@ describe("interaction states", () => {
       "expanded",
       "indeterminate",
       "invalid",
+      "editing",
     ];
     for (const state of states) {
       const spec = parseAnatomyYAML({

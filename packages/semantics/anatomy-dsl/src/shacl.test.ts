@@ -143,7 +143,7 @@ describe("SHACL over the goldens", () => {
   });
 
   it("admits every state the closed vocabulary holds, and nothing else", async () => {
-    // The refusal above is only worth having if the eight admitted states
+    // The refusal above is only worth having if the nine admitted states
     // pass: a sh:in that lost a member would show up here and not there.
     const states = [
       "hover",
@@ -154,6 +154,7 @@ describe("SHACL over the goldens", () => {
       "expanded",
       "indeterminate",
       "invalid",
+      "editing",
     ];
     for (const state of states) {
       const report = await validate(

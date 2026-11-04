@@ -518,6 +518,12 @@ anatomy:StyleShape a sh:NodeShape ;
     # the panel that exists only while open is the second, and stays the
     # Switch construct's.
     #
+    # editing entered on the same line. An inline-editable value re-values
+    # channels (fill, border) on the part being edited while the edit is
+    # open, so the state qualifies. Swapping what is shown, a label for an
+    # input, changes what exists and stays the Switch construct's job; the
+    # editing state never carries that swap.
+    #
     # A state value that differs from its base state's is a LINT, not a
     # constraint (AT.11): the reference does it — Button's :disabled reads a
     # different symbol — so it is reported with its ranks and never rejected,
@@ -526,8 +532,8 @@ anatomy:StyleShape a sh:NodeShape ;
         sh:path anatomy:styleState ;
         sh:maxCount 1 ;
         sh:datatype xsd:string ;
-        sh:in ( "hover" "active" "focus" "disabled" "selected" "expanded" "indeterminate" "invalid" ) ;
-        sh:message "styleState must be one of: hover, active, focus, disabled, selected, expanded, indeterminate, invalid (absent = default state)." ;
+        sh:in ( "hover" "active" "focus" "disabled" "selected" "expanded" "indeterminate" "invalid" "editing" ) ;
+        sh:message "styleState must be one of: hover, active, focus, disabled, selected, expanded, indeterminate, invalid, editing (absent = default state)." ;
     ] ;
 
     # BEGIN GENERATED valueKind sh:or — bun run generate:shapes

@@ -66,10 +66,11 @@ export interface Style {
   /**
    * Interaction state this value applies in — one of the closed set
    * `hover`, `active`, `focus`, `disabled`, `selected`, `expanded`,
-   * `indeterminate`, `invalid`. Absent = the default state. Authored as an
-   * `@state` suffix on the style key (`appearance.background@hover`). The
-   * set is closed by the shapes rather than by the parser: the parser splits
-   * the marker off and carries it verbatim.
+   * `indeterminate`, `invalid`, `editing`. Absent = the default state.
+   * Authored as an `@state` suffix on the style key
+   * (`appearance.background@hover`). The set is closed by the shapes rather
+   * than by the parser: the parser splits the marker off and carries it
+   * verbatim.
    */
   state?: string;
 }

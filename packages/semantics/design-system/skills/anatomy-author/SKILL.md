@@ -1094,7 +1094,7 @@ styles:
   appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing]   # a channel may exist only in a state
 ```
 
-**Vocabulary — closed, registry-governed.** Eight states, and only these:
+**Vocabulary — closed, registry-governed.** Nine states, and only these:
 
 | State | Meaning | What the implementation keys off |
 |-------|---------|----------------------------------|
@@ -1106,12 +1106,15 @@ styles:
 | `expanded` | A disclosure is open | `[open]`, `aria-expanded` |
 | `indeterminate` | A checkbox or a progress is mixed, on neither setting | `:indeterminate`, `aria-checked="mixed"` |
 | `invalid` | Validation has failed | `:invalid`, `aria-invalid` |
+| `editing` | An inline-editable value has its edit open | `:state(editing)` on a custom element, otherwise `[data-editing]`; no ARIA equivalent |
 
-The last three are the newest, and how they arrived is the rule: candidates
+The last four are the newest, and how they arrived is the rule: candidates
 (`checked`, `visited`, `dragged`, `pending`, `error`, `read-only`) enter through
 the registry with a definition and a per-platform mapping — NEVER by loosening the
-schema locally. If an anatomy seems to need a ninth state, that is a registry
+schema locally. If an anatomy seems to need a tenth state, that is a registry
 proposal, not a local decision. `open` is not a second spelling of `expanded`.
+`editing` re-values the edited part's fill or border; swapping a label for an
+input is a `switch`, never `@editing`.
 
 **States re-value channels; they never add structure.** This is the line to
 hold:
@@ -1535,7 +1538,7 @@ Check your anatomy against:
 - [ ] Nested components make semantic sense (judgment — nothing checks this but a reader)
 - [ ] Every symbol is the right symbol for the part, not merely one that resolves in the key's namespace (judgment — the gate checks resolution and namespace, never fit)
 - [ ] Switch cases carry `uri` or `node` and nothing else — no `default:`
-- [ ] Every `@state` marker is one of hover, active, focus, disabled, selected, expanded, indeterminate, invalid — one `@` per key, never `@default`
+- [ ] Every `@state` marker is one of hover, active, focus, disabled, selected, expanded, indeterminate, invalid, editing — one `@` per key, never `@default`
 - [ ] No `@state` stands in for a structural difference — that is a `switch`
 - [ ] Every node `projection` has at least one of `on` / `field`; every relation `projection` has `field` and no `on`
 - [ ] No projection spells an unwrapping path (`edges.node`), and every projected field name exists in the provider SDL
@@ -1669,7 +1672,7 @@ The children one-to-many relation follows inspiration from the [Relay connection
  * Keys may carry an "@state" suffix scoping the value to one interaction
  * state: "appearance.background@hover". The unmarked key is the default
  * state; "@default" is invalid. Vocabulary is closed: hover, active, focus,
- * disabled, selected, expanded, indeterminate, invalid.
+ * disabled, selected, expanded, indeterminate, invalid, editing.
  */
 type Styles = Record<StyleKey, Symbol | [...Symbol[], Primitive?] | Primitive>;
 
