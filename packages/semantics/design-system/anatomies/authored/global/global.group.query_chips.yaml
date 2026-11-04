@@ -1,0 +1,28 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# A Group is a set of sibling blocks whose collection carries its own identity. This one
+# holds segmented chips and nothing else: a query bar's entry and its other controls are
+# siblings of the group, not members.
+node:
+  uri: global.group.query_chips
+  styles:
+    layout.type: flex
+    layout.wrap: wrap
+    layout.align: center
+    # A <ul role="list">: the explicit role keeps the list's semantics where a list
+    # without bullets would lose them.
+    layout.listStyle: none
+    # 4 px between chips.
+    spacing.gap: dimension.050
+    spacing.internal.block.start: 0
+    spacing.internal.block.end: 0
+    spacing.internal.inline.start: 0
+    spacing.internal.inline.end: 0
+    spacing.external.block.start: 0
+    spacing.external.block.end: 0
+  edges:
+    - node:
+        uri: global.component.segmented_chip
+      relation:
+        cardinality: "1..*"
+        slotName: default
