@@ -1,0 +1,115 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# TODO anatomy: DropdownButton has none yet in the graph. It is to hold the trigger, the
+# chevron, the popover and its surface; this one fills its `label` and `default` slots, the
+# names its specification gives.
+# Applied state: no element state. The Badge's count is the visible cue, and the trigger's
+# accessible name carries the count ("Status, 2 applied"). No symbol declares an applied
+# fill yet. The applied clause's Condition mark comes before the count. The panel is
+# DropdownButton's non-modal dialog, named by the trigger, which takes
+# aria-haspopup="dialog"; it stays open while its controls change. It sits on the Surface
+# layer one above its host's (Surface2 on a page at Surface1), so its surface channels
+# resolve to that layer.
+node:
+  uri: global_dataviews.component.filter_button
+  edges:
+    - node:
+        uri: global.component.dropdown_button
+        # The trigger is Button's tertiary face, fixed: FilterButton sets Button's
+        # Importance to Tertiary and offers no importance of its own. No graph property
+        # exists to pin.
+        edges:
+          - node:
+              role: filter name
+            relation:
+              cardinality: "1"
+              slotName: label
+          - node:
+              # The Condition value's mark, such as "≠" for exclusion, while the filter
+              # applies and `condition` is set. Its glyph is the Condition value's; no channel
+              # carries a glyph yet, and FilterButton reads no Condition tone, so nothing is
+              # bound: the mark takes the trigger's text colour.
+              # aria-hidden, because the host's appliedLabel says it in words.
+              role: condition mark
+            relation:
+              cardinality: "0..1"
+              slotName: label
+          - node:
+              # The host's appliedLabel ("2 applied", "none of 2"), visually hidden, so the
+              # name reads "Status, 2 applied" and the visible label stays its prefix.
+              role: applied words
+            relation:
+              cardinality: "0..1"
+              slotName: label
+          - node:
+              # aria-hidden: the applied words carry the count to assistive technology.
+              uri: global.component.badge
+            relation:
+              # Present while the filter applies.
+              cardinality: "0..1"
+              slotName: label
+          - switch:
+              # The panel is the host's children. FilterButton renders no form of its own;
+              # the first case is the typical shape a host passes.
+              on: override
+              cases:
+                - node:
+                    role: option list
+                    styles:
+                      appearance.background: [surface.color.background, color.background]
+                      layout.type: flex
+                      layout.direction: column
+                      layout.overflow.block: auto
+                      spacing.internal.block.start: dimension.050
+                      spacing.internal.block.end: dimension.050
+                    edges:
+                      - node:
+                          uri: global.subcomponent.search_input
+                        relation:
+                          # Past ten options.
+                          cardinality: "0..1"
+                      - node:
+                          # A <label> around the checkbox, so its text and its count
+                          # together name the checkbox, a visually hidden ", " before the
+                          # count: "deployed, 12".
+                          role: option
+                          styles:
+                            spacing.internal.block.start: dimension.100
+                            spacing.internal.block.end: dimension.100
+                            spacing.internal.inline.start: dimension.150
+                            spacing.internal.inline.end: dimension.150
+                            # The layer2 ghost hover is bound until a surface-routed hover
+                            # channel exists.
+                            appearance.background@hover: color.foreground.ghost.layer2.hover
+                          edges:
+                            - node:
+                                uri: global.subcomponent.checkbox_input
+                              relation:
+                                cardinality: "1"
+                            - node:
+                                role: option label
+                              relation:
+                                cardinality: "1"
+                            - node:
+                                # A facet count, where the source gives one.
+                                role: option count
+                                styles:
+                                  typography.font: typography.text.tertiary
+                                  typography.color: color.text.muted
+                              relation:
+                                cardinality: "0..1"
+                        relation:
+                          cardinality: "0..*"
+                      - node:
+                          # When the host can spell addresses, its children are a GET form
+                          # and this is its Apply submit, hidden once scripts run, when each
+                          # choice commits as it is ticked.
+                          uri: global.component.button
+                        relation:
+                          cardinality: "0..1"
+                - uri: $custom
+            relation:
+              cardinality: "1"
+              slotName: default
+      relation:
+        cardinality: "1"
