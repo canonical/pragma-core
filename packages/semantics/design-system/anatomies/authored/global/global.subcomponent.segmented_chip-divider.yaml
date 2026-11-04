@@ -1,0 +1,16 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# The divider alone carries the separation between segments; the body sets no gap.
+# These are the bindings for the chip's default unity, `separated`: 2 px wide, painting
+# nothing, so the surface behind the chip shows through. The chip's `joined` case rebinds
+# it to a 1 px line with 6 px on each side.
+# --segmented-chip-divider-width, --segmented-chip-divider-color,
+# --segmented-chip-divider-margin-inline
+node:
+  uri: global.subcomponent.segmented_chip-divider
+  styles:
+    layout.alignSelf: stretch
+    layout.flex.shrink: 0
+    size.inline: dimension.025
+    appearance.background: transparent
+    appearance.background@invalid: transparent
