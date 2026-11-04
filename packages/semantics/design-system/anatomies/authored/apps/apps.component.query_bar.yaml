@@ -1,0 +1,77 @@
+---
+# TODO implementation: no reference — the tier has no implementation to derive from
+# It is to be implemented by DataViews.QueryBar in @canonical/dataviews-react.
+# The root is the bar's row: the query input, then the quick filters the application
+# passes. Below its container's narrow width the bar hides the chips and keeps the
+# QueryInput's search entry and clear button, beside a summary button that opens the
+# sheet; the switch is a container query, which the DSL does not express.
+node:
+  uri: apps.component.query_bar
+  styles:
+    layout.type: flex
+    layout.wrap: wrap
+    layout.align: center
+    layout.container: inline-size
+    spacing.gap: dimension.200
+  edges:
+    - node:
+        # The field shell: the search icon, the entry, the clear button, the focus ring and
+        # the suggestions. The bar fills it: the chips, from its clauses; the options for the
+        # segment being edited; the template and unit for the kind being typed; and the clear
+        # action, which clears the filters and the search, and is a link only when the
+        # navigation adapter provides href. On narrow containers its chips are hidden; the
+        # sheet lists them.
+        uri: global.subcomponent.query_input
+      relation:
+        cardinality: "1"
+    - node:
+        # Wide containers only, and only when the navigation adapter provides href: the
+        # full filters GET form in an inline <details> disclosure, whose submit is Apply,
+        # the baseline before scripts run. The form's fields have no block in the graph.
+        role: filters disclosure
+      relation:
+        cardinality: "0..1"
+    - node:
+        # Narrow containers only: "Filters" with the number of applied clauses, named
+        # "Filters, 2 applied". It opens the sheet with commandfor and
+        # command="show-modal", so it works before scripts run.
+        uri: global.component.button
+        edges:
+          - node:
+              role: summary label
+            relation:
+              cardinality: "1"
+              slotName: label
+          - node:
+              uri: global.component.badge
+            relation:
+              # Present while a clause applies.
+              cardinality: "0..1"
+              slotName: label
+      relation:
+        cardinality: "0..1"
+    - node:
+        uri: apps.subcomponent.query_bar-sheet
+      relation:
+        cardinality: "0..1"
+    - node:
+        # One per quick filter the application names. Quick filters may also be shown as
+        # option words.
+        uri: global.component.filter_button
+      relation:
+        cardinality: "0..*"
+    - node:
+        # The bar's warnings and errors: invalid input, a contradiction with its Merge
+        # action, and refused clauses. Shown while the field has focus too.
+        uri: global.subcomponent.field-error
+        styles:
+          layout.flex.basis: 100%
+      relation:
+        cardinality: "0..1"
+    - node:
+        # A visually hidden, polite, atomic role="status" region: the bar's announcer. While
+        # the sheet is open, the page behind it is inert, so announcements go to the sheet's
+        # own region instead.
+        role: status region
+      relation:
+        cardinality: "1"
