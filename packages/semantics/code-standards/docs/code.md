@@ -369,7 +369,7 @@ function getConfig() {
 
 **Identifier:** `cs:code.naming.function_verb`
 
-All function and method names must start with a verb that describes the action the function performs. Names like `pathToX` or `dataForUser` describe a result, not an action — use `findPathToX` or `fetchDataForUser` instead. This makes the function's intent immediately clear and distinguishes functions from plain values or constants.
+All function and method names must start with a verb that describes the action the function performs. Names like `pathToX` or `dataForUser` describe a result, not an action — use `findPathToX` or `fetchDataForUser` instead. This makes the function's intent immediately clear and distinguishes functions from plain values or constants. One exception: the members of a message record (a `MessageRecord` from `@canonical/i18n-core`) are named after the words they produce, whether a member holds text or a function that returns text, so code reads a record as words (`m.heading`, `m.instanceCount(3)`). Every function outside a record keeps the rule, including each locale's factory, such as `createFrench`.
 
 ### Do
 
@@ -406,6 +406,22 @@ const removeItem = (id: string): void => { /* ... */ };
 // Creation: create, build, generate, compose, make
 const createConnection = (config: Config): Connection => { /* ... */ };
 const buildQuery = (params: Params): string => { /* ... */ };
+```
+
+Name the members of a message record after the words they produce, and name the factory that builds the record with a verb
+```typescript
+// A record member is read as words, so it is named after them, not after an action.
+export default function createFrench(f: Formatters): InstanceMessages {
+  return {
+    heading: "Instances",
+    instanceCount: (count) =>
+      f.selectPlural(count, {
+        one: `${f.formatNumber(count)} instance`,
+        many: `${f.formatNumber(count)} d’instances`,
+        other: `${f.formatNumber(count)} instances`,
+      }),
+  };
+}
 ```
 
 ### Don't
