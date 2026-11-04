@@ -1,0 +1,82 @@
+---
+# Authored 2026-11-04 from @canonical/react-ds-global src/lib/component/Chip/styles.css
+# on .ds.chip, with Chip.tsx for the parts.
+# Authored from the implementation, so the implementation wins where the graph differs:
+# - the graph lists `icon`, `state`, `color`, `size`, `dismissible` and `badge`;
+#   ChipProps has `lead`, `value`, `onDismiss`, `criticality`, `release` and `onClick`.
+#   The badge styles exist (`& .ds.badge`), but Chip takes no children, so nothing can
+#   place a badge. The graph's entry needs correcting to match the component.
+# - the root is a <button> when `onClick` is given and a <span> otherwise; one tree.
+# - the stylesheet reads variables that no token stratum declares, named at each
+#   binding below; only the modifier channels and the foreground steps resolve.
+node:
+  uri: global.component.chip
+  styles:
+    layout.type: inline-flex
+    layout.align: baseline
+    interaction.select: none
+    typography.whiteSpace: nowrap
+    appearance.border.style: solid
+    # --chip-color-border falls back to --color-border-high-contrast, which no stratum
+    # declares. Only the modifier channel resolves.
+    appearance.border.color: modifier.color.border
+    # --chip-border-width reads --spacing-border-width, which no stratum declares.
+    # --chip-border-radius is a component-local literal.
+    appearance.radius: 1rem
+    typography.color: [modifier.color.text, color.text]
+    appearance.background: [modifier.color.foreground.secondary, color.foreground.secondary]
+    # Hover and active read --hover--color-foreground-secondary and
+    # --active--color-foreground-secondary first, derived state variables, and apply
+    # only while the chip has no dismiss control.
+    appearance.background@hover: color.foreground.secondary.hover
+    appearance.background@active: color.foreground.secondary.active
+    # font-size, font-weight and line-height read --font-size-small,
+    # --font-weight-default and --line-height-small; padding and margins read
+    # --spacing-vertical-xsmall, --spacing-horizontal-small, --spacing-vertical-small and
+    # --spacing-horizontal-medium. No stratum declares any of them.
+  edges:
+    - node:
+        role: lead
+        styles:
+          layout.type: inline
+          layout.overflow: hidden
+          typography.overflow: ellipsis
+          typography.variant.caps: all-small-caps
+          typography.variant.numeric: oldstyle-nums
+      relation:
+        cardinality: "0..1"
+    - node:
+        # drawn as ::before on the value, only when a lead precedes it: ": "
+        role: lead separator
+      relation:
+        cardinality: "0..1"
+    - node:
+        role: value
+        styles:
+          layout.type: inline
+          layout.overflow: hidden
+          typography.overflow: ellipsis
+      relation:
+        cardinality: "0..1"
+    - node:
+        # A native <button aria-label="Dismiss">; the glyph is a data-URI background image.
+        role: dismiss control
+        styles:
+          layout.type: inline-block
+          layout.alignSelf: center
+          layout.flex.grow: 0
+          layout.flex.shrink: 0
+          appearance.border.color: transparent
+          appearance.radius: 50%
+          appearance.background.repeat: no-repeat
+          appearance.background.position: center
+          appearance.background.size: 0.75rem
+          # --chip-color-background reads --color-foreground-secondary.
+          appearance.background: color.foreground.secondary
+          appearance.background@hover: color.foreground.secondary.hover
+          appearance.background@active: color.foreground.secondary.active
+          interaction.cursor: pointer
+          # width and height read --font-size-default and the margin reads
+          # --spacing-horizontal-xsmall; neither is declared.
+      relation:
+        cardinality: "0..1"
