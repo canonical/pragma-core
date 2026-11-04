@@ -22,9 +22,9 @@ interface GeneratorDefinition<A extends Record<string, unknown>> {
 
 ```typescript
 interface GeneratorMeta {
-  name: string;           // Display name
-  description: string;    // One-line description
-  version?: string;       // Semver version
+  name: string; // Display name
+  description: string; // One-line description
+  version?: string; // Semver version
 }
 ```
 
@@ -245,32 +245,35 @@ interface SortFileLinesOptions {
 
 ```typescript
 // Sort a barrel file alphabetically
-sortFileLines("src/index.ts")
+sortFileLines("src/index.ts");
 
 // Append an export then sort
 sequence_([
-  appendFile("src/index.ts", '\nexport { newFeature } from "./new-feature.js";'),
+  appendFile(
+    "src/index.ts",
+    '\nexport { newFeature } from "./new-feature.js";',
+  ),
   sortFileLines("src/index.ts"),
-])
+]);
 
 // Keep header comments at top
 sortFileLines("src/index.ts", {
   headerPattern: /^\/\//,
-})
+});
 
 // Sort and remove duplicates
-sortFileLines("src/exports.ts", { unique: true })
+sortFileLines("src/exports.ts", { unique: true });
 
 // Case-insensitive sort
 sortFileLines("src/index.ts", {
-  compare: (a, b) => a.toLowerCase().localeCompare(b.toLowerCase())
-})
+  compare: (a, b) => a.toLowerCase().localeCompare(b.toLowerCase()),
+});
 
 // Keep "export default" at bottom
 sortFileLines("src/index.ts", {
   headerPattern: /^\/\//,
   footerPattern: /^export default/,
-})
+});
 ```
 
 **Effects:** `ReadFile` + `WriteFile` (composed primitive)
@@ -409,10 +412,10 @@ Adds string transformation functions to template variables.
 
 ```typescript
 interface TemplateHelpers {
-  camelCase: (s: string) => string;    // myComponent
-  pascalCase: (s: string) => string;   // MyComponent
-  kebabCase: (s: string) => string;    // my-component
-  snakeCase: (s: string) => string;    // my_component
+  camelCase: (s: string) => string; // myComponent
+  pascalCase: (s: string) => string; // MyComponent
+  kebabCase: (s: string) => string; // my-component
+  snakeCase: (s: string) => string; // my_component
   constantCase: (s: string) => string; // MY_COMPONENT
 }
 ```
@@ -444,7 +447,7 @@ sequence_(tasks: Task<unknown>[]): Task<void>
 Runs tasks in order, discards results.
 
 ```typescript
-sequence_([mkdir("out"), writeFile("out/a.txt", "...")])
+sequence_([mkdir("out"), writeFile("out/a.txt", "...")]);
 ```
 
 ### Parallelism
@@ -536,8 +539,8 @@ Captures success/failure as an Either value.
 ```typescript
 interface Either<E, A> {
   _tag: "Left" | "Right";
-  error?: E;   // when _tag === "Left"
-  value?: A;   // when _tag === "Right"
+  error?: E; // when _tag === "Left"
+  value?: A; // when _tag === "Right"
 }
 ```
 
@@ -612,6 +615,7 @@ dryRun<A>(task: Task<A>): { value: A; effects: Effect[] }
 ```
 
 Executes task with a test interpreter that:
+
 - Collects effects instead of executing them
 - Maintains virtual filesystem state
 - Returns the computed value and list of effects
@@ -666,7 +670,12 @@ All effects have a `_tag` discriminator.
 ```typescript
 type Effect =
   | { _tag: "WriteFile"; path: string; content: string }
-  | { _tag: "AppendFile"; path: string; content: string; createIfMissing: boolean }
+  | {
+      _tag: "AppendFile";
+      path: string;
+      content: string;
+      createIfMissing: boolean;
+    }
   | { _tag: "CopyFile"; src: string; dest: string }
   | { _tag: "CopyDirectory"; src: string; dest: string }
   | { _tag: "DeleteFile"; path: string }
@@ -676,8 +685,19 @@ type Effect =
   | { _tag: "Glob"; pattern: string; cwd?: string }
   | { _tag: "Exec"; command: string; args: string[]; options?: ExecOptions }
   | { _tag: "Log"; level: "info" | "warn" | "error" | "debug"; message: string }
-  | { _tag: "Template"; source: string; dest: string; vars: Record<string, unknown> }
-  | { _tag: "TemplateDir"; source: string; dest: string; vars: Record<string, unknown>; rename?: Record<string, string> }
+  | {
+      _tag: "Template";
+      source: string;
+      dest: string;
+      vars: Record<string, unknown>;
+    }
+  | {
+      _tag: "TemplateDir";
+      source: string;
+      dest: string;
+      vars: Record<string, unknown>;
+      rename?: Record<string, string>;
+    };
 ```
 
 ---
@@ -692,18 +712,18 @@ summon [generator-path] [options]
 
 ### Global Options
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--dry-run` | `-d` | Preview without writing files |
-| `--yes` | `-y` | Skip confirmation prompts and preview |
-| `--verbose` | `-v` | Show debug output |
-| `--show-files` | | Show file contents in dry-run |
-| `--llm` | `-l` | LLM mode: dry-run with markdown output, no prompts, no stamps |
-| `--format <type>` | | Output format: `json` (implies dry-run, no prompts, no stamps) |
-| `--no-preview` | | Skip file preview step |
-| `--no-generated-stamp` | | Disable generated file stamp comments |
-| `--generators` | `-g` | Load generators from specific path |
-| `--help` | `-h` | Show help |
+| Flag                   | Short | Description                                                    |
+| ---------------------- | ----- | -------------------------------------------------------------- |
+| `--dry-run`            | `-d`  | Preview without writing files                                  |
+| `--yes`                | `-y`  | Skip confirmation prompts and preview                          |
+| `--verbose`            | `-v`  | Show debug output                                              |
+| `--show-files`         |       | Show file contents in dry-run                                  |
+| `--llm`                | `-l`  | LLM mode: dry-run with markdown output, no prompts, no stamps  |
+| `--format <type>`      |       | Output format: `json` (implies dry-run, no prompts, no stamps) |
+| `--no-preview`         |       | Skip file preview step                                         |
+| `--no-generated-stamp` |       | Disable generated file stamp comments                          |
+| `--generators`         | `-g`  | Load generators from specific path                             |
+| `--help`               | `-h`  | Show help                                                      |
 
 ### LLM-Optimized Output
 
@@ -718,6 +738,7 @@ summon component react src/components/Button --llm
 ```
 
 Output includes:
+
 - **Answers table** — All prompt values as a markdown table
 - **Plan table** — Every effect (create file, mkdir, exec, etc.) as a table row
 - **File contents** — Full file content in fenced code blocks with language hints
@@ -807,6 +828,7 @@ Generators are discovered in order (later overrides earlier):
 ### Package Naming
 
 Generator packages must be named:
+
 - `summon-*` (e.g., `summon-component`)
 - `@scope/summon-*` (e.g., `@myorg/summon-component`)
 
@@ -816,7 +838,7 @@ Packages must export a `generators` record:
 
 ```typescript
 export const generators: Record<string, AnyGenerator> = {
-  "name": generator,
+  name: generator,
   "namespace/name": nestedGenerator,
 };
 ```

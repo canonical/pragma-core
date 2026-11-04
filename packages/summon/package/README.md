@@ -5,6 +5,7 @@ Package scaffolding for the pragma monorepo. Generates new npm packages with pro
 ## Why Use This?
 
 Setting up a new package in a monorepo involves:
+
 - Creating the directory structure
 - Writing package.json with correct workspace references
 - Setting up TypeScript config that extends the workspace config
@@ -188,31 +189,31 @@ packages/my-styles/
 
 ### Core Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--name` | Full package name with scope (e.g., `@canonical/my-package`) | Interactive prompt |
-| `--type` | Package type: `tool-ts`, `library`, or `css` | Interactive prompt |
-| `--description` | Package description for package.json | Empty |
+| Flag            | Description                                                  | Default            |
+| --------------- | ------------------------------------------------------------ | ------------------ |
+| `--name`        | Full package name with scope (e.g., `@canonical/my-package`) | Interactive prompt |
+| `--type`        | Package type: `tool-ts`, `library`, or `css`                 | Interactive prompt |
+| `--description` | Package description for package.json                         | Empty              |
 
 ### Feature Flags
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--framework` | UI framework for a `library`: `none`, `react` or `svelte` | `none` |
-| `--with-react` | Deprecated alias for `--framework=react`; warns and maps onto it | — |
-| `--with-storybook` | Add Storybook configuration | `false` |
-| `--with-cli` | Add CLI binary entry point | `false` |
-| `--with-pr-template` | Add a `.github/PULL_REQUEST_TEMPLATE.md` | `false` |
-| `--no-run-install` | Skip the install step (install runs by default) | — |
+| Flag                 | Description                                                      | Default |
+| -------------------- | ---------------------------------------------------------------- | ------- |
+| `--framework`        | UI framework for a `library`: `none`, `react` or `svelte`        | `none`  |
+| `--with-react`       | Deprecated alias for `--framework=react`; warns and maps onto it | —       |
+| `--with-storybook`   | Add Storybook configuration                                      | `false` |
+| `--with-cli`         | Add CLI binary entry point                                       | `false` |
+| `--with-pr-template` | Add a `.github/PULL_REQUEST_TEMPLATE.md`                         | `false` |
+| `--no-run-install`   | Skip the install step (install runs by default)                  | —       |
 
 ### Global Options
 
-| Flag | Description |
-|------|-------------|
+| Flag              | Description                   |
+| ----------------- | ----------------------------- |
 | `--dry-run`, `-d` | Preview without writing files |
-| `--yes`, `-y` | Skip confirmation prompts |
-| `--no-preview` | Skip the file preview step |
-| `--help` | Show all options |
+| `--yes`, `-y`     | Skip confirmation prompts     |
+| `--no-preview`    | Skip the file preview step    |
+| `--help`          | Show all options              |
 
 ---
 
@@ -223,11 +224,11 @@ packages/my-styles/
 A `library` can target a UI framework. The three values are peers — each one
 generates a package that installs, checks, builds and tests on its own.
 
-| Value | Build | Type check | Tests | Ruleset |
-|-------|-------|------------|-------|---------|
-| `none` | `tsc -p tsconfig.build.json` → `dist/esm` + `dist/types` | `tsc --noEmit` | `vitest run` | `library` |
-| `react` | `tsc -p tsconfig.build.json` → `dist/esm` + `dist/types` | `tsc --noEmit` | `vitest run` (jsdom) | `package-react` |
-| `svelte` | `svelte-package` → a flat `dist/` | `svelte-check` | `ssr` + `server`; `test:all` adds `client` | `package-svelte` |
+| Value    | Build                                                    | Type check     | Tests                                      | Ruleset          |
+| -------- | -------------------------------------------------------- | -------------- | ------------------------------------------ | ---------------- |
+| `none`   | `tsc -p tsconfig.build.json` → `dist/esm` + `dist/types` | `tsc --noEmit` | `vitest run`                               | `library`        |
+| `react`  | `tsc -p tsconfig.build.json` → `dist/esm` + `dist/types` | `tsc --noEmit` | `vitest run` (jsdom)                       | `package-react`  |
+| `svelte` | `svelte-package` → a flat `dist/`                        | `svelte-check` | `ssr` + `server`; `test:all` adds `client` | `package-svelte` |
 
 **`react`** adds React and React DOM as dependencies, `@types/react*` and
 `@canonical/typescript-config-react` as devDependencies, and scaffolds a
@@ -486,11 +487,14 @@ export const generator = {
     },
   ],
 
-  generate: (answers) => sequence_([
-    baseGenerator.generate(answers),
-    // Add GraphQL config if requested
-    answers.withGraphQL && addGraphQLSetup(answers),
-  ].filter(Boolean)),
+  generate: (answers) =>
+    sequence_(
+      [
+        baseGenerator.generate(answers),
+        // Add GraphQL config if requested
+        answers.withGraphQL && addGraphQLSetup(answers),
+      ].filter(Boolean),
+    ),
 };
 ```
 

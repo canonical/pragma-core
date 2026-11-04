@@ -7,12 +7,14 @@ Standards for icons development.
 **Identifier:** `cs:icons.file.naming`
 
 Icon files must:
+
 - Use kebab-case naming
 - Use semantic identifiers
 
 ### Do
 
 Use kebab-case and a semantic identifier for the icon file name.
+
 ```
 warning.svg
 user-profile.svg
@@ -22,6 +24,7 @@ arrow-down.svg
 ### Don't
 
 Include size, theme, or redundant suffixes in the file name.
+
 ```
 warning-16.svg
 warning-dark.svg
@@ -30,6 +33,7 @@ WARNING.svg
 ```
 
 Use non-semantic or ambiguous names that do not describe the icon.
+
 ```
 icon1.svg
 shape.svg
@@ -46,6 +50,7 @@ Each icon shall be stored as a single SVG file in the `icons/` directory.
 ### Do
 
 Store each icon as an individual SVG file in the designated `icons/` directory.
+
 ```
 icons/
   ├── warning.svg
@@ -56,6 +61,7 @@ icons/
 ### Don't
 
 Store icons in nested directories or use incorrect file extensions.
+
 ```
 icons/
   ├── variants/
@@ -66,6 +72,7 @@ icons/
 ```
 
 Combine multiple icons into a single SVG file.
+
 ```
 icons/
   └── all-icons.svg
@@ -82,6 +89,7 @@ Icon must use `fill` with `currentColor` for their paths and shapes.
 ### Do
 
 Use `currentColor` for the `fill` of paths in non-branded icons.
+
 ```svg
 <!-- Non-branded icon -->
 <svg viewBox="0 0 16 16">
@@ -94,11 +102,13 @@ Use `currentColor` for the `fill` of paths in non-branded icons.
 ### Don't
 
 Use hard-coded colors in icons.
+
 ```svg
 <path fill="#000000" d="..." />
 ```
 
 Use `opacity` to create different shades of a color.
+
 ```svg
 <path fill="currentColor" opacity="0.5" d="..." />
 ```
@@ -114,6 +124,7 @@ Each icon's SVG markup must contain a single `<g>` element with an `id` matching
 ### Do
 
 Include a single `<g>` element with an `id` that matches the filename.
+
 ```svg
 <!-- warning.svg -->
 <svg>
@@ -126,6 +137,7 @@ Include a single `<g>` element with an `id` that matches the filename.
 ### Don't
 
 Use multiple `<g>` elements or an `id` that does not match the filename.
+
 ```svg
 <!-- warning.svg -->
 <svg>
@@ -151,6 +163,7 @@ Example
 
 Use SVG <mask> elements to create negative space or overlays in icons.
 Example
+
 ```svg
 <svg width='16' height='16' xmlns='http://www.w3.org/2000/svg'>
   <defs>
@@ -167,6 +180,7 @@ Example
 
 Use <rect> with fill="white" to define the mask area, and <path> with fill="black" to subtract shapes.
 Example
+
 ```svg
 <mask id="mask">
   <rect width="16" height="16" fill="white"/>
@@ -176,6 +190,7 @@ Example
 
 Use opacity on mask paths to achieve partial negation (e.g., faded or semi-transparent cutouts).
 Example
+
 ```svg
 <mask id="progress-mask">
   <rect width="16" height="16" fill="white"/>
@@ -185,6 +200,7 @@ Example
 
 Reference the mask in the icon's main shape using mask="url(#mask-id)".
 Example
+
 ```svg
 <circle fill='currentColor' cx='8' cy='8' r='7' mask="url(#mask-id)"/>
 ```
@@ -193,6 +209,7 @@ Example
 
 Use masks without clear purpose or visual benefit.
 Example
+
 ```svg
 <!-- Bad: Mask used but has no effect -->
 <mask id="empty-mask">
@@ -203,6 +220,7 @@ Example
 
 use non-semantic mask ids or omit mask references in the main shape.
 Example
+
 ```svg
 <!-- Bad: Non-semantic mask id -->
 <mask id="123">
@@ -213,6 +231,7 @@ Example
 
 rely on masks for simple icons that do not require negative space or overlays.
 Example
+
 ```svg
 <!-- Bad: Mask used for a simple shape -->
 <mask id="simple-mask">
@@ -232,6 +251,7 @@ All icon SVGs must use a `viewBox` of `0 0 16 16`.
 ### Do
 
 Set the `viewBox` attribute to `0 0 16 16` in the `<svg>` element.
+
 ```svg
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'>
   <g id="icon">
@@ -243,6 +263,7 @@ Set the `viewBox` attribute to `0 0 16 16` in the `<svg>` element.
 ### Don't
 
 Use a `viewBox` with dimensions other than `16 16`.
+
 ```svg
 <!-- Bad: Different viewBox size -->
 <svg viewBox="0 0 24 24">
@@ -251,6 +272,7 @@ Use a `viewBox` with dimensions other than `16 16`.
 ```
 
 Use a non-square `viewBox`.
+
 ```svg
 <!-- Bad: Non-square viewBox -->
 <svg viewBox="0 0 16 24">
@@ -259,6 +281,7 @@ Use a non-square `viewBox`.
 ```
 
 Omit the `viewBox` attribute.
+
 ```svg
 <!-- Bad: Missing viewBox -->
 <svg width="16" height="16">
@@ -273,6 +296,7 @@ Omit the `viewBox` attribute.
 **Identifier:** `cs:icons.type_safety.definition`
 
 Icon names must be:
+
 - Maintained in a type-safe constant array
 - Used to generate the `IconName` type
 - Defined in the icon exporter package
@@ -280,21 +304,19 @@ Icon names must be:
 ### Do
 
 Define a constant array of icon names and derive the `IconName` type from it in the icon exporter package.
+
 ```typescript
 // In the icon exporter package
-export const ICON_NAMES = [
-  "warning",
-  "search",
-  "github"
-] as const;
+export const ICON_NAMES = ["warning", "search", "github"] as const;
 
-export type IconName = typeof ICON_NAMES[number];
+export type IconName = (typeof ICON_NAMES)[number];
 ```
 
 Import the `IconName` type in consumer code to ensure type safety.
+
 ```typescript
 // In consumer code
-import type { IconName } from '@canonical/ds-assets';
+import type { IconName } from "@canonical/ds-assets";
 
 export interface ComponentProps {
   icon: IconName;
@@ -302,9 +324,10 @@ export interface ComponentProps {
 ```
 
 Use `Pick` to restrict choices from `IconName` when necessary.
+
 ```typescript
 // In consumer code
-import type { IconName } from '@canonical/ds-assets';
+import type { IconName } from "@canonical/ds-assets";
 
 export interface ComponentProps {
   icon: Pick<IconName, "warning" | "search">;
@@ -314,24 +337,27 @@ export interface ComponentProps {
 ### Don't
 
 Define icon name types or values on the consumer side.
+
 ```typescript
 // Bad: String literal type defined in consumer code
 type ComponentIconName = "warning" | "search";
 
 export interface ComponentProps {
-    icon: ComponentIconName;
+  icon: ComponentIconName;
 }
 ```
 
 Use a generic `string` type for icon names.
+
 ```typescript
 // Bad: No type safety for icon names
 export interface ComponentProps {
-    icon: string;
+  icon: string;
 }
 ```
 
 Maintain separate type and value definitions.
+
 ```typescript
 // Bad: Duplication of icon names
 const ICONS = ["warning", "search"];
@@ -349,6 +375,7 @@ Each icon concept must have exactly one SVG file. Size and theme variants are no
 ### Do
 
 Use a single SVG file for each icon and control its size and color with CSS.
+
 ```svg
 <!-- Single icon file -->
 <svg viewBox="0 0 16 16">
@@ -366,6 +393,7 @@ Use a single SVG file for each icon and control its size and color with CSS.
 ### Don't
 
 Create multiple files for different icon sizes.
+
 ```
 warning.svg
 warning-small.svg
@@ -373,6 +401,7 @@ warning-large.svg
 ```
 
 Create multiple files for different themes.
+
 ```
 warning.svg
 warning-dark.svg

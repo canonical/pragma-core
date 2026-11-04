@@ -7,134 +7,93 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 **Note:** Version bump only for package @canonical/task
-
-
-
-
 
 # 0.43.0-experimental.0 (2026-09-29)
 
 ### Features
 
-* **shared:** add task and utils ([#5](https://github.com/canonical/pragma-core/issues/5)) ([3e2ebff](https://github.com/canonical/pragma-core/commit/3e2ebff2569468dbe5996b321ac1dd29b558286f))
-
+- **shared:** add task and utils ([#5](https://github.com/canonical/pragma-core/issues/5)) ([3e2ebff](https://github.com/canonical/pragma-core/commit/3e2ebff2569468dbe5996b321ac1dd29b558286f))
 
 # [0.42.0](https://github.com/canonical/pragma/compare/v0.41.0...v0.42.0) (2026-09-28)
 
-* chore(monorepo)!: move to TypeScript 7 (#1374) ([713d307](https://github.com/canonical/pragma/commit/713d3071d3980539a849ea95823736e8b343a1b1)), closes [#1374](https://github.com/canonical/pragma/issues/1374) [#lib](https://github.com/canonical/pragma/issues/lib) [#domains](https://github.com/canonical/pragma/issues/domains) [#i18n](https://github.com/canonical/pragma/issues/i18n) [#relay](https://github.com/canonical/pragma/issues/relay) [#styles](https://github.com/canonical/pragma/issues/styles)
+- chore(monorepo)!: move to TypeScript 7 (#1374) ([713d307](https://github.com/canonical/pragma/commit/713d3071d3980539a849ea95823736e8b343a1b1)), closes [#1374](https://github.com/canonical/pragma/issues/1374) [#lib](https://github.com/canonical/pragma/issues/lib) [#domains](https://github.com/canonical/pragma/issues/domains) [#i18n](https://github.com/canonical/pragma/issues/i18n) [#relay](https://github.com/canonical/pragma/issues/relay) [#styles](https://github.com/canonical/pragma/issues/styles)
 
 ### BREAKING CHANGES
 
-* the shared TypeScript configs, storybook-config,
+- the shared TypeScript configs, storybook-config,
   vitest-config-react and styles-typography no longer accept TypeScript 5 as
   a peer, and the tsconfig presets no longer set or expect baseUrl.
-
-  * chore(configs): keep TypeScript 5.9 and 6 in the typescript peer ranges
+  - chore(configs): keep TypeScript 5.9 and 6 in the typescript peer ranges
 
   The shared configs, the Storybook config, the Vitest React config and
   @canonical/typography now accept TypeScript ^5.9.3 || ^6.0.0 || ^7.0.0,
   so consumers still on 5.9 or 6 are not pushed off by this upgrade. The
   Svelte config keeps ^5.9.3 || ^6.0.0, because its consumers compile
   declarations with TypeScript 6.
-
-  * chore(boilerplate-vite,summon-application): drop the tsconfig paths for # imports
-
+  - chore(boilerplate-vite,summon-application): drop the tsconfig paths for # imports
 
 # [0.41.0](https://github.com/canonical/pragma/compare/v0.40.0...v0.41.0) (2026-09-25)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.40.0](https://github.com/canonical/pragma/compare/v0.39.0...v0.40.0) (2026-09-20)
 
 **Note:** Version bump only for package @canonical/task
-
-
-
-
 
 # [0.39.0](https://github.com/canonical/pragma/compare/v0.38.0...v0.39.0) (2026-09-18)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.38.0](https://github.com/canonical/pragma/compare/v0.37.0...v0.38.0) (2026-09-16)
 
 **Note:** Version bump only for package @canonical/task
-
-
-
-
 
 # [0.37.0](https://github.com/canonical/pragma/compare/v0.36.0...v0.37.0) (2026-09-02)
 
 ### Bug Fixes
 
-* **task:** report per-undo outcomes and isolate undo failures, so `setup --undo` tells the truth ([#1058](https://github.com/canonical/pragma/issues/1058)) ([92977b8](https://github.com/canonical/pragma/commit/92977b838304d1bef90716c0b0d9ed981106389b))
-
+- **task:** report per-undo outcomes and isolate undo failures, so `setup --undo` tells the truth ([#1058](https://github.com/canonical/pragma/issues/1058)) ([92977b8](https://github.com/canonical/pragma/commit/92977b838304d1bef90716c0b0d9ed981106389b))
 
 # [0.36.0](https://github.com/canonical/pragma/compare/v0.35.0...v0.36.0) (2026-08-29)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.35.0](https://github.com/canonical/pragma/compare/v0.34.0...v0.35.0) (2026-08-28)
-
 
 ### Bug Fixes
 
-* **deps:** batch package dependency updates ([#963](https://github.com/canonical/pragma/issues/963)) ([923f482](https://github.com/canonical/pragma/commit/923f4825325ecd1afc93ec9bbeca7437a4a4569f)), closes [#958](https://github.com/canonical/pragma/issues/958) [#935](https://github.com/canonical/pragma/issues/935) [#919](https://github.com/canonical/pragma/issues/919) [#918](https://github.com/canonical/pragma/issues/918) [#894](https://github.com/canonical/pragma/issues/894)
-* **task:** collect undos against real host state with fail-backtracking ([#971](https://github.com/canonical/pragma/issues/971)) ([5231ce5](https://github.com/canonical/pragma/commit/5231ce53a82aac704183723d2ca2ced791a338d7))
-* **task:** repair the fallback glob and implement templateDir's transform option ([#987](https://github.com/canonical/pragma/issues/987)) ([90fafdb](https://github.com/canonical/pragma/commit/90fafdb64b73c62bb4bba3655e09536f98d159b7))
-
+- **deps:** batch package dependency updates ([#963](https://github.com/canonical/pragma/issues/963)) ([923f482](https://github.com/canonical/pragma/commit/923f4825325ecd1afc93ec9bbeca7437a4a4569f)), closes [#958](https://github.com/canonical/pragma/issues/958) [#935](https://github.com/canonical/pragma/issues/935) [#919](https://github.com/canonical/pragma/issues/919) [#918](https://github.com/canonical/pragma/issues/918) [#894](https://github.com/canonical/pragma/issues/894)
+- **task:** collect undos against real host state with fail-backtracking ([#971](https://github.com/canonical/pragma/issues/971)) ([5231ce5](https://github.com/canonical/pragma/commit/5231ce53a82aac704183723d2ca2ced791a338d7))
+- **task:** repair the fallback glob and implement templateDir's transform option ([#987](https://github.com/canonical/pragma/issues/987)) ([90fafdb](https://github.com/canonical/pragma/commit/90fafdb64b73c62bb4bba3655e09536f98d159b7))
 
 ### Features
 
-* **summon:** preview the undo plan and confirm before reversing ([#974](https://github.com/canonical/pragma/issues/974)) ([3c8d8d6](https://github.com/canonical/pragma/commit/3c8d8d6cc6c4aafacd1fe81c60183b497d479763)), closes [#988](https://github.com/canonical/pragma/issues/988)
-* **task:** mark carried writes verbatim so seam transforms skip them ([#997](https://github.com/canonical/pragma/issues/997)) ([f61f87d](https://github.com/canonical/pragma/commit/f61f87d32f7f621cfa6baf2b5c928864533a0823))
-
-
-
-
+- **summon:** preview the undo plan and confirm before reversing ([#974](https://github.com/canonical/pragma/issues/974)) ([3c8d8d6](https://github.com/canonical/pragma/commit/3c8d8d6cc6c4aafacd1fe81c60183b497d479763)), closes [#988](https://github.com/canonical/pragma/issues/988)
+- **task:** mark carried writes verbatim so seam transforms skip them ([#997](https://github.com/canonical/pragma/issues/997)) ([f61f87d](https://github.com/canonical/pragma/commit/f61f87d32f7f621cfa6baf2b5c928864533a0823))
 
 # [0.34.0](https://github.com/canonical/pragma/compare/v0.33.0...v0.34.0) (2026-08-21)
 
-
-* fix(cli)!: correctness — an honest preview interpreter, zod off the fast path, and four diagnosed defects (#909) ([17e1fae](https://github.com/canonical/pragma/commit/17e1faeb55be0a23c267ec0bbc9f6f38e5bdc2d4)), closes [#909](https://github.com/canonical/pragma/issues/909) [#5](https://github.com/canonical/pragma/issues/5) [#1](https://github.com/canonical/pragma/issues/1) [#2](https://github.com/canonical/pragma/issues/2) [#4](https://github.com/canonical/pragma/issues/4) [#909](https://github.com/canonical/pragma/issues/909) [#909](https://github.com/canonical/pragma/issues/909)
-
+- fix(cli)!: correctness — an honest preview interpreter, zod off the fast path, and four diagnosed defects (#909) ([17e1fae](https://github.com/canonical/pragma/commit/17e1faeb55be0a23c267ec0bbc9f6f38e5bdc2d4)), closes [#909](https://github.com/canonical/pragma/issues/909) [#5](https://github.com/canonical/pragma/issues/5) [#1](https://github.com/canonical/pragma/issues/1) [#2](https://github.com/canonical/pragma/issues/2) [#4](https://github.com/canonical/pragma/issues/4) [#909](https://github.com/canonical/pragma/issues/909) [#909](https://github.com/canonical/pragma/issues/909)
 
 ### BREAKING CHANGES
 
-* `--dry-run` and the MCP plan-first preview can now FAIL. They
-previously exited 0 unconditionally, because reads were mocked; they now perform
-their reads for real, so a mutation whose run would die on a missing or
-unreadable file exits nonzero (CLI) or returns an error envelope (MCP) instead
-of printing a plan. Writes are still only recorded — a preview never touches the
-disk. Scripts that treat `--dry-run`'s exit code as always-0 must handle a
-nonzero exit, which reports a failure the real run was always going to hit.
-Planned byte counts also increase by the generator stamp the real run writes and
-the mock omitted.
+- `--dry-run` and the MCP plan-first preview can now FAIL. They
+  previously exited 0 unconditionally, because reads were mocked; they now perform
+  their reads for real, so a mutation whose run would die on a missing or
+  unreadable file exits nonzero (CLI) or returns an error envelope (MCP) instead
+  of printing a plan. Writes are still only recorded — a preview never touches the
+  disk. Scripts that treat `--dry-run`'s exit code as always-0 must handle a
+  nonzero exit, which reports a failure the real run was always going to hit.
+  Planned byte counts also increase by the generator stamp the real run writes and
+  the mock omitted.
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* feat(summon): the wizard's confirm gate previews honestly
+- feat(summon): the wizard's confirm gate previews honestly
 
 PR7 C8, ruling R6. The Ink wizard's preview pane — the plan a user reads
 immediately before consenting to a scaffold — was built with `dryRun`, the
@@ -187,7 +146,7 @@ deleted in PR8, so changing it now would be work with no consumer.
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* refactor(cli): the storeless fast path reads a manifest without zod
+- refactor(cli): the storeless fast path reads a manifest without zod
 
 PRA-106 (PR7 C4). One edge put zod on the graph `bin.ts` evaluates for
 `__complete`: `capabilities/index.ts` → `resolveSources` → `packIsComplete` →
@@ -244,186 +203,109 @@ wide enough that a single pair should not be read as more precise than it is.
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* fix(cli): a structural `--<TAB>` execs nothing in fish either
-
-
-
-
+- fix(cli): a structural `--<TAB>` execs nothing in fish either
 
 # [0.33.0](https://github.com/canonical/pragma/compare/v0.32.0...v0.33.0) (2026-07-24)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.32.0](https://github.com/canonical/pragma/compare/v0.31.0...v0.32.0) (2026-07-20)
 
 **Note:** Version bump only for package @canonical/task
-
-
-
-
 
 # [0.31.0](https://github.com/canonical/pragma/compare/v0.30.0...v0.31.0) (2026-07-17)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.30.0](https://github.com/canonical/pragma/compare/v0.29.1...v0.30.0) (2026-07-14)
-
 
 ### Bug Fixes
 
-* **task:** route effect exceptions through recovery and trampoline preview/undo interpreters ([#740](https://github.com/canonical/pragma/issues/740)) ([6ad8b65](https://github.com/canonical/pragma/commit/6ad8b6518134f259f12acf76b21e1ce985e75403))
+- **task:** route effect exceptions through recovery and trampoline preview/undo interpreters ([#740](https://github.com/canonical/pragma/issues/740)) ([6ad8b65](https://github.com/canonical/pragma/commit/6ad8b6518134f259f12acf76b21e1ce985e75403))
 
-
-* refactor(task)!: scope @canonical/task to its consumer-used surface (#755) ([cdc725d](https://github.com/canonical/pragma/commit/cdc725d481d24ede55fc2f5b82cfad9b7dc088bc)), closes [#755](https://github.com/canonical/pragma/issues/755) [#741](https://github.com/canonical/pragma/issues/741) [#742](https://github.com/canonical/pragma/issues/742)
-
+- refactor(task)!: scope @canonical/task to its consumer-used surface (#755) ([cdc725d](https://github.com/canonical/pragma/commit/cdc725d481d24ede55fc2f5b82cfad9b7dc088bc)), closes [#755](https://github.com/canonical/pragma/issues/755) [#741](https://github.com/canonical/pragma/issues/741) [#742](https://github.com/canonical/pragma/issues/742)
 
 ### Features
 
-* **task:** content-addressable effect identity — canonicalJSON, EffectId, per-tag descriptors ([#741](https://github.com/canonical/pragma/issues/741)) ([f1a3a0b](https://github.com/canonical/pragma/commit/f1a3a0bacb607b51d89cf8f7d206a8252b7842bf))
-* **task:** journal record/replay for deterministic effect execution ([#742](https://github.com/canonical/pragma/issues/742)) ([703db92](https://github.com/canonical/pragma/commit/703db927cf0bf9f937948817a2a2f7ba5cd1f87a))
-
+- **task:** content-addressable effect identity — canonicalJSON, EffectId, per-tag descriptors ([#741](https://github.com/canonical/pragma/issues/741)) ([f1a3a0b](https://github.com/canonical/pragma/commit/f1a3a0bacb607b51d89cf8f7d206a8252b7842bf))
+- **task:** journal record/replay for deterministic effect execution ([#742](https://github.com/canonical/pragma/issues/742)) ([703db92](https://github.com/canonical/pragma/commit/703db927cf0bf9f937948817a2a2f7ba5cd1f87a))
 
 ### BREAKING CHANGES
 
-* the journal/effect-identity exports are gone from
-@canonical/task; RunTaskOptions no longer accepts `journal`.
+- the journal/effect-identity exports are gone from
+  @canonical/task; RunTaskOptions no longer accepts `journal`.
 
 Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01DF9ExVCukzqpe1Fus9V1no
 
-* chore(task): drop imports orphaned by the journal-seam test removal
+- chore(task): drop imports orphaned by the journal-seam test removal
 
 Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01DF9ExVCukzqpe1Fus9V1no
-
-
-
-
 
 # [0.29.0](https://github.com/canonical/pragma/compare/v0.29.0-experimental.0...v0.29.0) (2026-07-03)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.29.0-experimental.0](https://github.com/canonical/pragma/compare/v0.28.0...v0.29.0-experimental.0) (2026-06-24)
-
 
 ### Features
 
-* **task:** stack-safe trampoline interpreter + effect-alphabet generics ([#691](https://github.com/canonical/pragma/issues/691)) ([7dc66a3](https://github.com/canonical/pragma/commit/7dc66a3b6ca939bf9970903af241d947b6187fd0))
-
-
-
-
+- **task:** stack-safe trampoline interpreter + effect-alphabet generics ([#691](https://github.com/canonical/pragma/issues/691)) ([7dc66a3](https://github.com/canonical/pragma/commit/7dc66a3b6ca939bf9970903af241d947b6187fd0))
 
 # [0.28.0](https://github.com/canonical/pragma/compare/v0.27.1-experimental.0...v0.28.0) (2026-06-16)
 
-
 ### Features
 
-* **summon-application:** add domain, route, and wrapper generators ([#626](https://github.com/canonical/pragma/issues/626)) ([6744b08](https://github.com/canonical/pragma/commit/6744b084236175b121f7aec36859976b5028a33e)), closes [#617](https://github.com/canonical/pragma/issues/617) [#643](https://github.com/canonical/pragma/issues/643)
-
-
-
-
+- **summon-application:** add domain, route, and wrapper generators ([#626](https://github.com/canonical/pragma/issues/626)) ([6744b08](https://github.com/canonical/pragma/commit/6744b084236175b121f7aec36859976b5028a33e)), closes [#617](https://github.com/canonical/pragma/issues/617) [#643](https://github.com/canonical/pragma/issues/643)
 
 ## [0.27.1-experimental.0](https://github.com/canonical/pragma/compare/v0.28.0-experimental.0...v0.27.1-experimental.0) (2026-05-21)
 
-
 ### Bug Fixes
 
-* **release:** unblock lerna 9 publish (access via publishConfig) ([#637](https://github.com/canonical/pragma/issues/637)) ([acc1185](https://github.com/canonical/pragma/commit/acc1185b43290c1edd88da25c000f7d9494caee6))
-
-
-
-
+- **release:** unblock lerna 9 publish (access via publishConfig) ([#637](https://github.com/canonical/pragma/issues/637)) ([acc1185](https://github.com/canonical/pragma/commit/acc1185b43290c1edd88da25c000f7d9494caee6))
 
 # [0.27.0](https://github.com/canonical/pragma/compare/v0.26.0...v0.27.0) (2026-04-29)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.26.0](https://github.com/canonical/pragma/compare/v0.25.0...v0.26.0) (2026-04-24)
 
 **Note:** Version bump only for package @canonical/task
-
-
-
-
 
 # [0.25.0](https://github.com/canonical/pragma/compare/v0.24.0...v0.25.0) (2026-04-17)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.24.0](https://github.com/canonical/pragma/compare/v0.23.0...v0.24.0) (2026-04-13)
 
 **Note:** Version bump only for package @canonical/task
-
-
-
-
 
 # [0.23.0](https://github.com/canonical/pragma/compare/v0.22.1...v0.23.0) (2026-04-07)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.22.0](https://github.com/canonical/pragma/compare/v0.22.0-experimental.0...v0.22.0) (2026-04-03)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.21.0](https://github.com/canonical/pragma/compare/v0.20.1...v0.21.0) (2026-04-01)
-
 
 ### Features
 
-* **styles:** spacing tokens, canonical borders, self-hosted fonts, addon-utils toolbar ([#552](https://github.com/canonical/pragma/issues/552)) ([b7f0adc](https://github.com/canonical/pragma/commit/b7f0adc3f83dabf95b7272ce60e01de3110706c4))
-
-
-
-
+- **styles:** spacing tokens, canonical borders, self-hosted fonts, addon-utils toolbar ([#552](https://github.com/canonical/pragma/issues/552)) ([b7f0adc](https://github.com/canonical/pragma/commit/b7f0adc3f83dabf95b7272ce60e01de3110706c4))
 
 # [0.20.0](https://github.com/canonical/pragma/compare/v0.19.0...v0.20.0) (2026-03-26)
 
 **Note:** Version bump only for package @canonical/task
 
-
-
-
-
 # [0.19.0](https://github.com/canonical/pragma/compare/v0.18.0...v0.19.0) (2026-03-26)
-
 
 ### Features
 
-* **cli-framework:** add cli-framework package, build and webarchitect checks (v0.1-P3) ([#490](https://github.com/canonical/pragma/issues/490)) ([549806d](https://github.com/canonical/pragma/commit/549806dc5626a8f0165ca6daeb1abc65bb52d32b))
-* **cli-framework:** add generator-to-CLI bridge modules (v0.1-P3b) ([#494](https://github.com/canonical/pragma/issues/494)) ([8bbaf5f](https://github.com/canonical/pragma/commit/8bbaf5fa68507b5f7de8301a9f481103e9aaf211))
-* **harness:** creates the @canonical/harnesses package ([#486](https://github.com/canonical/pragma/issues/486)) ([6e11f7d](https://github.com/canonical/pragma/commit/6e11f7d0a9bd1849edd3d95ffa1124deecbdd182))
-* **task,summon-core:** extract @canonical/task, restructure summon as @canonical/summon-core (v0.1-P1+P2) ([#484](https://github.com/canonical/pragma/issues/484)) ([1493baf](https://github.com/canonical/pragma/commit/1493baf6b28a9d5cbd7e4e13009f105945df72a9))
-* **task:** add Symlink effect, switchMap, gen(), suppressed errors, AbortSignal (v0.1-P1b) ([#489](https://github.com/canonical/pragma/issues/489)) ([b199523](https://github.com/canonical/pragma/commit/b19952348be60e815e8c33477dbb02380ff4e139))
-* **task:** add undo interpreter and --undo flag across CLI ([#538](https://github.com/canonical/pragma/issues/538)) ([8c2fff5](https://github.com/canonical/pragma/commit/8c2fff58eb4e5527e4ca2aa1bd7e9f42b3cf70ee))
+- **cli-framework:** add cli-framework package, build and webarchitect checks (v0.1-P3) ([#490](https://github.com/canonical/pragma/issues/490)) ([549806d](https://github.com/canonical/pragma/commit/549806dc5626a8f0165ca6daeb1abc65bb52d32b))
+- **cli-framework:** add generator-to-CLI bridge modules (v0.1-P3b) ([#494](https://github.com/canonical/pragma/issues/494)) ([8bbaf5f](https://github.com/canonical/pragma/commit/8bbaf5fa68507b5f7de8301a9f481103e9aaf211))
+- **harness:** creates the @canonical/harnesses package ([#486](https://github.com/canonical/pragma/issues/486)) ([6e11f7d](https://github.com/canonical/pragma/commit/6e11f7d0a9bd1849edd3d95ffa1124deecbdd182))
+- **task,summon-core:** extract @canonical/task, restructure summon as @canonical/summon-core (v0.1-P1+P2) ([#484](https://github.com/canonical/pragma/issues/484)) ([1493baf](https://github.com/canonical/pragma/commit/1493baf6b28a9d5cbd7e4e13009f105945df72a9))
+- **task:** add Symlink effect, switchMap, gen(), suppressed errors, AbortSignal (v0.1-P1b) ([#489](https://github.com/canonical/pragma/issues/489)) ([b199523](https://github.com/canonical/pragma/commit/b19952348be60e815e8c33477dbb02380ff4e139))
+- **task:** add undo interpreter and --undo flag across CLI ([#538](https://github.com/canonical/pragma/issues/538)) ([8c2fff5](https://github.com/canonical/pragma/commit/8c2fff58eb4e5527e4ca2aa1bd7e9f42b3cf70ee))

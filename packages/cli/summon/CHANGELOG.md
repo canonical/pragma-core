@@ -7,65 +7,51 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* **deps:** bumps dependency ink to v8 ([#89](https://github.com/canonical/pragma-core/issues/89)) ([1733c7a](https://github.com/canonical/pragma-core/commit/1733c7a577ccf88881d7dd6f1542a872ae98c2c9))
-
+- **deps:** bumps dependency ink to v8 ([#89](https://github.com/canonical/pragma-core/issues/89)) ([1733c7a](https://github.com/canonical/pragma-core/commit/1733c7a577ccf88881d7dd6f1542a872ae98c2c9))
 
 # [0.43.0](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.1...v0.43.0) (2026-09-30)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.43.0-experimental.1](https://github.com/canonical/pragma-core/compare/v0.43.0-experimental.0...v0.43.0-experimental.1) (2026-09-29)
 
 **Note:** Version bump only for package @canonical/summon
-
-
-
-
 
 # 0.43.0-experimental.0 (2026-09-29)
 
 ### Features
 
-* **cli:** add the pragma and summon CLIs ([#15](https://github.com/canonical/pragma-core/issues/15)) ([15a28fb](https://github.com/canonical/pragma-core/commit/15a28fb2e38f1f1bcd75b62bc48a5be5be5a9584))
-
+- **cli:** add the pragma and summon CLIs ([#15](https://github.com/canonical/pragma-core/issues/15)) ([15a28fb](https://github.com/canonical/pragma-core/commit/15a28fb2e38f1f1bcd75b62bc48a5be5be5a9584))
 
 # [0.42.0](https://github.com/canonical/pragma/compare/v0.41.0...v0.42.0) (2026-09-28)
 
-* chore(monorepo)!: move to TypeScript 7 (#1374) ([713d307](https://github.com/canonical/pragma/commit/713d3071d3980539a849ea95823736e8b343a1b1)), closes [#1374](https://github.com/canonical/pragma/issues/1374) [#lib](https://github.com/canonical/pragma/issues/lib) [#domains](https://github.com/canonical/pragma/issues/domains) [#i18n](https://github.com/canonical/pragma/issues/i18n) [#relay](https://github.com/canonical/pragma/issues/relay) [#styles](https://github.com/canonical/pragma/issues/styles)
-* feat(summon-application,pragma-cli)!: replace the route generator with a page generator (#1373) ([02ee6cd](https://github.com/canonical/pragma/commit/02ee6cd62835aa8b036e749b2dfcf71f07782b60)), closes [#1373](https://github.com/canonical/pragma/issues/1373)
+- chore(monorepo)!: move to TypeScript 7 (#1374) ([713d307](https://github.com/canonical/pragma/commit/713d3071d3980539a849ea95823736e8b343a1b1)), closes [#1374](https://github.com/canonical/pragma/issues/1374) [#lib](https://github.com/canonical/pragma/issues/lib) [#domains](https://github.com/canonical/pragma/issues/domains) [#i18n](https://github.com/canonical/pragma/issues/i18n) [#relay](https://github.com/canonical/pragma/issues/relay) [#styles](https://github.com/canonical/pragma/issues/styles)
+- feat(summon-application,pragma-cli)!: replace the route generator with a page generator (#1373) ([02ee6cd](https://github.com/canonical/pragma/commit/02ee6cd62835aa8b036e749b2dfcf71f07782b60)), closes [#1373](https://github.com/canonical/pragma/issues/1373)
 
 ### BREAKING CHANGES
 
-* the `route` generator is removed. Use
+- the `route` generator is removed. Use
   `summon page <domain>/<name>` and add the printed import and route entry
   to the domain's routes.ts by hand.
-
-  * docs(summon-application): document the page generator in place of the route generator
+  - docs(summon-application): document the page generator in place of the route generator
 
   The package README documents `summon page`, including the routing
   examples it prints. The conventions, the scaffolded app's README, the
   repository README and the router middleware cookbook name the page
   generator where they named the route generator.
-
-  * fix(summon-application): make the page path a required answer
+  - fix(summon-application): make the page path a required answer
 
   The page generator's names come only from its argument. A default
   "example/page" would let a run with --yes, or a tool call with no
   arguments, pick a domain and page name nobody gave, so the prompt has no
   default and a missing path is refused.
-
-  * fix(summon-application): refuse a page path with a leading slash
+  - fix(summon-application): refuse a page path with a leading slash
 
   "/invoices/detail" reads as a url or an absolute path, and the page path
   is neither: it is two name segments. Refusing it, instead of silently
   stripping the slash, also keeps the page path prompt in line with the
   other positional path prompts, which reject absolute paths.
-
-  * fix(summon-core): let a generator guard on a file that must already exist
+  - fix(summon-core): let a generator guard on a file that must already exist
 
   Before running a generator, execute builds it once without touching the
   disk to list its effects for the outcome summary. That walk cannot see
@@ -79,115 +65,84 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
   which is the plan of the run in which the guards pass. The real run that
   follows still enforces every guard against the host, with the guard's own
   message.
-
-  * fix(summon-application): report a missing domain or a taken page name as an invalid answer
+  - fix(summon-application): report a missing domain or a taken page name as an invalid answer
 
   The page generator's refusals are the answer's fault: the domain it names
   does not exist, or the page name is already taken. They now carry summon's
   invalid-answer code, so a host reports them as a usage error rather than
   as an internal error to file a bug about.
-
-  * fix(summon-application): name no command in the missing-domain refusal
+  - fix(summon-application): name no command in the missing-domain refusal
 
   The page generator runs under more than one CLI, so its refusal and its
   help text no longer tell the user to run a command the invoking CLI may
   not have; they say the domain must be created first.
-
-  * feat(pragma-cli): add create page
+  - feat(pragma-cli): add create page
 
   `pragma create page <domain>/<name>` (MCP tool `create_page`) runs the
   application generator package's page generator, like the other create
-* the shared TypeScript configs, storybook-config,
+- the shared TypeScript configs, storybook-config,
   vitest-config-react and styles-typography no longer accept TypeScript 5 as
   a peer, and the tsconfig presets no longer set or expect baseUrl.
-
-  * chore(configs): keep TypeScript 5.9 and 6 in the typescript peer ranges
+  - chore(configs): keep TypeScript 5.9 and 6 in the typescript peer ranges
 
   The shared configs, the Storybook config, the Vitest React config and
   @canonical/typography now accept TypeScript ^5.9.3 || ^6.0.0 || ^7.0.0,
   so consumers still on 5.9 or 6 are not pushed off by this upgrade. The
   Svelte config keeps ^5.9.3 || ^6.0.0, because its consumers compile
   declarations with TypeScript 6.
-
-  * chore(boilerplate-vite,summon-application): drop the tsconfig paths for # imports
-
+  - chore(boilerplate-vite,summon-application): drop the tsconfig paths for # imports
 
 # [0.41.0](https://github.com/canonical/pragma/compare/v0.40.0...v0.41.0) (2026-09-25)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.40.0](https://github.com/canonical/pragma/compare/v0.39.0...v0.40.0) (2026-09-20)
 
 **Note:** Version bump only for package @canonical/summon
-
-
-
-
 
 # [0.39.0](https://github.com/canonical/pragma/compare/v0.38.0...v0.39.0) (2026-09-18)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.38.0](https://github.com/canonical/pragma/compare/v0.37.0...v0.38.0) (2026-09-16)
 
 **Note:** Version bump only for package @canonical/summon
-
-
-
-
 
 # [0.37.0](https://github.com/canonical/pragma/compare/v0.36.0...v0.37.0) (2026-09-02)
 
 ### Bug Fixes
 
-* **deps:** update dependency chalk to v6 ([#1077](https://github.com/canonical/pragma/issues/1077)) ([077d7c6](https://github.com/canonical/pragma/commit/077d7c69ef30e9abc75b1b1c5663a2da4cad6b78))
-* **deps:** update dependency commander to v15 ([#1078](https://github.com/canonical/pragma/issues/1078)) ([8e3355f](https://github.com/canonical/pragma/commit/8e3355ff96e4f2e8e4cb08fb247444a60ec12935))
-* **task:** report per-undo outcomes and isolate undo failures, so `setup --undo` tells the truth ([#1058](https://github.com/canonical/pragma/issues/1058)) ([92977b8](https://github.com/canonical/pragma/commit/92977b838304d1bef90716c0b0d9ed981106389b))
-
+- **deps:** update dependency chalk to v6 ([#1077](https://github.com/canonical/pragma/issues/1077)) ([077d7c6](https://github.com/canonical/pragma/commit/077d7c69ef30e9abc75b1b1c5663a2da4cad6b78))
+- **deps:** update dependency commander to v15 ([#1078](https://github.com/canonical/pragma/issues/1078)) ([8e3355f](https://github.com/canonical/pragma/commit/8e3355ff96e4f2e8e4cb08fb247444a60ec12935))
+- **task:** report per-undo outcomes and isolate undo failures, so `setup --undo` tells the truth ([#1058](https://github.com/canonical/pragma/issues/1058)) ([92977b8](https://github.com/canonical/pragma/commit/92977b838304d1bef90716c0b0d9ed981106389b))
 
 # [0.36.0](https://github.com/canonical/pragma/compare/v0.35.0...v0.36.0) (2026-08-29)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.35.0](https://github.com/canonical/pragma/compare/v0.34.0...v0.35.0) (2026-08-28)
-
 
 ### Bug Fixes
 
-* **deps:** batch package dependency updates ([#963](https://github.com/canonical/pragma/issues/963)) ([923f482](https://github.com/canonical/pragma/commit/923f4825325ecd1afc93ec9bbeca7437a4a4569f)), closes [#958](https://github.com/canonical/pragma/issues/958) [#935](https://github.com/canonical/pragma/issues/935) [#919](https://github.com/canonical/pragma/issues/919) [#918](https://github.com/canonical/pragma/issues/918) [#894](https://github.com/canonical/pragma/issues/894)
-* **pragma-cli:** render one plan, on both surfaces ([#1020](https://github.com/canonical/pragma/issues/1020)) ([f4b4f90](https://github.com/canonical/pragma/commit/f4b4f90db5766d75bcd8f3afbedcdcb647bb7f34))
-* **summon-core:** drop the dead broken builtins and the phantom discovery default ([#985](https://github.com/canonical/pragma/issues/985)) ([a4e8d0c](https://github.com/canonical/pragma/commit/a4e8d0c895e44531b8efcb1549fb38947c1737f9))
+- **deps:** batch package dependency updates ([#963](https://github.com/canonical/pragma/issues/963)) ([923f482](https://github.com/canonical/pragma/commit/923f4825325ecd1afc93ec9bbeca7437a4a4569f)), closes [#958](https://github.com/canonical/pragma/issues/958) [#935](https://github.com/canonical/pragma/issues/935) [#919](https://github.com/canonical/pragma/issues/919) [#918](https://github.com/canonical/pragma/issues/918) [#894](https://github.com/canonical/pragma/issues/894)
+- **pragma-cli:** render one plan, on both surfaces ([#1020](https://github.com/canonical/pragma/issues/1020)) ([f4b4f90](https://github.com/canonical/pragma/commit/f4b4f90db5766d75bcd8f3afbedcdcb647bb7f34))
+- **summon-core:** drop the dead broken builtins and the phantom discovery default ([#985](https://github.com/canonical/pragma/issues/985)) ([a4e8d0c](https://github.com/canonical/pragma/commit/a4e8d0c895e44531b8efcb1549fb38947c1737f9))
 
-
-* feat(pragma)!: mount summon's generators instead of mirroring them (#1005) ([299e206](https://github.com/canonical/pragma/commit/299e206a4dd76b62fc48a6d436d33d06652e6fdf)), closes [#1005](https://github.com/canonical/pragma/issues/1005)
-
+- feat(pragma)!: mount summon's generators instead of mirroring them (#1005) ([299e206](https://github.com/canonical/pragma/commit/299e206a4dd76b62fc48a6d436d33d06652e6fdf)), closes [#1005](https://github.com/canonical/pragma/issues/1005)
 
 ### Features
 
-* **summon:** preview the undo plan and confirm before reversing ([#974](https://github.com/canonical/pragma/issues/974)) ([3c8d8d6](https://github.com/canonical/pragma/commit/3c8d8d6cc6c4aafacd1fe81c60183b497d479763)), closes [#988](https://github.com/canonical/pragma/issues/988)
-
+- **summon:** preview the undo plan and confirm before reversing ([#974](https://github.com/canonical/pragma/issues/974)) ([3c8d8d6](https://github.com/canonical/pragma/commit/3c8d8d6cc6c4aafacd1fe81c60183b497d479763)), closes [#988](https://github.com/canonical/pragma/issues/988)
 
 ### BREAKING CHANGES
 
-* summon-core no longer exposes an embedded template store —
-callers pass a real path to `loadTemplate`. `GeneratorCliHost`,
-`registerGeneratorCommands` on the main projection subpath, the
-`writeUsageError` hook and the message-only usage-error exports are gone.
-`summon application react` no longer accepts `--no-ssr`/`--no-router`.
+- summon-core no longer exposes an embedded template store —
+  callers pass a real path to `loadTemplate`. `GeneratorCliHost`,
+  `registerGeneratorCommands` on the main projection subpath, the
+  `writeUsageError` hook and the message-only usage-error exports are gone.
+  `summon application react` no longer accepts `--no-ssr`/`--no-router`.
 
-* feat(pragma)!: mount summon's generators instead of mirroring them
+- feat(pragma)!: mount summon's generators instead of mirroring them
 
 pragma's `create` verb hand-maintained a copy of summon's generator surface —
 a flag list in `constants.ts`, an adapter that mapped it back, and a PROTECTED
@@ -219,12 +174,13 @@ Also here: the perf gate's `globalSetup` builds `dist` once behind a
 cross-process lock instead of once per worker, `scripts/codegen.ts` generates
 the create surface the covenant checks against, and the retired-flag migration
 handler no longer matches commands that never carried the flag.
-* `--ssr` and `--router` are gone from `pragma create
-application` — the generator no longer declares them. The
-`@canonical/summon-component/embedded` subpath export is removed along with
-its last consumer.
 
-* fix(pragma-cli,summon): make build-lock waiters re-acquire before re-statting freshness
+- `--ssr` and `--router` are gone from `pragma create
+application` — the generator no longer declares them. The
+  `@canonical/summon-component/embedded` subpath export is removed along with
+  its last consumer.
+
+- fix(pragma-cli,summon): make build-lock waiters re-acquire before re-statting freshness
 
 The waiter arm of buildUnderLock (pragma-cli src/testing/perf/
 globalSetup.ts:187, summon twin src/testing/globalSetup.ts:142) paired a
@@ -241,7 +197,7 @@ or carries another pid, so any freshness observation outside the
 waiter's own lock goes red deterministically (verified red against the
 removed fast path).
 
-* fix(pragma-cli): stop offering mutation flags on mounted namespace completions
+- fix(pragma-cli): stop offering mutation flags on mounted namespace completions
 
 toMountedEntry (src/kernel/completion/model.ts:250) stamped the owning
 verb's mutates onto every node of a mounted subtree, so the completion
@@ -253,7 +209,7 @@ children is now non-mutating for completion; the verb's mutability
 descends to the leaves. The literal namespace-tier pin and the
 emitSurface agreement assertion are updated to the registered grammar.
 
-* fix(pragma-cli): complete registered positional-prompt flags on create leaves
+- fix(pragma-cli): complete registered positional-prompt flags on create leaves
 
 leafChild (src/capabilities/create/mount.ts:466) filtered positional
 prompts out of a leaf's completion flag list, but addPromptOptions
@@ -264,7 +220,7 @@ leaf's own --help) that completion silently withheld. Every prompt now
 contributes its flag; the positional argument stays an additional
 spelling. The literal leaf-tier pins gain the positional-prompt flags.
 
-* fix(pragma-cli): stop retired-flag detection reading past the option terminator
+- fix(pragma-cli): stop retired-flag detection reading past the option terminator
 
 handleProgramError's retired-grammar scan (src/bin.ts:314) matched
 --framework anywhere in stripped argv, so a parse failure on `create
@@ -276,15 +232,11 @@ selectScanSpan (src/kernel/project/cli/globalFlags.ts), restricting
 detection to the pre-`--` span; a subprocess regression test pins the
 honest error.
 
-
-
-
-
 # Unreleased
 
 ### BREAKING CHANGES
 
-* **`@canonical/cli-core` is deleted.** It was the v1 shared-CLI framework, and
+- **`@canonical/cli-core` is deleted.** It was the v1 shared-CLI framework, and
   the v1 name dies with the v1 model: the pragma kernel dropped the dependency
   when it built its own command grammar, and every symbol summon still imported
   from it had already been moved down into `@canonical/summon-core` and was
@@ -304,7 +256,7 @@ honest error.
   this package: those concerns live inside the pragma kernel's command grammar,
   whose extraction into a shared package is tracked separately.
 
-* **One interaction model — non-interactive runs without complete input now
+- **One interaction model — non-interactive runs without complete input now
   REFUSE (exit 2).** Summon adopts the shared interaction decision it now
   shares verbatim with `pragma create` (the contract is executed, not
   written down: summon-core's projection suite pins the decision and
@@ -312,7 +264,6 @@ honest error.
   and compares what they emit). Three behaviors that
   previously fell through to mounting the Ink UI are now loud, scriptable
   failures:
-
   - **Non-TTY refusal**: a piped/CI run of a generator without `--yes`,
     `--dry-run`, `--undo`, or a complete set of answer flags exits **2** with
     `Refusing to scaffold in a non-interactive run without complete input.
@@ -381,9 +332,9 @@ honest error.
   defaulting the rest; and the long-missing `--undo` row appears in every
   generator's `--help`. Generated trees are byte-identical throughout; a
   `--yes` run with VALID answers is untouched (an invalid explicit answer
-  now refuses — see *Invalid input* above).
+  now refuses — see _Invalid input_ above).
 
-* **`application/react` drops its `ssr` and `router` prompts — SSR and the
+- **`application/react` drops its `ssr` and `router` prompts — SSR and the
   router are always on.** The scaffold has no SPA arm, so the two wizard
   questions (`Include SSR?`, `Include router?`) only ever accepted their
   default: answering "no" hit the generator's own guard. Worse, the pair made
@@ -397,24 +348,22 @@ honest error.
 
 # [0.34.0](https://github.com/canonical/pragma/compare/v0.33.0...v0.34.0) (2026-08-21)
 
-
-* refactor(cli)!: removals & fold — tier and block go through the story compiler, token add-config removed, cli-core folded into summon (#939) ([11d76c8](https://github.com/canonical/pragma/commit/11d76c83667c3f76e543c0d6dfc1f0c99f29bd3b)), closes [#939](https://github.com/canonical/pragma/issues/939) [#761](https://github.com/canonical/pragma/issues/761) [#939](https://github.com/canonical/pragma/issues/939) [#909](https://github.com/canonical/pragma/issues/909)
-
+- refactor(cli)!: removals & fold — tier and block go through the story compiler, token add-config removed, cli-core folded into summon (#939) ([11d76c8](https://github.com/canonical/pragma/commit/11d76c83667c3f76e543c0d6dfc1f0c99f29bd3b)), closes [#939](https://github.com/canonical/pragma/issues/939) [#761](https://github.com/canonical/pragma/issues/761) [#939](https://github.com/canonical/pragma/issues/939) [#909](https://github.com/canonical/pragma/issues/909)
 
 ### BREAKING CHANGES
 
-* `pragma tier lookup <name>` is removed; the verb is now
-the tier story's compiled lookup `pragma tier lookup <name...>`. The
-`tier_lookup` MCP tool takes `name: string[]` (was `name: string`) and
-returns the uniform lookup envelope `{ results, errors }` (was a single
-`{ uri, name, blocks }` object); its completion offers prefixed-IRI
-candidates. The `--format llm`/plain output follows the generic lookup
-renderers.
+- `pragma tier lookup <name>` is removed; the verb is now
+  the tier story's compiled lookup `pragma tier lookup <name...>`. The
+  `tier_lookup` MCP tool takes `name: string[]` (was `name: string`) and
+  returns the uniform lookup envelope `{ results, errors }` (was a single
+  `{ uri, name, blocks }` object); its completion offers prefixed-IRI
+  candidates. The `--format llm`/plain output follows the generic lookup
+  renderers.
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* refactor(cli)!: block list is the block story's declared, unfiltered list
+- refactor(cli)!: block list is the block story's declared, unfiltered list
 
 L-OPEN-9 (PRA-111): `block list` was the last hand-written data verb, and the
 filtering it existed for — the configured tier's parent CHAIN, the release
@@ -458,6 +407,7 @@ CONFIG HONESTY — the fields are KEPT, their claims are not. Removing
 `config.tier`/`config.channel` would be a second, unrequested breaking change,
 so they stay accepted and reported; what changes is every place that promised
 they scope something:
+
 - `emitReference.ts`'s field docs now say `tier` is accepted and SCOPES NOTHING
   (reported by `config show`/`info` only) and `channel` selects the npm dist-tag
   `upgrade`/`info` read, nothing more (`docs/reference/config.md` regenerated);
@@ -473,6 +423,7 @@ they scope something:
   the hand-written verb are corrected rather than deleted.
 
 PROTECTED updates, each replacing a dying assert with the new contract:
+
 - surface.test.ts re-pins the flagless emitted verb;
 - staleCommands.test.ts BANS `--all-tiers` in every shipped doc, so the retired
   flag cannot come back through prose (the same treatment `--llm` got);
@@ -500,19 +451,20 @@ independent`, asserting the beta-gated block is visible on the normal channel.
 Docs regenerated (`bun run gen:reference`: commands.md, tools.md, config.md);
 getting-started.md and the storybook-hub CLI page describe the unfiltered list.
 Gates: check, 1090 tests, perf budgets 8/8, build.
-* `pragma block list --all-tiers` is removed — the CLI rejects
-the flag as unknown, and the `block_list` MCP tool no longer accepts an
-`allTiers` parameter (it takes no input at all). `block list` no longer filters
-by the configured tier chain or release channel: it returns every block in the
-store, experimental and alpha ones included. `config.tier` consequently scopes
-nothing anywhere in the CLI, and `config.channel` retains only its npm dist-tag
-role for `upgrade`/`info`; both fields are still accepted and reported. Row
-shape, ordering and exit codes are unchanged.
+
+- `pragma block list --all-tiers` is removed — the CLI rejects
+  the flag as unknown, and the `block_list` MCP tool no longer accepts an
+  `allTiers` parameter (it takes no input at all). `block list` no longer filters
+  by the configured tier chain or release channel: it returns every block in the
+  store, experimental and alpha ones included. `config.tier` consequently scopes
+  nothing anywhere in the CLI, and `config.channel` retains only its npm dist-tag
+  role for `upgrade`/`info`; both fields are still accepted and reported. Row
+  shape, ordering and exit codes are unchanged.
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* refactor(cli)!: token add-config is removed, not ported
+- refactor(cli)!: token add-config is removed, not ported
 
 L-OPEN-9 (PRA-111), the third and last removal: `token add-config` writes a
 `tokens.config.mjs` starter file for the terrazzo pipeline. That is a MUTATION,
@@ -540,6 +492,7 @@ plan-first/confirm gate is a kernel contract, not this verb's, and
 behind it.
 
 PROTECTED updates, each replacing a dying assert with the new contract:
+
 - surface.test.ts pins `token`'s three read verbs, and both closing-direction
   guards (`surface.test.ts`'s emitted==covenant and
   `surfaceConformance.test.ts`'s frozen-tool count) move to 37 — the count is
@@ -571,16 +524,17 @@ architecture.md's "three DOMAIN verbs the story grammar cannot express" and
 config-model.md's composite clause are corrected here because the stale-command
 gate makes them red — the remaining composite framing is C4's sweep.
 Gates: check, 1087 tests, perf budgets 8/8, build.
-* `pragma token add-config` is removed and so is the
-`token_add-config` MCP tool; the designed MCP tool count drops from 38 to 37.
-Nothing in the CLI generates `tokens.config.mjs` any more — write it by hand or
-drive terrazzo directly. The `token` noun keeps `list`, `lookup` and `sample`,
-unchanged.
+
+- `pragma token add-config` is removed and so is the
+  `token_add-config` MCP tool; the designed MCP tool count drops from 38 to 37.
+  Nothing in the CLI generates `tokens.config.mjs` any more — write it by hand or
+  drive terrazzo directly. The `token` noun keeps `list`, `lookup` and `sample`,
+  unchanged.
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* docs(cli): the composite framing is retired, and a guard replaces it
+- docs(cli): the composite framing is retired, and a guard replaces it
 
 C1-C3 removed the last three hand-written data verbs, so every place that
 explained the CLI as "stories PLUS a few hand-written verbs" now describes a
@@ -607,6 +561,7 @@ read surface in pragma.conf.ts" — and it fails on re-introduction, not on
 review.
 
 Framing swept, each site now saying what is true:
+
 - `capabilities/distribution.ts` and `capabilities/index.ts` (the latter in C3):
   no data noun is authored, so a declared story IS the whole noun;
 - `kernel/packs/types.ts`: `list` is optional so a pack can serve a noun that is
@@ -639,28 +594,29 @@ Gates: check, 1088 tests, build.
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* test(summon): the byte-equality guarantee becomes a named conformance suite
+- test(summon): the byte-equality guarantee becomes a named conformance suite
 
 L-OPEN-10 (PRA-121) item 2. Both product binaries generate the same tree from
-* the `@canonical/cli-core` package is deleted and no longer
-published. Import the surviving symbols from `@canonical/summon-core` under the
-same names — `runGeneratorTask`, `createGeneratorStamp`,
-`createStampOnEffectStart`, `answerPromptWithDefaults`, `buildReplayCommand`,
-`formatContentPreview`, `formatEffectLine`, `formatEffectWithContent`,
-`formatLlmHelp`, `formatLlmJson`, `formatLlmMarkdown`, `getActionColor`,
-`getActionLabel`, `getEffectPayload`, `getLanguageHint`, `getLlmActionLabel`,
-`getLlmEffectPath`, `isVisibleEffect` — except `promptForAnswers`, which is
-`collectAnswers`. The v1 command model (`CommandDefinition`, `registerAll`,
-`formatHelp`/`formatNounHelp`/`formatVerbHelp`/`formatVerbList`,
-`buildCompleters`, `resolveCompletion`, `createOutputAdapter`,
-`createExitResult`, `createOutputResult`, `generatorToCommand`,
-`promptToParameter`, `executeGenerator`) is removed with no successor in any
-published package.
+
+- the `@canonical/cli-core` package is deleted and no longer
+  published. Import the surviving symbols from `@canonical/summon-core` under the
+  same names — `runGeneratorTask`, `createGeneratorStamp`,
+  `createStampOnEffectStart`, `answerPromptWithDefaults`, `buildReplayCommand`,
+  `formatContentPreview`, `formatEffectLine`, `formatEffectWithContent`,
+  `formatLlmHelp`, `formatLlmJson`, `formatLlmMarkdown`, `getActionColor`,
+  `getActionLabel`, `getEffectPayload`, `getLanguageHint`, `getLlmActionLabel`,
+  `getLlmEffectPath`, `isVisibleEffect` — except `promptForAnswers`, which is
+  `collectAnswers`. The v1 command model (`CommandDefinition`, `registerAll`,
+  `formatHelp`/`formatNounHelp`/`formatVerbHelp`/`formatVerbList`,
+  `buildCompleters`, `resolveCompletion`, `createOutputAdapter`,
+  `createExitResult`, `createOutputResult`, `generatorToCommand`,
+  `promptToParameter`, `executeGenerator`) is removed with no successor in any
+  published package.
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* feat(summon): the generator definition is summon's versioned domain spec
+- feat(summon): the generator definition is summon's versioned domain spec
 
 L-OPEN-10 (PRA-121) item 3. The shape of a generator was described only by
 TypeScript interfaces inside this package, so a consumer outside TypeScript had
@@ -702,7 +658,7 @@ Gates: summon-core check + 422 tests at 100% coverage.
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* docs(cli): the tool is the tool, not a next generation of one
+- docs(cli): the tool is the tool, not a next generation of one
 
 L-OPEN-10 (PRA-121) item 4. Two places still described `pragma` as a successor
 rather than as itself, and both are read by someone outside the repo:
@@ -740,167 +696,92 @@ reference pages never carried either string).
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_017EwUvEW5ZgjAYc9KWPjHCZ
 
-* test(cli): the real-run create gates carry explicit timeouts
-
-
-
-
+- test(cli): the real-run create gates carry explicit timeouts
 
 # [0.33.0](https://github.com/canonical/pragma/compare/v0.32.0...v0.33.0) (2026-07-24)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.32.0](https://github.com/canonical/pragma/compare/v0.31.0...v0.32.0) (2026-07-20)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.31.0](https://github.com/canonical/pragma/compare/v0.30.0...v0.31.0) (2026-07-17)
-
 
 ### Features
 
-* **cli:** pragma create reuses summon's rich Ink UI when interactive ([#819](https://github.com/canonical/pragma/issues/819)) ([23d88b0](https://github.com/canonical/pragma/commit/23d88b0f080650da5e50546e0d416b9e844bb6ae))
-
-
-
-
+- **cli:** pragma create reuses summon's rich Ink UI when interactive ([#819](https://github.com/canonical/pragma/issues/819)) ([23d88b0](https://github.com/canonical/pragma/commit/23d88b0f080650da5e50546e0d416b9e844bb6ae))
 
 # [0.30.0](https://github.com/canonical/pragma/compare/v0.29.1...v0.30.0) (2026-07-14)
 
-
 ### Bug Fixes
 
-* **summon:** run under plain Node + fix publish-time breakages ([#721](https://github.com/canonical/pragma/issues/721)) ([c24295f](https://github.com/canonical/pragma/commit/c24295f7c67f5d3577d77f0abad818073871bd2e))
-
+- **summon:** run under plain Node + fix publish-time breakages ([#721](https://github.com/canonical/pragma/issues/721)) ([c24295f](https://github.com/canonical/pragma/commit/c24295f7c67f5d3577d77f0abad818073871bd2e))
 
 ### Features
 
-* **cli:** byte-identical output for pragma create and summon; summon on the shared core ([#761](https://github.com/canonical/pragma/issues/761)) ([c10e133](https://github.com/canonical/pragma/commit/c10e1332e3a1f7e4f815da7cc40ecb4f95fbb045))
-
-
-
-
+- **cli:** byte-identical output for pragma create and summon; summon on the shared core ([#761](https://github.com/canonical/pragma/issues/761)) ([c10e133](https://github.com/canonical/pragma/commit/c10e1332e3a1f7e4f815da7cc40ecb4f95fbb045))
 
 # [0.29.0](https://github.com/canonical/pragma/compare/v0.29.0-experimental.0...v0.29.0) (2026-07-03)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.29.0-experimental.0](https://github.com/canonical/pragma/compare/v0.28.0...v0.29.0-experimental.0) (2026-06-24)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.28.0](https://github.com/canonical/pragma/compare/v0.27.1-experimental.0...v0.28.0) (2026-06-16)
-
 
 ### Features
 
-* **summon-application:** add domain, route, and wrapper generators ([#626](https://github.com/canonical/pragma/issues/626)) ([6744b08](https://github.com/canonical/pragma/commit/6744b084236175b121f7aec36859976b5028a33e)), closes [#617](https://github.com/canonical/pragma/issues/617) [#643](https://github.com/canonical/pragma/issues/643)
-
-
-
-
+- **summon-application:** add domain, route, and wrapper generators ([#626](https://github.com/canonical/pragma/issues/626)) ([6744b08](https://github.com/canonical/pragma/commit/6744b084236175b121f7aec36859976b5028a33e)), closes [#617](https://github.com/canonical/pragma/issues/617) [#643](https://github.com/canonical/pragma/issues/643)
 
 ## [0.27.1-experimental.0](https://github.com/canonical/pragma/compare/v0.28.0-experimental.0...v0.27.1-experimental.0) (2026-05-21)
 
-
 ### Bug Fixes
 
-* **release:** unblock lerna 9 publish (access via publishConfig) ([#637](https://github.com/canonical/pragma/issues/637)) ([acc1185](https://github.com/canonical/pragma/commit/acc1185b43290c1edd88da25c000f7d9494caee6))
-
-
-
-
+- **release:** unblock lerna 9 publish (access via publishConfig) ([#637](https://github.com/canonical/pragma/issues/637)) ([acc1185](https://github.com/canonical/pragma/commit/acc1185b43290c1edd88da25c000f7d9494caee6))
 
 # [0.27.0](https://github.com/canonical/pragma/compare/v0.26.0...v0.27.0) (2026-04-29)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.26.0](https://github.com/canonical/pragma/compare/v0.25.0...v0.26.0) (2026-04-24)
 
 **Note:** Version bump only for package @canonical/summon
-
-
-
-
 
 # [0.25.0](https://github.com/canonical/pragma/compare/v0.24.0...v0.25.0) (2026-04-17)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.24.0](https://github.com/canonical/pragma/compare/v0.23.0...v0.24.0) (2026-04-13)
 
 **Note:** Version bump only for package @canonical/summon
-
-
-
-
 
 # [0.23.0](https://github.com/canonical/pragma/compare/v0.22.1...v0.23.0) (2026-04-07)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.22.0](https://github.com/canonical/pragma/compare/v0.22.0-experimental.0...v0.22.0) (2026-04-03)
 
 **Note:** Version bump only for package @canonical/summon
-
-
-
-
 
 # [0.21.0](https://github.com/canonical/pragma/compare/v0.20.1...v0.21.0) (2026-04-01)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.20.0](https://github.com/canonical/pragma/compare/v0.19.0...v0.20.0) (2026-03-26)
 
 **Note:** Version bump only for package @canonical/summon
 
-
-
-
-
 # [0.19.0](https://github.com/canonical/pragma/compare/v0.18.0...v0.19.0) (2026-03-26)
-
 
 ### Bug Fixes
 
-* **ci:** add missing build step to push workflow, replace workspace: protocol ([#521](https://github.com/canonical/pragma/issues/521)) ([0e88312](https://github.com/canonical/pragma/commit/0e883120c96034d180de0ebdde6e9740d97609fe)), closes [#512](https://github.com/canonical/pragma/issues/512)
-* **summon-component:** duplication of "generated by" comment ([#495](https://github.com/canonical/pragma/issues/495)) ([c52a374](https://github.com/canonical/pragma/commit/c52a374a85a9f703d0ff04b3fc3fd6d18370c458))
-
+- **ci:** add missing build step to push workflow, replace workspace: protocol ([#521](https://github.com/canonical/pragma/issues/521)) ([0e88312](https://github.com/canonical/pragma/commit/0e883120c96034d180de0ebdde6e9740d97609fe)), closes [#512](https://github.com/canonical/pragma/issues/512)
+- **summon-component:** duplication of "generated by" comment ([#495](https://github.com/canonical/pragma/issues/495)) ([c52a374](https://github.com/canonical/pragma/commit/c52a374a85a9f703d0ff04b3fc3fd6d18370c458))
 
 ### Features
 
-* **pragma:** extract summon binary + add shared operations (v0.1-P3b/P4/D3) ([#497](https://github.com/canonical/pragma/issues/497)) ([15bfa93](https://github.com/canonical/pragma/commit/15bfa9381fc9571099467d382f60ae9f70b60bd5))
-* **task:** add undo interpreter and --undo flag across CLI ([#538](https://github.com/canonical/pragma/issues/538)) ([8c2fff5](https://github.com/canonical/pragma/commit/8c2fff58eb4e5527e4ca2aa1bd7e9f42b3cf70ee))
+- **pragma:** extract summon binary + add shared operations (v0.1-P3b/P4/D3) ([#497](https://github.com/canonical/pragma/issues/497)) ([15bfa93](https://github.com/canonical/pragma/commit/15bfa9381fc9571099467d382f60ae9f70b60bd5))
+- **task:** add undo interpreter and --undo flag across CLI ([#538](https://github.com/canonical/pragma/issues/538)) ([8c2fff5](https://github.com/canonical/pragma/commit/8c2fff58eb4e5527e4ca2aa1bd7e9f42b3cf70ee))

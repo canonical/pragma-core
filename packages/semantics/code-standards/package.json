@@ -9,7 +9,7 @@
     "check:fix": "biome check --write",
     "check:ts": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
-    "docs": "bun src/scripts/generate-docs.ts",
+    "docs": "bun src/scripts/generate-docs.ts && biome check --write docs/",
     "docs:check": "bun run docs && git diff --exit-code docs/"
   },
   "devDependencies": {

@@ -52,7 +52,7 @@ prompts: [
       { label: "Prettier", value: "prettier" },
     ],
   },
-]
+];
 ```
 
 All prompts become CLI flags automatically:
@@ -107,28 +107,25 @@ Generators that modify existing projects — adding scripts to package.json, app
 import { readFile, flatMap, writeFile, appendFile } from "@canonical/summon";
 
 // Read, transform, write back
-generate: (answers) => flatMap(
-  readFile("package.json"),
-  (content) => {
+generate: (answers) =>
+  flatMap(readFile("package.json"), (content) => {
     const pkg = JSON.parse(content);
     pkg.scripts = pkg.scripts || {};
     pkg.scripts.generate = "summon";
     return writeFile("package.json", JSON.stringify(pkg, null, 2) + "\n");
-  }
-)
+  });
 
 // Or just append
-generate: (answers) => appendFile(
-  "src/components/index.ts",
-  `export * from "./${answers.name}";\n`
-)
+generate: (answers) =>
+  appendFile("src/components/index.ts", `export * from "./${answers.name}";\n`);
 
 // Append with create-if-missing for files that might not exist yet
-generate: (answers) => appendFile(
-  "src/components/index.ts",
-  `export * from "./${answers.name}";\n`,
-  true
-)
+generate: (answers) =>
+  appendFile(
+    "src/components/index.ts",
+    `export * from "./${answers.name}";\n`,
+    true,
+  );
 ```
 
 ### Checking File Existence
@@ -138,11 +135,12 @@ Generators should often behave differently based on what's already there — ski
 ```typescript
 import { exists, ifElseM, writeFile, warn } from "@canonical/summon";
 
-generate: (answers) => ifElseM(
-  exists("tsconfig.json"),
-  warn("tsconfig.json exists — skipping to preserve your settings"),
-  writeFile("tsconfig.json", defaultTsConfig)
-)
+generate: (answers) =>
+  ifElseM(
+    exists("tsconfig.json"),
+    warn("tsconfig.json exists — skipping to preserve your settings"),
+    writeFile("tsconfig.json", defaultTsConfig),
+  );
 ```
 
 Note: `ifElseM` takes a Task as its condition (like `exists()`). Use plain `ifElse` when you have a boolean from answers.
@@ -154,11 +152,15 @@ For static assets that don't need templating — images, fonts, fixtures:
 ```typescript
 import { copyFile, copyDirectory } from "@canonical/summon";
 
-generate: (answers) => sequence_([
-  // Source paths are relative to your generator package
-  copyFile("./assets/placeholder.png", `${answers.name}/public/placeholder.png`),
-  copyDirectory("./fixtures", `${answers.name}/test/fixtures`),
-])
+generate: (answers) =>
+  sequence_([
+    // Source paths are relative to your generator package
+    copyFile(
+      "./assets/placeholder.png",
+      `${answers.name}/public/placeholder.png`,
+    ),
+    copyDirectory("./fixtures", `${answers.name}/test/fixtures`),
+  ]);
 ```
 
 ### Batch Operations with Glob
@@ -166,19 +168,29 @@ generate: (answers) => sequence_([
 For operations across many files — renaming, updating imports, generating indexes:
 
 ```typescript
-import { glob, flatMap, traverse_, readFile, writeFile, info } from "@canonical/summon";
+import {
+  glob,
+  flatMap,
+  traverse_,
+  readFile,
+  writeFile,
+  info,
+} from "@canonical/summon";
 
-generate: (answers) => flatMap(
-  glob("src/**/*.ts"),
-  (files) => traverse_(files, (file) =>
-    flatMap(readFile(file), (content) => {
-      const updated = content.replace(new RegExp(answers.oldName, "g"), answers.newName);
-      return updated !== content
-        ? writeFile(file, updated)
-        : info(`No changes in ${file}`);
-    })
-  )
-)
+generate: (answers) =>
+  flatMap(glob("src/**/*.ts"), (files) =>
+    traverse_(files, (file) =>
+      flatMap(readFile(file), (content) => {
+        const updated = content.replace(
+          new RegExp(answers.oldName, "g"),
+          answers.newName,
+        );
+        return updated !== content
+          ? writeFile(file, updated)
+          : info(`No changes in ${file}`);
+      }),
+    ),
+  );
 ```
 
 ---
@@ -192,22 +204,23 @@ Optional files based on user choices:
 ```typescript
 import { when, unless, ifElse, sequence_ } from "@canonical/summon";
 
-generate: (answers) => sequence_([
-  writeFile(`${answers.name}.tsx`, componentCode),
+generate: (answers) =>
+  sequence_([
+    writeFile(`${answers.name}.tsx`, componentCode),
 
-  // when: runs if true
-  when(answers.withTests, writeFile(`${answers.name}.test.tsx`, testCode)),
+    // when: runs if true
+    when(answers.withTests, writeFile(`${answers.name}.test.tsx`, testCode)),
 
-  // unless: runs if false
-  unless(answers.skipConfig, writeFile("config.json", defaultConfig)),
+    // unless: runs if false
+    unless(answers.skipConfig, writeFile("config.json", defaultConfig)),
 
-  // ifElse: choose between two paths
-  ifElse(
-    answers.useTypeScript,
-    writeFile("index.ts", tsCode),
-    writeFile("index.js", jsCode)
-  ),
-])
+    // ifElse: choose between two paths
+    ifElse(
+      answers.useTypeScript,
+      writeFile("index.ts", tsCode),
+      writeFile("index.js", jsCode),
+    ),
+  ]);
 ```
 
 ### Processing Arrays
@@ -218,19 +231,24 @@ When users provide multiple items to process:
 import { traverse, traverse_ } from "@canonical/summon";
 
 // traverse_: process each, discard results (for side effects)
-generate: (answers) => traverse_(
-  answers.modules,
-  (mod) => sequence_([
-    mkdir(`src/${mod}`),
-    writeFile(`src/${mod}/index.ts`, `export const ${mod} = {};\n`),
-  ])
-)
+generate: (answers) =>
+  traverse_(answers.modules, (mod) =>
+    sequence_([
+      mkdir(`src/${mod}`),
+      writeFile(`src/${mod}/index.ts`, `export const ${mod} = {};\n`),
+    ]),
+  );
 
 // traverse: process each, collect results (for further processing)
-generate: (answers) => flatMap(
-  traverse(answers.modules, (mod) => readFile(`templates/${mod}.json`)),
-  (configs) => writeFile("config.json", JSON.stringify(configs.map(JSON.parse), null, 2))
-)
+generate: (answers) =>
+  flatMap(
+    traverse(answers.modules, (mod) => readFile(`templates/${mod}.json`)),
+    (configs) =>
+      writeFile(
+        "config.json",
+        JSON.stringify(configs.map(JSON.parse), null, 2),
+      ),
+  );
 ```
 
 ### Error Handling
@@ -241,25 +259,22 @@ For operations that might fail — missing files, flaky network:
 import { orElse, attempt, optional, pure, retry } from "@canonical/summon";
 
 // orElse: try first, fall back to second
-orElse(
-  readFile("config.json"),
-  () => pure('{"version": "1.0.0"}')
-)
+orElse(readFile("config.json"), () => pure('{"version": "1.0.0"}'));
 
 // attempt: capture success/failure as Either
 flatMap(attempt(readFile("maybe.json")), (result) =>
   result._tag === "Right"
     ? info(`Found: ${result.value}`)
-    : warn("Not found, using defaults")
-)
+    : warn("Not found, using defaults"),
+);
 
 // optional: return undefined instead of failing
 flatMap(optional(readFile("optional.json")), (content) =>
-  content ? processConfig(content) : pure(undefined)
-)
+  content ? processConfig(content) : pure(undefined),
+);
 
 // retry: try N times for flaky operations
-retry(3, exec("npm", ["install"]))
+retry(3, exec("npm", ["install"]));
 ```
 
 ---
@@ -287,10 +302,10 @@ Use it:
 
 ```typescript
 template({
-  source: "./templates/component.tsx.ejs",  // relative to generator package
+  source: "./templates/component.tsx.ejs", // relative to generator package
   dest: `src/components/${answers.name}.tsx`,
   vars: { name: answers.name, withStyles: answers.withStyles },
-})
+});
 ```
 
 ### String Helpers
@@ -304,7 +319,7 @@ template({
   source: "./templates/component.tsx.ejs",
   dest: `src/components/${answers.name}.tsx`,
   vars: withHelpers({ name: answers.name }),
-})
+});
 ```
 
 In the template:
@@ -340,7 +355,7 @@ templateDir({
     "Component.tsx.ejs": `${answers.name}.tsx`,
     "Component.test.tsx.ejs": `${answers.name}.test.tsx`,
   },
-})
+});
 ```
 
 ---
@@ -375,17 +390,18 @@ import { generators as componentGenerators } from "@canonical/summon-component";
 
 const featureGenerator: GeneratorDefinition<Answers> = {
   // ...
-  generate: (answers) => sequence_([
-    mkdir(`src/features/${answers.name}`),
+  generate: (answers) =>
+    sequence_([
+      mkdir(`src/features/${answers.name}`),
 
-    // Delegate to another generator
-    componentGenerators["component/react"].generate({
-      componentPath: `src/features/${answers.name}/components/Main`,
-      withTests: true,
-    }),
+      // Delegate to another generator
+      componentGenerators["component/react"].generate({
+        componentPath: `src/features/${answers.name}/components/Main`,
+        withTests: true,
+      }),
 
-    writeFile(`src/features/${answers.name}/index.ts`, barrel),
-  ]),
+      writeFile(`src/features/${answers.name}/index.ts`, barrel),
+    ]),
 };
 ```
 
@@ -396,17 +412,27 @@ const featureGenerator: GeneratorDefinition<Answers> = {
 ### Inspecting Effects
 
 ```typescript
-import { dryRun, filterEffects, getAffectedFiles, getFileWrites, countEffects } from "@canonical/summon";
+import {
+  dryRun,
+  filterEffects,
+  getAffectedFiles,
+  getFileWrites,
+  countEffects,
+} from "@canonical/summon";
 
 test("creates expected files", () => {
-  const { effects } = dryRun(generator.generate({ name: "test", withTests: true }));
+  const { effects } = dryRun(
+    generator.generate({ name: "test", withTests: true }),
+  );
 
   // File paths
   expect(getAffectedFiles(effects)).toContain("src/test/index.ts");
 
   // File content
   const writes = getFileWrites(effects);
-  expect(writes.find(w => w.path === "src/test/index.ts")?.content).toContain("export");
+  expect(writes.find((w) => w.path === "src/test/index.ts")?.content).toContain(
+    "export",
+  );
 
   // Effect counts
   expect(countEffects(effects)).toEqual({ MakeDir: 1, WriteFile: 3 });
@@ -425,14 +451,16 @@ The dry-run interpreter tracks state, so conditional logic works correctly:
 const task = sequence_([
   writeFile("config.json", "{}"),
   ifElseM(
-    exists("config.json"),  // true — sees the virtual file above
+    exists("config.json"), // true — sees the virtual file above
     info("exists"),
     info("missing"),
   ),
 ]);
 
 const { effects } = dryRun(task);
-expect(filterEffects(effects, "Log").some(l => l.message === "exists")).toBe(true);
+expect(filterEffects(effects, "Log").some((l) => l.message === "exists")).toBe(
+  true,
+);
 ```
 
 ---
@@ -474,6 +502,7 @@ summon component react \
 ```
 
 Key flags:
+
 - `-y` / `--yes` — Skip all confirmation prompts AND the file preview step
 - All prompt values as REGISTERED flags (check `summon <generator> --help`
   for the exact spellings — a default-true confirm has only a `--no-` form)
@@ -498,6 +527,7 @@ summon component react --help --llm
 ```
 
 **Why this matters for LLMs:**
+
 - Structured, parseable output without ANSI escape codes
 - Full file contents in fenced code blocks with language hints
 - Replay command for executing the generation after review
@@ -554,12 +584,14 @@ import { run } from "@canonical/summon";
 const generator = generators["component/react"];
 
 // Execute directly
-await run(generator.generate({
-  componentPath: "src/components/Button",
-  withStyles: true,
-  withStories: true,
-  withSsrTests: true,
-}));
+await run(
+  generator.generate({
+    componentPath: "src/components/Button",
+    withStyles: true,
+    withStories: true,
+    withSsrTests: true,
+  }),
+);
 ```
 
 This bypasses the CLI entirely, suitable for scripts and automation.

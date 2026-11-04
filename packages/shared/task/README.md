@@ -14,8 +14,8 @@ bun add @canonical/task
 
 The package ships two entries, split by what they reach:
 
-- **`@canonical/task`** — the node-free base: core types, the task monad, effect constructors, primitives, combinators, the dry-run/testing interpreters (`dryRun`, `dryRunWith`, `collectEffects`, …), undo collection (`collectUndos`), and `TaskExecutionError`. No Node builtin is reachable from this entry's import graph (pinned by a closure-walking test), so it bundles cleanly for browser and edge targets. Everything about *describing*, *composing*, and *previewing* work lives here.
-- **`@canonical/task/node`** — the node-touching interpreters: `runTask` / `run` / `executeEffect` (which execute filesystem, exec, and prompt effects, importing `node:fs/promises`, `node:path`, and `node:child_process`) and `runUndo`. Only actually *running* a task against the host needs this entry.
+- **`@canonical/task`** — the node-free base: core types, the task monad, effect constructors, primitives, combinators, the dry-run/testing interpreters (`dryRun`, `dryRunWith`, `collectEffects`, …), undo collection (`collectUndos`), and `TaskExecutionError`. No Node builtin is reachable from this entry's import graph (pinned by a closure-walking test), so it bundles cleanly for browser and edge targets. Everything about _describing_, _composing_, and _previewing_ work lives here.
+- **`@canonical/task/node`** — the node-touching interpreters: `runTask` / `run` / `executeEffect` (which execute filesystem, exec, and prompt effects, importing `node:fs/promises`, `node:path`, and `node:child_process`) and `runUndo`. Only actually _running_ a task against the host needs this entry.
 
 The split matters because module resolution happens before tree-shaking: if the interpreters lived in the base entry, importing even a single pure function would pull `node:` imports into the module graph and fail any browser-platform build — regardless of what the bundle actually uses.
 
@@ -50,9 +50,8 @@ Tasks compose with `flatMap` or, more ergonomically, with generator syntax:
 import { flatMap, readFile, writeFile } from "@canonical/task";
 
 // flatMap style
-const greet = flatMap(
-  readFile("name.txt"),
-  (name) => writeFile("greeting.txt", `Hello, ${name}!`),
+const greet = flatMap(readFile("name.txt"), (name) =>
+  writeFile("greeting.txt", `Hello, ${name}!`),
 );
 ```
 
@@ -82,14 +81,14 @@ Under the hood, `gen` composes `flatMap` calls — the task is still a pure data
 
 Effects are pure data — tagged unions describing what should happen:
 
-| Category | Effects |
-|---|---|
-| **File I/O** | `ReadFile`, `WriteFile`, `AppendFile`, `CopyFile`, `CopyDirectory`, `DeleteFile`, `DeleteDirectory`, `MakeDir`, `Exists`, `Glob`, `Symlink` |
-| **Process** | `Exec` |
-| **Interaction** | `Prompt` (text, confirm, select, multiselect) |
-| **Logging** | `Log` (debug, info, warn, error) |
-| **Context** | `ReadContext`, `WriteContext` |
-| **Concurrency** | `Parallel`, `Race` |
+| Category        | Effects                                                                                                                                     |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **File I/O**    | `ReadFile`, `WriteFile`, `AppendFile`, `CopyFile`, `CopyDirectory`, `DeleteFile`, `DeleteDirectory`, `MakeDir`, `Exists`, `Glob`, `Symlink` |
+| **Process**     | `Exec`                                                                                                                                      |
+| **Interaction** | `Prompt` (text, confirm, select, multiselect)                                                                                               |
+| **Logging**     | `Log` (debug, info, warn, error)                                                                                                            |
+| **Context**     | `ReadContext`, `WriteContext`                                                                                                               |
+| **Concurrency** | `Parallel`, `Race`                                                                                                                          |
 
 ### Primitives
 
@@ -97,13 +96,34 @@ Task-returning wrappers for every effect. These are the building blocks you'll u
 
 ```typescript
 import {
-  readFile, writeFile, appendFile, copyFile, copyDirectory,
-  deleteFile, deleteDirectory, mkdir, exists, symlink, glob,
-  exec, execSimple,
-  prompt, promptText, promptConfirm, promptSelect, promptMultiselect,
-  log, debug, info, warn, error,
-  getContext, setContext, withContext,
-  noop, succeed,
+  readFile,
+  writeFile,
+  appendFile,
+  copyFile,
+  copyDirectory,
+  deleteFile,
+  deleteDirectory,
+  mkdir,
+  exists,
+  symlink,
+  glob,
+  exec,
+  execSimple,
+  prompt,
+  promptText,
+  promptConfirm,
+  promptSelect,
+  promptMultiselect,
+  log,
+  debug,
+  info,
+  warn,
+  error,
+  getContext,
+  setContext,
+  withContext,
+  noop,
+  succeed,
 } from "@canonical/task";
 ```
 
@@ -182,12 +202,12 @@ Tasks fail with structured `TaskError` values:
 
 ```typescript
 interface TaskError {
-  code: string;              // programmatic error code
-  message: string;           // human-readable description
-  cause?: unknown;           // original error that caused this failure
-  context?: Record<string, unknown>;  // additional structured data
-  stack?: string;            // stack trace if available
-  suppressed?: TaskError[];  // for parallel: all errors, not just the first
+  code: string; // programmatic error code
+  message: string; // human-readable description
+  cause?: unknown; // original error that caused this failure
+  context?: Record<string, unknown>; // additional structured data
+  stack?: string; // stack trace if available
+  suppressed?: TaskError[]; // for parallel: all errors, not just the first
 }
 ```
 
@@ -313,19 +333,26 @@ import { switchMap } from "@canonical/task";
 
 // Detect-then-dispatch: run a detection task, branch on its result
 const result = switchMap(
-  detectHarness,                // Task<"jest" | "vitest" | null>
+  detectHarness, // Task<"jest" | "vitest" | null>
   {
-    jest: configureJest,        // Task<Config>
-    vitest: configureVitest,    // Task<Config>
+    jest: configureJest, // Task<Config>
+    vitest: configureVitest, // Task<Config>
   },
-  useDefaultConfig,             // fallback Task<Config>
+  useDefaultConfig, // fallback Task<Config>
 );
 ```
 
 #### Error handling
 
 ```typescript
-import { retry, orElse, optional, attempt, bracket, ensure } from "@canonical/task";
+import {
+  retry,
+  orElse,
+  optional,
+  attempt,
+  bracket,
+  ensure,
+} from "@canonical/task";
 
 // Retry up to 3 times
 const resilient = retry(flakyTask, 3);
@@ -417,8 +444,12 @@ await runTask(myTask, {
   onLog: (level, message) => logger[level](message),
 
   // Effect lifecycle hooks
-  onEffectStart: (effect) => { /* before each effect */ },
-  onEffectComplete: (effect, durationMs) => { /* after each effect */ },
+  onEffectStart: (effect) => {
+    /* before each effect */
+  },
+  onEffectComplete: (effect, durationMs) => {
+    /* after each effect */
+  },
 
   // AbortSignal for interruption
   signal: controller.signal,
@@ -435,8 +466,8 @@ try {
   await runTask(myTask);
 } catch (err) {
   if (err instanceof TaskExecutionError) {
-    console.log(err.code);          // error code string
-    console.log(err.taskError);     // full TaskError object
+    console.log(err.code); // error code string
+    console.log(err.taskError); // full TaskError object
   }
 }
 ```
@@ -465,10 +496,13 @@ Override mock behaviour per effect type:
 import { dryRunWith } from "@canonical/task";
 
 const mocks = new Map([
-  ["ReadFile", (effect) => {
-    if (effect.path === "package.json") return '{"name": "my-app"}';
-    return "default content";
-  }],
+  [
+    "ReadFile",
+    (effect) => {
+      if (effect.path === "package.json") return '{"name": "my-app"}';
+      return "default content";
+    },
+  ],
   ["Exists", () => false],
 ]);
 
@@ -479,8 +513,11 @@ const { value, effects } = dryRunWith(myTask, mocks);
 
 ```typescript
 import {
-  collectEffects, countEffects, filterEffects,
-  getFileWrites, getAffectedFiles,
+  collectEffects,
+  countEffects,
+  filterEffects,
+  getFileWrites,
+  getAffectedFiles,
 } from "@canonical/task";
 
 const effects = collectEffects(myTask);
@@ -517,16 +554,16 @@ await runUndo(generator.generate(answers));
 
 Write-capable effects carry an optional `undo?: Task<void>` field. Primitives supply sensible defaults:
 
-| Primitive | Default undo |
-|-----------|-------------|
-| `writeFile` | `deleteFile(path)` |
-| `mkdir` | `deleteDirectory(path)` |
-| `copyFile` | `deleteFile(dest)` |
+| Primitive       | Default undo            |
+| --------------- | ----------------------- |
+| `writeFile`     | `deleteFile(path)`      |
+| `mkdir`         | `deleteDirectory(path)` |
+| `copyFile`      | `deleteFile(dest)`      |
 | `copyDirectory` | `deleteDirectory(dest)` |
-| `symlink` | `deleteFile(linkPath)` |
-| `appendFile` | none — provide custom |
-| `deleteFile` | none — provide custom |
-| `exec` | none — provide custom |
+| `symlink`       | `deleteFile(linkPath)`  |
+| `appendFile`    | none — provide custom   |
+| `deleteFile`    | none — provide custom   |
+| `exec`          | none — provide custom   |
 
 ##### Custom undo
 
@@ -583,31 +620,31 @@ result.toNotWriteFile("output/secret.key");
 
 ## API Summary
 
-| Category | Key Exports |
-|----------|-------------|
-| **Monad** | `pure`, `flatMap`, `map`, `ap`, `fail`, `failWith`, `recover`, `mapError` |
-| **Generator** | `gen`, `$`, `TaskGen` |
-| **Builder** | `task`, `of`, `TaskBuilder` |
-| **Guards** | `isPure`, `isFailed`, `hasEffects` |
-| **Primitives** | `readFile`, `writeFile`, `appendFile`, `copyFile`, `copyDirectory`, `deleteFile`, `deleteDirectory`, `mkdir`, `exists`, `symlink`, `glob`, `sortFileLines` |
-| **Process** | `exec`, `execSimple` |
-| **Prompts** | `prompt`, `promptText`, `promptConfirm`, `promptSelect`, `promptMultiselect` |
-| **Logging** | `log`, `debug`, `info`, `warn`, `error` |
-| **Context** | `getContext`, `setContext`, `withContext` |
-| **Pure** | `noop`, `succeed` |
-| **Sequencing** | `sequence`, `sequence_`, `traverse`, `traverse_` |
-| **Parallel** | `parallel`, `parallelN`, `race` |
-| **Conditionals** | `when`, `unless`, `ifElse`, `whenM`, `ifElseM` |
-| **Dispatch** | `switchMap` |
-| **Error handling** | `retry`, `retryWithBackoff`, `orElse`, `optional`, `attempt` |
-| **Resources** | `bracket`, `ensure` |
-| **Utilities** | `tap`, `tapError`, `delay`, `timeout`, `fold`, `zip`, `zip3` |
-| **Production interpreter** (`@canonical/task/node`) | `runTask`, `run`, `executeEffect`, `RunTaskOptions` |
-| **Dry-run interpreter** | `dryRun`, `dryRunWith`, `mockEffect`, `collectEffects`, `countEffects`, `filterEffects`, `getFileWrites`, `getAffectedFiles`, `assertEffects`, `assertFileWrites`, `expectTask` |
-| **Undo** | `collectUndos` (base), `UndoOptions` (base); `runUndo`, `UndoResult` (`@canonical/task/node`) |
-| **Errors** | `TaskExecutionError` (base — thrown by the interpreters, catchable anywhere) |
-| **Effect constructors** | `readFileEffect`, `writeFileEffect`, `appendFileEffect`, `copyFileEffect`, `copyDirectoryEffect`, `deleteFileEffect`, `deleteDirectoryEffect`, `makeDirEffect`, `existsEffect`, `symlinkEffect`, `globEffect`, `execEffect`, `promptEffect`, `logEffect`, `readContextEffect`, `writeContextEffect`, `parallelEffect`, `raceEffect` |
-| **Effect utilities** | `describeEffect`, `isWriteEffect`, `getAffectedPaths` |
+| Category                                            | Key Exports                                                                                                                                                                                                                                                                                                                         |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Monad**                                           | `pure`, `flatMap`, `map`, `ap`, `fail`, `failWith`, `recover`, `mapError`                                                                                                                                                                                                                                                           |
+| **Generator**                                       | `gen`, `$`, `TaskGen`                                                                                                                                                                                                                                                                                                               |
+| **Builder**                                         | `task`, `of`, `TaskBuilder`                                                                                                                                                                                                                                                                                                         |
+| **Guards**                                          | `isPure`, `isFailed`, `hasEffects`                                                                                                                                                                                                                                                                                                  |
+| **Primitives**                                      | `readFile`, `writeFile`, `appendFile`, `copyFile`, `copyDirectory`, `deleteFile`, `deleteDirectory`, `mkdir`, `exists`, `symlink`, `glob`, `sortFileLines`                                                                                                                                                                          |
+| **Process**                                         | `exec`, `execSimple`                                                                                                                                                                                                                                                                                                                |
+| **Prompts**                                         | `prompt`, `promptText`, `promptConfirm`, `promptSelect`, `promptMultiselect`                                                                                                                                                                                                                                                        |
+| **Logging**                                         | `log`, `debug`, `info`, `warn`, `error`                                                                                                                                                                                                                                                                                             |
+| **Context**                                         | `getContext`, `setContext`, `withContext`                                                                                                                                                                                                                                                                                           |
+| **Pure**                                            | `noop`, `succeed`                                                                                                                                                                                                                                                                                                                   |
+| **Sequencing**                                      | `sequence`, `sequence_`, `traverse`, `traverse_`                                                                                                                                                                                                                                                                                    |
+| **Parallel**                                        | `parallel`, `parallelN`, `race`                                                                                                                                                                                                                                                                                                     |
+| **Conditionals**                                    | `when`, `unless`, `ifElse`, `whenM`, `ifElseM`                                                                                                                                                                                                                                                                                      |
+| **Dispatch**                                        | `switchMap`                                                                                                                                                                                                                                                                                                                         |
+| **Error handling**                                  | `retry`, `retryWithBackoff`, `orElse`, `optional`, `attempt`                                                                                                                                                                                                                                                                        |
+| **Resources**                                       | `bracket`, `ensure`                                                                                                                                                                                                                                                                                                                 |
+| **Utilities**                                       | `tap`, `tapError`, `delay`, `timeout`, `fold`, `zip`, `zip3`                                                                                                                                                                                                                                                                        |
+| **Production interpreter** (`@canonical/task/node`) | `runTask`, `run`, `executeEffect`, `RunTaskOptions`                                                                                                                                                                                                                                                                                 |
+| **Dry-run interpreter**                             | `dryRun`, `dryRunWith`, `mockEffect`, `collectEffects`, `countEffects`, `filterEffects`, `getFileWrites`, `getAffectedFiles`, `assertEffects`, `assertFileWrites`, `expectTask`                                                                                                                                                     |
+| **Undo**                                            | `collectUndos` (base), `UndoOptions` (base); `runUndo`, `UndoResult` (`@canonical/task/node`)                                                                                                                                                                                                                                       |
+| **Errors**                                          | `TaskExecutionError` (base — thrown by the interpreters, catchable anywhere)                                                                                                                                                                                                                                                        |
+| **Effect constructors**                             | `readFileEffect`, `writeFileEffect`, `appendFileEffect`, `copyFileEffect`, `copyDirectoryEffect`, `deleteFileEffect`, `deleteDirectoryEffect`, `makeDirEffect`, `existsEffect`, `symlinkEffect`, `globEffect`, `execEffect`, `promptEffect`, `logEffect`, `readContextEffect`, `writeContextEffect`, `parallelEffect`, `raceEffect` |
+| **Effect utilities**                                | `describeEffect`, `isWriteEffect`, `getAffectedPaths`                                                                                                                                                                                                                                                                               |
 
 ## License
 
