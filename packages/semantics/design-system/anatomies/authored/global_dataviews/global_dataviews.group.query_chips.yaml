@@ -1,0 +1,29 @@
+---
+# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# A Group is a set of sibling blocks whose collection carries its own identity. This one
+# holds query chips and nothing else: a query bar's entry and its other controls are
+# siblings of the group, not members.
+node:
+  uri: global_dataviews.group.query_chips
+  styles:
+    layout.type: flex
+    layout.wrap: wrap
+    layout.align: center
+    # A <ul role="list">: the explicit role keeps the list's semantics where a list
+    # without bullets would lose them.
+    layout.listStyle: none
+    # 8 px between chips, so a focused chip's ring, which reaches 5 px past it, never draws
+    # over its neighbour.
+    spacing.gap: dimension.100
+    spacing.internal.block.start: 0
+    spacing.internal.block.end: 0
+    spacing.internal.inline.start: 0
+    spacing.internal.inline.end: 0
+    spacing.external.block.start: 0
+    spacing.external.block.end: 0
+  edges:
+    - node:
+        uri: global_dataviews.component.query_chip
+      relation:
+        cardinality: "1..*"
+        slotName: default
