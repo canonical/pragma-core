@@ -8,7 +8,7 @@ Standards for testing development.
 
 **Identifier:** `cs:testing.file.structure`
 
-Unit test files must be colocated with the source they test, using the `.test.ts` suffix (`.test.tsx` for component tests). Other test types (browser, e2e) may follow different naming conventions. Shared test infrastructure — fixtures, factory helpers, custom matchers, type definitions — lives in a `testing/` directory at the package root (not inside `src/`). This directory is excluded from coverage and from the package's public API. Integration tests that exercise multiple modules together go in `src/testing/integration/`. Do not place test files in a top-level `__tests__/` or `tests/` directory mirroring the source tree. Do not use `.spec.ts` — the convention is `.test.ts`.
+Unit test files must be colocated with the source they test, using the `.test.ts` suffix (`.test.tsx` for component tests). Other test types (browser, e2e) may follow different naming conventions. Shared test infrastructure — fixtures, factory helpers, custom matchers, type definitions — lives in a `testing/` directory at the package root (not inside `src/`). This directory stays out of the package's public API, but not out of its tests: each helper file in it has a colocated test, as a source file does, and the directory counts toward coverage, so a fixture or factory that tests rely on is tested itself. Integration tests that exercise multiple modules together go in `src/testing/integration/`. Do not place test files in a top-level `__tests__/` or `tests/` directory mirroring the source tree. Do not use `.spec.ts` — the convention is `.test.ts`.
 
 ### Do
 
@@ -22,8 +22,11 @@ packages/my-package/
 │   └── formatThing.test.ts
 ├── testing/
 │   ├── fixtures.ts               # shared test data
+│   ├── fixtures.test.ts          # helpers have colocated tests too
 │   ├── createTestDb.ts             # factory helpers
+│   ├── createTestDb.test.ts
 │   ├── registerMatchers.ts        # custom vitest matchers
+│   ├── registerMatchers.test.ts
 │   └── types.ts                   # test-only type definitions
 └── vitest.config.ts
 ```
