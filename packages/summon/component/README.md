@@ -329,45 +329,46 @@ export const Default: Story = {
 
 ### React Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--component-path` | Full path for the component (e.g., `src/components/Button`) | Interactive prompt |
-| `--no-with-styles` | Skip the `styles.css` file (included by default) | styles on |
-| `--no-with-stories` | Skip the Storybook stories (included by default) | stories on |
-| `--no-with-ssr-tests` | Skip the SSR test file (included by default) | SSR tests on |
+| Flag                  | Description                                                 | Default            |
+| --------------------- | ----------------------------------------------------------- | ------------------ |
+| `--component-path`    | Full path for the component (e.g., `src/components/Button`) | Interactive prompt |
+| `--no-with-styles`    | Skip the `styles.css` file (included by default)            | styles on          |
+| `--no-with-stories`   | Skip the Storybook stories (included by default)            | stories on         |
+| `--no-with-ssr-tests` | Skip the SSR test file (included by default)                | SSR tests on       |
 
 ### Svelte Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--component-path` | Full path for the component (e.g., `src/lib/components/Card`) | Interactive prompt |
-| `--no-with-styles` | Skip the external `styles.css` import (included by default) | styles on |
-| `--no-with-stories` | Skip the Storybook stories (included by default) | stories on |
-| `--use-ts-stories` | Use `.stories.ts` instead of `.stories.svelte` | `false` |
-| `--no-with-ssr-tests` | Skip the SSR test file (included by default) | SSR tests on |
+| Flag                  | Description                                                   | Default            |
+| --------------------- | ------------------------------------------------------------- | ------------------ |
+| `--component-path`    | Full path for the component (e.g., `src/lib/components/Card`) | Interactive prompt |
+| `--no-with-styles`    | Skip the external `styles.css` import (included by default)   | styles on          |
+| `--no-with-stories`   | Skip the Storybook stories (included by default)              | stories on         |
+| `--use-ts-stories`    | Use `.stories.ts` instead of `.stories.svelte`                | `false`            |
+| `--no-with-ssr-tests` | Skip the SSR test file (included by default)                  | SSR tests on       |
 
 ### Global Options
 
-| Flag | Description |
-|------|-------------|
+| Flag              | Description                   |
+| ----------------- | ----------------------------- |
 | `--dry-run`, `-d` | Preview without writing files |
-| `--yes`, `-y` | Skip confirmation prompts |
-| `--no-preview` | Skip the file preview step |
-| `--help` | Show all options |
+| `--yes`, `-y`     | Skip confirmation prompts     |
+| `--no-preview`    | Skip the file preview step    |
+| `--help`          | Show all options              |
 
 ### Web Components Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--component-path` | Full path for the component (e.g., `src/lib/Button`) | Interactive prompt |
-| `--no-with-styles` | Skip the `styles.css` file (included by default) | styles on |
-| `--no-with-stories` | Skip the Storybook stories (included by default) | stories on |
+| Flag                | Description                                          | Default            |
+| ------------------- | ---------------------------------------------------- | ------------------ |
+| `--component-path`  | Full path for the component (e.g., `src/lib/Button`) | Interactive prompt |
+| `--no-with-styles`  | Skip the `styles.css` file (included by default)     | styles on          |
+| `--no-with-stories` | Skip the Storybook stories (included by default)     | stories on         |
 
 ---
 
 ## Component Path Convention
 
 The `--component-path` determines:
+
 1. **Directory location** — where files are created
 2. **Component name** — derived from the last path segment
 
@@ -378,6 +379,7 @@ The `--component-path` determines:
 ```
 
 The component name is used as-is for PascalCase (class names) and converted for other cases:
+
 - `UserProfile.tsx` (filename)
 - `UserProfileProps` (types)
 - `user-profile` (CSS class in styles)
@@ -444,16 +446,20 @@ export const generator = {
   ],
 
   // Extend generation
-  generate: (answers) => sequence_([
-    // Run base generator
-    baseGenerator.generate(answers),
+  generate: (answers) =>
+    sequence_(
+      [
+        // Run base generator
+        baseGenerator.generate(answers),
 
-    // Add your files
-    answers.withI18n && writeFile(
-      `${answers.componentPath}/useTranslations.ts`,
-      `export const useTranslations = () => ({ t: (k: string) => k });\n`
+        // Add your files
+        answers.withI18n &&
+          writeFile(
+            `${answers.componentPath}/useTranslations.ts`,
+            `export const useTranslations = () => ({ t: (k: string) => k });\n`,
+          ),
+      ].filter(Boolean),
     ),
-  ].filter(Boolean)),
 };
 
 export const generators = {
@@ -600,6 +606,7 @@ The current generator creates single-level components. For compound components w
 3. Attach subcomponents using dot notation
 
 **Expected structure for compound components:**
+
 ```
 Accordion/
 ├── Accordion.tsx           # Parent with Accordion.Item = Item

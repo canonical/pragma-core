@@ -5,6 +5,7 @@ Package scaffolding for the pragma monorepo. Generates new npm packages with pro
 ## Why Use This?
 
 Setting up a new package in a monorepo involves:
+
 - Creating the directory structure
 - Writing package.json with correct workspace references
 - Setting up TypeScript config that extends the workspace config
@@ -181,30 +182,30 @@ packages/my-styles/
 
 ### Core Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--name` | Full package name with scope (e.g., `@canonical/my-package`) | Interactive prompt |
-| `--type` | Package type: `tool-ts`, `library`, or `css` | Interactive prompt |
-| `--description` | Package description for package.json | Empty |
+| Flag            | Description                                                  | Default            |
+| --------------- | ------------------------------------------------------------ | ------------------ |
+| `--name`        | Full package name with scope (e.g., `@canonical/my-package`) | Interactive prompt |
+| `--type`        | Package type: `tool-ts`, `library`, or `css`                 | Interactive prompt |
+| `--description` | Package description for package.json                         | Empty              |
 
 ### Feature Flags
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--with-react` | Add React dependencies and JSX config | `false` |
-| `--with-storybook` | Add Storybook configuration | `false` |
-| `--with-cli` | Add CLI binary entry point | `false` |
-| `--with-pr-template` | Add a `.github/PULL_REQUEST_TEMPLATE.md` | `false` |
-| `--no-run-install` | Skip the install step (install runs by default) | — |
+| Flag                 | Description                                     | Default |
+| -------------------- | ----------------------------------------------- | ------- |
+| `--with-react`       | Add React dependencies and JSX config           | `false` |
+| `--with-storybook`   | Add Storybook configuration                     | `false` |
+| `--with-cli`         | Add CLI binary entry point                      | `false` |
+| `--with-pr-template` | Add a `.github/PULL_REQUEST_TEMPLATE.md`        | `false` |
+| `--no-run-install`   | Skip the install step (install runs by default) | —       |
 
 ### Global Options
 
-| Flag | Description |
-|------|-------------|
+| Flag              | Description                   |
+| ----------------- | ----------------------------- |
 | `--dry-run`, `-d` | Preview without writing files |
-| `--yes`, `-y` | Skip confirmation prompts |
-| `--no-preview` | Skip the file preview step |
-| `--help` | Show all options |
+| `--yes`, `-y`     | Skip confirmation prompts     |
+| `--no-preview`    | Skip the file preview step    |
+| `--help`          | Show all options              |
 
 ---
 
@@ -452,11 +453,14 @@ export const generator = {
     },
   ],
 
-  generate: (answers) => sequence_([
-    baseGenerator.generate(answers),
-    // Add GraphQL config if requested
-    answers.withGraphQL && addGraphQLSetup(answers),
-  ].filter(Boolean)),
+  generate: (answers) =>
+    sequence_(
+      [
+        baseGenerator.generate(answers),
+        // Add GraphQL config if requested
+        answers.withGraphQL && addGraphQLSetup(answers),
+      ].filter(Boolean),
+    ),
 };
 ```
 

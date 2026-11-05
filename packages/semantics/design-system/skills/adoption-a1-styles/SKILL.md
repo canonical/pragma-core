@@ -1,4 +1,5 @@
 ---
+
 name: adoption-a1-styles
 description: Adopt Canonical design-system styles, fonts, and icons in an application (adoption track A1); also runs as a guided tutorial on a worked example
 ---
@@ -265,17 +266,17 @@ imported preview.
 
 - [ ] Computed `font-family` on body text shows Ubuntu Sans.
 - [ ] The root element carries one context class (`app`/`site`/`docs`) and one
-      density class (`comfortable`/`dense`).
+  density class (`comfortable`/`dense`).
 - [ ] Computed `--density-line-height` on a control matches the intended cell
-      (e.g. `32px` for app-comfortable, `36px` for site-comfortable) — a fallback
-      value on a class-less root passes visual inspection and still fails this check
-      on non-app surfaces.
+  (e.g. `32px` for app-comfortable, `36px` for site-comfortable) — a fallback
+  value on a class-less root passes visual inspection and still fails this check
+  on non-app surfaces.
 - [ ] `/icons/<name>.svg` returns 200 with SVG content, and an icon visibly renders.
 - [ ] The `@layer normalize, ds.reset, ds.modifiers, ds.components` rule is present in
-      the served CSS.
+  the served CSS.
 - [ ] Typography baseline behaves. Note: the baseline grid is computed with the CSS
-      `mod()` function and cannot be downleveled — check the support table in the
-      `@canonical/styles-typography` README against the browsers you target.
+  `mod()` function and cannot be downleveled — check the support table in the
+  `@canonical/styles-typography` README against the browsers you target.
 
 ## Next
 

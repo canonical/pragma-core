@@ -6,7 +6,8 @@
       "**/*.json",
       "pragma.conf.ts",
       "!**/*.generated.ts",
-      "!bundled-skills"
+      "!bundled-skills",
+      "!**/docs/reference"
     ]
   }
 }

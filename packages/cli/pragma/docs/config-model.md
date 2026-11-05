@@ -8,7 +8,7 @@ From lowest to highest precedence:
 
 1. **Built-in defaults** — the distribution config `pragma.conf.ts`, shipped with the package (identity, default packs and the read stories they supply, `channel: normal`, `detail: standard`).
 2. **Global config** — `$XDG_CONFIG_HOME/pragma/config.json`. Machine-wide state, written by the config setters.
-3. **Project config** — the nearest `pragma.config.ts`, walking up from the current directory. It is *evaluated* (not just parsed), and the result is content-hash cached under `$XDG_STATE_HOME/pragma/config-cache/<sha256>.json` so a re-run skips re-evaluation when the file is unchanged.
+3. **Project config** — the nearest `pragma.config.ts`, walking up from the current directory. It is _evaluated_ (not just parsed), and the result is content-hash cached under `$XDG_STATE_HOME/pragma/config-cache/<sha256>.json` so a re-run skips re-evaluation when the file is unchanged.
 
 A higher layer **replaces** a lower one field by field. No field merges: a project declaring one `prefixes` entry replaces the whole map, including the namespaces the distribution's own packs are built with. `pragma config show` prints four fields with the layer that supplied them; what the other seven do instead is in the reference under [What `config show` reports](./reference/config.md).
 
@@ -18,11 +18,11 @@ A **read story** is a noun described as data — a SPARQL `list`, a generated `l
 
 Stories reach the CLI from three places, weakest to strongest:
 
-| Tier | Where it is declared | Validation failure |
-| --- | --- | --- |
-| **distribution** | `packs[].stories` in the distribution's own `pragma.conf.ts` | compile-time: `tsc` for the shape, plus the `parsePackDefinition` round-trip in `distribution.test.ts` for the grammar |
-| **package** | `stories/*.json` shipped by a package the active pack was built from | the story is **ignored**, named on stderr and under `doctor`'s `pack refs` |
-| **config** | `packs[].stories`, then the top-level `stories`, in your config | fatal `CONFIG_ERROR` |
+| Tier             | Where it is declared                                                 | Validation failure                                                                                                     |
+| ---------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **distribution** | `packs[].stories` in the distribution's own `pragma.conf.ts`         | compile-time: `tsc` for the shape, plus the `parsePackDefinition` round-trip in `distribution.test.ts` for the grammar |
+| **package**      | `stories/*.json` shipped by a package the active pack was built from | the story is **ignored**, named on stderr and under `doctor`'s `pack refs`                                             |
+| **config**       | `packs[].stories`, then the top-level `stories`, in your config      | fatal `CONFIG_ERROR`                                                                                                   |
 
 Only your **config** may replace a noun the CLI already ships, and then only one that is itself story-backed — never a built-in command such as `config` or `doctor`. A **package** may add a noun the CLI does not have, and nothing else: a package story naming a shipped noun is ignored and reported, because replacing a noun replaces its whole module, so a dependency you merely declared could otherwise swap out this distribution's own design-system reads.
 
@@ -46,7 +46,7 @@ Two consequences worth knowing:
 `prefixes` is read twice, and only the distribution layer reaches both. Because a higher layer replaces the map rather than merging into it, a project that declares `prefixes` must declare every prefix its packs need, not only the new one.
 
 1. **Every layer** — the prefixes a `pragma sources update` builds the pack with. They are applied over the namespaces harvested from the source graphs, so declaring one is how you settle a package that binds the same prefix to two IRIs.
-2. **The distribution layer only** — the domain half of the CLI's compiled-in prefix map, which is what compacts IRIs in output *and* what expands a prefixed name you type (`pragma standard lookup cs:something`) before the query runs.
+2. **The distribution layer only** — the domain half of the CLI's compiled-in prefix map, which is what compacts IRIs in output _and_ what expands a prefixed name you type (`pragma standard lookup cs:something`) before the query runs.
 
 The second reader runs on the storeless `--help`/`__complete` fast path, which reads no config at all, so it can only ever see `pragma.conf.ts`. A project config that adds a prefix therefore changes the graph it builds, not how the CLI renders it. A fork that wants its own namespaces rendered and resolvable declares them in its own `pragma.conf.ts`.
 
@@ -69,7 +69,7 @@ export const vocabulary = {
 
 These are the domain terms the generic kernel reads a graph with: the property entities are addressed by (projected into the pack index as `altNames` enrichment by the index builder), and the shape of a prompt entity (which the `prompt_*` tools and the native MCP `prompts/*` surface both read).
 
-It is **not** a config layer field, and cannot be set in a global or project config. Its readers are the storeless `--help`/`__complete` fast path and the pack index builder — neither can reach a config layer at all, so a layered field would be one you could set to no effect. A fork changes these values in its own `pragma.conf.ts` and rebuilds its binary; that, plus `prefixes` and the identity fields, is the whole of what makes the CLI *this* distribution.
+It is **not** a config layer field, and cannot be set in a global or project config. Its readers are the storeless `--help`/`__complete` fast path and the pack index builder — neither can reach a config layer at all, so a layered field would be one you could set to no effect. A fork changes these values in its own `pragma.conf.ts` and rebuilds its binary; that, plus `prefixes` and the identity fields, is the whole of what makes the CLI _this_ distribution.
 
 Every term must be a prefixed name (`prefix:local`) whose prefix `prefixes` binds. They are interpolated into queries, where a bare absolute IRI is a parse error, so the CLI validates them at startup and refuses to run with a message naming the offending field rather than reporting an unreadable graph as an empty one.
 

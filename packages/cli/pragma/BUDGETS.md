@@ -37,17 +37,16 @@ sample, because the user pays it.
 >    maintainer's run before a release. Nothing runs it automatically today.
 > 2. **Whether `BUDGET_WARM_STORE_MS` reverts to its reference-box value.** It
 >    was raised for a runner class that no longer gates anything.
->
-> Until (1) is answered, a performance regression reaches `main` unobserved.
-> That is the accepted cost of the ruling, written down so it stays a decision
-> rather than becoming an accident.
+>    Until (1) is answered, a performance regression reaches `main` unobserved.
+>    That is the accepted cost of the ruling, written down so it stays a decision
+>    rather than becoming an accident.
 
 ## Designed targets (surface covenant)
 
 | Path                         | Designed target |
 | ---------------------------- | --------------- |
-| `pragma --help`             | < 50 ms         |
-| `pragma __complete …`       | < 50 ms         |
+| `pragma --help`              | < 50 ms         |
+| `pragma __complete …`        | < 50 ms         |
 | project `pragma.config.ts`   | < 10 ms warm    |
 | warm store-backed verb       | < 300 ms        |
 | MCP p95 (warm)               | < 100 ms        |
@@ -84,10 +83,10 @@ The de-compile doubled the fast paths. The create surface's projection then
 added ~46 ms of eager import on top, and the two costs together put both fast
 paths over their ceilings:
 
-| Path | measured (load 1.8) | old ceiling | new ceiling |
-|---|---|---|---|
-| `pragma --help` | ~151 ms | 130 ms | **220 ms** |
-| `pragma __complete` | ~163 ms | 150 ms | **220 ms** |
+| Path                | measured (load 1.8) | old ceiling | new ceiling |
+| ------------------- | ------------------- | ----------- | ----------- |
+| `pragma --help`     | ~151 ms             | 130 ms      | **220 ms**  |
+| `pragma __complete` | ~163 ms             | 150 ms      | **220 ms**  |
 
 **Where the 46 ms goes**, since a raised ceiling with no cause is just a lower
 standard. `capabilities/index` barrels every capability, and `create.verb.ts`
@@ -138,22 +137,22 @@ machine drift on a shared box lands on both arms equally instead of on
 whichever was measured second. 40 kept samples per cell (5 warmup rounds),
 `node dist/src/bin.js` through `spawnSync`, fresh XDG dirs, load average ~1.5.
 
-| Path | before (median) | after (median) | ceiling |
-|---|---|---|---|
-| `pragma --help` | 74.6 ms | **64.7 ms** | 130 ms |
-| `pragma __complete config` | 79.1 ms | **69.2 ms** | 150 ms |
-| `pragma __complete skill lookup` | 74.2 ms | **69.3 ms** | 150 ms |
-| `pragma --version` (control) | 25.4 ms | 29.5 ms | — |
+| Path                             | before (median) | after (median) | ceiling |
+| -------------------------------- | --------------- | -------------- | ------- |
+| `pragma --help`                  | 74.6 ms         | **64.7 ms**    | 130 ms  |
+| `pragma __complete config`       | 79.1 ms         | **69.2 ms**    | 150 ms  |
+| `pragma __complete skill lookup` | 74.2 ms         | **69.3 ms**    | 150 ms  |
+| `pragma --version` (control)     | 25.4 ms         | 29.5 ms        | —       |
 
 Process start is most of every number above, and it is not pragma's to spend,
 so the arms are also compared net of each arm's OWN `--version` control — the
 work the CLI actually does:
 
-| Path | before | after | delta |
-|---|---|---|---|
-| `pragma --help` | 49.3 ms | 35.3 ms | **−14.0 ms (−28%)** |
-| `pragma __complete config` | 53.7 ms | 39.7 ms | **−14.0 ms (−26%)** |
-| `pragma __complete skill lookup` | 48.9 ms | 39.8 ms | **−9.1 ms (−19%)** |
+| Path                             | before  | after   | delta               |
+| -------------------------------- | ------- | ------- | ------------------- |
+| `pragma --help`                  | 49.3 ms | 35.3 ms | **−14.0 ms (−28%)** |
+| `pragma __complete config`       | 53.7 ms | 39.7 ms | **−14.0 ms (−26%)** |
+| `pragma __complete skill lookup` | 48.9 ms | 39.8 ms | **−9.1 ms (−19%)**  |
 
 The capabilities barrel's own import, measured the same paired way (25 spawns
 per arm, 5 discarded, timing one dynamic `import()` of `capabilities/index.js`
@@ -171,10 +170,10 @@ ceilings were nevertheless right to be provisional, and are right to be down.
 
 The 2×-median rule against the after arm, on this box:
 
-| Path | after median | 2× median | ceiling |
-|---|---|---|---|
-| `pragma --help` | 64.7 ms | 129.5 ms | **130 ms** |
-| `pragma __complete` (slower of the two cases) | 69.3 ms | 138.5 ms | **150 ms** |
+| Path                                          | after median | 2× median | ceiling    |
+| --------------------------------------------- | ------------ | --------- | ---------- |
+| `pragma --help`                               | 64.7 ms      | 129.5 ms  | **130 ms** |
+| `pragma __complete` (slower of the two cases) | 69.3 ms      | 138.5 ms  | **150 ms** |
 
 `--help` lands on 130 to within half a millisecond — the standing ceiling IS
 the rule's number, not a number the rule happens to tolerate.
@@ -202,25 +201,25 @@ The designed 50 ms target stays recorded as unmet.
 
 Every figure above was measured against a `bun build --compile` executable. The
 distribution now ships JavaScript that `node` executes, which costs roughly 2×
-on the fast paths — so a ceiling set at 2× the *binary's* median lands on the
-*emit's* median, where it can no longer separate a regression from a slow
+on the fast paths — so a ceiling set at 2× the _binary's_ median lands on the
+_emit's_ median, where it can no longer separate a regression from a slow
 runner.
 
 `__complete` demonstrated this rather than merely risking it. Three CI attempts,
 all against the 100 ms ceiling:
 
 | Attempt | trimmed mean |
-|---|---|
-| 1 | 100.37 ms |
-| 2 | 100.20 ms |
-| 3 | 100.15 ms |
+| ------- | ------------ |
+| 1       | 100.37 ms    |
+| 2       | 100.20 ms    |
+| 3       | 100.15 ms    |
 
 That is a ceiling sitting on the median, not above it.
 
-| Budget | Compiled median | Shipped entry | Ceiling | Basis |
-|---|---|---|---|---|
-| `pragma --help` | ~61 ms | ~72 ms local | **130 ms** (unchanged) | still has real headroom to lose |
-| `pragma __complete` | ~46 ms | ~69 ms local · ~100 ms CI trimmed mean | **150 ms** (was 100) | 2× the shipped median, the same rule as before |
+| Budget              | Compiled median | Shipped entry                          | Ceiling                | Basis                                          |
+| ------------------- | --------------- | -------------------------------------- | ---------------------- | ---------------------------------------------- |
+| `pragma --help`     | ~61 ms          | ~72 ms local                           | **130 ms** (unchanged) | still has real headroom to lose                |
+| `pragma __complete` | ~46 ms          | ~69 ms local · ~100 ms CI trimmed mean | **150 ms** (was 100)   | 2× the shipped median, the same rule as before |
 
 **The designed 50 ms target is not met, and is recorded as unmet rather than
 moved.** The shipped entry cannot reach it: node's own start consumes most of
@@ -230,7 +229,7 @@ packaging change genuinely cost.
 
 ## p95 stabilization (`__complete`)
 
-A nearest-rank p95 over a small sample is effectively the *maximum* of that
+A nearest-rank p95 over a small sample is effectively the _maximum_ of that
 sample (with 12 kept samples, `ceil(0.95 × 12) = 12` → the slowest spawn), so a
 single GC/scheduler spike tips it over the ceiling. `__complete` — median ~62 ms
 here, comfortably under the 100 ms budget — nonetheless flaked red on p95 under
@@ -244,14 +243,14 @@ change made the statistic reliable without touching the ceiling. The ceiling
 itself was re-derived later, when the shipped artifact changed; see
 "Re-derived for the shipped entry" below.
 
-| Path                       | Median  | p95     | Budget  | Basis                     |
-| -------------------------- | ------- | ------- | ------- | ------------------------- |
-| `pragma --version` (cold) | 45.5 ms | 50.1 ms | —       | reference (cold start)    |
-| `pragma --help`           | 61.0 ms | 66.1 ms | 130 ms  | 2× median (50 ms target)  |
-| `pragma __complete`       | 46.1 ms | 51.3 ms | 100 ms  | 2× median (50 ms target)  |
-| `config show`              | 63.5 ms | 68.9 ms | —       | reference (storeless run) |
-| project config load (warm) | < 1 ms  | < 1 ms  | 10 ms   | cache hit (in-process)    |
-| `__store-probe` (store)    | ~147 ms | ~176 ms | 500 ms  | re-derived (see below)    |
+| Path                       | Median  | p95     | Budget | Basis                     |
+| -------------------------- | ------- | ------- | ------ | ------------------------- |
+| `pragma --version` (cold)  | 45.5 ms | 50.1 ms | —      | reference (cold start)    |
+| `pragma --help`            | 61.0 ms | 66.1 ms | 130 ms | 2× median (50 ms target)  |
+| `pragma __complete`        | 46.1 ms | 51.3 ms | 100 ms | 2× median (50 ms target)  |
+| `config show`              | 63.5 ms | 68.9 ms | —      | reference (storeless run) |
+| project config load (warm) | < 1 ms  | < 1 ms  | 10 ms  | cache hit (in-process)    |
+| `__store-probe` (store)    | ~147 ms | ~176 ms | 500 ms | re-derived (see below)    |
 
 The store-backed verb budget (`__store-probe`: oxigraph WASM load + n-quads
 cache load + `compileFromExtraction` + a SPARQL count, across the process
@@ -285,10 +284,10 @@ worthless in isolation — measures it **net of process start**.
 between the two binaries is the pack. Every probe is netted against **its own
 binary's** `--version`, measured in the same repetition.
 
-- *Interleaved* (reps 1–3): round-robin over all four cases, 18 rounds, 3
+- _Interleaved_ (reps 1–3): round-robin over all four cases, 18 rounds, 3
   discarded as warmups, rotating the start index each round — so both binaries
   see the same machine load and the same page-cache pressure.
-- *Per-binary* (reps 4–5): the two cases of one binary round-robined together,
+- _Per-binary_ (reps 4–5): the two cases of one binary round-robined together,
   the two binaries run back to back.
 
 | Rep | protocol    | load    | toy store work | real store work | multiplier |
@@ -355,7 +354,7 @@ designed-vs-enforced divergence.
 
 **Also measured — the per-invocation start tax**, on the compiled binary of the
 time. The real embed made it ~2.0 MB bigger (104.8 → 106.8 MB), and
-`bun build --compile` emitted one script, so the whole embed was *parsed* at
+`bun build --compile` emitted one script, so the whole embed was _parsed_ at
 process start on every invocation even
 though `--version` and `--help` import neither generated module. Measured on
 `--version` under the interleaved protocol, which is the only one where the two
@@ -363,7 +362,7 @@ binaries face the same page-cache pressure: **+24.1 / +24.7 / +28.4 ms**. Scaled
 to the reference box's 45.5 ms start that is roughly +6 ms, which neither the
 130 ms `--help` nor the 100 ms `__complete` ceiling notices — but it is a real
 cost of the embed and it is not what the `entitySource` module split avoids
-(that split keeps the 1.87 MB from being *evaluated*, not from being *parsed*).
+(that split keeps the 1.87 MB from being _evaluated_, not from being _parsed_).
 
 **Pre-existing gap, recorded honestly:** the `warm store-backed verb` budget case
 already fails on this box with the **toy** pack — 352 / 364 / 382 ms median
@@ -409,10 +408,10 @@ enforced. They are split by MEASUREMENT TYPE:
   ceiling. The budget now genuinely constrains description length — verbose
   `use_when`/tool descriptions are what it guards against.
 
-| Budget         | Measured (full catalog)      | Ceiling      | Pass                 |
-| -------------- | ---------------------------- | ------------ | -------------------- |
-| `mcpP95Warm`   | p95 ≈ 0.4 ms (in-process)    | 100 ms       | serial perf (`test:perf`) |
-| `condensedSDL` | 2767 tokens (38 tools) — STALE, see the 2026-09-10 re-measurement at the end of this file | 8000 tokens  | eval/coverage        |
+| Budget         | Measured (full catalog)                                                                   | Ceiling     | Pass                      |
+| -------------- | ----------------------------------------------------------------------------------------- | ----------- | ------------------------- |
+| `mcpP95Warm`   | p95 ≈ 0.4 ms (in-process)                                                                 | 100 ms      | serial perf (`test:perf`) |
+| `condensedSDL` | 2767 tokens (38 tools) — STALE, see the 2026-09-10 re-measurement at the end of this file | 8000 tokens | eval/coverage             |
 
 Confirmed by the spike:
 
@@ -482,18 +481,18 @@ indirectly — see "Durability of the ruling" at the end of this section.
 
 ### Environment
 
-| | |
-|---|---|
-| OS / CPU | Linux 6.18.44 x86_64 · Intel Core Ultra 7 165U (14 threads) · 62 GB RAM |
-| Runtime | `node` v24.18.1 (the runtime the entry ships for), `bun` 1.4.0, `vitest` 4.1.2 |
-| Artifact | `dist/src/bin.js` — the `tsc` emit from `bun run build`, spawned as `node dist/src/bin.js`, exactly as `budgets.test.ts` does |
-| Embedded pack | 49 630 triples / 4 167 entities (`contentHash 83746a38…`, generated 2026-09-08) |
-| Surface | 22 capability modules (16 authored + 6 declared stories) · 42 MCP tools |
+|               |                                                                                                                               |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| OS / CPU      | Linux 6.18.44 x86_64 · Intel Core Ultra 7 165U (14 threads) · 62 GB RAM                                                       |
+| Runtime       | `node` v24.18.1 (the runtime the entry ships for), `bun` 1.4.0, `vitest` 4.1.2                                                |
+| Artifact      | `dist/src/bin.js` — the `tsc` emit from `bun run build`, spawned as `node dist/src/bin.js`, exactly as `budgets.test.ts` does |
+| Embedded pack | 49 630 triples / 4 167 entities (`contentHash 83746a38…`, generated 2026-09-08)                                               |
+| Surface       | 22 capability modules (16 authored + 6 declared stories) · 42 MCP tools                                                       |
 
 This is the same physical box as the "paired A/B" and "embedded pack becomes
 the real graph" sections above, which is what licenses the within-box
 comparisons below. It is **not** the day-1 reference box: its cold process
-start is *faster* (`--version` median 34.8 ms here against the reference box's
+start is _faster_ (`--version` median 34.8 ms here against the reference box's
 45.5 ms), so where a reference-box projection is quoted it is a projection, not
 an observation.
 
@@ -515,31 +514,31 @@ share a statistic share a run.
 **A repetition was accepted only if its own `--version` control had a median
 at or below 40 ms.** This box's quiet band is a control median of 33–39 ms
 (sample minimum ~26 ms); when other work is running it goes to 60–110 ms, and
-the netted *work* figures then inflate superlinearly — help work ranged 66 ms
+the netted _work_ figures then inflate superlinearly — help work ranged 66 ms
 to 233 ms across repetitions, tracking nothing but the control. Netting alone
 does not rescue a contended run, because a longer piece of work is more exposed
 to contention (the same point the "multiplier, not the increment" argument
 makes above). So contended repetitions are **discarded, not averaged in**:
 
-| cells | repetitions run | accepted (control ≤ 40 ms) | rejected controls |
-|---|---|---|---|
-| fast paths | 9 | 5 | 40.8 · 42.4 · 60.5 · 110.0 ms |
-| `__store-probe` | 7 | 4 | 44.5 · 60.2 · 71.4 ms |
+| cells           | repetitions run | accepted (control ≤ 40 ms) | rejected controls             |
+| --------------- | --------------- | -------------------------- | ----------------------------- |
+| fast paths      | 9               | 5                          | 40.8 · 42.4 · 60.5 · 110.0 ms |
+| `__store-probe` | 7               | 4                          | 44.5 · 60.2 · 71.4 ms         |
 
 Every figure below is the **median across accepted repetitions** of that
 repetition's own statistic.
 
 ### Measured
 
-| Cell | n | median | p95 | 10%-trimmed mean | work (net of control) |
-|---|---|---|---|---|---|
-| `pragma --version` (control) | 5 × 40 | **34.8 ms** | 43.3 ms | 35.9 ms | — |
-| `pragma --help` | 5 × 40 | **103.3 ms** | 134.0 ms | 107.7 ms | 69.1 ms |
-| `pragma __complete config` | 5 × 40 | 116.4 ms | 141.2 ms | 118.5 ms | 81.7 ms |
-| `pragma __complete skill lookup do` | 5 × 40 | **115.7 ms** | 145.0 ms | 118.6 ms | 81.4 ms |
-| `pragma __store-probe` | 4 × 40 | **536.0 ms** | 608.9 ms | 536.2 ms | 499.9 ms |
-| project config load (warm, in-process) | 40 | **0.011 ms** | 0.034 ms | 0.013 ms | — |
-| MCP `capabilities` (warm, in-process) | 40 | 0.506 ms | **0.732 ms** | 0.530 ms | — |
+| Cell                                   | n      | median       | p95          | 10%-trimmed mean | work (net of control) |
+| -------------------------------------- | ------ | ------------ | ------------ | ---------------- | --------------------- |
+| `pragma --version` (control)           | 5 × 40 | **34.8 ms**  | 43.3 ms      | 35.9 ms          | —                     |
+| `pragma --help`                        | 5 × 40 | **103.3 ms** | 134.0 ms     | 107.7 ms         | 69.1 ms               |
+| `pragma __complete config`             | 5 × 40 | 116.4 ms     | 141.2 ms     | 118.5 ms         | 81.7 ms               |
+| `pragma __complete skill lookup do`    | 5 × 40 | **115.7 ms** | 145.0 ms     | 118.6 ms         | 81.4 ms               |
+| `pragma __store-probe`                 | 4 × 40 | **536.0 ms** | 608.9 ms     | 536.2 ms         | 499.9 ms              |
+| project config load (warm, in-process) | 40     | **0.011 ms** | 0.034 ms     | 0.013 ms         | —                     |
+| MCP `capabilities` (warm, in-process)  | 40     | 0.506 ms     | **0.732 ms** | 0.530 ms         | —                     |
 
 The two in-process cells were measured against the same `dist/` under `node`,
 priming the cache / making one warm-up call first, exactly as
@@ -551,10 +550,10 @@ Almost all of it is one import. Timing a single dynamic `import()` of the
 built modules and nothing else — 25 spawns per module, 5 discarded, three
 repetitions:
 
-| Module | import median | recorded in the A/B above |
-|---|---|---|
-| `capabilities/index.js` (the barrel) | **68.0 ms** | 37.6 ms |
-| `constants.js` | 5.0 ms | — |
+| Module                               | import median | recorded in the A/B above |
+| ------------------------------------ | ------------- | ------------------------- |
+| `capabilities/index.js` (the barrel) | **68.0 ms**   | 37.6 ms                   |
+| `constants.js`                       | 5.0 ms        | —                         |
 
 68.0 ms of import against 69.1 ms of measured `--help` work: the barrel **is**
 the fast path now. It has gained **+30.4 ms (1.81×)** since the recovery A/B,
@@ -594,7 +593,7 @@ ceiling             = ceil(206.6 / 10) × 10   = 210 ms
 ```
 
 Cross-checked against the reference box, holding the measured work constant:
-`45.5 + 69.1 = 114.6` ms median → 2× = **229 ms**. The projection is *looser*
+`45.5 + 69.1 = 114.6` ms median → 2× = **229 ms**. The projection is _looser_
 than the local rule, so 210 is the tight side of the rule — the same
 relationship 130 had to its own projection (~162 ms) when it was set.
 
@@ -659,13 +658,13 @@ measure the scheduler.
 
 ### Summary
 
-| Constant | Designed | Median | p95 | Old ceiling | New ceiling | Rule applied |
-|---|---|---|---|---|---|---|
-| `BUDGET_HELP_MS` | 50 (unmet) | 103.3 ms | 134.0 ms | 130 | **210** | 2× median = 206.6 |
-| `BUDGET_COMPLETE_MS` | 50 (unmet) | 115.7 ms | 145.0 ms | 150 | **240** | 2× median = 231.4 |
-| `BUDGET_PROJECT_CONFIG_MS` | 10 warm | 0.011 ms | 0.034 ms | 10 | **10** | left — 900× headroom |
-| `BUDGET_WARM_STORE_MS` | 300 (unmet) | 536.0 ms | 608.9 ms | 500 | **850** | ceil(projected p95 × 1.25 / 50) × 50 |
-| `BUDGET_MCP_P95_WARM_MS` | 100 | 0.506 ms | 0.732 ms | 100 | **100** | left — 137× headroom |
+| Constant                   | Designed    | Median   | p95      | Old ceiling | New ceiling | Rule applied                         |
+| -------------------------- | ----------- | -------- | -------- | ----------- | ----------- | ------------------------------------ |
+| `BUDGET_HELP_MS`           | 50 (unmet)  | 103.3 ms | 134.0 ms | 130         | **210**     | 2× median = 206.6                    |
+| `BUDGET_COMPLETE_MS`       | 50 (unmet)  | 115.7 ms | 145.0 ms | 150         | **240**     | 2× median = 231.4                    |
+| `BUDGET_PROJECT_CONFIG_MS` | 10 warm     | 0.011 ms | 0.034 ms | 10          | **10**      | left — 900× headroom                 |
+| `BUDGET_WARM_STORE_MS`     | 300 (unmet) | 536.0 ms | 608.9 ms | 500         | **850**     | ceil(projected p95 × 1.25 / 50) × 50 |
+| `BUDGET_MCP_P95_WARM_MS`   | 100         | 0.506 ms | 0.732 ms | 100         | **100**     | left — 137× headroom                 |
 
 The designed 50 ms fast-path target and the designed 300 ms store target both
 stay recorded as **designed and unmet**. Neither was moved.
@@ -674,10 +673,10 @@ stay recorded as **designed and unmet**. Neither was moved.
 
 Measured against `origin/main` `075bdbab7` with the ceilings it shipped:
 
-| Case | Statistic asserted | Observed | Ceiling then |
-|---|---|---|---|
-| `warm store-backed verb` | median | 550.5 · 573.6 · 568.1 ms (three retries, all red) | 500 |
-| `pragma --help` | p95 | 131.0 · 132.8 · 134.0 · 134.1 · 140.2 ms (every accepted repetition) | 130 |
+| Case                     | Statistic asserted | Observed                                                             | Ceiling then |
+| ------------------------ | ------------------ | -------------------------------------------------------------------- | ------------ |
+| `warm store-backed verb` | median             | 550.5 · 573.6 · 568.1 ms (three retries, all red)                    | 500          |
+| `pragma --help`          | p95                | 131.0 · 132.8 · 134.0 · 134.1 · 140.2 ms (every accepted repetition) | 130          |
 
 `--help` is red on **p95 only** — its median, 103.3 ms, was still inside the
 130 ms ceiling. That is worth stating precisely, because it means the ceiling
@@ -693,16 +692,16 @@ the tests assert. Replaying each case under **its own test's protocol** (`help`
 15 runs/3 warmups → 12 kept; `__complete` 30/5 → 25 kept; `__store-probe`
 12/3 → 9 kept, so its p95 is the maximum), repeatedly:
 
-| Case | trials | median of medians | median p95 | worst asserted statistic | new ceiling |
-|---|---|---|---|---|---|
-| `--help` | 12 | 115.0 ms | 142.1 ms | p95 200.2 ms | 210 |
-| `__complete skill lookup do` | 8 | 129.7 ms | 147.0 ms | trimmed mean 136.7 ms | 240 |
-| `__store-probe` | 15 | 576.2 ms | 667.7 ms | p95 807.5 ms quiet · 1556.5 ms contended | 850 |
+| Case                         | trials | median of medians | median p95 | worst asserted statistic                 | new ceiling |
+| ---------------------------- | ------ | ----------------- | ---------- | ---------------------------------------- | ----------- |
+| `--help`                     | 12     | 115.0 ms          | 142.1 ms   | p95 200.2 ms                             | 210         |
+| `__complete skill lookup do` | 8      | 129.7 ms          | 147.0 ms   | trimmed mean 136.7 ms                    | 240         |
+| `__store-probe`              | 15     | 576.2 ms          | 667.7 ms   | p95 807.5 ms quiet · 1556.5 ms contended | 850         |
 
 Two honest caveats fall out of that table.
 
 1. **`--help` has the least room of the three.** It is the only case still
-   asserted on a *raw* nearest-rank p95 at the bare ceiling, over 12 kept
+   asserted on a _raw_ nearest-rank p95 at the bare ceiling, over 12 kept
    samples — where p95 is effectively the maximum. 200.2 of 210 was the worst
    of 12 replays. The available fix is the one `__complete` already got
    (enforce the trimmed mean, keep p95 as a soft check with headroom); it is
@@ -770,7 +769,7 @@ Re-verified 2026-09-10, mechanically, that nothing reaches this pass:
 The ruling is now restated where someone about to undo it will read it:
 `vitest.perf.config.ts`'s header, `docs/CI.md` ("What CI deliberately does not
 run"), and `AGENTS.md`'s "CI workflows are global" section. No test asserts the
-*contents* of a workflow file, and none was added — this repo does not do that
+_contents_ of a workflow file, and none was added — this repo does not do that
 anywhere, and a test that pins CI's shape from inside one package would be the
 package-scoped CI concern `AGENTS.md` forbids.
 
@@ -778,6 +777,7 @@ Open question (1) from the 2026-08-30 banner — where the pass should run
 instead — is **still open**, and this re-derivation makes it more pressing
 rather than less: two of the three ceilings moved because real cost had
 accumulated unobserved between one manual run and the next.
+
 ## 2026-09-10 — the first response-size budget for a list-shaped answer
 
 `LIST_PAYLOAD_BUDGET_BYTES = 125_000`, enforced in
@@ -797,17 +797,17 @@ formatter's output, re-serialised the way both machine surfaces send it, so the
 figure is what crosses the wire and not what the indented formatter string
 weighs):
 
-| Body                       | rows at the default limit | bytes | rows unpaginated | bytes  |
-| -------------------------- | ------------------------- | ----- | ---------------- | ------ |
-| `block list`               | 252                       | 32,956 | 252             | 32,956 |
-| `token list`               | 0                         | 2      | 0               | 2      |
-| `modifier list`            | 11                        | 1,392  | 11              | 1,392  |
-| `tier list`                | 15                        | 1,051  | 15              | 1,051  |
-| `concept list`             | 4                         | 1,340  | 4               | 1,340  |
-| `standard list`            | 147                       | 78,129 | 147             | 78,129 |
-| `standard categories`      | 21                        | 689    | 21              | 689    |
-| `implementation list`      | 90                        | 27,850 | 90              | 27,850 |
-| `implementation libraries` | 4                         | 711    | 4               | 711    |
+| Body                       | rows at the default limit | bytes  | rows unpaginated | bytes  |
+| -------------------------- | ------------------------- | ------ | ---------------- | ------ |
+| `block list`               | 252                       | 32,956 | 252              | 32,956 |
+| `token list`               | 0                         | 2      | 0                | 2      |
+| `modifier list`            | 11                        | 1,392  | 11               | 1,392  |
+| `tier list`                | 15                        | 1,051  | 15               | 1,051  |
+| `concept list`             | 4                         | 1,340  | 4                | 1,340  |
+| `standard list`            | 147                       | 78,129 | 147              | 78,129 |
+| `standard categories`      | 21                        | 689    | 21               | 689    |
+| `implementation list`      | 90                        | 27,850 | 90               | 27,850 |
+| `implementation libraries` | 4                         | 711    | 4                | 711    |
 
 The two columns are the same number for every body, and that is the point: the
 kernel's default page is **500 rows**, above every declared story's population,
@@ -905,11 +905,11 @@ Adding the token-graph nouns took the catalogue from 43 to **49 tools**, and the
 the assertion measures it (name + description + `inputSchema` per tool, joined,
 at ~4 chars/token, over the live in-process MCP catalogue):
 
-| When              | Tools | Chars  | ≈ Tokens | % of the 8000 ceiling |
-| ----------------- | ----- | ------ | -------- | --------------------- |
-| PR7 record        | 38    | 11 068 | 2 767    | 35%                   |
-| Before this work  | 43    | 21 733 | 5 434    | **68%**               |
-| After this work   | 49    | 29 277 | 7 320    | **91%**               |
+| When             | Tools | Chars  | ≈ Tokens | % of the 8000 ceiling |
+| ---------------- | ----- | ------ | -------- | --------------------- |
+| PR7 record       | 38    | 11 068 | 2 767    | 35%                   |
+| Before this work | 43    | 21 733 | 5 434    | **68%**               |
+| After this work  | 49    | 29 277 | 7 320    | **91%**               |
 
 Three things to take from it.
 
@@ -1053,10 +1053,10 @@ apiece, with nothing in the answer saying so. Fifty answers every pattern that
 means "this family" in full (`color.text.*` is 36). It bounds the COUNT, not
 the bytes — those follow the noun's own level:
 
-| Widest pattern     | matched | `summary` bytes | `detailed` bytes |
-| ------------------ | ------- | --------------- | ---------------- |
-| `block lookup '*'` | 313     | 22,592          | 206,809          |
-| `token lookup 'color.*'` | 473 | 11,221        | 58,164           |
+| Widest pattern           | matched | `summary` bytes | `detailed` bytes |
+| ------------------------ | ------- | --------------- | ---------------- |
+| `block lookup '*'`       | 313     | 22,592          | 206,809          |
+| `token lookup 'color.*'` | 473     | 11,221          | 58,164           |
 
 Ceilings × 1.5: 34,000 and 310,000. Warm cost of `token lookup 'color.*'`:
 895 ms uncapped, 32 ms capped.

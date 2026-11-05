@@ -163,40 +163,40 @@ pragma graph query "SELECT ?c WHERE { ?c ds:hasModifierFamily <https://ds.canoni
 
 ### Classes
 
-| Class | Description |
-|-------|-------------|
-| `UIElement` | Root class for all design system entities |
-| `UIBlock` | Visual/abstract entity for composing UIs |
-| `Component` | Implementable UI piece |
-| `Pattern` | Reusable UX solution |
-| `Layout` | Space division for navigation |
-| `Subcomponent` | Part of a component |
-| `Modifier` | Variant option |
-| `ModifierFamily` | Grouping of related modifiers |
-| `Tier` | Scope/applicability level |
-| `Property` | Configurable component property |
-| `ImplementationObject` | Platform-specific implementation |
-| `ImplementationLibrary` | Implementation library |
-| `TokenBinding` | One symbol a block consumes, at one node, key, state and rank |
+| Class                   | Description                                                   |
+| ----------------------- | ------------------------------------------------------------- |
+| `UIElement`             | Root class for all design system entities                     |
+| `UIBlock`               | Visual/abstract entity for composing UIs                      |
+| `Component`             | Implementable UI piece                                        |
+| `Pattern`               | Reusable UX solution                                          |
+| `Layout`                | Space division for navigation                                 |
+| `Subcomponent`          | Part of a component                                           |
+| `Modifier`              | Variant option                                                |
+| `ModifierFamily`        | Grouping of related modifiers                                 |
+| `Tier`                  | Scope/applicability level                                     |
+| `Property`              | Configurable component property                               |
+| `ImplementationObject`  | Platform-specific implementation                              |
+| `ImplementationLibrary` | Implementation library                                        |
+| `TokenBinding`          | One symbol a block consumes, at one node, key, state and rank |
 
 Run `pragma ontology lookup ds` for the full class list with today's instance
 counts (it also carries classes this overview omits).
 
 ### UIBlock Properties
 
-| Property | Range | Description |
-|----------|-------|-------------|
-| `name` | string | Display name (from `Entity`) |
-| `summary` | string | What this block is/does (from `Entity`) |
-| `tier` | Tier | Scope classification |
-| `usage` | string | Usage guidance (`### When to use` / `### When not to use` sections) |
-| `guidelines` | string | Design guidelines |
-| `figmaLink` | anyURI | Link to Figma designs |
-| `anatomyDsl` | string | Anatomy in the Anatomy DSL (YAML) |
-| `anatomyClassic` | string | Anatomy as links/prose |
-| `hasVariant` | UIBlock | Variant blocks |
-| `hasModifierFamily` | ModifierFamily | Applicable variant axes |
-| `hasProperty` | Property | Configurable properties |
+| Property            | Range          | Description                                                         |
+| ------------------- | -------------- | ------------------------------------------------------------------- |
+| `name`              | string         | Display name (from `Entity`)                                        |
+| `summary`           | string         | What this block is/does (from `Entity`)                             |
+| `tier`              | Tier           | Scope classification                                                |
+| `usage`             | string         | Usage guidance (`### When to use` / `### When not to use` sections) |
+| `guidelines`        | string         | Design guidelines                                                   |
+| `figmaLink`         | anyURI         | Link to Figma designs                                               |
+| `anatomyDsl`        | string         | Anatomy in the Anatomy DSL (YAML)                                   |
+| `anatomyClassic`    | string         | Anatomy as links/prose                                              |
+| `hasVariant`        | UIBlock        | Variant blocks                                                      |
+| `hasModifierFamily` | ModifierFamily | Applicable variant axes                                             |
+| `hasProperty`       | Property       | Configurable properties                                             |
 
 Run `pragma ontology lookup ds --class UIBlock` for the full declared set —
 `documentationStage`, `changeLog`, and the variant/inheritance links are there too
@@ -204,29 +204,29 @@ Run `pragma ontology lookup ds --class UIBlock` for the full declared set —
 
 ### Layout-Specific Properties
 
-| Property | Range | Description |
-|----------|-------|-------------|
-| `domain` | string | Information domain |
-| `grid` | string | CSS grid definition |
-| `gridAreas` | string | Named grid areas |
-| `targetDevices` | string | Supported devices |
+| Property        | Range  | Description         |
+| --------------- | ------ | ------------------- |
+| `domain`        | string | Information domain  |
+| `grid`          | string | CSS grid definition |
+| `gridAreas`     | string | Named grid areas    |
+| `targetDevices` | string | Supported devices   |
 
 ### Component Relationships
 
-| Property | Domain | Range | Description |
-|----------|--------|-------|-------------|
-| `hasSubcomponent` | Component | Subcomponent | Composition |
-| `parentComponent` | Subcomponent | Component | Inverse of above |
-| `hasModifierFamily` | UIBlock | ModifierFamily | Variant axes |
-| `hasModifier` | ModifierFamily | Modifier | Variant options |
+| Property            | Domain         | Range          | Description      |
+| ------------------- | -------------- | -------------- | ---------------- |
+| `hasSubcomponent`   | Component      | Subcomponent   | Composition      |
+| `parentComponent`   | Subcomponent   | Component      | Inverse of above |
+| `hasModifierFamily` | UIBlock        | ModifierFamily | Variant axes     |
+| `hasModifier`       | ModifierFamily | Modifier       | Variant options  |
 
 ### Implementation Bridge
 
-| Property | Domain | Range | Description |
-|----------|--------|-------|-------------|
-| `implementsBlock` | ImplementationObject | UIBlock | Links code to spec |
-| `library` | ImplementationObject | ImplementationLibrary | Source library |
-| `libraryTier` | ImplementationLibrary | Tier | Library's tier |
+| Property          | Domain                | Range                 | Description        |
+| ----------------- | --------------------- | --------------------- | ------------------ |
+| `implementsBlock` | ImplementationObject  | UIBlock               | Links code to spec |
+| `library`         | ImplementationObject  | ImplementationLibrary | Source library     |
+| `libraryTier`     | ImplementationLibrary | Tier                  | Library's tier     |
 
 ### Token Bindings
 
@@ -236,15 +236,15 @@ transform, parsing each block's `ds:anatomyDsl` literal with `@canonical/anatomy
 and following its `uri:` references transitively. A record is a blank node in the
 block's own per-instance file.
 
-| Property | Domain | Range | Description |
-|----------|--------|-------|-------------|
-| `hasTokenBinding` | UIBlock | TokenBinding | A symbol this block consumes |
-| `consumesSymbol` | TokenBinding | `dt:TokenSymbol` | The symbol — exactly one, determined by the identity |
-| `viaBlock` | TokenBinding | UIBlock | The tree it was reached through; equal to the block for an own-tree binding |
-| `node` | TokenBinding | string | The node's tree path (`$root/nav list/level-1 entry/link`) |
-| `styleKey` | TokenBinding | string | `anatomy:styleKey`, reused from the anatomy vocabulary |
-| `styleState` | TokenBinding | string | `anatomy:styleState`; `"default"` for the unmarked key |
-| `rank` | TokenBinding | integer | 1-based position in the value's fallback order |
+| Property          | Domain       | Range            | Description                                                                 |
+| ----------------- | ------------ | ---------------- | --------------------------------------------------------------------------- |
+| `hasTokenBinding` | UIBlock      | TokenBinding     | A symbol this block consumes                                                |
+| `consumesSymbol`  | TokenBinding | `dt:TokenSymbol` | The symbol — exactly one, determined by the identity                        |
+| `viaBlock`        | TokenBinding | UIBlock          | The tree it was reached through; equal to the block for an own-tree binding |
+| `node`            | TokenBinding | string           | The node's tree path (`$root/nav list/level-1 entry/link`)                  |
+| `styleKey`        | TokenBinding | string           | `anatomy:styleKey`, reused from the anatomy vocabulary                      |
+| `styleState`      | TokenBinding | string           | `anatomy:styleState`; `"default"` for the unmarked key                      |
+| `rank`            | TokenBinding | integer          | 1-based position in the value's fallback order                              |
 
 The identity is the six-tuple `(block, viaBlock, node, styleKey, styleState, rank)`;
 `consumesSymbol` is functionally determined by it. An inherited binding is therefore
@@ -277,6 +277,7 @@ After a decade using Vanilla Framework (CSS library), Canonical observed that vi
 4. **Fragmented specifications** - Figma, docs, code out of sync
 
 An ontology addresses these by:
+
 - **Establishing shared vocabulary** - One name, one meaning
 - **Explicit relationships** - Queryable component graph
 - **Structured metadata** - Guidelines, rationale, links preserved
@@ -286,7 +287,7 @@ An ontology addresses these by:
 
 **1. Separation of Concept and Implementation**
 
-The ontology separates the *what* (UIBlock) from the *how* (ImplementationObject). A Button concept can have multiple implementations across React, Web Components, or Flutter while maintaining semantic identity.
+The ontology separates the _what_ (UIBlock) from the _how_ (ImplementationObject). A Button concept can have multiple implementations across React, Web Components, or Flutter while maintaining semantic identity.
 
 **2. Tiered Scoping**
 
@@ -395,12 +396,12 @@ floors hold. `ci.yml`'s `census-drift` job runs it with `--write-register` and d
 
 **The files, and who writes them.**
 
-| File | Writer | What it is |
-|---|---|---|
-| `anatomies/authored/<tier>/<uri>.yaml` | by hand | One anatomy each. Reviewed as files in a pull request, and the text of the file is the text of the `anatomy_dsl` cell the write sends |
-| `anatomies/census.json` | `validate --write-register` | The corpus and its counts. The one committed generated file, and the one thing CI diffs |
-| `anatomies/register.yaml` | `validate --write-register` | Every exception, with its hand-written rationale preserved. **Not committed** — most of its rows today are the parse failures of the retired notation, and they disappear as the anatomies are authored, so the file would land at many times its steady-state size. `readRegister` reads a missing file as an empty register, and the census carries the counts |
-| `anatomies/snapshots/<stamp>-uiBlocks.json` | `write --apply`, `restore --apply` | What every `anatomy_dsl` cell said before the run touched it. Gitignored: a recovery artefact of one run against one document |
+| File                                        | Writer                             | What it is                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anatomies/authored/<tier>/<uri>.yaml`      | by hand                            | One anatomy each. Reviewed as files in a pull request, and the text of the file is the text of the `anatomy_dsl` cell the write sends                                                                                                                                                                                                                            |
+| `anatomies/census.json`                     | `validate --write-register`        | The corpus and its counts. The one committed generated file, and the one thing CI diffs                                                                                                                                                                                                                                                                          |
+| `anatomies/register.yaml`                   | `validate --write-register`        | Every exception, with its hand-written rationale preserved. **Not committed** — most of its rows today are the parse failures of the retired notation, and they disappear as the anatomies are authored, so the file would land at many times its steady-state size. `readRegister` reads a missing file as an empty register, and the census carries the counts |
+| `anatomies/snapshots/<stamp>-uiBlocks.json` | `write --apply`, `restore --apply` | What every `anatomy_dsl` cell said before the run touched it. Gitignored: a recovery artefact of one run against one document                                                                                                                                                                                                                                    |
 
 Nothing here writes `data/`, which is the Coda pull sync's alone, and nothing here
 writes `anatomies/authored/`.
@@ -526,18 +527,18 @@ The `collect-implementations` script scans codebases for `@implements` annotatio
 
 ### Configuration Options
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | Yes | Library identifier (e.g., "pragma-react") |
-| `platform` | Yes | Framework/platform (react, vue, angular, etc.) |
-| `description` | No | Human-readable library description |
-| `link` | Yes | Main repository or package URL |
-| `documentation` | No | Documentation URL if different from link |
-| `tier` | No | Design system tier reference (e.g., "ds:global") |
-| `prefix.short` | Yes | Namespace prefix used in annotations (e.g., "ds") |
-| `prefix.namespace` | Yes | Full namespace URI |
-| `pattern` | Yes | Glob pattern for files to scan |
-| `outputDir` | No | Output directory for .ttl files (default: "data") |
+| Field              | Required | Description                                       |
+| ------------------ | -------- | ------------------------------------------------- |
+| `name`             | Yes      | Library identifier (e.g., "pragma-react")         |
+| `platform`         | Yes      | Framework/platform (react, vue, angular, etc.)    |
+| `description`      | No       | Human-readable library description                |
+| `link`             | Yes      | Main repository or package URL                    |
+| `documentation`    | No       | Documentation URL if different from link          |
+| `tier`             | No       | Design system tier reference (e.g., "ds:global")  |
+| `prefix.short`     | Yes      | Namespace prefix used in annotations (e.g., "ds") |
+| `prefix.namespace` | Yes      | Full namespace URI                                |
+| `pattern`          | Yes      | Glob pattern for files to scan                    |
+| `outputDir`        | No       | Output directory for .ttl files (default: "data") |
 
 ### Annotating Components
 
@@ -551,6 +552,7 @@ export function Button({ children, ...props }) {
 ```
 
 Annotation formats:
+
 - Basic: `// @implements ds:global.component.button`
 - With version: `// @implements ds:global.component.button@1.0.0`
 - Draft status: `// @implements ds:global.component.button [draft]`
@@ -575,6 +577,7 @@ config and annotation from the sections above, it emits (verbatim, after each fi
 
 1. **`implementationLibrary.ttl`** - Defines the implementation library under
    `<namespace>implementation.library.<slug>`:
+
    ```turtle
    ds:implementation.library.my-component-library a ds:ImplementationLibrary;
        ds:libraryName "my-component-library";
@@ -588,6 +591,7 @@ config and annotation from the sections above, it emits (verbatim, after each fi
 2. **`implementationObjects.ttl`** - Attaches each annotated file to the library as
    a blank-node `ds:ImplementationObject` (`ds:headLink` carries the file's relative
    path):
+
    ```turtle
    ds:implementation.library.my-component-library ds:hasImplementation [
            a ds:ImplementationObject;
@@ -646,7 +650,7 @@ something the document says exists, so losing it must be loud.
    hard-fails if any is missing from the extract
    (`src/transform/expectedTables.ts`).
 2. **Delta guards** — the new dataset is staged in a temp directory and
-   compared against the committed `data/` *before* anything is deleted. The
+   compared against the committed `data/` _before_ anything is deleted. The
    transform aborts when a non-empty table yields zero subjects, the subject
    count drops >10%, any tier file disappears, or the triple count drops >5%
    (`src/transform/deltaGuards.ts`, `src/transform/collectDataMetrics.ts`).
@@ -661,7 +665,7 @@ something the document says exists, so losing it must be loud.
    tidying. Every configured table must declare such a filter, which
    `src/transform/identityFilter.tests.ts` enforces: a table without one is a
    latent outage.
-4. **Malformed-row guard** — a row whose `uri` is *present but degenerate*
+4. **Malformed-row guard** — a row whose `uri` is _present but degenerate_
    (a blank or dangling upstream reference leaves empty dot-separated
    segments, e.g. `ds:global..`) cannot be emitted as valid Turtle, so the
    transform drops it and its subject silently disappears from `data/`. The
@@ -676,7 +680,7 @@ something the document says exists, so losing it must be loud.
    threshold of zero, same escape hatch. Before it existed such a row was
    dropped in total silence — no warning, no count, no failure.
 5. **Workflow content-loss guard** — after regeneration, the sync workflow
-   checks the staged git diff and refuses to commit when the sync *loses*
+   checks the staged git diff and refuses to commit when the sync _loses_
    committed content: deletions that nothing added back, measured as **net
    loss** (deleted − added) against a share of the committed corpus, with an
    absolute ceiling as a catastrophic backstop
@@ -686,7 +690,7 @@ something the document says exists, so losing it must be loud.
    not. Being a proportion, it does not need raising as the corpus grows.
 
 On any guard failure the run fails without committing, the job summary names
-*which* guard tripped and what to fix, and an issue is opened/annotated with
+_which_ guard tripped and what to fix, and an issue is opened/annotated with
 the same text.
 
 #### Escape hatches
@@ -697,11 +701,11 @@ intentional mass deletion does not also wave through rows the source is
 losing by accident. Identity filters have no escape hatch and need none —
 they never fail a sync.
 
-| Situation | Manual workflow input | Environment variable |
-| --- | --- | --- |
-| Intentional large deletion (a planned cleanup in Coda) | `allow_shrink` | `SYNC_ALLOW_SHRINK=1` |
+| Situation                                              | Manual workflow input  | Environment variable          |
+| ------------------------------------------------------ | ---------------------- | ----------------------------- |
+| Intentional large deletion (a planned cleanup in Coda) | `allow_shrink`         | `SYNC_ALLOW_SHRINK=1`         |
 | Known-malformed upstream rows that cannot be fixed yet | `allow_malformed_rows` | `SYNC_ALLOW_MALFORMED_ROWS=1` |
-| Named rows whose `type` cannot be filled in yet | `allow_malformed_rows` | `SYNC_ALLOW_MALFORMED_ROWS=1` |
+| Named rows whose `type` cannot be filled in yet        | `allow_malformed_rows` | `SYNC_ALLOW_MALFORMED_ROWS=1` |
 
 Either input downgrades its guard to a warning for that run. Locally:
 `SYNC_ALLOW_SHRINK=1 bun run build`. Scheduled runs never set either one.

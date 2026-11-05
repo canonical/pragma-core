@@ -16,14 +16,16 @@ node:
     appearance.border.style: solid
     # The primary foreground fills the background, through the channel that
     # importance provides it on.
-    appearance.background: [modifier.color.foreground.primary, color.foreground.primary]
+    appearance.background:
+      [modifier.color.foreground.primary, color.foreground.primary]
     appearance.background@hover: color.foreground.primary.hover
     appearance.background@active: color.foreground.primary.active
     appearance.background@disabled: color.foreground.primary.disabled
     # The border colour reads the channel first, then a highlighted border
     # that itself falls back to the plain one: three ranks, and the whole
     # chain is what an implementation regenerated from this has to write.
-    appearance.border.color: [modifier.color.border, color.border.highlighted, color.border]
+    appearance.border.color:
+      [modifier.color.border, color.border.highlighted, color.border]
     appearance.border.color@disabled: color.border.disabled
     typography.color: [modifier.color.text, color.text]
     typography.color@disabled: color.text.disabled
@@ -36,7 +38,8 @@ node:
     appearance.outline.style@focus: solid
     # The focus ring ends in a literal: currentColor is what the chain falls
     # back to on the page, and dropping it would lose the information.
-    appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing, currentColor]
+    appearance.outline.color@focus:
+      [modifier.color.focusRing, color.focusRing, currentColor]
     appearance.outline.offset@focus: dimension.025
   edges:
     - node:
@@ -44,7 +47,8 @@ node:
         styles:
           # Two channels, then currentColor: the icon follows the icon
           # channel, then the text channel, then the colour it inherits.
-          typography.color: [modifier.color.icon, modifier.color.text, currentColor]
+          typography.color:
+            [modifier.color.icon, modifier.color.text, currentColor]
           typography.color@disabled: color.icon.disabled
       relation:
         cardinality: "0..1"

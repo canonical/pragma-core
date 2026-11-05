@@ -2,19 +2,19 @@
 
 `pragma` answers questions about Canonical's design system from your terminal — and, run as a Model Context Protocol (MCP) server, from your AI agent. The design system ships as a knowledge graph: every block (a component, pattern, or layout), every tier, modifier family, and code standard is a node `pragma` can read. Reads answer offline, from a snapshot compiled into the package — no network, no build.
 
-| You want to… | Run |
-|---|---|
-| See the blocks you build with | `pragma block list` — the top-level tiers, each row with its tier |
-| See a product tier's blocks, and the global ones under them | `pragma block list --tier apps_lxd` (`--tier all` for every tier) |
-| Read a block's full spec — anatomy, modifiers, properties | `pragma block lookup Button` |
-| Find the design system's name for something you already know | `pragma block lookup 'Nav*'` — lookups take names or globs |
-| Know which tier something belongs to | `pragma tier list`, `pragma tier lookup <name>` |
-| Stay consistent with the modifiers that already exist | `pragma modifier list` — 11 families |
-| Check your code against the coding standards | `pragma standard list --category react` |
-| Scaffold a component, package, or application, or a page in an existing domain | `pragma create component react <path>` |
-| Ask the graph something the commands don't cover | `pragma graph query "<sparql>"` |
-| Set it up, and check it's healthy | `pragma setup`, then `pragma doctor` |
-| Give your AI agent the same access | `pragma setup mcp` |
+| You want to…                                                                   | Run                                                               |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| See the blocks you build with                                                  | `pragma block list` — the top-level tiers, each row with its tier |
+| See a product tier's blocks, and the global ones under them                    | `pragma block list --tier apps_lxd` (`--tier all` for every tier) |
+| Read a block's full spec — anatomy, modifiers, properties                      | `pragma block lookup Button`                                      |
+| Find the design system's name for something you already know                   | `pragma block lookup 'Nav*'` — lookups take names or globs        |
+| Know which tier something belongs to                                           | `pragma tier list`, `pragma tier lookup <name>`                   |
+| Stay consistent with the modifiers that already exist                          | `pragma modifier list` — 11 families                              |
+| Check your code against the coding standards                                   | `pragma standard list --category react`                           |
+| Scaffold a component, package, or application, or a page in an existing domain | `pragma create component react <path>`                            |
+| Ask the graph something the commands don't cover                               | `pragma graph query "<sparql>"`                                   |
+| Set it up, and check it's healthy                                              | `pragma setup`, then `pragma doctor`                              |
+| Give your AI agent the same access                                             | `pragma setup mcp`                                                |
 
 The sections below take these in turn.
 
@@ -84,14 +84,14 @@ That answer came from the snapshot inside the package. No network, no cache, no 
 
 What this distribution's graph answers today:
 
-| Ask | Answer |
-|---|---|
-| `pragma block list` | **173** blocks — components, patterns, layouts and subcomponents of the five top-level tiers, each row with its tier. **252** with `--tier all`: the other 79 sit in the ten product tiers below, and `--tier apps_lxd` adds one of those to the global blocks it builds on |
-| `pragma tier list` | **15** tiers — `global`, `apps` plus nine app tiers, `sites` plus one, `stores`, `documentation` |
-| `pragma modifier list` | **11** modifier families — Importance (Primary/Secondary/Tertiary), Anticipation (Caution/Constructive/Destructive), Criticality, Density, Lifecycle, Mode, Release, Surface, and three more |
-| `pragma standard categories` | **21** code-standard categories — react 16, css 15, lit 13, svelte 12, rust 11, storybook 11, code 10, … |
-| `pragma token list` | **0** — this distribution's graph ships no token entities |
-| `pragma prompt list` | **0** — likewise, no prompt entities |
+| Ask                          | Answer                                                                                                                                                                                                                                                                      |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pragma block list`          | **173** blocks — components, patterns, layouts and subcomponents of the five top-level tiers, each row with its tier. **252** with `--tier all`: the other 79 sit in the ten product tiers below, and `--tier apps_lxd` adds one of those to the global blocks it builds on |
+| `pragma tier list`           | **15** tiers — `global`, `apps` plus nine app tiers, `sites` plus one, `stores`, `documentation`                                                                                                                                                                            |
+| `pragma modifier list`       | **11** modifier families — Importance (Primary/Secondary/Tertiary), Anticipation (Caution/Constructive/Destructive), Criticality, Density, Lifecycle, Mode, Release, Surface, and three more                                                                                |
+| `pragma standard categories` | **21** code-standard categories — react 16, css 15, lit 13, svelte 12, rust 11, storybook 11, code 10, …                                                                                                                                                                    |
+| `pragma token list`          | **0** — this distribution's graph ships no token entities                                                                                                                                                                                                                   |
+| `pragma prompt list`         | **0** — likewise, no prompt entities                                                                                                                                                                                                                                        |
 
 The two zeroes are real answers: the commands say the store is empty rather than inventing, and stay empty until a pack that ships those entities is configured.
 

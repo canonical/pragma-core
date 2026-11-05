@@ -8,11 +8,11 @@ If you have not installed pragma yet, start with [getting started](./getting-sta
 
 The read nouns share one grammar:
 
-| Verb | What it does |
-|---|---|
-| `list` | Every entity of that kind, one line each |
-| `lookup <name...>` | The full record of one or more entities, by name or glob (`'Nav*'`) |
-| `sample` | A few complete entities at random — real data shapes before you write a query |
+| Verb               | What it does                                                                  |
+| ------------------ | ----------------------------------------------------------------------------- |
+| `list`             | Every entity of that kind, one line each                                      |
+| `lookup <name...>` | The full record of one or more entities, by name or glob (`'Nav*'`)           |
+| `sample`           | A few complete entities at random — real data shapes before you write a query |
 
 Three flags apply everywhere:
 
@@ -69,15 +69,15 @@ pragma block lookup 'Nav*'
 
 A full block record carries, where the graph declares them:
 
-| Section | What it holds |
-|---|---|
-| Summary | What the block is and its main use cases |
-| Guidelines | Accessibility and content-writing rules |
-| Anatomy (DSL) | The structural node tree — see the walk-through below |
-| Anatomy (classic) | A link to the drawn anatomy reference |
+| Section           | What it holds                                           |
+| ----------------- | ------------------------------------------------------- |
+| Summary           | What the block is and its main use cases                |
+| Guidelines        | Accessibility and content-writing rules                 |
+| Anatomy (DSL)     | The structural node tree — see the walk-through below   |
+| Anatomy (classic) | A link to the drawn anatomy reference                   |
 | Modifier Families | The variant axes this block composes, with their values |
-| Properties | The block's API: name, type, optional |
-| Subcomponents | The parts that ship with it |
+| Properties        | The block's API: name, type, optional                   |
+| Subcomponents     | The parts that ship with it                             |
 
 Not every block fills every section — an absent section means the graph holds nothing for it, not that the command trimmed it. To see what fully-populated records look like before writing your own queries, ask for exemplars:
 

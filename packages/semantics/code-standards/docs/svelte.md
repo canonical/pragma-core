@@ -11,6 +11,7 @@ Add a clear comment immediately above every `$effect` that states the side effec
 ### Do
 
 (Do) Place a comment directly above the `$effect` that explains the side effect, what should trigger it, and why it is needed.
+
 ```javascript
 // Sync document title when pageTitle changes to keep browser context and accessibility cues up to date
 $effect(() => {
@@ -21,6 +22,7 @@ $effect(() => {
 ### Don't
 
 (Don't) Use `$effect` without a comment.
+
 ```javascript
 $effect(() => {
   document.title = `${pageTitle} | Canonical`;
@@ -38,6 +40,7 @@ Name consumer-facing props with Svelte's native attribute names (for example `cl
 ### Do
 
 (Do) Accept the native `class` prop, aliasing it locally only to avoid the reserved word. When it targets a different element than the forwarded rest attributes, declare it manually with the native `ClassValue` type and document its target.
+
 ```svelte
 <script lang="ts">
   import type { ClassValue, SvelteHTMLElements } from "svelte/elements";
@@ -60,6 +63,7 @@ Name consumer-facing props with Svelte's native attribute names (for example `cl
 ### Don't
 
 (Don't) Expose React-style `className` or `onClick` props.
+
 ```svelte
 <script lang="ts">
   let { current = false, className, onClick }: ItemProps = $props();
@@ -79,6 +83,7 @@ Keep components framework-agnostic: receive all render data and behavior through
 ### Do
 
 (Do) Pass data via props instead of importing from SvelteKit modules.
+
 ```svelte
 <script>
   let { pageTitle } = $props();
@@ -90,6 +95,7 @@ Keep components framework-agnostic: receive all render data and behavior through
 ### Don't
 
 (Don't) Import from SvelteKit modules like `$app/stores`, `$app/navigation`, or `$app/environment`.
+
 ```svelte
 <script>
   import { page } from '$app/stores';
@@ -110,6 +116,7 @@ Name element references by reactivity role: use the `Ref` suffix for reactive re
 
 (Do) Name reactive references (e.g., via `bind:this`) with the `Ref` suffix.
 (Do) Name non-reactive references (e.g., via `querySelector`) with the `Element` suffix.
+
 ```svelte
 <script>
   let containerRef = $state();
@@ -127,6 +134,7 @@ Name element references by reactivity role: use the `Ref` suffix for reactive re
 ### Don't
 
 (Don't) Use generic or ambiguous names for element references.
+
 ```svelte
 <script>
   let container = $state();
@@ -152,6 +160,7 @@ Call `use…` functions only at top-level component scope. Do not invoke them in
 ### Do
 
 (Do) Call `use…` functions at the top-level scope of the `<script>` block.
+
 ```svelte
 <script>
   const stopwatch = useStopwatch();
@@ -167,6 +176,7 @@ Call `use…` functions only at top-level component scope. Do not invoke them in
 ### Don't
 
 (Don't) Call `use…` functions inside event handlers, conditionals, loops, or nested scopes.
+
 ```svelte
 <script>
   function handleClick() {
@@ -189,6 +199,7 @@ Reserve the `use…` prefix for functions that relay on internal runes definitio
 ### Do
 
 (Do) Use the `use…` prefix only for functions with reactive or lifecycle behavior.
+
 ```svelte
 <script>
   const stopwatch = useStopwatch();
@@ -196,6 +207,7 @@ Reserve the `use…` prefix for functions that relay on internal runes definitio
 ```
 
 (Do) Use non-`use…` names for plain utilities.
+
 ```javascript
 const formatted = formatDate(new Date());
 ```
@@ -203,6 +215,7 @@ const formatted = formatDate(new Date());
 ### Don't
 
 (Don't) Name plain helpers with the `use…` prefix.
+
 ```javascript
 function useFormatDate(date) {
   return date.toISOString();
@@ -220,6 +233,7 @@ Name functions used with `{@attach ...}` according to observable behavior or int
 ### Do
 
 (Do) Use verbs or nouns that describe the attachment's behavior (e.g., `tooltip`, `observeHover`).
+
 ```svelte
 <button {@attach tooltip("Save changes")}>
   Save
@@ -229,6 +243,7 @@ Name functions used with `{@attach ...}` according to observable behavior or int
 ### Don't
 
 (Don't) Use vague or generic names like `handler` or `myAttachment`.
+
 ```svelte
 <button {@attach handler(someData)}>
   Save
@@ -246,6 +261,7 @@ Offer customization through Svelte-native composition — native attribute sprea
 ### Do
 
 (Do) Let consumers customize by spreading native attributes onto the element (extend the native element type).
+
 ```svelte
 <script lang="ts">
   import type { SvelteHTMLElements } from "svelte/elements";
@@ -257,6 +273,7 @@ Offer customization through Svelte-native composition — native attribute sprea
 ```
 
 (Do) When an override hook is needed, expose a typed snippet whose props object is fully typed and spreadable.
+
 ```svelte
 <script lang="ts">
   import type { Snippet } from "svelte";
@@ -275,6 +292,7 @@ Offer customization through Svelte-native composition — native attribute sprea
 ### Don't
 
 (Don't) Accept an injected component (React-style) for overrides, especially typed as `Component<any>`, which hides the injected props from the type system and narrows the element contract.
+
 ```typescript
 export interface Props {
   Component: Component<any>;
@@ -301,21 +319,23 @@ When reactive state crosses object or function boundaries, pass accessors (prope
 ### Do
 
 (Do) Use property getters when working with objects (e.g., in `setContext`).
+
 ```typescript
 let greeting = $state("Hello");
 
-setContext('my-context', {
+setContext("my-context", {
   get greeting() {
     return greeting;
-  }
+  },
 });
 ```
 (Do) Use getter functions (prefixed with `get…`) when passing state to functions like `use…` hooks.
+
 ```typescript
 // useStorage.ts
 export function useStorage(getGreeting: () => string) {
   $effect(() => {
-    localStorage.setItem('greeting', getGreeting());
+    localStorage.setItem("greeting", getGreeting());
   });
 }
 
@@ -326,9 +346,10 @@ useStorage(() => greeting);
 ### Don't
 
 (Don't) Pass raw reactive values directly to objects or functions where tracking might be lost.
+
 ```typescript
 // Object property - reactivity lost on reassignment
-setContext('my-context', { greeting });
+setContext("my-context", { greeting });
 
 // Function argument - value is not reactive inside $effect
 useStorage(greeting);
@@ -345,6 +366,7 @@ When rendering snippets that require consumer wiring, pass a descriptively named
 ### Do
 
 (Do) Provide a `triggerProps` (or similarly named) object for spreading onto target elements.
+
 ```svelte
 {@render trigger({
   popovertarget: popoverId,
@@ -363,6 +385,7 @@ When rendering snippets that require consumer wiring, pass a descriptively named
 ### Don't
 
 (Don't) Pass individual HTML attributes as positional snippet arguments, which prevents consumers from spreading props and forces them to know both argument order and intended usage.
+
 ```svelte
 {@render trigger(popoverId, helpId)}
 
@@ -380,6 +403,7 @@ When rendering snippets that require consumer wiring, pass a descriptively named
 ```
 
 (Don't) Render snippets without providing necessary attributes, forcing consumers to manually wire up internal IDs.
+
 ```svelte
 {@render trigger()}
 
@@ -404,6 +428,7 @@ Use snippets to let consumers provide and position render content (default `chil
 
 (Do) Pass primary content via the default `children` snippet.
 (Do) Use named snippets for multiple, distinct areas.
+
 ```svelte
 <Card>
   {#snippet header()}
@@ -418,6 +443,7 @@ Use snippets to let consumers provide and position render content (default `chil
 ### Don't
 
 (Don't) Pass complex content or UI structures via props instead of snippets.
+
 ```svelte
 <Card
   header="Title"
@@ -436,6 +462,7 @@ When wiring element relationships, resolve a stable ID by defaulting to `$props.
 ### Do
 
 (Do) Resolve a stable ID by combining an optional `id` prop with a fallback.
+
 ```typescript
 const { id: idProp, ...rest } = $props();
 const fallbackId = $props.id();
@@ -445,6 +472,7 @@ const id = $derived(idProp || fallbackId);
 ### Don't
 
 (Don't) Fail to provide a fallback ID, breaking accessibility and internal wiring when the `id` prop is omitted.
+
 ```typescript
 // No fallback if id is not provided
 const { id, ...rest } = $props();
@@ -461,6 +489,7 @@ When a component contains repeated items or non-trivial layout composition, expo
 ### Do
 
 (Do) Expose constituent parts as subcomponents to give consumers control over HTML.
+
 ```svelte
 <OptionsPanel>
   <form action="?/updateProfile" method="POST">
@@ -483,6 +512,7 @@ When a component contains repeated items or non-trivial layout composition, expo
 ### Don't
 
 (Don't) Hide complex UI structures or iteration logic behind simple configuration props.
+
 ```svelte
 <OptionsPanel {groups} submitLabel="Save" />
 ```
@@ -498,6 +528,7 @@ Avoid accessing browser-only globals (`window`, `document`, `navigator`, `localS
 ### Do
 
 (Do) Access browser APIs inside `$effect` so code only runs on the client.
+
 ```svelte
 <script>
   let width = $state(0);
@@ -509,6 +540,7 @@ Avoid accessing browser-only globals (`window`, `document`, `navigator`, `localS
 ```
 
 (Do) Access browser APIs in event handlers if needed.
+
 ```svelte
 <script>
   function copyUrl() {
@@ -522,6 +554,7 @@ Avoid accessing browser-only globals (`window`, `document`, `navigator`, `localS
 ### Don't
 
 (Don't) Read browser globals at module or component initialization scope.
+
 ```svelte
 <script>
   const initialWidth = window.innerWidth;
@@ -540,6 +573,7 @@ When testing a component that renders consumer-provided snippet content (`childr
 ### Do
 
 (Do) Export named snippets and their backing data from a `.svelte` fixture module.
+
 ```svelte
 <!-- test.fixtures.svelte -->
 <script lang="ts" module>
@@ -566,10 +600,16 @@ When testing a component that renders consumer-provided snippet content (`childr
 ```
 
 (Do) Import the snippets as snippet props and assert against the exported data.
+
 ```typescript
 import { render } from "vitest-browser-svelte";
 import Component from "./Component.svelte";
-import { items, itemsProps, oneItem, oneItemProps } from "./test.fixtures.svelte";
+import {
+  items,
+  itemsProps,
+  oneItem,
+  oneItemProps,
+} from "./test.fixtures.svelte";
 
 it("renders a single item", async () => {
   const page = render(Component, { children: oneItem });
@@ -585,6 +625,7 @@ it("renders multiple items", () => {
 ### Don't
 
 (Don't) Inline markup and duplicate literal data in each test, which cannot express snippets and drifts from the rendered content.
+
 ```typescript
 it("renders multiple items", () => {
   // Snippet content cannot be declared here, so tests hardcode expectations

@@ -31,39 +31,59 @@ The plugin produces CSS files and a `tokens.json` artifact in the output directo
 
 ```ts
 canonicalPlugin({
-  tokensDir: "./tokens/canonical",       // Base directory for token sources (default)
-  families: [                            // Modifier family names
+  tokensDir: "./tokens/canonical", // Base directory for token sources (default)
+  families: [
+    // Modifier family names
     "anticipation",
     "criticality",
     "emphasis",
     "importance",
   ],
-  layers: { /* @layer name overrides */ },
-  sets: {                                // Primitive / semantic set configuration
-    primitive: { /* ... */ },
-    semantic:  { /* ... */ },
+  layers: {
+    /* @layer name overrides */
   },
-  theme:      { /* light/dark theme config */ },
-  typography: { /* typography modifier config */ },
-  surfaces:   { /* surface selector mapping */ },
-  states:     { /* interactive state derivation */ },
-  motion:     { /* prefers-reduced-motion scoping */ },
-  contrast:   { /* prefers-contrast scoping */ },
+  sets: {
+    // Primitive / semantic set configuration
+    primitive: {
+      /* ... */
+    },
+    semantic: {
+      /* ... */
+    },
+  },
+  theme: {
+    /* light/dark theme config */
+  },
+  typography: {
+    /* typography modifier config */
+  },
+  surfaces: {
+    /* surface selector mapping */
+  },
+  states: {
+    /* interactive state derivation */
+  },
+  motion: {
+    /* prefers-reduced-motion scoping */
+  },
+  contrast: {
+    /* prefers-contrast scoping */
+  },
 });
 ```
 
-| Option | Description |
-|--------|-------------|
-| `tokensDir` | Base directory for token source files. Used to locate modifier sources and read DTCG alias targets. Default: `"./tokens/canonical"`. |
-| `families` | Modifier family names to generate (e.g. `"criticality"`, `"emphasis"`). Default: `["anticipation", "criticality", "emphasis", "importance"]`. |
-| `layers` | CSS `@layer` name overrides for controlling specificity ordering. |
-| `sets` | Configuration for primitive and semantic token sets. |
-| `theme` | Light/dark theme modifier — controls `light-dark()` output and `color-scheme` declarations. |
-| `typography` | Typography modifier configuration. |
-| `surfaces` | Maps resolver context names to CSS selectors. See [documentation/surfaces.md](../documentation/surfaces.md). |
-| `states` | Interactive state derivation layer (hover, active, disabled). |
-| `motion` | `@media (prefers-reduced-motion)` scoping configuration. |
-| `contrast` | `@media (prefers-contrast)` scoping configuration. |
+| Option       | Description                                                                                                                                   |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tokensDir`  | Base directory for token source files. Used to locate modifier sources and read DTCG alias targets. Default: `"./tokens/canonical"`.          |
+| `families`   | Modifier family names to generate (e.g. `"criticality"`, `"emphasis"`). Default: `["anticipation", "criticality", "emphasis", "importance"]`. |
+| `layers`     | CSS `@layer` name overrides for controlling specificity ordering.                                                                             |
+| `sets`       | Configuration for primitive and semantic token sets.                                                                                          |
+| `theme`      | Light/dark theme modifier — controls `light-dark()` output and `color-scheme` declarations.                                                   |
+| `typography` | Typography modifier configuration.                                                                                                            |
+| `surfaces`   | Maps resolver context names to CSS selectors. See [documentation/surfaces.md](../documentation/surfaces.md).                                  |
+| `states`     | Interactive state derivation layer (hover, active, disabled).                                                                                 |
+| `motion`     | `@media (prefers-reduced-motion)` scoping configuration.                                                                                      |
+| `contrast`   | `@media (prefers-contrast)` scoping configuration.                                                                                            |
 
 ## Development
 

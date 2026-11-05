@@ -26,7 +26,7 @@ const store = await createStore({
 });
 
 const result = await store.query(
-  sparql`SELECT ?name WHERE { ?c a ds:UIBlock ; ds:name ?name }`
+  sparql`SELECT ?name WHERE { ?c a ds:UIBlock ; ds:name ?name }`,
 );
 // result.type === "select"
 // result.bindings === [{ name: "Button" }, { name: "Card" }, ...]
@@ -72,7 +72,7 @@ const store = await createStore({
 });
 
 const result = await store.query(
-  sparql`SELECT ?name WHERE { ?c a ds:UIBlock ; ds:name ?name }`
+  sparql`SELECT ?name WHERE { ?c a ds:UIBlock ; ds:name ?name }`,
 );
 
 console.log(store.prefixes);
@@ -87,7 +87,7 @@ ke supports three SPARQL query forms, each returning a different result shape.
 
 ```typescript
 const result = await store.query(
-  sparql`SELECT ?name ?tier WHERE { ?c a ds:UIBlock ; ds:name ?name ; ds:tier ?tier }`
+  sparql`SELECT ?name ?tier WHERE { ?c a ds:UIBlock ; ds:name ?name ; ds:tier ?tier }`,
 );
 // result.type === "select"
 // result.variables === ["name", "tier"]
@@ -98,7 +98,7 @@ const result = await store.query(
 
 ```typescript
 const result = await store.query(
-  sparql`CONSTRUCT { ?c ds:name ?name } WHERE { ?c a ds:UIBlock ; ds:name ?name }`
+  sparql`CONSTRUCT { ?c ds:name ?name } WHERE { ?c a ds:UIBlock ; ds:name ?name }`,
 );
 // result.type === "construct"
 // result.triples === [{ subject: "https://...", predicate: "https://...", object: "Button" }, ...]
@@ -108,7 +108,7 @@ const result = await store.query(
 
 ```typescript
 const result = await store.query(
-  sparql`ASK { <https://ds.canonical.com/component.button> a ds:UIBlock }`
+  sparql`ASK { <https://ds.canonical.com/component.button> a ds:UIBlock }`,
 );
 // result.type === "ask"
 // result.result === true
@@ -217,7 +217,10 @@ import { createStore } from "@canonical/ke";
 import { createSparqlHandler } from "@canonical/ke/http";
 
 const store = await createStore({ sources: ["./data.ttl"] });
-const handler = createSparqlHandler(store, { cors: true, maxQueryLength: 10_000 });
+const handler = createSparqlHandler(store, {
+  cors: true,
+  maxQueryLength: 10_000,
+});
 
 Bun.serve({ fetch: handler, port: 3030 });
 ```
@@ -242,19 +245,19 @@ const all = await store.query(sparql`SELECT ?s WHERE { ?s a ds:UIBlock }`);
 
 // Scope to a specific graph with GRAPH clause
 const onlyData = await store.query(
-  sparql`SELECT ?s WHERE { GRAPH <urn:pragma:data> { ?s a ds:UIBlock } }`
+  sparql`SELECT ?s WHERE { GRAPH <urn:pragma:data> { ?s a ds:UIBlock } }`,
 );
 ```
 
 ## Testing
 
-| Aspect | Detail |
-|--------|--------|
-| Test files | 8 (unit + integration) |
-| Environment | Node (vitest) |
-| Coverage | 100% enforced (statements, branches, functions, lines) |
-| Posture | Enforced |
-| Visual regression | Not applicable (no UI) |
+| Aspect            | Detail                                                 |
+| ----------------- | ------------------------------------------------------ |
+| Test files        | 8 (unit + integration)                                 |
+| Environment       | Node (vitest)                                          |
+| Coverage          | 100% enforced (statements, branches, functions, lines) |
+| Posture           | Enforced                                               |
+| Visual regression | Not applicable (no UI)                                 |
 
 ke provides test utilities at `@canonical/ke/testing`:
 
@@ -274,7 +277,7 @@ test("finds components", async () => {
   });
 
   const result = await store.query(
-    sparql`SELECT ?name WHERE { ?c a ds:UIBlock ; ds:name ?name }`
+    sparql`SELECT ?name WHERE { ?c a ds:UIBlock ; ds:name ?name }`,
   );
 
   expect(result.bindings).toContainBinding("name", "Button");
@@ -284,22 +287,22 @@ test("finds components", async () => {
 
 ## API summary
 
-| Export | Description |
-|--------|-------------|
-| `createStore(config)` | Create a store from TTL sources (sole entry point) |
-| `sparql\`...\`` | Tagged template for safe SPARQL construction |
-| `createNamespace(iri)` | Create a typed URI constructor |
-| `definePlugin(plugin)` | Define a plugin with type inference |
-| `escapeSparqlValue(v)` | Escape a value for SPARQL interpolation |
-| `escapeSparqlURI(uri)` | Wrap a URI in angle brackets |
-| `markAsURI(str)` | Mark a string as a URI at runtime |
+| Export                 | Description                                        |
+| ---------------------- | -------------------------------------------------- |
+| `createStore(config)`  | Create a store from TTL sources (sole entry point) |
+| `sparql\`...\``        | Tagged template for safe SPARQL construction       |
+| `createNamespace(iri)` | Create a typed URI constructor                     |
+| `definePlugin(plugin)` | Define a plugin with type inference                |
+| `escapeSparqlValue(v)` | Escape a value for SPARQL interpolation            |
+| `escapeSparqlURI(uri)` | Wrap a URI in angle brackets                       |
+| `markAsURI(str)`       | Mark a string as a URI at runtime                  |
 
 ### Sub-path exports
 
-| Import path | Description |
-|-------------|-------------|
-| `@canonical/ke` | Core API |
-| `@canonical/ke/http` | SPARQL Protocol HTTP handler |
+| Import path             | Description                                |
+| ----------------------- | ------------------------------------------ |
+| `@canonical/ke`         | Core API                                   |
+| `@canonical/ke/http`    | SPARQL Protocol HTTP handler               |
 | `@canonical/ke/testing` | Test utilities (createTestStore, matchers) |
 
 ## Trade-offs

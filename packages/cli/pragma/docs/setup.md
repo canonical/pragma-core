@@ -6,13 +6,13 @@ Reads work from the moment the package is installed — nothing on this page is 
 
 `pragma setup` is one wizard over five installers:
 
-| Step | What it installs | Where |
-|---|---|---|
-| `config` | Your global config file, filled in with the defaults | global |
-| `completions` | The TAB-completion script for the shell you are running — zsh, bash, or fish | global |
-| `lsp` | The Terrazzo design-token extension, into your VS Code-family editors — VS Code, VS Code Insiders, VSCodium, Cursor, Windsurf, Antigravity | global |
-| `mcp` | A pragma MCP server entry in each AI harness config file | global and local project |
-| `skills` | A symlink for each installed skill, into every harness that reads them | global and local project |
+| Step          | What it installs                                                                                                                           | Where                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `config`      | Your global config file, filled in with the defaults                                                                                       | global                   |
+| `completions` | The TAB-completion script for the shell you are running — zsh, bash, or fish                                                               | global                   |
+| `lsp`         | The Terrazzo design-token extension, into your VS Code-family editors — VS Code, VS Code Insiders, VSCodium, Cursor, Windsurf, Antigravity | global                   |
+| `mcp`         | A pragma MCP server entry in each AI harness config file                                                                                   | global and local project |
+| `skills`      | A symlink for each installed skill, into every harness that reads them                                                                     | global and local project |
 
 ```bash
 pragma setup
@@ -172,18 +172,18 @@ Four tiers, not two. **pass** is fine, **fail** is broken and worth your attenti
 
 The report groups its findings under **Global** and **Local project**, matching setup's two scopes — a failing row's section tells you which of the two to re-run setup in.
 
-| Row | What it checks | What it names |
-|---|---|---|
-| Node version | The runtime is a supported major (20+) | Install a supported Node.js |
-| pragma version | The version, and how it was installed | — (informational) |
-| pack refs | The pack answering reads is the one your config asks for — a project that declared its own packs but never built them fails here, and a pack an older CLI built (which the shipped snapshot now answers in place of) is named here | `pragma sources update` |
-| store | The store boots; reports entity count and boot time | `pragma sources update` |
-| config | The global config file exists and parses | `pragma setup config` |
-| completions | The installed script exists, is current, and is wired into the shell | `pragma setup completions` |
-| lsp | The Terrazzo extension is present in each editor found, and how each was found | `pragma setup lsp` |
-| mcp | Each config file carries a current pragma entry, and the command it names is on `PATH` | `pragma setup mcp` |
-| skills | Every skill is linked into each harness that reads them | `pragma setup skills` |
-| harnesses | A listing, not a verdict: which AI harnesses are on this machine, and whether pragma is registered in each | — (the `mcp` row owns the fix) |
+| Row            | What it checks                                                                                                                                                                                                                     | What it names                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| Node version   | The runtime is a supported major (20+)                                                                                                                                                                                             | Install a supported Node.js    |
+| pragma version | The version, and how it was installed                                                                                                                                                                                              | — (informational)              |
+| pack refs      | The pack answering reads is the one your config asks for — a project that declared its own packs but never built them fails here, and a pack an older CLI built (which the shipped snapshot now answers in place of) is named here | `pragma sources update`        |
+| store          | The store boots; reports entity count and boot time                                                                                                                                                                                | `pragma sources update`        |
+| config         | The global config file exists and parses                                                                                                                                                                                           | `pragma setup config`          |
+| completions    | The installed script exists, is current, and is wired into the shell                                                                                                                                                               | `pragma setup completions`     |
+| lsp            | The Terrazzo extension is present in each editor found, and how each was found                                                                                                                                                     | `pragma setup lsp`             |
+| mcp            | Each config file carries a current pragma entry, and the command it names is on `PATH`                                                                                                                                             | `pragma setup mcp`             |
+| skills         | Every skill is linked into each harness that reads them                                                                                                                                                                            | `pragma setup skills`          |
+| harnesses      | A listing, not a verdict: which AI harnesses are on this machine, and whether pragma is registered in each                                                                                                                         | — (the `mcp` row owns the fix) |
 
 Every row except `harnesses` is named after the setup target that repairs it, so the row name is also the argument you type: `✗ mcp` sits above `fix: pragma setup mcp`.
 

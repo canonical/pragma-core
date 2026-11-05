@@ -11,6 +11,7 @@ Experimental APIs must be marked with the @experimental JSDoc tag in type defini
 ### Do
 
 Mark an experimental interface with a clear @experimental JSDoc tag and description.
+
 ```typescript
 /**
  * Configuration for the data processing pipeline.
@@ -23,6 +24,7 @@ interface PipelineConfig {
 ```
 
 Add an @experimental tag to a specific property with context about its experimental status.
+
 ```typescript
 interface PipelineConfig {
   /**
@@ -34,6 +36,7 @@ interface PipelineConfig {
 ```
 
 Describe the experimental status and any future plans for the API.
+
 ```typescript
 interface CacheConfig {
   /**
@@ -47,6 +50,7 @@ interface CacheConfig {
 ### Don't
 
 Use the @experimental tag without an explanation.
+
 ```typescript
 interface ProcessorConfig {
   /** @experimental */ // Bad: No context provided.
@@ -55,6 +59,7 @@ interface ProcessorConfig {
 ```
 
 Use the @experimental tag without describing what is experimental.
+
 ```typescript
 /**
  * @experimental // Bad: No description of what is experimental.
@@ -75,6 +80,7 @@ Use `.at(index)` instead of bracket notation for array element access. Bracket n
 ### Do
 
 Use `.at()` for index-based array access.
+
 ```typescript
 // .at() returns T | undefined — callers must handle the missing case
 const first = items.at(0);
@@ -84,6 +90,7 @@ const last = items.at(-1);
 ### Don't
 
 Use bracket notation — TypeScript infers `T` instead of `T | undefined`, hiding potential out-of-bounds access.
+
 ```typescript
 // TypeScript says this is `string`, but it can be `undefined` at runtime
 const first = items[0];
@@ -100,12 +107,14 @@ Prefer runtime assertions over non-null assertions (`!`). TypeScript's `!` opera
 ### Do
 
 Use a runtime assertion to document and enforce the invariant.
+
 ```typescript
 // assertInvariant throws if the value is null or undefined
 const first = assertInvariant(items.at(0), "expected at least one item");
 ```
 
 In inline expressions where an assertion would add noise, `as T` or `!` is acceptable when the proof is on the same line.
+
 ```typescript
 // Acceptable — filter guarantees non-empty rows, proof is one line up
 const maxLen = Math.max(...rows.map((r) => (r.name as string).length));
@@ -114,11 +123,13 @@ const maxLen = Math.max(...rows.map((r) => (r.name as string).length));
 ### Don't
 
 Use `!` to suppress the type checker — it has no runtime effect and fails silently when the invariant breaks.
+
 ```typescript
 const first = items.at(0)!;
 ```
 
 Use `as T` to cast away nullability outside of inline expressions.
+
 ```typescript
 const config = loadConfig() as Config;
 ```
@@ -134,6 +145,7 @@ Domain constants must be collected in a `constants.ts` file using named exports 
 ### Do
 
 Create a `constants.ts` file with named exports at the domain level
+
 ```typescript
 // features/pricing/constants.ts
 export const DEFAULT_CURRENCY = "USD";
@@ -142,6 +154,7 @@ export const MAX_DISCOUNT_PERCENT = 50;
 ```
 
 Colocate `constants.ts` inside the domain folder it belongs to
+
 ```
 features/
 ├── pricing/
@@ -155,12 +168,14 @@ features/
 ```
 
 Import constants directly from the owning domain's `constants.ts`
+
 ```typescript
 // features/pricing/calculatePrice.ts
 import { TAX_RATE, DEFAULT_CURRENCY } from "./constants.js";
 ```
 
 Keep all exports in `constants.ts` as named exports with the same shape (plain values)
+
 ```typescript
 // constants.ts
 export const RECONNECT_INTERVAL_MS = 5000;
@@ -169,6 +184,7 @@ export const DEFAULT_TIMEOUT_MS = 30_000;
 ```
 
 Keep single-use constants inline in the file that uses them
+
 ```typescript
 // features/pricing/applyDiscount.ts
 const MAX_DISCOUNT_PERCENT = 50;
@@ -182,6 +198,7 @@ export default function applyDiscount(price: number, rate: number): number {
 ### Don't
 
 Use a default export in a constants file
+
 ```typescript
 // Bad: default export forces consumers to name the import
 export default {
@@ -191,6 +208,7 @@ export default {
 ```
 
 Scatter constants across unrelated files instead of collecting them in `constants.ts`
+
 ```typescript
 // Bad: constants buried inside implementation files
 // calculatePrice.ts
@@ -200,15 +218,17 @@ export default calculatePrice;
 ```
 
 Place constants far from the domain that owns them
+
 ```typescript
 // Bad: pricing constants in a top-level shared file
 // src/constants.ts
-export const TAX_RATE = 0.21;        // Belongs in pricing/
-export const MAX_RETRIES = 3;        // Belongs in network/
-export const SESSION_TTL_MS = 3600;  // Belongs in auth/
+export const TAX_RATE = 0.21; // Belongs in pricing/
+export const MAX_RETRIES = 3; // Belongs in network/
+export const SESSION_TTL_MS = 3600; // Belongs in auth/
 ```
 
 Mix constants with functions, types, or other non-constant exports
+
 ```typescript
 // Bad: constants.ts should only contain constant values
 export const MAX_RETRIES = 3;
@@ -227,6 +247,7 @@ Defensive fallbacks (`?? ""`, `?? 0`, `?? []`) at external API boundaries are co
 ### Do
 
 Use defensive `??` fallbacks at external boundaries, even when the left side appears guaranteed.
+
 ```typescript
 // Defensive — safe even if the upstream API contract changes
 const name = response.headers.get("x-request-id") ?? "";
@@ -236,6 +257,7 @@ const retries = Number.parseInt(env.MAX_RETRIES ?? "3", 10);
 ### Don't
 
 Trust external contracts with unsafe casts instead of defensive fallbacks.
+
 ```typescript
 const name = response.headers.get("x-request-id") as string;
 const retries = Number.parseInt(env.MAX_RETRIES as string, 10);
@@ -252,6 +274,7 @@ Each function must handle exactly one specific task. Complex operations must be 
 ### Do
 
 Define functions with a single, clear responsibility.
+
 ```typescript
 const validateEmail = (email: string): boolean => {
   return /^[^@]+@[^@]+\\.[^@]+$/.test(email);
@@ -259,12 +282,13 @@ const validateEmail = (email: string): boolean => {
 ```
 
 Compose single-purpose functions to build complex logic.
+
 ```typescript
 const validatePassword = (password: string): boolean => {
   return password.length >= 8;
 };
 
-const validateForm = (email: string, password:string): boolean => {
+const validateForm = (email: string, password: string): boolean => {
   return validateEmail(email) && validatePassword(password);
 };
 ```
@@ -272,6 +296,7 @@ const validateForm = (email: string, password:string): boolean => {
 ### Don't
 
 Mix multiple responsibilities in a single function.
+
 ```typescript
 const processUserData = (user: any) => {
   // Validates user data
@@ -292,6 +317,7 @@ Functions must be defined as close to their broadest point of use as possible. S
 ### Do
 
 Place functions in the file or module where they are most broadly used. If a function is shared across multiple components or modules, place it in a common utility location.
+
 ```typescript
 // utils/math.ts
 export function calculateSum(a: number, b: number): number {
@@ -299,7 +325,7 @@ export function calculateSum(a: number, b: number): number {
 }
 
 // Used in multiple places
-import { calculateSum } from './utils/math.js';
+import { calculateSum } from "./utils/math.js";
 
 // For single-use functions, keep them close to their usage:
 ```
@@ -307,6 +333,7 @@ import { calculateSum } from './utils/math.js';
 ### Don't
 
 Place functions far from where they are used, or in a generic location if only used in one place.
+
 ```typescript
 // utils/validators.ts
 export const validateUser = (user: User) => { ... }; // Only used in one component
@@ -328,6 +355,7 @@ Functions should be pure where possible. A pure function returns the same output
 ### Do
 
 Create pure functions that rely only on their inputs to compute the output.
+
 ```typescript
 const calculatePrice = (basePrice: number, taxRate: number): number => {
   return basePrice * (1 + taxRate);
@@ -335,6 +363,7 @@ const calculatePrice = (basePrice: number, taxRate: number): number => {
 ```
 
 Annotate and document impure functions that perform I/O or modify external state, explaining why impurity is necessary using @note.
+
 ```typescript
 /**
  * Writes data to the file system.
@@ -348,6 +377,7 @@ function writeOutputToFile(data: string, path: string) {
 ### Don't
 
 Create impure functions without annotation or documentation.
+
 ```typescript
 let total = 0;
 const addToTotal = (value: number) => {
@@ -356,10 +386,11 @@ const addToTotal = (value: number) => {
 ```
 
 Hide side effects in functions that appear pure.
+
 ```typescript
 function getConfig() {
   // Reads from disk without annotation
-  return fs.readFileSync('config.json');
+  return fs.readFileSync("config.json");
 }
 ```
 
@@ -374,62 +405,112 @@ All function and method names must start with a verb that describes the action t
 ### Do
 
 Start function names with an action verb
+
 ```typescript
-const findPathToModule = (name: string): string => { /* ... */ };
-const fetchDataForUser = (userId: string): Promise<User> => { /* ... */ };
-const parseConfigFile = (path: string): Config => { /* ... */ };
-const calculateTotalPrice = (items: Item[]): number => { /* ... */ };
-const isValidEmail = (email: string): boolean => { /* ... */ };
-const hasPermission = (user: User, action: string): boolean => { /* ... */ };
+const findPathToModule = (name: string): string => {
+  /* ... */
+};
+const fetchDataForUser = (userId: string): Promise<User> => {
+  /* ... */
+};
+const parseConfigFile = (path: string): Config => {
+  /* ... */
+};
+const calculateTotalPrice = (items: Item[]): number => {
+  /* ... */
+};
+const isValidEmail = (email: string): boolean => {
+  /* ... */
+};
+const hasPermission = (user: User, action: string): boolean => {
+  /* ... */
+};
 ```
 
 Use descriptive verb prefixes that convey the operation
+
 ```typescript
 // Retrieval: get, fetch, find, resolve, load, read
-const getUser = (id: string): User => { /* ... */ };
-const fetchOrders = (): Promise<Order[]> => { /* ... */ };
-const findMatchingRule = (rules: Rule[], input: string): Rule | undefined => { /* ... */ };
+const getUser = (id: string): User => {
+  /* ... */
+};
+const fetchOrders = (): Promise<Order[]> => {
+  /* ... */
+};
+const findMatchingRule = (rules: Rule[], input: string): Rule | undefined => {
+  /* ... */
+};
 
 // Transformation: format, parse, convert, transform, map, normalize
-const formatDate = (date: Date): string => { /* ... */ };
-const parseResponse = (raw: string): Response => { /* ... */ };
+const formatDate = (date: Date): string => {
+  /* ... */
+};
+const parseResponse = (raw: string): Response => {
+  /* ... */
+};
 
 // Validation: is, has, can, should, validate, check
-const isActive = (user: User): boolean => { /* ... */ };
-const hasExpired = (token: Token): boolean => { /* ... */ };
-const validateInput = (data: unknown): data is FormData => { /* ... */ };
+const isActive = (user: User): boolean => {
+  /* ... */
+};
+const hasExpired = (token: Token): boolean => {
+  /* ... */
+};
+const validateInput = (data: unknown): data is FormData => {
+  /* ... */
+};
 
 // Mutation: set, update, add, remove, delete, reset, clear
-const setTheme = (theme: Theme): void => { /* ... */ };
-const removeItem = (id: string): void => { /* ... */ };
+const setTheme = (theme: Theme): void => {
+  /* ... */
+};
+const removeItem = (id: string): void => {
+  /* ... */
+};
 
 // Creation: create, build, generate, compose, make
-const createConnection = (config: Config): Connection => { /* ... */ };
-const buildQuery = (params: Params): string => { /* ... */ };
+const createConnection = (config: Config): Connection => {
+  /* ... */
+};
+const buildQuery = (params: Params): string => {
+  /* ... */
+};
 ```
 
 ### Don't
 
 Name functions as nouns or noun phrases — they read like values, not actions
+
 ```typescript
 // Bad: reads like a variable, not a function
-const pathToModule = (name: string): string => { /* ... */ };
+const pathToModule = (name: string): string => {
+  /* ... */
+};
 // Good: findPathToModule
 
-const dataForUser = (userId: string): Promise<User> => { /* ... */ };
+const dataForUser = (userId: string): Promise<User> => {
+  /* ... */
+};
 // Good: fetchDataForUser
 
-const userPermissions = (user: User): Permission[] => { /* ... */ };
+const userPermissions = (user: User): Permission[] => {
+  /* ... */
+};
 // Good: getPermissions or listPermissions
 ```
 
 Use vague or non-descriptive verbs that don't convey meaning
+
 ```typescript
 // Bad: "do" and "process" are too vague on their own
-const doEmail = (email: string) => { /* ... */ };
+const doEmail = (email: string) => {
+  /* ... */
+};
 // Good: sendEmail, validateEmail, formatEmail
 
-const processUser = (user: User) => { /* ... */ };
+const processUser = (user: User) => {
+  /* ... */
+};
 // Good: activateUser, deactivateUser, updateUser
 ```
 
@@ -444,6 +525,7 @@ Reusable domain types must be collected in a `types.ts` file using named exports
 ### Do
 
 Create a `types.ts` file with named exports for types shared across the domain
+
 ```typescript
 // features/pricing/types.ts
 export type Currency = "USD" | "EUR" | "GBP";
@@ -456,6 +538,7 @@ export type DiscountStrategy = "percentage" | "fixed";
 ```
 
 Colocate `types.ts` inside the domain folder it belongs to
+
 ```
 features/
 ├── pricing/
@@ -470,17 +553,22 @@ features/
 ```
 
 Keep single-use types inline in the file that uses them
+
 ```typescript
 // features/pricing/applyDiscount.ts
 type DiscountResult = { discounted: number; savings: number };
 
-export default function applyDiscount(price: number, rate: number): DiscountResult {
+export default function applyDiscount(
+  price: number,
+  rate: number,
+): DiscountResult {
   const savings = price * rate;
   return { discounted: price - savings, savings };
 }
 ```
 
 Import shared types from the owning domain's `types.ts`
+
 ```typescript
 // features/pricing/calculatePrice.ts
 import type { Currency, PriceBreakdown } from "./types.js";
@@ -489,6 +577,7 @@ import type { Currency, PriceBreakdown } from "./types.js";
 ### Don't
 
 Use a default export in a types file
+
 ```typescript
 // Bad: default export for a collection of types
 export default interface PriceBreakdown {
@@ -499,6 +588,7 @@ export default interface PriceBreakdown {
 ```
 
 Extract single-use types to `types.ts` when they are only used in one file
+
 ```typescript
 // Bad: types.ts contains a type only used in applyDiscount.ts
 // types.ts
@@ -509,20 +599,23 @@ import type { DiscountResult } from "./types.js"; // Unnecessary indirection
 ```
 
 Place types far from the domain that owns them
+
 ```typescript
 // Bad: all types dumped in a top-level shared file
 // src/types.ts
-export type Currency = "USD" | "EUR" | "GBP";  // Belongs in pricing/
-export type AuthToken = { jwt: string };         // Belongs in auth/
-export type RetryPolicy = { max: number };       // Belongs in network/
+export type Currency = "USD" | "EUR" | "GBP"; // Belongs in pricing/
+export type AuthToken = { jwt: string }; // Belongs in auth/
+export type RetryPolicy = { max: number }; // Belongs in network/
 ```
 
 Mix types with functions, constants, or other non-type exports
+
 ```typescript
 // Bad: types.ts should only contain type declarations
 export type Currency = "USD" | "EUR" | "GBP";
 export const DEFAULT_CURRENCY: Currency = "USD";
-export const formatCurrency = (value: number, currency: Currency) => `${currency} ${value}`;
+export const formatCurrency = (value: number, currency: Currency) =>
+  `${currency} ${value}`;
 ```
 
 ---

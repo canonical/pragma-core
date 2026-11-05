@@ -15,6 +15,7 @@ As a client-only progressive enhancement, `aria-label` can also be derived from 
 ### Do
 
 Require `aria-label` explicitly and treat slot-derived text as a client-side enhancement only.
+
 ```typescript
 @property({ type: String, attribute: "aria-label" })
 ariaLabel: string | null = null;
@@ -50,6 +51,7 @@ render() {
 ### Don't
 
 Set ARIA on the host when wrapping a native interactive element.
+
 ```typescript
 // Bad: aria-label on the host is ignored when the inner button is focused
 connectedCallback() {
@@ -59,6 +61,7 @@ connectedCallback() {
 ```
 
 Omit an explicit `aria-label` prop and rely solely on slot-derived text — this produces components with no accessible name during SSR.
+
 ```html
 <!-- Bad: icon-only button with no aria-label prop. -->
 <!-- In SSR, slottedText is always empty, so aria-label is never written to the markup. -->
@@ -78,24 +81,27 @@ Each component folder must have an `index.ts` that re-exports the public API. Th
 ### Do
 
 Export the component using its default export alias and types using `export type *`.
+
 ```typescript
 // index.ts
-export { default as MyComponent } from './MyComponent.js';
-export type * from './types.js';
+export { default as MyComponent } from "./MyComponent.js";
+export type * from "./types.js";
 ```
 
 ### Don't
 
 Use a named re-export — the component uses `export default class`, so `export { MyComponent }` would not resolve correctly.
+
 ```typescript
 // Bad: doesn't match the default export shape
-export { MyComponent } from './MyComponent.js';
+export { MyComponent } from "./MyComponent.js";
 ```
 
 Use `export *` for types — it allows value exports to leak, which types files must not do.
+
 ```typescript
 // Bad
-export * from './types.js';
+export * from "./types.js";
 ```
 
 Omit the barrel file or fail to re-export types — consumers will be unable to import the component or its types through the package's public API.
@@ -111,6 +117,7 @@ CSS custom properties inherit across the shadow DOM boundary. Tokens are availab
 ### Do
 
 Explicitly restore inherited typography on form element roots — UA stylesheets reset these inside shadow DOM.
+
 ```css
 .ds.button {
   font-family: inherit;
@@ -135,19 +142,21 @@ Any file that uses a web component in a template must include a side-effect impo
 ### Do
 
 Include the side-effect import alongside the type import.
+
 ```typescript
-import "./MyComponent.js";                        // registers the custom element at runtime
-import type MyComponent from "./MyComponent.js";  // TypeScript types only
+import "./MyComponent.js"; // registers the custom element at runtime
+import type MyComponent from "./MyComponent.js"; // TypeScript types only
 ```
 
 ### Don't
 
 Use a value import expecting to render with the class. Lit templates always use the tag name string, never the class directly. The value import becomes an unused binding.
+
 ```typescript
 import MyComponent from "./MyComponent.js";
 
 // Wrong: MyComponent cannot be used like a JSX/Lit tag
-html`<${MyComponent}></${MyComponent}>`;  // not valid
+html`<${MyComponent}></${MyComponent}>`; // not valid
 
 // The tag name string is always the correct form
 html`<ds-example></ds-example>`;
@@ -165,29 +174,30 @@ Lit SSR is provided by the `@lit-labs/ssr` package (currently Lit Labs — exper
 
 **Which lifecycle methods run on the server:**
 
-| Method | Runs on server |
-|---|---|
-| `constructor()` | Yes ⚠️ |
-| `willUpdate()` | Yes ⚠️ |
-| `render()` | Yes ⚠️ |
-| `hasChanged()` | Yes ⚠️ |
-| `connectedCallback()` | No |
-| `disconnectedCallback()` | No |
-| `attributeChangedCallback()` | No |
-| `shouldUpdate()` | No |
-| `update()` | No |
-| `firstUpdated()` | No |
-| `updated()` | No |
+| Method                       | Runs on server |
+| ---------------------------- | -------------- |
+| `constructor()`              | Yes ⚠️         |
+| `willUpdate()`               | Yes ⚠️         |
+| `render()`                   | Yes ⚠️         |
+| `hasChanged()`               | Yes ⚠️         |
+| `connectedCallback()`        | No             |
+| `disconnectedCallback()`     | No             |
+| `attributeChangedCallback()` | No             |
+| `shouldUpdate()`             | No             |
+| `update()`                   | No             |
+| `firstUpdated()`             | No             |
+| `updated()`                  | No             |
 
 Only `constructor()`, `willUpdate()`, and `render()` run during SSR. Any browser DOM access must be confined to the methods in the "No" column, or guarded explicitly. The `@slotchange` event is a browser DOM event — it never fires during SSR. See `cs:lit.component.a11y.aria` for the consequence of this on accessible name derivation.
 
 ### Do
 
 Use `isServer` from `lit` to guard any browser-only logic that cannot be moved into a safe lifecycle method.
-```typescript
-import { LitElement, html, isServer } from 'lit';
 
-@customElement('ds-button')
+```typescript
+import { LitElement, html, isServer } from "lit";
+
+@customElement("ds-button")
 export default class Button extends LitElement {
   connectedCallback() {
     // connectedCallback() is not called on the server, so this is already
@@ -199,12 +209,15 @@ export default class Button extends LitElement {
 
   private setupResizeObserver() {
     if (isServer) return; // ResizeObserver does not exist in the SSR DOM shim
-    this._observer = new ResizeObserver(() => { /* ... */ });
+    this._observer = new ResizeObserver(() => {
+      /* ... */
+    });
   }
 }
 ```
 
 Confine imperative DOM access to lifecycle methods that are not called on the server — `updated()` is the standard choice.
+
 ```typescript
 updated() {
   // Safe: updated() is never called during SSR.
@@ -214,15 +227,18 @@ updated() {
 ```
 
 Use optional chaining or `typeof` guards as lightweight protection against APIs outside the SSR DOM shim, when moving code into a safe lifecycle method is not practical.
+
 ```typescript
 // Checks whether the API actually exists before calling it.
 // Works in both Node (undefined) and browser (function) environments.
-const supportsPopover = typeof HTMLElement?.prototype?.showPopover === 'function';
+const supportsPopover =
+  typeof HTMLElement?.prototype?.showPopover === "function";
 ```
 
 ### Don't
 
 Access browser APIs in `constructor()`, `willUpdate()`, or `render()` — these three methods run on the server and the APIs will not exist.
+
 ```typescript
 // Bad: document is not available in the SSR DOM shim
 constructor() {
@@ -238,6 +254,7 @@ render() {
 ```
 
 Rely on `@slotchange` to derive values used in the server-rendered markup — the event never fires during SSR, so any value populated by it will be absent in the initial HTML.
+
 ```typescript
 // Bad: slottedText is always '' during SSR.
 // Any attribute derived from it (like aria-label) will be missing
@@ -268,6 +285,7 @@ The fix is to keep `lit` external in the library build. The bare `lit` specifier
 ### Do
 
 Mark `lit` and all its subpaths as external in `vite.config.ts` so the conditional exports resolve correctly at the consumer's build time.
+
 ```typescript
 // vite.config.ts
 export default defineConfig({
@@ -284,6 +302,7 @@ export default defineConfig({
 ```
 
 If bundling lit is unavoidable (e.g. CDN), produce separate browser and node bundles and declare them in conditional exports.
+
 ```json
 {
   "name": "my-ds",
@@ -299,14 +318,15 @@ If bundling lit is unavoidable (e.g. CDN), produce separate browser and node bun
 ### Don't
 
 Omit the external rule — Vite will inline lit into the output, locking in one environment's conditional export variant and silently breaking SSR or browser usage.
+
 ```typescript
 // Bad: lit is bundled into the output with the browser variant inlined.
 // Node consumers will get browser-variant lit with no DOM shim.
 export default defineConfig({
   build: {
     lib: {
-      entry: 'src/index.ts',
-      formats: ['es'],
+      entry: "src/index.ts",
+      formats: ["es"],
     },
     // rollupOptions.external omitted — lit is bundled rather than kept external
   },
@@ -327,20 +347,22 @@ After the server emits Declarative Shadow DOM HTML, the client must hydrate it t
 ### Do
 
 Import the hydration support module first, before any component or `lit` import, in the client entry point.
+
 ```typescript
 // entry-client.ts — order matters
-import '@lit-labs/ssr-client/lit-element-hydrate-support.js'; // must be first
-import './components/Button.js';   // registers ds-button, triggers self-hydration
-import './components/Label.js';
+import "@lit-labs/ssr-client/lit-element-hydrate-support.js"; // must be first
+import "./components/Button.js"; // registers ds-button, triggers self-hydration
+import "./components/Label.js";
 ```
 
 ### Don't
 
 Import component modules before the hydration support module — hydration support must be installed before `lit` is first imported.
+
 ```typescript
 // Bad: Button.ts imports lit, which runs before hydration support is installed.
-import './components/Button.js';
-import '@lit-labs/ssr-client/lit-element-hydrate-support.js'; // too late
+import "./components/Button.js";
+import "@lit-labs/ssr-client/lit-element-hydrate-support.js"; // too late
 ```
 
 ---
@@ -354,6 +376,7 @@ Each web component must reside in its own PascalCase-named folder. Component-spe
 ### Do
 
 Place all component-related files within a single folder named after the component.
+
 ```bash
 MyComponent/
   ├── MyComponent.ts           # Component-specific
@@ -370,6 +393,7 @@ MyComponent/
 ### Don't
 
 Scatter files across different parts of the application.
+
 ```bash
 components/
   └── MyComponent.ts
@@ -378,6 +402,7 @@ styles/
 ```
 
 Add redundant prefixes to domain-level files — the folder name already provides the namespace.
+
 ```bash
 MyComponent/
   ├── MyComponent.types.ts      # Bad: Redundant prefix
@@ -400,8 +425,9 @@ Two selectors are used, each with a distinct responsibility:
 ### Do
 
 Author styles in a separate `.css` file and import them into the component.
+
 ```typescript
-import styles from './styles.css';
+import styles from "./styles.css";
 
 export default class Button extends LitElement {
   static styles = styles;
@@ -409,6 +435,7 @@ export default class Button extends LitElement {
 ```
 
 Use `:host` only for properties that define the element's footprint in the outer layout. Set a default `display` value since custom elements are `display: inline` by default.
+
 ```css
 /* Corrects the default display: inline — most components need inline-block for a proper box model */
 :host {
@@ -423,6 +450,7 @@ Use `:host` only for properties that define the element's footprint in the outer
 ```
 
 Always pair a default `:host` display with `:host([hidden]) { display: none }`. Without it, an explicitly set `display` on `:host` overrides the lower-specificity native `hidden` attribute, breaking `elem.hidden = true`.
+
 ```css
 :host {
   display: inline-block;
@@ -434,6 +462,7 @@ Always pair a default `:host` display with `:host([hidden]) { display: none }`. 
 ```
 
 Use `.ds.{component}` for all visual, layout, spacing, and token-based styles.
+
 ```css
 .ds.button {
   display: inline-flex;
@@ -448,6 +477,7 @@ Use `.ds.{component}` for all visual, layout, spacing, and token-based styles.
 ### Don't
 
 Write styles inline as template literals — doing so loses CSS tooling and file co-location.
+
 ```typescript
 // Bad
 static styles = css`
@@ -456,12 +486,15 @@ static styles = css`
 ```
 
 Put visual or internal layout styles on `:host` — they belong on `.ds.{component}`.
+
 ```css
 /* Bad: visual and internal layout styles on :host */
 :host {
-  display: inline-flex;    /* internal layout — belongs on .ds.button */
-  background-color: var(--button-color-background); /* visual — belongs on .ds.button */
-  padding: 0.5rem 1rem;    /* spacing — belongs on .ds.button */
+  display: inline-flex; /* internal layout — belongs on .ds.button */
+  background-color: var(
+    --button-color-background
+  ); /* visual — belongs on .ds.button */
+  padding: 0.5rem 1rem; /* spacing — belongs on .ds.button */
 }
 ```
 
@@ -476,6 +509,7 @@ Component styles follow the token hierarchy defined in `cs:styling.tokens.types`
 ### Do
 
 Use the full modifier cascade with the component token as the innermost fallback.
+
 ```css
 .ds.button {
   /* Resolution: anticipation modifier → importance modifier → component token */
@@ -489,6 +523,7 @@ Use the full modifier cascade with the component token as the innermost fallback
 ### Don't
 
 Redeclare a component token inside the component's own `:host` — it is already defined by the token system. Declaring it on `:host` hardcodes its value and overrides whatever the theme or consumer set.
+
 ```css
 /* Bad: wins over the inherited value and breaks theming */
 :host {
@@ -511,6 +546,7 @@ The element must also be typed as its concrete class (not `HTMLElement`) so prop
 ### Do
 
 Mount and unmount the element in hooks, typed as the component class.
+
 ```typescript
 import "./MyComponent.js";
 import type MyComponent from "./MyComponent.js";
@@ -528,6 +564,7 @@ afterEach(() => {
 ```
 
 Use `customElements.whenDefined()` before querying the shadow DOM.
+
 ```typescript
 it("renders", async () => {
   await customElements.whenDefined("ds-my-component");
@@ -537,15 +574,19 @@ it("renders", async () => {
 ```
 
 Use `await elem.updateComplete` before asserting on reactive property changes.
+
 ```typescript
 it("reflects label prop", async () => {
   elem.label = "Updated";
   await elem.updateComplete;
-  expect(elem.shadowRoot?.querySelector(".ds.my-component")?.textContent?.trim()).toBe("Updated");
+  expect(
+    elem.shadowRoot?.querySelector(".ds.my-component")?.textContent?.trim(),
+  ).toBe("Updated");
 });
 ```
 
 Query slotted content via the light DOM (`elem.querySelector`) — slotted nodes remain in the light tree and are never accessible through `shadowRoot`.
+
 ```typescript
 it("renders slotted icon", async () => {
   const icon = document.createElement("ds-icon");
@@ -564,6 +605,7 @@ it("renders slotted icon", async () => {
 ### Don't
 
 Type the element as `HTMLElement` — it loses access to component properties and `updateComplete`.
+
 ```typescript
 // Bad
 let elem: HTMLElement;
@@ -573,6 +615,7 @@ elem = document.createElement("ds-my-component");
 Query the shadow DOM before the element is defined or before `updateComplete` resolves when testing reactive properties — the shadow tree may not yet exist or may reflect stale state.
 
 Use `shadowRoot` to assert on slotted content — slotted nodes are projected from the light DOM and will never appear inside `shadowRoot`.
+
 ```typescript
 // Bad: always returns null; slotted children are not in the shadow tree
 const icon = elem.shadowRoot?.querySelector("ds-icon[slot='icon']");
@@ -589,6 +632,7 @@ Component TSDoc documentation must use the description from the design system on
 ### Do
 
 Use the description from the DSL ontology verbatim.
+
 ```typescript
 /**
  * The label component is a compact, non-interactive visual element used to
@@ -598,7 +642,7 @@ Use the description from the DSL ontology verbatim.
  *
  * @implements ds:global.component.label
  */
-@customElement('ds-label')
+@customElement("ds-label")
 export default class Label extends LitElement implements LabelProps {
   @property() criticality?: string;
 }
@@ -607,6 +651,7 @@ export default class Label extends LitElement implements LabelProps {
 ### Don't
 
 Write custom descriptions that deviate from the DSL.
+
 ```typescript
 // Bad: Custom title and paraphrased description
 /**
@@ -617,7 +662,8 @@ Write custom descriptions that deviate from the DSL.
 ```
 
 Include `@example` blocks — stories fulfill this role.
-```typescript
+
+````typescript
 // Bad: Examples belong in stories, not TSDoc
 /**
  * The label component is a compact...
@@ -628,9 +674,10 @@ Include `@example` blocks — stories fulfill this role.
  * <ds-label criticality="warning">Warning</ds-label>
  * ```
  */
-```
+````
 
 Omit the `@implements` tag — it is the link between the component implementation and the DSL definition.
+
 ```typescript
 // Bad: Missing @implements tag
 /**
@@ -649,6 +696,7 @@ Component props (reactive properties/attributes) must be typed in a `types.ts` f
 ### Do
 
 Define the interface with TSDoc-commented props in `types.ts`.
+
 ```typescript
 // types.ts
 export interface ButtonProps {
@@ -660,11 +708,12 @@ export interface ButtonProps {
 ```
 
 Import the type and use `implements` in the component class.
+
 ```typescript
 // Button.ts
-import type { ButtonProps } from './types.js';
+import type { ButtonProps } from "./types.js";
 
-@customElement('ds-button')
+@customElement("ds-button")
 export default class Button extends LitElement implements ButtonProps {
   @property() emphasis?: string;
   @property({ type: Boolean, reflect: true }) disabled = false;
@@ -672,6 +721,7 @@ export default class Button extends LitElement implements ButtonProps {
 ```
 
 Use `reflect: true` on boolean props that map to CSS attribute selectors. Without it, the DOM attribute is never written and the CSS selector silently fails.
+
 ```typescript
 // The CSS rule [disabled] { ... } requires the attribute to exist in the DOM.
 // reflect: true ensures setting this.disabled = true also writes disabled="" on the element.
@@ -679,6 +729,7 @@ Use `reflect: true` on boolean props that map to CSS attribute selectors. Withou
 ```
 
 Use the `@implements` JSDoc tag in the component's TSDoc to link to the DSL.
+
 ```typescript
 /**
  * The button initiates an action...
@@ -691,6 +742,7 @@ export default class Button extends LitElement implements ButtonProps {}
 ### Don't
 
 Define types inline in the component file — they belong in `types.ts`.
+
 ```typescript
 // Bad: types belong in types.ts
 export default class Button extends LitElement {
@@ -699,6 +751,7 @@ export default class Button extends LitElement {
 ```
 
 Omit the `implements` clause — it enforces that reactive properties stay in sync with the declared interface.
+
 ```typescript
 // Bad: class doesn't declare it implements the props interface
 export default class Button extends LitElement {}
