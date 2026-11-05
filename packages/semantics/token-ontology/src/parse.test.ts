@@ -57,28 +57,28 @@ describe("the strata hold what the populator reported", () => {
 
   it.each([
     [`${W3C}File`, 45],
-    // 1311 includes the 68 new authored definitions from the baseline and
+    // 1320 includes the 68 new authored definitions from the baseline and
     // product-spacing documents, after the prior 30 identity rebinds were
     // removed from layer1 and modal.
     // authored (15 each) are no longer tokens anywhere. They stated a RESET —
     // an alias naming the node it sat on — which the source cannot express
     // once the override moves to $root, so the CSS profile carries them.
-    [`${W3C}Token`, 1311],
+    [`${W3C}Token`, 1320],
     [`${W3C}ResolverContext`, 44],
     [`${W3C}ResolverModifier`, 10],
-    // 745 = the 720 authored symbols of s1, plus the 25 channels s2 mints
+    // 754 = the 729 authored symbols of s1, plus the 25 channels s2 mints
     // from coverage. The channels are symbols like any other; what makes one a
     // channel is dt:channelOf, not a class.
-    [`${DT}TokenSymbol`, 745],
+    [`${DT}TokenSymbol`, 754],
     // Breakpoint no longer covers a semantic token after its baseline is
     // retired, so the observed-coverage draft omits that empty contract.
     [`${DT}Contract`, 9],
     [`${DT}Coordinate`, 36],
-    // 1,237 = 1,072 along mode, plus one channel routing per (channel x
+    // 1,246 = 1,081 along mode, plus one channel routing per (channel x
     // coordinate) pair the platform provisions — 165. Not 330: a routing
     // carries no value of its own, so there is nothing for a second row at
     // mode.dark to hold, and the mode coordinate is off the node.
-    [`${DT}ResolvedValue`, 1237],
+    [`${DT}ResolvedValue`, 1246],
   ])("%s → %i", (cls, expected) => {
     expect(countOf(cls)).toBe(expected);
   });

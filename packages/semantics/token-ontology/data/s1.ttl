@@ -600,6 +600,7 @@ dt:color.palette.aubergine.398 a dt:TokenSymbol ; rdfs:label "color.palette.aube
 dt:color.palette.aubergine.40 a dt:TokenSymbol ; rdfs:label "color.palette.aubergine.40" .
 dt:color.palette.aubergine.520 a dt:TokenSymbol ; rdfs:label "color.palette.aubergine.520" .
 dt:color.palette.aubergine.590 a dt:TokenSymbol ; rdfs:label "color.palette.aubergine.590" .
+dt:color.palette.aubergine.70 a dt:TokenSymbol ; rdfs:label "color.palette.aubergine.70" .
 dt:color.palette.aubergine.700 a dt:TokenSymbol ; rdfs:label "color.palette.aubergine.700" .
 dt:color.palette.aubergine.820 a dt:TokenSymbol ; rdfs:label "color.palette.aubergine.820" .
 dt:color.palette.aubergine.930 a dt:TokenSymbol ; rdfs:label "color.palette.aubergine.930" .
@@ -614,6 +615,7 @@ dt:color.palette.blue.398 a dt:TokenSymbol ; rdfs:label "color.palette.blue.398"
 dt:color.palette.blue.40 a dt:TokenSymbol ; rdfs:label "color.palette.blue.40" .
 dt:color.palette.blue.520 a dt:TokenSymbol ; rdfs:label "color.palette.blue.520" .
 dt:color.palette.blue.590 a dt:TokenSymbol ; rdfs:label "color.palette.blue.590" .
+dt:color.palette.blue.70 a dt:TokenSymbol ; rdfs:label "color.palette.blue.70" .
 dt:color.palette.blue.700 a dt:TokenSymbol ; rdfs:label "color.palette.blue.700" .
 dt:color.palette.blue.820 a dt:TokenSymbol ; rdfs:label "color.palette.blue.820" .
 dt:color.palette.blue.930 a dt:TokenSymbol ; rdfs:label "color.palette.blue.930" .
@@ -627,6 +629,7 @@ dt:color.palette.gray.398 a dt:TokenSymbol ; rdfs:label "color.palette.gray.398"
 dt:color.palette.gray.40 a dt:TokenSymbol ; rdfs:label "color.palette.gray.40" .
 dt:color.palette.gray.520 a dt:TokenSymbol ; rdfs:label "color.palette.gray.520" .
 dt:color.palette.gray.590 a dt:TokenSymbol ; rdfs:label "color.palette.gray.590" .
+dt:color.palette.gray.70 a dt:TokenSymbol ; rdfs:label "color.palette.gray.70" .
 dt:color.palette.gray.700 a dt:TokenSymbol ; rdfs:label "color.palette.gray.700" .
 dt:color.palette.gray.820 a dt:TokenSymbol ; rdfs:label "color.palette.gray.820" .
 dt:color.palette.gray.930 a dt:TokenSymbol ; rdfs:label "color.palette.gray.930" .
@@ -640,6 +643,7 @@ dt:color.palette.green.398 a dt:TokenSymbol ; rdfs:label "color.palette.green.39
 dt:color.palette.green.40 a dt:TokenSymbol ; rdfs:label "color.palette.green.40" .
 dt:color.palette.green.520 a dt:TokenSymbol ; rdfs:label "color.palette.green.520" .
 dt:color.palette.green.590 a dt:TokenSymbol ; rdfs:label "color.palette.green.590" .
+dt:color.palette.green.70 a dt:TokenSymbol ; rdfs:label "color.palette.green.70" .
 dt:color.palette.green.700 a dt:TokenSymbol ; rdfs:label "color.palette.green.700" .
 dt:color.palette.green.820 a dt:TokenSymbol ; rdfs:label "color.palette.green.820" .
 dt:color.palette.green.930 a dt:TokenSymbol ; rdfs:label "color.palette.green.930" .
@@ -653,6 +657,7 @@ dt:color.palette.orange.398 a dt:TokenSymbol ; rdfs:label "color.palette.orange.
 dt:color.palette.orange.40 a dt:TokenSymbol ; rdfs:label "color.palette.orange.40" .
 dt:color.palette.orange.520 a dt:TokenSymbol ; rdfs:label "color.palette.orange.520" .
 dt:color.palette.orange.590 a dt:TokenSymbol ; rdfs:label "color.palette.orange.590" .
+dt:color.palette.orange.70 a dt:TokenSymbol ; rdfs:label "color.palette.orange.70" .
 dt:color.palette.orange.700 a dt:TokenSymbol ; rdfs:label "color.palette.orange.700" .
 dt:color.palette.orange.820 a dt:TokenSymbol ; rdfs:label "color.palette.orange.820" .
 dt:color.palette.orange.930 a dt:TokenSymbol ; rdfs:label "color.palette.orange.930" .
@@ -666,6 +671,7 @@ dt:color.palette.purple.398 a dt:TokenSymbol ; rdfs:label "color.palette.purple.
 dt:color.palette.purple.40 a dt:TokenSymbol ; rdfs:label "color.palette.purple.40" .
 dt:color.palette.purple.520 a dt:TokenSymbol ; rdfs:label "color.palette.purple.520" .
 dt:color.palette.purple.590 a dt:TokenSymbol ; rdfs:label "color.palette.purple.590" .
+dt:color.palette.purple.70 a dt:TokenSymbol ; rdfs:label "color.palette.purple.70" .
 dt:color.palette.purple.700 a dt:TokenSymbol ; rdfs:label "color.palette.purple.700" .
 dt:color.palette.purple.820 a dt:TokenSymbol ; rdfs:label "color.palette.purple.820" .
 dt:color.palette.purple.930 a dt:TokenSymbol ; rdfs:label "color.palette.purple.930" .
@@ -679,6 +685,7 @@ dt:color.palette.red.398 a dt:TokenSymbol ; rdfs:label "color.palette.red.398" .
 dt:color.palette.red.40 a dt:TokenSymbol ; rdfs:label "color.palette.red.40" .
 dt:color.palette.red.520 a dt:TokenSymbol ; rdfs:label "color.palette.red.520" .
 dt:color.palette.red.590 a dt:TokenSymbol ; rdfs:label "color.palette.red.590" .
+dt:color.palette.red.70 a dt:TokenSymbol ; rdfs:label "color.palette.red.70" .
 dt:color.palette.red.700 a dt:TokenSymbol ; rdfs:label "color.palette.red.700" .
 dt:color.palette.red.820 a dt:TokenSymbol ; rdfs:label "color.palette.red.820" .
 dt:color.palette.red.930 a dt:TokenSymbol ; rdfs:label "color.palette.red.930" .
@@ -692,6 +699,7 @@ dt:color.palette.teal.398 a dt:TokenSymbol ; rdfs:label "color.palette.teal.398"
 dt:color.palette.teal.40 a dt:TokenSymbol ; rdfs:label "color.palette.teal.40" .
 dt:color.palette.teal.520 a dt:TokenSymbol ; rdfs:label "color.palette.teal.520" .
 dt:color.palette.teal.590 a dt:TokenSymbol ; rdfs:label "color.palette.teal.590" .
+dt:color.palette.teal.70 a dt:TokenSymbol ; rdfs:label "color.palette.teal.70" .
 dt:color.palette.teal.700 a dt:TokenSymbol ; rdfs:label "color.palette.teal.700" .
 dt:color.palette.teal.820 a dt:TokenSymbol ; rdfs:label "color.palette.teal.820" .
 dt:color.palette.teal.930 a dt:TokenSymbol ; rdfs:label "color.palette.teal.930" .
@@ -706,6 +714,7 @@ dt:color.palette.yellow.398 a dt:TokenSymbol ; rdfs:label "color.palette.yellow.
 dt:color.palette.yellow.40 a dt:TokenSymbol ; rdfs:label "color.palette.yellow.40" .
 dt:color.palette.yellow.520 a dt:TokenSymbol ; rdfs:label "color.palette.yellow.520" .
 dt:color.palette.yellow.590 a dt:TokenSymbol ; rdfs:label "color.palette.yellow.590" .
+dt:color.palette.yellow.70 a dt:TokenSymbol ; rdfs:label "color.palette.yellow.70" .
 dt:color.palette.yellow.700 a dt:TokenSymbol ; rdfs:label "color.palette.yellow.700" .
 dt:color.palette.yellow.820 a dt:TokenSymbol ; rdfs:label "color.palette.yellow.820" .
 dt:color.palette.yellow.930 a dt:TokenSymbol ; rdfs:label "color.palette.yellow.930" .
@@ -1070,6 +1079,15 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:description "Primitive aubergine shade 590" ;
     dt:tokenType w3c-tokens:color .
 
+<global/primitive/color.tokens.json#color.palette.aubergine.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.aubergine.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.aubergine.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0204,335],\"alpha\":1,\"hex\":\"#f0e2ed\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive aubergine shade 70" ;
+    dt:tokenType w3c-tokens:color .
+
 <global/primitive/color.tokens.json#color.palette.aubergine.700>
     a w3c-tokens:Token ;
     w3c-tokens:name "color.palette.aubergine.700" ;
@@ -1102,7 +1120,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.aubergine.960" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.aubergine.960 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.2264,0,0],\"alpha\":1,\"hex\":\"#1C1C1C\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1866,0.0287,335.44],\"alpha\":1,\"hex\":\"#1B0E18\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive aubergine shade 960" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1129,7 +1147,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.100" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.100 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0366,255.96],\"alpha\":1,\"hex\":\"#CEDFF6\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0343,256],\"alpha\":1,\"hex\":\"#cfdff5\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 100" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1138,7 +1156,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.180" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.180 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8236,0.0735,255.56],\"alpha\":1,\"hex\":\"#A6C8F5\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.0688,256],\"alpha\":1,\"hex\":\"#a8c8f2\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 180" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1147,7 +1165,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.20" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.20 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.978,0.0062,255.47],\"alpha\":1,\"hex\":\"#F5F8FC\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0058,256],\"alpha\":1,\"hex\":\"#f6f8fc\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 20" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1156,7 +1174,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.280" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.280 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.7361,0.1249,255.7],\"alpha\":1,\"hex\":\"#73ACF7\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.7354,0.1144,256],\"alpha\":1,\"hex\":\"#78acf1\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 280" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1165,7 +1183,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.398" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.398 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08],\"alpha\":1,\"hex\":\"#368bf6\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256],\"alpha\":1,\"hex\":\"#468de8\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 398" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1174,7 +1192,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.40" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.40 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9589,0.0125,255.51],\"alpha\":1,\"hex\":\"#ECF2FA\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0121,256],\"alpha\":1,\"hex\":\"#ecf2f9\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 40" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1183,7 +1201,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.520" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.520 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04],\"alpha\":1,\"hex\":\"#0F6ED7\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256],\"alpha\":1,\"hex\":\"#2770ca\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 520" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1192,8 +1210,17 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.590" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.590 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1635,256.12],\"alpha\":1,\"hex\":\"#0D60BD\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1445,256],\"alpha\":1,\"hex\":\"#2062b3\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 590" ;
+    dt:tokenType w3c-tokens:color .
+
+<global/primitive/color.tokens.json#color.palette.blue.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.blue.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.blue.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0227,256],\"alpha\":1,\"hex\":\"#dee8f7\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive blue shade 70" ;
     dt:tokenType w3c-tokens:color .
 
 <global/primitive/color.tokens.json#color.palette.blue.700>
@@ -1201,7 +1228,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.700" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.700 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4218,0.1294,255.95],\"alpha\":1,\"hex\":\"#114C92\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.1161,256],\"alpha\":1,\"hex\":\"#1b4d8b\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 700" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1210,7 +1237,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.820" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.820 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.3332,0.0875,255.77],\"alpha\":1,\"hex\":\"#133662\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.3317,0.0798,256],\"alpha\":1,\"hex\":\"#17365e\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 820" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1219,7 +1246,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.930" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.930 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.2289,0.0465,255.85],\"alpha\":1,\"hex\":\"#0D1D32\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0436,256],\"alpha\":1,\"hex\":\"#0e1d31\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 930" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1228,7 +1255,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.960" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.960 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1896,0.0347,256.41],\"alpha\":1,\"hex\":\"#091423\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1864,0.0326,256],\"alpha\":1,\"hex\":\"#091321\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 960" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1237,7 +1264,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.blue.990" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.blue.990 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1215,0.0193,259.05],\"alpha\":1,\"hex\":\"#03060D\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1156,0.0182,256],\"alpha\":1,\"hex\":\"#02050b\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive blue shade 990" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1313,6 +1340,15 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:description "Primitive gray shade 590" ;
     dt:tokenType w3c-tokens:color .
 
+<global/primitive/color.tokens.json#color.palette.gray.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.gray.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.gray.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0,0],\"alpha\":1,\"hex\":\"#e7e7e7\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive gray shade 70" ;
+    dt:tokenType w3c-tokens:color .
+
 <global/primitive/color.tokens.json#color.palette.gray.700>
     a w3c-tokens:Token ;
     w3c-tokens:name "color.palette.gray.700" ;
@@ -1363,7 +1399,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.100" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.100 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8983,0.0804,143.81],\"alpha\":1,\"hex\":\"#BEECBC\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0757,144],\"alpha\":1,\"hex\":\"#c0ebbe\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 100" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1372,7 +1408,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.180" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.180 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8235,0.1488,143.84],\"alpha\":1,\"hex\":\"#86DE85\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.1366,144],\"alpha\":1,\"hex\":\"#8cdc8b\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 180" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1381,7 +1417,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.20" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.20 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0101,145.5],\"alpha\":1,\"hex\":\"#F4FAF4\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0103,144],\"alpha\":1,\"hex\":\"#f4faf4\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 20" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1390,7 +1426,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.280" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.280 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.735,0.1708,143.94],\"alpha\":1,\"hex\":\"#5CC45E\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.7354,0.1573,144],\"alpha\":1,\"hex\":\"#64c266\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 280" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1399,7 +1435,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.398" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.398 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01],\"alpha\":1,\"hex\":\"#38a63e\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144],\"alpha\":1,\"hex\":\"#49a34b\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 398" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1408,7 +1444,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.40" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.40 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9586,0.0247,143.5],\"alpha\":1,\"hex\":\"#E8F6E7\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0231,144],\"alpha\":1,\"hex\":\"#e8f6e8\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 40" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1417,7 +1453,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.520" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.520 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.551,0.1575,144.01],\"alpha\":1,\"hex\":\"#25882C\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1339,144],\"alpha\":1,\"hex\":\"#37853a\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 520" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1426,8 +1462,17 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.590" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.590 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.5,0.1355,143.96],\"alpha\":1,\"hex\":\"#26762A\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1181,144],\"alpha\":1,\"hex\":\"#327434\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 590" ;
+    dt:tokenType w3c-tokens:color .
+
+<global/primitive/color.tokens.json#color.palette.green.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.green.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.green.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0473,144],\"alpha\":1,\"hex\":\"#d5f0d4\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive green shade 70" ;
     dt:tokenType w3c-tokens:color .
 
 <global/primitive/color.tokens.json#color.palette.green.700>
@@ -1435,7 +1480,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.700" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.700 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4222,0.0981,143.94],\"alpha\":1,\"hex\":\"#275B28\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.0918,144],\"alpha\":1,\"hex\":\"#2a5a2b\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 700" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1444,7 +1489,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.820" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.820 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.3331,0.0672,144.49],\"alpha\":1,\"hex\":\"#1E3F1F\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.3317,0.0643,144],\"alpha\":1,\"hex\":\"#1f3e20\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 820" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1453,7 +1498,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.930" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.930 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.228,0.0373,144.23],\"alpha\":1,\"hex\":\"#112111\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0363,144],\"alpha\":1,\"hex\":\"#112111\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 930" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1462,7 +1507,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.960" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.960 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.189,0.0295,144.3],\"alpha\":1,\"hex\":\"#0B170B\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1864,0.0274,144],\"alpha\":1,\"hex\":\"#0b160b\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 960" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1471,7 +1516,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.green.990" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.green.990 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1194,0.0171,144.41],\"alpha\":1,\"hex\":\"#030703\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1156,0.0154,144],\"alpha\":1,\"hex\":\"#030603\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive green shade 990" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1545,6 +1590,15 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     dt:symbol dt:color.palette.orange.590 ;
     w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4991,0.157,37.79],\"alpha\":1,\"hex\":\"#A9370C\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive orange shade 590" ;
+    dt:tokenType w3c-tokens:color .
+
+<global/primitive/color.tokens.json#color.palette.orange.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.orange.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.orange.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0251,38],\"alpha\":1,\"hex\":\"#f7e2db\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive orange shade 70" ;
     dt:tokenType w3c-tokens:color .
 
 <global/primitive/color.tokens.json#color.palette.orange.700>
@@ -1664,6 +1718,15 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:description "Primitive purple shade 590" ;
     dt:tokenType w3c-tokens:color .
 
+<global/primitive/color.tokens.json#color.palette.purple.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.purple.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.purple.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.025,290],\"alpha\":1,\"hex\":\"#e6e5f7\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive purple shade 70" ;
+    dt:tokenType w3c-tokens:color .
+
 <global/primitive/color.tokens.json#color.palette.purple.700>
     a w3c-tokens:Token ;
     w3c-tokens:name "color.palette.purple.700" ;
@@ -1714,7 +1777,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.100" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.100 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8976,0.0384,23.87],\"alpha\":1,\"hex\":\"#F6D4D1\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0364,24],\"alpha\":1,\"hex\":\"#f5d5d2\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 100" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1723,7 +1786,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.180" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.180 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8227,0.0804,23.7],\"alpha\":1,\"hex\":\"#F5B1AC\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.0768,24],\"alpha\":1,\"hex\":\"#f3b2ad\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 180" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1732,7 +1795,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.20" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.20 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9797,0.0055,31.05],\"alpha\":1,\"hex\":\"#FCF7F6\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0058,24],\"alpha\":1,\"hex\":\"#fcf7f6\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 20" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1741,7 +1804,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.280" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.280 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.736,0.144,24.23],\"alpha\":1,\"hex\":\"#F7827C\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.7354,0.1354,24],\"alpha\":1,\"hex\":\"#f3857f\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 280" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1750,7 +1813,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.398" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.398 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11],\"alpha\":1,\"hex\":\"#f53e45\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24],\"alpha\":1,\"hex\":\"#eb4c4e\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 398" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1759,7 +1822,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.40" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.40 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9583,0.0131,23.19],\"alpha\":1,\"hex\":\"#FAEEED\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0124,24],\"alpha\":1,\"hex\":\"#faeeed\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 40" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1768,7 +1831,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.520" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.520 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.5488,0.2107,23.83],\"alpha\":1,\"hex\":\"#D0192D\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1907,24],\"alpha\":1,\"hex\":\"#c92e35\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 520" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1777,8 +1840,17 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.590" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.590 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4993,0.1883,23.79],\"alpha\":1,\"hex\":\"#B61928\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1719,24],\"alpha\":1,\"hex\":\"#b0282e\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 590" ;
+    dt:tokenType w3c-tokens:color .
+
+<global/primitive/color.tokens.json#color.palette.red.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.red.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.red.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0237,24],\"alpha\":1,\"hex\":\"#f7e1df\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive red shade 70" ;
     dt:tokenType w3c-tokens:color .
 
 <global/primitive/color.tokens.json#color.palette.red.700>
@@ -1786,7 +1858,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.700" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.700 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4223,0.1451,23.93],\"alpha\":1,\"hex\":\"#8C1E23\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.1345,24],\"alpha\":1,\"hex\":\"#882426\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 700" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1795,7 +1867,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.820" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.820 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.3335,0.0953,24.66],\"alpha\":1,\"hex\":\"#5E1D1C\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.3317,0.09,24],\"alpha\":1,\"hex\":\"#5c1f1e\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 820" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1804,7 +1876,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.930" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.930 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.2283,0.0493,23.67],\"alpha\":1,\"hex\":\"#301211\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0475,24],\"alpha\":1,\"hex\":\"#2f1311\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 930" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1813,7 +1885,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.960" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.960 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.187,0.0364,23.99],\"alpha\":1,\"hex\":\"#210C0B\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1864,0.035,24],\"alpha\":1,\"hex\":\"#200c0b\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 960" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1822,7 +1894,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.palette.red.990" ;
     w3c-tokens:inFile <global/primitive/color.tokens.json> ;
     dt:symbol dt:color.palette.red.990 ;
-    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1218,0.019,31.68],\"alpha\":1,\"hex\":\"#0C0403\"}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.1156,0.0192,24],\"alpha\":1,\"hex\":\"#0b0303\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive red shade 990" ;
     dt:tokenType w3c-tokens:color .
 
@@ -1896,6 +1968,15 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     dt:symbol dt:color.palette.teal.590 ;
     w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4986,0.0833,205.9],\"alpha\":1,\"hex\":\"#09707A\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive teal shade 590" ;
+    dt:tokenType w3c-tokens:color .
+
+<global/primitive/color.tokens.json#color.palette.teal.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.teal.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.teal.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0372,205],\"alpha\":1,\"hex\":\"#cbeff3\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive teal shade 70" ;
     dt:tokenType w3c-tokens:color .
 
 <global/primitive/color.tokens.json#color.palette.teal.700>
@@ -2022,6 +2103,15 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     dt:symbol dt:color.palette.yellow.590 ;
     w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.4994,0.1081,67.44],\"alpha\":1,\"hex\":\"#8B5505\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive yellow shade 590" ;
+    dt:tokenType w3c-tokens:color .
+
+<global/primitive/color.tokens.json#color.palette.yellow.70>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "color.palette.yellow.70" ;
+    w3c-tokens:inFile <global/primitive/color.tokens.json> ;
+    dt:symbol dt:color.palette.yellow.70 ;
+    w3c-tokens:value "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0313,67],\"alpha\":1,\"hex\":\"#f6e4d2\"}"^^rdf:JSON ;
+    w3c-tokens:description "Primitive yellow shade 70" ;
     dt:tokenType w3c-tokens:color .
 
 <global/primitive/color.tokens.json#color.palette.yellow.700>
@@ -3397,7 +3487,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "number.lightness.foreground.primary.active.onDark" ;
     w3c-tokens:inFile <global/primitive/number.tokens.json> ;
     dt:symbol dt:number.lightness.foreground.primary.active.onDark ;
-    w3c-tokens:value "0.6"^^rdf:JSON ;
+    w3c-tokens:value "0.7"^^rdf:JSON ;
     w3c-tokens:description "Lightness adjustment for primary foreground active state on dark backgrounds" ;
     dt:tokenType w3c-tokens:number .
 
@@ -3415,7 +3505,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "number.lightness.foreground.primary.disabled.onDark" ;
     w3c-tokens:inFile <global/primitive/number.tokens.json> ;
     dt:symbol dt:number.lightness.foreground.primary.disabled.onDark ;
-    w3c-tokens:value "0.32"^^rdf:JSON ;
+    w3c-tokens:value "0.36"^^rdf:JSON ;
     w3c-tokens:description "Lightness adjustment for primary foreground disabled state on dark backgrounds" ;
     dt:tokenType w3c-tokens:number .
 
@@ -3433,7 +3523,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "number.lightness.foreground.primary.hover.onDark" ;
     w3c-tokens:inFile <global/primitive/number.tokens.json> ;
     dt:symbol dt:number.lightness.foreground.primary.hover.onDark ;
-    w3c-tokens:value "0.58"^^rdf:JSON ;
+    w3c-tokens:value "0.67"^^rdf:JSON ;
     w3c-tokens:description "Lightness adjustment for primary foreground hover state on dark backgrounds" ;
     dt:tokenType w3c-tokens:number .
 
@@ -3514,7 +3604,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "number.lightness.foreground.secondary.active.onLight" ;
     w3c-tokens:inFile <global/primitive/number.tokens.json> ;
     dt:symbol dt:number.lightness.foreground.secondary.active.onLight ;
-    w3c-tokens:value "0.84"^^rdf:JSON ;
+    w3c-tokens:value "0.87"^^rdf:JSON ;
     w3c-tokens:description "Lightness adjustment for secondary foreground active state on light backgrounds" ;
     dt:tokenType w3c-tokens:number .
 
@@ -3532,7 +3622,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "number.lightness.foreground.secondary.disabled.onLight" ;
     w3c-tokens:inFile <global/primitive/number.tokens.json> ;
     dt:symbol dt:number.lightness.foreground.secondary.disabled.onLight ;
-    w3c-tokens:value "0.96"^^rdf:JSON ;
+    w3c-tokens:value "0.95"^^rdf:JSON ;
     w3c-tokens:description "Lightness adjustment for secondary foreground disabled state on light backgrounds" ;
     dt:tokenType w3c-tokens:number .
 
@@ -3550,7 +3640,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "number.lightness.foreground.secondary.hover.onLight" ;
     w3c-tokens:inFile <global/primitive/number.tokens.json> ;
     dt:symbol dt:number.lightness.foreground.secondary.hover.onLight ;
-    w3c-tokens:value "0.86"^^rdf:JSON ;
+    w3c-tokens:value "0.89"^^rdf:JSON ;
     w3c-tokens:description "Lightness adjustment for secondary foreground hover state on light backgrounds" ;
     dt:tokenType w3c-tokens:number .
 
@@ -3811,7 +3901,7 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "number.opacity.backdrop" ;
     w3c-tokens:inFile <global/primitive/number.tokens.json> ;
     dt:symbol dt:number.opacity.backdrop ;
-    w3c-tokens:value "0.15"^^rdf:JSON ;
+    w3c-tokens:value "0.5"^^rdf:JSON ;
     w3c-tokens:description "Opacity for backdrop elements" ;
     dt:tokenType w3c-tokens:number .
 
@@ -3910,10 +4000,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.backdrop" ;
     w3c-tokens:inFile <global/semantic/color/dark.tokens.json> ;
     dt:symbol dt:color.backdrop ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/white/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/white/$value/components/0\"},{\"$ref\":\"#/color/palette/white/$value/components/1\"},{\"$ref\":\"#/color/palette/white/$value/components/2\"}],\"alpha\":{\"$ref\":\"#/number/opacity/backdrop/$value\"}}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/700/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/gray/700/$value/components/0\"},{\"$ref\":\"#/color/palette/gray/700/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/700/$value/components/2\"}],\"alpha\":{\"$ref\":\"#/number/opacity/backdrop/$value\"}}"^^rdf:JSON ;
     w3c-tokens:description "Semi-transparent overlay color for modal dialogs, drawers, and other components that require dimming the underlying content" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.white ;
+    dt:refersTo dt:color.palette.gray.700 ;
     dt:refersTo dt:number.opacity.backdrop .
 
 <global/semantic/color/dark.tokens.json#color.background.$root>
@@ -7674,10 +7764,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.backdrop" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.backdrop ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/black/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/black/$value/components/0\"},{\"$ref\":\"#/color/palette/black/$value/components/1\"},{\"$ref\":\"#/color/palette/black/$value/components/2\"}],\"alpha\":{\"$ref\":\"#/number/opacity/backdrop/$value\"}}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/gray/100/$value/components/0\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/2\"}],\"alpha\":{\"$ref\":\"#/number/opacity/backdrop/$value\"}}"^^rdf:JSON ;
     w3c-tokens:description "Semi-transparent overlay color for modal dialogs, drawers, and other components that require dimming the underlying content" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.black ;
+    dt:refersTo dt:color.palette.gray.100 ;
     dt:refersTo dt:number.opacity.backdrop .
 
 <global/semantic/color/light.tokens.json#color.background.$root>
@@ -10203,20 +10293,20 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.$root" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/gray/100/$value/components/0\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/gray/70/$value/components/0\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color for secondary interactive elements such as chips that need lower visual prominence than primary" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.gray.100 .
+    dt:refersTo dt:color.palette.gray.70 .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.active>
     a w3c-tokens:Token ;
     w3c-tokens:name "color.foreground.secondary.active" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.active ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/number/lightness/foreground/secondary/active/onLight/$value\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/number/lightness/foreground/secondary/active/onLight/$value\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color to use when the element using the secondary foreground is in an active state" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.gray.100 ;
+    dt:refersTo dt:color.palette.gray.70 ;
     dt:refersTo dt:number.lightness.foreground.secondary.active.onLight .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.branded.$root>
@@ -10224,10 +10314,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.branded.$root" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.branded ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/orange/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/orange/100/$value/components/0\"},{\"$ref\":\"#/color/palette/orange/100/$value/components/1\"},{\"$ref\":\"#/color/palette/orange/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/orange/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/orange/70/$value/components/0\"},{\"$ref\":\"#/color/palette/orange/70/$value/components/1\"},{\"$ref\":\"#/color/palette/orange/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color for secondary interactive elements that need to reflect the brand identity" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.orange.100 .
+    dt:refersTo dt:color.palette.orange.70 .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.branded.active>
     a w3c-tokens:Token ;
@@ -10268,10 +10358,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.category.$root" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.category ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/gray/100/$value/components/0\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/1\"},{\"$ref\":\"#/number/hue/category/$value\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/gray/70/$value/components/0\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/1\"},{\"$ref\":\"#/number/hue/category/$value\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color for secondary elements where a custom hue is needed. Use for user-generated categories, tags, or chips where semantic color meaning isn't predefined. Override number.hue.category on the element to set the hue while maintaining accessibility through consistent lightness and chroma with color.foreground.secondary." ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.gray.100 ;
+    dt:refersTo dt:color.palette.gray.70 ;
     dt:refersTo dt:number.hue.category .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.category.active>
@@ -10312,10 +10402,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.disabled" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.disabled ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/number/lightness/foreground/secondary/disabled/onLight/$value\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/number/lightness/foreground/secondary/disabled/onLight/$value\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color to use when the element using the secondary foreground is in a disabled state" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.gray.100 ;
+    dt:refersTo dt:color.palette.gray.70 ;
     dt:refersTo dt:number.lightness.foreground.secondary.disabled.onLight .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.error.$root>
@@ -10323,10 +10413,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.error.$root" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.error ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/red/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/red/100/$value/components/0\"},{\"$ref\":\"#/color/palette/red/100/$value/components/1\"},{\"$ref\":\"#/color/palette/red/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/red/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/red/70/$value/components/0\"},{\"$ref\":\"#/color/palette/red/70/$value/components/1\"},{\"$ref\":\"#/color/palette/red/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color for secondary interactive elements indicating errors or critical issues" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.red.100 .
+    dt:refersTo dt:color.palette.red.70 .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.error.active>
     a w3c-tokens:Token ;
@@ -10367,10 +10457,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.hover" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.hover ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/number/lightness/foreground/secondary/hover/onLight/$value\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/gray/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/number/lightness/foreground/secondary/hover/onLight/$value\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/1\"},{\"$ref\":\"#/color/palette/gray/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color to use when the element using the secondary foreground is in a hover state" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.gray.100 ;
+    dt:refersTo dt:color.palette.gray.70 ;
     dt:refersTo dt:number.lightness.foreground.secondary.hover.onLight .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.information.$root>
@@ -10378,10 +10468,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.information.$root" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.information ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/blue/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/blue/100/$value/components/0\"},{\"$ref\":\"#/color/palette/blue/100/$value/components/1\"},{\"$ref\":\"#/color/palette/blue/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/blue/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/blue/70/$value/components/0\"},{\"$ref\":\"#/color/palette/blue/70/$value/components/1\"},{\"$ref\":\"#/color/palette/blue/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color for secondary interactive elements conveying informational or neutral feedback" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.blue.100 .
+    dt:refersTo dt:color.palette.blue.70 .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.information.active>
     a w3c-tokens:Token ;
@@ -10422,10 +10512,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.success.$root" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.success ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/green/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/green/100/$value/components/0\"},{\"$ref\":\"#/color/palette/green/100/$value/components/1\"},{\"$ref\":\"#/color/palette/green/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/green/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/green/70/$value/components/0\"},{\"$ref\":\"#/color/palette/green/70/$value/components/1\"},{\"$ref\":\"#/color/palette/green/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color for secondary interactive elements indicating successful completion or positive outcomes" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.green.100 .
+    dt:refersTo dt:color.palette.green.70 .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.success.active>
     a w3c-tokens:Token ;
@@ -10466,10 +10556,10 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:name "color.foreground.secondary.warning.$root" ;
     w3c-tokens:inFile <global/semantic/color/light.tokens.json> ;
     dt:symbol dt:color.foreground.secondary.warning ;
-    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/yellow/100/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/yellow/100/$value/components/0\"},{\"$ref\":\"#/color/palette/yellow/100/$value/components/1\"},{\"$ref\":\"#/color/palette/yellow/100/$value/components/2\"}]}"^^rdf:JSON ;
+    w3c-tokens:value "{\"colorSpace\":{\"$ref\":\"#/color/palette/yellow/70/$value/colorSpace\"},\"components\":[{\"$ref\":\"#/color/palette/yellow/70/$value/components/0\"},{\"$ref\":\"#/color/palette/yellow/70/$value/components/1\"},{\"$ref\":\"#/color/palette/yellow/70/$value/components/2\"}]}"^^rdf:JSON ;
     w3c-tokens:description "Fill color for secondary interactive elements conveying caution or potential issues" ;
     dt:tokenType w3c-tokens:color ;
-    dt:refersTo dt:color.palette.yellow.100 .
+    dt:refersTo dt:color.palette.yellow.70 .
 
 <global/semantic/color/light.tokens.json#color.foreground.secondary.warning.active>
     a w3c-tokens:Token ;

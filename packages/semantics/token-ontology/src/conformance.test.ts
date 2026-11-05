@@ -118,16 +118,16 @@ const buildSurplus = only(ids, base);
 
 describe("the graph and the build agree on which symbols resolve", () => {
   it("compares non-empty sets, so no assertion below holds vacuously", () => {
-    expect(base.size).toBe(718);
-    expect(ids.size).toBe(878);
+    expect(base.size).toBe(727);
+    expect(ids.size).toBe(887);
     // And no set below owes its size to deduplication: every artifact entry
     // that carries an id carries a distinct one.
     expect(identified).toBe(ids.size);
   });
 
-  it("shares 691 symbols", () => {
+  it("shares 700 symbols", () => {
     const shared = [...base].filter((s) => ids.has(s));
-    expect(shared.length).toBe(691);
+    expect(shared.length).toBe(700);
     // Among them all 115 `number.*` — the lightness, chroma and hue parameters
     // the derivation rules consume. The artifact names every one, which is why
     // the graph's surplus below holds none.
@@ -333,10 +333,10 @@ function compareValues(): { compared: number; divergences: Divergence[] } {
 describe("the graph and the build agree on what those symbols resolve to", () => {
   const { compared, divergences } = compareValues();
 
-  it("compares 443 literal oklch values across both branches", () => {
+  it("compares 452 literal oklch values across both branches", () => {
     // The denominator is asserted so a parser change that silently stopped
     // matching cannot turn this suite into a no-op that still passes.
-    expect(compared).toBe(443);
+    expect(compared).toBe(452);
   });
 
   it("agrees on every one of them", () => {

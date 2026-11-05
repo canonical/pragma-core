@@ -53,14 +53,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.backdrop ;
-    dt:resolvesTo "{\"alpha\":0.15,\"colorSpace\":\"oklch\",\"components\":[0,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":0.5,\"colorSpace\":\"oklch\",\"components\":[0.8975,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.backdrop> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.backdrop ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"alpha\":0.15,\"colorSpace\":\"oklch\",\"components\":[1,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":0.5,\"colorSpace\":\"oklch\",\"components\":[0.4202,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.backdrop> ) .
 
 []
@@ -209,53 +209,53 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.constructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.551,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.constructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.constructive.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.constructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.constructive.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.constructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.destructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5488,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.destructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.destructive.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.destructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.destructive.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.destructive.disabled> ) .
 
 []
@@ -274,27 +274,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5488,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.error.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.error.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.error.disabled> ) .
 
 []
@@ -326,27 +326,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.information ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.information ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.information.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.information.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.information.disabled> ) .
 
 []
@@ -378,27 +378,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.551,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.success.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.border.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.border.success.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.border.success.disabled> ) .
 
 []
@@ -443,66 +443,66 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04],\"hex\":\"#0F6ED7\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256],\"hex\":\"#2770ca\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.focusRing.$root> <global/primitive/color.tokens.json#color.palette.blue.520> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08],\"hex\":\"#368bf6\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256],\"hex\":\"#468de8\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.focusRing.$root> <global/primitive/color.tokens.json#color.palette.blue.398> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing.constructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.551,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.focusRing.constructive> <global/semantic/color/light.tokens.json#color.border.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing.constructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.focusRing.constructive> <global/semantic/color/dark.tokens.json#color.border.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing.destructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5488,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.focusRing.destructive> <global/semantic/color/light.tokens.json#color.border.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing.destructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.focusRing.destructive> <global/semantic/color/dark.tokens.json#color.border.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5488,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.focusRing.error> <global/semantic/color/light.tokens.json#color.border.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.focusRing.error> <global/semantic/color/dark.tokens.json#color.border.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.551,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.focusRing.success> <global/semantic/color/light.tokens.json#color.border.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.focusRing.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.focusRing.success> <global/semantic/color/dark.tokens.json#color.border.success.$root> ) .
 
 []
@@ -612,27 +612,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.checkbox.selected ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.checkbox.selected.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.checkbox.selected ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.checkbox.selected.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.checkbox.selected.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.checkbox.selected.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.checkbox.selected.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.checkbox.selected.disabled> ) .
 
 []
@@ -1015,14 +1015,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0757,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.constructive.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.constructive.active> ) .
 
 []
@@ -1054,14 +1054,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0757,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.constructive.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.constructive.hover> ) .
 
 []
@@ -1080,14 +1080,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.layer2.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.92,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.92,0.0757,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.constructive.layer2.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.layer2.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.constructive.layer2.active> ) .
 
 []
@@ -1106,14 +1106,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.layer2.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0757,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.constructive.layer2.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.layer2.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.constructive.layer2.hover> ) .
 
 []
@@ -1132,14 +1132,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.layer3.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0757,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.constructive.layer3.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.layer3.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.constructive.layer3.active> ) .
 
 []
@@ -1158,14 +1158,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.layer3.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0757,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.constructive.layer3.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.constructive.layer3.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.constructive.layer3.hover> ) .
 
 []
@@ -1197,14 +1197,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0364,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.destructive.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.destructive.active> ) .
 
 []
@@ -1236,14 +1236,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0364,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.destructive.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.destructive.hover> ) .
 
 []
@@ -1262,14 +1262,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.layer2.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.92,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.92,0.0364,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.destructive.layer2.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.layer2.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.destructive.layer2.active> ) .
 
 []
@@ -1288,14 +1288,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.layer2.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0364,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.destructive.layer2.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.layer2.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.destructive.layer2.hover> ) .
 
 []
@@ -1314,14 +1314,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.layer3.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0364,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.destructive.layer3.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.layer3.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.destructive.layer3.active> ) .
 
 []
@@ -1340,14 +1340,14 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.layer3.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0364,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.ghost.destructive.layer3.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.ghost.destructive.layer3.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.ghost.destructive.layer3.hover> ) .
 
 []
@@ -1535,170 +1535,170 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9797,0.0055,31.05]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0058,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.187,0.0364,23.99]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.1864,0.035,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.98,0.0055,31.05]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.98,0.0058,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.19,0.0364,23.99]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.19,0.035,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.contrasted ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9583,0.0131,23.19]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0124,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.contrasted.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.contrasted ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.2283,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.contrasted.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,31.05]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.15,0.1,23.99]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.15,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0055,31.05]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0058,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0364,23.99]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.035,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer2 ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9583,0.0131,23.19]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0124,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.layer2.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer2 ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.2283,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.layer2.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer2.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[1,0.0131,23.19]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[1,0.0124,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.layer2.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer2.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.layer2.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer2.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,23.19]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.layer2.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer2.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.17,0.1,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.17,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.layer2.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer2.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0131,23.19]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0124,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.layer2.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer2.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0493,23.67]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0475,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.layer2.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer3 ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9797,0.0055,31.05]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0058,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.layer3.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer3 ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.187,0.0364,23.99]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.1864,0.035,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.layer3.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer3.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.98,0.0055,31.05]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.98,0.0058,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.layer3.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer3.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.19,0.0364,23.99]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.19,0.035,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.layer3.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer3.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,31.05]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.layer3.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer3.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.15,0.1,23.99]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.15,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.layer3.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer3.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0055,31.05]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0058,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.error.layer3.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.error.layer3.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0364,23.99]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.035,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.error.layer3.hover> ) .
 
 []
@@ -1821,170 +1821,170 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0101,145.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0103,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.189,0.0295,144.3]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.1864,0.0274,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.98,0.0101,145.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.98,0.0103,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.19,0.0295,144.3]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.19,0.0274,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.contrasted ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9586,0.0247,143.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0231,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.contrasted.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.contrasted ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.228,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.contrasted.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,145.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.15,0.1,144.3]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.15,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0101,145.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0103,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0295,144.3]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0274,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer2 ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9586,0.0247,143.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0231,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.layer2.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer2 ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.228,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.layer2.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer2.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[1,0.0247,143.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[1,0.0231,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.layer2.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer2.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.layer2.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer2.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,143.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.layer2.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer2.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.17,0.1,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.17,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.layer2.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer2.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0247,143.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.0231,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.layer2.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer2.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0373,144.23]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.27,0.0363,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.layer2.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer3 ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0101,145.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0103,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.layer3.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer3 ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.189,0.0295,144.3]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.1864,0.0274,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.layer3.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer3.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.98,0.0101,145.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.98,0.0103,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.layer3.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer3.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.19,0.0295,144.3]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.19,0.0274,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.layer3.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer3.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,145.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.99,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.layer3.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer3.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.15,0.1,144.3]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.15,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.layer3.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer3.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0101,145.5]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.94,0.0103,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.input.success.layer3.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.input.success.layer3.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0295,144.3]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.24,0.0274,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.input.success.layer3.hover> ) .
 
 []
@@ -2426,7 +2426,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.branded.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6,0.1941,37.76]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.7,0.1941,37.76]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.branded.active> ) .
 
 []
@@ -2439,7 +2439,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.branded.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,37.76]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,37.76]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.branded.disabled> ) .
 
 []
@@ -2452,7 +2452,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.branded.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.58,0.1941,37.76]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.67,0.1941,37.76]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.branded.hover> ) .
 
 []
@@ -2478,7 +2478,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.caution.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6,0.1384,67.1]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.7,0.1384,67.1]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.caution.active> ) .
 
 []
@@ -2491,7 +2491,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.caution.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,67.1]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,67.1]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.caution.disabled> ) .
 
 []
@@ -2504,111 +2504,111 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.caution.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.58,0.1384,67.1]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.67,0.1384,67.1]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.caution.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.constructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.551,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.constructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.constructive.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.constructive.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.constructive.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.7,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.constructive.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.constructive.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.constructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.constructive.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.constructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.constructive.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.constructive.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.constructive.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.58,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.67,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.constructive.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.destructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5488,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.destructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.destructive.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.destructive.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.destructive.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.7,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.destructive.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.destructive.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.destructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.destructive.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.destructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.destructive.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.destructive.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.destructive.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.58,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.67,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.destructive.hover> ) .
 
 []
@@ -2627,53 +2627,53 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5488,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.error.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.error.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.error.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.7,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.error.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.error.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.error.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.error.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.2107,23.83]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.1907,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.error.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.error.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.58,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.67,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.error.hover> ) .
 
 []
@@ -2692,105 +2692,105 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.information ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.information ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.information.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.1803,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.1572,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.information.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.information.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.7,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.information.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.information.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.information.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.information.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.1803,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.1572,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.information.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.information.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.58,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.67,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.information.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.551,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.success.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.51,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.success.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.success.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.7,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.success.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.success.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.success.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.success.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.1575,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.52,0.1339,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.primary.success.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.success.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.58,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.67,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.success.hover> ) .
 
 []
@@ -2816,7 +2816,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.warning.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6,0.1384,67.1]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.7,0.1384,67.1]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.warning.active> ) .
 
 []
@@ -2829,7 +2829,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.warning.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,67.1]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,67.1]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.warning.disabled> ) .
 
 []
@@ -2842,7 +2842,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.primary.warning.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.58,0.1384,67.1]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.67,0.1384,67.1]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.primary.warning.hover> ) .
 
 []
@@ -2939,27 +2939,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.radio.selected ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.radio.selected.$root> <global/semantic/color/light.tokens.json#color.foreground.checkbox.selected.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.radio.selected ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.radio.selected.$root> <global/semantic/color/dark.tokens.json#color.foreground.checkbox.selected.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.radio.selected.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.radio.selected.disabled> <global/semantic/color/light.tokens.json#color.foreground.checkbox.selected.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.radio.selected.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.radio.selected.disabled> <global/semantic/color/dark.tokens.json#color.foreground.checkbox.selected.disabled> ) .
 
 []
@@ -3134,7 +3134,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8975,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.$root> ) .
 
 []
@@ -3147,7 +3147,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.84,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.87,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.active> ) .
 
 []
@@ -3160,7 +3160,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.branded ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8979,0.0395,37.53]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0251,38]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.branded.$root> ) .
 
 []
@@ -3173,7 +3173,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.branded.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.84,0.0395,37.53]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.87,0.0251,38]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.branded.active> ) .
 
 []
@@ -3186,7 +3186,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.branded.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.1,37.53]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.95,0.1,38]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.branded.disabled> ) .
 
 []
@@ -3199,7 +3199,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.branded.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.86,0.0395,37.53]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.89,0.0251,38]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.branded.hover> ) .
 
 []
@@ -3212,7 +3212,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.category ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8975,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.category.$root> ) .
 
 []
@@ -3225,7 +3225,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.category.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.84,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.87,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.category.active> ) .
 
 []
@@ -3238,7 +3238,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.category.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.95,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.category.disabled> ) .
 
 []
@@ -3251,7 +3251,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.category.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.86,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.89,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.category.hover> ) .
 
 []
@@ -3264,7 +3264,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.95,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.disabled> ) .
 
 []
@@ -3277,59 +3277,59 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8976,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0237,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3335,0.0953,24.66]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3317,0.09,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.error.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.84,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.87,0.0237,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.error.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.error.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.38,0.0953,24.66]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.38,0.09,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.error.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.error.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.1,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.95,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.error.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.1,24.66]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.error.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.86,0.0384,23.87]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.89,0.0237,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.error.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.error.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.0953,24.66]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.09,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.error.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.86,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.89,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.hover> ) .
 
 []
@@ -3342,111 +3342,111 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.information ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0366,255.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0227,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.information ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3332,0.0875,255.77]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3317,0.0798,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.information.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.84,0.0366,255.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.87,0.0227,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.information.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.information.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.38,0.0875,255.77]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.38,0.0798,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.information.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.information.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.1,255.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.95,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.information.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.1,255.77]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.information.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.86,0.0366,255.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.89,0.0227,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.information.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.information.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.0875,255.77]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.0798,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.information.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8983,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0473,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3331,0.0672,144.49]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.3317,0.0643,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.success.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.84,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.87,0.0473,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.success.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.success.active ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.38,0.0672,144.49]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.38,0.0643,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.success.active> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.success.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.1,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.95,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.success.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.1,144.49]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.23,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.success.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.86,0.0804,143.81]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.89,0.0473,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.success.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.success.hover ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.0672,144.49]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.0643,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.secondary.success.hover> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.warning ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8983,0.0486,67.14]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0313,67]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.warning.$root> ) .
 
 []
@@ -3459,7 +3459,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.warning.active ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.84,0.0486,67.14]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.87,0.0313,67]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.warning.active> ) .
 
 []
@@ -3472,7 +3472,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.warning.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.96,0.1,67.14]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.95,0.1,67]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.warning.disabled> ) .
 
 []
@@ -3485,7 +3485,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.secondary.warning.hover ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.86,0.0486,67.14]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.89,0.0313,67]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.secondary.warning.hover> ) .
 
 []
@@ -3498,27 +3498,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.slider.progress ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.slider.progress.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.slider.progress ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.slider.progress.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.slider.progress.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.slider.progress.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.slider.progress.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.slider.progress.disabled> ) .
 
 []
@@ -3570,7 +3570,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.slider.track.endstop.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.slider.track.endstop.disabled> ) .
 
 []
@@ -3667,27 +3667,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.switch.selected ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.switch.selected.$root> <global/semantic/color/light.tokens.json#color.foreground.checkbox.selected.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.switch.selected ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.switch.selected.$root> <global/semantic/color/dark.tokens.json#color.foreground.checkbox.selected.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.switch.selected.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256.04]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.83,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.foreground.switch.selected.disabled> <global/semantic/color/light.tokens.json#color.foreground.checkbox.selected.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.switch.selected.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.switch.selected.disabled> <global/semantic/color/dark.tokens.json#color.foreground.checkbox.selected.disabled> ) .
 
 []
@@ -3713,7 +3713,7 @@
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.foreground.switch.unselected.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.32,0,0]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0,0]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.foreground.switch.unselected.disabled> ) .
 
 []
@@ -3758,53 +3758,53 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.constructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5,0.1355,143.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1181,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.constructive.$root> <global/semantic/color/light.tokens.json#color.text.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.constructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.constructive.$root> <global/semantic/color/dark.tokens.json#color.text.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.constructive.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,143.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.constructive.disabled> <global/semantic/color/light.tokens.json#color.text.constructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.constructive.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.constructive.disabled> <global/semantic/color/dark.tokens.json#color.text.constructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.destructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4993,0.1883,23.79]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1719,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.destructive.$root> <global/semantic/color/light.tokens.json#color.text.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.destructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.destructive.$root> <global/semantic/color/dark.tokens.json#color.text.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.destructive.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,23.79]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.destructive.disabled> <global/semantic/color/light.tokens.json#color.text.destructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.destructive.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.destructive.disabled> <global/semantic/color/dark.tokens.json#color.text.destructive.disabled> ) .
 
 []
@@ -3823,79 +3823,79 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4993,0.1883,23.79]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1719,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.error.$root> <global/semantic/color/light.tokens.json#color.text.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.error.$root> <global/semantic/color/dark.tokens.json#color.text.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.error.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,23.79]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.error.disabled> <global/semantic/color/light.tokens.json#color.text.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.error.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.error.disabled> <global/semantic/color/dark.tokens.json#color.text.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.information ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1635,256.12]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1445,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.information.$root> <global/semantic/color/light.tokens.json#color.text.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.information ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.information.$root> <global/semantic/color/dark.tokens.json#color.text.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.information.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,256.12]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.information.disabled> <global/semantic/color/light.tokens.json#color.text.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.information.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.information.disabled> <global/semantic/color/dark.tokens.json#color.text.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.link ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1635,256.12]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1445,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.link.$root> <global/semantic/color/light.tokens.json#color.text.link.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.link ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.link.$root> <global/semantic/color/dark.tokens.json#color.text.link.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.link.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8,0.1,256.12]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.link.disabled> <global/semantic/color/light.tokens.json#color.text.link.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.link.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.link.disabled> <global/semantic/color/dark.tokens.json#color.text.link.disabled> ) .
 
 []
@@ -4018,79 +4018,79 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4223,0.1451,23.93]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.1345,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.onForegroundSecondary.error.$root> <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8227,0.0804,23.7]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.0768,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.onForegroundSecondary.error.$root> <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.error.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,23.93]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.onForegroundSecondary.error.disabled> <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.error.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,23.7]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.onForegroundSecondary.error.disabled> <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.information ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4218,0.1294,255.95]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.1161,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.onForegroundSecondary.information.$root> <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.information ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8236,0.0735,255.56]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.0688,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.onForegroundSecondary.information.$root> <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.information.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,255.95]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.onForegroundSecondary.information.disabled> <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.information.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,255.56]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.onForegroundSecondary.information.disabled> <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4222,0.0981,143.94]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.0918,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.onForegroundSecondary.success.$root> <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8235,0.1488,143.84]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.1366,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.onForegroundSecondary.success.$root> <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.success.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,143.94]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.onForegroundSecondary.success.disabled> <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.onForegroundSecondary.success.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,143.84]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.onForegroundSecondary.success.disabled> <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.success.disabled> ) .
 
 []
@@ -4122,27 +4122,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5,0.1355,143.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1181,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.success.$root> <global/semantic/color/light.tokens.json#color.text.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.success.$root> <global/semantic/color/dark.tokens.json#color.text.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.success.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,143.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.icon.success.disabled> <global/semantic/color/light.tokens.json#color.text.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.icon.success.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.icon.success.disabled> <global/semantic/color/dark.tokens.json#color.text.success.disabled> ) .
 
 []
@@ -4221,6 +4221,12 @@
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.aubergine.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0204,335],\"hex\":\"#f0e2ed\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.aubergine.70> ) .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.aubergine.700 ;
     dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4217,0.1151,335.03],\"hex\":\"#723166\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.aubergine.700> ) .
@@ -4240,7 +4246,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.aubergine.960 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.2264,0,0],\"hex\":\"#1C1C1C\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1866,0.0287,335.44],\"hex\":\"#1B0E18\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.aubergine.960> ) .
 
 []
@@ -4258,79 +4264,85 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.100 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0366,255.96],\"hex\":\"#CEDFF6\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0343,256],\"hex\":\"#cfdff5\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.100> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.180 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8236,0.0735,255.56],\"hex\":\"#A6C8F5\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8228,0.0688,256],\"hex\":\"#a8c8f2\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.180> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.20 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.978,0.0062,255.47],\"hex\":\"#F5F8FC\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0058,256],\"hex\":\"#f6f8fc\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.20> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.280 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.7361,0.1249,255.7],\"hex\":\"#73ACF7\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.7354,0.1144,256],\"hex\":\"#78acf1\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.280> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.398 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08],\"hex\":\"#368bf6\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256],\"hex\":\"#468de8\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.398> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.40 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9589,0.0125,255.51],\"hex\":\"#ECF2FA\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0121,256],\"hex\":\"#ecf2f9\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.40> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.520 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.549,0.1803,256.04],\"hex\":\"#0F6ED7\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1572,256],\"hex\":\"#2770ca\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.520> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.590 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1635,256.12],\"hex\":\"#0D60BD\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1445,256],\"hex\":\"#2062b3\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.590> ) .
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.blue.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0227,256],\"hex\":\"#dee8f7\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.70> ) .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.700 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4218,0.1294,255.95],\"hex\":\"#114C92\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.421,0.1161,256],\"hex\":\"#1b4d8b\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.700> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.820 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.3332,0.0875,255.77],\"hex\":\"#133662\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.3317,0.0798,256],\"hex\":\"#17365e\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.820> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.930 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.2289,0.0465,255.85],\"hex\":\"#0D1D32\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0436,256],\"hex\":\"#0e1d31\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.930> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.960 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1896,0.0347,256.41],\"hex\":\"#091423\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1864,0.0326,256],\"hex\":\"#091321\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.960> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.blue.990 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1215,0.0193,259.05],\"hex\":\"#03060D\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1156,0.0182,256],\"hex\":\"#02050b\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.blue.990> ) .
 
 []
@@ -4383,6 +4395,12 @@
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.gray.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0,0],\"hex\":\"#e7e7e7\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.gray.70> ) .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.gray.700 ;
     dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4202,0,0],\"hex\":\"#4D4D4D\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.gray.700> ) .
@@ -4414,79 +4432,85 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.100 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8983,0.0804,143.81],\"hex\":\"#BEECBC\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0757,144],\"hex\":\"#c0ebbe\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.100> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.180 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8235,0.1488,143.84],\"hex\":\"#86DE85\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8228,0.1366,144],\"hex\":\"#8cdc8b\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.180> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.20 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0101,145.5],\"hex\":\"#F4FAF4\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0103,144],\"hex\":\"#f4faf4\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.20> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.280 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.735,0.1708,143.94],\"hex\":\"#5CC45E\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.7354,0.1573,144],\"hex\":\"#64c266\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.280> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.398 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01],\"hex\":\"#38a63e\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144],\"hex\":\"#49a34b\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.398> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.40 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9586,0.0247,143.5],\"hex\":\"#E8F6E7\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0231,144],\"hex\":\"#e8f6e8\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.40> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.520 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.551,0.1575,144.01],\"hex\":\"#25882C\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1339,144],\"hex\":\"#37853a\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.520> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.590 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.5,0.1355,143.96],\"hex\":\"#26762A\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1181,144],\"hex\":\"#327434\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.590> ) .
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.green.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0473,144],\"hex\":\"#d5f0d4\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.70> ) .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.700 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4222,0.0981,143.94],\"hex\":\"#275B28\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.421,0.0918,144],\"hex\":\"#2a5a2b\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.700> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.820 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.3331,0.0672,144.49],\"hex\":\"#1E3F1F\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.3317,0.0643,144],\"hex\":\"#1f3e20\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.820> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.930 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.228,0.0373,144.23],\"hex\":\"#112111\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0363,144],\"hex\":\"#112111\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.930> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.960 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.189,0.0295,144.3],\"hex\":\"#0B170B\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1864,0.0274,144],\"hex\":\"#0b160b\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.960> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.green.990 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1194,0.0171,144.41],\"hex\":\"#030703\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1156,0.0154,144],\"hex\":\"#030603\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.green.990> ) .
 
 []
@@ -4536,6 +4560,12 @@
     dt:forSymbol dt:color.palette.orange.590 ;
     dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4991,0.157,37.79],\"hex\":\"#A9370C\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.orange.590> ) .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.orange.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0251,38],\"hex\":\"#f7e2db\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.orange.70> ) .
 
 []
     a dt:ResolvedValue ;
@@ -4617,6 +4647,12 @@
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.purple.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0.025,290],\"hex\":\"#e6e5f7\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.purple.70> ) .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.purple.700 ;
     dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4216,0.2006,289.92],\"hex\":\"#5325B0\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.purple.700> ) .
@@ -4648,79 +4684,85 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.100 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8976,0.0384,23.87],\"hex\":\"#F6D4D1\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8981,0.0364,24],\"hex\":\"#f5d5d2\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.100> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.180 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8227,0.0804,23.7],\"hex\":\"#F5B1AC\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.8228,0.0768,24],\"hex\":\"#f3b2ad\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.180> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.20 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9797,0.0055,31.05],\"hex\":\"#FCF7F6\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9789,0.0058,24],\"hex\":\"#fcf7f6\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.20> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.280 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.736,0.144,24.23],\"hex\":\"#F7827C\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.7354,0.1354,24],\"hex\":\"#f3857f\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.280> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.398 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11],\"hex\":\"#f53e45\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24],\"hex\":\"#eb4c4e\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.398> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.40 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9583,0.0131,23.19],\"hex\":\"#FAEEED\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9581,0.0124,24],\"hex\":\"#faeeed\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.40> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.520 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.5488,0.2107,23.83],\"hex\":\"#D0192D\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.5491,0.1907,24],\"hex\":\"#c92e35\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.520> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.590 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4993,0.1883,23.79],\"hex\":\"#B61928\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1719,24],\"hex\":\"#b0282e\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.590> ) .
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.red.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0237,24],\"hex\":\"#f7e1df\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.70> ) .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.700 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4223,0.1451,23.93],\"hex\":\"#8C1E23\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.421,0.1345,24],\"hex\":\"#882426\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.700> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.820 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.3335,0.0953,24.66],\"hex\":\"#5E1D1C\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.3317,0.09,24],\"hex\":\"#5c1f1e\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.820> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.930 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.2283,0.0493,23.67],\"hex\":\"#301211\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.2282,0.0475,24],\"hex\":\"#2f1311\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.930> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.960 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.187,0.0364,23.99],\"hex\":\"#210C0B\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1864,0.035,24],\"hex\":\"#200c0b\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.960> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.red.990 ;
-    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1218,0.019,31.68],\"hex\":\"#0C0403\"}"^^rdf:JSON ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.1156,0.0192,24],\"hex\":\"#0b0303\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.red.990> ) .
 
 []
@@ -4770,6 +4812,12 @@
     dt:forSymbol dt:color.palette.teal.590 ;
     dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4986,0.0833,205.9],\"hex\":\"#09707A\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.teal.590> ) .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.teal.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0372,205],\"hex\":\"#cbeff3\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.teal.70> ) .
 
 []
     a dt:ResolvedValue ;
@@ -4857,6 +4905,12 @@
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:color.palette.yellow.70 ;
+    dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.9277,0.0313,67],\"hex\":\"#f6e4d2\"}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.yellow.70> ) .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:color.palette.yellow.700 ;
     dt:resolvesTo "{\"alpha\":1,\"colorSpace\":\"oklch\",\"components\":[0.4226,0.0882,67.69],\"hex\":\"#6D4309\"}"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/color.tokens.json#color.palette.yellow.700> ) .
@@ -4927,27 +4981,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.constructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5,0.1355,143.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1181,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.constructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.constructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.constructive.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,143.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.constructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.constructive.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.constructive.disabled> ) .
 
 []
@@ -4966,27 +5020,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.destructive ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4993,0.1883,23.79]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1719,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.destructive ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.destructive.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.destructive.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,23.79]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.destructive.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.destructive.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.destructive.disabled> ) .
 
 []
@@ -5005,79 +5059,79 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4993,0.1883,23.79]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1719,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6418,0.2184,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1953,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.error.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,23.79]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.error.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,24.11]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.information ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1635,256.12]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1445,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.information ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.information.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,256.12]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.information.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.link ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1635,256.12]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1445,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.link.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.link ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1793,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1549,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.link.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.link.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8,0.1,256.12]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.link.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.link.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256.08]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.36,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.link.disabled> ) .
 
 []
@@ -5213,79 +5267,79 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.error ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4223,0.1451,23.93]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.1345,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.error ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8227,0.0804,23.7]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.0768,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.error.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.error.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,23.93]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.error.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,23.7]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,24]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.error.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.information ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4218,0.1294,255.95]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.1161,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.information ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8236,0.0735,255.56]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.0688,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.information.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.information.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,255.95]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.information.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,255.56]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,256]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.information.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4222,0.0981,143.94]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.421,0.0918,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8235,0.1488,143.84]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.8228,0.1366,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.success.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,143.94]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.77,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.onForegroundSecondary.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.onForegroundSecondary.success.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,143.84]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.41,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.onForegroundSecondary.success.disabled> ) .
 
 []
@@ -5317,27 +5371,27 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.success ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.5,0.1355,143.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.4989,0.1181,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.success ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6405,0.1743,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.6403,0.1525,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.success.$root> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.success.disabled ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,143.96]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.69,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/light.tokens.json#color.text.success.disabled> ) .
 
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:color.text.success.disabled ;
     dt:coordinate dt:coordinate.mode.dark ;
-    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,144.01]}"^^rdf:JSON ;
+    dt:resolvesTo "{\"colorSpace\":\"oklch\",\"components\":[0.45,0.1,144]}"^^rdf:JSON ;
     dt:resolutionChain ( <global/semantic/color/dark.tokens.json#color.text.success.disabled> ) .
 
 []
@@ -6251,7 +6305,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:number.lightness.foreground.primary.active.onDark ;
-    dt:resolvesTo "0.6"^^rdf:JSON ;
+    dt:resolvesTo "0.7"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/number.tokens.json#number.lightness.foreground.primary.active.onDark> ) .
 
 []
@@ -6263,7 +6317,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:number.lightness.foreground.primary.disabled.onDark ;
-    dt:resolvesTo "0.32"^^rdf:JSON ;
+    dt:resolvesTo "0.36"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/number.tokens.json#number.lightness.foreground.primary.disabled.onDark> ) .
 
 []
@@ -6275,7 +6329,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:number.lightness.foreground.primary.hover.onDark ;
-    dt:resolvesTo "0.58"^^rdf:JSON ;
+    dt:resolvesTo "0.67"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/number.tokens.json#number.lightness.foreground.primary.hover.onDark> ) .
 
 []
@@ -6329,7 +6383,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:number.lightness.foreground.secondary.active.onLight ;
-    dt:resolvesTo "0.84"^^rdf:JSON ;
+    dt:resolvesTo "0.87"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/number.tokens.json#number.lightness.foreground.secondary.active.onLight> ) .
 
 []
@@ -6341,7 +6395,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:number.lightness.foreground.secondary.disabled.onLight ;
-    dt:resolvesTo "0.96"^^rdf:JSON ;
+    dt:resolvesTo "0.95"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/number.tokens.json#number.lightness.foreground.secondary.disabled.onLight> ) .
 
 []
@@ -6353,7 +6407,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:number.lightness.foreground.secondary.hover.onLight ;
-    dt:resolvesTo "0.86"^^rdf:JSON ;
+    dt:resolvesTo "0.89"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/number.tokens.json#number.lightness.foreground.secondary.hover.onLight> ) .
 
 []
@@ -6527,7 +6581,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:number.opacity.backdrop ;
-    dt:resolvesTo "0.15"^^rdf:JSON ;
+    dt:resolvesTo "0.5"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/number.tokens.json#number.opacity.backdrop> ) .
 
 []
