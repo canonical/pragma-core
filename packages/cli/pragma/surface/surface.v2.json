@@ -281,6 +281,7 @@
             "--name",
             "--type",
             "--description",
+            "--framework",
             "--with-react",
             "--with-storybook",
             "--with-cli",

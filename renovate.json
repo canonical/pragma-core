@@ -13,6 +13,18 @@
       ],
       "depNameTemplate": "@canonical/react-ds-global",
       "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "description": "The pragma-web release that summon-package's framework templates pin generated packages to; tracked through @canonical/react-ds-global, which is released at that version",
+      "managerFilePatterns": [
+        "/^packages/summon/package/src/shared/versions\\.ts$/"
+      ],
+      "matchStrings": [
+        "export const PRAGMA_WEB_VERSION = \"(?<currentValue>[^\"]+)\";"
+      ],
+      "depNameTemplate": "@canonical/react-ds-global",
+      "datasourceTemplate": "npm"
     }
   ],
   "packageRules": [

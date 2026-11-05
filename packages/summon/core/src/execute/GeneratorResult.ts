@@ -21,4 +21,12 @@ export interface GeneratorResult {
   readonly answers: Record<string, unknown>;
   /** A dry-run preview of the effects the generation performed. */
   readonly effects: Effect[];
+  /**
+   * The warnings the generation emitted, in order.
+   *
+   * Read from the preview's `Log` effects at warn level, so a caller that
+   * receives the result (the MCP/JSON outcome, not just a terminal) can show
+   * the same coercions and deprecations the interactive run prints.
+   */
+  readonly warnings: readonly string[];
 }

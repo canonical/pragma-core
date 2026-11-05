@@ -14,6 +14,7 @@ import {
   pure,
   sequence_,
   type Task,
+  warn,
   writeFile,
 } from "@canonical/task";
 import { runTask } from "@canonical/task/node";
@@ -59,6 +60,36 @@ describe("execute — the summon↔pragma seam", () => {
     expect(value.answers).toEqual({ path: "out.txt", flavor: "a" });
     expect(effects.some((e) => e._tag === "WriteFile")).toBe(true);
     expect(value.effects.some((e) => e._tag === "WriteFile")).toBe(true);
+  });
+
+  it("reconciles the answer set before generating and returns it", () => {
+    const reconciling: GeneratorDefinition = {
+      ...fixture,
+      reconcileAnswers: (answers) => ({ ...answers, flavor: "b" }),
+      generate: (a) =>
+        sequence_([writeFile(String(a.path), `flavor=${a.flavor}\n`)]),
+    };
+    const { value, effects } = dryRun(
+      execute(reconciling, { prompt: autoPrompt({}), params: {} }),
+    );
+
+    expect(value.answers).toEqual({ path: "out.txt", flavor: "b" });
+    const written = effects.find((e) => e._tag === "WriteFile") as
+      | { content: string }
+      | undefined;
+    expect(written?.content).toBe("flavor=b\n");
+  });
+
+  it("carries the generation's warnings in the result", () => {
+    const noisy: GeneratorDefinition = {
+      ...fixture,
+      generate: () => sequence_([warn("coerced a value"), mkdir(".")]),
+    };
+    const { value } = dryRun(
+      execute(noisy, { prompt: autoPrompt({}), params: {} }),
+    );
+
+    expect(value.warnings).toEqual(["coerced a value"]);
   });
 
   it("performs the generation for real, honouring provided params", async () => {

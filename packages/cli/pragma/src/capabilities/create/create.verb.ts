@@ -256,10 +256,13 @@ export async function runCreate(
   const generator = pickGenerator(commandPath);
   const kind = kindOf(commandPath);
 
-  // The tree segment is not an answer: drop a stray `framework` key so the
-  // generators (whose prompts never include it) see only their own answers.
+  // For `create component`, the tree segment is not an answer: drop a stray
+  // `framework` key so the generator (whose prompts never include it) sees
+  // only its own answers. Every other kind carries `framework` as a real
+  // prompt — `package` is where a library chooses none|react|svelte — so it
+  // must survive.
   const answers: Record<string, unknown> = { ...params };
-  delete answers.framework;
+  if (kind === "component") delete answers.framework;
 
   // Reject a flag/arg-provided answer that fails its prompt's own constraint,
   // with a clean INVALID_INPUT (execute re-validates as a backstop). Runs
