@@ -386,6 +386,33 @@ There is no derivation step, no `references.yaml` and no register category for a
 stylesheet fact: reading an implementation and choosing the node, the key and the
 symbol is judgement, which is why it happens in a file under review.
 
+## Commenting Guidelines
+
+### General rules
+
+- **Purpose:** Explain **why** decisions were made rather than repeat **what** the Anatomy DSL already describes.
+- **Brevity:** Keep comments concise and factual.
+- **Maintenance:** Review and update comments whenever the anatomy changes.
+- **Placement:** Place comments immediately above the relevant property or node, not inline.
+- **Omitted elements:** Place comments for omitted anatomy or styling properties immediately above the relevant YAML `styles` block, or above the relevant node for omitted structural features.
+- **Omission prefix:** Start comments for omitted properties or structural features with `# Omitted:`, identifying what was omitted and why.
+
+### Required comments
+
+Include the following comments when applicable:
+
+- **Source references:** In the YAML header, identify the source used to create the anatomy (e.g., an implementation file and CSS selector, or a design file or component URL).
+- **Non-obvious decisions:** Explain structural choices, exceptions, agreed assumptions, or limitations when the reason is not clear from the DSL. This includes CSS pseudo-elements and anonymous nodes used for components that do not yet exist.
+- **Unsupported properties and structures:** Document anatomy or styling properties and structural features that cannot be represented in the DSL, explaining why they were omitted.
+- **Differences:** Explain any known differences between the documented anatomy and the design or implementation specifications, identifying what differs and why.
+
+### Excluded comments
+
+- **Redundant information:** Avoid repeating node names, roles, properties, tokens, or relationships already expressed in the DSL.
+- **Outdated information:** Remove previous-version details, old decisions, and resolved limitations. Keep historical information in version history or changelogs instead.
+- **Irrelevant implementation details:** Exclude implementation details that do not help explain the anatomy.
+- **Unverified information:** Do not present unsupported assumptions or guesses as facts, including speculation about future implementations. Flag open decisions for review instead.
+
 ## DSL Reference
 
 ### YAML Format
@@ -1596,7 +1623,7 @@ When creating an anatomy, respond with:
 2. **Use discovery**: Query existing components for patterns and consistency
 3. **Name thoughtfully**: URIs are identifiers - choose clear, consistent names
    (see the URI Encoding Convention table above)
-4. **Annotate decisions**: Use YAML comments for non-obvious choices
+4. **Annotate decisions**: Follow the [Commenting Guidelines](#commenting-guidelines)
 5. **Validate cardinality**: Think through edge cases (empty states, maximums)
 6. **Separate concerns**: Structural styles vs themeable styles
 7. **Anonymous nodes are OK**: Don't force DS identity on pure wrappers
