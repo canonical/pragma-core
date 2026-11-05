@@ -40,6 +40,15 @@
           },
           "$description": "Primitive gray shade 40"
         },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0, 0],
+            "alpha": 1,
+            "hex": "#e7e7e7"
+          },
+          "$description": "Primitive gray shade 70"
+        },
         "100": {
           "$value": {
             "colorSpace": "oklch",
@@ -158,6 +167,15 @@
             "hex": "#FAEEEB"
           },
           "$description": "Primitive orange shade 40"
+        },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0.0251, 38],
+            "alpha": 1,
+            "hex": "#f7e2db"
+          },
+          "$description": "Primitive orange shade 70"
         },
         "100": {
           "$value": {
@@ -278,6 +296,15 @@
           },
           "$description": "Primitive teal shade 40"
         },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0.0372, 205],
+            "alpha": 1,
+            "hex": "#cbeff3"
+          },
+          "$description": "Primitive teal shade 70"
+        },
         "100": {
           "$value": {
             "colorSpace": "oklch",
@@ -382,117 +409,126 @@
         "20": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.978, 0.0062, 255.47],
+            "components": [0.9789, 0.0058, 256],
             "alpha": 1,
-            "hex": "#F5F8FC"
+            "hex": "#f6f8fc"
           },
           "$description": "Primitive blue shade 20"
         },
         "40": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.9589, 0.0125, 255.51],
+            "components": [0.9581, 0.0121, 256],
             "alpha": 1,
-            "hex": "#ECF2FA"
+            "hex": "#ecf2f9"
           },
           "$description": "Primitive blue shade 40"
+        },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0.0227, 256],
+            "alpha": 1,
+            "hex": "#dee8f7"
+          },
+          "$description": "Primitive blue shade 70"
         },
         "100": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.8981, 0.0366, 255.96],
+            "components": [0.8981, 0.0343, 256],
             "alpha": 1,
-            "hex": "#CEDFF6"
+            "hex": "#cfdff5"
           },
           "$description": "Primitive blue shade 100"
         },
         "180": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.8236, 0.0735, 255.56],
+            "components": [0.8228, 0.0688, 256],
             "alpha": 1,
-            "hex": "#A6C8F5"
+            "hex": "#a8c8f2"
           },
           "$description": "Primitive blue shade 180"
         },
         "280": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.7361, 0.1249, 255.7],
+            "components": [0.7354, 0.1144, 256],
             "alpha": 1,
-            "hex": "#73ACF7"
+            "hex": "#78acf1"
           },
           "$description": "Primitive blue shade 280"
         },
         "398": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.6405, 0.1793, 256.08],
+            "components": [0.6403, 0.1549, 256],
             "alpha": 1,
-            "hex": "#368bf6"
+            "hex": "#468de8"
           },
           "$description": "Primitive blue shade 398"
         },
         "520": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.549, 0.1803, 256.04],
+            "components": [0.5491, 0.1572, 256],
             "alpha": 1,
-            "hex": "#0F6ED7"
+            "hex": "#2770ca"
           },
           "$description": "Primitive blue shade 520"
         },
         "590": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.4989, 0.1635, 256.12],
+            "components": [0.4989, 0.1445, 256],
             "alpha": 1,
-            "hex": "#0D60BD"
+            "hex": "#2062b3"
           },
           "$description": "Primitive blue shade 590"
         },
         "700": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.4218, 0.1294, 255.95],
+            "components": [0.421, 0.1161, 256],
             "alpha": 1,
-            "hex": "#114C92"
+            "hex": "#1b4d8b"
           },
           "$description": "Primitive blue shade 700"
         },
         "820": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.3332, 0.0875, 255.77],
+            "components": [0.3317, 0.0798, 256],
             "alpha": 1,
-            "hex": "#133662"
+            "hex": "#17365e"
           },
           "$description": "Primitive blue shade 820"
         },
         "930": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.2289, 0.0465, 255.85],
+            "components": [0.2282, 0.0436, 256],
             "alpha": 1,
-            "hex": "#0D1D32"
+            "hex": "#0e1d31"
           },
           "$description": "Primitive blue shade 930"
         },
         "960": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.1896, 0.0347, 256.41],
+            "components": [0.1864, 0.0326, 256],
             "alpha": 1,
-            "hex": "#091423"
+            "hex": "#091321"
           },
           "$description": "Primitive blue shade 960"
         },
         "990": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.1215, 0.0193, 259.05],
+            "components": [0.1156, 0.0182, 256],
             "alpha": 1,
-            "hex": "#03060D"
+            "hex": "#02050b"
           },
           "$description": "Primitive blue shade 990"
         }
@@ -515,6 +551,15 @@
             "hex": "#F1F0FA"
           },
           "$description": "Primitive purple shade 40"
+        },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0.025, 290],
+            "alpha": 1,
+            "hex": "#e6e5f7"
+          },
+          "$description": "Primitive purple shade 70"
         },
         "100": {
           "$value": {
@@ -620,97 +665,106 @@
         "20": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.9789, 0.0101, 145.5],
+            "components": [0.9789, 0.0103, 144],
             "alpha": 1,
-            "hex": "#F4FAF4"
+            "hex": "#f4faf4"
           },
           "$description": "Primitive green shade 20"
         },
         "40": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.9586, 0.0247, 143.5],
+            "components": [0.9581, 0.0231, 144],
             "alpha": 1,
-            "hex": "#E8F6E7"
+            "hex": "#e8f6e8"
           },
           "$description": "Primitive green shade 40"
+        },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0.0473, 144],
+            "alpha": 1,
+            "hex": "#d5f0d4"
+          },
+          "$description": "Primitive green shade 70"
         },
         "100": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.8983, 0.0804, 143.81],
+            "components": [0.8981, 0.0757, 144],
             "alpha": 1,
-            "hex": "#BEECBC"
+            "hex": "#c0ebbe"
           },
           "$description": "Primitive green shade 100"
         },
         "180": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.8235, 0.1488, 143.84],
+            "components": [0.8228, 0.1366, 144],
             "alpha": 1,
-            "hex": "#86DE85"
+            "hex": "#8cdc8b"
           },
           "$description": "Primitive green shade 180"
         },
         "280": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.735, 0.1708, 143.94],
+            "components": [0.7354, 0.1573, 144],
             "alpha": 1,
-            "hex": "#5CC45E"
+            "hex": "#64c266"
           },
           "$description": "Primitive green shade 280"
         },
         "398": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.6405, 0.1743, 144.01],
+            "components": [0.6403, 0.1525, 144],
             "alpha": 1,
-            "hex": "#38a63e"
+            "hex": "#49a34b"
           },
           "$description": "Primitive green shade 398"
         },
         "520": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.551, 0.1575, 144.01],
+            "components": [0.5491, 0.1339, 144],
             "alpha": 1,
-            "hex": "#25882C"
+            "hex": "#37853a"
           },
           "$description": "Primitive green shade 520"
         },
         "590": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.5, 0.1355, 143.96],
+            "components": [0.4989, 0.1181, 144],
             "alpha": 1,
-            "hex": "#26762A"
+            "hex": "#327434"
           },
           "$description": "Primitive green shade 590"
         },
         "700": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.4222, 0.0981, 143.94],
+            "components": [0.421, 0.0918, 144],
             "alpha": 1,
-            "hex": "#275B28"
+            "hex": "#2a5a2b"
           },
           "$description": "Primitive green shade 700"
         },
         "820": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.3331, 0.0672, 144.49],
+            "components": [0.3317, 0.0643, 144],
             "alpha": 1,
-            "hex": "#1E3F1F"
+            "hex": "#1f3e20"
           },
           "$description": "Primitive green shade 820"
         },
         "930": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.228, 0.0373, 144.23],
+            "components": [0.2282, 0.0363, 144],
             "alpha": 1,
             "hex": "#112111"
           },
@@ -719,18 +773,18 @@
         "960": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.189, 0.0295, 144.3],
+            "components": [0.1864, 0.0274, 144],
             "alpha": 1,
-            "hex": "#0B170B"
+            "hex": "#0b160b"
           },
           "$description": "Primitive green shade 960"
         },
         "990": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.1194, 0.0171, 144.41],
+            "components": [0.1156, 0.0154, 144],
             "alpha": 1,
-            "hex": "#030703"
+            "hex": "#030603"
           },
           "$description": "Primitive green shade 990"
         }
@@ -739,117 +793,126 @@
         "20": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.9797, 0.0055, 31.05],
+            "components": [0.9789, 0.0058, 24],
             "alpha": 1,
-            "hex": "#FCF7F6"
+            "hex": "#fcf7f6"
           },
           "$description": "Primitive red shade 20"
         },
         "40": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.9583, 0.0131, 23.19],
+            "components": [0.9581, 0.0124, 24],
             "alpha": 1,
-            "hex": "#FAEEED"
+            "hex": "#faeeed"
           },
           "$description": "Primitive red shade 40"
+        },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0.0237, 24],
+            "alpha": 1,
+            "hex": "#f7e1df"
+          },
+          "$description": "Primitive red shade 70"
         },
         "100": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.8976, 0.0384, 23.87],
+            "components": [0.8981, 0.0364, 24],
             "alpha": 1,
-            "hex": "#F6D4D1"
+            "hex": "#f5d5d2"
           },
           "$description": "Primitive red shade 100"
         },
         "180": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.8227, 0.0804, 23.7],
+            "components": [0.8228, 0.0768, 24],
             "alpha": 1,
-            "hex": "#F5B1AC"
+            "hex": "#f3b2ad"
           },
           "$description": "Primitive red shade 180"
         },
         "280": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.736, 0.144, 24.23],
+            "components": [0.7354, 0.1354, 24],
             "alpha": 1,
-            "hex": "#F7827C"
+            "hex": "#f3857f"
           },
           "$description": "Primitive red shade 280"
         },
         "398": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.6418, 0.2184, 24.11],
+            "components": [0.6403, 0.1953, 24],
             "alpha": 1,
-            "hex": "#f53e45"
+            "hex": "#eb4c4e"
           },
           "$description": "Primitive red shade 398"
         },
         "520": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.5488, 0.2107, 23.83],
+            "components": [0.5491, 0.1907, 24],
             "alpha": 1,
-            "hex": "#D0192D"
+            "hex": "#c92e35"
           },
           "$description": "Primitive red shade 520"
         },
         "590": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.4993, 0.1883, 23.79],
+            "components": [0.4989, 0.1719, 24],
             "alpha": 1,
-            "hex": "#B61928"
+            "hex": "#b0282e"
           },
           "$description": "Primitive red shade 590"
         },
         "700": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.4223, 0.1451, 23.93],
+            "components": [0.421, 0.1345, 24],
             "alpha": 1,
-            "hex": "#8C1E23"
+            "hex": "#882426"
           },
           "$description": "Primitive red shade 700"
         },
         "820": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.3335, 0.0953, 24.66],
+            "components": [0.3317, 0.09, 24],
             "alpha": 1,
-            "hex": "#5E1D1C"
+            "hex": "#5c1f1e"
           },
           "$description": "Primitive red shade 820"
         },
         "930": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.2283, 0.0493, 23.67],
+            "components": [0.2282, 0.0475, 24],
             "alpha": 1,
-            "hex": "#301211"
+            "hex": "#2f1311"
           },
           "$description": "Primitive red shade 930"
         },
         "960": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.187, 0.0364, 23.99],
+            "components": [0.1864, 0.035, 24],
             "alpha": 1,
-            "hex": "#210C0B"
+            "hex": "#200c0b"
           },
           "$description": "Primitive red shade 960"
         },
         "990": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.1218, 0.019, 31.68],
+            "components": [0.1156, 0.0192, 24],
             "alpha": 1,
-            "hex": "#0C0403"
+            "hex": "#0b0303"
           },
           "$description": "Primitive red shade 990"
         }
@@ -872,6 +935,15 @@
             "hex": "#F6EFF4"
           },
           "$description": "Primitive aubergine shade 40"
+        },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0.0204, 335],
+            "alpha": 1,
+            "hex": "#f0e2ed"
+          },
+          "$description": "Primitive aubergine shade 70"
         },
         "100": {
           "$value": {
@@ -957,9 +1029,9 @@
         "960": {
           "$value": {
             "colorSpace": "oklch",
-            "components": [0.2264, 0, 0],
+            "components": [0.1866, 0.0287, 335.44],
             "alpha": 1,
-            "hex": "#1C1C1C"
+            "hex": "#1B0E18"
           },
           "$description": "Primitive aubergine shade 960"
         },
@@ -991,6 +1063,15 @@
             "hex": "#F9EFE6"
           },
           "$description": "Primitive yellow shade 40"
+        },
+        "70": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9277, 0.0313, 67],
+            "alpha": 1,
+            "hex": "#f6e4d2"
+          },
+          "$description": "Primitive yellow shade 70"
         },
         "100": {
           "$value": {

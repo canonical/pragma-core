@@ -10,8 +10,8 @@
  *
  * Three strata, and the split is the law's:
  *
- *   S1  the authored symbols (720)
- *   S2  the channels coverage mints (25)          — together, the 745 the law resolves against
+ *   S1  the authored symbols (729)
+ *   S2  the channels coverage mints (25)          — together, the 754 the law resolves against
  *   S4  the web platform's variables              — read only by the derivation's name
  *                                                   lift and by the register's X15
  *

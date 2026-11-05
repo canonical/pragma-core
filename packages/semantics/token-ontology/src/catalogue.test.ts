@@ -109,7 +109,7 @@ describe("KNOWN_CHANNELS partitions the channel variables", () => {
 
 describe("the six laws", () => {
   it("L1 records every declaration, and one foreign property", () => {
-    expect(findings.l1.declarations).toBe(1904);
+    expect(findings.l1.declarations).toBe(1913);
     expect(findings.l1.files).toBe(11);
     // `color-scheme` is not a custom property, so no term holds it. Pinned so
     // a second foreign property is a decision rather than a surprise.
@@ -122,12 +122,12 @@ describe("the six laws", () => {
   });
 
   it("L3 joins every symbol-bearing declaration to a resolved value", () => {
-    // Zero missing is the law. `matched` rose from 1,204 to 1,369 when the 25
+    // Zero missing is the law. `matched` rose from 1,204 to 1,378 when the 25
     // channels gained dt:ofSymbol and S3 gained their 165 positions, and
     // `no-symbol` fell by the same 165.
     expect(findings.l3.missing).toBe(0);
     expect(findings.l3.declined).toBe(0);
-    expect(findings.l3.matched).toBe(1369);
+    expect(findings.l3.matched).toBe(1378);
     expect(findings.l3.noSymbol).toBe(796);
     // The typography slots, PRA-157: artifact ids that are not symbols, so
     // they carry no dt:ofSymbol rather than a dangling IRI.
@@ -144,7 +144,7 @@ describe("the six laws", () => {
   });
 
   it("L6 leaves 29 variables reaching no symbol, in two known populations", () => {
-    expect(findings.l6.total).toBe(1156);
+    expect(findings.l6.total).toBe(1165);
     expect(findings.l6.unreachable).toBe(29);
     expect(findings.l6.groups).toEqual({
       // 16 --delta-* lightness offsets: each is the value of a number.* symbol
@@ -313,7 +313,7 @@ describe("the variables a value names", () => {
 
 describe("the two spellings a symbol can carry", () => {
   /**
-   * S4 gives 204 of the 716 symbols that have a variable TWO variables — the
+   * S4 gives 204 of the 725 symbols that have a variable TWO variables — the
    * kebab-case name and the camelCase legacy name the build still emits — and
    * nothing in the graph marks either one canonical. ADR §3.4 assigns that
    * rule to J-1 and §3.7's row X9 records it as settled; it is neither, and it
@@ -340,10 +340,10 @@ describe("the two spellings a symbol can carry", () => {
     histogram.set(variables.length, (histogram.get(variables.length) ?? 0) + 1);
   const pairs = [...bySymbol].filter(([, v]) => v.length === 2);
 
-  it("gives 204 of the 716 symbols with a variable exactly two", () => {
-    expect(bySymbol.size).toBe(716);
+  it("gives 204 of the 725 symbols with a variable exactly two", () => {
+    expect(bySymbol.size).toBe(725);
     expect(Object.fromEntries([...histogram].sort())).toEqual({
-      1: 512,
+      1: 521,
       2: 204,
     });
   });

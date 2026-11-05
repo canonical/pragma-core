@@ -5,17 +5,17 @@
     "backdrop": {
       "$value": {
         "colorSpace": {
-          "$ref": "#/color/palette/black/$value/colorSpace"
+          "$ref": "#/color/palette/gray/100/$value/colorSpace"
         },
         "components": [
           {
-            "$ref": "#/color/palette/black/$value/components/0"
+            "$ref": "#/color/palette/gray/100/$value/components/0"
           },
           {
-            "$ref": "#/color/palette/black/$value/components/1"
+            "$ref": "#/color/palette/gray/100/$value/components/1"
           },
           {
-            "$ref": "#/color/palette/black/$value/components/2"
+            "$ref": "#/color/palette/gray/100/$value/components/2"
           }
         ],
         "alpha": {
@@ -3664,17 +3664,17 @@
         "$root": {
           "$value": {
             "colorSpace": {
-              "$ref": "#/color/palette/gray/100/$value/colorSpace"
+              "$ref": "#/color/palette/gray/70/$value/colorSpace"
             },
             "components": [
               {
-                "$ref": "#/color/palette/gray/100/$value/components/0"
+                "$ref": "#/color/palette/gray/70/$value/components/0"
               },
               {
-                "$ref": "#/color/palette/gray/100/$value/components/1"
+                "$ref": "#/color/palette/gray/70/$value/components/1"
               },
               {
-                "$ref": "#/color/palette/gray/100/$value/components/2"
+                "$ref": "#/color/palette/gray/70/$value/components/2"
               }
             ]
           },
@@ -3683,17 +3683,17 @@
         "hover": {
           "$value": {
             "colorSpace": {
-              "$ref": "#/color/palette/gray/100/$value/colorSpace"
+              "$ref": "#/color/palette/gray/70/$value/colorSpace"
             },
             "components": [
               {
                 "$ref": "#/number/lightness/foreground/secondary/hover/onLight/$value"
               },
               {
-                "$ref": "#/color/palette/gray/100/$value/components/1"
+                "$ref": "#/color/palette/gray/70/$value/components/1"
               },
               {
-                "$ref": "#/color/palette/gray/100/$value/components/2"
+                "$ref": "#/color/palette/gray/70/$value/components/2"
               }
             ]
           },
@@ -3702,17 +3702,17 @@
         "active": {
           "$value": {
             "colorSpace": {
-              "$ref": "#/color/palette/gray/100/$value/colorSpace"
+              "$ref": "#/color/palette/gray/70/$value/colorSpace"
             },
             "components": [
               {
                 "$ref": "#/number/lightness/foreground/secondary/active/onLight/$value"
               },
               {
-                "$ref": "#/color/palette/gray/100/$value/components/1"
+                "$ref": "#/color/palette/gray/70/$value/components/1"
               },
               {
-                "$ref": "#/color/palette/gray/100/$value/components/2"
+                "$ref": "#/color/palette/gray/70/$value/components/2"
               }
             ]
           },
@@ -3721,17 +3721,17 @@
         "disabled": {
           "$value": {
             "colorSpace": {
-              "$ref": "#/color/palette/gray/100/$value/colorSpace"
+              "$ref": "#/color/palette/gray/70/$value/colorSpace"
             },
             "components": [
               {
                 "$ref": "#/number/lightness/foreground/secondary/disabled/onLight/$value"
               },
               {
-                "$ref": "#/color/palette/gray/100/$value/components/1"
+                "$ref": "#/color/palette/gray/70/$value/components/1"
               },
               {
-                "$ref": "#/color/palette/gray/100/$value/components/2"
+                "$ref": "#/color/palette/gray/70/$value/components/2"
               }
             ]
           },
@@ -3741,17 +3741,17 @@
           "$root": {
             "$value": {
               "colorSpace": {
-                "$ref": "#/color/palette/blue/100/$value/colorSpace"
+                "$ref": "#/color/palette/blue/70/$value/colorSpace"
               },
               "components": [
                 {
-                  "$ref": "#/color/palette/blue/100/$value/components/0"
+                  "$ref": "#/color/palette/blue/70/$value/components/0"
                 },
                 {
-                  "$ref": "#/color/palette/blue/100/$value/components/1"
+                  "$ref": "#/color/palette/blue/70/$value/components/1"
                 },
                 {
-                  "$ref": "#/color/palette/blue/100/$value/components/2"
+                  "$ref": "#/color/palette/blue/70/$value/components/2"
                 }
               ]
             },
@@ -3819,17 +3819,17 @@
           "$root": {
             "$value": {
               "colorSpace": {
-                "$ref": "#/color/palette/yellow/100/$value/colorSpace"
+                "$ref": "#/color/palette/yellow/70/$value/colorSpace"
               },
               "components": [
                 {
-                  "$ref": "#/color/palette/yellow/100/$value/components/0"
+                  "$ref": "#/color/palette/yellow/70/$value/components/0"
                 },
                 {
-                  "$ref": "#/color/palette/yellow/100/$value/components/1"
+                  "$ref": "#/color/palette/yellow/70/$value/components/1"
                 },
                 {
-                  "$ref": "#/color/palette/yellow/100/$value/components/2"
+                  "$ref": "#/color/palette/yellow/70/$value/components/2"
                 }
               ]
             },
@@ -3897,17 +3897,17 @@
           "$root": {
             "$value": {
               "colorSpace": {
-                "$ref": "#/color/palette/red/100/$value/colorSpace"
+                "$ref": "#/color/palette/red/70/$value/colorSpace"
               },
               "components": [
                 {
-                  "$ref": "#/color/palette/red/100/$value/components/0"
+                  "$ref": "#/color/palette/red/70/$value/components/0"
                 },
                 {
-                  "$ref": "#/color/palette/red/100/$value/components/1"
+                  "$ref": "#/color/palette/red/70/$value/components/1"
                 },
                 {
-                  "$ref": "#/color/palette/red/100/$value/components/2"
+                  "$ref": "#/color/palette/red/70/$value/components/2"
                 }
               ]
             },
@@ -3975,17 +3975,17 @@
           "$root": {
             "$value": {
               "colorSpace": {
-                "$ref": "#/color/palette/green/100/$value/colorSpace"
+                "$ref": "#/color/palette/green/70/$value/colorSpace"
               },
               "components": [
                 {
-                  "$ref": "#/color/palette/green/100/$value/components/0"
+                  "$ref": "#/color/palette/green/70/$value/components/0"
                 },
                 {
-                  "$ref": "#/color/palette/green/100/$value/components/1"
+                  "$ref": "#/color/palette/green/70/$value/components/1"
                 },
                 {
-                  "$ref": "#/color/palette/green/100/$value/components/2"
+                  "$ref": "#/color/palette/green/70/$value/components/2"
                 }
               ]
             },
@@ -4053,17 +4053,17 @@
           "$root": {
             "$value": {
               "colorSpace": {
-                "$ref": "#/color/palette/orange/100/$value/colorSpace"
+                "$ref": "#/color/palette/orange/70/$value/colorSpace"
               },
               "components": [
                 {
-                  "$ref": "#/color/palette/orange/100/$value/components/0"
+                  "$ref": "#/color/palette/orange/70/$value/components/0"
                 },
                 {
-                  "$ref": "#/color/palette/orange/100/$value/components/1"
+                  "$ref": "#/color/palette/orange/70/$value/components/1"
                 },
                 {
-                  "$ref": "#/color/palette/orange/100/$value/components/2"
+                  "$ref": "#/color/palette/orange/70/$value/components/2"
                 }
               ]
             },
@@ -4131,14 +4131,14 @@
           "$root": {
             "$value": {
               "colorSpace": {
-                "$ref": "#/color/palette/gray/100/$value/colorSpace"
+                "$ref": "#/color/palette/gray/70/$value/colorSpace"
               },
               "components": [
                 {
-                  "$ref": "#/color/palette/gray/100/$value/components/0"
+                  "$ref": "#/color/palette/gray/70/$value/components/0"
                 },
                 {
-                  "$ref": "#/color/palette/gray/100/$value/components/1"
+                  "$ref": "#/color/palette/gray/70/$value/components/1"
                 },
                 {
                   "$ref": "#/number/hue/category/$value"

@@ -90,7 +90,7 @@
     },
     "opacity": {
       "backdrop": {
-        "$value": 0.15,
+        "$value": 0.5,
         "$description": "Opacity for backdrop elements"
       }
     },
@@ -323,7 +323,7 @@
               "$description": "Lightness adjustment for primary foreground hover state on light backgrounds"
             },
             "onDark": {
-              "$value": 0.58,
+              "$value": 0.67,
               "$description": "Lightness adjustment for primary foreground hover state on dark backgrounds"
             }
           },
@@ -333,7 +333,7 @@
               "$description": "Lightness adjustment for primary foreground active state on light backgrounds"
             },
             "onDark": {
-              "$value": 0.6,
+              "$value": 0.7,
               "$description": "Lightness adjustment for primary foreground active state on dark backgrounds"
             }
           },
@@ -343,7 +343,7 @@
               "$description": "Lightness adjustment for primary foreground disabled state on light backgrounds"
             },
             "onDark": {
-              "$value": 0.32,
+              "$value": 0.36,
               "$description": "Lightness adjustment for primary foreground disabled state on dark backgrounds"
             }
           },
@@ -383,7 +383,7 @@
         "secondary": {
           "hover": {
             "onLight": {
-              "$value": 0.86,
+              "$value": 0.89,
               "$description": "Lightness adjustment for secondary foreground hover state on light backgrounds"
             },
             "onDark": {
@@ -393,7 +393,7 @@
           },
           "active": {
             "onLight": {
-              "$value": 0.84,
+              "$value": 0.87,
               "$description": "Lightness adjustment for secondary foreground active state on light backgrounds"
             },
             "onDark": {
@@ -403,7 +403,7 @@
           },
           "disabled": {
             "onLight": {
-              "$value": 0.96,
+              "$value": 0.95,
               "$description": "Lightness adjustment for secondary foreground disabled state on light backgrounds"
             },
             "onDark": {
