@@ -69,6 +69,7 @@
       "default": "none",
       "contexts": {
         "none": [],
+        "default": [],
         "constructive": [
           {
             "$ref": "global/semantic/modifier/anticipation/constructive.tokens.json"
@@ -91,6 +92,7 @@
       "default": "none",
       "contexts": {
         "none": [],
+        "default": [],
         "success": [
           { "$ref": "global/semantic/modifier/criticality/success.tokens.json" }
         ],
@@ -112,6 +114,7 @@
       "default": "none",
       "contexts": {
         "none": [],
+        "default": [],
         "muted": [
           { "$ref": "global/semantic/modifier/emphasis/muted.tokens.json" }
         ],
@@ -148,6 +151,7 @@
       "default": "none",
       "contexts": {
         "none": [],
+        "default": [],
         "planned": [
           {
             "$ref": "global/semantic/modifier/lifecycle/planned.tokens.json"
@@ -175,6 +179,7 @@
       "default": "none",
       "contexts": {
         "none": [],
+        "default": [],
         "experimental": [
           {
             "$ref": "global/semantic/modifier/release/experimental.tokens.json"

@@ -14625,6 +14625,7 @@ dt:axis.anticipation
     w3c-tokens:description "Anticipation modifier family (WD433). Contexts: constructive, destructive, caution." ;
     w3c-tokens:context dt:context.anticipation.caution ;
     w3c-tokens:context dt:context.anticipation.constructive ;
+    w3c-tokens:context dt:context.anticipation.default ;
     w3c-tokens:context dt:context.anticipation.destructive ;
     w3c-tokens:context dt:context.anticipation.none ;
     w3c-tokens:default dt:context.anticipation.none .
@@ -14638,6 +14639,11 @@ dt:context.anticipation.constructive
     a w3c-tokens:ResolverContext ;
     w3c-tokens:name "constructive" ;
     w3c-tokens:includes ( <global/semantic/modifier/anticipation/constructive.tokens.json> ) .
+
+dt:context.anticipation.default
+    a w3c-tokens:ResolverContext ;
+    w3c-tokens:name "default" ;
+    w3c-tokens:includes () .
 
 dt:context.anticipation.destructive
     a w3c-tokens:ResolverContext ;
@@ -14683,12 +14689,18 @@ dt:axis.criticality
     a w3c-tokens:ResolverModifier ;
     w3c-tokens:name "criticality" ;
     w3c-tokens:description "Criticality modifier family (WD433). Contexts: success, error, warning, information." ;
+    w3c-tokens:context dt:context.criticality.default ;
     w3c-tokens:context dt:context.criticality.error ;
     w3c-tokens:context dt:context.criticality.information ;
     w3c-tokens:context dt:context.criticality.none ;
     w3c-tokens:context dt:context.criticality.success ;
     w3c-tokens:context dt:context.criticality.warning ;
     w3c-tokens:default dt:context.criticality.none .
+
+dt:context.criticality.default
+    a w3c-tokens:ResolverContext ;
+    w3c-tokens:name "default" ;
+    w3c-tokens:includes () .
 
 dt:context.criticality.error
     a w3c-tokens:ResolverContext ;
@@ -14720,6 +14732,7 @@ dt:axis.emphasis
     w3c-tokens:name "emphasis" ;
     w3c-tokens:description "Emphasis modifier family (WD433). Contexts: muted, highlighted, branded." ;
     w3c-tokens:context dt:context.emphasis.branded ;
+    w3c-tokens:context dt:context.emphasis.default ;
     w3c-tokens:context dt:context.emphasis.highlighted ;
     w3c-tokens:context dt:context.emphasis.muted ;
     w3c-tokens:context dt:context.emphasis.none ;
@@ -14729,6 +14742,11 @@ dt:context.emphasis.branded
     a w3c-tokens:ResolverContext ;
     w3c-tokens:name "branded" ;
     w3c-tokens:includes ( <global/semantic/modifier/emphasis/branded.tokens.json> ) .
+
+dt:context.emphasis.default
+    a w3c-tokens:ResolverContext ;
+    w3c-tokens:name "default" ;
+    w3c-tokens:includes () .
 
 dt:context.emphasis.highlighted
     a w3c-tokens:ResolverContext ;
@@ -14780,6 +14798,7 @@ dt:axis.lifecycle
     w3c-tokens:name "lifecycle" ;
     w3c-tokens:description "Lifecycle modifier family. Contexts: planned, inProgress, completed, failed." ;
     w3c-tokens:context dt:context.lifecycle.completed ;
+    w3c-tokens:context dt:context.lifecycle.default ;
     w3c-tokens:context dt:context.lifecycle.failed ;
     w3c-tokens:context dt:context.lifecycle.inProgress ;
     w3c-tokens:context dt:context.lifecycle.none ;
@@ -14790,6 +14809,11 @@ dt:context.lifecycle.completed
     a w3c-tokens:ResolverContext ;
     w3c-tokens:name "completed" ;
     w3c-tokens:includes ( <global/semantic/modifier/lifecycle/completed.tokens.json> ) .
+
+dt:context.lifecycle.default
+    a w3c-tokens:ResolverContext ;
+    w3c-tokens:name "default" ;
+    w3c-tokens:includes () .
 
 dt:context.lifecycle.failed
     a w3c-tokens:ResolverContext ;
@@ -14853,6 +14877,7 @@ dt:axis.release
     w3c-tokens:description "Release modifier family. Contexts: experimental, alpha, beta, stable." ;
     w3c-tokens:context dt:context.release.alpha ;
     w3c-tokens:context dt:context.release.beta ;
+    w3c-tokens:context dt:context.release.default ;
     w3c-tokens:context dt:context.release.experimental ;
     w3c-tokens:context dt:context.release.none ;
     w3c-tokens:context dt:context.release.stable ;
@@ -14867,6 +14892,11 @@ dt:context.release.beta
     a w3c-tokens:ResolverContext ;
     w3c-tokens:name "beta" ;
     w3c-tokens:includes ( <global/semantic/modifier/release/beta.tokens.json> ) .
+
+dt:context.release.default
+    a w3c-tokens:ResolverContext ;
+    w3c-tokens:name "default" ;
+    w3c-tokens:includes () .
 
 dt:context.release.experimental
     a w3c-tokens:ResolverContext ;

@@ -96,15 +96,15 @@ describe("the channels minted from coverage", () => {
 });
 
 describe("the routings the channels carry", () => {
-  it("holds one node per (channel x coordinate) pair — 165, not 330", () => {
-    expect(resolution.routings).toHaveLength(165);
-    // S3's total: 718 at the all-defaults position, 354 at mode.dark, 165 on
+  it("holds one node per (channel x coordinate) pair — 194, not 330", () => {
+    expect(resolution.routings).toHaveLength(194);
+    // S3's total: 718 at the all-defaults position, 354 at mode.dark, 194 on
     // the channels. It was 1,402 while every channel row also carried a copy
     // of its target's value and so needed a second row per mode; a routing
     // holds no value, so the mode row has nothing to say and is gone.
     expect(
       built.s3.counts.base + built.s3.counts.dark + resolution.routings.length,
-    ).toBe(1237);
+    ).toBe(1266);
   });
 
   it("invents nothing where the platform routes nowhere", () => {
@@ -180,11 +180,11 @@ describe("the routings the channels carry", () => {
       byFamily.set(family, (byFamily.get(family) ?? 0) + 1);
     }
     expect(Object.fromEntries([...byFamily].sort())).toEqual({
-      anticipation: 18,
-      criticality: 30,
-      emphasis: 9,
-      lifecycle: 16,
-      release: 16,
+      anticipation: 25,
+      criticality: 38,
+      emphasis: 15,
+      lifecycle: 20,
+      release: 20,
       surface: 76,
     });
   });

@@ -43,6 +43,9 @@ interface Condition {
   atRules: string[];
   selector: string;
   slug: string;
+  /** The file the selector was read from. A class name that encodes more than
+   * one context (`.default`, once several families carry one) is scoped by it. */
+  file: string;
 }
 
 interface Declaration {
@@ -137,7 +140,7 @@ export function parseCssText(file: string, source: string): Parsed {
     const slug = [...atRules, selector].map(slugPart).join("/");
     declarations.push({
       variable: property,
-      condition: { atRules, selector, slug },
+      condition: { atRules, selector, slug, file },
       value,
       file,
       line: i + 1,
@@ -295,7 +298,7 @@ export function channelSymbol(variable: string, symbols: Set<string>): string {
 
 interface Algebra {
   coordinates: Set<string>; // "mode.dark", "criticality.success", …
-  byContextName: Map<string, string>; // "success" → "criticality.success"
+  byContextName: Map<string, string[]>; // "success" → ["criticality.success"]
   symbols: Set<string>; // every dt:TokenSymbol in S1
 }
 
@@ -304,7 +307,7 @@ function loadAlgebra(): Algebra {
     readFileSync(join(DATA, "s2.ttl"), "utf8"),
   );
   const coordinates = new Set<string>();
-  const byContextName = new Map<string, string>();
+  const byContextName = new Map<string, string[]>();
   for (const q of quads) {
     if (
       q.predicate.value === "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
@@ -317,7 +320,9 @@ function loadAlgebra(): Algebra {
       const ctx = q.subject.value.slice(`${DT}context.`.length);
       const coord = q.object.value.slice(`${DT}coordinate.`.length);
       const name = ctx.slice(ctx.indexOf(".") + 1);
-      byContextName.set(name, coord);
+      const list = byContextName.get(name) ?? [];
+      list.push(coord);
+      byContextName.set(name, list);
     }
   }
   const symbols = new Set<string>();
@@ -338,6 +343,12 @@ function loadAlgebra(): Algebra {
  * Which coordinate a condition selects. Recorded, per the vocabulary — but
  * this script has to derive it from the selector, and the derivation is
  * honest about its one judgement: the dark media query is left ABSENT.
+ *
+ * A class name that encodes more than one context — `.default`, carried by
+ * several families — is resolved against the family the FILE emits for:
+ * `modifiers.<family>.css`. A file that names no such family leaves the
+ * condition without a coordinate, which is a state L4 reports rather than
+ * one this function guesses at.
  */
 function selectsCoordinate(c: Condition, alg: Algebra): string | null {
   const s = c.selector;
@@ -346,10 +357,18 @@ function selectsCoordinate(c: Condition, alg: Algebra): string | null {
   const surface = /^(\.surface)( \.surface)*$/.exec(s);
   if (surface) {
     const depth = s.split(" ").length;
-    return alg.byContextName.get(`layer${depth}`) ?? null;
+    const coords = alg.byContextName.get(`layer${depth}`) ?? [];
+    return coords.length === 1 ? coords[0] : null;
   }
   const cls = /^\.([A-Za-z]+)$/.exec(s);
-  if (cls) return alg.byContextName.get(cls[1]) ?? null;
+  if (cls) {
+    const coords = alg.byContextName.get(cls[1]) ?? [];
+    if (coords.length <= 1) return coords[0] ?? null;
+    const family = /^modifiers\.([A-Za-z]+)\.css$/.exec(c.file)?.[1];
+    return family
+      ? (coords.find((k) => k.startsWith(`${family}.`)) ?? null)
+      : null;
+  }
   return null;
 }
 
@@ -389,9 +408,20 @@ export function build() {
   const artifact = loadArtifact();
   const alg = loadAlgebra();
 
-  // conditions, minted once
+  // conditions, minted once. A class name that encodes more than one context
+  // (`.default`, carried by several families) mints one condition per file, so
+  // each keeps the coordinate of its own family; the file rides in the slug.
   const conditions = new Map<string, Condition>();
   for (const d of declarations) {
+    const cls = /^\.([A-Za-z]+)$/.exec(d.condition.selector)?.[1];
+    const ambiguous =
+      cls !== undefined && (alg.byContextName.get(cls)?.length ?? 0) > 1;
+    if (ambiguous) {
+      d.condition = {
+        ...d.condition,
+        slug: `${d.condition.slug}/${slugPart(d.file.replace(/\.css$/, ""))}`,
+      };
+    }
     const c = conditions.get(d.condition.slug);
     if (
       c &&

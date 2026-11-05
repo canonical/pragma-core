@@ -6,4 +6,4 @@ ds:global.modifier_family.anticipation a ds:ModifierFamily;
     ds:name "Anticipation";
     ds:summary "";
     ds:tier ds:global;
-    ds:hasModifier ds:global.modifier.constructive, ds:global.modifier.destructive, ds:global.modifier.caution.
+    ds:hasModifier ds:global.modifier.constructive, ds:global.modifier.destructive, ds:global.modifier.caution, ds:global.modifier.default.

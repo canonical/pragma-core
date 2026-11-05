@@ -6,4 +6,4 @@ ds:global.modifier_family.criticality a ds:ModifierFamily;
     ds:name "Criticality";
     ds:summary "";
     ds:tier ds:global;
-    ds:hasModifier ds:global.modifier.success, ds:global.modifier.information, ds:global.modifier.warning, ds:global.modifier.error.
+    ds:hasModifier ds:global.modifier.success, ds:global.modifier.information, ds:global.modifier.warning, ds:global.modifier.error, ds:global.modifier.default.
