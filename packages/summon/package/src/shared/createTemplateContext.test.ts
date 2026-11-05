@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import pkg from "../../package.json" with { type: "json" };
 import createTemplateContext from "./createTemplateContext.js";
 import type { MonorepoInfo, PackageAnswers } from "./types.js";
+import { PRAGMA_WEB_VERSION } from "./versions.js";
 
 const baseAnswers: PackageAnswers = {
   name: "@canonical/test-pkg",
@@ -42,12 +43,14 @@ describe("createTemplateContext", () => {
     expect(ctx.version).toBe("0.1.0");
   });
 
-  it("keeps the @canonical/* dependency line separate from the host version", () => {
+  it("keeps the two @canonical/* dependency lines separate from the host version", () => {
     const monorepoInfo: MonorepoInfo = { isMonorepo: true, version: "0.0.1" };
     const ctx = createTemplateContext(baseAnswers, monorepoInfo);
 
     expect(ctx.version).toBe("0.0.1");
-    expect(ctx.canonicalVersion).toBe(pkg.version);
+    expect(ctx.coreVersion).toBe(pkg.version);
+    expect(ctx.webVersion).toBe(PRAGMA_WEB_VERSION);
+    expect(ctx.coreVersion).not.toBe(ctx.version);
   });
 
   it("handles unscoped package names", () => {

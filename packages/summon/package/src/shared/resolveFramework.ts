@@ -20,6 +20,9 @@
  * consistent package is meant. The warning is what makes the coercion
  * visible.
  *
+ * The deprecated `--with-react` is folded onto `framework` here too, so the
+ * answer set a result reports and the files a run writes always agree.
+ *
  * Pure: it decides, the caller emits the warnings and writes the files.
  */
 
@@ -31,7 +34,6 @@ export interface FrameworkInput {
   readonly framework: Framework;
   readonly withCli: boolean;
 }
-
 /** The reconciled answers, plus the human-readable reason for each change. */
 export interface FrameworkResolution {
   /** The framework to generate for. */
@@ -79,6 +81,10 @@ export default function resolveFramework(
  * {@link resolveFramework} over a full answer set, returning answers that are
  * safe to hand to the templates.
  *
+ * The deprecated `--with-react` flag is folded into `framework` here, so every
+ * caller — the wizard, `pragma create`, MCP — sees one framework answer and
+ * the templates never read the legacy field.
+ *
  * @param answers - The generator's answers.
  * @returns The reconciled answers and the warnings explaining any change.
  */
@@ -86,6 +92,25 @@ export function resolveAnswers(answers: PackageAnswers): {
   readonly answers: PackageAnswers;
   readonly warnings: readonly string[];
 } {
-  const { framework, withCli, warnings } = resolveFramework(answers);
-  return { answers: { ...answers, framework, withCli }, warnings };
+  const warnings: string[] = [];
+  let framework = answers.framework;
+
+  if (answers.withReact === true) {
+    warnings.push("--with-react is deprecated; use --framework=react instead.");
+    if (framework === "none") framework = "react";
+    else if (framework !== "react")
+      warnings.push(
+        `Ignoring --with-react because --framework=${framework} was given.`,
+      );
+  }
+
+  const reconciled = resolveFramework({ ...answers, framework });
+  return {
+    answers: {
+      ...answers,
+      framework: reconciled.framework,
+      withCli: reconciled.withCli,
+    },
+    warnings: [...warnings, ...reconciled.warnings],
+  };
 }

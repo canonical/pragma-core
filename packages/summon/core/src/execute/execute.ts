@@ -167,7 +167,16 @@ export default function execute(
       generator.prompts as readonly AnswerablePrompt[],
       ctx.params,
     ),
-    (answers) => {
+    (collected) => {
+      // 1b. Reconcile — a generator may coerce the answer set (fold a
+      //     deprecated flag onto its replacement, drop an impossible
+      //     combination). Validation, generation AND the returned result all
+      //     read the reconciled set, so a machine that reads `answers` sees
+      //     what the run actually wrote.
+      const answers = generator.reconcileAnswers
+        ? generator.reconcileAnswers(collected)
+        : collected;
+
       // 2. Validate — reject the same bad input (unknown enum, failing
       //    validator) a wizard would, so flag/MCP-arg runs are held to the
       //    same constraints.
@@ -195,10 +204,16 @@ export default function execute(
           //    write for real. The preview gives the outcome summary its file
           //    list without re-running side effects.
           const effects = previewEffects(() => generator.generate(answers));
+          const warnings = effects.flatMap((effect) =>
+            effect._tag === "Log" && effect.level === "warn"
+              ? [effect.message]
+              : [],
+          );
           return map(generator.generate(answers), () => ({
             generator,
             answers,
             effects,
+            warnings,
           }));
         },
       );

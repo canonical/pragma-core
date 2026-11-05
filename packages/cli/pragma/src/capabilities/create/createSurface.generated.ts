@@ -259,6 +259,13 @@ export const CREATE_SURFACE: Readonly<Record<string, SurfaceCommand>> = {
         "group": "Options"
       },
       {
+        "name": "withReact",
+        "type": "confirm",
+        "message": "Include React dependencies? (deprecated: use --framework=react)",
+        "group": "Deprecated",
+        "conditional": true
+      },
+      {
         "name": "withStorybook",
         "type": "confirm",
         "message": "Include Storybook setup?",
@@ -438,6 +445,11 @@ export const CREATE_CLI_SYNTAX: Readonly<
       "flag": "--framework",
       "takesValue": true,
       "kebabName": "framework"
+    },
+    "withReact": {
+      "flag": "--with-react",
+      "takesValue": false,
+      "kebabName": "with-react"
     },
     "withStorybook": {
       "flag": "--with-storybook",

@@ -22,6 +22,12 @@ export interface PackageAnswers {
   description: string;
   /** UI framework the package targets (`library` packages only) */
   framework: Framework;
+  /**
+   * Deprecated compatibility answer: `--with-react` was the old way to select
+   * React. It is mapped onto `framework` by `resolveAnswers`; new callers use
+   * `--framework=react`.
+   */
+  withReact?: boolean;
   /** Include Storybook setup */
   withStorybook: boolean;
   /** Include CLI binary entry point */
@@ -61,15 +67,21 @@ export interface TemplateContext {
   /** `types` entry point the manifest advertises, or null for CSS packages */
   typesEntry: string | null;
   /**
-   * Version line to depend on for `@canonical/*` packages.
+   * Version line for the pragma-core packages the generated package depends
+   * on: `biome-config`, `webarchitect` and the plain `typescript-config`.
    *
-   * Taken from this generator's own version, not from the host repository:
-   * the generator ships from the same fixed-version monorepo as the config
-   * packages it scaffolds a dependency on, so its version is the published
-   * line those packages exist on. The host repository's version says nothing
-   * about them.
+   * Taken from this generator's own version: it ships from the same
+   * fixed-version monorepo as those packages, so its version is the published
+   * line they exist on. The host repository's version says nothing about them.
    */
-  canonicalVersion: string;
+  coreVersion: string;
+  /**
+   * Version line for the pragma-web packages a framework arm depends on:
+   * `typescript-config-react`, `typescript-config-svelte`, `svelte-ssr-test`
+   * and `storybook-config`. pragma-web releases independently, so this is its
+   * own line, not the generator's.
+   */
+  webVersion: string;
   /** Webarchitect ruleset */
   ruleset: string;
   /** UI framework the package targets, after reconciliation */

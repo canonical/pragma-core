@@ -86,8 +86,11 @@ export const createFormatters: Formatters<GeneratorResult> = {
   plain(result) {
     const files = created(result.effects);
     const header = `Created with ${result.generator.meta.name} v${result.generator.meta.version}.`;
-    if (files.length === 0) return header;
-    return [header, ...files.map((file) => `  + ${file}`)].join("\n");
+    const warnings = result.warnings.map((warning) => `Warning: ${warning}`);
+    if (files.length === 0) return [header, ...warnings].join("\n");
+    return [header, ...warnings, ...files.map((file) => `  + ${file}`)].join(
+      "\n",
+    );
   },
 
   llm(result) {
@@ -97,6 +100,9 @@ export const createFormatters: Formatters<GeneratorResult> = {
       "",
       `Generated ${files.length} path${files.length === 1 ? "" : "s"}:`,
       ...files.map((file) => `- \`${file}\``),
+      ...(result.warnings.length === 0
+        ? []
+        : ["", "## Warnings", ...result.warnings.map((w) => `- ${w}`)]),
     ];
     return lines.join("\n");
   },
@@ -108,6 +114,7 @@ export const createFormatters: Formatters<GeneratorResult> = {
         version: result.generator.meta.version,
       },
       answers: result.answers,
+      warnings: result.warnings,
       created: created(result.effects),
     });
   },

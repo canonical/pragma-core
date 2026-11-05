@@ -199,6 +199,7 @@ packages/my-styles/
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--framework` | UI framework for a `library`: `none`, `react` or `svelte` | `none` |
+| `--with-react` | Deprecated alias for `--framework=react`; warns and maps onto it | — |
 | `--with-storybook` | Add Storybook configuration | `false` |
 | `--with-cli` | Add CLI binary entry point | `false` |
 | `--with-pr-template` | Add a `.github/PULL_REQUEST_TEMPLATE.md` | `false` |
@@ -226,7 +227,7 @@ generates a package that installs, checks, builds and tests on its own.
 |-------|-------|------------|-------|---------|
 | `none` | `tsc -p tsconfig.build.json` → `dist/esm` + `dist/types` | `tsc --noEmit` | `vitest run` | `library` |
 | `react` | `tsc -p tsconfig.build.json` → `dist/esm` + `dist/types` | `tsc --noEmit` | `vitest run` (jsdom) | `package-react` |
-| `svelte` | `svelte-package` → a flat `dist/` | `svelte-check` | three Vitest projects | `package-svelte` |
+| `svelte` | `svelte-package` → a flat `dist/` | `svelte-check` | `ssr` + `server`; `test:all` adds `client` | `package-svelte` |
 
 **`react`** adds React and React DOM as dependencies, `@types/react*` and
 `@canonical/typescript-config-react` as devDependencies, and scaffolds a
@@ -239,9 +240,13 @@ sample `Example` component with a jsdom test.
 `package-svelte` ruleset enforces, and a sample `Example` component with an SSR
 test, a client (real-browser) test, and a plain module test.
 
-`bun run test` runs the `ssr` and `server` projects. The `client` project drives
-a real browser through Playwright, so it is opt-in — run
-`bunx playwright install` once, then `bun run test:client`.
+`bun run test` runs the `ssr` and `server` projects, which need no browser. The
+`client` project drives a real browser through Playwright, so it is opt-in:
+run `bunx playwright install` once, then `bun run test:all`. That second command
+is the complete gate — `test` plus `test:client` — and is the command CI should
+run. Every arm names it, so a consumer can wire one command regardless of the
+framework: on `none` and `react` it is the same as `test` today, and on `svelte`
+it adds the browser project.
 
 **Coercions.** A framework applies to `library` packages only, and `svelte`
 cannot carry a CLI entry point (`svelte-package` emits a component tree, not an

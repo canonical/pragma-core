@@ -12,6 +12,7 @@ import {
   createTemplateContext,
   type MonorepoInfo,
   type PackageAnswers,
+  PRAGMA_WEB_VERSION,
 } from "./shared/index.js";
 
 interface Manifest {
@@ -255,9 +256,11 @@ describe("generated manifest", () => {
     );
   });
 
-  it("ranges @canonical/* dependencies on the generator's own version", () => {
+  it("ranges core packages on the generator's version and web packages on pragma-web's", () => {
     // The host repository's version says nothing about which versions of
-    // @canonical/* exist on npm, so it must not leak into the ranges.
+    // @canonical/* exist on npm, so it must not leak into the ranges. The two
+    // release lines are distinct: core packages follow this generator, web
+    // packages follow pragma-web.
     const manifest = renderManifest(libraryAnswers, {
       isMonorepo: true,
       version: "0.0.1",
@@ -268,6 +271,50 @@ describe("generated manifest", () => {
     );
     expect(manifest.devDependencies["@canonical/typescript-config"]).toBe(
       `^${pkg.version}`,
+    );
+
+    const react = renderManifest({ ...libraryAnswers, framework: "react" });
+    expect(react.devDependencies["@canonical/typescript-config-react"]).toBe(
+      `^${PRAGMA_WEB_VERSION}`,
+    );
+
+    const svelte = renderManifest({ ...libraryAnswers, framework: "svelte" });
+    expect(svelte.devDependencies["@canonical/typescript-config-svelte"]).toBe(
+      `^${PRAGMA_WEB_VERSION}`,
+    );
+    expect(svelte.devDependencies["@canonical/svelte-ssr-test"]).toBe(
+      `^${PRAGMA_WEB_VERSION}`,
+    );
+    expect(svelte.devDependencies["@canonical/webarchitect"]).toBe(
+      `^${pkg.version}`,
+    );
+  });
+
+  it("names a complete test gate in every arm", () => {
+    const none = renderManifest(libraryAnswers);
+    expect(none.scripts.test).toBe("vitest run");
+    expect(none.scripts["test:all"]).toBe("bun run test");
+
+    const react = renderManifest({ ...libraryAnswers, framework: "react" });
+    expect(react.scripts["test:all"]).toBe("bun run test");
+
+    const svelte = renderManifest({ ...libraryAnswers, framework: "svelte" });
+    expect(svelte.scripts.test).toContain("--project=ssr");
+    expect(svelte.scripts.test).toContain("--project=server");
+    expect(svelte.scripts["test:all"]).toBe(
+      "bun run test && bun run test:client",
+    );
+  });
+
+  it("keeps --with-react as a deprecated route to the react arm", () => {
+    const manifest = renderManifest({
+      ...libraryAnswers,
+      framework: "none",
+      withReact: true,
+    });
+
+    expect(manifest.devDependencies["@canonical/typescript-config-react"]).toBe(
+      `^${PRAGMA_WEB_VERSION}`,
     );
   });
 });
@@ -433,7 +480,6 @@ describe("generated manifest — validity matrix", () => {
         expect(manifest.scripts["build:storybook"]).toBeDefined();
         expect(allDependencies.storybook).toBeDefined();
         expect(allDependencies["@canonical/storybook-config"]).toBeDefined();
-        expect(allDependencies["@canonical/styles-debug"]).toBeDefined();
         if (isSvelte) {
           expect(allDependencies["@storybook/svelte-vite"]).toBeDefined();
           expect(allDependencies["@storybook/addon-svelte-csf"]).toBeDefined();

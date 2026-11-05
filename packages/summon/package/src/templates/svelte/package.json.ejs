@@ -48,41 +48,41 @@
     "storybook": "storybook dev -p 6006 --no-open --host 0.0.0.0",
 <% } -%>
     "test": "vitest --run --project=ssr --project=server",
+    "test:all": "bun run test && bun run test:client",
     "test:client": "vitest --run --project=client",
     "test:server": "vitest --run --project=server",
     "test:ssr": "vitest --run --project=ssr",
     "test:watch": "vitest"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.14",
-    "@canonical/biome-config": "^<%= canonicalVersion %>",
+    "@biomejs/biome": "2.5.15",
+    "@canonical/biome-config": "^<%= coreVersion %>",
 <% if (withStorybook) { -%>
-    "@canonical/storybook-config": "^<%= canonicalVersion %>",
-    "@canonical/styles-debug": "^<%= canonicalVersion %>",
+    "@canonical/storybook-config": "^<%= webVersion %>",
 <% } -%>
-    "@canonical/svelte-ssr-test": "^<%= canonicalVersion %>",
-    "@canonical/typescript-config-svelte": "^<%= canonicalVersion %>",
-    "@canonical/webarchitect": "^<%= canonicalVersion %>",
+    "@canonical/svelte-ssr-test": "^<%= webVersion %>",
+    "@canonical/typescript-config-svelte": "^<%= webVersion %>",
+    "@canonical/webarchitect": "^<%= coreVersion %>",
 <% if (withStorybook) { -%>
     "@chromatic-com/storybook": "^5.0.1",
-    "@storybook/addon-svelte-csf": "^5.0.11",
-    "@storybook/svelte-vite": "^10.3.1",
+    "@storybook/addon-svelte-csf": "^5.1.3",
+    "@storybook/svelte-vite": "^10.6.0",
 <% } -%>
-    "@sveltejs/package": "^2.5.7",
+    "@sveltejs/package": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@types/node": "^26.0.0",
-    "@vitest/browser": "^4.0.18",
-    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/browser": "^5.0.0",
+    "@vitest/browser-playwright": "^5.0.0",
     "playwright": "^1.61.1",
 <% if (withStorybook) { -%>
-    "storybook": "^10.3.1",
+    "storybook": "^10.6.0",
 <% } -%>
     "svelte": "^5.47.1",
     "svelte-check": "^4.4.5",
-    "typescript": "^5.9.3",
+    "typescript": "~6.0.3",
     "vite": "^8.0.1",
-    "vitest": "^4.0.18",
-    "vitest-browser-svelte": "^2.0.2"
+    "vitest": "^5.0.0",
+    "vitest-browser-svelte": "^3.0.0"
   },
   "peerDependencies": {
     "svelte": "^5.0.0"

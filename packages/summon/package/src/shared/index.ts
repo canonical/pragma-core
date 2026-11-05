@@ -16,3 +16,4 @@ export {
 } from "./resolveFramework.js";
 export type * from "./types.js";
 export { default as validatePackageName } from "./validatePackageName.js";
+export { PRAGMA_WEB_VERSION } from "./versions.js";

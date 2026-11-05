@@ -97,4 +97,59 @@ describe("resolveAnswers", () => {
     expect(result.answers.name).toBe("@canonical/my-pkg");
     expect(result.warnings).toHaveLength(1);
   });
+
+  it("folds --with-react into the react framework, with a deprecation warning", () => {
+    const result = resolveAnswers({
+      ...answers,
+      type: "library",
+      framework: "none",
+      withReact: true,
+    });
+
+    expect(result.answers.framework).toBe("react");
+    expect(result.warnings[0]).toContain("--with-react is deprecated");
+    expect(result.warnings[0]).toContain("--framework=react");
+  });
+
+  it("keeps an explicit react framework and still deprecates --with-react", () => {
+    const result = resolveAnswers({
+      ...answers,
+      type: "library",
+      framework: "react",
+      withReact: true,
+    });
+
+    expect(result.answers.framework).toBe("react");
+    expect(result.warnings).toEqual([
+      expect.stringContaining("--with-react is deprecated"),
+    ]);
+  });
+
+  it("lets --framework win over the legacy flag, naming the ignored alias", () => {
+    const result = resolveAnswers({
+      ...answers,
+      type: "library",
+      framework: "svelte",
+      withReact: true,
+    });
+
+    expect(result.answers.framework).toBe("svelte");
+    expect(
+      result.warnings.some((warning) =>
+        warning.includes("Ignoring --with-react"),
+      ),
+    ).toBe(true);
+  });
+
+  it("ignores a false legacy flag", () => {
+    const result = resolveAnswers({
+      ...answers,
+      type: "library",
+      framework: "none",
+      withReact: false,
+    });
+
+    expect(result.answers.framework).toBe("none");
+    expect(result.warnings).toHaveLength(0);
+  });
 });

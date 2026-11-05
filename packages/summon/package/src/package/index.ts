@@ -190,6 +190,18 @@ const prompts: PromptDefinition[] = [
     group: "Options",
   },
   {
+    // Compatibility for callers of the pre-select surface. `when` is false so
+    // the wizard never asks it; an explicit `--with-react` still lands in the
+    // answer set and is folded into `framework` by `resolveAnswers`. No
+    // default, so the prompt leaves no `withReact: false` in a fresh answer
+    // set or in the result JSON.
+    name: "withReact",
+    type: "confirm",
+    message: "Include React dependencies? (deprecated: use --framework=react)",
+    when: () => false,
+    group: "Deprecated",
+  },
+  {
     name: "withStorybook",
     type: "confirm",
     message: "Include Storybook setup?",
@@ -386,6 +398,7 @@ FRAMEWORKS (--framework, library packages only):
 
 OPTIONS:
   --framework       UI framework for a library: none, react or svelte
+  --with-react      Deprecated alias for --framework=react
   --with-storybook  Add Storybook configuration
   --with-cli        Add CLI binary entry point (src/cli.ts)
   --with-pr-template  Add .github/PULL_REQUEST_TEMPLATE.md (for standalone
@@ -407,6 +420,12 @@ The generator auto-detects:
   },
 
   prompts,
+
+  // The CLI, the wizard and `generate` itself all read one reconciled answer
+  // set: `execute` calls this before validation, so `GeneratorResult.answers`
+  // reports the framework the run actually generated (a deprecated
+  // `--with-react` becomes `framework: "react"`), not the raw request.
+  reconcileAnswers: (answers) => resolveAnswers(answers).answers,
 
   generate: (rawAnswers) => {
     const { answers, warnings } = resolveAnswers(rawAnswers);

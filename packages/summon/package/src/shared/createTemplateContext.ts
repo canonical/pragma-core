@@ -6,6 +6,7 @@ import getPackageShortName from "./getPackageShortName.js";
 import { packageVersion } from "./packageVersion.js";
 import { resolveAnswers } from "./resolveFramework.js";
 import type { MonorepoInfo, PackageAnswers, TemplateContext } from "./types.js";
+import { PRAGMA_WEB_VERSION } from "./versions.js";
 
 /**
  * Create template context from answers.
@@ -41,7 +42,8 @@ export default function createTemplateContext(
     needsBuild: entryPoints.needsBuild,
     moduleEntry: entryPoints.module,
     typesEntry: entryPoints.types,
-    canonicalVersion: packageVersion(),
+    coreVersion: packageVersion(),
+    webVersion: PRAGMA_WEB_VERSION,
     ruleset: getRuleset(answers.type, answers.framework),
     framework: answers.framework,
     withStorybook: answers.withStorybook,

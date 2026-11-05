@@ -222,6 +222,7 @@ describe("surface conformance — capabilities ⊆ covenant (PROTECTED)", () => 
           "--type",
           "--description",
           "--framework",
+          "--with-react",
           "--with-storybook",
           "--with-cli",
           "--with-pr-template",

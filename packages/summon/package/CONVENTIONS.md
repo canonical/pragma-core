@@ -74,7 +74,7 @@
 | P4.6 | `check:biome:fix` runs `biome check --write` | script exists |
 | P4.7 | `check:ts` runs `tsc --noEmit`, or `svelte-check --tsconfig ./tsconfig.json` for Svelte packages | script exists |
 | P4.8 | `check:webarchitect` runs `webarchitect <ruleset>` | script exists |
-| P4.9 | `test` runs `vitest run`; Svelte packages run the `ssr` and `server` Vitest projects, with the real-browser `client` project on `test:client` | script exists |
+| P4.9 | `test` runs the default Vitest suite (`vitest run`; Svelte packages run the `ssr` and `server` projects). `test:all` is the complete gate and adds the real-browser `client` project where one exists (`test:client`) | script exists |
 | P4.10 | `test:coverage` runs `vitest run --coverage` | script exists |
 
 ---

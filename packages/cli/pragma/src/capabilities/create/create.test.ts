@@ -100,6 +100,61 @@ describe("create — real generation + stamp", () => {
     // legs timed out at 5000ms on a run whose import phase alone took 88s.
   }, 60_000);
 
+  it("scaffolds a Svelte library when --framework=svelte", async () => {
+    const dir = freshCwd();
+    const outcome = await runIn(
+      dir,
+      {
+        name: "@canonical/my-ui",
+        type: "library",
+        description: "",
+        framework: "svelte",
+        withStorybook: false,
+        withCli: false,
+        withPrTemplate: false,
+        runInstall: false,
+      },
+      { dryRun: false, undo: false, yes: true },
+      createVerbs.package,
+    );
+
+    expect(outcome.exitCode).toBe(0);
+    expect(existsSync(join(dir, "my-ui/svelte.config.js"))).toBe(true);
+    expect(existsSync(join(dir, "my-ui/src/lib/Example/Example.svelte"))).toBe(
+      true,
+    );
+  }, 60_000);
+
+  it("keeps --with-react working as a deprecated alias and reports the warning", async () => {
+    const dir = freshCwd();
+    const outcome = await runIn(
+      dir,
+      {
+        name: "@canonical/my-ui",
+        type: "library",
+        description: "",
+        framework: "none",
+        withReact: true,
+        withStorybook: false,
+        withCli: false,
+        withPrTemplate: false,
+        runInstall: false,
+      },
+      YES,
+      createVerbs.package,
+      JSON_FLAGS,
+    );
+
+    expect(outcome.exitCode).toBe(0);
+    expect(existsSync(join(dir, "my-ui/src/Example/Example.tsx"))).toBe(true);
+    const data = JSON.parse(outcome.stdout ?? "{}").data as {
+      answers: { framework: string };
+      warnings: string[];
+    };
+    expect(data.answers.framework).toBe("react");
+    expect(data.warnings.join("\n")).toContain("--with-react is deprecated");
+  }, 60_000);
+
   it("--dry-run writes nothing and previews effects (no Prompt lines)", async () => {
     const dir = freshCwd();
     const outcome = await runIn(
@@ -676,15 +731,17 @@ describe("projection fidelity — the committed surface IS the live generators (
       "type",
       "description",
       "framework",
+      "withReact",
       "withStorybook",
       "withCli",
       "withPrTemplate",
       "runInstall",
     ]);
     // The prompt names ARE the param names (the flag TOKENS are
-    // buildOptionInfo's registered forms): the B8 --with-X aliases are gone —
-    // and so are ssr/router, WITH their prompts (always-on facts whose only
-    // explicit spelling the generator's old guard rejected).
+    // buildOptionInfo's registered forms). withReact stays as the one
+    // deprecated compatibility prompt; ssr/router are gone WITH their
+    // prompts (always-on facts whose only explicit spelling the generator's
+    // old guard rejected).
     expect(createVerbs.application.params.map((p) => p.name)).toEqual([
       "appPath",
       "forms",
