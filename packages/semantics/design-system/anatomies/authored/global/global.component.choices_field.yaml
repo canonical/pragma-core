@@ -100,6 +100,15 @@ node:
                         relation:
                           cardinality: "1"
                           slotName: label
+                      # Optional one-line muted description under the label
+                      # (the option's `description` field), stacked layout only.
+                      - node:
+                          role: option description
+                          styles:
+                            typography.color: color.text.muted
+                        relation:
+                          cardinality: "0..1"
+                          slotName: description
                   relation:
                     cardinality: "2..*"
                     slotName: default
