@@ -896,6 +896,7 @@ Custom hooks must separate concerns at the domain level. All hooks within a Comp
 
 All of the types for a domain level's hooks must be defined in the `hooks/types.ts` file of that folder.
 Each hook must define a [HookName]Props and [HookName]Result type in `hooks/types.ts`.
+A hook with exactly one input and no options may take that input positionally, typed as its [HookName]Props. A hook with two or more inputs, or with options, takes one object of props as the example shows.
 
 ### Do
 
@@ -942,6 +943,14 @@ export interface UseWindowFitmentResult {
    */
   popupPositionStyle: CSSProperties;
 }
+```
+
+Take a single input positionally when the hook has exactly one input and no options.
+```typescript
+// [MyComponent]/hooks/useLocalized.ts
+const useLocalized = <T>(
+  messages: UseLocalizedProps<T>,
+): UseLocalizedResult<T> => {
 ```
 
 ### Don't
