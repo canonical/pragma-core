@@ -126,7 +126,7 @@ describe("3.3 sets.primitive.css", () => {
     const colorDecls = decls.filter((d) =>
       d.property.startsWith("--color-palette-"),
     );
-    expect(colorDecls.length).toBe(119);
+    expect(colorDecls.length).toBe(128);
   });
 
   it("contains dimension tokens", () => {
