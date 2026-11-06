@@ -8,7 +8,7 @@ A drafted block, awaiting entry into the database of record. Each section below 
 - **Tier (`ds:tier`):** `ds:global`
 - **Inherits from (`ds:inheritsFrom`):** `ds:global.component.button`
 - **Modifier families (`ds:hasModifierFamily`):** `ds:global.modifier_family.importance`, `ds:global.modifier_family.anticipation`
-- **Documentation stage (`ds:documentationStage`):** `ds:tag.needsdocumentation`
+- **Documentation stage (`ds:documentationStage`):** `ds:tag.needsdefinition`. It moves to `ds:tag.needsdocumentation` once the anatomy is written to the block.
 
 ## Summary (`ds:summary`)
 
