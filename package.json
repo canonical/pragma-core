@@ -43,7 +43,7 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^5.0.0",
     "lerna": "^10.0.0",
-    "nx": "^23.0.0"
+    "nx": "^24.0.0"
   },
   "patchedDependencies": {
     "sigstore@4.1.0": "patches/sigstore@4.1.0.patch"
