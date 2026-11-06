@@ -295,82 +295,31 @@ const Memoized = memo(UserProfile);
 
 ---
 
-## Default or uniform named exports
+## One default export named after the file
 
 **Identifier:** `cs:packaging.export.shape`
 
-Files must use either a single default export or multiple named exports. When using multiple named exports, all exports must have the same type or shape.
+A module that exports has one default export, named as the file. Except: barrels (`index.ts`); files of only types or only plain values (`types.ts`, `constants.ts`, `testing/fixtures.ts`), which use named exports.
 
 ### Do
 
-Use a single default export for files implementing a single component or function
+Export one default named as the file, or only plain values by name
 ```typescript
-// ComponentName.tsx
-export default ComponentName;
-```
-
-Name atomic function files after the function they export
-```typescript
-// assignElement.ts
-export default function assignElement(target: Element, source: Partial<Element>) {
-  // ...
-}
-
 // formatCurrency.ts
-export default function formatCurrency(value: number) {
-  // ...
-}
-```
+export default function formatCurrency(value: number): string { /* ... */ }
 
-Use multiple named exports for files providing a public API or a collection of related items, and ensure all exports have the same type
-```typescript
-// index.ts
-export { ComponentA, ComponentB };
-
-// types.ts
-export type TypeA = { ... };
-export type TypeB = { ... };
-
-// Consistent export shape:
-export const myFuncA = (value: string) => {};
-export const myFuncB = (value: string) => {};
-export const myFuncC = (value: string) => {};
+// constants.ts
+export const MAX_RETRIES = 3;
+export const DEFAULT_TIMEOUT = 5000;
 ```
 
 ### Don't
 
-Mix default and unrelated named exports in a way that confuses the file's purpose
+Export several functions, or a default beside named exports, from one file
 ```typescript
-export default ComponentName;
-export const helper = () => {};
-```
-
-Name an atomic function file with a name that doesn't match its exported function
-```typescript
-// helpers.ts — wrong: generic name instead of function name
-export default function assignElement(target: Element, source: Partial<Element>) {
-  // ...
-}
-
-// utils.ts — wrong: generic name instead of function name
-export default function formatCurrency(value: number) {
-  // ...
-}
-```
-
-Provide multiple unrelated exports from a file meant for a single domain
-```typescript
-export default debounce;
-export const throttle = () => {};
-export const logger = () => {};
-```
-
-Export objects of different types or shapes from the same file
-```typescript
-export const transformer = (value: string) => {};
-export const reducer = (map: string[]) => {};
-class ABC {}
-export { ABC };
+// format.ts
+export default function formatDate(value: Date): string { /* ... */ }
+export const formatTime = (value: Date): string => { /* ... */ };
 ```
 
 ---
@@ -703,76 +652,25 @@ npm warn EBADENGINE }
 
 **Identifier:** `cs:packaging.naming.single_export_file`
 
-Files that contain a single export must be named after that export. This applies to functions, classes, types, constants, and any other single-export module. The file name must match the exported identifier exactly, preserving its casing (camelCase for functions/variables, PascalCase for classes/types/components).
+A file with a single export is named after it, in its casing: `isAccepted.ts`, `EventEmitter.ts`. Except: `index.ts`, `types.ts`, `constants.ts` and `testing/fixtures.ts` keep their role names.
 
 ### Do
 
-Name files after the single function they export
+Name the file after its export, or keep its role name
 ```typescript
 // isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
+export default function isAccepted(status: string): boolean { /* ... */ }
 
-// formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-```
-
-Name files after the single type or interface they export
-```typescript
-// ConnectionConfig.ts
-export interface ConnectionConfig {
-  host: string;
-  port: number;
-}
-
-// UserRole.ts
+// types.ts
 export type UserRole = "admin" | "editor" | "viewer";
-```
-
-Name files after the single class they export
-```typescript
-// EventEmitter.ts
-export class EventEmitter {
-  // ...
-}
-```
-
-Name files after the single constant they export
-```typescript
-// DEFAULT_TIMEOUT.ts
-export const DEFAULT_TIMEOUT = 5000;
 ```
 
 ### Don't
 
-Use generic names like `helpers.ts`, `utils.ts`, or `types.ts` for files with a single export
+Name a single export's file generically or by its domain
 ```typescript
-// helpers.ts — wrong: should be isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
-
-// utils.ts — wrong: should be formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-```
-
-Use names that describe the domain instead of the export
-```typescript
-// validation.ts — wrong: should be isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
-
-// network.ts — wrong: should be ConnectionConfig.ts
-export interface ConnectionConfig {
-  host: string;
-  port: number;
-}
+// helpers.ts: should be isAccepted.ts
+export default function isAccepted(status: string): boolean { /* ... */ }
 ```
 
 ---
