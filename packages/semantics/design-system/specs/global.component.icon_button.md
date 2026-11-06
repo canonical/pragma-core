@@ -12,9 +12,11 @@ A drafted block, awaiting entry into the database of record. Each section below 
 
 ## Summary (`ds:summary`)
 
-An icon button is a square Button that shows a single icon and no visible label. Unlike a Button with an icon and a label, its box is exactly as wide as it is tall in every density, and its baseline sits where a labelled Button's label baseline sits, so it lines up with text and with other buttons in a row. It has no visible text, so it is always named explicitly and always paired with a Tooltip that states the action.
+An icon button is a square Button that shows a single icon and no visible label. Use it for very common actions with a recognizable icon, such as edit, delete or close in a table row, for the trigger of a settings or options panel, and for actions that sit side by side in a toolbar. Unlike a Button with an icon and a label, its box is exactly as wide as it is tall in every density, and its baseline sits where a labelled Button's label baseline sits, so it lines up with text and with other buttons in a row. It has no visible text, so it is always named explicitly and always paired with a Tooltip that states the action.
 
 ## Usage (`ds:usage`)
+
+An icon button carries an action whose icon is widely recognized, where a written label would take more room than the layout has. It behaves as a Button in every other respect: it takes Button's hierarchy and anticipation, its loading and disabled states, and its density. Because it has no visible text, its action is stated twice: by its accessible name, for assistive technology, and by the Tooltip it is paired with, for sighted users.
 
 ### When to use
 
@@ -37,13 +39,30 @@ Always pair an icon button with a Tooltip that states the action clearly, as But
 
 When the icon button opens a menu or a panel, keep the Tooltip closed while the panel is open, so the Tooltip never covers what the button opened.
 
-### Size and alignment
+### Content
+
+An icon button shows one icon and no text. Choose an icon whose meaning is settled across products; when no icon is that clear, use a Button with a label instead. Write the Tooltip as the action, a verb and a noun in sentence case, such as "Delete instance", and keep it to a few words.
+
+### Size, alignment and responsiveness
 
 The box is the density cell in both directions: it follows the context and the density it sits in, as a labelled Button does. In a row aligned on the text baseline, the icon button, a labelled Button and plain text share one baseline. The icon is centred in the box.
+
+Because the box follows the density cell, a dense icon button is small. On touch screens, prefer the comfortable density, or give the row enough space between buttons that each keeps a comfortable hit area. The hit area of a dense icon button is smaller than the one the Icon block asks for, which is an open point for the design owners.
 
 ### Hierarchy
 
 An icon button takes Button's Importance and Anticipation modifier families. Most icon buttons are tertiary, because they sit beside the content they act on.
+
+### Localization
+
+- Translate the accessible name and the Tooltip message, which state the same action
+- Mirror directional icons, such as arrows and chevrons, in right-to-left layouts; leave icons that do not point a direction as they are
+- Allow the Tooltip message to grow in translation: it wraps, and the icon button's box does not change with it
+
+### Animation
+
+- Disable the colour transitions when `prefers-reduced-motion: reduce` is set, as for Button
+- The Tooltip's delay is not an animation, and stays in place under reduced motion
 
 ### Accessibility
 
