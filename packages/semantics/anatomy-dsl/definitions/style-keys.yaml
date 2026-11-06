@@ -67,11 +67,9 @@
 # with a comment in its place. The second namespace is temporary and is
 # marked as such below.
 #
-# `motion.` is declared as a namespace though no stratum publishes one yet,
-# so a `motion.duration.fast` binding is admitted where a symbol declares it
-# — and where none does, the binding is not written: the `#` comment on the
-# line is the record (`# reads --motion-duration-fast; no symbol declares
-# it`). `shadow.` is NOT declared, for the same reason in reverse — nothing
+# `motion.` admits the duration and easing symbols the motion stratum
+# declares. Where a symbol is not declared, the binding is not written: the
+# `#` comment on the line is the record. `shadow.` is NOT declared — nothing
 # names it — so no shadow key is in the roster.
 # ═══════════════════════════════════════════════════════════════════════════
 

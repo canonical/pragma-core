@@ -73,7 +73,7 @@ describe("the $root remedies", () => {
   const files = tokenFiles();
 
   it("reads every canonical token file", () => {
-    expect(files.length).toBe(45);
+    expect(files.length).toBe(46);
   });
 
   it("N2 — no node bears both $value and members (format §6.1)", () => {

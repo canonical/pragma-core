@@ -1810,6 +1810,12 @@ exports[`build output snapshots > sets.primitive.css matches snapshot 1`] = `
 		--dimension-space-top-text-baselineNudge-1000: 0.25rem;
 		--dimension-stroke-thickness-large: 3px;
 		--dimension-stroke-thickness-medium: 1px;
+		--motion-duration-fast: 165ms;
+		--motion-duration-medium: 250ms;
+		--motion-duration-slow: 400ms;
+		--motion-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+		--motion-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+		--motion-easing-standard: cubic-bezier(0, 0, 0.58, 1);
 		--number-chroma-disabled: 0.1;
 		--number-hue-category: 0;
 		--number-lightness-border-disabled-on-dark: 0.32;
@@ -7486,6 +7492,162 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       }
     ]
   },
+  "--motion-duration-fast": {
+    "cssVar": "--motion-duration-fast",
+    "id": "motion.duration.fast",
+    "type": "duration",
+    "tier": "primitive",
+    "visibility": "public",
+    "isPaired": false,
+    "cssOutputFile": "sets.primitive.css",
+    "description": "Small state changes: chevrons, toggles",
+    "valueLight": "165ms",
+    "valueDark": "165ms",
+    "sourceFile": "global/primitive/motion.tokens.json",
+    "declarations": [
+      {
+        "selector": ":root",
+        "file": "sets.primitive.css",
+        "line": 263,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.tokens"
+          }
+        ]
+      }
+    ]
+  },
+  "--motion-duration-medium": {
+    "cssVar": "--motion-duration-medium",
+    "id": "motion.duration.medium",
+    "type": "duration",
+    "tier": "primitive",
+    "visibility": "public",
+    "isPaired": false,
+    "cssOutputFile": "sets.primitive.css",
+    "description": "Panels and disclosures",
+    "valueLight": "250ms",
+    "valueDark": "250ms",
+    "sourceFile": "global/primitive/motion.tokens.json",
+    "declarations": [
+      {
+        "selector": ":root",
+        "file": "sets.primitive.css",
+        "line": 264,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.tokens"
+          }
+        ]
+      }
+    ]
+  },
+  "--motion-duration-slow": {
+    "cssVar": "--motion-duration-slow",
+    "id": "motion.duration.slow",
+    "type": "duration",
+    "tier": "primitive",
+    "visibility": "public",
+    "isPaired": false,
+    "cssOutputFile": "sets.primitive.css",
+    "description": "Larger transitions and overlays",
+    "valueLight": "400ms",
+    "valueDark": "400ms",
+    "sourceFile": "global/primitive/motion.tokens.json",
+    "declarations": [
+      {
+        "selector": ":root",
+        "file": "sets.primitive.css",
+        "line": 265,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.tokens"
+          }
+        ]
+      }
+    ]
+  },
+  "--motion-easing-accelerate": {
+    "cssVar": "--motion-easing-accelerate",
+    "id": "motion.easing.accelerate",
+    "type": "cubicBezier",
+    "tier": "primitive",
+    "visibility": "public",
+    "isPaired": false,
+    "cssOutputFile": "sets.primitive.css",
+    "description": "Exiting",
+    "valueLight": "cubic-bezier(0.4, 0, 1, 1)",
+    "valueDark": "cubic-bezier(0.4, 0, 1, 1)",
+    "sourceFile": "global/primitive/motion.tokens.json",
+    "declarations": [
+      {
+        "selector": ":root",
+        "file": "sets.primitive.css",
+        "line": 266,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.tokens"
+          }
+        ]
+      }
+    ]
+  },
+  "--motion-easing-decelerate": {
+    "cssVar": "--motion-easing-decelerate",
+    "id": "motion.easing.decelerate",
+    "type": "cubicBezier",
+    "tier": "primitive",
+    "visibility": "public",
+    "isPaired": false,
+    "cssOutputFile": "sets.primitive.css",
+    "description": "Entering",
+    "valueLight": "cubic-bezier(0, 0, 0.2, 1)",
+    "valueDark": "cubic-bezier(0, 0, 0.2, 1)",
+    "sourceFile": "global/primitive/motion.tokens.json",
+    "declarations": [
+      {
+        "selector": ":root",
+        "file": "sets.primitive.css",
+        "line": 267,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.tokens"
+          }
+        ]
+      }
+    ]
+  },
+  "--motion-easing-standard": {
+    "cssVar": "--motion-easing-standard",
+    "id": "motion.easing.standard",
+    "type": "cubicBezier",
+    "tier": "primitive",
+    "visibility": "public",
+    "isPaired": false,
+    "cssOutputFile": "sets.primitive.css",
+    "description": "Enter and exit default (CSS ease-out)",
+    "valueLight": "cubic-bezier(0, 0, 0.58, 1)",
+    "valueDark": "cubic-bezier(0, 0, 0.58, 1)",
+    "sourceFile": "global/primitive/motion.tokens.json",
+    "declarations": [
+      {
+        "selector": ":root",
+        "file": "sets.primitive.css",
+        "line": 268,
+        "atRules": [
+          {
+            "name": "layer",
+            "prelude": "ds.tokens"
+          }
+        ]
+      }
+    ]
+  },
   "--number-chroma-disabled": {
     "cssVar": "--number-chroma-disabled",
     "id": "number.chroma.disabled",
@@ -7502,7 +7664,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 263,
+        "line": 269,
         "atRules": [
           {
             "name": "layer",
@@ -7528,7 +7690,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 264,
+        "line": 270,
         "atRules": [
           {
             "name": "layer",
@@ -7554,7 +7716,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 265,
+        "line": 271,
         "atRules": [
           {
             "name": "layer",
@@ -7580,7 +7742,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 267,
+        "line": 273,
         "atRules": [
           {
             "name": "layer",
@@ -7606,7 +7768,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 269,
+        "line": 275,
         "atRules": [
           {
             "name": "layer",
@@ -7632,7 +7794,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 271,
+        "line": 277,
         "atRules": [
           {
             "name": "layer",
@@ -7658,7 +7820,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 273,
+        "line": 279,
         "atRules": [
           {
             "name": "layer",
@@ -7684,7 +7846,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 275,
+        "line": 281,
         "atRules": [
           {
             "name": "layer",
@@ -7710,7 +7872,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 277,
+        "line": 283,
         "atRules": [
           {
             "name": "layer",
@@ -7736,7 +7898,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 279,
+        "line": 285,
         "atRules": [
           {
             "name": "layer",
@@ -7762,7 +7924,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 281,
+        "line": 287,
         "atRules": [
           {
             "name": "layer",
@@ -7788,7 +7950,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 283,
+        "line": 289,
         "atRules": [
           {
             "name": "layer",
@@ -7814,7 +7976,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 285,
+        "line": 291,
         "atRules": [
           {
             "name": "layer",
@@ -7840,7 +8002,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 287,
+        "line": 293,
         "atRules": [
           {
             "name": "layer",
@@ -7866,7 +8028,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 289,
+        "line": 295,
         "atRules": [
           {
             "name": "layer",
@@ -7892,7 +8054,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 291,
+        "line": 297,
         "atRules": [
           {
             "name": "layer",
@@ -7918,7 +8080,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 293,
+        "line": 299,
         "atRules": [
           {
             "name": "layer",
@@ -7944,7 +8106,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 295,
+        "line": 301,
         "atRules": [
           {
             "name": "layer",
@@ -7970,7 +8132,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 297,
+        "line": 303,
         "atRules": [
           {
             "name": "layer",
@@ -7996,7 +8158,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 299,
+        "line": 305,
         "atRules": [
           {
             "name": "layer",
@@ -8022,7 +8184,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 301,
+        "line": 307,
         "atRules": [
           {
             "name": "layer",
@@ -8048,7 +8210,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 303,
+        "line": 309,
         "atRules": [
           {
             "name": "layer",
@@ -8074,7 +8236,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 305,
+        "line": 311,
         "atRules": [
           {
             "name": "layer",
@@ -8100,7 +8262,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 307,
+        "line": 313,
         "atRules": [
           {
             "name": "layer",
@@ -8126,7 +8288,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 309,
+        "line": 315,
         "atRules": [
           {
             "name": "layer",
@@ -8152,7 +8314,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 311,
+        "line": 317,
         "atRules": [
           {
             "name": "layer",
@@ -8178,7 +8340,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 313,
+        "line": 319,
         "atRules": [
           {
             "name": "layer",
@@ -8204,7 +8366,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 315,
+        "line": 321,
         "atRules": [
           {
             "name": "layer",
@@ -8230,7 +8392,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 317,
+        "line": 323,
         "atRules": [
           {
             "name": "layer",
@@ -8256,7 +8418,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 319,
+        "line": 325,
         "atRules": [
           {
             "name": "layer",
@@ -8282,7 +8444,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 321,
+        "line": 327,
         "atRules": [
           {
             "name": "layer",
@@ -8308,7 +8470,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 323,
+        "line": 329,
         "atRules": [
           {
             "name": "layer",
@@ -8334,7 +8496,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 325,
+        "line": 331,
         "atRules": [
           {
             "name": "layer",
@@ -8360,7 +8522,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 327,
+        "line": 333,
         "atRules": [
           {
             "name": "layer",
@@ -8386,7 +8548,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 329,
+        "line": 335,
         "atRules": [
           {
             "name": "layer",
@@ -8412,7 +8574,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 331,
+        "line": 337,
         "atRules": [
           {
             "name": "layer",
@@ -8438,7 +8600,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 333,
+        "line": 339,
         "atRules": [
           {
             "name": "layer",
@@ -8464,7 +8626,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 335,
+        "line": 341,
         "atRules": [
           {
             "name": "layer",
@@ -8490,7 +8652,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 337,
+        "line": 343,
         "atRules": [
           {
             "name": "layer",
@@ -8516,7 +8678,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 339,
+        "line": 345,
         "atRules": [
           {
             "name": "layer",
@@ -8542,7 +8704,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 341,
+        "line": 347,
         "atRules": [
           {
             "name": "layer",
@@ -8568,7 +8730,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 343,
+        "line": 349,
         "atRules": [
           {
             "name": "layer",
@@ -8594,7 +8756,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 345,
+        "line": 351,
         "atRules": [
           {
             "name": "layer",
@@ -8620,7 +8782,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 347,
+        "line": 353,
         "atRules": [
           {
             "name": "layer",
@@ -8646,7 +8808,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 349,
+        "line": 355,
         "atRules": [
           {
             "name": "layer",
@@ -8672,7 +8834,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 351,
+        "line": 357,
         "atRules": [
           {
             "name": "layer",
@@ -8698,7 +8860,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 353,
+        "line": 359,
         "atRules": [
           {
             "name": "layer",
@@ -8724,7 +8886,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 355,
+        "line": 361,
         "atRules": [
           {
             "name": "layer",
@@ -8750,7 +8912,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 357,
+        "line": 363,
         "atRules": [
           {
             "name": "layer",
@@ -8776,7 +8938,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 359,
+        "line": 365,
         "atRules": [
           {
             "name": "layer",
@@ -8802,7 +8964,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 361,
+        "line": 367,
         "atRules": [
           {
             "name": "layer",
@@ -8828,7 +8990,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 363,
+        "line": 369,
         "atRules": [
           {
             "name": "layer",
@@ -8854,7 +9016,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 365,
+        "line": 371,
         "atRules": [
           {
             "name": "layer",
@@ -8880,7 +9042,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 367,
+        "line": 373,
         "atRules": [
           {
             "name": "layer",
@@ -8906,7 +9068,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 369,
+        "line": 375,
         "atRules": [
           {
             "name": "layer",
@@ -8932,7 +9094,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 371,
+        "line": 377,
         "atRules": [
           {
             "name": "layer",
@@ -8958,7 +9120,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 373,
+        "line": 379,
         "atRules": [
           {
             "name": "layer",
@@ -8984,7 +9146,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 375,
+        "line": 381,
         "atRules": [
           {
             "name": "layer",
@@ -9010,7 +9172,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 377,
+        "line": 383,
         "atRules": [
           {
             "name": "layer",
@@ -9036,7 +9198,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 379,
+        "line": 385,
         "atRules": [
           {
             "name": "layer",
@@ -9062,7 +9224,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 381,
+        "line": 387,
         "atRules": [
           {
             "name": "layer",
@@ -9088,7 +9250,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 383,
+        "line": 389,
         "atRules": [
           {
             "name": "layer",
@@ -9114,7 +9276,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 385,
+        "line": 391,
         "atRules": [
           {
             "name": "layer",
@@ -9140,7 +9302,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 387,
+        "line": 393,
         "atRules": [
           {
             "name": "layer",
@@ -9166,7 +9328,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 389,
+        "line": 395,
         "atRules": [
           {
             "name": "layer",
@@ -9192,7 +9354,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 391,
+        "line": 397,
         "atRules": [
           {
             "name": "layer",
@@ -9218,7 +9380,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 393,
+        "line": 399,
         "atRules": [
           {
             "name": "layer",
@@ -9244,7 +9406,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 395,
+        "line": 401,
         "atRules": [
           {
             "name": "layer",
@@ -9270,7 +9432,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 397,
+        "line": 403,
         "atRules": [
           {
             "name": "layer",
@@ -9296,7 +9458,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 399,
+        "line": 405,
         "atRules": [
           {
             "name": "layer",
@@ -9322,7 +9484,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 401,
+        "line": 407,
         "atRules": [
           {
             "name": "layer",
@@ -9348,7 +9510,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 403,
+        "line": 409,
         "atRules": [
           {
             "name": "layer",
@@ -9374,7 +9536,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 405,
+        "line": 411,
         "atRules": [
           {
             "name": "layer",
@@ -9400,7 +9562,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 407,
+        "line": 413,
         "atRules": [
           {
             "name": "layer",
@@ -9426,7 +9588,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 409,
+        "line": 415,
         "atRules": [
           {
             "name": "layer",
@@ -9452,7 +9614,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 411,
+        "line": 417,
         "atRules": [
           {
             "name": "layer",
@@ -9478,7 +9640,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 413,
+        "line": 419,
         "atRules": [
           {
             "name": "layer",
@@ -9504,7 +9666,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 415,
+        "line": 421,
         "atRules": [
           {
             "name": "layer",
@@ -9530,7 +9692,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 417,
+        "line": 423,
         "atRules": [
           {
             "name": "layer",
@@ -9556,7 +9718,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 419,
+        "line": 425,
         "atRules": [
           {
             "name": "layer",
@@ -9582,7 +9744,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 421,
+        "line": 427,
         "atRules": [
           {
             "name": "layer",
@@ -9608,7 +9770,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 423,
+        "line": 429,
         "atRules": [
           {
             "name": "layer",
@@ -9634,7 +9796,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 425,
+        "line": 431,
         "atRules": [
           {
             "name": "layer",
@@ -9660,7 +9822,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 427,
+        "line": 433,
         "atRules": [
           {
             "name": "layer",
@@ -9686,7 +9848,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 429,
+        "line": 435,
         "atRules": [
           {
             "name": "layer",
@@ -9712,7 +9874,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 431,
+        "line": 437,
         "atRules": [
           {
             "name": "layer",
@@ -9738,7 +9900,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 433,
+        "line": 439,
         "atRules": [
           {
             "name": "layer",
@@ -9764,7 +9926,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 435,
+        "line": 441,
         "atRules": [
           {
             "name": "layer",
@@ -9790,7 +9952,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 437,
+        "line": 443,
         "atRules": [
           {
             "name": "layer",
@@ -9816,7 +9978,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 439,
+        "line": 445,
         "atRules": [
           {
             "name": "layer",
@@ -9842,7 +10004,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 441,
+        "line": 447,
         "atRules": [
           {
             "name": "layer",
@@ -9868,7 +10030,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 443,
+        "line": 449,
         "atRules": [
           {
             "name": "layer",
@@ -9894,7 +10056,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 445,
+        "line": 451,
         "atRules": [
           {
             "name": "layer",
@@ -9920,7 +10082,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 447,
+        "line": 453,
         "atRules": [
           {
             "name": "layer",
@@ -9946,7 +10108,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 449,
+        "line": 455,
         "atRules": [
           {
             "name": "layer",
@@ -9972,7 +10134,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 451,
+        "line": 457,
         "atRules": [
           {
             "name": "layer",
@@ -9998,7 +10160,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 453,
+        "line": 459,
         "atRules": [
           {
             "name": "layer",
@@ -10024,7 +10186,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 455,
+        "line": 461,
         "atRules": [
           {
             "name": "layer",
@@ -10050,7 +10212,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 457,
+        "line": 463,
         "atRules": [
           {
             "name": "layer",
@@ -10076,7 +10238,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 459,
+        "line": 465,
         "atRules": [
           {
             "name": "layer",
@@ -10102,7 +10264,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 461,
+        "line": 467,
         "atRules": [
           {
             "name": "layer",
@@ -10128,7 +10290,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 463,
+        "line": 469,
         "atRules": [
           {
             "name": "layer",
@@ -10154,7 +10316,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 465,
+        "line": 471,
         "atRules": [
           {
             "name": "layer",
@@ -10180,7 +10342,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 467,
+        "line": 473,
         "atRules": [
           {
             "name": "layer",
@@ -10206,7 +10368,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 469,
+        "line": 475,
         "atRules": [
           {
             "name": "layer",
@@ -10232,7 +10394,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 471,
+        "line": 477,
         "atRules": [
           {
             "name": "layer",
@@ -10258,7 +10420,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 473,
+        "line": 479,
         "atRules": [
           {
             "name": "layer",
@@ -10284,7 +10446,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 475,
+        "line": 481,
         "atRules": [
           {
             "name": "layer",
@@ -10310,7 +10472,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 477,
+        "line": 483,
         "atRules": [
           {
             "name": "layer",
@@ -10336,7 +10498,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 479,
+        "line": 485,
         "atRules": [
           {
             "name": "layer",
@@ -10362,7 +10524,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 481,
+        "line": 487,
         "atRules": [
           {
             "name": "layer",
@@ -10388,7 +10550,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 483,
+        "line": 489,
         "atRules": [
           {
             "name": "layer",
@@ -10414,7 +10576,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 485,
+        "line": 491,
         "atRules": [
           {
             "name": "layer",
@@ -10440,7 +10602,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 487,
+        "line": 493,
         "atRules": [
           {
             "name": "layer",
@@ -10466,7 +10628,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 489,
+        "line": 495,
         "atRules": [
           {
             "name": "layer",
@@ -10492,7 +10654,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 490,
+        "line": 496,
         "atRules": [
           {
             "name": "layer",
@@ -10518,7 +10680,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 492,
+        "line": 498,
         "atRules": [
           {
             "name": "layer",
@@ -10544,7 +10706,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 494,
+        "line": 500,
         "atRules": [
           {
             "name": "layer",
@@ -10570,7 +10732,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 495,
+        "line": 501,
         "atRules": [
           {
             "name": "layer",
@@ -10596,7 +10758,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 497,
+        "line": 503,
         "atRules": [
           {
             "name": "layer",
@@ -10622,7 +10784,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 499,
+        "line": 505,
         "atRules": [
           {
             "name": "layer",
@@ -10648,7 +10810,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 500,
+        "line": 506,
         "atRules": [
           {
             "name": "layer",
@@ -10674,7 +10836,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 501,
+        "line": 507,
         "atRules": [
           {
             "name": "layer",
@@ -10700,7 +10862,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 502,
+        "line": 508,
         "atRules": [
           {
             "name": "layer",
@@ -10726,7 +10888,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
       {
         "selector": ":root",
         "file": "sets.primitive.css",
-        "line": 504,
+        "line": 510,
         "atRules": [
           {
             "name": "layer",

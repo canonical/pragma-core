@@ -28,14 +28,14 @@ pass changes nothing.
 
 | Stratum | Holds | Standing |
 |---|---|---|
-| `s1.ttl` | 45 files, 1,320 token definitions, 729 symbols, 56 annotated groups, the resolver with its 10 axes and 44 contexts | complete; round-trips to the source documents except for key order, which RDF does not carry |
+| `s1.ttl` | 45 files, 1,326 token definitions, 735 symbols, 58 annotated groups, the resolver with its 10 axes and 44 contexts | complete; round-trips to the source documents except for key order, which RDF does not carry |
 | `s2.ttl` | one observed-coverage contract per non-empty axis, with the encoding bridge to `ds:`; the 25 channel symbols that coverage implies; the breakpoint axis is omitted now that it covers no semantic token | **a draft for review** — contracts are authored, not derived |
-| `s3.ttl` | 1,246 resolved values: 1,081 along mode — one per symbol at the all-defaults position, one more for each symbol the theme family covers — and 165 channel routings, one per (channel × coordinate) pair the platform provisions | the positions the graph chooses to materialise |
-| `s4.web.ttl` | 1,165 variables, 1,913 declarations under 31 conditions — every custom property the web build ships, verbatim, with the symbol it stands for and the coordinate its condition selects | one catalogue per platform; the bridge into `s3` is (symbol × position), verified complete for every variable that names a symbol |
+| `s3.ttl` | 1,252 resolved values: 1,087 along mode — one per symbol at the all-defaults position, one more for each symbol the theme family covers — and 165 channel routings, one per (channel × coordinate) pair the platform provisions | the positions the graph chooses to materialise |
+| `s4.web.ttl` | 1,171 variables, 1,919 declarations under 31 conditions — every custom property the web build ships, verbatim, with the symbol it stands for and the coordinate its condition selects | one catalogue per platform; the bridge into `s3` is (symbol × position), verified complete for every variable that names a symbol |
 
-Every symbol carries an `rdfs:label` holding its dotted name (754), and every
+Every symbol carries an `rdfs:label` holding its dotted name (760), and every
 variable one holding its custom-property name with the leading `--` stripped
-(1,165). Both are carried rather than derived: a consumer with only the IRI has
+(1,171). Both are carried rather than derived: a consumer with only the IRI has
 to choose a separator to recover a name, and `--color-text` cannot be typed as
 a command-line argument at all. The two label sets are disjoint, so they can be
 queried as one.

@@ -5896,6 +5896,42 @@
 
 []
     a dt:ResolvedValue ;
+    dt:forSymbol dt:motion.duration.fast ;
+    dt:resolvesTo "{\"unit\":\"ms\",\"value\":165}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/motion.tokens.json#motion.duration.fast> ) .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:motion.duration.medium ;
+    dt:resolvesTo "{\"unit\":\"ms\",\"value\":250}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/motion.tokens.json#motion.duration.medium> ) .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:motion.duration.slow ;
+    dt:resolvesTo "{\"unit\":\"ms\",\"value\":400}"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/motion.tokens.json#motion.duration.slow> ) .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:motion.easing.accelerate ;
+    dt:resolvesTo "[0.4,0,1,1]"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/motion.tokens.json#motion.easing.accelerate> ) .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:motion.easing.decelerate ;
+    dt:resolvesTo "[0,0,0.2,1]"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/motion.tokens.json#motion.easing.decelerate> ) .
+
+[]
+    a dt:ResolvedValue ;
+    dt:forSymbol dt:motion.easing.standard ;
+    dt:resolvesTo "[0,0,0.58,1]"^^rdf:JSON ;
+    dt:resolutionChain ( <global/primitive/motion.tokens.json#motion.easing.standard> ) .
+
+[]
+    a dt:ResolvedValue ;
     dt:forSymbol dt:number.chroma.disabled ;
     dt:resolvesTo "0.1"^^rdf:JSON ;
     dt:resolutionChain ( <global/primitive/number.tokens.json#number.chroma.disabled> ) .

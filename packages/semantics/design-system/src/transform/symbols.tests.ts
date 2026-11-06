@@ -32,8 +32,8 @@ describe("loadSymbolIndex", () => {
   const index = loadSymbolIndex();
 
   it("resolves S1's authored symbols and S2's minted channels together", () => {
-    // 729 authored plus the 25 channels coverage mints (ADR J §1.4, §3.2).
-    expect(index.names.size).toBe(754);
+    // 735 authored plus the 25 channels coverage mints (ADR J §1.4, §3.2).
+    expect(index.names.size).toBe(760);
     expect(index.names.has("color.text")).toBe(true);
     expect(index.names.has("modifier.color.text")).toBe(true);
   });
@@ -57,7 +57,7 @@ describe("loadPlatformVariables", () => {
   const variables = loadPlatformVariables();
 
   it("reads every web variable the catalogue declares", () => {
-    expect(variables.size).toBe(1165);
+    expect(variables.size).toBe(1171);
   });
 
   it("carries dt:ofSymbol, which is the first case of the name lift", () => {

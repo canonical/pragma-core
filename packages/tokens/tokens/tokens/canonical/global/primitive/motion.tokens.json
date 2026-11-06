@@ -1,0 +1,35 @@
+{
+  "$schema": "https://designtokens.org/schemas/2025.10/format.json",
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "fast": {
+        "$value": { "value": 165, "unit": "ms" },
+        "$description": "Small state changes: chevrons, toggles"
+      },
+      "medium": {
+        "$value": { "value": 250, "unit": "ms" },
+        "$description": "Panels and disclosures"
+      },
+      "slow": {
+        "$value": { "value": 400, "unit": "ms" },
+        "$description": "Larger transitions and overlays"
+      }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "standard": {
+        "$value": [0, 0, 0.58, 1],
+        "$description": "Enter and exit default (CSS ease-out)"
+      },
+      "decelerate": {
+        "$value": [0, 0, 0.2, 1],
+        "$description": "Entering"
+      },
+      "accelerate": {
+        "$value": [0.4, 0, 1, 1],
+        "$description": "Exiting"
+      }
+    }
+  }
+}
