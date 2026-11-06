@@ -10167,6 +10167,78 @@
         dt:derives dt:derivation.channel-modifier ;
         dt:computedFrom <--color-text-on-foreground-secondary-information> ] .
 
+<--motion-duration-fast>
+    a dt:Variable ;
+    rdfs:label "motion-duration-fast" ;
+    dt:ofSymbol dt:motion.duration.fast ;
+    dt:tier dt:tier.primitive ;
+    dt:visibility dt:visibility.public ;
+    dt:declaredAt [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-tokens/root> ;
+        dt:emits "165ms" ;
+        dt:at "sets.primitive.css:264" ] .
+
+<--motion-duration-medium>
+    a dt:Variable ;
+    rdfs:label "motion-duration-medium" ;
+    dt:ofSymbol dt:motion.duration.medium ;
+    dt:tier dt:tier.primitive ;
+    dt:visibility dt:visibility.public ;
+    dt:declaredAt [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-tokens/root> ;
+        dt:emits "250ms" ;
+        dt:at "sets.primitive.css:265" ] .
+
+<--motion-duration-slow>
+    a dt:Variable ;
+    rdfs:label "motion-duration-slow" ;
+    dt:ofSymbol dt:motion.duration.slow ;
+    dt:tier dt:tier.primitive ;
+    dt:visibility dt:visibility.public ;
+    dt:declaredAt [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-tokens/root> ;
+        dt:emits "400ms" ;
+        dt:at "sets.primitive.css:266" ] .
+
+<--motion-easing-accelerate>
+    a dt:Variable ;
+    rdfs:label "motion-easing-accelerate" ;
+    dt:ofSymbol dt:motion.easing.accelerate ;
+    dt:tier dt:tier.primitive ;
+    dt:visibility dt:visibility.public ;
+    dt:declaredAt [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-tokens/root> ;
+        dt:emits "cubic-bezier(0.4, 0, 1, 1)" ;
+        dt:at "sets.primitive.css:267" ] .
+
+<--motion-easing-decelerate>
+    a dt:Variable ;
+    rdfs:label "motion-easing-decelerate" ;
+    dt:ofSymbol dt:motion.easing.decelerate ;
+    dt:tier dt:tier.primitive ;
+    dt:visibility dt:visibility.public ;
+    dt:declaredAt [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-tokens/root> ;
+        dt:emits "cubic-bezier(0, 0, 0.2, 1)" ;
+        dt:at "sets.primitive.css:268" ] .
+
+<--motion-easing-standard>
+    a dt:Variable ;
+    rdfs:label "motion-easing-standard" ;
+    dt:ofSymbol dt:motion.easing.standard ;
+    dt:tier dt:tier.primitive ;
+    dt:visibility dt:visibility.public ;
+    dt:declaredAt [
+        a dt:Declaration ;
+        dt:under <cond/layer-ds-tokens/root> ;
+        dt:emits "cubic-bezier(0, 0, 0.58, 1)" ;
+        dt:at "sets.primitive.css:269" ] .
+
 <--number-chroma-disabled>
     a dt:Variable ;
     rdfs:label "number-chroma-disabled" ;
@@ -10177,7 +10249,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.1" ;
-        dt:at "sets.primitive.css:264" ] .
+        dt:at "sets.primitive.css:270" ] .
 
 <--number-hue-category>
     a dt:Variable ;
@@ -10189,7 +10261,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0" ;
-        dt:at "sets.primitive.css:265" ] .
+        dt:at "sets.primitive.css:271" ] .
 
 <--number-lightness-border-disabled-on-dark>
     a dt:Variable ;
@@ -10201,7 +10273,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.32" ;
-        dt:at "sets.primitive.css:266" ] .
+        dt:at "sets.primitive.css:272" ] .
 
 <--number-lightness-border-disabled-on-light>
     a dt:Variable ;
@@ -10213,7 +10285,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.83" ;
-        dt:at "sets.primitive.css:268" ] .
+        dt:at "sets.primitive.css:274" ] .
 
 <--number-lightness-border-disabled-onDark>
     a dt:Variable ;
@@ -10225,7 +10297,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.32" ;
-        dt:at "sets.primitive.css:267" ] .
+        dt:at "sets.primitive.css:273" ] .
 
 <--number-lightness-border-disabled-onLight>
     a dt:Variable ;
@@ -10237,7 +10309,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.83" ;
-        dt:at "sets.primitive.css:269" ] .
+        dt:at "sets.primitive.css:275" ] .
 
 <--number-lightness-border-highlighted-disabled-on-dark>
     a dt:Variable ;
@@ -10249,7 +10321,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.45" ;
-        dt:at "sets.primitive.css:270" ] .
+        dt:at "sets.primitive.css:276" ] .
 
 <--number-lightness-border-highlighted-disabled-on-light>
     a dt:Variable ;
@@ -10261,7 +10333,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.69" ;
-        dt:at "sets.primitive.css:272" ] .
+        dt:at "sets.primitive.css:278" ] .
 
 <--number-lightness-border-highlighted-disabled-onDark>
     a dt:Variable ;
@@ -10273,7 +10345,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.45" ;
-        dt:at "sets.primitive.css:271" ] .
+        dt:at "sets.primitive.css:277" ] .
 
 <--number-lightness-border-highlighted-disabled-onLight>
     a dt:Variable ;
@@ -10285,7 +10357,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.69" ;
-        dt:at "sets.primitive.css:273" ] .
+        dt:at "sets.primitive.css:279" ] .
 
 <--number-lightness-border-muted-disabled-on-dark>
     a dt:Variable ;
@@ -10297,7 +10369,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.23" ;
-        dt:at "sets.primitive.css:274" ] .
+        dt:at "sets.primitive.css:280" ] .
 
 <--number-lightness-border-muted-disabled-on-light>
     a dt:Variable ;
@@ -10309,7 +10381,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:276" ] .
+        dt:at "sets.primitive.css:282" ] .
 
 <--number-lightness-border-muted-disabled-onDark>
     a dt:Variable ;
@@ -10321,7 +10393,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.23" ;
-        dt:at "sets.primitive.css:275" ] .
+        dt:at "sets.primitive.css:281" ] .
 
 <--number-lightness-border-muted-disabled-onLight>
     a dt:Variable ;
@@ -10333,7 +10405,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:277" ] .
+        dt:at "sets.primitive.css:283" ] .
 
 <--number-lightness-foreground-ghost-active-on-dark>
     a dt:Variable ;
@@ -10345,7 +10417,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.3" ;
-        dt:at "sets.primitive.css:278" ] .
+        dt:at "sets.primitive.css:284" ] .
 
 <--number-lightness-foreground-ghost-active-on-layer2-on-dark>
     a dt:Variable ;
@@ -10357,7 +10429,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:280" ] .
+        dt:at "sets.primitive.css:286" ] .
 
 <--number-lightness-foreground-ghost-active-on-layer2-on-light>
     a dt:Variable ;
@@ -10369,7 +10441,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.92" ;
-        dt:at "sets.primitive.css:282" ] .
+        dt:at "sets.primitive.css:288" ] .
 
 <--number-lightness-foreground-ghost-active-on-layer3-on-dark>
     a dt:Variable ;
@@ -10381,7 +10453,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.3" ;
-        dt:at "sets.primitive.css:284" ] .
+        dt:at "sets.primitive.css:290" ] .
 
 <--number-lightness-foreground-ghost-active-on-layer3-on-light>
     a dt:Variable ;
@@ -10393,7 +10465,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:286" ] .
+        dt:at "sets.primitive.css:292" ] .
 
 <--number-lightness-foreground-ghost-active-on-light>
     a dt:Variable ;
@@ -10405,7 +10477,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:288" ] .
+        dt:at "sets.primitive.css:294" ] .
 
 <--number-lightness-foreground-ghost-active-onDark>
     a dt:Variable ;
@@ -10417,7 +10489,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.3" ;
-        dt:at "sets.primitive.css:279" ] .
+        dt:at "sets.primitive.css:285" ] .
 
 <--number-lightness-foreground-ghost-active-onLayer2-onDark>
     a dt:Variable ;
@@ -10429,7 +10501,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:281" ] .
+        dt:at "sets.primitive.css:287" ] .
 
 <--number-lightness-foreground-ghost-active-onLayer2-onLight>
     a dt:Variable ;
@@ -10441,7 +10513,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.92" ;
-        dt:at "sets.primitive.css:283" ] .
+        dt:at "sets.primitive.css:289" ] .
 
 <--number-lightness-foreground-ghost-active-onLayer3-onDark>
     a dt:Variable ;
@@ -10453,7 +10525,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.3" ;
-        dt:at "sets.primitive.css:285" ] .
+        dt:at "sets.primitive.css:291" ] .
 
 <--number-lightness-foreground-ghost-active-onLayer3-onLight>
     a dt:Variable ;
@@ -10465,7 +10537,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:287" ] .
+        dt:at "sets.primitive.css:293" ] .
 
 <--number-lightness-foreground-ghost-active-onLight>
     a dt:Variable ;
@@ -10477,7 +10549,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:289" ] .
+        dt:at "sets.primitive.css:295" ] .
 
 <--number-lightness-foreground-ghost-disabled-on-dark>
     a dt:Variable ;
@@ -10489,7 +10561,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.12" ;
-        dt:at "sets.primitive.css:290" ] .
+        dt:at "sets.primitive.css:296" ] .
 
 <--number-lightness-foreground-ghost-disabled-on-layer2-on-dark>
     a dt:Variable ;
@@ -10501,7 +10573,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.19" ;
-        dt:at "sets.primitive.css:292" ] .
+        dt:at "sets.primitive.css:298" ] .
 
 <--number-lightness-foreground-ghost-disabled-on-layer2-on-light>
     a dt:Variable ;
@@ -10513,7 +10585,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.98" ;
-        dt:at "sets.primitive.css:294" ] .
+        dt:at "sets.primitive.css:300" ] .
 
 <--number-lightness-foreground-ghost-disabled-on-layer3-on-dark>
     a dt:Variable ;
@@ -10525,7 +10597,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.12" ;
-        dt:at "sets.primitive.css:296" ] .
+        dt:at "sets.primitive.css:302" ] .
 
 <--number-lightness-foreground-ghost-disabled-on-layer3-on-light>
     a dt:Variable ;
@@ -10537,7 +10609,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1" ;
-        dt:at "sets.primitive.css:298" ] .
+        dt:at "sets.primitive.css:304" ] .
 
 <--number-lightness-foreground-ghost-disabled-on-light>
     a dt:Variable ;
@@ -10549,7 +10621,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1" ;
-        dt:at "sets.primitive.css:300" ] .
+        dt:at "sets.primitive.css:306" ] .
 
 <--number-lightness-foreground-ghost-disabled-onDark>
     a dt:Variable ;
@@ -10561,7 +10633,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.12" ;
-        dt:at "sets.primitive.css:291" ] .
+        dt:at "sets.primitive.css:297" ] .
 
 <--number-lightness-foreground-ghost-disabled-onLayer2-onDark>
     a dt:Variable ;
@@ -10573,7 +10645,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.19" ;
-        dt:at "sets.primitive.css:293" ] .
+        dt:at "sets.primitive.css:299" ] .
 
 <--number-lightness-foreground-ghost-disabled-onLayer2-onLight>
     a dt:Variable ;
@@ -10585,7 +10657,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.98" ;
-        dt:at "sets.primitive.css:295" ] .
+        dt:at "sets.primitive.css:301" ] .
 
 <--number-lightness-foreground-ghost-disabled-onLayer3-onDark>
     a dt:Variable ;
@@ -10597,7 +10669,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.12" ;
-        dt:at "sets.primitive.css:297" ] .
+        dt:at "sets.primitive.css:303" ] .
 
 <--number-lightness-foreground-ghost-disabled-onLayer3-onLight>
     a dt:Variable ;
@@ -10609,7 +10681,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1" ;
-        dt:at "sets.primitive.css:299" ] .
+        dt:at "sets.primitive.css:305" ] .
 
 <--number-lightness-foreground-ghost-disabled-onLight>
     a dt:Variable ;
@@ -10621,7 +10693,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1" ;
-        dt:at "sets.primitive.css:301" ] .
+        dt:at "sets.primitive.css:307" ] .
 
 <--number-lightness-foreground-ghost-hover-on-dark>
     a dt:Variable ;
@@ -10633,7 +10705,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:302" ] .
+        dt:at "sets.primitive.css:308" ] .
 
 <--number-lightness-foreground-ghost-hover-on-layer2-on-dark>
     a dt:Variable ;
@@ -10645,7 +10717,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:304" ] .
+        dt:at "sets.primitive.css:310" ] .
 
 <--number-lightness-foreground-ghost-hover-on-layer2-on-light>
     a dt:Variable ;
@@ -10657,7 +10729,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:306" ] .
+        dt:at "sets.primitive.css:312" ] .
 
 <--number-lightness-foreground-ghost-hover-on-layer3-on-dark>
     a dt:Variable ;
@@ -10669,7 +10741,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:308" ] .
+        dt:at "sets.primitive.css:314" ] .
 
 <--number-lightness-foreground-ghost-hover-on-layer3-on-light>
     a dt:Variable ;
@@ -10681,7 +10753,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:310" ] .
+        dt:at "sets.primitive.css:316" ] .
 
 <--number-lightness-foreground-ghost-hover-on-light>
     a dt:Variable ;
@@ -10693,7 +10765,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:312" ] .
+        dt:at "sets.primitive.css:318" ] .
 
 <--number-lightness-foreground-ghost-hover-onDark>
     a dt:Variable ;
@@ -10705,7 +10777,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:303" ] .
+        dt:at "sets.primitive.css:309" ] .
 
 <--number-lightness-foreground-ghost-hover-onLayer2-onDark>
     a dt:Variable ;
@@ -10717,7 +10789,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:305" ] .
+        dt:at "sets.primitive.css:311" ] .
 
 <--number-lightness-foreground-ghost-hover-onLayer2-onLight>
     a dt:Variable ;
@@ -10729,7 +10801,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:307" ] .
+        dt:at "sets.primitive.css:313" ] .
 
 <--number-lightness-foreground-ghost-hover-onLayer3-onDark>
     a dt:Variable ;
@@ -10741,7 +10813,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:309" ] .
+        dt:at "sets.primitive.css:315" ] .
 
 <--number-lightness-foreground-ghost-hover-onLayer3-onLight>
     a dt:Variable ;
@@ -10753,7 +10825,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:311" ] .
+        dt:at "sets.primitive.css:317" ] .
 
 <--number-lightness-foreground-ghost-hover-onLight>
     a dt:Variable ;
@@ -10765,7 +10837,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:313" ] .
+        dt:at "sets.primitive.css:319" ] .
 
 <--number-lightness-foreground-input-active-on-dark>
     a dt:Variable ;
@@ -10777,7 +10849,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.19" ;
-        dt:at "sets.primitive.css:314" ] .
+        dt:at "sets.primitive.css:320" ] .
 
 <--number-lightness-foreground-input-active-on-layer2-on-dark>
     a dt:Variable ;
@@ -10789,7 +10861,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.23" ;
-        dt:at "sets.primitive.css:316" ] .
+        dt:at "sets.primitive.css:322" ] .
 
 <--number-lightness-foreground-input-active-on-layer2-on-light>
     a dt:Variable ;
@@ -10801,7 +10873,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1" ;
-        dt:at "sets.primitive.css:318" ] .
+        dt:at "sets.primitive.css:324" ] .
 
 <--number-lightness-foreground-input-active-on-layer3-on-dark>
     a dt:Variable ;
@@ -10813,7 +10885,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.19" ;
-        dt:at "sets.primitive.css:320" ] .
+        dt:at "sets.primitive.css:326" ] .
 
 <--number-lightness-foreground-input-active-on-layer3-on-light>
     a dt:Variable ;
@@ -10825,7 +10897,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.98" ;
-        dt:at "sets.primitive.css:322" ] .
+        dt:at "sets.primitive.css:328" ] .
 
 <--number-lightness-foreground-input-active-on-light>
     a dt:Variable ;
@@ -10837,7 +10909,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.98" ;
-        dt:at "sets.primitive.css:324" ] .
+        dt:at "sets.primitive.css:330" ] .
 
 <--number-lightness-foreground-input-active-onDark>
     a dt:Variable ;
@@ -10849,7 +10921,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.19" ;
-        dt:at "sets.primitive.css:315" ] .
+        dt:at "sets.primitive.css:321" ] .
 
 <--number-lightness-foreground-input-active-onLayer2-onDark>
     a dt:Variable ;
@@ -10861,7 +10933,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.23" ;
-        dt:at "sets.primitive.css:317" ] .
+        dt:at "sets.primitive.css:323" ] .
 
 <--number-lightness-foreground-input-active-onLayer2-onLight>
     a dt:Variable ;
@@ -10873,7 +10945,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1" ;
-        dt:at "sets.primitive.css:319" ] .
+        dt:at "sets.primitive.css:325" ] .
 
 <--number-lightness-foreground-input-active-onLayer3-onDark>
     a dt:Variable ;
@@ -10885,7 +10957,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.19" ;
-        dt:at "sets.primitive.css:321" ] .
+        dt:at "sets.primitive.css:327" ] .
 
 <--number-lightness-foreground-input-active-onLayer3-onLight>
     a dt:Variable ;
@@ -10897,7 +10969,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.98" ;
-        dt:at "sets.primitive.css:323" ] .
+        dt:at "sets.primitive.css:329" ] .
 
 <--number-lightness-foreground-input-active-onLight>
     a dt:Variable ;
@@ -10909,7 +10981,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.98" ;
-        dt:at "sets.primitive.css:325" ] .
+        dt:at "sets.primitive.css:331" ] .
 
 <--number-lightness-foreground-input-disabled-on-dark>
     a dt:Variable ;
@@ -10921,7 +10993,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.15" ;
-        dt:at "sets.primitive.css:326" ] .
+        dt:at "sets.primitive.css:332" ] .
 
 <--number-lightness-foreground-input-disabled-on-layer2-on-dark>
     a dt:Variable ;
@@ -10933,7 +11005,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.17" ;
-        dt:at "sets.primitive.css:328" ] .
+        dt:at "sets.primitive.css:334" ] .
 
 <--number-lightness-foreground-input-disabled-on-layer2-on-light>
     a dt:Variable ;
@@ -10945,7 +11017,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:330" ] .
+        dt:at "sets.primitive.css:336" ] .
 
 <--number-lightness-foreground-input-disabled-on-layer3-on-dark>
     a dt:Variable ;
@@ -10957,7 +11029,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.15" ;
-        dt:at "sets.primitive.css:332" ] .
+        dt:at "sets.primitive.css:338" ] .
 
 <--number-lightness-foreground-input-disabled-on-layer3-on-light>
     a dt:Variable ;
@@ -10969,7 +11041,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:334" ] .
+        dt:at "sets.primitive.css:340" ] .
 
 <--number-lightness-foreground-input-disabled-on-light>
     a dt:Variable ;
@@ -10981,7 +11053,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:336" ] .
+        dt:at "sets.primitive.css:342" ] .
 
 <--number-lightness-foreground-input-disabled-onDark>
     a dt:Variable ;
@@ -10993,7 +11065,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.15" ;
-        dt:at "sets.primitive.css:327" ] .
+        dt:at "sets.primitive.css:333" ] .
 
 <--number-lightness-foreground-input-disabled-onLayer2-onDark>
     a dt:Variable ;
@@ -11005,7 +11077,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.17" ;
-        dt:at "sets.primitive.css:329" ] .
+        dt:at "sets.primitive.css:335" ] .
 
 <--number-lightness-foreground-input-disabled-onLayer2-onLight>
     a dt:Variable ;
@@ -11017,7 +11089,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:331" ] .
+        dt:at "sets.primitive.css:337" ] .
 
 <--number-lightness-foreground-input-disabled-onLayer3-onDark>
     a dt:Variable ;
@@ -11029,7 +11101,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.15" ;
-        dt:at "sets.primitive.css:333" ] .
+        dt:at "sets.primitive.css:339" ] .
 
 <--number-lightness-foreground-input-disabled-onLayer3-onLight>
     a dt:Variable ;
@@ -11041,7 +11113,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:335" ] .
+        dt:at "sets.primitive.css:341" ] .
 
 <--number-lightness-foreground-input-disabled-onLight>
     a dt:Variable ;
@@ -11053,7 +11125,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:337" ] .
+        dt:at "sets.primitive.css:343" ] .
 
 <--number-lightness-foreground-input-hover-on-dark>
     a dt:Variable ;
@@ -11065,7 +11137,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:338" ] .
+        dt:at "sets.primitive.css:344" ] .
 
 <--number-lightness-foreground-input-hover-on-layer2-on-dark>
     a dt:Variable ;
@@ -11077,7 +11149,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:340" ] .
+        dt:at "sets.primitive.css:346" ] .
 
 <--number-lightness-foreground-input-hover-on-layer2-on-light>
     a dt:Variable ;
@@ -11089,7 +11161,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:342" ] .
+        dt:at "sets.primitive.css:348" ] .
 
 <--number-lightness-foreground-input-hover-on-layer3-on-dark>
     a dt:Variable ;
@@ -11101,7 +11173,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:344" ] .
+        dt:at "sets.primitive.css:350" ] .
 
 <--number-lightness-foreground-input-hover-on-layer3-on-light>
     a dt:Variable ;
@@ -11113,7 +11185,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:346" ] .
+        dt:at "sets.primitive.css:352" ] .
 
 <--number-lightness-foreground-input-hover-on-light>
     a dt:Variable ;
@@ -11125,7 +11197,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:348" ] .
+        dt:at "sets.primitive.css:354" ] .
 
 <--number-lightness-foreground-input-hover-onDark>
     a dt:Variable ;
@@ -11137,7 +11209,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:339" ] .
+        dt:at "sets.primitive.css:345" ] .
 
 <--number-lightness-foreground-input-hover-onLayer2-onDark>
     a dt:Variable ;
@@ -11149,7 +11221,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:341" ] .
+        dt:at "sets.primitive.css:347" ] .
 
 <--number-lightness-foreground-input-hover-onLayer2-onLight>
     a dt:Variable ;
@@ -11161,7 +11233,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:343" ] .
+        dt:at "sets.primitive.css:349" ] .
 
 <--number-lightness-foreground-input-hover-onLayer3-onDark>
     a dt:Variable ;
@@ -11173,7 +11245,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:345" ] .
+        dt:at "sets.primitive.css:351" ] .
 
 <--number-lightness-foreground-input-hover-onLayer3-onLight>
     a dt:Variable ;
@@ -11185,7 +11257,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:347" ] .
+        dt:at "sets.primitive.css:353" ] .
 
 <--number-lightness-foreground-input-hover-onLight>
     a dt:Variable ;
@@ -11197,7 +11269,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:349" ] .
+        dt:at "sets.primitive.css:355" ] .
 
 <--number-lightness-foreground-navigation-primary-active-on-dark>
     a dt:Variable ;
@@ -11209,7 +11281,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:350" ] .
+        dt:at "sets.primitive.css:356" ] .
 
 <--number-lightness-foreground-navigation-primary-active-on-layer2-on-dark>
     a dt:Variable ;
@@ -11221,7 +11293,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.3" ;
-        dt:at "sets.primitive.css:352" ] .
+        dt:at "sets.primitive.css:358" ] .
 
 <--number-lightness-foreground-navigation-primary-active-on-layer2-on-light>
     a dt:Variable ;
@@ -11233,7 +11305,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:354" ] .
+        dt:at "sets.primitive.css:360" ] .
 
 <--number-lightness-foreground-navigation-primary-active-on-layer3-on-dark>
     a dt:Variable ;
@@ -11245,7 +11317,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:356" ] .
+        dt:at "sets.primitive.css:362" ] .
 
 <--number-lightness-foreground-navigation-primary-active-on-layer3-on-light>
     a dt:Variable ;
@@ -11257,7 +11329,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.92" ;
-        dt:at "sets.primitive.css:358" ] .
+        dt:at "sets.primitive.css:364" ] .
 
 <--number-lightness-foreground-navigation-primary-active-on-light>
     a dt:Variable ;
@@ -11269,7 +11341,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.92" ;
-        dt:at "sets.primitive.css:360" ] .
+        dt:at "sets.primitive.css:366" ] .
 
 <--number-lightness-foreground-navigation-primary-active-onDark>
     a dt:Variable ;
@@ -11281,7 +11353,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:351" ] .
+        dt:at "sets.primitive.css:357" ] .
 
 <--number-lightness-foreground-navigation-primary-active-onLayer2-onDark>
     a dt:Variable ;
@@ -11293,7 +11365,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.3" ;
-        dt:at "sets.primitive.css:353" ] .
+        dt:at "sets.primitive.css:359" ] .
 
 <--number-lightness-foreground-navigation-primary-active-onLayer2-onLight>
     a dt:Variable ;
@@ -11305,7 +11377,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:355" ] .
+        dt:at "sets.primitive.css:361" ] .
 
 <--number-lightness-foreground-navigation-primary-active-onLayer3-onDark>
     a dt:Variable ;
@@ -11317,7 +11389,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:357" ] .
+        dt:at "sets.primitive.css:363" ] .
 
 <--number-lightness-foreground-navigation-primary-active-onLayer3-onLight>
     a dt:Variable ;
@@ -11329,7 +11401,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.92" ;
-        dt:at "sets.primitive.css:359" ] .
+        dt:at "sets.primitive.css:365" ] .
 
 <--number-lightness-foreground-navigation-primary-active-onLight>
     a dt:Variable ;
@@ -11341,7 +11413,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.92" ;
-        dt:at "sets.primitive.css:361" ] .
+        dt:at "sets.primitive.css:367" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-on-dark>
     a dt:Variable ;
@@ -11353,7 +11425,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.15" ;
-        dt:at "sets.primitive.css:362" ] .
+        dt:at "sets.primitive.css:368" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-on-layer2-on-dark>
     a dt:Variable ;
@@ -11365,7 +11437,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.17" ;
-        dt:at "sets.primitive.css:364" ] .
+        dt:at "sets.primitive.css:370" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-on-layer2-on-light>
     a dt:Variable ;
@@ -11377,7 +11449,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:366" ] .
+        dt:at "sets.primitive.css:372" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-on-layer3-on-dark>
     a dt:Variable ;
@@ -11389,7 +11461,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.15" ;
-        dt:at "sets.primitive.css:368" ] .
+        dt:at "sets.primitive.css:374" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-on-layer3-on-light>
     a dt:Variable ;
@@ -11401,7 +11473,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:370" ] .
+        dt:at "sets.primitive.css:376" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-on-light>
     a dt:Variable ;
@@ -11413,7 +11485,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:372" ] .
+        dt:at "sets.primitive.css:378" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-onDark>
     a dt:Variable ;
@@ -11425,7 +11497,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.15" ;
-        dt:at "sets.primitive.css:363" ] .
+        dt:at "sets.primitive.css:369" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-onLayer2-onDark>
     a dt:Variable ;
@@ -11437,7 +11509,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.17" ;
-        dt:at "sets.primitive.css:365" ] .
+        dt:at "sets.primitive.css:371" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-onLayer2-onLight>
     a dt:Variable ;
@@ -11449,7 +11521,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:367" ] .
+        dt:at "sets.primitive.css:373" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-onLayer3-onDark>
     a dt:Variable ;
@@ -11461,7 +11533,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.15" ;
-        dt:at "sets.primitive.css:369" ] .
+        dt:at "sets.primitive.css:375" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-onLayer3-onLight>
     a dt:Variable ;
@@ -11473,7 +11545,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:371" ] .
+        dt:at "sets.primitive.css:377" ] .
 
 <--number-lightness-foreground-navigation-primary-disabled-onLight>
     a dt:Variable ;
@@ -11485,7 +11557,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:373" ] .
+        dt:at "sets.primitive.css:379" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-on-dark>
     a dt:Variable ;
@@ -11497,7 +11569,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:374" ] .
+        dt:at "sets.primitive.css:380" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-on-layer2-on-dark>
     a dt:Variable ;
@@ -11509,7 +11581,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:376" ] .
+        dt:at "sets.primitive.css:382" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-on-layer2-on-light>
     a dt:Variable ;
@@ -11521,7 +11593,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:378" ] .
+        dt:at "sets.primitive.css:384" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-on-layer3-on-dark>
     a dt:Variable ;
@@ -11533,7 +11605,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:380" ] .
+        dt:at "sets.primitive.css:386" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-on-layer3-on-light>
     a dt:Variable ;
@@ -11545,7 +11617,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:382" ] .
+        dt:at "sets.primitive.css:388" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-on-light>
     a dt:Variable ;
@@ -11557,7 +11629,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:384" ] .
+        dt:at "sets.primitive.css:390" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-onDark>
     a dt:Variable ;
@@ -11569,7 +11641,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:375" ] .
+        dt:at "sets.primitive.css:381" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-onLayer2-onDark>
     a dt:Variable ;
@@ -11581,7 +11653,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.27" ;
-        dt:at "sets.primitive.css:377" ] .
+        dt:at "sets.primitive.css:383" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-onLayer2-onLight>
     a dt:Variable ;
@@ -11593,7 +11665,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:379" ] .
+        dt:at "sets.primitive.css:385" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-onLayer3-onDark>
     a dt:Variable ;
@@ -11605,7 +11677,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:381" ] .
+        dt:at "sets.primitive.css:387" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-onLayer3-onLight>
     a dt:Variable ;
@@ -11617,7 +11689,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:383" ] .
+        dt:at "sets.primitive.css:389" ] .
 
 <--number-lightness-foreground-navigation-primary-hover-onLight>
     a dt:Variable ;
@@ -11629,7 +11701,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:385" ] .
+        dt:at "sets.primitive.css:391" ] .
 
 <--number-lightness-foreground-navigation-secondary-active-on-dark>
     a dt:Variable ;
@@ -11641,7 +11713,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:386" ] .
+        dt:at "sets.primitive.css:392" ] .
 
 <--number-lightness-foreground-navigation-secondary-active-on-light>
     a dt:Variable ;
@@ -11653,7 +11725,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.9" ;
-        dt:at "sets.primitive.css:388" ] .
+        dt:at "sets.primitive.css:394" ] .
 
 <--number-lightness-foreground-navigation-secondary-active-onDark>
     a dt:Variable ;
@@ -11665,7 +11737,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.24" ;
-        dt:at "sets.primitive.css:387" ] .
+        dt:at "sets.primitive.css:393" ] .
 
 <--number-lightness-foreground-navigation-secondary-active-onLight>
     a dt:Variable ;
@@ -11677,7 +11749,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.9" ;
-        dt:at "sets.primitive.css:389" ] .
+        dt:at "sets.primitive.css:395" ] .
 
 <--number-lightness-foreground-navigation-secondary-disabled-on-dark>
     a dt:Variable ;
@@ -11689,7 +11761,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.17" ;
-        dt:at "sets.primitive.css:390" ] .
+        dt:at "sets.primitive.css:396" ] .
 
 <--number-lightness-foreground-navigation-secondary-disabled-on-light>
     a dt:Variable ;
@@ -11701,7 +11773,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:392" ] .
+        dt:at "sets.primitive.css:398" ] .
 
 <--number-lightness-foreground-navigation-secondary-disabled-onDark>
     a dt:Variable ;
@@ -11713,7 +11785,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.17" ;
-        dt:at "sets.primitive.css:391" ] .
+        dt:at "sets.primitive.css:397" ] .
 
 <--number-lightness-foreground-navigation-secondary-disabled-onLight>
     a dt:Variable ;
@@ -11725,7 +11797,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.99" ;
-        dt:at "sets.primitive.css:393" ] .
+        dt:at "sets.primitive.css:399" ] .
 
 <--number-lightness-foreground-navigation-secondary-hover-on-dark>
     a dt:Variable ;
@@ -11737,7 +11809,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.2" ;
-        dt:at "sets.primitive.css:394" ] .
+        dt:at "sets.primitive.css:400" ] .
 
 <--number-lightness-foreground-navigation-secondary-hover-on-light>
     a dt:Variable ;
@@ -11749,7 +11821,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.92" ;
-        dt:at "sets.primitive.css:396" ] .
+        dt:at "sets.primitive.css:402" ] .
 
 <--number-lightness-foreground-navigation-secondary-hover-onDark>
     a dt:Variable ;
@@ -11761,7 +11833,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.2" ;
-        dt:at "sets.primitive.css:395" ] .
+        dt:at "sets.primitive.css:401" ] .
 
 <--number-lightness-foreground-navigation-secondary-hover-onLight>
     a dt:Variable ;
@@ -11773,7 +11845,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.92" ;
-        dt:at "sets.primitive.css:397" ] .
+        dt:at "sets.primitive.css:403" ] .
 
 <--number-lightness-foreground-primary-active-on-dark>
     a dt:Variable ;
@@ -11785,7 +11857,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.7" ;
-        dt:at "sets.primitive.css:398" ] .
+        dt:at "sets.primitive.css:404" ] .
 
 <--number-lightness-foreground-primary-active-on-light>
     a dt:Variable ;
@@ -11797,7 +11869,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.51" ;
-        dt:at "sets.primitive.css:400" ] .
+        dt:at "sets.primitive.css:406" ] .
 
 <--number-lightness-foreground-primary-active-onDark>
     a dt:Variable ;
@@ -11809,7 +11881,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.7" ;
-        dt:at "sets.primitive.css:399" ] .
+        dt:at "sets.primitive.css:405" ] .
 
 <--number-lightness-foreground-primary-active-onLight>
     a dt:Variable ;
@@ -11821,7 +11893,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.51" ;
-        dt:at "sets.primitive.css:401" ] .
+        dt:at "sets.primitive.css:407" ] .
 
 <--number-lightness-foreground-primary-disabled-on-dark>
     a dt:Variable ;
@@ -11833,7 +11905,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.36" ;
-        dt:at "sets.primitive.css:402" ] .
+        dt:at "sets.primitive.css:408" ] .
 
 <--number-lightness-foreground-primary-disabled-on-light>
     a dt:Variable ;
@@ -11845,7 +11917,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.83" ;
-        dt:at "sets.primitive.css:404" ] .
+        dt:at "sets.primitive.css:410" ] .
 
 <--number-lightness-foreground-primary-disabled-onDark>
     a dt:Variable ;
@@ -11857,7 +11929,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.36" ;
-        dt:at "sets.primitive.css:403" ] .
+        dt:at "sets.primitive.css:409" ] .
 
 <--number-lightness-foreground-primary-disabled-onLight>
     a dt:Variable ;
@@ -11869,7 +11941,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.83" ;
-        dt:at "sets.primitive.css:405" ] .
+        dt:at "sets.primitive.css:411" ] .
 
 <--number-lightness-foreground-primary-hover-on-dark>
     a dt:Variable ;
@@ -11881,7 +11953,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.67" ;
-        dt:at "sets.primitive.css:406" ] .
+        dt:at "sets.primitive.css:412" ] .
 
 <--number-lightness-foreground-primary-hover-on-light>
     a dt:Variable ;
@@ -11893,7 +11965,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.52" ;
-        dt:at "sets.primitive.css:408" ] .
+        dt:at "sets.primitive.css:414" ] .
 
 <--number-lightness-foreground-primary-hover-onDark>
     a dt:Variable ;
@@ -11905,7 +11977,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.67" ;
-        dt:at "sets.primitive.css:407" ] .
+        dt:at "sets.primitive.css:413" ] .
 
 <--number-lightness-foreground-primary-hover-onLight>
     a dt:Variable ;
@@ -11917,7 +11989,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.52" ;
-        dt:at "sets.primitive.css:409" ] .
+        dt:at "sets.primitive.css:415" ] .
 
 <--number-lightness-foreground-primary-root-active-on-dark>
     a dt:Variable ;
@@ -11929,7 +12001,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:410" ] .
+        dt:at "sets.primitive.css:416" ] .
 
 <--number-lightness-foreground-primary-root-active-on-light>
     a dt:Variable ;
@@ -11941,7 +12013,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.22" ;
-        dt:at "sets.primitive.css:412" ] .
+        dt:at "sets.primitive.css:418" ] .
 
 <--number-lightness-foreground-primary-root-active-onDark>
     a dt:Variable ;
@@ -11953,7 +12025,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.94" ;
-        dt:at "sets.primitive.css:411" ] .
+        dt:at "sets.primitive.css:417" ] .
 
 <--number-lightness-foreground-primary-root-active-onLight>
     a dt:Variable ;
@@ -11965,7 +12037,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.22" ;
-        dt:at "sets.primitive.css:413" ] .
+        dt:at "sets.primitive.css:419" ] .
 
 <--number-lightness-foreground-primary-root-disabled-on-dark>
     a dt:Variable ;
@@ -11977,7 +12049,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.45" ;
-        dt:at "sets.primitive.css:414" ] .
+        dt:at "sets.primitive.css:420" ] .
 
 <--number-lightness-foreground-primary-root-disabled-on-light>
     a dt:Variable ;
@@ -11989,7 +12061,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.69" ;
-        dt:at "sets.primitive.css:416" ] .
+        dt:at "sets.primitive.css:422" ] .
 
 <--number-lightness-foreground-primary-root-disabled-onDark>
     a dt:Variable ;
@@ -12001,7 +12073,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.45" ;
-        dt:at "sets.primitive.css:415" ] .
+        dt:at "sets.primitive.css:421" ] .
 
 <--number-lightness-foreground-primary-root-disabled-onLight>
     a dt:Variable ;
@@ -12013,7 +12085,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.69" ;
-        dt:at "sets.primitive.css:417" ] .
+        dt:at "sets.primitive.css:423" ] .
 
 <--number-lightness-foreground-primary-root-hover-on-dark>
     a dt:Variable ;
@@ -12025,7 +12097,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:418" ] .
+        dt:at "sets.primitive.css:424" ] .
 
 <--number-lightness-foreground-primary-root-hover-on-light>
     a dt:Variable ;
@@ -12037,7 +12109,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.19" ;
-        dt:at "sets.primitive.css:420" ] .
+        dt:at "sets.primitive.css:426" ] .
 
 <--number-lightness-foreground-primary-root-hover-onDark>
     a dt:Variable ;
@@ -12049,7 +12121,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.96" ;
-        dt:at "sets.primitive.css:419" ] .
+        dt:at "sets.primitive.css:425" ] .
 
 <--number-lightness-foreground-primary-root-hover-onLight>
     a dt:Variable ;
@@ -12061,7 +12133,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.19" ;
-        dt:at "sets.primitive.css:421" ] .
+        dt:at "sets.primitive.css:427" ] .
 
 <--number-lightness-foreground-secondary-active-on-dark>
     a dt:Variable ;
@@ -12073,7 +12145,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.38" ;
-        dt:at "sets.primitive.css:422" ] .
+        dt:at "sets.primitive.css:428" ] .
 
 <--number-lightness-foreground-secondary-active-on-light>
     a dt:Variable ;
@@ -12085,7 +12157,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.87" ;
-        dt:at "sets.primitive.css:424" ] .
+        dt:at "sets.primitive.css:430" ] .
 
 <--number-lightness-foreground-secondary-active-onDark>
     a dt:Variable ;
@@ -12097,7 +12169,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.38" ;
-        dt:at "sets.primitive.css:423" ] .
+        dt:at "sets.primitive.css:429" ] .
 
 <--number-lightness-foreground-secondary-active-onLight>
     a dt:Variable ;
@@ -12109,7 +12181,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.87" ;
-        dt:at "sets.primitive.css:425" ] .
+        dt:at "sets.primitive.css:431" ] .
 
 <--number-lightness-foreground-secondary-disabled-on-dark>
     a dt:Variable ;
@@ -12121,7 +12193,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.23" ;
-        dt:at "sets.primitive.css:426" ] .
+        dt:at "sets.primitive.css:432" ] .
 
 <--number-lightness-foreground-secondary-disabled-on-light>
     a dt:Variable ;
@@ -12133,7 +12205,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.95" ;
-        dt:at "sets.primitive.css:428" ] .
+        dt:at "sets.primitive.css:434" ] .
 
 <--number-lightness-foreground-secondary-disabled-onDark>
     a dt:Variable ;
@@ -12145,7 +12217,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.23" ;
-        dt:at "sets.primitive.css:427" ] .
+        dt:at "sets.primitive.css:433" ] .
 
 <--number-lightness-foreground-secondary-disabled-onLight>
     a dt:Variable ;
@@ -12157,7 +12229,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.95" ;
-        dt:at "sets.primitive.css:429" ] .
+        dt:at "sets.primitive.css:435" ] .
 
 <--number-lightness-foreground-secondary-hover-on-dark>
     a dt:Variable ;
@@ -12169,7 +12241,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.36" ;
-        dt:at "sets.primitive.css:430" ] .
+        dt:at "sets.primitive.css:436" ] .
 
 <--number-lightness-foreground-secondary-hover-on-light>
     a dt:Variable ;
@@ -12181,7 +12253,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.89" ;
-        dt:at "sets.primitive.css:432" ] .
+        dt:at "sets.primitive.css:438" ] .
 
 <--number-lightness-foreground-secondary-hover-onDark>
     a dt:Variable ;
@@ -12193,7 +12265,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.36" ;
-        dt:at "sets.primitive.css:431" ] .
+        dt:at "sets.primitive.css:437" ] .
 
 <--number-lightness-foreground-secondary-hover-onLight>
     a dt:Variable ;
@@ -12205,7 +12277,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.89" ;
-        dt:at "sets.primitive.css:433" ] .
+        dt:at "sets.primitive.css:439" ] .
 
 <--number-lightness-text-disabled-on-dark>
     a dt:Variable ;
@@ -12217,7 +12289,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.45" ;
-        dt:at "sets.primitive.css:434" ] .
+        dt:at "sets.primitive.css:440" ] .
 
 <--number-lightness-text-disabled-on-light>
     a dt:Variable ;
@@ -12229,7 +12301,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.69" ;
-        dt:at "sets.primitive.css:436" ] .
+        dt:at "sets.primitive.css:442" ] .
 
 <--number-lightness-text-disabled-onDark>
     a dt:Variable ;
@@ -12241,7 +12313,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.45" ;
-        dt:at "sets.primitive.css:435" ] .
+        dt:at "sets.primitive.css:441" ] .
 
 <--number-lightness-text-disabled-onLight>
     a dt:Variable ;
@@ -12253,7 +12325,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.69" ;
-        dt:at "sets.primitive.css:437" ] .
+        dt:at "sets.primitive.css:443" ] .
 
 <--number-lightness-text-link-disabled-on-dark>
     a dt:Variable ;
@@ -12265,7 +12337,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.36" ;
-        dt:at "sets.primitive.css:438" ] .
+        dt:at "sets.primitive.css:444" ] .
 
 <--number-lightness-text-link-disabled-on-light>
     a dt:Variable ;
@@ -12277,7 +12349,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.8" ;
-        dt:at "sets.primitive.css:440" ] .
+        dt:at "sets.primitive.css:446" ] .
 
 <--number-lightness-text-link-disabled-onDark>
     a dt:Variable ;
@@ -12289,7 +12361,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.36" ;
-        dt:at "sets.primitive.css:439" ] .
+        dt:at "sets.primitive.css:445" ] .
 
 <--number-lightness-text-link-disabled-onLight>
     a dt:Variable ;
@@ -12301,7 +12373,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.8" ;
-        dt:at "sets.primitive.css:441" ] .
+        dt:at "sets.primitive.css:447" ] .
 
 <--number-lightness-text-muted-disabled-on-dark>
     a dt:Variable ;
@@ -12313,7 +12385,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.36" ;
-        dt:at "sets.primitive.css:442" ] .
+        dt:at "sets.primitive.css:448" ] .
 
 <--number-lightness-text-muted-disabled-on-light>
     a dt:Variable ;
@@ -12325,7 +12397,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.8" ;
-        dt:at "sets.primitive.css:444" ] .
+        dt:at "sets.primitive.css:450" ] .
 
 <--number-lightness-text-muted-disabled-onDark>
     a dt:Variable ;
@@ -12337,7 +12409,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.36" ;
-        dt:at "sets.primitive.css:443" ] .
+        dt:at "sets.primitive.css:449" ] .
 
 <--number-lightness-text-muted-disabled-onLight>
     a dt:Variable ;
@@ -12349,7 +12421,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.8" ;
-        dt:at "sets.primitive.css:445" ] .
+        dt:at "sets.primitive.css:451" ] .
 
 <--number-lightness-text-on-foreground-primary-disabled-on-dark>
     a dt:Variable ;
@@ -12361,7 +12433,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.1" ;
-        dt:at "sets.primitive.css:446" ] .
+        dt:at "sets.primitive.css:452" ] .
 
 <--number-lightness-text-on-foreground-primary-disabled-on-light>
     a dt:Variable ;
@@ -12373,7 +12445,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1" ;
-        dt:at "sets.primitive.css:448" ] .
+        dt:at "sets.primitive.css:454" ] .
 
 <--number-lightness-text-on-foreground-secondary-disabled-on-dark>
     a dt:Variable ;
@@ -12385,7 +12457,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.41" ;
-        dt:at "sets.primitive.css:450" ] .
+        dt:at "sets.primitive.css:456" ] .
 
 <--number-lightness-text-on-foreground-secondary-disabled-on-light>
     a dt:Variable ;
@@ -12397,7 +12469,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.77" ;
-        dt:at "sets.primitive.css:452" ] .
+        dt:at "sets.primitive.css:458" ] .
 
 <--number-lightness-text-onForegroundPrimary-disabled-onDark>
     a dt:Variable ;
@@ -12409,7 +12481,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.1" ;
-        dt:at "sets.primitive.css:447" ] .
+        dt:at "sets.primitive.css:453" ] .
 
 <--number-lightness-text-onForegroundPrimary-disabled-onLight>
     a dt:Variable ;
@@ -12421,7 +12493,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1" ;
-        dt:at "sets.primitive.css:449" ] .
+        dt:at "sets.primitive.css:455" ] .
 
 <--number-lightness-text-onForegroundSecondary-disabled-onDark>
     a dt:Variable ;
@@ -12433,7 +12505,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.41" ;
-        dt:at "sets.primitive.css:451" ] .
+        dt:at "sets.primitive.css:457" ] .
 
 <--number-lightness-text-onForegroundSecondary-disabled-onLight>
     a dt:Variable ;
@@ -12445,7 +12517,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.77" ;
-        dt:at "sets.primitive.css:453" ] .
+        dt:at "sets.primitive.css:459" ] .
 
 <--number-line-height-1000>
     a dt:Variable ;
@@ -12457,7 +12529,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.0833" ;
-        dt:at "sets.primitive.css:488" ] .
+        dt:at "sets.primitive.css:494" ] .
 
 <--number-line-height-200>
     a dt:Variable ;
@@ -12469,7 +12541,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.2" ;
-        dt:at "sets.primitive.css:454" ] .
+        dt:at "sets.primitive.css:460" ] .
 
 <--number-line-height-250>
     a dt:Variable ;
@@ -12481,7 +12553,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.3333" ;
-        dt:at "sets.primitive.css:456" ] .
+        dt:at "sets.primitive.css:462" ] .
 
 <--number-line-height-300>
     a dt:Variable ;
@@ -12493,7 +12565,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.4286" ;
-        dt:at "sets.primitive.css:458" ] .
+        dt:at "sets.primitive.css:464" ] .
 
 <--number-line-height-350>
     a dt:Variable ;
@@ -12505,7 +12577,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.5" ;
-        dt:at "sets.primitive.css:460" ] .
+        dt:at "sets.primitive.css:466" ] .
 
 <--number-line-height-400>
     a dt:Variable ;
@@ -12517,7 +12589,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.3333" ;
-        dt:at "sets.primitive.css:462" ] .
+        dt:at "sets.primitive.css:468" ] .
 
 <--number-line-height-450>
     a dt:Variable ;
@@ -12529,7 +12601,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.3333" ;
-        dt:at "sets.primitive.css:464" ] .
+        dt:at "sets.primitive.css:470" ] .
 
 <--number-line-height-500>
     a dt:Variable ;
@@ -12541,7 +12613,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.3333" ;
-        dt:at "sets.primitive.css:466" ] .
+        dt:at "sets.primitive.css:472" ] .
 
 <--number-line-height-550>
     a dt:Variable ;
@@ -12553,7 +12625,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.2857" ;
-        dt:at "sets.primitive.css:468" ] .
+        dt:at "sets.primitive.css:474" ] .
 
 <--number-line-height-600>
     a dt:Variable ;
@@ -12565,7 +12637,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.25" ;
-        dt:at "sets.primitive.css:470" ] .
+        dt:at "sets.primitive.css:476" ] .
 
 <--number-line-height-650>
     a dt:Variable ;
@@ -12577,7 +12649,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.2222" ;
-        dt:at "sets.primitive.css:472" ] .
+        dt:at "sets.primitive.css:478" ] .
 
 <--number-line-height-700>
     a dt:Variable ;
@@ -12589,7 +12661,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1429" ;
-        dt:at "sets.primitive.css:474" ] .
+        dt:at "sets.primitive.css:480" ] .
 
 <--number-line-height-750>
     a dt:Variable ;
@@ -12601,7 +12673,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1667" ;
-        dt:at "sets.primitive.css:476" ] .
+        dt:at "sets.primitive.css:482" ] .
 
 <--number-line-height-800>
     a dt:Variable ;
@@ -12613,7 +12685,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1636" ;
-        dt:at "sets.primitive.css:478" ] .
+        dt:at "sets.primitive.css:484" ] .
 
 <--number-line-height-850>
     a dt:Variable ;
@@ -12625,7 +12697,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1429" ;
-        dt:at "sets.primitive.css:480" ] .
+        dt:at "sets.primitive.css:486" ] .
 
 <--number-line-height-900>
     a dt:Variable ;
@@ -12637,7 +12709,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.0959" ;
-        dt:at "sets.primitive.css:482" ] .
+        dt:at "sets.primitive.css:488" ] .
 
 <--number-line-height-950>
     a dt:Variable ;
@@ -12649,7 +12721,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.0952" ;
-        dt:at "sets.primitive.css:484" ] .
+        dt:at "sets.primitive.css:490" ] .
 
 <--number-line-height-975>
     a dt:Variable ;
@@ -12661,7 +12733,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1429" ;
-        dt:at "sets.primitive.css:486" ] .
+        dt:at "sets.primitive.css:492" ] .
 
 <--number-lineHeight-1000>
     a dt:Variable ;
@@ -12673,7 +12745,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.0833" ;
-        dt:at "sets.primitive.css:489" ] .
+        dt:at "sets.primitive.css:495" ] .
 
 <--number-lineHeight-200>
     a dt:Variable ;
@@ -12685,7 +12757,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.2" ;
-        dt:at "sets.primitive.css:455" ] .
+        dt:at "sets.primitive.css:461" ] .
 
 <--number-lineHeight-250>
     a dt:Variable ;
@@ -12697,7 +12769,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.3333" ;
-        dt:at "sets.primitive.css:457" ] .
+        dt:at "sets.primitive.css:463" ] .
 
 <--number-lineHeight-300>
     a dt:Variable ;
@@ -12709,7 +12781,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.4286" ;
-        dt:at "sets.primitive.css:459" ] .
+        dt:at "sets.primitive.css:465" ] .
 
 <--number-lineHeight-350>
     a dt:Variable ;
@@ -12721,7 +12793,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.5" ;
-        dt:at "sets.primitive.css:461" ] .
+        dt:at "sets.primitive.css:467" ] .
 
 <--number-lineHeight-400>
     a dt:Variable ;
@@ -12733,7 +12805,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.3333" ;
-        dt:at "sets.primitive.css:463" ] .
+        dt:at "sets.primitive.css:469" ] .
 
 <--number-lineHeight-450>
     a dt:Variable ;
@@ -12745,7 +12817,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.3333" ;
-        dt:at "sets.primitive.css:465" ] .
+        dt:at "sets.primitive.css:471" ] .
 
 <--number-lineHeight-500>
     a dt:Variable ;
@@ -12757,7 +12829,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.3333" ;
-        dt:at "sets.primitive.css:467" ] .
+        dt:at "sets.primitive.css:473" ] .
 
 <--number-lineHeight-550>
     a dt:Variable ;
@@ -12769,7 +12841,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.2857" ;
-        dt:at "sets.primitive.css:469" ] .
+        dt:at "sets.primitive.css:475" ] .
 
 <--number-lineHeight-600>
     a dt:Variable ;
@@ -12781,7 +12853,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.25" ;
-        dt:at "sets.primitive.css:471" ] .
+        dt:at "sets.primitive.css:477" ] .
 
 <--number-lineHeight-650>
     a dt:Variable ;
@@ -12793,7 +12865,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.2222" ;
-        dt:at "sets.primitive.css:473" ] .
+        dt:at "sets.primitive.css:479" ] .
 
 <--number-lineHeight-700>
     a dt:Variable ;
@@ -12805,7 +12877,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1429" ;
-        dt:at "sets.primitive.css:475" ] .
+        dt:at "sets.primitive.css:481" ] .
 
 <--number-lineHeight-750>
     a dt:Variable ;
@@ -12817,7 +12889,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1667" ;
-        dt:at "sets.primitive.css:477" ] .
+        dt:at "sets.primitive.css:483" ] .
 
 <--number-lineHeight-800>
     a dt:Variable ;
@@ -12829,7 +12901,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1636" ;
-        dt:at "sets.primitive.css:479" ] .
+        dt:at "sets.primitive.css:485" ] .
 
 <--number-lineHeight-850>
     a dt:Variable ;
@@ -12841,7 +12913,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1429" ;
-        dt:at "sets.primitive.css:481" ] .
+        dt:at "sets.primitive.css:487" ] .
 
 <--number-lineHeight-900>
     a dt:Variable ;
@@ -12853,7 +12925,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.0959" ;
-        dt:at "sets.primitive.css:483" ] .
+        dt:at "sets.primitive.css:489" ] .
 
 <--number-lineHeight-950>
     a dt:Variable ;
@@ -12865,7 +12937,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.0952" ;
-        dt:at "sets.primitive.css:485" ] .
+        dt:at "sets.primitive.css:491" ] .
 
 <--number-lineHeight-975>
     a dt:Variable ;
@@ -12877,7 +12949,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "1.1429" ;
-        dt:at "sets.primitive.css:487" ] .
+        dt:at "sets.primitive.css:493" ] .
 
 <--number-opacity-backdrop>
     a dt:Variable ;
@@ -12889,7 +12961,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "0.5" ;
-        dt:at "sets.primitive.css:490" ] .
+        dt:at "sets.primitive.css:496" ] .
 
 <--spacing-baseline>
     a dt:Variable ;
@@ -14091,7 +14163,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "\"Ubuntu Sans Mono\", \"Ubuntu Mono\", \"Noto Color Emoji\", \"Adwaita Mono\", \"Source Code Pro\", \"Hack\", ui-monospace, \"SF Mono\", \"Apple Color Emoji\", \"Cascadia Code\", \"Consolas\", \"Segoe UI Emoji\", \"Roboto Mono\", monospace" ;
-        dt:at "sets.primitive.css:491" ] .
+        dt:at "sets.primitive.css:497" ] .
 
 <--typography-font-family-sans-serif>
     a dt:Variable ;
@@ -14103,7 +14175,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "\"Ubuntu Sans\", \"Ubuntu\", \"Cantarell\", \"Adwaita Sans\", \"Noto Sans\", \"Oxygen\", -apple-system, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Noto Color Emoji\", \"Apple Color Emoji\", \"Segoe UI Emoji\", sans-serif" ;
-        dt:at "sets.primitive.css:493" ] .
+        dt:at "sets.primitive.css:499" ] .
 
 <--typography-fontFamily-code>
     a dt:Variable ;
@@ -14141,7 +14213,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "\"Ubuntu Sans Mono\", \"Ubuntu Mono\", \"Noto Color Emoji\", \"Adwaita Mono\", \"Source Code Pro\", \"Hack\", ui-monospace, \"SF Mono\", \"Apple Color Emoji\", \"Cascadia Code\", \"Consolas\", \"Segoe UI Emoji\", \"Roboto Mono\", monospace" ;
-        dt:at "sets.primitive.css:492" ] .
+        dt:at "sets.primitive.css:498" ] .
 
 <--typography-fontFamily-sansSerif>
     a dt:Variable ;
@@ -14153,7 +14225,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "\"Ubuntu Sans\", \"Ubuntu\", \"Cantarell\", \"Adwaita Sans\", \"Noto Sans\", \"Oxygen\", -apple-system, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Noto Color Emoji\", \"Apple Color Emoji\", \"Segoe UI Emoji\", sans-serif" ;
-        dt:at "sets.primitive.css:494" ] .
+        dt:at "sets.primitive.css:500" ] .
 
 <--typography-heading-1-bold-font-family>
     a dt:Variable ;
@@ -19487,7 +19559,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "700" ;
-        dt:at "sets.primitive.css:495" ] .
+        dt:at "sets.primitive.css:501" ] .
 
 <--typography-weight-extra-bold>
     a dt:Variable ;
@@ -19499,7 +19571,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "800" ;
-        dt:at "sets.primitive.css:496" ] .
+        dt:at "sets.primitive.css:502" ] .
 
 <--typography-weight-extra-light>
     a dt:Variable ;
@@ -19511,7 +19583,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "200" ;
-        dt:at "sets.primitive.css:498" ] .
+        dt:at "sets.primitive.css:504" ] .
 
 <--typography-weight-extraBold>
     a dt:Variable ;
@@ -19523,7 +19595,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "800" ;
-        dt:at "sets.primitive.css:497" ] .
+        dt:at "sets.primitive.css:503" ] .
 
 <--typography-weight-extraLight>
     a dt:Variable ;
@@ -19535,7 +19607,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "200" ;
-        dt:at "sets.primitive.css:499" ] .
+        dt:at "sets.primitive.css:505" ] .
 
 <--typography-weight-light>
     a dt:Variable ;
@@ -19547,7 +19619,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "300" ;
-        dt:at "sets.primitive.css:500" ] .
+        dt:at "sets.primitive.css:506" ] .
 
 <--typography-weight-medium>
     a dt:Variable ;
@@ -19559,7 +19631,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "500" ;
-        dt:at "sets.primitive.css:501" ] .
+        dt:at "sets.primitive.css:507" ] .
 
 <--typography-weight-regular>
     a dt:Variable ;
@@ -19571,7 +19643,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "400" ;
-        dt:at "sets.primitive.css:502" ] .
+        dt:at "sets.primitive.css:508" ] .
 
 <--typography-weight-semi-bold>
     a dt:Variable ;
@@ -19583,7 +19655,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "600" ;
-        dt:at "sets.primitive.css:503" ] .
+        dt:at "sets.primitive.css:509" ] .
 
 <--typography-weight-semiBold>
     a dt:Variable ;
@@ -19595,7 +19667,7 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "600" ;
-        dt:at "sets.primitive.css:504" ] .
+        dt:at "sets.primitive.css:510" ] .
 
 <--typography-weight-thin>
     a dt:Variable ;
@@ -19607,4 +19679,4 @@
         a dt:Declaration ;
         dt:under <cond/layer-ds-tokens/root> ;
         dt:emits "100" ;
-        dt:at "sets.primitive.css:505" ] .
+        dt:at "sets.primitive.css:511" ] .

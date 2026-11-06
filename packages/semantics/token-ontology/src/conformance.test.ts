@@ -118,16 +118,16 @@ const buildSurplus = only(ids, base);
 
 describe("the graph and the build agree on which symbols resolve", () => {
   it("compares non-empty sets, so no assertion below holds vacuously", () => {
-    expect(base.size).toBe(727);
-    expect(ids.size).toBe(887);
+    expect(base.size).toBe(733);
+    expect(ids.size).toBe(893);
     // And no set below owes its size to deduplication: every artifact entry
     // that carries an id carries a distinct one.
     expect(identified).toBe(ids.size);
   });
 
-  it("shares 700 symbols", () => {
+  it("shares 706 symbols", () => {
     const shared = [...base].filter((s) => ids.has(s));
-    expect(shared.length).toBe(700);
+    expect(shared.length).toBe(706);
     // Among them all 115 `number.*` — the lightness, chroma and hue parameters
     // the derivation rules consume. The artifact names every one, which is why
     // the graph's surplus below holds none.

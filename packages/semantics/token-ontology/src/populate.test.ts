@@ -98,13 +98,13 @@ describe("the channels minted from coverage", () => {
 describe("the routings the channels carry", () => {
   it("holds one node per (channel x coordinate) pair — 165, not 330", () => {
     expect(resolution.routings).toHaveLength(165);
-    // S3's total: 727 at the all-defaults position, 354 at mode.dark, 165 on
+    // S3's total: 733 at the all-defaults position, 354 at mode.dark, 165 on
     // the channels. It was 1,402 while every channel row also carried a copy
     // of its target's value and so needed a second row per mode; a routing
     // holds no value, so the mode row has nothing to say and is gone.
     expect(
       built.s3.counts.base + built.s3.counts.dark + resolution.routings.length,
-    ).toBe(1246);
+    ).toBe(1252);
   });
 
   it("invents nothing where the platform routes nowhere", () => {
@@ -338,14 +338,14 @@ describe("the labels", () => {
     "s4/web/",
   );
 
-  it("labels all 754 symbols with their dotted name", () => {
-    expect(symbolLabels.size).toBe(754);
+  it("labels all 760 symbols with their dotted name", () => {
+    expect(symbolLabels.size).toBe(760);
     for (const [iri, label] of symbolLabels)
       expect(label).toBe(decodeURIComponent(iri.slice(DT.length)));
   });
 
-  it("labels all 1,165 variables with the name minus the leading dashes", () => {
-    expect(variableLabels.size).toBe(1165);
+  it("labels all 1,171 variables with the name minus the leading dashes", () => {
+    expect(variableLabels.size).toBe(1171);
     for (const [iri, label] of variableLabels)
       expect(`--${label}`).toBe(
         decodeURIComponent(iri.slice(`${DT}s4/web/`.length)),

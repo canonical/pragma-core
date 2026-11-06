@@ -110,7 +110,7 @@ describe("classifyUnresolved", () => {
   });
 
   it("calls an absent namespace X1 and a present one with no member X2", () => {
-    expect(classifyUnresolved("motion.duration.fast", symbols, computed)).toBe(
+    expect(classifyUnresolved("shadow.elevation.low", symbols, computed)).toBe(
       "X1",
     );
     expect(classifyUnresolved("spacing.small", symbols, computed)).toBe("X2");

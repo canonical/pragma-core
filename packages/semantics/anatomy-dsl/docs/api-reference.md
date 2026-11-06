@@ -246,7 +246,7 @@ grammar does not have to.
 | `typography` | `typography.size`, `typography.weight`, `typography.color`, `typography.lineHeight` | `typography.*`, `dimension.*` or `color.*` symbols |
 | `size` | `size.width`, `size.height`, `size.max.width` | `dimension.*` symbols, or a primitive |
 | `interaction` | `interaction.cursor`, `interaction.select` | Primitives |
-| `motion` | `motion.property`, `motion.duration`, `motion.easing` | `motion.*` symbols — a namespace no stratum declares yet, so the binding is left out and the `#` comment on the line is the record (`# reads --motion-duration-fast; no symbol declares it`) |
+| `motion` | `motion.property`, `motion.duration`, `motion.easing` | `motion.*` symbols: the duration and easing stratum. Where a symbol is not declared, the binding is left out and the `#` comment on the line is the record |
 
 **Which of the three a key takes** is `anatomy:valueKind` on the key —
 `token`, `primitive` or `either` — and it was measured from the reference

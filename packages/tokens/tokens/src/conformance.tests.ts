@@ -92,7 +92,7 @@ describe("DTCG conformance", () => {
     // The subject is the directory, never a list — a file added without being
     // registered anywhere is still measured. Asserting a floor stops an empty
     // or mis-rooted walk from making every case below pass vacuously.
-    expect(tokenFiles.length).toBe(45);
+    expect(tokenFiles.length).toBe(46);
   });
 
   it("the resolver document validates", () => {

@@ -28,6 +28,11 @@
     w3c-tokens:path "global/primitive/dimension.tokens.json" ;
     w3c-tokens:schema "https://designtokens.org/schemas/2025.10/format.json" .
 
+<global/primitive/motion.tokens.json>
+    a w3c-tokens:File ;
+    w3c-tokens:path "global/primitive/motion.tokens.json" ;
+    w3c-tokens:schema "https://designtokens.org/schemas/2025.10/format.json" .
+
 <global/primitive/number.tokens.json>
     a w3c-tokens:File ;
     w3c-tokens:path "global/primitive/number.tokens.json" ;
@@ -836,6 +841,12 @@ dt:dimension.space.top.text.baselineNudge.900 a dt:TokenSymbol ; rdfs:label "dim
 dt:dimension.space.top.text.baselineNudge.950 a dt:TokenSymbol ; rdfs:label "dimension.space.top.text.baselineNudge.950" .
 dt:dimension.stroke.thickness.large a dt:TokenSymbol ; rdfs:label "dimension.stroke.thickness.large" .
 dt:dimension.stroke.thickness.medium a dt:TokenSymbol ; rdfs:label "dimension.stroke.thickness.medium" .
+dt:motion.duration.fast a dt:TokenSymbol ; rdfs:label "motion.duration.fast" .
+dt:motion.duration.medium a dt:TokenSymbol ; rdfs:label "motion.duration.medium" .
+dt:motion.duration.slow a dt:TokenSymbol ; rdfs:label "motion.duration.slow" .
+dt:motion.easing.accelerate a dt:TokenSymbol ; rdfs:label "motion.easing.accelerate" .
+dt:motion.easing.decelerate a dt:TokenSymbol ; rdfs:label "motion.easing.decelerate" .
+dt:motion.easing.standard a dt:TokenSymbol ; rdfs:label "motion.easing.standard" .
 dt:number.chroma.disabled a dt:TokenSymbol ; rdfs:label "number.chroma.disabled" .
 dt:number.hue.category a dt:TokenSymbol ; rdfs:label "number.hue.category" .
 dt:number.lightness.border.disabled.onDark a dt:TokenSymbol ; rdfs:label "number.lightness.border.disabled.onDark" .
@@ -2869,6 +2880,60 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:value "{\"value\":1,\"unit\":\"px\"}"^^rdf:JSON ;
     w3c-tokens:description "Primitive stroke thickness medium (1px)" ;
     dt:tokenType w3c-tokens:dimension .
+
+<global/primitive/motion.tokens.json#motion.duration.fast>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "motion.duration.fast" ;
+    w3c-tokens:inFile <global/primitive/motion.tokens.json> ;
+    dt:symbol dt:motion.duration.fast ;
+    w3c-tokens:value "{\"value\":165,\"unit\":\"ms\"}"^^rdf:JSON ;
+    w3c-tokens:description "Small state changes: chevrons, toggles" ;
+    dt:tokenType w3c-tokens:duration .
+
+<global/primitive/motion.tokens.json#motion.duration.medium>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "motion.duration.medium" ;
+    w3c-tokens:inFile <global/primitive/motion.tokens.json> ;
+    dt:symbol dt:motion.duration.medium ;
+    w3c-tokens:value "{\"value\":250,\"unit\":\"ms\"}"^^rdf:JSON ;
+    w3c-tokens:description "Panels and disclosures" ;
+    dt:tokenType w3c-tokens:duration .
+
+<global/primitive/motion.tokens.json#motion.duration.slow>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "motion.duration.slow" ;
+    w3c-tokens:inFile <global/primitive/motion.tokens.json> ;
+    dt:symbol dt:motion.duration.slow ;
+    w3c-tokens:value "{\"value\":400,\"unit\":\"ms\"}"^^rdf:JSON ;
+    w3c-tokens:description "Larger transitions and overlays" ;
+    dt:tokenType w3c-tokens:duration .
+
+<global/primitive/motion.tokens.json#motion.easing.accelerate>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "motion.easing.accelerate" ;
+    w3c-tokens:inFile <global/primitive/motion.tokens.json> ;
+    dt:symbol dt:motion.easing.accelerate ;
+    w3c-tokens:value "[0.4,0,1,1]"^^rdf:JSON ;
+    w3c-tokens:description "Exiting" ;
+    dt:tokenType w3c-tokens:cubicBezier .
+
+<global/primitive/motion.tokens.json#motion.easing.decelerate>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "motion.easing.decelerate" ;
+    w3c-tokens:inFile <global/primitive/motion.tokens.json> ;
+    dt:symbol dt:motion.easing.decelerate ;
+    w3c-tokens:value "[0,0,0.2,1]"^^rdf:JSON ;
+    w3c-tokens:description "Entering" ;
+    dt:tokenType w3c-tokens:cubicBezier .
+
+<global/primitive/motion.tokens.json#motion.easing.standard>
+    a w3c-tokens:Token ;
+    w3c-tokens:name "motion.easing.standard" ;
+    w3c-tokens:inFile <global/primitive/motion.tokens.json> ;
+    dt:symbol dt:motion.easing.standard ;
+    w3c-tokens:value "[0,0,0.58,1]"^^rdf:JSON ;
+    w3c-tokens:description "Enter and exit default (CSS ease-out)" ;
+    dt:tokenType w3c-tokens:cubicBezier .
 
 <global/primitive/number.tokens.json#number.chroma.disabled>
     a w3c-tokens:Token ;
@@ -14343,6 +14408,18 @@ dt:typography.weight.thin a dt:TokenSymbol ; rdfs:label "typography.weight.thin"
     w3c-tokens:inFile <global/primitive/dimension.tokens.json> ;
     w3c-tokens:type "dimension" .
 
+<global/primitive/motion.tokens.json#motion.duration>
+    a w3c-tokens:Group ;
+    w3c-tokens:name "motion.duration" ;
+    w3c-tokens:inFile <global/primitive/motion.tokens.json> ;
+    w3c-tokens:type "duration" .
+
+<global/primitive/motion.tokens.json#motion.easing>
+    a w3c-tokens:Group ;
+    w3c-tokens:name "motion.easing" ;
+    w3c-tokens:inFile <global/primitive/motion.tokens.json> ;
+    w3c-tokens:type "cubicBezier" .
+
 <global/primitive/number.tokens.json#number>
     a w3c-tokens:Group ;
     w3c-tokens:name "number" ;
@@ -14707,7 +14784,7 @@ dt:set.primitive
     a w3c-tokens:TokenSet ;
     w3c-tokens:name "primitive" ;
     w3c-tokens:description "Base primitive tokens: color palette, dimensions, numbers, typography primitives." ;
-    w3c-tokens:includes ( <global/primitive/color.tokens.json> <global/primitive/dimension.tokens.json> <global/primitive/number.tokens.json> <global/primitive/typography.tokens.json> ) .
+    w3c-tokens:includes ( <global/primitive/color.tokens.json> <global/primitive/dimension.tokens.json> <global/primitive/motion.tokens.json> <global/primitive/number.tokens.json> <global/primitive/typography.tokens.json> ) .
 
 dt:axis.anticipation
     a w3c-tokens:ResolverModifier ;
