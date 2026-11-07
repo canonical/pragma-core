@@ -10,21 +10,21 @@ ds:apps_landscape.component.loading_state a ds:Component;
     ds:usage "### When to use\n\n**Wait for asynchronous content**\n\nIndicate that a region or page is waiting for indeterminate asynchronous work before stable content can render.\n\n**Signal route redirection**\n\nCompose the separate Redirecting component, which uses `LoadingState inline`, when visible route-transition wording is required.\n\n**Compact pending values**\n\nUse the inline variant where a count, status, or small content fragment is pending and a strip would disrupt its surrounding layout.\n\n### When not to use\n\n**Report determinate progress**\n\nDisplaying a progress percentage or completion count for known-length operations.\n\n**Incorrect pattern**: Using Loading State with a custom message or label to show “50% complete” or similar measured progress.\n\n**Remediation strategy**: Use a dedicated progress component (e.g., Vanilla Framework progress bar) when a percentage, count, or known total is available.\n\n**Load a button action**\n\nIndicating pending work initiated by a button click.\n\n**Incorrect pattern**: Wrapping a button in a Loading State div while its action awaits completion, disconnecting the status from the initiating control.\n\n**Remediation strategy**: Use the Button component’s native loading prop or disabled state so the pending status remains visually associated with the control that triggered it.\n\n**Explain a long operation**\n\nIndicating an extended wait without context about what is happening or why.\n\n**Incorrect pattern**: Rendering only the spinner with a generic “Loading…” message when a multi-minute operation is in progress, without explaining the task or recovery options.\n\n**Remediation strategy**: Add persistent context outside the Loading State component describing the operation; use a more specific status pattern (modal, toast, or status page) for long waits that need explanation or cancellation options.";
     ds:guidelines "### Accessibility\n\n- Keep `role=\"status\"` and the off-screen `Loading...` label intact. The spinner is correctly `aria-hidden`, so state is not conveyed by animation alone.\n- `role=\"status\"` supplies polite live-region semantics. Do not wrap it in another competing status or alert that announces the same loading event.\n- The fixed message does not identify the affected region. Provide nearby context when multiple independent loading states can appear.\n- Do not move focus to the status; preserve focus on the initiating control or stable route destination.\n\n### Content\n\n- Use the separate Redirecting composition only when navigation, rather than data loading, is pending.\n- Pair long waits with useful visible context outside the spinner when users need to understand the operation or recovery path.\n- Do not add adjacent visible text that contradicts the fixed accessible `Loading...` status.\n\n### Responsive behavior\n\n- Use inline inside compact controls or copy and contained layout for a content region.\n- Reserve screen centering for a page-level wait state. Its source uses `height: 100vh` and `padding: 1rem`, with no small-viewport or dynamic-viewport override.\n- The default strip follows Vanilla layout. The component itself defines no width, breakpoint, or overflow rule.\n\n### Keyboard\n\n- Do not move focus to the spinner; preserve focus on the initiating control or next stable destination.\n- Loading State contains no interactive elements and must not be added to the tab order.\n- If pending work temporarily removes an interactive region, restore focus deliberately when stable content returns.\n\n### Internationalization\n\n- The accessible `Loading...` text is hardcoded English and cannot be customized through props. Localization requires a source API change.\n- The component has no visible copy, except when used by a separate composition such as Redirecting.\n- Ellipsis punctuation is part of the fixed source string; do not infer localization readiness from the icon-only visual presentation.\n\n";
     ds:tier ds:apps_landscape;
-    ds:documentationStage ds:tag.specialadoption-docs;
     ds:hasProperty [
         a ds:Property;
         ds:name "`LoadingState.centerOnScreen`";
-        ds:summary "Adds the full-viewport-height centering class to the outer non-inline wrapper. ";
+        ds:summary "Adds the full-viewport-height centering class to the outer non-inline wrapper.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
-        ds:constraints "It does not add another element. Ignored when `inline` is truthy because the inline branch returns before wrapper rendering. ";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "It does not add another element. Ignored when `inline` is truthy because the inline branch returns before wrapper rendering.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`LoadingState.inline`";
-        ds:summary "Renders a bare status span instead of the contained strip structure. ";
+        ds:summary "Renders a bare status span instead of the contained strip structure.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
-        ds:constraints "Takes precedence over `centerOnScreen`; intended for compact placements. ";
-        ds:optional "true"
-    ].
+        ds:optional "true";
+        ds:constraints "Takes precedence over `centerOnScreen`; intended for compact placements.";
+        ds:defaultValue "—"
+    ];
+    ds:documentationStage ds:tag.specialadoption-docs.

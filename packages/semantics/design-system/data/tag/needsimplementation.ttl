@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.needsimplementation a ds:Tag;
+    ds:name "needs:implementation";
+    ds:category ds:tagcategory.implementationworkflow;
+    ds:whenToApply "A UI block has summary, anatomy and styling ready and added to coda and has all other necessary documents ready for implementation";
+    ds:whenToRemove "".

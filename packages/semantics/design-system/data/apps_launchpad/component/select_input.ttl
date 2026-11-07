@@ -33,7 +33,7 @@ ds:apps_launchpad.component.select_input a ds:Component;
     ], [
         a ds:Property;
         ds:name "label";
-        ds:summary "A label for the select element. ";
+        ds:summary "A label for the select element.";
         ds:propertyType "text";
         ds:optional "true";
         ds:defaultValue "“”"

@@ -1,0 +1,11 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:concept.Overflow a ds:Concept;
+    ds:name "Overflow";
+    ds:summary "";
+    ds:tier ds:global;
+    ds:content "Example of overflow (from stores) in table to be considered - button probably needs to be left aligned  \n\n\n";
+    ds:knownEdgeCases "";
+    ds:conceptType ds:concepttype.How-to-guide.

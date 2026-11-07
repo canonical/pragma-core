@@ -4,6 +4,6 @@
 
 ds:tag.triagedrejected a ds:Tag;
     ds:name "triaged:rejected";
-    ds:category ds:tagcategory.documentation-stage;
-    ds:whenToApply "UIBlock proposal was rejected because it was assessed not to be a valuable addition to the design system. ";
+    ds:category ds:tagcategory.design--documentation-status;
+    ds:whenToApply "UIBlock proposal was rejected because it was assessed not to be a valuable addition to the design system.";
     ds:whenToRemove "".

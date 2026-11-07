@@ -10,58 +10,58 @@ ds:apps_landscape.pattern.form_field_help a ds:Pattern;
     ds:usage "### When to use\n\n**Contextual clarification**\n\nUse for short, optional explanation that would otherwise interrupt a compact form.\n\n**Unfamiliar settings**\n\nUse beside technical labels or checkbox choices whose consequences need clarification.\n\n**Supplementary information**\n\nUse only when users can understand and operate the control without opening the tooltip.\n\n### When not to use\n\n**Required instructions**\n\nEssential information users must read before completing a field.\n\n**Incorrect pattern**: Hiding critical setup steps or prerequisites behind a tooltip.\n\n**Remediation strategy**: Place required instructions persistently as label text or use persistent help text instead.\n\n**Validation feedback**\n\nErrors, warnings, or status messages that must remain visible.\n\n**Incorrect pattern**: Using a tooltip for validation errors or status that changes dynamically.\n\n**Remediation strategy**: Use persistent error/help text or use a dedicated validation pattern paired with the form control.\n\n**Long or interactive content**\n\nRich content like multi-step guidance, links, tables, or content that should remain open.\n\n**Incorrect pattern**: Forcing multi-paragraph help, clickable links, or complex structures into a tooltip.\n\n**Remediation strategy**: Use persistent help text, a disclosure/accordion, or a dedicated help panel for rich content.\n\n**Accessible label replacement**\n\nUsing the help icon or text as the only way to identify a form control.\n\n**Incorrect pattern**: Treating the icon or FieldDescription text span as a substitute for a form control’s native label.\n\n**Remediation strategy**: Always provide an explicit `<label>` or aria-label on the control itself; use help only as supplementary context.";
     ds:guidelines "";
     ds:tier ds:apps_landscape;
-    ds:documentationStage ds:tag.specialadoption-docs;
     ds:hasProperty [
         a ds:Property;
-        ds:name "FieldDescription.label ";
-        ds:summary "Text rendered in the wrapper span. ";
+        ds:name "FieldDescription.label";
+        ds:summary "Text rendered in the wrapper span.";
         ds:propertyType "text";
-        ds:defaultValue "— ";
-        ds:constraints "Visual text only; the component does not bind it to a control. "
+        ds:constraints "Visual text only; the component does not bind it to a control.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
-        ds:name "FieldDescription.description ";
-        ds:summary "Content passed to Tooltip as its message. ";
+        ds:name "FieldDescription.description";
+        ds:summary "Content passed to Tooltip as its message.";
         ds:propertyType "node";
-        ds:defaultValue "— ";
-        ds:constraints "Exact type: ReactNode. Keep actual usage concise and non-essential. "
+        ds:constraints "Exact type: ReactNode. Keep actual usage concise and non-essential.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
-        ds:name "FieldDescription.tooltipPosition ";
-        ds:summary "Positions the Canonical Tooltip. ";
+        ds:name "FieldDescription.tooltipPosition";
+        ds:summary "Positions the Canonical Tooltip.";
         ds:propertyType "choice";
-        ds:defaultValue "\"top-left\" ";
-        ds:constraints "Exact type: \"btm-center\" | \"btm-left\" | \"btm-right\" | \"left\" | \"right\" | \"top-center\" | \"top-left\" | \"top-right\" | undefined. ";
+        ds:constraints "Exact type: \"btm-center\" | \"btm-left\" | \"btm-right\" | \"left\" | \"right\" | \"top-center\" | \"top-left\" | \"top-right\" | undefined.";
+        ds:defaultValue "\"top-left\"";
         ds:optional "true"
     ], [
         a ds:Property;
-        ds:name "CheckboxInputWithHelp.tooltipMessage ";
-        ds:summary "Fixed string passed to Tooltip as its message. ";
+        ds:name "CheckboxInputWithHelp.tooltipMessage";
+        ds:summary "Fixed string passed to Tooltip as its message.";
         ds:propertyType "text";
-        ds:defaultValue "— ";
-        ds:constraints "Rich React content is not accepted by this wrapper's type. "
+        ds:constraints "Rich React content is not accepted by this wrapper's type.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
-        ds:name "CheckboxInputWithHelp.label ";
-        ds:summary "Passed explicitly to Canonical Input. ";
+        ds:name "CheckboxInputWithHelp.label";
+        ds:summary "Passed explicitly to Canonical Input.";
         ds:propertyType "node";
-        ds:defaultValue "— ";
-        ds:constraints "Exact type: ReactNode. Uses Canonical Input's behavior when omitted; use a visible, specific checkbox label. ";
+        ds:constraints "Exact type: ReactNode. Uses Canonical Input's behavior when omitted; use a visible, specific checkbox label.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
-        ds:name "CheckboxInputWithHelp.disabled ";
-        ds:summary "Passed to Input and controls the icon opacity class. ";
+        ds:name "CheckboxInputWithHelp.disabled";
+        ds:summary "Passed to Input and controls the icon opacity class.";
         ds:propertyType "boolean";
-        ds:defaultValue "— ";
-        ds:constraints "Exact type: InputProps[\"disabled\"]. Omission uses Canonical Input's behavior and does not apply the disabled icon class. It does not locally disable the Tooltip. ";
+        ds:constraints "Exact type: InputProps[\"disabled\"]. Omission uses Canonical Input's behavior and does not apply the disabled icon class. It does not locally disable the Tooltip.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
-        ds:name "CheckboxInputWithHelp.remaining InputProps ";
-        ds:summary "Forwarded to Canonical Input after local type, label, and disabled. ";
+        ds:name "CheckboxInputWithHelp.remaining InputProps";
+        ds:summary "Forwarded to Canonical Input after local type, label, and disabled.";
         ds:propertyType "object";
-        ds:defaultValue "— ";
-        ds:constraints "Exact contract: CheckboxInputWithHelpProps extends InputProps { readonly tooltipMessage: string }. Inherited props use their Canonical defaults. Because the spread is last, props such as type may override type=\"checkbox\"; consumers should not do so. ";
+        ds:constraints "Exact contract: CheckboxInputWithHelpProps extends InputProps { readonly tooltipMessage: string }. Inherited props use their Canonical defaults. Because the spread is last, props such as type may override type=\"checkbox\"; consumers should not do so.";
+        ds:defaultValue "—";
         ds:optional "true"
-    ].
+    ];
+    ds:documentationStage ds:tag.specialadoption-docs.

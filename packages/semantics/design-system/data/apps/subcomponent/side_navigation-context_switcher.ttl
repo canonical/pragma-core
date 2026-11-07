@@ -1,0 +1,53 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.side_navigation-context_switcher a ds:Subcomponent;
+    ds:name "SideNavigation.ContextSwitcher";
+    ds:summary "The context switcher allows users to switch between different contexts, such as projects or users, within an application. The context switcher is a dropdown that includes the currently selected context, a list of available contexts, and an optional action to create a new context.";
+    ds:anatomyDsl "SideNavigation.ContextSwitcher\n├── Label (optional)\n├── Context switcher dropdown\n│   ├── Current context\n│   └── Dropdown icon\n└── Context list (visible only when dropdown is open)\n    ├── Context switcher item (repeatable)\n    │   ├── Context title\n    │   ├── Context description\n    │   └── Badge (optional)\n    ├── Separator (when Create context is shown)\n    └── Create context button (optional)\n        ├── Create icon\n        └── Create context label\n```\n\n```\n---\n# SideNavigation.ContextSwitcher — a dropdown for switching between\n# contexts.\n#\n# Authored 2026-10-16 from the supplied planning tree ALONE. No\n# implementation was read, so this anatomy carries STRUCTURE ONLY.\n#\n# The tree marks the context list \"visible only when the dropdown is open\".\n# That is conditional display, for which the DSL has no construct: the list\n# is modelled as a node and the condition recorded here.\n#\n# The tree says \"Context description\" without marking it optional, so it is\n# required. Only \"Badge\" and \"Create context button\" carry the optional mark\n# inside the list.\nnode:\n  uri: apps.subcomponent.side_navigation-context_switcher\n  edges:\n    - node:\n        role: label\n      relation:\n        cardinality: \"0..1\"\n        slotName: label\n    - node:\n        role: context switcher dropdown\n        edges:\n          - node:\n              role: current context\n            relation:\n              cardinality: \"1\"\n              slotName: label\n          # The tree does not name the glyph, so no prop is pinned here.\n          - node:\n              uri: global.component.icon\n            relation:\n              cardinality: \"1\"\n              slotName: end\n      relation:\n        cardinality: \"1\"\n        slotName: trigger\n    - node:\n        # Visible only while the dropdown is open.\n        role: context list\n        edges:\n          - node:\n              role: context switcher item\n              edges:\n                - node:\n                    role: context title\n                  relation:\n                    cardinality: \"1\"\n                    slotName: title\n                - node:\n                    role: context description\n                  relation:\n                    cardinality: \"1\"\n                    slotName: description\n                - node:\n                    uri: global.component.badge\n                  relation:\n                    cardinality: \"0..1\"\n                    slotName: badge\n            relation:\n              cardinality: \"1..*\"\n              slotName: default\n          # Present only when the create-context button is.\n          - node:\n              role: separator\n            relation:\n              cardinality: \"0..1\"\n          - node:\n              role: create context button\n              edges:\n                # The tree does not name the glyph, so no prop is pinned.\n                - node:\n                    uri: global.component.icon\n                  relation:\n                    cardinality: \"1\"\n                    slotName: icon\n                - node:\n                    role: create context label\n                  relation:\n                    cardinality: \"1\"\n                    slotName: default\n            relation:\n              cardinality: \"0..1\"\n              slotName: create\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "Context switcher anatomy\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=10062-13449&t=HfRgpBcYWYYrZVn8-1\n\nContext switcher styling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=10064-25238&t=HfRgpBcYWYYrZVn8-1\n\nMobile navigation — Context switcher open anatomy\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=11030-17767&t=kljb9kz81nAn2N2G-1";
+    ds:usage "### When to use\n\nUse the context switcher if your application classifies content into different contexts, projects, users, or similar. The navigation pages should remain the same for every context, while the content varies depending on the selected context.\n\n### When not to use\n\nDo not use the context switcher to navigate between unrelated sections or pages of an application. Use navigation items instead.";
+    ds:guidelines "## Content specification\n\nThe context switcher can only be used in the primary navigation. It is always positioned at the top of the navigation content, before the navigation item groups.\n\n### Context switcher dropdown\n\nThe context switcher dropdown displays the currently selected context.\n\nThe context switcher can have an optional label that describes the context being selected.\n\n### Context list\n\nThe context switcher items are user-generated. Users should be able to create new contexts, which are then listed in the context list.\n\nA context switcher item can have a badge, which should be used to convey dynamic and actionable information related to that context. Badges indicate a quantifiable status change and should not be used to convey passive information.\n\nThe Create context button is optional. When used, it is separated from the context switcher items by a separator.\n\n## Responsive behaviour\n\n### Mobile\n\nThe context switcher appears in the same position as on desktop. When the user opens the dropdown, the context list is displayed on top of the navigation content.\n\nWhen the context is switched, the mobile navigation closes.\n\n## Interaction\n\n### Context switcher dropdown\n\n**Hover**\n\nOn hover, the background colour of the context switcher dropdown changes and the cursor changes to a pointer.\n\n**Click**\n\nWhen the context switcher dropdown is clicked, the `is-open` property is toggled to show or hide the context list.\n\n### Context switcher item\n\n**Hover**\n\nOn hover, the background colour of the context switcher item changes and the cursor changes to a pointer.\n\n**Click**\n\nWhen a context switcher item is clicked, the current context is set to the selected context. This may refresh the content of the page to reflect the newly selected context.\n\nThe current page remains open if it exists in the newly selected context. Otherwise, the default page of the new context is opened.\n\n### Create context button\n\n**Hover**\n\nOn hover, the background colour of the Create context menu item changes and the cursor changes to a pointer.\n\n**Click**\n\nWhen the Create context menu item is clicked, the user is forwarded to the page where a new context can be created.\n\n## Accessibility\n\n### Keyboard navigation\n\nThe context switcher should come before the navigation items in the focus order, following its position in the navigation content.\n\nThe dropdown and its menu items must be accessible using the keyboard.\n\n### Screen reader\n\nThe context switcher must have an accessible name, and the currently selected context must be identifiable to screen-reader users.\n\nContext switcher items must have accessible names that describe their purpose.";
+    ds:tier ds:apps;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "current-context";
+        ds:summary "Sets the currently selected context and its name in the dropdown field.";
+        ds:propertyType "choice";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "is-open";
+        ds:summary "Controls whether the context list is open or closed.";
+        ds:propertyType "boolean";
+        ds:optional "false";
+        ds:defaultValue "`false`"
+    ], [
+        a ds:Property;
+        ds:name "contexts";
+        ds:summary "Defines the context switcher items.";
+        ds:propertyType "list of nodes";
+        ds:optional "false";
+        ds:constraints "Only context switcher items are allowed."
+    ], [
+        a ds:Property;
+        ds:name "context-name";
+        ds:summary "Defines the name of the context.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "context-description";
+        ds:summary "Defines the description of the context.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "badge";
+        ds:summary "Controls whether the badge is displayed.";
+        ds:propertyType "boolean";
+        ds:optional "false";
+        ds:defaultValue "`false`"
+    ];
+    ds:parentComponent ds:apps.component.side_navigation.

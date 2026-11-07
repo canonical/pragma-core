@@ -34,8 +34,8 @@ ds:apps_launchpad.component.combobox a ds:Component;
         ds:summary "Combobox type.";
         ds:propertyType "choice";
         ds:optional "false";
-        ds:defaultValue "multi-select";
-        ds:constraints "multi-select, single-select"
+        ds:constraints "multi-select, single-select";
+        ds:defaultValue "multi-select"
     ], [
         a ds:Property;
         ds:name "aria-busy";

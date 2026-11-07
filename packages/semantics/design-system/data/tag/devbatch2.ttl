@@ -4,6 +4,6 @@
 
 ds:tag.devbatch2 a ds:Tag;
     ds:name "dev:batch2";
-    ds:category ds:tagcategory.implementation-status;
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "";
     ds:whenToRemove "".

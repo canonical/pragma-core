@@ -10,7 +10,7 @@ ds:global.component.combobox_field a ds:Component;
     ds:usage "Lets the user pick one or more values from a long set, narrowing the visible options by typing to filter.\n\n### When to use\n- The set of options is large enough that scanning all of them at once is impractical.\n- Filtering as the user types meaningfully speeds up finding the intended value.\n- Either a single selection or multiple selections from the same long set is needed.\n\n### When not to use\n- The set is short and can be shown in full — use **Choices**, **SimpleChoices**, or **Select**.\n- The value is open-ended and not drawn from a predefined set — use **Text**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needsdesign;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.combobox_field;

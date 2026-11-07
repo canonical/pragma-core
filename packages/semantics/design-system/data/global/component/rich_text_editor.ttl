@@ -2,12 +2,11 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:apps_workplaceengineering.pattern.event_timeline a ds:Pattern;
-    ds:name "EventTimeline";
+ds:global.component.rich_text_editor a ds:Component;
+    ds:name "RichTextEditor";
     ds:summary "";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";
     ds:guidelines "";
-    ds:tier ds:apps_workplaceengineering;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:tier ds:global.

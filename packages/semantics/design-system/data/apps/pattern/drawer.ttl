@@ -10,5 +10,5 @@ ds:apps.pattern.drawer a ds:Pattern;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needstriage;
     ds:hasSubcomponent ds:apps.subcomponent.drawer-content, ds:apps.subcomponent.drawer-footer, ds:apps.subcomponent.drawer-header.

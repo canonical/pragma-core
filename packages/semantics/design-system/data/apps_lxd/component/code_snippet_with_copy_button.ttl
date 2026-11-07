@@ -30,7 +30,7 @@ ds:apps_lxd.component.code_snippet_with_copy_button a ds:Component;
         ds:propertyType "text";
         ds:optional "true";
         ds:defaultValue "`linuxPrompt`";
-        ds:constraints "Must be `linuxPrompt` (terminal/command line styling) or `numbered` (code with line numbers) or `url` (code block with border styling) or `windowsPrompt` "
+        ds:constraints "Must be `linuxPrompt` (terminal/command line styling) or `numbered` (code with line numbers) or `url` (code block with border styling) or `windowsPrompt`"
     ], [
         a ds:Property;
         ds:name "title";

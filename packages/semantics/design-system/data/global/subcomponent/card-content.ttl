@@ -10,13 +10,13 @@ ds:global.subcomponent.card-content a ds:Subcomponent;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdocumentation;
     ds:hasProperty [
         a ds:Property;
         ds:name "children";
         ds:propertyType "node";
         ds:optional "false"
     ];
+    ds:documentationStage ds:tag.needsdocumentation;
     ds:parentComponent ds:global.component.card;
     ds:hasTokenBinding [
         a ds:TokenBinding;

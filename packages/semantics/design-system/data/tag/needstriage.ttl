@@ -4,6 +4,6 @@
 
 ds:tag.needstriage a ds:Tag;
     ds:name "needs:triage";
-    ds:category ds:tagcategory.documentation-stage;
+    ds:category ds:tagcategory.design--documentation-status;
     ds:whenToApply "UIBlock is proposed to be included in DS";
     ds:whenToRemove "".

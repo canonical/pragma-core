@@ -2,8 +2,8 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:tag.devreactapproved a ds:Tag;
-    ds:name "dev:react:approved";
+ds:tag.devreactdone a ds:Tag;
+    ds:name "dev:react:done";
     ds:category ds:tagcategory.implementation-status;
-    ds:whenToApply "Design : approved";
+    ds:whenToApply "Implementation: stable. Design: approved";
     ds:whenToRemove "".

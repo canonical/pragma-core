@@ -10,7 +10,7 @@ ds:global.subcomponent.file_upload_input a ds:Subcomponent;
     ds:usage "The document-attachment entry part a host places in context when the value is a supplied file rather than typed content.\n\n### When to use\n- A host needs a person to attach one or more existing documents, images, or assets.\n- The value is a binary artefact that cannot be expressed as typed text.\n\n### When not to use\n- The value is prose the person writes directly — compose **TextInput** or **TextareaInput**.\n- The value is a choice from a fixed set — compose **SelectInput**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needsdesign;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.file_upload_input;

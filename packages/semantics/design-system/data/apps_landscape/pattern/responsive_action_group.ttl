@@ -10,68 +10,68 @@ ds:apps_landscape.pattern.responsive_action_group a ds:Pattern;
     ds:usage "### When to use\n\n- Use for two or more related page, table, or panel commands that may move into overflow at a known Landscape breakpoint.\n- Put priority actions first and set `alwaysVisible` to the number that must remain exposed below the breakpoint.\n- Use supported button, confirmation-button, and object-link contextual-menu shapes when semantic preservation matters.\n\n### When not to use\n\n**Primary navigation or form fields**\n\nNavigation structures, standalone form inputs, or arbitrary interactive compositions that should not become menu buttons.\n\n**Incorrect pattern**: Placing a form control like a `Select` or `Input` inside `buttons` expecting it to collapse into an overflow menu gracefully.\n\n**Remediation strategy**: Keep form fields and navigation in their own containers. Use Responsive Action Group only for buttons, confirmation buttons, and contextual-menu shapes that have straightforward button semantics.\n\n**String or array contextual-menu links**\n\nA collapsed `ContextualMenu` that contains string or array-form links rather than object-form links.\n\n**Incorrect pattern**: Building a contextual menu with a mix of strings, arrays, and objects, and expecting all entries to survive collapse into the responsive adapter.\n\n**Remediation strategy**: Use only object-form links in your contextual menus: `{ children: \"...\", onClick: ... }`. String and array links are skipped during collapse. Convert them to object form or keep them in a separate non-collapsible menu.\n\n**Viewport collapse is the wrong constraint**\n\nA layout problem where the actual constraint is the measured width of a specific container, not the viewport breakpoint.\n\n**Incorrect pattern**: Using Responsive Action Group when the available space is a side panel, table cell, or other container that is narrower than the viewport breakpoint.\n\n**Remediation strategy**: Use a container-aware component with `ResizeObserver` or container queries. Responsive Action Group uses `matchMedia` for viewport breakpoints only; it cannot adapt to container-specific constraints.";
     ds:guidelines "### Accessibility\n\n- Give every supplied action and nested menu a clear text/accessibility name before adaptation.\n- Disabled direct actions and nested object links are preserved; the overflow toggle disables when all collapsed items are disabled.\n- Recreated confirmation content stays mounted while `onConfirm` awaits. Cancel/close clears local state before invoking the supplied modal `close`; fulfilment clears local state without invoking that callback; rejection propagates and leaves the modal open for retry.\n- Responsive movement replaces elements in the DOM with different controls; no focus preservation is implemented when the media query changes.\n\n### Content\n\n- Use concise verb-led labels that remain meaningful in the overflow menu.\n- Supply a localized `menuLabel`; direct action content is reused, while missing children fall back to recursively extracted text or `Action N`.\n- Do not depend on non-string props such as `aria-label` becoming visible menu text when children are absent; the fallback does not read those props.\n\n### Internationalization / globalization\n\n- `menuLabel` and caller children can be localized; generated `Action N` fallback is hardcoded English.\n- Breakpoints are pixel constants and do not account for text expansion except through the viewport-wide media query.\n- Nested chevron direction comes from `ResponsiveDropdownItem` position, not document direction; verify RTL behavior.\n\n### Device / responsive behavior\n\n- Available thresholds are `xs: 460`, `sm: 620`, `md: 768`, `lg: 1036`, `xl: 1280`, and `xxl: 1400` pixels.\n- Below the threshold, adaptation is based on array position and eligible element shape, not measured overflow.\n- HTML5 pointer/touch behavior is delegated to underlying buttons and menus; no device-specific handlers exist.\n\n### Keyboard and interaction\n\n- Ordinary collapsed actions close the outer menu before callback invocation.\n- Nested triggers use buttons and outside-click closure from `ResponsiveDropdownItem`; source defines no custom arrow/Escape/focus-return logic beyond dependencies.\n- Clicking nested content closes the outer menu, even when the clicked child has no action callback.\n\n";
     ds:tier ds:apps_landscape;
-    ds:documentationStage ds:tag.specialadoption-docs;
     ds:hasProperty [
         a ds:Property;
         ds:name "`buttons`";
         ds:summary "Ordered nodes to present.";
         ds:propertyType "list of nodes";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `ReactNode[]`. Collapse recognition is shape-based; stable keys prevent clone/reconciliation churn. Array length controls lone-node behavior. "
+        ds:constraints "TypeScript: `ReactNode[]`. Collapse recognition is shape-based; stable keys prevent clone/reconciliation churn. Array length controls lone-node behavior.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`collapseFrom`";
         ds:summary "Minimum viewport width considered large.";
         ds:propertyType "choice";
+        ds:constraints "Maps to Landscape pixel constants: `xs: 460`, `sm: 620`, `md: 768`, `lg: 1036`, `xl: 1280`, and `xxl: 1400`.";
         ds:defaultValue "`md`";
-        ds:constraints "Maps to Landscape pixel constants: `xs: 460`, `sm: 620`, `md: 768`, `lg: 1036`, `xl: 1280`, and `xxl: 1400`. ";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`alwaysCollapse`";
-        ds:summary "Forces the small-screen path regardless of media query. ";
+        ds:summary "Forces the small-screen path regardless of media query.";
         ds:propertyType "boolean";
+        ds:constraints "Can collapse a lone eligible node, unlike ordinary small-screen behavior.";
         ds:defaultValue "false";
-        ds:constraints "Can collapse a lone eligible node, unlike ordinary small-screen behavior. ";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`alwaysVisible`";
-        ds:summary "Leading slice retained in the visible set on the small-screen path. ";
+        ds:summary "Leading slice retained in the visible set on the small-screen path.";
         ds:propertyType "number";
+        ds:constraints "Runtime does not validate sign, integer, or range; standard `slice` semantics apply. Unsupported later nodes can also become visible.";
         ds:defaultValue "0";
-        ds:constraints "Runtime does not validate sign, integer, or range; standard `slice` semantics apply. Unsupported later nodes can also become visible. ";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`menuLabel`";
         ds:summary "Overflow toggle label.";
         ds:propertyType "text";
+        ds:constraints "Visible and accessible through Canonical `ContextualMenu`; localize at the call site.";
         ds:defaultValue "`Actions`";
-        ds:constraints "Visible and accessible through Canonical `ContextualMenu`; localize at the call site. ";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`className`";
         ds:summary "Additional class on the root.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "Merged with the local grouped class.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`menuPosition`";
         ds:summary "Overflow alignment.";
         ds:propertyType "choice";
+        ds:constraints "Nested contextual menus retain their own position independently.";
         ds:defaultValue "`right`";
-        ds:constraints "Nested contextual menus retain their own position independently. ";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`grouped`";
-        ds:summary "Enables segmented markup for more than one visible node and root flex styling. ";
+        ds:summary "Enables segmented markup for more than one visible node and root flex styling.";
         ds:propertyType "boolean";
+        ds:constraints "Does not group the overflow menu into the segmented wrapper.";
         ds:defaultValue "true";
-        ds:constraints "Does not group the overflow menu into the segmented wrapper. ";
         ds:optional "true"
-    ].
+    ];
+    ds:documentationStage ds:tag.specialadoption-docs.

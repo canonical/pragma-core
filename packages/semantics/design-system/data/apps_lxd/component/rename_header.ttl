@@ -15,15 +15,15 @@ ds:apps_lxd.component.rename_header a ds:Component;
         ds:name "name";
         ds:summary "The current name/title of the resource being displayed and potentially renamed. This appears in the breadcrumb as the final item and serves as the default value when entering edit mode";
         ds:propertyType "text";
-        ds:constraints "Must be a non-empty string. Should follow the application's naming conventions for the specific resource type";
-        ds:optional "false"
+        ds:optional "false";
+        ds:constraints "Must be a non-empty string. Should follow the application's naming conventions for the specific resource type"
     ], [
         a ds:Property;
         ds:name "parentItems";
         ds:summary "Array of React elements representing the hierarchical breadcrumb path leading to the current resource. Each item typically contains links or text showing the navigation hierarchy";
         ds:propertyType "list of nodes";
-        ds:constraints "Must be a non-empty array. Each element should represent a clickable or non-clickable breadcrumb item";
-        ds:optional "false"
+        ds:optional "false";
+        ds:constraints "Must be a non-empty array. Each element should represent a clickable or non-clickable breadcrumb item"
     ], [
         a ds:Property;
         ds:name "isLoaded";
@@ -35,42 +35,42 @@ ds:apps_lxd.component.rename_header a ds:Component;
         ds:name "relatedChip";
         ds:summary "Optional chip or badge element displayed alongside the breadcrumb navigation to show additional context about the current resource (e.g., status, type, or relationship indicators)";
         ds:propertyType "node";
-        ds:constraints "Accepts any ReactNode, typically small informational components like chips or badges";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "Accepts any ReactNode, typically small informational components like chips or badges"
     ], [
         a ds:Property;
         ds:name "titleClassName";
         ds:summary "Additional CSS class names to apply to the title container for custom styling or layout adjustments";
         ds:propertyType "text";
-        ds:constraints "Must be valid CSS class names";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "Must be valid CSS class names"
     ], [
         a ds:Property;
         ds:name "centerControls";
         ds:summary "Content displayed in the center area of the header when not in rename mode, typically used for contextual actions or status information";
         ds:propertyType "node";
-        ds:constraints "Accepts any ReactNode. Hidden during rename operations to avoid layout conflicts";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "Accepts any ReactNode. Hidden during rename operations to avoid layout conflicts"
     ], [
         a ds:Property;
         ds:name "controls";
         ds:summary "Primary action controls displayed on the right side of the header when not in rename mode, typically containing main page actions like edit, delete, or settings buttons";
         ds:propertyType "node";
-        ds:constraints "Accepts any ReactNode. Only displayed when isLoaded is true and not in rename mode";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "Accepts any ReactNode. Only displayed when isLoaded is true and not in rename mode"
     ], [
         a ds:Property;
         ds:name "renameDisabledReason";
         ds:summary "When provided, disables the rename functionality and shows this message as a tooltip explanation for why renaming is not available (e.g., \"Insufficient permissions\" or \"Resource is read-only\")";
         ds:propertyType "text";
-        ds:constraints "Should be a clear, user-friendly explanation. When undefined, renaming is enabled";
         ds:optional "true";
+        ds:constraints "Should be a clear, user-friendly explanation. When undefined, renaming is enabled";
         ds:defaultValue "undefined (renaming enabled)"
     ], [
         a ds:Property;
         ds:name "formik";
         ds:summary "Formik form management object that handles the rename operation state, validation, and submission. Must conform to the RenameHeaderValues interface with name and isRenaming fields";
         ds:propertyType "object";
-        ds:constraints "Must be FormikProps<RenameHeaderValues> object. Required for rename functionality to work. Values must include: name (string), isRenaming (boolean)";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "Must be FormikProps<RenameHeaderValues> object. Required for rename functionality to work. Values must include: name (string), isRenaming (boolean)"
     ].

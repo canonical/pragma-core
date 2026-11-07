@@ -4,6 +4,6 @@
 
 ds:tag.lptriagereimplement-and-deprecate a ds:Tag;
     ds:name "lp:triage:reimplement-and-deprecate";
-    ds:category ds:tagcategory.lpupstream;
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "";
     ds:whenToRemove "".

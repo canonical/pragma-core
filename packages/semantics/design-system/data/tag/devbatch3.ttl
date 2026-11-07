@@ -4,6 +4,6 @@
 
 ds:tag.devbatch3 a ds:Tag;
     ds:name "dev:batch3";
-    ds:category ds:tagcategory.implementation-status;
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "";
     ds:whenToRemove "".

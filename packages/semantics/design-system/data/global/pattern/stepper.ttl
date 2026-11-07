@@ -10,4 +10,4 @@ ds:global.pattern.stepper a ds:Pattern;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.triagedbacklog.
+    ds:documentationStage ds:tag.needstriage.

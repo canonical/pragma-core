@@ -10,6 +10,6 @@ ds:apps.layout.application_layout a ds:Layout;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.designin-progress;
     ds:grid "min-content 1fr;";
     ds:domain "application".

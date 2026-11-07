@@ -15,8 +15,8 @@ ds:apps_launchpad.subcomponent.modal-content a ds:Subcomponent;
         ds:name "children";
         ds:summary "Content rendered inside the dialog content container.";
         ds:propertyType "Snippet";
-        ds:constraints "Typically Header, Body, Footer composition.";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "Typically Header, Body, Footer composition."
     ];
     ds:hasSubcomponent ds:apps_launchpad.subcomponent.modal-content-footer, ds:apps_launchpad.subcomponent.modal-content-body, ds:apps_launchpad.subcomponent.modal-content-header;
     ds:parentComponent ds:apps_launchpad.component.modal.

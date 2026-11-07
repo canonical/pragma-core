@@ -10,4 +10,5 @@ ds:documentation.layout.documentation_layout a ds:Layout;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:documentation;
-    ds:documentationStage ds:tag.needstriage.
+    ds:documentationStage ds:tag.needstriage;
+    ds:hasSubcomponent ds:documentation.layout.search_page_layout, ds:documentation.layout.content_page_layout.

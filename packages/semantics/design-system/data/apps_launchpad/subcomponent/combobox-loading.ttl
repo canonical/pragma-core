@@ -15,7 +15,7 @@ ds:apps_launchpad.subcomponent.combobox-loading a ds:Subcomponent;
         ds:name "children";
         ds:summary "Optional text to be displayed next to the spinner.";
         ds:propertyType "node";
-        ds:defaultValue "'Loading...'";
-        ds:optional "true"
+        ds:optional "true";
+        ds:defaultValue "'Loading...'"
     ];
     ds:parentComponent ds:apps_launchpad.component.combobox.

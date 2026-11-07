@@ -2,8 +2,8 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:tag.stylesready a ds:Tag;
-    ds:name "styles:ready";
-    ds:category ds:tagcategory.implementation-status;
+ds:tag.devdone a ds:Tag;
+    ds:name "dev:done";
+    ds:category ds:tagcategory.implementationstatus;
     ds:whenToApply "";
     ds:whenToRemove "".

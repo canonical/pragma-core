@@ -5,7 +5,7 @@
 ds:apps.subcomponent.side_panel-content a ds:Subcomponent;
     ds:name "SidePanel.Content";
     ds:summary "";
-    ds:anatomyDsl "", "---  \nnode:  \n  uri: apps.subcomponent.side_panel-content  \n  styles:  \n    layout.flex: 1  \n    spacing.internal.block: spacing/small            # --dimension-200  \n  edges:  \n    - node:  \n        role: content  \n      relation:  \n        cardinality: \"1\"  \n        slotName: default";
+    ds:anatomyDsl "", "---\n\n# Authored 2026-09-17 from @canonical/react-ds-app\n\n# src/lib/SidePanel/common/Content/styles.css on .ds.side-panel-content.\n\nnode:\n\n  uri: apps.subcomponent.side_panel-content\n\n  styles:\n\n    # Takes the space the header and footer leave, so a short panel still fills.\n\n    layout.flex.grow: 1\n\n    layout.flex.shrink: 1\n\n    # No scroller here: overflow spills to the panel, which scrolls — that is\n\n    # what keeps the scrollbar at the panel's edge rather than inside the text\n\n    # column. Padding reads a component-local custom property over\n\n    # --dimension-200; spacing.* keys admit spacing. symbols only, so literals.\n\n    spacing.internal.block.start: 0.5rem\n\n    spacing.internal.block.end: 0.5rem\n\n  edges:\n\n    - node:\n\n        role: content\n\n      relation:\n\n        cardinality: \"1\"\n\n        slotName: default";
     ds:anatomyClassic "";
     ds:usage "";
     ds:guidelines "";

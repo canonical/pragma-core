@@ -15,8 +15,8 @@ ds:apps_lxd.component.doc_link a ds:Component;
         ds:name "docPath";
         ds:summary "The relative path to append to the base documentation URL obtained from the docs context. This path will be combined with the base URL to create the complete documentation link.";
         ds:propertyType "text";
-        ds:constraints "Must be a valid string representing a URL path (e.g., \"/guides/getting-started\", \"/api/endpoints\")";
-        ds:optional "false"
+        ds:optional "false";
+        ds:constraints "Must be a valid string representing a URL path (e.g., \"/guides/getting-started\", \"/api/endpoints\")"
     ], [
         a ds:Property;
         ds:name "children";

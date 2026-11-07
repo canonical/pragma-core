@@ -22,6 +22,6 @@ ds:apps_launchpad.component.badge a ds:Component;
         ds:summary "The variant of the badge.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "neutral";
-        ds:constraints "neutral, info, success, warning, danger"
+        ds:constraints "neutral, info, success, warning, danger";
+        ds:defaultValue "neutral"
     ].

@@ -10,4 +10,4 @@ ds:apps.pattern.code_diff a ds:Pattern;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needstriage.
+    ds:documentationStage ds:tag.needsdesign.

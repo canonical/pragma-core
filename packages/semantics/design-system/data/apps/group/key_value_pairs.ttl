@@ -10,4 +10,4 @@ ds:apps.group.key_value_pairs a ds:Group;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.designin-progress.

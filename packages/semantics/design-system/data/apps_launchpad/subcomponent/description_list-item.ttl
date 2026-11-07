@@ -19,7 +19,7 @@ ds:apps_launchpad.subcomponent.description_list-item a ds:Subcomponent;
     ], [
         a ds:Property;
         ds:name "children";
-        ds:summary "The description of the term. ";
+        ds:summary "The description of the term.";
         ds:propertyType "node";
         ds:optional "false"
     ];

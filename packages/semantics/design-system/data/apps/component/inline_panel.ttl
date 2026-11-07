@@ -1,0 +1,18 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.component.inline_panel a ds:Component;
+    ds:name "InlinePanel";
+    ds:summary "The Inline Panel is a layout surface that exists in the same plane as the main area and causes it to resize (e.g. persistent navigation, split panel layouts). It is used when the user needs to act in two contexts at the same time. It can be placed on the left or on the right of the main content area.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needsdesign;
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-09-29T00:00:00.000+02:00";
+        ds:change "Created the entry. Vanilla name of component was “pinned panel”"
+    ].

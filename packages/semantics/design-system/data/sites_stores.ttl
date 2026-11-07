@@ -2,5 +2,5 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:tagcategory.documentation-stage a ds:TagCategory;
-    ds:name "documentation stage".
+ds:sites_stores a ds:Tier;
+    ds:name "Sites/Stores".

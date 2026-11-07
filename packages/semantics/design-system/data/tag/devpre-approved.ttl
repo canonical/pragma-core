@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devpre-approved a ds:Tag;
+    ds:name "dev:pre-approved";
+    ds:category ds:tagcategory.implementationstatus;
+    ds:whenToApply "";
+    ds:whenToRemove "".

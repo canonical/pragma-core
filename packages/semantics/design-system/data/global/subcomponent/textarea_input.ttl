@@ -10,7 +10,6 @@ ds:global.subcomponent.textarea_input a ds:Subcomponent;
     ds:usage "The multi-line free-text entry part a host places in context for longer written passages.\n\n### When to use\n- A host collects open prose that spans multiple lines, such as comments or descriptions.\n- The person needs room to compose and review extended text.\n\n### When not to use\n- The value is a single short line — compose **TextInput**.\n- The value is a choice from a fixed set — compose **SelectInput**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
     ds:hasProperty [
         a ds:Property;
         ds:name "value";
@@ -33,6 +32,7 @@ ds:global.subcomponent.textarea_input a ds:Subcomponent;
         ds:summary "(Cc [Goulin Khoge](mailto:goulin.khoge@canonical.com) ‘s suggestion)";
         ds:optional "false"
     ];
+    ds:documentationStage ds:tag.needsdefinition;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.textarea_input;

@@ -14,21 +14,21 @@ ds:apps_lxd.component.tab_links a ds:Component;
         a ds:Property;
         ds:name "tabs";
         ds:summary "Array of tab definitions that can be either simple string labels or TabLink objects from canonical/react-components";
-        ds:constraints "Must contain at least one tab. When using strings, they will be automatically converted to URL-friendly slugs. When using TabLink objects, they must follow the canonical/react-components TabLink interface";
-        ds:optional "false"
+        ds:optional "false";
+        ds:constraints "Must contain at least one tab. When using strings, they will be automatically converted to URL-friendly slugs. When using TabLink objects, they must follow the canonical/react-components TabLink interface"
     ], [
         a ds:Property;
         ds:name "tabUrl";
         ds:summary "Base URL path for the tab navigation. Individual tabs will extend this URL with their slugified names (except the first tab which uses the base URL)";
-        ds:constraints "Must be a valid URL path. Should not include trailing slash as tab paths are appended automatically";
         ds:optional "false";
+        ds:constraints "Must be a valid URL path. Should not include trailing slash as tab paths are appended automatically";
         ds:propertyType "text"
     ], [
         a ds:Property;
         ds:name "activeTab";
         ds:summary "The slug identifier of the currently active tab. Used to determine which tab should display as selected";
-        ds:constraints "Must match the slugified version of a tab name or the id of a TabLink object. If not provided, the first tab becomes active by default";
         ds:optional "true";
+        ds:constraints "Must match the slugified version of a tab name or the id of a TabLink object. If not provided, the first tab becomes active by default";
         ds:propertyType "text";
         ds:defaultValue "First tab in the tabs array"
     ], [

@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.implementationcomplete a ds:Tag;
+    ds:name "implementation:complete";
+    ds:category ds:tagcategory.implementationworkflow;
+    ds:whenToApply "A UI Block has implementation complete in all supported frameworks";
+    ds:whenToRemove "".

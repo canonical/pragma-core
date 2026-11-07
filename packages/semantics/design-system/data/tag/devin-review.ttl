@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devin-review a ds:Tag;
+    ds:name "dev:in-review";
+    ds:category ds:tagcategory.implementationstatus;
+    ds:whenToApply "";
+    ds:whenToRemove "".

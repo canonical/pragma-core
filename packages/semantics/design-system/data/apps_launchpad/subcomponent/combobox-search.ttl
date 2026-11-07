@@ -15,14 +15,14 @@ ds:apps_launchpad.subcomponent.combobox-search a ds:Subcomponent;
         ds:name "value";
         ds:summary "The current value of the search input.";
         ds:propertyType "text";
-        ds:defaultValue "“”";
-        ds:optional "true"
+        ds:optional "true";
+        ds:defaultValue "“”"
     ], [
         a ds:Property;
         ds:name "placeholder";
         ds:summary "The placeholder text for the search input.";
         ds:propertyType "text";
-        ds:defaultValue "Search...";
-        ds:optional "true"
+        ds:optional "true";
+        ds:defaultValue "Search..."
     ];
     ds:parentComponent ds:apps_launchpad.component.combobox.

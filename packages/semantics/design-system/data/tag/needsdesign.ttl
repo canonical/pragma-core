@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.needsdesign a ds:Tag;
+    ds:name "needs:design";
+    ds:category ds:tagcategory.design--documentation-status;
+    ds:whenToApply "UI block, has been triaged, validated, and needs design";
+    ds:whenToRemove "".
