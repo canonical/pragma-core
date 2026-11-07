@@ -98,53 +98,26 @@ export const Default: Story = {
 
 **Identifier:** `cs:storybook.story.decorator`
 
-Decorators must be used to wrap stories in common context providers or layout elements. Decorators should generally be defined in `storybook/decorators.tsx` and be imported as `decorators` in the storybook file. Decorators may be defined inline in story files in limited circumstances when it would be difficult to globally define a semantic decorator (e.g., a decorator that provides mock data specific to that component).
+Wrap stories in shared providers or layout with decorators, one per file in `storybook/decorators/`, each its file's default export and imported as one. Except: a decorator only one component's stories need, such as its mock data, sits inline.
 
 ### Do
 
-Use decorators for static context or layout wrapping.
-```typescript
-// storybook/decorators.tsx
+Define a shared decorator in its own file and import its default
+```tsx
+// storybook/decorators/withTheme.tsx
+export default function withTheme(Story: StoryFn) { /* ... */ }
 
-export const theme = (Story: StoryFn<typeof Component>) => (
-  <ThemeProvider theme="dark">
-    <Story />
-  </ThemeProvider>
-);
-
-export const config = (Story: StoryFn<typeof Component>) => (
-  <ConfigProvider locale="en">
-    <Story />
-  </ConfigProvider>
-);
-
-// src/ui/<ComponentName>/<ComponentName>.stories.tsx
-
-import * as decorators from "storybook/decorators.js";
-export const WithTheme: Story = {
-  decorators: [decorators.theme],
-  args: {
-    variant: "primary"
-  }
-};
-
-// Component-level decorator in meta, applies to all stories in this file.
-const meta = {
-  decorators: [decorators.config],
-} satisfies Meta<typeof Component>;
-
-export default meta;
+// Button.stories.tsx
+import withTheme from "../storybook/decorators/withTheme.js";
+export const Dark = { decorators: [withTheme] };
 ```
 
 ### Don't
 
-Use function-based stories for static wrapping that could be done with decorators.
-```typescript
-// Bad: Using function-based story for static wrapping
-export const WithTheme = (args: ComponentProps) => (
-  <ThemeProvider theme="dark">
-    <Component {...args} />
-  </ThemeProvider>
+Wrap a story in a function where a decorator would do
+```tsx
+export const Dark = (args: ComponentProps) => (
+  <ThemeProvider theme="dark"><Component {...args} /></ThemeProvider>
 );
 ```
 

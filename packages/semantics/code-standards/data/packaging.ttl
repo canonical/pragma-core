@@ -123,8 +123,8 @@ packages/my-cli/
         cs:language "typescript" ;
         cs:code """
 // Bad: reaching into a sibling domain's internals
-import { resolveConfig } from "../operations/resolveConfig.js";
-import { formatOutput } from "../utils/formatOutput.js";
+import resolveConfig from "../operations/resolveConfig.js";
+import formatOutput from "../utils/formatOutput.js";
 
 // Good: import through the domain barrel
 import { resolveConfig } from "../operations/index.js";
@@ -263,89 +263,28 @@ packages/my-package/
 
 # Export Shape Standard
 cs:packaging.export.shape a cs:CodeStandard ;
-    rdfs:label "Default or uniform named exports"@en ;
+    rdfs:label "One default export named after the file"@en ;
     cs:hasCategory cs:packaging ;
-    cs:description "Files must use either a single default export or multiple named exports. When using multiple named exports, all exports must have the same type or shape." ;
+    cs:description "A module that exports has one default export, named as the file. Except: barrels (`index.ts`); files of only types or only plain values (`types.ts`, `constants.ts`, `testing/fixtures.ts`), which use named exports; story files, and the configs and entry files a tool loads." ;
     cs:do [
-        cs:description "Use a single default export for files implementing a single component or function" ;
+        cs:description "Export one default named as the file, or only plain values by name" ;
         cs:language "typescript" ;
         cs:code """
-// ComponentName.tsx
-export default ComponentName;
-    """
-    ] ;
-    cs:do [
-        cs:description "Name atomic function files after the function they export" ;
-        cs:language "typescript" ;
-        cs:code """
-// assignElement.ts
-export default function assignElement(target: Element, source: Partial<Element>) {
-  // ...
-}
-
 // formatCurrency.ts
-export default function formatCurrency(value: number) {
-  // ...
-}
-    """
-    ] ;
-    cs:do [
-        cs:description "Use multiple named exports for files providing a public API or a collection of related items, and ensure all exports have the same type" ;
-        cs:language "typescript" ;
-        cs:code """
-// index.ts
-export { ComponentA, ComponentB };
+export default function formatCurrency(value: number): string { /* ... */ }
 
-// types.ts
-export type TypeA = { ... };
-export type TypeB = { ... };
-
-// Consistent export shape:
-export const myFuncA = (value: string) => {};
-export const myFuncB = (value: string) => {};
-export const myFuncC = (value: string) => {};
+// constants.ts
+export const MAX_RETRIES = 3;
+export const DEFAULT_TIMEOUT = 5000;
     """
     ] ;
     cs:dont [
-        cs:description "Mix default and unrelated named exports in a way that confuses the file's purpose" ;
+        cs:description "Export several functions, or a default beside named exports, from one file" ;
         cs:language "typescript" ;
         cs:code """
-export default ComponentName;
-export const helper = () => {};
-    """
-    ] ;
-    cs:dont [
-        cs:description "Name an atomic function file with a name that doesn't match its exported function" ;
-        cs:language "typescript" ;
-        cs:code """
-// helpers.ts — wrong: generic name instead of function name
-export default function assignElement(target: Element, source: Partial<Element>) {
-  // ...
-}
-
-// utils.ts — wrong: generic name instead of function name
-export default function formatCurrency(value: number) {
-  // ...
-}
-    """
-    ] ;
-    cs:dont [
-        cs:description "Provide multiple unrelated exports from a file meant for a single domain" ;
-        cs:language "typescript" ;
-        cs:code """
-export default debounce;
-export const throttle = () => {};
-export const logger = () => {};
-    """
-    ] ;
-    cs:dont [
-        cs:description "Export objects of different types or shapes from the same file" ;
-        cs:language "typescript" ;
-        cs:code """
-export const transformer = (value: string) => {};
-export const reducer = (map: string[]) => {};
-class ABC {}
-export { ABC };
+// format.ts
+export default function formatDate(value: Date): string { /* ... */ }
+export const formatTime = (value: Date): string => { /* ... */ };
     """
     ] .
 
@@ -359,7 +298,7 @@ cs:packaging.export.barrel a cs:CodeStandard ;
         cs:language "typescript" ;
         cs:code """
 // src/index.ts
-export { Button } from "./components/Button.js";
+export { default as Button } from "./components/Button.js";
 export type { ButtonProps } from "./components/Button.types.js";
     """
     ] ;
@@ -368,8 +307,8 @@ export type { ButtonProps } from "./components/Button.types.js";
         cs:language "typescript" ;
         cs:code """
 // src/operations/index.ts
-export { resolveConfig } from "./resolveConfig.js";
-export { runValidation } from "./runValidation.js";
+export { default as resolveConfig } from "./resolveConfig.js";
+export { default as runValidation } from "./runValidation.js";
     """
     ] ;
     cs:do [
@@ -377,8 +316,8 @@ export { runValidation } from "./runValidation.js";
         cs:language "typescript" ;
         cs:code """
 // src/build/buildTheme.ts — same domain, import the file
-import { computeDeltas } from "./computeDeltas.js";
-import { recoverPrimitiveRef } from "./recoverPrimitiveRef.js";
+import computeDeltas from "./computeDeltas.js";
+import recoverPrimitiveRef from "./recoverPrimitiveRef.js";
     """
     ] ;
     cs:do [
@@ -394,8 +333,8 @@ import { resolveConfig } from "../operations/index.js";
         cs:language "typescript" ;
         cs:code """
 /** Public compatibility surface. */
-export { computeDeltas } from "./computeDeltas.js";
-export { formatDelta } from "./formatDelta.js";
+export { default as computeDeltas } from "./computeDeltas.js";
+export { default as formatDelta } from "./formatDelta.js";
     """
     ] ;
     cs:dont [
@@ -412,7 +351,7 @@ import { computeDeltas, recoverPrimitiveRef } from "./index.js";
         cs:language "typescript" ;
         cs:code """
 // Bad: bypassing the domain barrel
-import { resolveConfig } from "../operations/resolveConfig.js";
+import resolveConfig from "../operations/resolveConfig.js";
 
 // Good: through the barrel
 import { resolveConfig } from "../operations/index.js";
@@ -440,84 +379,28 @@ src/operations/
 cs:packaging.export.declaration a cs:CodeStandard ;
     rdfs:label "Export at the declaration"@en ;
     cs:hasCategory cs:packaging ;
-    cs:description "Exports must be declared on the definition itself (e.g. `export default function` or `export const`), not gathered at the end of the file. When a wrapper (HOC, decorator, middleware) is applied, declare the unwrapped binding with `const`, then export the wrapped result as default on a separate line." ;
+    cs:description "Declare each export on its definition, never gathered at the end. Except: a story's `meta`, a tool config, a context, and a wrapped or cast component or function are bound to a `const` and exported as the default on a separate line." ;
     cs:do [
-        cs:description "Declare the export directly on the function or class definition" ;
-        cs:language "typescript" ;
+        cs:description "Export on the definition, or bind a wrapped value first" ;
+        cs:language "tsx" ;
         cs:code """
 // formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-    """
-    ] ;
-    cs:do [
-        cs:description "Declare the export directly on a named constant" ;
-        cs:language "typescript" ;
-        cs:code """
-// MAX_RETRIES.ts
-export const MAX_RETRIES = 3;
-    """
-    ] ;
-    cs:do [
-        cs:description "When a wrapper is involved, declare the raw binding with `const`, then export the wrapped result as default" ;
-        cs:language "typescript" ;
-        cs:code """
-// UserProfile.tsx
-const UserProfile = ({ user }: UserProfileProps) => {
-  return <div>{user.name}</div>;
-};
+export default function formatCurrency(n: number) { /* ... */ }
 
-export default memo(UserProfile);
-    """
-    ] ;
-    cs:do [
-        cs:description "Apply the same pattern for higher-order functions and middleware" ;
-        cs:language "typescript" ;
-        cs:code """
-// connectDatabase.ts
-const connectDatabase = (config: DbConfig): Connection => {
-  return new Connection(config);
-};
-
-export default withRetry(connectDatabase);
+// Row.tsx
+const Row = <T,>({ row }: RowProps<T>) => <tr>{row.name}</tr>;
+export default memo(Row) as typeof Row;
     """
     ] ;
     cs:dont [
-        cs:description "Define a symbol and then export it at the end of the file" ;
-        cs:language "typescript" ;
+        cs:description "Export away from the definition, or wrap a `function` declaration" ;
+        cs:language "tsx" ;
         cs:code """
-// Bad: export is separated from definition
-function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-
+const formatCurrency = (value: number) => { /* ... */ };
 export default formatCurrency;
-    """
-    ] ;
-    cs:dont [
-        cs:description "Gather multiple exports at the bottom of the file" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: exports collected at the end
-const helperA = () => {};
-const helperB = () => {};
 
-export { helperA, helperB };
-    """
-    ] ;
-    cs:dont [
-        cs:description "Use `export default` on the raw binding when a wrapper is needed" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: exports the unwrapped version, then wraps elsewhere
-export default function UserProfile({ user }: UserProfileProps) {
-  return <div>{user.name}</div>;
-}
-
-// consumer.ts — has to wrap it themselves
-import UserProfile from "./UserProfile.js";
-const Memoized = memo(UserProfile);
+function Row({ row }: RowProps) { /* ... */ }
+export default memo(Row);
     """
     ] .
 
@@ -525,83 +408,24 @@ const Memoized = memo(UserProfile);
 cs:packaging.naming.single_export_file a cs:CodeStandard ;
     rdfs:label "Filename matches the export"@en ;
     cs:hasCategory cs:packaging ;
-    cs:description "Files that contain a single export must be named after that export. This applies to functions, classes, types, constants, and any other single-export module. The file name must match the exported identifier exactly, preserving its casing (camelCase for functions/variables, PascalCase for classes/types/components)." ;
+    cs:description "A file with a single export is named after it, in its casing: `isAccepted.ts`, `EventEmitter.ts`. Except: `index.ts`, `types.ts`, `constants.ts` and `testing/fixtures.ts` keep their role names." ;
     cs:do [
-        cs:description "Name files after the single function they export" ;
+        cs:description "Name the file after its export, or keep its role name" ;
         cs:language "typescript" ;
         cs:code """
 // isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
+export default function isAccepted(status: string): boolean { /* ... */ }
 
-// formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-    """
-    ] ;
-    cs:do [
-        cs:description "Name files after the single type or interface they export" ;
-        cs:language "typescript" ;
-        cs:code """
-// ConnectionConfig.ts
-export interface ConnectionConfig {
-  host: string;
-  port: number;
-}
-
-// UserRole.ts
+// types.ts
 export type UserRole = "admin" | "editor" | "viewer";
     """
     ] ;
-    cs:do [
-        cs:description "Name files after the single class they export" ;
-        cs:language "typescript" ;
-        cs:code """
-// EventEmitter.ts
-export class EventEmitter {
-  // ...
-}
-    """
-    ] ;
-    cs:do [
-        cs:description "Name files after the single constant they export" ;
-        cs:language "typescript" ;
-        cs:code """
-// DEFAULT_TIMEOUT.ts
-export const DEFAULT_TIMEOUT = 5000;
-    """
-    ] ;
     cs:dont [
-        cs:description "Use generic names like `helpers.ts`, `utils.ts`, or `types.ts` for files with a single export" ;
+        cs:description "Name a single export's file generically or by its domain" ;
         cs:language "typescript" ;
         cs:code """
-// helpers.ts — wrong: should be isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
-
-// utils.ts — wrong: should be formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-    """
-    ] ;
-    cs:dont [
-        cs:description "Use names that describe the domain instead of the export" ;
-        cs:language "typescript" ;
-        cs:code """
-// validation.ts — wrong: should be isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
-
-// network.ts — wrong: should be ConnectionConfig.ts
-export interface ConnectionConfig {
-  host: string;
-  port: number;
-}
+// helpers.ts: should be isAccepted.ts
+export default function isAccepted(status: string): boolean { /* ... */ }
     """
     ] .
 
@@ -733,7 +557,7 @@ import { PragmaError } from "error/index.js";
         cs:language "typescript" ;
         cs:code """
 // Bad: bypasses the barrel, couples to internal file structure
-import { PragmaError } from "../../error/PragmaError.js";
+import PragmaError from "../../error/PragmaError.js";
 
 // Good (application): the alias points at the barrel
 import { PragmaError } from "#error";
