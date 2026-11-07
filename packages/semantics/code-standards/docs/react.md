@@ -830,56 +830,31 @@ Omit the @implements tag that links to the DSL.
 
 **Identifier:** `cs:react.component.tsdoc.import`
 
-A component's TSDoc must show how a consumer imports it: a single import statement wrapped in backticks, on its own line, with a blank line before it, placed just before the @implements tag. This documents the public import surface without an @example block (which cs:react.component.tsdoc forbids). The imported name must match the component's exact public export API — the identifier a consumer actually imports from the package's published name — which is not always the local declaration name (a component may be renamed at its barrel, e.g. a local `FieldError` re-exported as `Error`).
+A component's TSDoc gives its consumer import in backticks, on its own line before `@implements`, naming what the package exports, or a part's public parent, such as `Card` for `Card.Thumbnail`. Except: an internal part, which never reaches the package root, has none.
 
 ### Do
 
-Add the backtick-wrapped import line before @implements.
+Give the consumer's import on its own line before `@implements`
 ```typescript
 /**
- * The label component is a compact, non-interactive visual element used to
- * categorize content or indicate a status.
+ * Displays a small thumbnail image within a card, typically used alongside
+ * content for logo/icon representation.
  *
- * `import { Label } from \"@canonical/react-ds-global\";`
+ * `import { Card } from "@canonical/react-ds-global";`
  *
- * @implements ds:global.component.label
+ * @implements ds:global.subcomponent.card-thumbnail
  */
 ```
 
 ### Don't
 
-Use an @example or a fenced code block instead of the single backtick line.
+Name the local identifier, or give an internal part a line
 ```typescript
-// Bad: @example is forbidden; a fenced block is heavier than needed
-/**
- * The label component is a compact...
- *
- * @example
- * import { Label } from \"@canonical/react-ds-global\";
- */
-```
+// Bad: the package exports FieldError as Error
+/** `import { FieldError } from "@canonical/react-ds-global-form";` */
 
-Omit the blank line before the import, or drop the backticks.
-```typescript
-// Bad: no blank line before, and no backticks
-/**
- * The label component is a compact...
- * import { Label } from \"@canonical/react-ds-global\";
- * @implements ds:global.component.label
- */
-```
-
-Use the local declaration name when the barrel re-exports it under a different name.
-```typescript
-// The component is declared locally as FieldError but exported as `Error`.
-// Bad: imports the local name, which the consumer cannot import
-/**
- * `import { FieldError } from \"@canonical/react-ds-global-form\";`
- */
-// Good: use the exported (consumer-facing) name
-/**
- * `import { Error } from \"@canonical/react-ds-global-form\";`
- */
+// Bad: an internal part
+/** `import { Draft } from "./_work_in_progress/Draft/index.js";` */
 ```
 
 ---
