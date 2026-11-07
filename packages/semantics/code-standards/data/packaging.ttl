@@ -161,7 +161,7 @@ packages/build-tools/
 cs:packaging.library.structure a cs:CodeStandard ;
     rdfs:label "Libraries export from src/lib"@en ;
     cs:hasCategory cs:packaging ;
-    cs:description "Library packages export reusable code (components, utilities, hooks, types) for consumption by other packages. They must organize their exportable code in a `src/lib/` folder and re-export through a root barrel. This convention ensures consistency across the monorepo and clearly separates public API code from non-exported concerns like storybook configuration or test utilities. Each domain folder within `lib/` must have its own barrel (`index.ts`)." ;
+    cs:description "Library packages export reusable code (components, utilities, hooks, types) for consumption by other packages. They must organize their exportable code in a `src/lib/` folder and re-export through a root barrel. This convention ensures consistency across the monorepo and clearly separates public API code from non-exported concerns like storybook configuration or test utilities. Each domain folder within `lib/` must have its own barrel (`index.ts`). Except: an `@experimental` `./testing` subpath." ;
     cs:do [
         cs:description "Recognise a library package by its `package.json` signals — `main`/`exports` field, publishable, no `bin`" ;
         cs:language "json" ;
