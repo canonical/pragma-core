@@ -144,8 +144,7 @@ Use multiple `<g>` elements or an `id` that does not match the filename.
 
 **Identifier:** `cs:icons.svg.mask_usage`
 
-Use SVG <mask> elements to create negative space or overlays in icons.
-Example
+Icons may use SVG masks to negate or partially negate paths, enabling advanced visual effects such as cutouts and overlays.
 
 ### Do
 

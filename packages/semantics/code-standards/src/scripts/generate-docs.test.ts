@@ -85,6 +85,39 @@ broken
 `);
   });
 
+  it("decodes escapes in descriptions and code", () => {
+    const { run, read } = generate(`${CATEGORY}
+cs:sample.rule a cs:CodeStandard ;
+    rdfs:label "A sample rule"@en ;
+    cs:hasCategory cs:sample ;
+    cs:description "Set \\"placing\\" on the root." ;
+    cs:do [
+        cs:description "Escape the dot" ;
+        cs:code """
+/a\\\\.b/
+    """
+    ] .
+`);
+
+    expect(run.status).toBe(0);
+    expect(read("sample.md")).toContain('\nSet "placing" on the root.\n');
+    expect(read("sample.md")).toContain("\n/a\\.b/\n");
+  });
+
+  it("fails, naming the file, on a literal it cannot read", () => {
+    const { run } = generate(`${CATEGORY}
+cs:sample.rule a cs:CodeStandard ;
+    rdfs:label "A sample rule"@en ;
+    cs:hasCategory cs:sample ;
+    cs:description "Never closed ;
+`);
+
+    expect(run.status).not.toBe(0);
+    expect(run.stderr).toContain(
+      "sample.ttl: cs:sample.rule: Unterminated literal",
+    );
+  });
+
   it("lists each category in the index with its count of standards", () => {
     const { run, read } = generate(`${CATEGORY}
 cs:sample.one a cs:CodeStandard ;

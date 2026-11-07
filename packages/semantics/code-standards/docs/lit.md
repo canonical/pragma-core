@@ -277,7 +277,7 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: [/^lit($|\\/)/], // externalises 'lit', 'lit/decorators.js', 'lit/directives/*', etc.
+      external: [/^lit($|\/)/], // externalises 'lit', 'lit/decorators.js', 'lit/directives/*', etc.
     },
   },
 });
