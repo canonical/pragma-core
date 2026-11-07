@@ -8,7 +8,7 @@ Standards for testing development.
 
 **Identifier:** `cs:testing.file.structure`
 
-Unit test files must be colocated with the source they test, using the `.test.ts` suffix (`.test.tsx` for component tests). Other test types (browser, e2e) may follow different naming conventions. Shared test infrastructure — fixtures, factory helpers, custom matchers, type definitions — lives in a `testing/` directory at the package root (not inside `src/`). This directory stays out of the package's public API, but not out of its tests: each helper file in it has a colocated test, as a source file does, and the directory counts toward coverage, so a fixture or factory that tests rely on is tested itself. Integration tests that exercise multiple modules together go in `src/testing/integration/`. Do not place test files in a top-level `__tests__/` or `tests/` directory mirroring the source tree. Do not use `.spec.ts` — the convention is `.test.ts`.
+Unit test files must be colocated with the source they test, using the `.test.ts` suffix (`.test.tsx` for component tests). Other test types (browser, e2e) may follow different naming conventions. Shared test infrastructure — fixtures, factory helpers, custom matchers, type definitions — lives in a `testing/` directory at the package root (not inside `src/`). This directory stays out of the package's public API, but not out of its tests: each helper file in it has a colocated test, as a source file does, and the directory counts toward coverage, so a fixture or factory that tests rely on is tested itself. A file of pure types, in `src/` or `testing/`, has no runtime behaviour to test, so its colocated test is a compile-time `*.types.test.ts` (for example `types.types.test.ts`) that pins the shapes the types accept and refuse with `expectTypeOf`, checked by `tsc --noEmit`. Integration tests that exercise multiple modules together go in `src/testing/integration/`. Do not place test files in a top-level `__tests__/` or `tests/` directory mirroring the source tree. Do not use `.spec.ts` — the convention is `.test.ts`.
 
 ### Do
 
@@ -27,7 +27,8 @@ packages/my-package/
 │   ├── createTestDb.test.ts
 │   ├── registerMatchers.ts        # custom vitest matchers
 │   ├── registerMatchers.test.ts
-│   └── types.ts                   # test-only type definitions
+│   ├── types.ts                   # test-only type definitions
+│   └── types.types.test.ts        # pure type files get a compile-time test
 └── vitest.config.ts
 ```
 
@@ -63,7 +64,7 @@ packages/my-package/
 
 **Identifier:** `cs:testing.coverage.config`
 
-New packages with runtime code must enforce 100% coverage thresholds using vitest with the v8 provider. Existing packages should ratchet toward 100% over time. Every package that exports runtime code (not pure types or CSS) must configure vitest coverage. The `test:coverage` script in `package.json` runs `vitest run --coverage`. The plain `test` script runs `vitest run` without coverage for speed during development. Package-specific exclusions are acceptable when justified (e.g., `**/types/*.ts` for packages with type directories, third-party wrappers). Each addition to `exclude` must be a category of non-runtime code, not a way to skip hard-to-test source.
+New packages with runtime code must enforce 100% coverage thresholds using vitest with the v8 provider. Existing packages should ratchet toward 100% over time. Every package that exports runtime code (not pure types or CSS) must configure vitest coverage. The `test:coverage` script in `package.json` runs `vitest run --coverage`. The plain `test` script runs `vitest run` without coverage for speed during development. Package-specific exclusions are acceptable when justified (e.g., `**/types/*.ts` for packages with type directories, third-party wrappers). Each addition to `exclude` must be a category of non-runtime code, not a way to skip hard-to-test source. Coverage includes the package's `testing/` helpers as well as `src/`, since those helpers have colocated tests of their own (see cs:testing.file.structure).
 
 ### Do
 
@@ -74,7 +75,7 @@ export default defineConfig({
   test: {
     coverage: {
       provider: "v8",
-      include: ["src/**/*.ts"],
+      include: ["src/**/*.ts", "testing/**/*.ts"],
       exclude: [
         "**/index.ts",       // barrel re-exports
         "**/*.test.ts",      // test files
