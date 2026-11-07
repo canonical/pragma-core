@@ -123,8 +123,8 @@ packages/my-cli/
         cs:language "typescript" ;
         cs:code """
 // Bad: reaching into a sibling domain's internals
-import { resolveConfig } from "../operations/resolveConfig.js";
-import { formatOutput } from "../utils/formatOutput.js";
+import resolveConfig from "../operations/resolveConfig.js";
+import formatOutput from "../utils/formatOutput.js";
 
 // Good: import through the domain barrel
 import { resolveConfig } from "../operations/index.js";
@@ -298,7 +298,7 @@ cs:packaging.export.barrel a cs:CodeStandard ;
         cs:language "typescript" ;
         cs:code """
 // src/index.ts
-export { Button } from "./components/Button.js";
+export { default as Button } from "./components/Button.js";
 export type { ButtonProps } from "./components/Button.types.js";
     """
     ] ;
@@ -307,8 +307,8 @@ export type { ButtonProps } from "./components/Button.types.js";
         cs:language "typescript" ;
         cs:code """
 // src/operations/index.ts
-export { resolveConfig } from "./resolveConfig.js";
-export { runValidation } from "./runValidation.js";
+export { default as resolveConfig } from "./resolveConfig.js";
+export { default as runValidation } from "./runValidation.js";
     """
     ] ;
     cs:do [
@@ -316,8 +316,8 @@ export { runValidation } from "./runValidation.js";
         cs:language "typescript" ;
         cs:code """
 // src/build/buildTheme.ts — same domain, import the file
-import { computeDeltas } from "./computeDeltas.js";
-import { recoverPrimitiveRef } from "./recoverPrimitiveRef.js";
+import computeDeltas from "./computeDeltas.js";
+import recoverPrimitiveRef from "./recoverPrimitiveRef.js";
     """
     ] ;
     cs:do [
@@ -333,8 +333,8 @@ import { resolveConfig } from "../operations/index.js";
         cs:language "typescript" ;
         cs:code """
 /** Public compatibility surface. */
-export { computeDeltas } from "./computeDeltas.js";
-export { formatDelta } from "./formatDelta.js";
+export { default as computeDeltas } from "./computeDeltas.js";
+export { default as formatDelta } from "./formatDelta.js";
     """
     ] ;
     cs:dont [
@@ -351,7 +351,7 @@ import { computeDeltas, recoverPrimitiveRef } from "./index.js";
         cs:language "typescript" ;
         cs:code """
 // Bad: bypassing the domain barrel
-import { resolveConfig } from "../operations/resolveConfig.js";
+import resolveConfig from "../operations/resolveConfig.js";
 
 // Good: through the barrel
 import { resolveConfig } from "../operations/index.js";
@@ -557,7 +557,7 @@ import { PragmaError } from "error/index.js";
         cs:language "typescript" ;
         cs:code """
 // Bad: bypasses the barrel, couples to internal file structure
-import { PragmaError } from "../../error/PragmaError.js";
+import PragmaError from "../../error/PragmaError.js";
 
 // Good (application): the alias points at the barrel
 import { PragmaError } from "#error";

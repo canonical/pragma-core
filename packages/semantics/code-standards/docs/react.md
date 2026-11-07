@@ -117,14 +117,14 @@ Card/
   │   ├── Footer/
   │   │   └── Footer.tsx
   │   └── utils/
-  │       └── helpers.ts
+  │       └── formatLabel.ts
   └── index.ts
 ```
 
 Allow subcomponents to depend on siblings or shared utilities within the same component scope.
 ```typescript
 // Header.tsx can import from utils/
-import { helper } from '../utils/helpers.js';
+import formatLabel from '../utils/formatLabel.js';
 
 // Footer.tsx can import from Header.tsx
 import Header from '../Header.js';
@@ -564,20 +564,18 @@ export default Context;
 
 Use `Provider.tsx` as the main component file. The provider is responsible for wrapping children with the context.
 ```tsx
-// [MyComponent]/Provider.tsx
 import Context from "./Context.js";
-import { useProviderState } from "./hooks/useProviderState.js";
-import type { ProviderProps } from "./types.js";
+import useProviderState from "./hooks/useProviderState.js";
+import type { [MyComponent]Component, ProviderProps } from "./types.js";
 
-const Provider = ({ children }: ProviderProps) => {
-  const state = useProviderState();
-  return <Context.Provider value={state}>{children}</Context.Provider>;
-};
+const Provider = ({ children }: ProviderProps) => (
+  <Context.Provider value={useProviderState()}>{children}</Context.Provider>
+);
 
-export default Provider;
+export default Provider as [MyComponent]Component;
 ```
 
-Use `index.ts` to export the `Provider` as a named component that matches the folder name, casting it to the component type.
+Use `index.ts` to export the `Provider` as a named component that matches the folder name.
 ```typescript
 // [MyComponent]/types.ts
 import type { ReactElement } from "react";
@@ -587,11 +585,7 @@ export type [MyComponent]Component = ((props: ProviderProps) => ReactElement) & 
 };
 
 // [MyComponent]/index.ts
-import Provider from "./Provider.js";
-import type { [MyComponent] } from "./types.js";
-
-export const [MyComponent] = Provider as [MyComponent]Component;
-export default [MyComponent];
+export { default as [MyComponent] } from "./Provider.js";
 ```
 
 Create provider state hook types in `hooks/types.ts` for context providers.
@@ -609,15 +603,12 @@ export type UseProviderStateResult = ContextOptions;
 Create a provider state hook implementation.
 ```tsx
 // [MyComponent]/hooks/useProviderState.ts
-import { useContext } from "react";
 import type { UseProviderStateProps, UseProviderStateResult } from "./types.js";
 
-/**
- * Hook to manage the state of the provider
- */
-const useProviderState = ({
+/** Manages the state of the provider. */
+export default function useProviderState({
     // ..props...
-}: UseProviderStateProps): UseProviderStateResult => {
+}: UseProviderStateProps): UseProviderStateResult {
  // centralize the entire provider state here...
 }
 ```
@@ -711,8 +702,7 @@ Export public subcomponents by attaching them to the parent component using dot 
 ```typescript
 const Item = (props: ItemProps) => { /* ... */ };
 const Accordion = (props: AccordionProps) => { /* ... */ };
-Accordion.Item = Item;
-export default Accordion;
+export default Object.assign(Accordion, { Item });
 ```
 
 Use semantic, self-descriptive names for subcomponents
