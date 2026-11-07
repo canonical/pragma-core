@@ -161,8 +161,11 @@ Prefix component-specific files and use generic names for domain-level files.
   ├── [MyComponent].stories.tsx   # Component-specific
   ├── [MyComponent].test.tsx      # Component-specific
   ├── Context.tsx               # Domain-level
+  ├── Context.test.tsx          # Domain-level
   ├── types.ts                  # Domain-level
-  └── styles.css                # Domain-level
+  ├── types.types.test.ts       # Domain-level
+  ├── styles.css                # Domain-level
+  └── styles.test.tsx           # Domain-level
 ```
 
 ### Don't
@@ -672,7 +675,9 @@ Place all component-related files within a single folder named after the compone
   ├── [MyComponent].test.tsx
   ├── index.ts
   ├── styles.css
-  └── types.ts
+  ├── styles.test.tsx
+  ├── types.ts
+  └── types.types.test.ts
 ```
 
 ### Don't
