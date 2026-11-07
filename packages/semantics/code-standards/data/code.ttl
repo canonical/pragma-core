@@ -204,7 +204,7 @@ interface QueueConfig {
 cs:code.naming.function_verb a cs:CodeStandard ;
     rdfs:label "Name functions with a verb"@en ;
     cs:hasCategory cs:code ;
-    cs:description "Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add." ;
+    cs:description "Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: components (`Button`); the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add." ;
     cs:do [
         cs:description "Start names with a verb, name data keys after the data, and wrappers `with…`" ;
         cs:language "typescript" ;
@@ -216,7 +216,7 @@ const withTooltip = (C: ComponentType) => { /* ... */ };
     """
     ] ;
     cs:dont [
-        cs:description "Name a function or a method as a noun" ;
+        cs:description "Name a non-component function or a method as a noun" ;
         cs:language "typescript" ;
         cs:code """
 const pathToModule = (name: string) => { /* ... */ };

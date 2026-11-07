@@ -369,7 +369,7 @@ function getConfig() {
 
 **Identifier:** `cs:code.naming.function_verb`
 
-Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add.
+Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: components (`Button`); the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add.
 
 ### Do
 
@@ -383,7 +383,7 @@ const withTooltip = (C: ComponentType) => { /* ... */ };
 
 ### Don't
 
-Name a function or a method as a noun
+Name a non-component function or a method as a noun
 ```typescript
 const pathToModule = (name: string) => { /* ... */ };
 const label = f.number(count); // a method called by name
