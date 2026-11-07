@@ -1,13 +1,13 @@
 #!/usr/bin/env bun
 /**
  * Transforms code standards from TTL to readable markdown per category.
- * Usage: bun src/scripts/generate-docs.ts [output-dir]
+ * Usage: bun src/scripts/generate-docs.ts [output-dir] [data-dir]
  */
 
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 
-const DATA_DIR = join(import.meta.dir, "../../data");
+const DEFAULT_DATA_DIR = join(import.meta.dir, "../../data");
 const DEFAULT_OUTPUT = "./docs";
 
 interface Example {
@@ -296,15 +296,16 @@ function generateMarkdown(root: Category, subcategories: Category[]): string {
   return lines.join("\n");
 }
 
-function main() {
+function generateDocs() {
   const outputDir = process.argv[2] || DEFAULT_OUTPUT;
+  const dataDir = process.argv[3] || DEFAULT_DATA_DIR;
   mkdirSync(outputDir, { recursive: true });
 
-  const files = readdirSync(DATA_DIR).filter((f) => f.endsWith(".ttl"));
+  const files = readdirSync(dataDir).filter((f) => f.endsWith(".ttl"));
   const docCategories: DocCategory[] = [];
 
   for (const file of files) {
-    const content = readFileSync(join(DATA_DIR, file), "utf-8");
+    const content = readFileSync(join(dataDir, file), "utf-8");
     const cats = parseCategories(content);
     const standards = parseStandards(content);
 
@@ -378,4 +379,4 @@ function main() {
   console.log(`Generated ${join(outputDir, "index.md")}`);
 }
 
-main();
+generateDocs();
