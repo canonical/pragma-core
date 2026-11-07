@@ -20,10 +20,7 @@ The compiler runs as a ke plugin: when the store finishes loading, the schema is
 
 ```typescript
 import { createStore } from "@canonical/ke";
-import {
-  createSchemaPlugin,
-  type SchemaPluginApi,
-} from "@canonical/ke-graphql";
+import { createSchemaPlugin, type SchemaPluginApi } from "@canonical/ke-graphql";
 import { createGraphQLHandler } from "@canonical/ke-graphql/http";
 
 const graphql = createSchemaPlugin();
@@ -34,8 +31,7 @@ const store = await createStore({
   plugins: [graphql],
 });
 
-const { schema, sdl, createContext } =
-  store.api<SchemaPluginApi>("ke-graphql")!;
+const { schema, sdl, createContext } = store.api<SchemaPluginApi>("ke-graphql")!;
 
 Bun.serve({
   port: 4000,
@@ -92,16 +88,14 @@ the compiler emits the following (fields lightly reordered for reading, Relay bo
 # revision: 0
 # prefixing: none
 
-interface Node {
-  # identity + self-description, and nothing else
+interface Node {           # identity + self-description, and nothing else
   uri: ID!
   _meta: EntityMeta!
 }
 
-type EntityMeta {
-  # every generic answer lives here, off the data surface
-  curie: String! # DISPLAY form of uri ("lib:dune") — never an identity
-  title(lang: String = "en"): String! # TOTAL — never null, always renderable
+type EntityMeta {          # every generic answer lives here, off the data surface
+  curie: String!                         # DISPLAY form of uri ("lib:dune") — never an identity
+  title(lang: String = "en"): String!    # TOTAL — never null, always renderable
   label(lang: String = "en"): String
   comment(lang: String = "en"): String
   definition(lang: String = "en"): String
@@ -114,45 +108,29 @@ interface Work implements Node {
   uri: ID!
   _meta: EntityMeta!
   title: String
-  authors(
-    first: Int
-    after: String
-    last: Int
-    before: String
-  ): AuthorConnection!
+  authors(first: Int, after: String, last: Int, before: String): AuthorConnection!
   reviews: [Review!]!
 }
 
 type Book implements Node & Work {
-  uri: ID! # the absolute IRI: "https://example.org/library/dune"
+  uri: ID!                 # the absolute IRI: "https://example.org/library/dune"
   _meta: EntityMeta!
   title: String
   pageCount: Int
-  inPrint: Boolean # data stores "true" as a string — the resolver coerces
-  authors(
-    first: Int
-    after: String
-    last: Int
-    before: String
-  ): AuthorConnection!
-  reviews: [Review!]! # plain list — Review instances are blank nodes
+  inPrint: Boolean         # data stores "true" as a string — the resolver coerces
+  authors(first: Int, after: String, last: Int, before: String): AuthorConnection!
+  reviews: [Review!]!      # plain list — Review instances are blank nodes
 }
 
 type Author implements Node {
   uri: ID!
   _meta: EntityMeta!
   name: String
-  authoreds(
-    first: Int
-    after: String
-    last: Int
-    before: String
-  ): WorkConnection!
+  authoreds(first: Int, after: String, last: Int, before: String): WorkConnection!
 }
 
-type Review {
-  # embeddable: no Node, no uri — it lives inside its parent
-  _meta: EntityMeta! # …but it still knows its own class
+type Review {              # embeddable: no Node, no uri — it lives inside its parent
+  _meta: EntityMeta!       # …but it still knows its own class
   rating: Int
   comment: String
 }
@@ -162,12 +140,7 @@ type Query {
   book(uri: String!): Book
   books(first: Int, after: String, last: Int, before: String): BookConnection!
   author(uri: String!): Author
-  authors(
-    first: Int
-    after: String
-    last: Int
-    before: String
-  ): AuthorConnection!
+  authors(first: Int, after: String, last: Int, before: String): AuthorConnection!
   film(uri: String!): Film
   films(first: Int, after: String, last: Int, before: String): FilmConnection!
   ontologies: [Ontology!]!
@@ -179,9 +152,9 @@ type Query {
 
 Reading the output back against the input shows most of the compiler's rules at once:
 
-- **`Work` became an interface.** It has subclasses and no direct instances, so it's abstract — and because all of its concrete implementors are full entities, the interface itself implements `Node`, which is what lets Relay refetch a fragment written against `Work`. (A class with subclasses _and_ direct instances of its own stays a concrete type and earns a `V016` warning: a supertype-typed field can't surface its subclasses' fields. Force it abstract with `{ abstract: true }` when it has no direct instances; the interface-plus-companion-type alternative is a deferred option.)
+- **`Work` became an interface.** It has subclasses and no direct instances, so it's abstract — and because all of its concrete implementors are full entities, the interface itself implements `Node`, which is what lets Relay refetch a fragment written against `Work`. (A class with subclasses *and* direct instances of its own stays a concrete type and earns a `V016` warning: a supertype-typed field can't surface its subclasses' fields. Force it abstract with `{ abstract: true }` when it has no direct instances; the interface-plus-companion-type alternative is a deferred option.)
 - **`hasAuthor` became `authors`.** Field names strip a leading `has`/`is` verb; list fields are pluralized (`category → categories`, `child → children` — the pluralizer knows the irregulars).
-- **`reviews` is a plain list while `authors` is a connection.** `Review` instances are blank nodes: no URI means no global ID, no cursor, no standalone resolution. The compiler marks such classes _embeddable_ and resolves them inline from the parent's own triples. Everything URI-addressable gets a paginated Relay connection instead. An embeddable still carries `_meta`, because knowing your own class is a fact about the class, not about identity — and it means a class with zero properties of its own still compiles.
+- **`reviews` is a plain list while `authors` is a connection.** `Review` instances are blank nodes: no URI means no global ID, no cursor, no standalone resolution. The compiler marks such classes *embeddable* and resolves them inline from the parent's own triples. Everything URI-addressable gets a paginated Relay connection instead. An embeddable still carries `_meta`, because knowing your own class is a fact about the class, not about identity — and it means a class with zero properties of its own still compiles.
 - **One field per side of the inverse pair, and direction doesn't matter.** `hasAuthor`/`authored` produce `Book.authors` and `Author.authoreds` — never the duplicates. At resolution time each side takes the union of forward and reverse assertions, so data written in either direction answers identically from both ends.
 - **`inPrint: Boolean` works even though the data says `"true"`.** Real-world TTL stores booleans as strings; the resolver coerces (`"true"/"false"/"1"/"0"`) and reports anything else through the runtime-warning channel instead of crashing the response.
 - **Identity is the absolute IRI**, not an opaque token and not a prefixed form. `uri: ID!` on every node, `node(id: "https://example.org/library/dune")`, the loader keys, and the connection cursors are all the same string — one currency, so an `after:` cursor can never quietly miss. The prefixed form survives in exactly two places, neither of them identity-bearing: the singular `book(uri: "lib:dune")` lookup ARGUMENT, as a typing convenience, and `_meta.curie`, the DISPLAY form — a string to render, never to store, send back, or compare. `toPrefixed` is exported so a consumer can compute it themselves too.
@@ -252,10 +225,10 @@ Precedence, highest first:
 1. custom mapping `{ singular }` override (the config shadow)
 2. `graphql:singular` annotation on the property
 3. `owl:FunctionalProperty`
-4. SHACL `sh:maxCount 1` — per _(class, property)_ pair, so the same property can be singular on one class and a list on another; `sh:or` branches merge to the most permissive interpretation, repeated shapes for one path merge as the SHACL conjunction
+4. SHACL `sh:maxCount 1` — per *(class, property)* pair, so the same property can be singular on one class and a list on another; `sh:or` branches merge to the most permissive interpretation, repeated shapes for one path merge as the SHACL conjunction
 5. kind default: **datatype and annotation properties are singular; object properties are lists.** (Multi-valued literals are the exception in RDF practice; opt a datatype property back into a list with `graphql:singular false` or `{ singular: false }`.)
 
-Nullability is deliberate and honest: `uri` and `_meta` are non-null, list and connection fields are non-null with empty defaults — and _everything else is nullable_, because OWL ontologies don't promise completeness. SHACL `sh:minCount` is **recorded** (queryable as `ClassProperty.required`) but never auto-promoted to GraphQL non-null: a single missing value would take down whole responses. An ontology that knows its data promotes a field with `graphql:nonNull true`; the deprecated `nonNullOverrides: { Book: ["title"] }` config keeps working and OR-merges with it (both only ever promote).
+Nullability is deliberate and honest: `uri` and `_meta` are non-null, list and connection fields are non-null with empty defaults — and *everything else is nullable*, because OWL ontologies don't promise completeness. SHACL `sh:minCount` is **recorded** (queryable as `ClassProperty.required`) but never auto-promoted to GraphQL non-null: a single missing value would take down whole responses. An ontology that knows its data promotes a field with `graphql:nonNull true`; the deprecated `nonNullOverrides: { Book: ["title"] }` config keeps working and OR-merges with it (both only ever promote).
 
 ## The second schema: `_meta` and the ontology browser
 
@@ -266,62 +239,43 @@ The compiler emits two connected schemas. Alongside the data types, a hand-writt
   book(uri: "lib:dune") {
     title
     _meta {
-      title # generic, total, renderable
-      label(lang: "en") # generic, nullable
-      curie # "lib:dune" — display only
-      type {
-        label
-        definition
-        superclasses {
-          label
-        }
-      } # the OWL class
-      fields {
-        # every applicable property
-        name # what field(name:) accepts — pluralized FOR THIS class
-        property {
-          label
-          range
-          acceptanceCriteria
-        }
-        required # SHACL sh:minCount, for THIS class
+      title                                                 # generic, total, renderable
+      label(lang: "en")                                     # generic, nullable
+      curie                                                 # "lib:dune" — display only
+      type { label definition superclasses { label } }      # the OWL class
+      fields {                                              # every applicable property
+        name          # what field(name:) accepts — pluralized FOR THIS class
+        property { label range acceptanceCriteria }
+        required      # SHACL sh:minCount, for THIS class
         singular
-        inherited # declared on an ancestor vs Book itself
+        inherited     # declared on an ancestor vs Book itself
       }
     }
   }
   ontologyClass(uri: "https://example.org/library/Work") {
     isAbstract
-    subclasses {
-      label
-    }
-    instances(first: 10) {
-      edges {
-        node {
-          uri
-        }
-      }
-    } # TBox → ABox hop
+    subclasses { label }
+    instances(first: 10) { edges { node { uri } } }         # TBox → ABox hop
   }
 }
 ```
 
-This is what powers documentation UIs: "which fields _should_ this entity have, which are required, what does good look like" — asked of the schema itself, in the same query as the data. The reflective surface reads the compiler's frozen IR, **not the store** — labels, definitions, cardinality, sub/superclasses, `isAbstract`, even `instanceCount` (a Pass 1 statistic) — so ontology browsing answers before the TTL finishes parsing and even against a disposed store, and it can't disagree with the schema's own shape because both came from the same compilation. The one exception is `OntologyClass.instances`: it hands back real entities, so it reaches the store through the same loaders as any data field and needs a live one.
+This is what powers documentation UIs: "which fields *should* this entity have, which are required, what does good look like" — asked of the schema itself, in the same query as the data. The reflective surface reads the compiler's frozen IR, **not the store** — labels, definitions, cardinality, sub/superclasses, `isAbstract`, even `instanceCount` (a Pass 1 statistic) — so ontology browsing answers before the TTL finishes parsing and even against a disposed store, and it can't disagree with the schema's own shape because both came from the same compilation. The one exception is `OntologyClass.instances`: it hands back real entities, so it reaches the store through the same loaders as any data field and needs a live one.
 
 ## Diagnostics
 
 The compiler collects problems instead of aborting on the first one (the `tsc` model). Every diagnostic has a stable code:
 
-| Range       | Meaning                                             | Examples                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| ----------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `E001`      | extraction/SPARQL failure                           | query failed, unregistered namespace (synthetic prefix assigned), blank nodes nested deeper than the loader's closure                                                                                                                                                                                                                                                                                                        |
+| Range | Meaning | Examples |
+|---|---|---|
+| `E001` | extraction/SPARQL failure | query failed, unregistered namespace (synthetic prefix assigned), blank nodes nested deeper than the loader's closure |
 | `A001–A008` | `graphql:` annotation resolution + projection modes | conflicting values, never tiebroken (`A001`, error), foreign/unknown target (`A002`, error), malformed value (`A003`, error), unrecognized term or inapplicable target ignored (`A004`), config shadows an annotation — config wins (`A005`), `mode: "auto"` ignoring present annotations (`A006`, info), the `mode: "explicit"` dropped-class aggregate (`A007`, info), field omitted for an unexposed range class (`A008`) |
-| `B001–B005` | build references                                    | `subClassOf` cycle, unknown domain/range/inverse, two namespaces claiming one prefix with no declaration in play (`B005`)                                                                                                                                                                                                                                                                                                    |
-| `V001–V016` | data/ontology validation                            | blank-node-only class (`V001`), domainless property (`V002`), boolean-as-string (`V006`), SHACL `sh:maxCount 0` omission (`V010`), undeclared ABox predicate (`V014`), abstract mapping with direct instances (`V015`), concrete supertype flattening (`V016`)                                                                                                                                                               |
-| `M001–M006` | naming                                              | duplicate type or field name, later claimant dropped (`M001`, error), illegal class local name sanitized (`M002`), unknown mapping (`M003`), auto-resolved type collision (`M004`), property claims a structural field name and is dropped (`M005`, error), one union name minted with different member sets (`M006`, error)                                                                                                 |
-| `X002–X003` | union emission                                      | named / synthesized union created                                                                                                                                                                                                                                                                                                                                                                                            |
-| `W001`      | Relay wiring                                        | two root query fields claim one name, later field dropped (error)                                                                                                                                                                                                                                                                                                                                                            |
-| `C001–C003` | composition                                         | extension targets unknown type, extension field conflict (incl. a generated root field colliding with a TBox root field), `validateSchema` failure                                                                                                                                                                                                                                                                           |
+| `B001–B005` | build references | `subClassOf` cycle, unknown domain/range/inverse, two namespaces claiming one prefix with no declaration in play (`B005`) |
+| `V001–V016` | data/ontology validation | blank-node-only class (`V001`), domainless property (`V002`), boolean-as-string (`V006`), SHACL `sh:maxCount 0` omission (`V010`), undeclared ABox predicate (`V014`), abstract mapping with direct instances (`V015`), concrete supertype flattening (`V016`) |
+| `M001–M006` | naming | duplicate type or field name, later claimant dropped (`M001`, error), illegal class local name sanitized (`M002`), unknown mapping (`M003`), auto-resolved type collision (`M004`), property claims a structural field name and is dropped (`M005`, error), one union name minted with different member sets (`M006`, error) |
+| `X002–X003` | union emission | named / synthesized union created |
+| `W001` | Relay wiring | two root query fields claim one name, later field dropped (error) |
+| `C001–C003` | composition | extension targets unknown type, extension field conflict (incl. a generated root field colliding with a TBox root field), `validateSchema` failure |
 
 **Any error-severity diagnostic refuses the compile** — `compile()` throws `CompilationError` carrying the complete diagnostic list. A schema minus silently dropped fields must never be served, so a boot dies loudly instead. Warnings and infos surface in `result.diagnostics` while the schema builds; the consumer chooses its policy for those.
 
@@ -329,26 +283,25 @@ The compiler collects problems instead of aborting on the first one (the `tsc` m
 
 ```typescript
 createSchemaPlugin({
-  mappings, // DEPRECATED — CustomMappings (above); config wins per key with A005
-  extensions, // consumer fields — object or factory form (below)
-  relay: true, // Node/uri/_meta/connections/root queries (default true)
-  incremental: false, // add @defer/@stream directives (below)
-  sdlOutput: "./schema.graphql", // write the SDL on every compile that prints one — feed
-  // relay-compiler (artifact boots skip printing and leave
-  // the file untouched)
-  nonNullOverrides: { Book: ["title"] }, // DEPRECATED — prefer graphql:nonNull (OR-merged)
-  prefixing: "none", // or "all" — namespace-prefix EVERY field name
-  mode: "annotated", // "auto" (ignore annotations) | "annotated" (bind them)
-  // | "explicit" (graphql:expose allowlist)
-  provider: "library", // stamped into the SDL provenance header
-  revision: "a1b2c3d", // stamped into the SDL provenance header
-  standardVocabFields: {
-    // DEPRECATED, superseded by the graphql:*From annotations:
+  mappings,                          // DEPRECATED — CustomMappings (above); config wins per key with A005
+  extensions,                        // consumer fields — object or factory form (below)
+  relay: true,                       // Node/uri/_meta/connections/root queries (default true)
+  incremental: false,                // add @defer/@stream directives (below)
+  sdlOutput: "./schema.graphql",     // write the SDL on every compile that prints one — feed
+                                     // relay-compiler (artifact boots skip printing and leave
+                                     // the file untouched)
+  nonNullOverrides: { Book: ["title"] },  // DEPRECATED — prefer graphql:nonNull (OR-merged)
+  prefixing: "none",                 // or "all" — namespace-prefix EVERY field name
+  mode: "annotated",                 // "auto" (ignore annotations) | "annotated" (bind them)
+                                     // | "explicit" (graphql:expose allowlist)
+  provider: "library",               // stamped into the SDL provenance header
+  revision: "a1b2c3d",               // stamped into the SDL provenance header
+  standardVocabFields: {             // DEPRECATED, superseded by the graphql:*From annotations:
     Category: { "http://www.w3.org/2000/01/rdf-schema#label": "label" },
-  }, // opt-in instance-level rdfs:label/comment as ordinary fields
-  loaderCache: "request", // or "process" — see Performance
-  extraction: "./extraction.json", // precomputed boot artifact — see Fast boot
-  onRuntimeWarning: (w) => log.warn(w), // coercion failures at resolve time
+  },                                 // opt-in instance-level rdfs:label/comment as ordinary fields
+  loaderCache: "request",            // or "process" — see Performance
+  extraction: "./extraction.json",   // precomputed boot artifact — see Fast boot
+  onRuntimeWarning: (w) => log.warn(w),  // coercion failures at resolve time
 });
 ```
 
@@ -363,19 +316,17 @@ extensions: (types) => ({
   Book: {
     citation: {
       type: GraphQLString,
-      resolve: (book) => formatCitation(book), // book is an EntityValue
+      resolve: (book) => formatCitation(book),       // book is an EntityValue
     },
   },
   Query: {
     search: {
-      type: new GraphQLNonNull(
-        new GraphQLList(new GraphQLNonNull(SearchHitType)),
-      ),
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SearchHitType))),
       args: { query: { type: new GraphQLNonNull(GraphQLString) } },
       resolve: (_s, args, ctx) => ctx.searchIndex.search(args.query),
     },
   },
-});
+})
 ```
 
 Extensions are validated at composition: an unknown type name is `C001`, a clash with a generated field is `C002` — both fatal, both reported together. Extension resolvers receive the `CompilerContext` (the loaders, the name map, the store escape hatch) and may stash their own state on it.
@@ -407,7 +358,7 @@ const handler = createGraphQLHandler(schema, {
 Bun.serve({ fetch: handler });   // or compose with other handlers by pathname
 ```
 
-The handler is a plain `(Request) => Promise<Response>` — no framework, same composition pattern as `createSparqlHandler`. It implements GraphQL-over-HTTP (GET with query param, POST JSON, persisted-query extension), answers CORS preflight, honors `Accept` q-values, and serves nothing it wasn't asked to: the handler provides _seams_, the consumer provides _policy_. Build the persisted manifest from your client's compiled operations with `createPersistedManifest(operationTexts)` (SHA-256, the Relay/Apollo convention).
+The handler is a plain `(Request) => Promise<Response>` — no framework, same composition pattern as `createSparqlHandler`. It implements GraphQL-over-HTTP (GET with query param, POST JSON, persisted-query extension), answers CORS preflight, honors `Accept` q-values, and serves nothing it wasn't asked to: the handler provides *seams*, the consumer provides *policy*. Build the persisted manifest from your client's compiled operations with `createPersistedManifest(operationTexts)` (SHA-256, the Relay/Apollo convention).
 
 **Built-in hardening defaults.** On top of those seams, the package ships a baseline production posture from its `hardening` domain (all named, exported, and tunable — never magic numbers buried in a resolver): every connection is page-size-clamped (`DEFAULT_PAGE_SIZE` 50, `MAX_PAGE_SIZE` 100), so a list is never unbounded and a client can't demand an oversized page; queries nested deeper than `maxDepth` (default `DEFAULT_MAX_QUERY_DEPTH`, 20) are rejected, bounding the recursion that cyclic types otherwise allow; IRIs that would break out of a SPARQL `IRIREF` are dropped before interpolation, so a crafted `node(id:)` resolves to `null` rather than injected SPARQL; and in production (`maskErrors`, default on) an unexpected internal error is returned as a generic message — store and SPARQL internals never reach the client, while deliberate validation/argument errors pass through. `loaderCache: "process"` uses bounded LRU caches (next section) so ID enumeration can't exhaust memory.
 
@@ -440,19 +391,12 @@ const result = await executeLocal({
 // the store's own instance inventory; anything non-enumerable
 // (pagination cursors) fails loudly instead of shipping partial data.
 const artifacts = await extractStatic({
-  schema,
-  mapped: result.mapped,
-  context: createContext(store),
+  schema, mapped: result.mapped, context: createContext(store),
   queries: [
-    {
-      name: "AllBooks",
-      text: "{ books(first: 500) { edges { node { uri title } } } }",
-    },
-    {
-      name: "BookPage",
+    { name: "AllBooks", text: "{ books(first: 500) { edges { node { uri title } } } }" },
+    { name: "BookPage",
       text: "query($uri: String!) { book(uri: $uri) { title authors(first: 10) { edges { node { name } } } } }",
-      variables: { uri: "String!" },
-    },
+      variables: { uri: "String!" } },
   ],
 });
 ```
@@ -474,9 +418,9 @@ createSchemaPlugin({ extraction: "./extraction.json" });
 // or with no store at all until the first data query:
 import { compileFromExtraction } from "@canonical/ke-graphql";
 const result = compileFromExtraction(artifactJson, { loaderCache: "process" });
-const storeReady = createStore({ sources, prefixes }); // not awaited!
-const ctx = result.createContext(storeReady); // TBox answers now;
-// data queries await the store
+const storeReady = createStore({ sources, prefixes });   // not awaited!
+const ctx = result.createContext(storeReady);            // TBox answers now;
+                                                         // data queries await the store
 ```
 
 The artifact embeds a `sourcesHash` fingerprint of the TTL it was built from. The plugin re-fingerprints the sources as ke loads them: match → fast boot; mismatch → a warning and a live compile. A stale artifact can cost you milliseconds, never wrong answers. `pragma graphql check` runs the same compile with no outputs and fails on error diagnostics — the CI gate that puts ontology changes under the same discipline as code.
@@ -485,24 +429,24 @@ The artifact embeds a `sourcesHash` fingerprint of the TTL it was built from. Th
 
 Measured by the committed benchmark (`bun run bench`, 250-entity graph):
 
-| Path                                                 | Cost                                                                       |
-| ---------------------------------------------------- | -------------------------------------------------------------------------- |
-| Schema boot from artifact (`compileFromExtraction`)  | **~10 ms** — no store                                                      |
-| Live compile (Pass 1 + passes 2–7 + validate)        | ~50–110 ms                                                                 |
-| Detail page / `node()` with `loaderCache: "process"` | **~0.3 ms**                                                                |
-| Listing `first: 24`                                  | **~0.7 ms** warm — pagination runs on the URI list; only the page hydrates |
-| TBox / ontology browsing                             | ~0.1 ms — store-free                                                       |
+| Path | Cost |
+|---|---|
+| Schema boot from artifact (`compileFromExtraction`) | **~10 ms** — no store |
+| Live compile (Pass 1 + passes 2–7 + validate) | ~50–110 ms |
+| Detail page / `node()` with `loaderCache: "process"` | **~0.3 ms** |
+| Listing `first: 24` | **~0.7 ms** warm — pagination runs on the URI list; only the page hydrates |
+| TBox / ontology browsing | ~0.1 ms — store-free |
 
 `loaderCache: "process"` shares DataLoader caches across requests — sound because the store is immutable between reloads, and a reload produces a new compile (automatic invalidation). The shared caches are **bounded LRUs** (`processCacheSize`, default 10,000 entries each), so enumerating distinct IDs can't grow them without limit; evicted entries are simply re-queried, and failed batches are evicted, never memoized. The default `"request"` keeps the textbook per-request isolation.
 
-The ladder to zero: a warm process answers in microseconds; Lambda-style containers pay one ~80 ms boot per container with the artifact; Cloudflare Workers (WASM precompiled at deploy, TTL as ke inline sources — see `examples/cloudflare-worker`) cold-start in ~25–60 ms; and with persisted queries in front of a CDN, responses are pure functions of _(hash, variables)_ until the next deploy — cacheable to 0 ms. For fully static deployments, `extractStatic` removes the runtime altogether.
+The ladder to zero: a warm process answers in microseconds; Lambda-style containers pay one ~80 ms boot per container with the artifact; Cloudflare Workers (WASM precompiled at deploy, TTL as ke inline sources — see `examples/cloudflare-worker`) cold-start in ~25–60 ms; and with persisted queries in front of a CDN, responses are pure functions of *(hash, variables)* until the next deploy — cacheable to 0 ms. For fully static deployments, `extractStatic` removes the runtime altogether.
 
 ## Package boundary
 
-| Entry                        | Exports                                                                                                                                                                                                                                                                               | Dependencies                         |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `@canonical/ke-graphql`      | `createSchemaPlugin`, `compile`, `compileFromExtraction`, `serializeExtraction`/`deserializeExtraction`/`hashSources`, `executeLocal`, `extractStatic`, `mergeIncremental`, `relayFormatAdapter`, `createPersistedManifest`, connection/pagination helpers, all IR + diagnostic types | `graphql` (pinned), `dataloader`     |
-| `@canonical/ke-graphql/http` | `createGraphQLHandler`, `graphiqlHtml`                                                                                                                                                                                                                                                | the root, plus platform-native fetch |
+| Entry | Exports | Dependencies |
+|---|---|---|
+| `@canonical/ke-graphql` | `createSchemaPlugin`, `compile`, `compileFromExtraction`, `serializeExtraction`/`deserializeExtraction`/`hashSources`, `executeLocal`, `extractStatic`, `mergeIncremental`, `relayFormatAdapter`, `createPersistedManifest`, connection/pagination helpers, all IR + diagnostic types | `graphql` (pinned), `dataloader` |
+| `@canonical/ke-graphql/http` | `createGraphQLHandler`, `graphiqlHtml` | the root, plus platform-native fetch |
 
 Consumers that never serve — static extraction in CI, SSR-only processes, tests — never load a byte of HTTP or GraphiQL code.
 

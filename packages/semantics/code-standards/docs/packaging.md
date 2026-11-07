@@ -11,7 +11,6 @@ Application packages (CLIs, servers, MCP tools, build scripts, workers) execute 
 ### Do
 
 Recognise an application package by its `package.json` signals — `bin` field, `private: true`, no `main`/`exports`
-
 ```json
 {
   "name": "@scope/my-cli",
@@ -21,7 +20,6 @@ Recognise an application package by its `package.json` signals — `bin` field, 
 ```
 
 Organize code around execution domains. Each domain folder gets its own barrel (`index.ts`) that exposes the domain's internal API to sibling domains
-
 ```
 packages/my-cli/
 ├── src/
@@ -41,7 +39,6 @@ packages/my-cli/
 ```
 
 Import from sibling domains through their barrel, not from individual files
-
 ```typescript
 // src/commands/deploy.ts
 import { resolveConfig, runValidation } from "../operations/index.js";
@@ -49,7 +46,6 @@ import { formatOutput } from "../utils/index.js";
 ```
 
 Use domain-appropriate folder names that reflect what the code does — `commands/`, `tools/`, `routes/`, `operations/`, `handlers/`
-
 ```
 packages/my-mcp/
 ├── src/
@@ -65,7 +61,6 @@ packages/my-mcp/
 ```
 
 For **hybrid** packages (primarily application but exporting a small reusable surface), isolate the exported surface in `src/lib/` following library rules while keeping the rest as application structure
-
 ```
 packages/my-mcp/
 ├── src/
@@ -86,7 +81,6 @@ packages/my-mcp/
 ### Don't
 
 Apply library structure (`src/lib/`, barrel re-exports) to application packages
-
 ```
 // Bad: CLI tool forced into library layout
 packages/my-cli/
@@ -98,7 +92,6 @@ packages/my-cli/
 ```
 
 Create a `src/lib/` folder for internal shared operations. Use domain-appropriate names instead
-
 ```
 // Bad: "lib" implies external consumption
 packages/my-cli/
@@ -114,7 +107,6 @@ packages/my-cli/
 ```
 
 Import directly from files inside a sibling domain — always go through the domain barrel
-
 ```typescript
 // Bad: reaching into a sibling domain's internals
 import { resolveConfig } from "../operations/resolveConfig.js";
@@ -126,7 +118,6 @@ import { formatOutput } from "../utils/index.js";
 ```
 
 Omit barrels from domain folders
-
 ```
 // Bad: no barrels — every consumer imports individual files
 packages/my-cli/
@@ -140,7 +131,6 @@ packages/my-cli/
 ```
 
 Default to library structure just because the package lives in a monorepo
-
 ```
 // Bad: reflexively adding lib/ to a build script package
 packages/build-tools/
@@ -161,7 +151,6 @@ Every domain folder must have a barrel file (`index.ts`) that defines its API su
 ### Do
 
 Use a barrel at the package entry point to define the public API (library packages)
-
 ```typescript
 // src/index.ts
 export { Button } from "./components/Button.js";
@@ -169,7 +158,6 @@ export type { ButtonProps } from "./components/Button.types.js";
 ```
 
 Use a barrel at each domain folder to define the domain's API (application packages)
-
 ```typescript
 // src/operations/index.ts
 export { resolveConfig } from "./resolveConfig.js";
@@ -177,7 +165,6 @@ export { runValidation } from "./runValidation.js";
 ```
 
 Import internal implementation code within a domain from the owning file directly
-
 ```typescript
 // src/build/buildTheme.ts — same domain, import the file
 import { computeDeltas } from "./computeDeltas.js";
@@ -185,14 +172,12 @@ import { recoverPrimitiveRef } from "./recoverPrimitiveRef.js";
 ```
 
 Import cross-domain code through the sibling domain's barrel
-
 ```typescript
 // src/commands/deploy.ts — different domain, import through barrel
 import { resolveConfig } from "../operations/index.js";
 ```
 
 Keep compatibility barrels thin and documented as public facades
-
 ```typescript
 /** Public compatibility surface. */
 export { computeDeltas } from "./computeDeltas.js";
@@ -202,7 +187,6 @@ export { formatDelta } from "./formatDelta.js";
 ### Don't
 
 Route internal same-domain code through its own barrel
-
 ```typescript
 // Bad: internal implementation depends on its own barrel
 // src/build/applyTheme.ts
@@ -210,7 +194,6 @@ import { computeDeltas, recoverPrimitiveRef } from "./index.js";
 ```
 
 Import cross-domain code by reaching into individual files
-
 ```typescript
 // Bad: bypassing the domain barrel
 import { resolveConfig } from "../operations/resolveConfig.js";
@@ -220,14 +203,12 @@ import { resolveConfig } from "../operations/index.js";
 ```
 
 Hide domain ownership behind convenience barrels
-
 ```typescript
 // Bad: types appear to belong to context.ts instead of their owning domains
 import type { Artifact, CSSNode, OverlayToken } from "./context.js";
 ```
 
 Omit the barrel from a domain folder
-
 ```
 // Bad: no index.ts — consumers must know internal file names
 src/operations/
@@ -246,7 +227,6 @@ Exports must be declared on the definition itself (e.g. `export default function
 ### Do
 
 Declare the export directly on the function or class definition
-
 ```typescript
 // formatCurrency.ts
 export default function formatCurrency(value: number): string {
@@ -255,14 +235,12 @@ export default function formatCurrency(value: number): string {
 ```
 
 Declare the export directly on a named constant
-
 ```typescript
 // MAX_RETRIES.ts
 export const MAX_RETRIES = 3;
 ```
 
 When a wrapper is involved, declare the raw binding with `const`, then export the wrapped result as default
-
 ```typescript
 // UserProfile.tsx
 const UserProfile = ({ user }: UserProfileProps) => {
@@ -273,7 +251,6 @@ export default memo(UserProfile);
 ```
 
 Apply the same pattern for higher-order functions and middleware
-
 ```typescript
 // connectDatabase.ts
 const connectDatabase = (config: DbConfig): Connection => {
@@ -286,7 +263,6 @@ export default withRetry(connectDatabase);
 ### Don't
 
 Define a symbol and then export it at the end of the file
-
 ```typescript
 // Bad: export is separated from definition
 function formatCurrency(value: number): string {
@@ -297,7 +273,6 @@ export default formatCurrency;
 ```
 
 Gather multiple exports at the bottom of the file
-
 ```typescript
 // Bad: exports collected at the end
 const helperA = () => {};
@@ -307,7 +282,6 @@ export { helperA, helperB };
 ```
 
 Use `export default` on the raw binding when a wrapper is needed
-
 ```typescript
 // Bad: exports the unwrapped version, then wraps elsewhere
 export default function UserProfile({ user }: UserProfileProps) {
@@ -330,14 +304,12 @@ Files must use either a single default export or multiple named exports. When us
 ### Do
 
 Use a single default export for files implementing a single component or function
-
 ```typescript
 // ComponentName.tsx
 export default ComponentName;
 ```
 
 Name atomic function files after the function they export
-
 ```typescript
 // assignElement.ts
 export default function assignElement(target: Element, source: Partial<Element>) {
@@ -351,7 +323,6 @@ export default function formatCurrency(value: number) {
 ```
 
 Use multiple named exports for files providing a public API or a collection of related items, and ensure all exports have the same type
-
 ```typescript
 // index.ts
 export { ComponentA, ComponentB };
@@ -369,14 +340,12 @@ export const myFuncC = (value: string) => {};
 ### Don't
 
 Mix default and unrelated named exports in a way that confuses the file's purpose
-
 ```typescript
 export default ComponentName;
 export const helper = () => {};
 ```
 
 Name an atomic function file with a name that doesn't match its exported function
-
 ```typescript
 // helpers.ts — wrong: generic name instead of function name
 export default function assignElement(target: Element, source: Partial<Element>) {
@@ -390,7 +359,6 @@ export default function formatCurrency(value: number) {
 ```
 
 Provide multiple unrelated exports from a file meant for a single domain
-
 ```typescript
 export default debounce;
 export const throttle = () => {};
@@ -398,7 +366,6 @@ export const logger = () => {};
 ```
 
 Export objects of different types or shapes from the same file
-
 ```typescript
 export const transformer = (value: string) => {};
 export const reducer = (map: string[]) => {};
@@ -423,7 +390,6 @@ In both archetypes the alternatives stay off the table: with `moduleResolution: 
 ### Do
 
 In an application package, map each `#` alias directly to the domain barrel in `package.json` — no wildcards, no path suffixes
-
 ```json
 {
   "imports": {
@@ -437,7 +403,6 @@ In an application package, map each `#` alias directly to the domain barrel in `
 ```
 
 In an application package, import cross-domain modules using the `#` alias — clean, no path suffixes
-
 ```typescript
 // src/pipeline/runPipeline.ts
 import { PragmaError } from "#error";
@@ -445,7 +410,6 @@ import { resolveConfig } from "#config";
 ```
 
 In a distributable package, import cross-domain modules with ordinary relative paths and `.js` extensions (NodeNext), still through the sibling domain's barrel
-
 ```typescript
 // src/pipeline/runPipeline.ts — published package: no # aliases
 import { PragmaError } from "../error/index.js";
@@ -453,7 +417,6 @@ import { resolveConfig } from "../config/index.js";
 ```
 
 Use `moduleResolution: "nodenext"` (or `"node16"` / `"bundler"`) in `tsconfig.json` so TypeScript resolves subpath imports via `resolvePackageJsonImports` (enabled by default with these settings)
-
 ```json
 {
   "compilerOptions": {
@@ -463,7 +426,6 @@ Use `moduleResolution: "nodenext"` (or `"node16"` / `"bundler"`) in `tsconfig.js
 ```
 
 In an application package, use conditional subpath imports when you need different resolutions for different environments
-
 ```json
 {
   "imports": {
@@ -478,7 +440,6 @@ In an application package, use conditional subpath imports when you need differe
 ### Don't
 
 Use `#` subpath imports in a distributable package — `tsc` never rewrites module specifiers, so the alias is emitted verbatim into `dist`, leaking the private `imports` map into the package's public contract
-
 ```typescript
 // Bad: src/pipeline/runPipeline.ts in a *published* package
 import { PragmaError } from "#error";
@@ -490,7 +451,6 @@ import { PragmaError } from "#error";
 ```
 
 Use wildcard splats or path suffixes in `#` aliases — point directly to the barrel instead
-
 ```json
 // Bad: wildcard mapping forces consumers to know internal file structure
 {
@@ -505,14 +465,12 @@ import { PragmaError } from "#error/index.js";
 ```
 
 Use bare specifiers without the `#` prefix for intra-package imports — they resolve as package names under `nodenext`
-
 ```typescript
 // Bad: "error/index.js" resolves as the npm package "error", not ./src/error/
 import { PragmaError } from "error/index.js";
 ```
 
 Use `paths` in `tsconfig.json` as a substitute for subpath imports — it's a manual alias table that doesn't participate in Node.js resolution
-
 ```json
 // Bad: brittle, verbose, requires a bundler or ts-patch to work at runtime
 {
@@ -528,7 +486,6 @@ Use `paths` in `tsconfig.json` as a substitute for subpath imports — it's a ma
 ```
 
 Reach across domains into individual files — cross-domain imports go through the domain's barrel: behind the `#` alias in an application, via a relative path to the barrel in a distributable package
-
 ```typescript
 // Bad: bypasses the barrel, couples to internal file structure
 import { PragmaError } from "../../error/PragmaError.js";
@@ -541,7 +498,6 @@ import { PragmaError } from "../error/index.js";
 ```
 
 Import specific files through the `#` alias — go through the barrel instead
-
 ```typescript
 // Bad: bypasses the barrel, couples to internal file structure
 import { readConfig } from "#config/readConfig.js";
@@ -561,7 +517,6 @@ Library packages export reusable code (components, utilities, hooks, types) for 
 ### Do
 
 Recognise a library package by its `package.json` signals — `main`/`exports` field, publishable, no `bin`
-
 ```json
 {
   "name": "@scope/design-system",
@@ -571,7 +526,6 @@ Recognise a library package by its `package.json` signals — `main`/`exports` f
 ```
 
 Place all reusable/exportable code in `src/lib/`, with a barrel in each domain folder
-
 ```
 packages/my-package/
 ├── src/
@@ -593,14 +547,12 @@ packages/my-package/
 ```
 
 Re-export from the lib folder in the package entry point
-
 ```typescript
 // src/index.ts
 export * from "./lib/index.js";
 ```
 
 Use the lib barrel to compose the package's public API from domain barrels
-
 ```typescript
 // src/lib/index.ts
 export * from "./Button/index.js";
@@ -611,7 +563,6 @@ export type * from "./types/index.js";
 ### Don't
 
 Use alternative folder names like `ui`, `components`, or `utils` for exportable code at the package level
-
 ```
 // Bad: Using 'ui' instead of 'lib'
 packages/my-package/
@@ -622,7 +573,6 @@ packages/my-package/
 ```
 
 Mix exportable and non-exportable code at the same level
-
 ```
 // Bad: Mixing concerns
 packages/my-package/
@@ -633,7 +583,6 @@ packages/my-package/
 ```
 
 Create deeply nested lib-like structures; keep lib at the top level of src
-
 ```
 // Bad: Nested lib folders
 packages/my-package/
@@ -643,7 +592,6 @@ packages/my-package/
 ```
 
 Omit barrels from domain folders within lib
-
 ```
 // Bad: no barrels — consumers must know individual file paths
 packages/my-package/
@@ -668,7 +616,6 @@ A published package must declare `engines.node` covering the highest runtime flo
 ### Do
 
 Declare `engines.node` covering the highest floor among the package's runtime dependencies — here `commander@15` requires Node >=22.12
-
 ```json
 {
   "name": "@scope/my-cli",
@@ -682,7 +629,6 @@ Declare `engines.node` covering the highest floor among the package's runtime de
 ```
 
 Raise the floor in the same change that raises the dependency, so the manifest and the dependency tree never disagree
-
 ```json
 {
   "dependencies": {
@@ -695,7 +641,6 @@ Raise the floor in the same change that raises the dependency, so the manifest a
 ```
 
 Use one range across sibling packages in a monorepo, so a consumer installing several of them cannot be handed conflicting floors
-
 ```bash
 # Every publishable package resolves to the same declared floor
 $ grep -h '"node"' packages/*/package.json | sort -u
@@ -705,7 +650,6 @@ $ grep -h '"node"' packages/*/package.json | sort -u
 ### Don't
 
 Depend on a package with a runtime floor while declaring no `engines` at all — the install is silent and the failure lands at runtime
-
 ```json
 {
   "name": "@scope/my-cli",
@@ -716,7 +660,6 @@ Depend on a package with a runtime floor while declaring no `engines` at all —
 ```
 
 Declare a floor lower than a dependency requires — the manifest states support the package cannot deliver
-
 ```json
 {
   "dependencies": {
@@ -729,7 +672,6 @@ Declare a floor lower than a dependency requires — the manifest states support
 ```
 
 Treat the declaration as settled once written. A dependency can raise its own floor in a version your range already accepts, so a floor that was correct when measured goes stale with no change to your manifest.
-
 ```json
 {
   "dependencies": {
@@ -746,7 +688,6 @@ Treat the declaration as settled once written. A dependency can raise its own fl
 ```
 
 Rely on the dependency's own `engines` to warn the consumer — package managers report the transitive package, naming a dependency the consumer never chose
-
 ```bash
 # The warning names commander, not the package that pulled it in
 npm warn EBADENGINE Unsupported engine {
@@ -767,7 +708,6 @@ Files that contain a single export must be named after that export. This applies
 ### Do
 
 Name files after the single function they export
-
 ```typescript
 // isAccepted.ts
 export const isAccepted = (status: string): boolean => {
@@ -781,7 +721,6 @@ export default function formatCurrency(value: number): string {
 ```
 
 Name files after the single type or interface they export
-
 ```typescript
 // ConnectionConfig.ts
 export interface ConnectionConfig {
@@ -794,7 +733,6 @@ export type UserRole = "admin" | "editor" | "viewer";
 ```
 
 Name files after the single class they export
-
 ```typescript
 // EventEmitter.ts
 export class EventEmitter {
@@ -803,7 +741,6 @@ export class EventEmitter {
 ```
 
 Name files after the single constant they export
-
 ```typescript
 // DEFAULT_TIMEOUT.ts
 export const DEFAULT_TIMEOUT = 5000;
@@ -812,7 +749,6 @@ export const DEFAULT_TIMEOUT = 5000;
 ### Don't
 
 Use generic names like `helpers.ts`, `utils.ts`, or `types.ts` for files with a single export
-
 ```typescript
 // helpers.ts — wrong: should be isAccepted.ts
 export const isAccepted = (status: string): boolean => {
@@ -826,7 +762,6 @@ export default function formatCurrency(value: number): string {
 ```
 
 Use names that describe the domain instead of the export
-
 ```typescript
 // validation.ts — wrong: should be isAccepted.ts
 export const isAccepted = (status: string): boolean => {

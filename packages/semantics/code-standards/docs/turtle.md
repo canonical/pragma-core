@@ -19,7 +19,6 @@ This convention allows a single prefix to serve both definitions and data, with 
 ### Do
 
 Use PascalCase for class names.
-
 ```turtle
 ds:Component a owl:Class .
 ds:UIBlock a owl:Class .
@@ -27,7 +26,6 @@ ds:ModifierFamily a owl:Class .
 ```
 
 Use camelCase for property names.
-
 ```turtle
 ds:name a owl:DatatypeProperty .
 ds:hasProperty a owl:ObjectProperty .
@@ -35,7 +33,6 @@ ds:parentComponent a owl:ObjectProperty .
 ```
 
 Use lowercase with dots for hierarchy and snake_case for multi-word instance segments.
-
 ```turtle
 ds:global.component.button a ds:Component .
 ds:global.modifier_family.importance a ds:ModifierFamily .
@@ -46,21 +43,18 @@ cs:turtle.naming.local_name_casing a cs:CodeStandard ;
 ### Don't
 
 Use lowercase for class names.
-
 ```turtle
 # Bad: Class names should be PascalCase
 ds:component a owl:Class .
 ```
 
 Use PascalCase for instance identifiers.
-
 ```turtle
 # Bad: Instance names should be lowercase
 ds:GlobalComponentButton a ds:Component .
 ```
 
 Use PascalCase or uppercase for property names.
-
 ```turtle
 # Bad: Property names should be camelCase
 ds:HasProperty a owl:ObjectProperty .
@@ -80,7 +74,6 @@ The namespace URI should be a base URI without a fragment or trailing path segme
 ### Do
 
 Use a single prefix for both definitions and data.
-
 ```turtle
 # In both definitions/ and data/ files:
 @prefix ds: <https://ds.canonical.com/> .
@@ -97,7 +90,6 @@ ds:global.component.button a ds:Component ;
 ### Don't
 
 Use separate prefixes for ontology and data when a unified prefix is preferred.
-
 ```turtle
 # Bad: Unnecessarily complex when unified prefix suffices
 @prefix dso: <https://ds.canonical.com/ontology#> .
@@ -122,7 +114,6 @@ This separation allows tools to distinguish between schema and instance data, en
 ### Do
 
 Place ontology definitions (classes, properties, datatypes) in the `definitions/` directory.
-
 ```turtle
 # definitions/ontology.ttl
 @prefix ds: <https://ds.canonical.com/> .
@@ -136,7 +127,6 @@ ds:name a owl:DatatypeProperty ;
 ```
 
 Place instance data in the `data/` directory.
-
 ```turtle
 # data/global/component/button.ttl
 @prefix ds: <https://ds.canonical.com/> .
@@ -148,7 +138,6 @@ ds:global.component.button a ds:Component ;
 ### Don't
 
 Mix class definitions and instance data in the same file.
-
 ```turtle
 # Bad: Mixing schema and data
 ds:Component a owl:Class .
@@ -156,7 +145,6 @@ ds:global.component.button a ds:Component .
 ```
 
 Place instance data in the `definitions/` directory.
-
 ```
 # Bad: Data file in definitions
 definitions/
@@ -174,7 +162,6 @@ Every Turtle file must declare all prefixes used within the file at the top of t
 ### Do
 
 Declare all prefixes at the top of the file.
-
 ```turtle
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
@@ -189,7 +176,6 @@ ds:Component a owl:Class ;
 ### Don't
 
 Declare the same prefix multiple times.
-
 ```turtle
 # Bad: Duplicate prefix declaration
 @prefix ds: <https://ds.canonical.com/> .
@@ -197,7 +183,6 @@ Declare the same prefix multiple times.
 ```
 
 Use prefixes without declaring them.
-
 ```turtle
 # Bad: Missing prefix declaration for ds:
 ds:Component a owl:Class .

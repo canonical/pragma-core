@@ -1,5 +1,4 @@
 ---
-
 name: add-standard
 description: Create and add a new code standard to the code-standards package
 ---
@@ -11,7 +10,6 @@ Create and add a new code standard to the code-standards package.
 ## When to Use
 
 Use this skill when:
-
 - "Add a standard for..."
 - "Create a coding standard..."
 - "Document a new convention..."
@@ -34,7 +32,6 @@ SELECT ?standard ?description WHERE {
 ```
 
 Or use lookup:
-
 ```
 sem_lookup(type: "cs:CodeStandard", filters: {"@id": {"$contains": "your-topic"}})
 ```
@@ -56,19 +53,19 @@ SELECT ?category ?label ?slug WHERE {
 
 **Available Categories:**
 
-| Category  | Slug        | Description                                                |
-| --------- | ----------- | ---------------------------------------------------------- |
-| React     | `react`     | React component development                                |
-| CSS       | `css`       | CSS technical implementation                               |
-| Styling   | `styling`   | Design system styling patterns                             |
-| Code      | `code`      | General TypeScript standards                               |
-| Storybook | `storybook` | Storybook documentation                                    |
-| Icons     | `icons`     | Icon implementation                                        |
-| Packaging | `packaging` | Package structure and exports                              |
-| Rust      | `rust`      | Idiomatic Rust development                                 |
-| Git       | `git`       | Git workflow conventions                                   |
-| TSDoc     | `tsdoc`     | Documentation conventions                                  |
-| Turtle    | `turtle`    | RDF/Turtle authoring                                       |
+| Category | Slug | Description |
+|----------|------|-------------|
+| React | `react` | React component development |
+| CSS | `css` | CSS technical implementation |
+| Styling | `styling` | Design system styling patterns |
+| Code | `code` | General TypeScript standards |
+| Storybook | `storybook` | Storybook documentation |
+| Icons | `icons` | Icon implementation |
+| Packaging | `packaging` | Package structure and exports |
+| Rust | `rust` | Idiomatic Rust development |
+| Git | `git` | Git workflow conventions |
+| TSDoc | `tsdoc` | Documentation conventions |
+| Turtle | `turtle` | RDF/Turtle authoring |
 | UI Blocks | `ui-blocks` | Framework-agnostic capabilities and patterns for UI blocks |
 
 If no existing category fits, create a new one (see Section 5).
@@ -80,14 +77,12 @@ Standard identifiers follow a hierarchical compact IRI pattern: `cs:{category}.{
 **Pattern:** `^cs:[a-z]+(\.[a-z0-9_]+){2,}$`
 
 **Examples:**
-
 - `cs:react.component.structure.folder`
 - `cs:css.selectors.namespace`
 - `cs:styling.tokens.creation`
 - `cs:react.hooks.naming`
 
 **Guidelines:**
-
 - Use lowercase with underscores for multi-word segments
 - Category is always the first segment after `cs:`
 - Be specific but not overly verbose
@@ -141,13 +136,11 @@ const alsoBad = true;
 ```
 
 Each `cs:do` and `cs:dont` is a blank node (`cs:Example`) with structured fields:
-
 - `cs:description` — What the example demonstrates (required)
 - `cs:language` — Language of the code block, e.g. `"typescript"`, `"rust"`, `"css"`, `"bash"`, `"svg"` (optional, omit when no code)
 - `cs:code` — The code content (optional, omit for description-only examples)
 
 **Required Properties:**
-
 - subject IRI - Canonical compact identifier
 - `cs:hasCategory` - Reference to a Category instance
 - `cs:description` - What and why (plain text or markdown)
@@ -155,7 +148,6 @@ Each `cs:do` and `cs:dont` is a blank node (`cs:Example`) with structured fields
 - `cs:dont` - One or more negative examples (blank nodes)
 
 **Optional Properties:**
-
 - `cs:name` - Human-readable display title
 - `cs:extends` - Reference to a parent standard this builds upon
 
@@ -197,7 +189,6 @@ cs:react.component.props.special_case a cs:CodeStandard ;
 ```
 
 Query to find potential parent standards:
-
 ```sparql
 PREFIX cs: <http://pragma.canonical.com/codestandards#>
 
@@ -216,7 +207,6 @@ sem check code-standards
 ```
 
 Then verify the standard loads correctly:
-
 ```
 sem_lookup(type: "cs:CodeStandard", filters: {"@id": "cs:category.domain.topic"})
 ```
@@ -248,14 +238,12 @@ Add new standards to the file matching their category.
 ## Writing Quality Standards
 
 ### Description Guidelines
-
 - Start with WHAT the standard covers
 - Explain WHY it matters
 - Keep it concise but complete
 - Use markdown for complex descriptions
 
 ### Do Examples Guidelines
-
 - Each `cs:do` blank node is one discrete positive example
 - `cs:description` explains what the example demonstrates
 - `cs:language` must match the code block language (e.g. `"typescript"`, `"css"`, `"rust"`)
@@ -264,14 +252,12 @@ Add new standards to the file matching their category.
 - Show the COMPLETE correct pattern
 
 ### Don't Examples Guidelines
-
 - Each `cs:dont` blank node is one discrete negative example
 - Show realistic mistakes developers make
 - `cs:description` should explain WHY it's problematic
 - Mirror the structure of the do examples where possible
 
 ### Example Quality Checklist
-
 - [ ] Examples are syntactically correct
 - [ ] Examples are self-contained (can be understood without context)
 - [ ] Examples use realistic code, not `foo`/`bar`

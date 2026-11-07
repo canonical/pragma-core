@@ -1,5 +1,4 @@
 ---
-
 name: adoption-a3-forms
 description: Migrate application forms to the Canonical form system built on react-hook-form (adoption track A3); also runs as a guided tutorial on a worked example
 ---
@@ -171,13 +170,8 @@ Each field is a declaration, not an assembly of label + input + error markup:
 
 ```tsx
 <Form onSubmit={handleSubmit}>
-  <Field
-    name="email"
-    inputType="email"
-    label="Email address"
-    description="Work address preferred"
-  />
-</Form>;
+  <Field name="email" inputType="email" label="Email address" description="Work address preferred" />
+</Form>
 ```
 
 `inputType` is a discriminated union selecting the input subcomponent — text, textarea,
@@ -195,12 +189,7 @@ Storybook stories — not from this skill.
 A one-off input stays INSIDE the system:
 
 ```tsx
-<Field
-  name="tags"
-  inputType="custom"
-  CustomComponent={TagPicker}
-  label="Tags"
-/>;
+<Field name="tags" inputType="custom" CustomComponent={TagPicker} label="Tags" />
 ```
 
 `CustomComponent` is a `React.ComponentType<InputProps>`: it keeps react-hook-form
@@ -254,7 +243,7 @@ live react-hook-form state while you exercise a story.
 ## Verify
 
 - [ ] Root context and density classes present (track A1) — field spacing and control
-  seating read the `--density-*` channel.
+      seating read the `--density-*` channel.
 - [ ] Submit round-trip works, with validation errors surfaced per field.
 - [ ] The whole form is completable keyboard-only.
 - [ ] Zero dev-console warnings from the form components.

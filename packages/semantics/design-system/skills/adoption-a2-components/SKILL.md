@@ -1,5 +1,4 @@
 ---
-
 name: adoption-a2-components
 description: Swap an application's UI to Canonical design-system components one component type per PR (adoption track A2); also runs as a guided tutorial on a worked example
 ---
@@ -173,7 +172,7 @@ grep -rnE '\bp-button\b' src/   # swap p-button for the type at hand
 ```
 
 Anchor on the class TOKEN, not on the attribute — a `class(Name)?="…"` pattern
-under-collects, missing template-literal (``className={`p-button …`}``), `clsx(…)`,
+under-collects, missing template-literal (`` className={`p-button …`} ``), `clsx(…)`,
 and single-quoted call sites.
 
 ## The covered set is queried live
@@ -287,7 +286,7 @@ yet — check the component's types before writing it.
 ## Verify per PR
 
 - [ ] Root context and density classes present (track A1) — swapped components size
-  from the `--density-*` channel, not from luck.
+      from the `--density-*` channel, not from luck.
 - [ ] Zero dev-console warnings from the swapped components.
 - [ ] Keyboard pass on each swapped instance (focus, activation, escape where relevant).
 - [ ] Visual pass against the component's Storybook stories.

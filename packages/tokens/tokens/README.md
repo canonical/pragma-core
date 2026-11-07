@@ -28,10 +28,10 @@ Tokens are available as CSS custom properties:
 
 ## Token Tiers
 
-| Tier      | Path                                 | Description                                                                                                  |
-| --------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| Primitive | `tokens/canonical/global/primitive/` | Raw values for colour, dimension, number, and typography. Not intended for direct use in application code.   |
-| Semantic  | `tokens/canonical/global/semantic/`  | Aliased tokens referencing primitives. These encode design intent and are the tokens consumed by components. |
+| Tier | Path | Description |
+|------|------|-------------|
+| Primitive | `tokens/canonical/global/primitive/` | Raw values for colour, dimension, number, and typography. Not intended for direct use in application code. |
+| Semantic | `tokens/canonical/global/semantic/` | Aliased tokens referencing primitives. These encode design intent and are the tokens consumed by components. |
 
 ## Building
 

@@ -11,7 +11,6 @@ Use monadic Result chaining with the ? operator and combinators like and_then, m
 ### Do
 
 Use the ? operator for clean Result propagation.
-
 ```rust
 fn load_project_graph() -> Result<(SemStore, Vec<PackageGraph>), GraphError> {
     let project_root = find_project_root()
@@ -36,7 +35,6 @@ fn load_project_graph() -> Result<(SemStore, Vec<PackageGraph>), GraphError> {
 ```
 
 Use and_then for dependent computations.
-
 ```rust
 fn process_user_input(input: &str) -> Result<Output, ProcessError> {
     parse_input(input)
@@ -47,7 +45,6 @@ fn process_user_input(input: &str) -> Result<Output, ProcessError> {
 ```
 
 Use map for infallible transformations within Result.
-
 ```rust
 fn get_package_names(path: &Path) -> Result<Vec<String>, IoError> {
     fs::read_dir(path)?
@@ -67,7 +64,6 @@ fn get_config_value(key: &str) -> Result<String, ConfigError> {
 ```
 
 Use or_else for fallback computations.
-
 ```rust
 fn find_config() -> Result<Config, ConfigError> {
     load_config_from_env()
@@ -77,7 +73,6 @@ fn find_config() -> Result<Config, ConfigError> {
 ```
 
 Combine multiple Results with the ? operator in sequence.
-
 ```rust
 fn setup_application() -> Result<App, SetupError> {
     let config = load_config()?;
@@ -92,7 +87,6 @@ fn setup_application() -> Result<App, SetupError> {
 ### Don't
 
 Use nested match expressions for Result handling.
-
 ```rust
 // Bad: Deeply nested, hard to follow
 fn process(input: &str) -> Result<Output, Error> {
@@ -114,7 +108,6 @@ fn process(input: &str) -> Result<Output, Error> {
 ```
 
 Use unwrap() or expect() to bypass error handling.
-
 ```rust
 // Bad: Panics on error
 fn load_data() -> Data {
@@ -124,7 +117,6 @@ fn load_data() -> Data {
 ```
 
 Ignore errors silently.
-
 ```rust
 // Bad: Errors are silently dropped
 fn try_save(data: &Data) {
@@ -133,7 +125,6 @@ fn try_save(data: &Data) {
 ```
 
 Convert all errors to strings early in the chain.
-
 ```rust
 // Bad: Loses error type information
 fn process() -> Result<(), String> {
@@ -154,7 +145,6 @@ Always enrich errors with contextual information such as file paths, operation n
 ### Do
 
 Use thiserror to create structured, contextual error types.
-
 ```rust
 use thiserror::Error;
 use std::path::PathBuf;
@@ -186,7 +176,6 @@ pub enum GraphError {
 ```
 
 Use map_err to add context when propagating errors.
-
 ```rust
 fn load_package(path: &Path) -> Result<Package, GraphError> {
     let content = fs::read_to_string(path)
@@ -206,7 +195,6 @@ fn load_package(path: &Path) -> Result<Package, GraphError> {
 ```
 
 Chain errors to preserve the full error trail.
-
 ```rust
 #[derive(Error, Debug)]
 pub enum AppError {
@@ -226,7 +214,6 @@ pub enum AppError {
 ```
 
 Include actionable information in error messages.
-
 ```rust
 #[derive(Error, Debug)]
 pub enum ValidationError {
@@ -241,7 +228,6 @@ pub enum ValidationError {
 ### Don't
 
 Use generic string errors that lose context.
-
 ```rust
 // Bad: Loses type information and context
 fn load_config(path: &Path) -> Result<Config, String> {
@@ -254,7 +240,6 @@ fn load_config(path: &Path) -> Result<Config, String> {
 ```
 
 Discard error information with unwrap or expect in library code.
-
 ```rust
 // Bad: Panics instead of propagating
 fn parse_uri(s: &str) -> Uri {
@@ -266,7 +251,6 @@ let file = File::open(path).expect("failed");  // Which path?
 ```
 
 Create error types without Display or Debug.
-
 ```rust
 // Bad: Unusable error type
 pub struct MyError {
@@ -276,7 +260,6 @@ pub struct MyError {
 ```
 
 Use anyhow/eyre in library code (ok for applications).
-
 ```rust
 // Bad in libraries: Erases type information
 pub fn process() -> anyhow::Result<()> {
@@ -300,7 +283,6 @@ Structure functions as `A -> Result<B, E>` (Kleisli arrows) for composable, chai
 ### Do
 
 Design functions as Kleisli arrows: `A -> Result<B, E>`.
-
 ```rust
 // Each function is a Kleisli arrow that can be composed
 fn parse_config(input: &str) -> Result<RawConfig, ParseError> { /* ... */ }
@@ -327,7 +309,6 @@ fn process_input(s: &str) -> Result<Output, ProcessError> {
 ```
 
 Use combinators to compose fallible operations.
-
 ```rust
 impl DepSpec {
     pub fn from_value(value: &DependencyValue) -> Result<Self, ParseError> {
@@ -348,7 +329,6 @@ impl DepSpec {
 ```
 
 Create helper traits for method chaining when needed.
-
 ```rust
 trait ResultExt<T, E> {
     fn and_try<U, F>(self, f: F) -> Result<U, E>
@@ -373,7 +353,6 @@ let result = input
 ```
 
 Use the pipe pattern for readability.
-
 ```rust
 // With a pipe trait or tap crate
 trait Pipe: Sized {
@@ -393,7 +372,6 @@ let result = input
 ### Don't
 
 Mix side effects into pure transformation chains.
-
 ```rust
 // Bad: Side effects hidden in chain
 fn process(input: &str) -> Result<Output, Error> {
@@ -417,7 +395,6 @@ fn process(input: &str) -> Result<Output, Error> {
 ```
 
 Break the chain with early returns when and_then works.
-
 ```rust
 // Bad: Breaks the monadic flow
 fn process(input: &str) -> Result<Output, Error> {
@@ -443,7 +420,6 @@ fn process(input: &str) -> Result<Output, Error> {
 ```
 
 Use unwrap in the middle of a chain.
-
 ```rust
 // Bad: Panics break the monadic abstraction
 let result = items.iter()
@@ -463,7 +439,6 @@ Prefer iterator combinators (map, filter, flat_map, collect) over imperative loo
 ### Do
 
 Use iterator chains for data transformations.
-
 ```rust
 fn get_installed_packages() -> Result<Vec<String>, IoError> {
     let packages_path = sem_packages_dir()?;
@@ -488,7 +463,6 @@ fn get_installed_packages() -> Result<Vec<String>, IoError> {
 ```
 
 Use flat_map for one-to-many transformations.
-
 ```rust
 fn get_all_dependencies(packages: &[Package]) -> Vec<Dependency> {
     packages.iter()
@@ -498,7 +472,6 @@ fn get_all_dependencies(packages: &[Package]) -> Vec<Dependency> {
 ```
 
 Use filter_map to combine filter and map operations.
-
 ```rust
 fn parse_valid_numbers(strings: &[&str]) -> Vec<i32> {
     strings.iter()
@@ -508,7 +481,6 @@ fn parse_valid_numbers(strings: &[&str]) -> Vec<i32> {
 ```
 
 Use fold/reduce for accumulating results.
-
 ```rust
 fn total_size(files: &[PathBuf]) -> u64 {
     files.iter()
@@ -524,7 +496,6 @@ fn merge_configs(configs: &[Config]) -> Config {
 ```
 
 Chain multiple operations for complex transformations.
-
 ```rust
 fn process_log_entries(entries: &[LogEntry]) -> HashMap<String, Vec<&LogEntry>> {
     entries.iter()
@@ -540,7 +511,6 @@ fn process_log_entries(entries: &[LogEntry]) -> HashMap<String, Vec<&LogEntry>> 
 ```
 
 Use collect with turbofish for type-driven collection.
-
 ```rust
 // Collect into different types based on need
 let vec: Vec<_> = iter.collect();
@@ -556,7 +526,6 @@ let results: Result<Vec<_>, _> = items.iter()
 ### Don't
 
 Use imperative loops when combinators are clearer.
-
 ```rust
 // Bad: Imperative style obscures intent
 fn get_names(users: &[User]) -> Vec<String> {
@@ -579,7 +548,6 @@ fn get_names(users: &[User]) -> Vec<String> {
 ```
 
 Collect intermediate results unnecessarily.
-
 ```rust
 // Bad: Unnecessary allocation
 let filtered: Vec<_> = items.iter().filter(|x| x.valid).collect();
@@ -594,7 +562,6 @@ let result: i32 = items.iter()
 ```
 
 Use for loops just to build up a Vec.
-
 ```rust
 // Bad: Manual Vec building
 let mut results = Vec::new();
@@ -607,7 +574,6 @@ let results: Vec<_> = items.iter().map(transform).collect();
 ```
 
 Nest loops when flat_map works.
-
 ```rust
 // Bad: Nested loops
 let mut all_items = Vec::new();
@@ -634,7 +600,6 @@ Use Option explicitly and idiomatically; prefer Option<T> combinators (map, and_
 ### Do
 
 Use Option combinators for clean transformations.
-
 ```rust
 impl Manifest {
     pub fn display_name(&self) -> Option<String> {
@@ -654,7 +619,6 @@ impl Manifest {
 ```
 
 Use unwrap_or and unwrap_or_else for defaults.
-
 ```rust
 fn get_config_value(key: &str) -> String {
     config.get(key)
@@ -671,7 +635,6 @@ fn get_timeout() -> Duration {
 ```
 
 Use ok_or to convert Option to Result.
-
 ```rust
 fn find_package(name: &str) -> Result<&Package, PackageError> {
     packages.get(name)
@@ -685,7 +648,6 @@ fn get_required_field<'a>(map: &'a HashMap<String, Value>, key: &str) -> Result<
 ```
 
 Use filter and filter_map for conditional processing.
-
 ```rust
 fn find_active_user(id: UserId) -> Option<User> {
     users.get(&id).filter(|u| u.is_active)
@@ -699,7 +661,6 @@ fn get_valid_entries(entries: &[Entry]) -> Vec<&Entry> {
 ```
 
 Use the ? operator with Option in functions returning Option.
-
 ```rust
 fn get_nested_value(data: &Data) -> Option<&str> {
     let section = data.sections.get("main")?;
@@ -711,7 +672,6 @@ fn get_nested_value(data: &Data) -> Option<&str> {
 ### Don't
 
 Use sentinel values instead of Option.
-
 ```rust
 // Bad: Magic values
 fn find_index(items: &[Item], target: &Item) -> i32 {
@@ -726,7 +686,6 @@ fn find_index(items: &[Item], target: &Item) -> Option<usize> {
 ```
 
 Overuse unwrap() or expect() outside of tests.
-
 ```rust
 // Bad: Panics on None
 let user = users.get(id).unwrap();
@@ -738,7 +697,6 @@ let name = user.name.as_deref().unwrap_or("Anonymous");
 ```
 
 Check is_some/is_none then unwrap.
-
 ```rust
 // Bad: Redundant check
 if value.is_some() {
@@ -756,7 +714,6 @@ value.map(process);
 ```
 
 Create deeply nested Option chains without combinators.
-
 ```rust
 // Bad: Nested matching
 match outer {
@@ -788,7 +745,6 @@ Complement unit tests with property-based testing to verify invariants across ma
 ### Do
 
 Use proptest for property-based testing.
-
 ```rust
 use proptest::prelude::*;
 
@@ -815,7 +771,6 @@ proptest! {
 ```
 
 Test algebraic properties (identity, associativity, commutativity).
-
 ```rust
 proptest! {
     #[test]
@@ -836,7 +791,6 @@ proptest! {
 ```
 
 Test invariants that should hold for all valid inputs.
-
 ```rust
 proptest! {
     #[test]
@@ -861,7 +815,6 @@ proptest! {
 ```
 
 Use custom strategies for domain-specific types.
-
 ```rust
 fn valid_package_name() -> impl Strategy<Value = String> {
     "[a-z][a-z0-9-]{0,62}[a-z0-9]?"
@@ -884,7 +837,6 @@ proptest! {
 ### Don't
 
 Only write example-based unit tests for complex logic.
-
 ```rust
 // Incomplete: Only tests a few examples
 #[test]
@@ -898,7 +850,6 @@ fn test_merge() {
 ```
 
 Ignore test failures without understanding the counterexample.
-
 ```rust
 // Bad: Ignoring failures
 proptest! {
@@ -911,7 +862,6 @@ proptest! {
 ```
 
 Write properties that are too weak or tautological.
-
 ```rust
 // Bad: This always passes, tests nothing useful
 proptest! {
@@ -932,7 +882,6 @@ proptest! {
 ```
 
 Generate invalid inputs without proper filtering.
-
 ```rust
 // Bad: Generates invalid UTF-8 and panics
 proptest! {
@@ -962,7 +911,6 @@ Follow the strict TDD cycle: write a failing test first (red), implement minimal
 ### Do
 
 Write the test first, watch it fail.
-
 ```rust
 // Step 1: RED - Write failing test
 #[cfg(test)]
@@ -982,7 +930,6 @@ mod tests {
 ```
 
 Implement the minimum code to pass.
-
 ```rust
 // Step 2: GREEN - Minimal implementation
 pub struct Version {
@@ -1009,7 +956,6 @@ impl Version {
 ```
 
 Refactor while keeping tests green.
-
 ```rust
 // Step 3: REFACTOR - Improve design
 impl Version {
@@ -1038,7 +984,6 @@ impl Version {
 ```
 
 Add tests for edge cases incrementally.
-
 ```rust
 #[test]
 fn parse_rejects_empty_string() {
@@ -1063,7 +1008,6 @@ fn parse_handles_leading_zeros() {
 ```
 
 Use test modules colocated with implementation.
-
 ```rust
 // src/version.rs
 pub struct Version { /* ... */ }
@@ -1085,7 +1029,6 @@ mod tests {
 ### Don't
 
 Write implementation before tests.
-
 ```rust
 // Bad: Implementation without tests
 pub fn complex_algorithm(input: &str) -> Result<Output, Error> {
@@ -1096,7 +1039,6 @@ pub fn complex_algorithm(input: &str) -> Result<Output, Error> {
 ```
 
 Write tests that pass trivially or test nothing.
-
 ```rust
 // Bad: Test that always passes
 #[test]
@@ -1112,7 +1054,6 @@ fn test_without_assertions() {
 ```
 
 Skip the refactor step.
-
 ```rust
 // Bad: "It works, ship it!"
 impl Version {
@@ -1131,7 +1072,6 @@ impl Version {
 ```
 
 Write tests after the fact that just confirm current behavior.
-
 ```rust
 // Bad: "Characterization tests" without understanding intent
 #[test]
@@ -1142,7 +1082,6 @@ fn test_weird_behavior() {
 ```
 
 Test private implementation details.
-
 ```rust
 // Bad: Testing internals that may change
 #[test]
@@ -1173,7 +1112,6 @@ Prefer small, focused traits that compose well over large monolithic interfaces.
 ### Do
 
 Design small, single-purpose traits.
-
 ```rust
 /// Can be resolved from a prefixed form to a full URI
 trait Resolvable {
@@ -1199,7 +1137,6 @@ trait Loadable: Sized {
 ```
 
 Compose traits using supertraits and bounds.
-
 ```rust
 // Compose small traits into larger capabilities
 trait UriHandler: Resolvable + Compactable {}
@@ -1214,7 +1151,6 @@ fn process_uri<T: Resolvable + Display>(uri: &T, map: &PrefixMap) -> String {
 ```
 
 Use extension traits to add methods to existing types.
-
 ```rust
 trait ResultExt<T, E> {
     fn context(self, msg: &str) -> Result<T, ContextError<E>>;
@@ -1237,7 +1173,6 @@ let data = fs::read_to_string(path)
 ```
 
 Implement standard library traits for interoperability.
-
 ```rust
 impl Default for SemStore {
     fn default() -> Self {
@@ -1263,7 +1198,6 @@ impl FromStr for Version {
 ### Don't
 
 Create large, monolithic traits.
-
 ```rust
 // Bad: Too many responsibilities
 trait Repository {
@@ -1282,7 +1216,6 @@ trait Repository {
 ```
 
 Use trait objects when generics suffice.
-
 ```rust
 // Bad: Unnecessary dynamic dispatch
 fn process(items: &[Box<dyn Processable>]) {
@@ -1300,7 +1233,6 @@ fn process<T: Processable>(items: &[T]) {
 ```
 
 Require unused trait methods via blanket requirements.
-
 ```rust
 // Bad: Forces implementers to provide unused methods
 trait DataStore: Connect + Query + Mutate + Transaction + Cache + Log {
@@ -1314,7 +1246,6 @@ fn process<T: Query + Mutate>(store: &mut T) {
 ```
 
 Use associated types when generic parameters work better.
-
 ```rust
 // Bad: Can only have one implementation per type
 trait Container {
@@ -1340,7 +1271,6 @@ Model state and variants with enums (algebraic sum types) rather than flags, inh
 ### Do
 
 Use enums to model mutually exclusive states.
-
 ```rust
 #[derive(Debug, Clone, PartialEq)]
 pub enum DepSpec {
@@ -1368,7 +1298,6 @@ impl DepSpec {
 ```
 
 Use enums for state machines with compile-time guarantees.
-
 ```rust
 enum ConnectionState {
     Disconnected,
@@ -1399,7 +1328,6 @@ impl ConnectionState {
 ```
 
 Use enums to make invalid states unrepresentable.
-
 ```rust
 // User can be either anonymous or authenticated, never both
 enum User {
@@ -1420,7 +1348,6 @@ enum FieldState<T> {
 ```
 
 Leverage exhaustive matching for safety.
-
 ```rust
 fn handle_result(result: QueryResult) -> Response {
     match result {
@@ -1438,7 +1365,6 @@ fn handle_result(result: QueryResult) -> Response {
 ### Don't
 
 Use boolean flags for mutually exclusive states.
-
 ```rust
 // Bad: Multiple bools can have invalid combinations
 struct User {
@@ -1454,7 +1380,6 @@ struct Connection {
 ```
 
 Use Option when you need more than two states.
-
 ```rust
 // Bad: Option doesn't capture "loading" vs "error" vs "empty"
 struct DataView {
@@ -1471,7 +1396,6 @@ enum DataState {
 ```
 
 Use inheritance-like patterns with trait objects when enums suffice.
-
 ```rust
 // Bad: Runtime dispatch when compile-time would work
 trait Shape {
@@ -1497,7 +1421,6 @@ impl Shape {
 ```
 
 Use integers or strings as type discriminators.
-
 ```rust
 // Bad: Magic numbers
 const USER_TYPE_ADMIN: i32 = 1;
@@ -1519,7 +1442,6 @@ Use the newtype pattern to create distinct types for domain-specific values, pre
 ### Do
 
 Wrap primitive types in newtypes for domain semantics.
-
 ```rust
 /// A validated package name following sem conventions
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -1544,7 +1466,6 @@ impl PackageName {
 ```
 
 Use newtypes to distinguish semantically different IDs.
-
 ```rust
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct UserId(u64);
@@ -1560,7 +1481,6 @@ fn process_order(user: UserId, order: OrderId) { /* ... */ }
 ```
 
 Derive common traits to maintain ergonomics.
-
 ```rust
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -1568,7 +1488,6 @@ pub struct Uri(String);
 ```
 
 Use phantom types for compile-time state tracking.
-
 ```rust
 use std::marker::PhantomData;
 
@@ -1597,7 +1516,6 @@ impl Input<Validated> {
 ### Don't
 
 Use raw primitive types for domain concepts.
-
 ```rust
 // Bad: Raw strings lose semantic meaning
 fn load_package(name: String, path: String, uri: String) {
@@ -1609,7 +1527,6 @@ load_package(uri, name, path);  // Compiles but wrong!
 ```
 
 Create newtypes without validation when invariants exist.
-
 ```rust
 // Bad: Allows invalid state
 pub struct Email(pub String);  // pub field allows any string
@@ -1628,7 +1545,6 @@ impl Email {
 ```
 
 Over-wrap types that don't need semantic distinction.
-
 ```rust
 // Bad: Unnecessary wrapping of implementation details
 struct LoopCounter(usize);  // Just use usize
@@ -1646,7 +1562,6 @@ Use constructor validation to ensure only valid states can exist. Follow the 'pa
 ### Do
 
 Validate in constructors to ensure type invariants.
-
 ```rust
 impl Manifest {
     pub fn from_path(path: &Path) -> Result<Self, ManifestError> {
@@ -1673,7 +1588,6 @@ impl Manifest {
 ```
 
 Use the typestate pattern for compile-time state enforcement.
-
 ```rust
 // States as zero-sized types
 struct Draft;
@@ -1713,7 +1627,6 @@ impl Article<Published> {
 ```
 
 Parse into validated types at system boundaries.
-
 ```rust
 // Raw input from external source
 struct RawUserInput {
@@ -1749,7 +1662,6 @@ impl Email {
 ```
 
 Make the validated state obvious in function signatures.
-
 ```rust
 // Functions that require validation communicate it via types
 fn send_email(to: &Email, subject: &str, body: &str) -> Result<(), SendError> {
@@ -1764,7 +1676,6 @@ fn create_account(user: ValidatedUser) -> Result<Account, AccountError> {
 ### Don't
 
 Scatter validation logic throughout the codebase.
-
 ```rust
 // Bad: Validation repeated everywhere
 fn send_email(to: &str, subject: &str, body: &str) -> Result<(), Error> {
@@ -1783,7 +1694,6 @@ fn save_user(email: &str) -> Result<(), Error> {
 ```
 
 Allow construction of invalid objects.
-
 ```rust
 // Bad: Public fields allow invalid state
 pub struct Email {
@@ -1799,7 +1709,6 @@ impl User {
 ```
 
 Use validation functions that return bool.
-
 ```rust
 // Bad: Caller can ignore the result
 fn is_valid_email(s: &str) -> bool {
@@ -1817,7 +1726,6 @@ fn parse_email(s: &str) -> Result<Email, ValidationError>
 ```
 
 Re-validate already-validated data.
-
 ```rust
 // Bad: Redundant validation
 fn process(user: ValidatedUser) -> Result<(), Error> {

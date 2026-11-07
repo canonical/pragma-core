@@ -11,7 +11,6 @@ The index.ts file must be a complete barrel export for the component folder, re-
 ### Do
 
 Create an index.ts file that re-exports all public APIs from the component folder.
-
 ```typescript
 // index.ts
 export { default as [MyComponent] } from './[MyComponent].js';
@@ -23,17 +22,15 @@ export { default as SubComponent } from './SubComponent.js';
 ### Don't
 
 Omit the index.ts file or fail to re-export all public APIs.
-
 ```typescript
 // Bad: index.ts only exports default, omits types and named exports
-export { default } from "./[MyComponent].js";
+export { default } from './[MyComponent].js';
 ```
 
 Use `export * from './types.js'` as it allows value exports, which is not expected for types files.
-
 ```typescript
 // Bad: Using export * from './types.js' allows value exports, which is not allowed
-export * from "./types.js";
+export * from './types.js';
 ```
 
 ---
@@ -55,7 +52,6 @@ Component CSS class names must be constructed following a specific pattern:
 ### Do
 
 Follow the complete pattern for class name construction.
-
 ```tsx
 const componentCssClassName = "ds badge";
 
@@ -81,21 +77,18 @@ const Badge = ({
 ### Don't
 
 Hardcode the base class name inside the JSX.
-
 ```tsx
 // Bad: Base class "ds badge" is hardcoded.
 <span className={["ds badge", severity, className].filter(Boolean).join(" ")}>
 ```
 
 Place the consumer `className` prop before other classes.
-
 ```tsx
 // Bad: Consumer class is first
 <span className={[className, componentCssClassName, severity].filter(Boolean).join(" ")}>
 ```
 
 Use string concatenation or template literals to add class names.
-
 ```tsx
 // Bad: Harder to read and maintain, vulnerable to inconsistent formatting
 <span className={`${componentCssClassName} ${severity} ${className}`}>
@@ -108,7 +101,6 @@ Use string concatenation or template literals to add class names.
 **Identifier:** `cs:react.component.dependencies`
 
 Component dependencies must follow a strict unidirectional flow:
-
 - Subcomponents must be in a `common/` folder within the parent component's directory
 - Dependencies can flow downwards (parent to subcomponent) or sideways (between siblings)
 - Dependencies must not flow upwards (subcomponent to parent)
@@ -116,7 +108,6 @@ Component dependencies must follow a strict unidirectional flow:
 ### Do
 
 Place subcomponents in a `common/` folder inside the parent component directory.
-
 ```
 Card/
   ├── Card.tsx
@@ -131,29 +122,26 @@ Card/
 ```
 
 Allow subcomponents to depend on siblings or shared utilities within the same component scope.
-
 ```typescript
 // Header.tsx can import from utils/
-import { helper } from "../utils/helpers.js";
+import { helper } from '../utils/helpers.js';
 
 // Footer.tsx can import from Header.tsx
-import Header from "../Header.js";
+import Header from '../Header.js';
 ```
 
 ### Don't
 
 Create dependencies that flow upwards from a subcomponent to its parent.
-
 ```typescript
 // Bad: Header.tsx in Card/common/ should not import from Card.tsx
-import Card from "../../Card.js";
+import Card from '../../Card.js';
 ```
 
 Allow external components to depend on the internal structure of another component.
-
 ```typescript
 // Bad: AnotherComponent should not import from Card's internal common folder
-import Header from "../Card/common/Header.js";
+import Header from '../Card/common/Header.js';
 ```
 
 ---
@@ -167,7 +155,6 @@ Component folder and file naming is based on scope. Component-specific files (im
 ### Do
 
 Prefix component-specific files and use generic names for domain-level files.
-
 ```
 [MyComponent]/
   ├── [MyComponent].tsx           # Component-specific
@@ -181,7 +168,6 @@ Prefix component-specific files and use generic names for domain-level files.
 ### Don't
 
 Add redundant prefixes to domain-level files.
-
 ```
 [MyComponent]/
   ├── [MyComponent].Context.tsx   # Bad: Redundant prefix
@@ -195,11 +181,11 @@ Add redundant prefixes to domain-level files.
 
 **Identifier:** `cs:react.component.link_component`
 
-A _complex_ component — one that renders a set of navigable items (a list, tree, tab strip, breadcrumb trail, menu) and injects an inner link renderer for them — MUST integrate with a consumer's router through a single `LinkComponent` prop against the shared `LinkComponentProps` contract, NOT through a per-component re-authored interface and NOT through the polymorphic `as` prop. (A _simple_ component that merely re-targets its own wrapper element uses `as` instead — see the boundary below.)
+A *complex* component — one that renders a set of navigable items (a list, tree, tab strip, breadcrumb trail, menu) and injects an inner link renderer for them — MUST integrate with a consumer's router through a single `LinkComponent` prop against the shared `LinkComponentProps` contract, NOT through a per-component re-authored interface and NOT through the polymorphic `as` prop. (A *simple* component that merely re-targets its own wrapper element uses `as` instead — see the boundary below.)
 
 The contract is deliberately narrow: `LinkComponent?: ComponentType<LinkComponentProps> | "a"`, defaulting to the intrinsic `"a"`. `LinkComponentProps` forwards only `href`, `className`, `children`, and `aria-current` — not the full anchor attribute set — so the same router `Link` adapter works across every component that uses it. Define `LinkComponentProps` once in a shared location and import it; do not copy the interface per component.
 
-Boundary with the polymorphic `as` prop — the deciding question is _what is being configured_: the component's own wrapper element, or an inner link renderer among other structure.
+Boundary with the polymorphic `as` prop — the deciding question is *what is being configured*: the component's own wrapper element, or an inner link renderer among other structure.
 
 - **Simple component → `as`.** When the component IS the element (its own root wrapper is what gets swapped for the consumer's link/element — e.g. a `Link`, `Button`, `Box`, or any single-element component the consumer re-targets), use the polymorphic `as`/`ElementType` prop. The consumer configures the wrapper directly.
 - **Complex component → `LinkComponent`.** When the component renders multiple navigable items and injects ONE inner link renderer for each (a list, tree, tab strip, breadcrumb trail, menu), use `LinkComponent`. Here `as` would be wrong: there is no single wrapper to re-target, and threading `as`-style generics through the subcomponents to reach each inner link is the anti-pattern this standard exists to prevent.
@@ -209,7 +195,6 @@ Fallback semantics: a non-navigable item (one with no `url`/`href`) MUST render 
 ### Do
 
 Inject the link via a single `LinkComponent` prop typed against the shared `LinkComponentProps`, defaulting to the intrinsic anchor, and render a plain element for non-navigable items.
-
 ```typescript
 // types.ts — shared contract, defined once and imported (not re-declared per component)
 export interface LinkComponentProps {
@@ -241,7 +226,6 @@ const Item = ({ url, label, active, disabled, LinkComponent = "a" }: ItemProps) 
 ### Don't
 
 Re-author the link contract per component, reach for the polymorphic `as` prop for router integration, or render a link for a non-navigable item.
-
 ```typescript
 // Bad: a bespoke, wider interface copied into this component instead of the shared LinkComponentProps
 interface TabsProps {
@@ -292,7 +276,6 @@ searchresultlist
 **Identifier:** `cs:react.component.props`
 
 Component props must:
-
 - Be documented with TSDoc comments
 - Be destructured when used in markup
 - Be spread to the root element when unused
@@ -301,7 +284,6 @@ Component props must:
 ### Do
 
 Document props with TSDoc comments and use proper destructuring and spreading.
-
 ```typescript
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** The button's text content */
@@ -332,7 +314,6 @@ const Button = ({
 ### Don't
 
 Mix explicit and spread props or destructure props unnecessarily.
-
 ```typescript
 // Bad: Mixing explicit props with spread
 const Button = (props: ButtonProps) => (
@@ -377,7 +358,6 @@ A component's props type must extend the native props of the element it renders 
 ### Do
 
 Intersect the design-system props with the root tag's native props, omitting the DS-owned keys.
-
 ```typescript
 import type { ComponentProps } from "react";
 
@@ -387,26 +367,19 @@ type OwnProps = {
 };
 
 // Change "button" to whatever element the component actually renders as its root.
-export type ButtonProps = OwnProps &
-  Omit<ComponentProps<"button">, keyof OwnProps>;
+export type ButtonProps = OwnProps & Omit<ComponentProps<"button">, keyof OwnProps>;
 ```
 
 Destructure every DS-owned prop out, spread the rest onto the root, and set DS-controlled attributes after the spread so they win.
-
 ```tsx
 const Button = ({ importance, className, ...rest }: ButtonProps) => (
   // type is set before the spread, so a caller can still override it;
   // className is merged rather than replaced.
-  <button
-    type="button"
-    {...rest}
-    className={["ds", importance, className].filter(Boolean).join(" ")}
-  />
+  <button type="button" {...rest} className={["ds", importance, className].filter(Boolean).join(" ")} />
 );
 ```
 
 State any further exclusion the component deliberately controls, and say why.
-
 ```typescript
 // The design system owns href and tabIndex on this component, so they are
 // excluded from the native half rather than left for a caller to set.
@@ -415,7 +388,6 @@ export type SkipLinkProps = OwnProps &
 ```
 
 A component with no single native root is exempt — and says so in the file, so a later reader knows it was decided rather than missed. Check first: a component that renders a wrapper element has a root, however composite it looks.
-
 ```typescript
 /**
  * Internal renderer props — exempt from the native-prop extension convention.
@@ -432,18 +404,15 @@ export interface ItemProps {
 ### Don't
 
 Use `interface … extends` for the native half. It does not distribute over unions, so a component with two root forms silently loses its discriminant.
-
 ```typescript
 // Bad: an interface cannot express the union case, and extending one
 // alongside union members can collapse the props to `any`.
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   importance?: "primary" | "secondary";
 }
 ```
 
 Reach for the per-element `XxxHTMLAttributes<T>` interfaces. They are easy to mis-instantiate against an element the component does not render.
-
 ```typescript
 // Bad: says HTMLDivElement while the component renders a <section>.
 // ComponentProps<"section"> cannot be wrong in that way.
@@ -453,7 +422,6 @@ export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
 ```
 
 Re-declare attributes the native props already carry — they drift from the DOM and hide which props the design system actually owns.
-
 ```typescript
 // Bad: every one of these already exists on ComponentProps<"button">.
 export interface ButtonProps {
@@ -466,7 +434,6 @@ export interface ButtonProps {
 ```
 
 Use `ComponentPropsWithoutRef` on React 19, where `ref` is an ordinary prop and belongs in the surface.
-
 ```typescript
 // Bad on React 19: drops ref from the public props for no reason.
 export type ButtonProps = OwnProps &
@@ -474,14 +441,11 @@ export type ButtonProps = OwnProps &
 ```
 
 Give the design-system half the public name and invent a suffixed one for the finished type. A `Type` suffix carries no information — the position already says it is a type — and it appears when the good name is taken, which is the collision to fix rather than work around.
-
 ```typescript
 // Bad: a consumer importing ChipProps reasonably expects the props of <Chip>,
 // and receives the design-system fields with none of the native ones. The name
 // that reads correctly is the one that is wrong.
-export interface ChipProps {
-  criticality?: Criticality;
-}
+export interface ChipProps { criticality?: Criticality }
 export type ChipPropsType = InteractiveChipProps | StaticChipProps;
 
 // Good: the finished type takes the name, the design-system half is private.
@@ -500,7 +464,6 @@ Wrapper components must use namespaced props for inner components and accept uns
 ### Do
 
 Use namespaced props for inner components and unscoped props for the wrapper element.
-
 ```tsx
 interface ThumbnailSectionProps extends SectionProps {
   /** Props for the thumbnail image */
@@ -514,10 +477,7 @@ const ThumbnailSection = ({
   className,
   ...props
 }: ThumbnailSectionProps) => (
-  <Section
-    className={[componentCssClassName, className].filter(Boolean).join(" ")}
-    {...props}
-  >
+  <Section className={[componentCssClassName, className].filter(Boolean).join(" ")} {...props}>
     <img {...imageProps} />
   </Section>
 );
@@ -526,20 +486,14 @@ const ThumbnailSection = ({
 ### Don't
 
 Mix prop scopes between wrapper and inner components.
-
 ```tsx
 interface ThumbnailSectionProps {
-  src: string; // Bad: Unscoped image props
-  alt: string; // Bad: Unscoped image props
-  width: number; // Bad: Ambiguous - for image or section?
+  src: string;      // Bad: Unscoped image props
+  alt: string;      // Bad: Unscoped image props
+  width: number;    // Bad: Ambiguous - for image or section?
 }
 
-const ThumbnailSection = ({
-  src,
-  alt,
-  width,
-  ...props
-}: ThumbnailSectionProps) => (
+const ThumbnailSection = ({ src, alt, width, ...props }: ThumbnailSectionProps) => (
   <Section {...props}>
     <img src={src} alt={alt} width={width} />
   </Section>
@@ -557,7 +511,6 @@ Context providers must use `Provider.tsx` as the main component file instead of 
 ### Do
 
 Organize provider-related files by separating concerns into distinct files: place the context definition in `Context.tsx`, the provider implementation in `Provider.tsx`, and provider-specific hooks in a `hooks/` directory. Create a `hooks/useProviderState.ts` file to centrally manage the state of the provider.`
-
 ```
 [MyComponent]/
   ├── Context.tsx
@@ -576,7 +529,6 @@ Organize provider-related files by separating concerns into distinct files: plac
 ```
 
 Create the context type within `types.ts`.
-
 ```typescript
 // [MyComponent]/types.ts
 /** The value of the config context */
@@ -589,19 +541,17 @@ export interface ContextOptions {
 ```
 
 create the provider props type within `types.ts`, accepting `children` at a minimum and more props as needed.
-
 ```typescript
 // [MyComponent]/types.ts
 
 export interface ProviderProps {
-  // The child nodes which will have access to the provider state
-  children: React.ReactNode;
-  // ...other props...
+    // The child nodes which will have access to the provider state
+    children: React.ReactNode;
+    // ...other props...
 }
 ```
 
 Create a `Context.tsx` file for the context definition.
-
 ```tsx
 // [MyComponent]/Context.tsx
 import { createContext } from "react";
@@ -613,7 +563,6 @@ export default Context;
 ```
 
 Use `Provider.tsx` as the main component file. The provider is responsible for wrapping children with the context.
-
 ```tsx
 // [MyComponent]/Provider.tsx
 import Context from "./Context.js";
@@ -629,7 +578,6 @@ export default Provider;
 ```
 
 Use `index.ts` to export the `Provider` as a named component that matches the folder name, casting it to the component type.
-
 ```typescript
 // [MyComponent]/types.ts
 import type { ReactElement } from "react";
@@ -647,7 +595,6 @@ export default [MyComponent];
 ```
 
 Create provider state hook types in `hooks/types.ts` for context providers.
-
 ```typescript
 // [MyComponent]/hooks/types.ts
 import type { ContextOptions, ProviderProps } from "../types.js";
@@ -660,7 +607,6 @@ export type UseProviderStateResult = ContextOptions;
 ```
 
 Create a provider state hook implementation.
-
 ```tsx
 // [MyComponent]/hooks/useProviderState.ts
 import { useContext } from "react";
@@ -670,16 +616,15 @@ import type { UseProviderStateProps, UseProviderStateResult } from "./types.js";
  * Hook to manage the state of the provider
  */
 const useProviderState = ({
-  // ..props...
+    // ..props...
 }: UseProviderStateProps): UseProviderStateResult => {
-  // centralize the entire provider state here...
-};
+ // centralize the entire provider state here...
+}
 ```
 
 ### Don't
 
 Create a separate component file (e.g., `[MyComponent].tsx`) when `Provider.tsx` exists. The provider is the main component.
-
 ```
 [MyComponent]/
   ├── [MyComponent].tsx
@@ -687,7 +632,6 @@ Create a separate component file (e.g., `[MyComponent].tsx`) when `Provider.tsx`
 ```
 
 Nest context-related files in a `context/` subfolder.
-
 ```
 [MyComponent]/
   └── context/ # Unnecessary nesting
@@ -696,7 +640,6 @@ Nest context-related files in a `context/` subfolder.
 ```
 
 Create multiple provider files within the same component folder.
-
 ```
 [MyComponent]/
   ├── Provider.tsx
@@ -704,7 +647,6 @@ Create multiple provider files within the same component folder.
 ```
 
 Mix concerns of the Provider and its state.
-
 ```tsx
 exort const Provider = ({ children }: ProviderProps) => {
   const [state, setState] = useState(...); // Bad: State logic mixed in
@@ -723,7 +665,6 @@ Each component must reside in its own folder, which contains all related files: 
 ### Do
 
 Place all component-related files within a single folder named after the component.
-
 ```bash
 [MyComponent]/
   ├── [MyComponent].tsx
@@ -737,7 +678,6 @@ Place all component-related files within a single folder named after the compone
 ### Don't
 
 Scatter component files across different parts of the application.
-
 ```bash
 # Bad: Files are not co-located
 components/
@@ -759,7 +699,6 @@ Subcomponents are **public** if they are intended to be directly used by the con
 Subcomponents are **private** if they are internal implementation details of the parent component, and are not intended for direct use by the consumer.
 
 Public subcomponents must be:
-
 - Exported by attaching them to the parent component using dot notation.
 - Named semantically.
 - Kept to a single level of nesting.
@@ -769,28 +708,21 @@ Private subcomponents must remain internal to the component's implementation and
 ### Do
 
 Export public subcomponents by attaching them to the parent component using dot notation
-
 ```typescript
-const Item = (props: ItemProps) => {
-  /* ... */
-};
-const Accordion = (props: AccordionProps) => {
-  /* ... */
-};
+const Item = (props: ItemProps) => { /* ... */ };
+const Accordion = (props: AccordionProps) => { /* ... */ };
 Accordion.Item = Item;
 export default Accordion;
 ```
 
 Use semantic, self-descriptive names for subcomponents
-
 ```typescript
-Accordion.Item;
-Card.Header;
-Card.Footer;
+Accordion.Item
+Card.Header
+Card.Footer
 ```
 
 Keep subcomponent nesting to a single level
-
 ```typescript
 <Card>
   <Card.Header />
@@ -801,19 +733,16 @@ Keep subcomponent nesting to a single level
 ### Don't
 
 Repeat the parent component name in subcomponent names
-
 ```typescript
 Card.CardHeader = Header; // Bad: Redundant 'Card' prefix
 ```
 
 Map a subcomponent to a different name (renaming)
-
 ```typescript
 Card.Top = Header; // Bad: Mapping 'Header' to 'Top' is not allowed
 ```
 
 Use non-semantic or unclear subcomponent names
-
 ```
 Card/
   └── common/
@@ -822,7 +751,6 @@ Card/
 ```
 
 Nest subcomponents more than one level deep
-
 ```typescript
 <Card>
   <Card.Header>
@@ -832,7 +760,6 @@ Nest subcomponents more than one level deep
 ```
 
 Export private subcomponents that are not intended for public use.
-
 ```typescript
 // Bad: Exporting internal-only subcomponents
 export { InternalHelper };
@@ -849,7 +776,6 @@ Component TSDoc documentation must use the description from the design system on
 ### Do
 
 Use the description from the DSL ontology verbatim.
-
 ```typescript
 /**
  * The label component is a compact, non-interactive visual element used to
@@ -869,7 +795,6 @@ const Label = ({ children, criticality, className, ...props }: LabelProps) => (
 ### Don't
 
 Write custom descriptions that deviate from the DSL.
-
 ```typescript
 // Bad: Custom title and paraphrased description
 /**
@@ -880,7 +805,6 @@ Write custom descriptions that deviate from the DSL.
 ```
 
 Include @example blocks - stories fulfill this role.
-
 ```typescript
 // Bad: Examples belong in stories, not TSDoc
 /**
@@ -893,7 +817,6 @@ Include @example blocks - stories fulfill this role.
 ```
 
 Omit the @implements tag that links to the DSL.
-
 ```typescript
 // Bad: Missing @implements tag
 /**
@@ -912,7 +835,6 @@ A component's TSDoc must show how a consumer imports it: a single import stateme
 ### Do
 
 Add the backtick-wrapped import line before @implements.
-
 ```typescript
 /**
  * The label component is a compact, non-interactive visual element used to
@@ -927,7 +849,6 @@ Add the backtick-wrapped import line before @implements.
 ### Don't
 
 Use an @example or a fenced code block instead of the single backtick line.
-
 ```typescript
 // Bad: @example is forbidden; a fenced block is heavier than needed
 /**
@@ -939,7 +860,6 @@ Use an @example or a fenced code block instead of the single backtick line.
 ```
 
 Omit the blank line before the import, or drop the backticks.
-
 ```typescript
 // Bad: no blank line before, and no backticks
 /**
@@ -950,7 +870,6 @@ Omit the blank line before the import, or drop the backticks.
 ```
 
 Use the local declaration name when the barrel re-exports it under a different name.
-
 ```typescript
 // The component is declared locally as FieldError but exported as `Error`.
 // Bad: imports the local name, which the consumer cannot import
@@ -969,7 +888,11 @@ Use the local declaration name when the barrel re-exports it under a different n
 
 **Identifier:** `cs:react.hooks.custom`
 
-Custom hooks must separate concerns at the domain level. All hooks within a ComponentDomain/hooks directory are considered within the domain scope and should focus on a single concern. Custom hooks must be used when: - Logic needs to be shared between components - Component logic becomes complex - State management needs to be abstracted - Side effects need to be encapsulated
+Custom hooks must separate concerns at the domain level. All hooks within a ComponentDomain/hooks directory are considered within the domain scope and should focus on a single concern. Custom hooks must be used when:
+    - Logic needs to be shared between components
+    - Component logic becomes complex
+    - State management needs to be abstracted
+    - Side effects need to be encapsulated
 
 All of the types for a domain level's hooks must be defined in the `hooks/types.ts` file of that folder.
 Each hook must define a [HookName]Props and [HookName]Result type in `hooks/types.ts`.
@@ -977,7 +900,6 @@ Each hook must define a [HookName]Props and [HookName]Result type in `hooks/type
 ### Do
 
 Create a custom hook that focuses on a single concern within the domain.
-
 ```typescript
 // [MyComponent]/hooks/useWindowFitment.ts
 const useWindowFitment = ({
@@ -987,7 +909,6 @@ const useWindowFitment = ({
 ```
 
 Create hook types in `hooks/types.ts`.
-
 ```typescript
 // [MyComponent]/hooks/types.ts
 export interface UseWindowFitmentProps {
@@ -1026,7 +947,6 @@ export interface UseWindowFitmentResult {
 ### Don't
 
 Create a custom hook for simple, non-reusable state.
-
 ```tsx
 // Bad: Unnecessary abstraction for a simple counter
 const useCounter = () => {
@@ -1036,7 +956,6 @@ const useCounter = () => {
 ```
 
 Mix multiple concerns in a single hook
-
 ```typescript
 // Bad: Multiple concerns in one hook
 const useUserData = () => {
@@ -1059,21 +978,19 @@ The hook name must start with 'use' and clearly describe its purpose.
 ### Do
 
 Name custom hooks so the hook name starts with 'use' and is descriptive
-
 ```typescript
-useWindowSize();
-useAuthentication();
-useFormValidation();
+useWindowSize()
+useAuthentication()
+useFormValidation()
 ```
 
 ### Don't
 
 Name hooks without the 'use' prefix at the start of the hook name
-
 ```typescript
-windowSize();
-getAuth();
-formValidation();
+windowSize()
+getAuth()
+formValidation()
 ```
 
 ---

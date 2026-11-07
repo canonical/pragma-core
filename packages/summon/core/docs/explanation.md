@@ -1,12 +1,12 @@
 # Explanation: Why Effects as Data?
 
-This document explores the ideas behind Summon. If you want to _use_ Summon, start with the [Tutorial](tutorial.md). If you want to look up specific functions, see the [Reference](reference.md). This is for when you want to _understand_ why Summon works the way it does.
+This document explores the ideas behind Summon. If you want to *use* Summon, start with the [Tutorial](tutorial.md). If you want to look up specific functions, see the [Reference](reference.md). This is for when you want to *understand* why Summon works the way it does.
 
 ---
 
 ## The Problem with Traditional Generators
 
-Code generators like Yeoman, Plop, and Hygen are fundamentally imperative. When you call `fs.writeFile()`, the file is written. When you call `exec("npm install")`, the command runs. The generator _does things_ as it executes.
+Code generators like Yeoman, Plop, and Hygen are fundamentally imperative. When you call `fs.writeFile()`, the file is written. When you call `exec("npm install")`, the command runs. The generator *does things* as it executes.
 
 This creates three interconnected problems:
 
@@ -39,7 +39,7 @@ if (fs.existsSync("config.json")) {
 }
 ```
 
-In dry-run mode, `existsSync` returns the _actual_ filesystem state, not the state that would exist after previous dry-run operations. If an earlier part of your generator would create `config.json`, the dry-run can't know that.
+In dry-run mode, `existsSync` returns the *actual* filesystem state, not the state that would exist after previous dry-run operations. If an earlier part of your generator would create `config.json`, the dry-run can't know that.
 
 The preview lies. Users see "would create config.json" but can't trust the full picture.
 
@@ -92,7 +92,7 @@ async function scaffoldFeature(answers) {
 }
 ```
 
-Error handling is scattered. State is passed manually. There's no way to inspect what operations _would_ happen before they do.
+Error handling is scattered. State is passed manually. There's no way to inspect what operations *would* happen before they do.
 
 ---
 
@@ -100,7 +100,7 @@ Error handling is scattered. State is passed manually. There's no way to inspect
 
 Summon's key insight is borrowed from functional programming: **effects should be data, not actions**.
 
-Instead of _doing_ things, your generator _describes_ what to do. The description is a data structure — a `Task` — that can be inspected, transformed, and interpreted in different ways.
+Instead of *doing* things, your generator *describes* what to do. The description is a data structure — a `Task` — that can be inspected, transformed, and interpreted in different ways.
 
 ```typescript
 // Traditional: does things
@@ -124,7 +124,7 @@ The Summon version returns a `Task<void>`. That Task contains effect objects:
 [
   { _tag: "MakeDir", path: "src/Button", recursive: true },
   { _tag: "WriteFile", path: "src/Button/index.ts", content: "..." },
-];
+]
 ```
 
 These are plain JavaScript objects. Data. They don't do anything by themselves.
@@ -221,7 +221,7 @@ test("creates files", () => {
 });
 ```
 
-You're testing the _description_ of what would happen, not the side effects of what did happen.
+You're testing the *description* of what would happen, not the side effects of what did happen.
 
 ### Composable Abstractions
 
@@ -271,12 +271,12 @@ without forking execution:
 - a **log sink** and an abort **signal**.
 
 This is the payoff of the interpreter pattern taken one step further: not just
-"same generator, different interpreters," but _one_ interpreter shared across
+"same generator, different interpreters," but *one* interpreter shared across
 every binary, with the UI held at the edges.
 
 A note on prompting today: form-first generators (a static `prompts` list plus
 `generate(answers)`) have their answers gathered up front — summon's Ink wizard,
-pragma's readline session — and any `Prompt` effect raised _during_ execution
+pragma's readline session — and any `Prompt` effect raised *during* execution
 resolves to its default. The Task alphabet already carries `Prompt` as a
 first-class effect, so a generator that asks a question mid-run is expressible;
 wiring the execution-phase handler to an interactive UI is the remaining step to
@@ -293,7 +293,6 @@ Summon's approach comes from a long tradition in functional programming:
 The pattern of describing effects as data and interpreting them later is called the "free monad" or "effect system" pattern. Languages like Haskell, PureScript, and Scala have entire ecosystems built on this idea.
 
 The core insight: if side effects are values, you can:
-
 - Inspect them before running
 - Transform them (add logging, change paths, etc.)
 - Interpret them differently in different contexts
@@ -301,7 +300,7 @@ The core insight: if side effects are values, you can:
 
 ### IO Monad
 
-Haskell's IO monad pioneered the idea that effectful computations are values. `IO String` is a _description_ of a computation that produces a string — it doesn't run until the runtime interprets it.
+Haskell's IO monad pioneered the idea that effectful computations are values. `IO String` is a *description* of a computation that produces a string — it doesn't run until the runtime interprets it.
 
 ### Algebraic Effects
 

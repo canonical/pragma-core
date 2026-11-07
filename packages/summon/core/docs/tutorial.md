@@ -182,7 +182,7 @@ test("<%= kebabCase(name) %> renders heading", async () => {
 
 ### `src/templates/README.md.ejs`
 
-````ejs
+```ejs
 # <%= pascalCase(name) %>
 
 A Lit web component project.
@@ -192,18 +192,16 @@ A Lit web component project.
 ```bash
 <%= packageManager %> install
 <%= packageManager %> run dev
-````
+```
 
 Open http://localhost:5173 in your browser.
 <% if (withTests) { %>
-
 ## Testing
 
 ```bash
 <%= packageManager %> run test
 ```
 <% } %>
-
 ## Building
 
 ```bash
@@ -211,8 +209,7 @@ Open http://localhost:5173 in your browser.
 ```
 
 Output goes to `dist/`.
-
-````
+```
 
 ---
 
@@ -371,7 +368,7 @@ const generator: GeneratorDefinition<Answers> = {
 export const generators: Record<string, AnyGenerator> = {
   "lit-app": generator,
 };
-````
+```
 
 Let's unpack what's happening:
 
@@ -470,7 +467,7 @@ describe("lit-app generator", () => {
     const { effects } = dryRun(task);
 
     const writes = filterEffects(effects, "WriteFile");
-    const readme = writes.find((w) => w.path === "test-app/README.md");
+    const readme = writes.find(w => w.path === "test-app/README.md");
 
     expect(readme?.content).toContain("pnpm install");
     expect(readme?.content).toContain("pnpm run dev");

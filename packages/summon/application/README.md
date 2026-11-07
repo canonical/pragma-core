@@ -125,7 +125,7 @@ Kept: the e2e suite. Its harness spawns a script and polls HTTP — `vite` and
 
 **What a SPA gives up.** The client router still performs the auth redirect,
 the `/home` redirect and the not-found route. What is lost is the HTTP status
-on a _cold_ request — no 404, 301 or 302 from a server — plus `/sitemap.xml`
+on a *cold* request — no 404, 301 or 302 from a server — plus `/sitemap.xml`
 and the server-painted first paint (`<html lang dir>` and the cookie-derived
 theme class), so expect a brief default theme/locale flash. With `--relay` the
 catalog page always suspends and fetches rather than arriving with prefetched
@@ -326,13 +326,13 @@ src/
 
 ### Naming
 
-| Concept           | Pattern                  | Example                         |
-| ----------------- | ------------------------ | ------------------------------- |
-| Page component    | `{Name}Page.tsx`         | `SettingsPage.tsx`              |
-| Layout component  | `{Name}Layout.tsx`       | `SidebarLayout.tsx`             |
-| Domain routes     | `routes.ts` (not `.tsx`) | `src/domains/billing/routes.ts` |
-| Root routes       | `routes.tsx`             | `src/routes.tsx`                |
-| Component folders | PascalCase               | `src/lib/SidebarLayout/`        |
+| Concept | Pattern | Example |
+|---------|---------|---------|
+| Page component | `{Name}Page.tsx` | `SettingsPage.tsx` |
+| Layout component | `{Name}Layout.tsx` | `SidebarLayout.tsx` |
+| Domain routes | `routes.ts` (not `.tsx`) | `src/domains/billing/routes.ts` |
+| Root routes | `routes.tsx` | `src/routes.tsx` |
+| Component folders | PascalCase | `src/lib/SidebarLayout/` |
 
 ### Route definitions
 
@@ -429,14 +429,14 @@ Design decisions about the generated output that are not yet settled:
   Renovate keeps current. The pragma-core packages (`biome-config`) take
   `^<installed generator version>`, since `@canonical/summon-application` is released in
   lockstep with them. No lookup happens at summon time, so scaffolding is offline and
-  reproducible. Note `@canonical/design-tokens` is versioned separately and is _not_
+  reproducible. Note `@canonical/design-tokens` is versioned separately and is *not*
   covered here (it arrives transitively via `@canonical/styles`). **Open:** whether to let
   users pin explicitly.
 
 - **Two static-asset folders (`src/assets/` + `public/`).** The generated app ships both,
   and `.storybook/main.ts` lists `staticDirs: ["../src/assets", "../public"]` to match the
   `@canonical/react-ds-global` convention. The two serve different roles under Vite —
-  `src/assets/` for assets _imported in code_ (hashed/optimized, dropped if unused), `public/`
+  `src/assets/` for assets *imported in code* (hashed/optimized, dropped if unused), `public/`
   for files referenced by fixed URL (favicon, `robots.txt`, served as-is, unhashed). **Open:**
   whether a scaffolded app genuinely needs both by default, or whether one (likely just
   `public/` for a favicon) is enough and `src/assets/` should be added only when the app

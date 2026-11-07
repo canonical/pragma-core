@@ -5,7 +5,6 @@ This package provides a central configuration for Canonical's TypeScript project
 For React projects, see the [React configuration](https://www.npmjs.com/package/@canonical/typescript-config-react).
 
 ## Getting Started
-
 1. Install Typescript: `bun add -d typescript`
 2. Install this configuration: `bun add -d @canonical/typescript-config`
 3. Create a `tsconfig.json` file in the root of your project and extend this configuration.
@@ -19,16 +18,15 @@ For React projects, see the [React configuration](https://www.npmjs.com/package/
 ## Configuration
 
 This configuration enables the following behavior:
-
 1. [`ES2023` library](https://www.typescriptlang.org/tsconfig/#lib) inclusion: Includes the `ES2023` library for TypeScript projects.
 2. [`NodeNext` module](https://www.typescriptlang.org/tsconfig/#module): enables module resolution for Node projects with both CJS & ESM support.
    1. Explicit import file extensions (e.g., `./Button/index.js` instead of `./Button`).
-3. `ES2023` target: Targets the `ES2023` ECMAScript version. Emits modern JavaScript syntax, omits legacy transforms and polyfills.
+3. `ES2023` target: Targets the `ES2023` ECMAScript version. Emits modern JavaScript syntax, omits legacy transforms and polyfills. 
 4. [Strict mode](https://www.typescriptlang.org/tsconfig/#strict): Enables strict type checking & several other strictness settings.
 
 ### History
 
-This configuration is rooted in the [Canonical React Components Typescript config](https://github.com/canonical/react-components/blob/30cc5e338f1fbca75625a94993bccd6cf902fc28/tsconfig.json).
+This configuration is rooted in the [Canonical React Components Typescript config](https://github.com/canonical/react-components/blob/30cc5e338f1fbca75625a94993bccd6cf902fc28/tsconfig.json). 
 It has been generalized to support non-React projects and be more minimal.
 
 The following options have been changed from the original configuration:
@@ -59,3 +57,4 @@ Best Practices:
 This approach maintains compatibility with both Node.js and bundlers.
 
 In other words, by using NodeNext, we are aiming at compatibility with the ES Module specification, and this requires importing explicitly `mymodule/index.js` files instead of simply `mymodule/`.
+

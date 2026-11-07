@@ -11,7 +11,6 @@ Express form constraints with native HTML attributes (e.g., `required`, `type=em
 ### Do
 
 Declare constraints natively and style after interaction.
-
 ```html
 <label for="email">Email</label>
 <input id="email" name="email" type="email" required />
@@ -23,7 +22,6 @@ Declare constraints natively and style after interaction.
 ### Don't
 
 Disable native validation by default and rebuild it in JavaScript.
-
 ```html
 <form novalidate>
   <input name="email" /><!-- all checks deferred to a script -->
@@ -41,7 +39,6 @@ Use native lazy-loading (`loading=lazy`, `decoding=async`) and responsive source
 ### Do
 
 Defer offscreen images natively while keeping a real, responsive source.
-
 ```html
 <img src="card-800.jpg" srcset="card-400.jpg 400w, card-800.jpg 800w"
      sizes="(max-width: 600px) 400px, 800px"
@@ -51,7 +48,6 @@ Defer offscreen images natively while keeping a real, responsive source.
 ### Don't
 
 Defer real media sources to JavaScript with placeholder-src lazy-loader patterns.
-
 ```html
 <img src="blank.gif" data-src="card-800.jpg" class="lazy" alt="Product overview" />
 ```
@@ -67,7 +63,6 @@ Build every UI block in layers: semantic HTML first, CSS for presentation and de
 ### Do
 
 Render the core task in HTML that works on its own; a real link navigates and a real form submits to a server endpoint.
-
 ```html
 <form action="/search" method="get">
   <label for="q">Search</label>
@@ -79,7 +74,6 @@ Render the core task in HTML that works on its own; a real link navigates and a 
 ### Don't
 
 Gate the core task behind JavaScript so it is unreachable until, and unless, a script runs.
-
 ```html
 <div class="button" onclick="doSearch()">Search</div>
 ```
@@ -99,7 +93,6 @@ Do not server-render ARIA roles, states, or properties that advertise interactiv
 ### Do
 
 Render a semantic baseline first; apply ARIA contracts only after hydration and behavior wiring are active.
-
 ```html
 <nav><a href="#overview">Overview</a> <a href="#specs">Specs</a></nav>
 <section id="overview"><h2>Overview</h2>...</section>
@@ -116,7 +109,6 @@ Render a semantic baseline first; apply ARIA contracts only after hydration and 
 ### Don't
 
 Server-render ARIA semantics before hydration when scripts may fail or be unavailable.
-
 ```html
 <div role="tablist">
   <button role="tab" aria-selected="true" aria-controls="overview">Overview</button>
@@ -135,7 +127,6 @@ Use native `<dialog>` for modal dialogs and control it declaratively with invoke
 ### Do
 
 Open and close a modal declaratively with invoker commands.
-
 ```html
 <button commandfor="confirm" command="show-modal">Delete</button>
 <dialog id="confirm" aria-labelledby="confirm-title">
@@ -147,7 +138,6 @@ Open and close a modal declaratively with invoker commands.
 ### Don't
 
 Fake a modal with a positioned div, which lacks focus trapping and background inertness.
-
 ```html
 <div class="overlay"><div class="modal" role="dialog">...</div></div>
 ```
@@ -163,7 +153,6 @@ Use native `<details>` and `<summary>` for disclosure. Use a shared `name` attri
 ### Do
 
 Build a single-open accordion by giving each `<details>` the same `name`.
-
 ```html
 <details name="faq">
   <summary>How do I reset my password?</summary>
@@ -178,7 +167,6 @@ Build a single-open accordion by giving each `<details>` the same `name`.
 ### Don't
 
 Re-implement disclosure with a generic element and JavaScript, losing built-in focus, keyboard, and state semantics.
-
 ```html
 <div class="summary" onclick="toggle(this)">How do I reset my password?</div>
 <div class="panel" hidden>Use the reset link on the sign-in page.</div>
@@ -195,7 +183,6 @@ Wire buttons to interactive elements declaratively with the Invoker Commands API
 ### Do
 
 Use a built-in command to toggle a popover with no event listener.
-
 ```html
 <button commandfor="tips" command="toggle-popover">Tips</button>
 <div id="tips" popover>Keyboard shortcuts: ...</div>
@@ -204,11 +191,8 @@ Use a built-in command to toggle a popover with no event listener.
 ### Don't
 
 Reach for a click listener for an action the platform already provides declaratively.
-
 ```javascript
-document
-  .querySelector("#btn")
-  .addEventListener("click", () => tips.togglePopover());
+document.querySelector('#btn').addEventListener('click', () => tips.togglePopover());
 ```
 
 ---
@@ -222,7 +206,6 @@ Use the declarative Popover API (`popover` with `popovertarget`) for non-modal o
 ### Do
 
 Toggle a non-modal menu declaratively with popovertarget.
-
 ```html
 <button popovertarget="menu">Actions</button>
 <div id="menu" popover>
@@ -234,7 +217,6 @@ Toggle a non-modal menu declaratively with popovertarget.
 ### Don't
 
 Hand-roll an overlay with manual outside-click and Escape handling that only works once JavaScript runs.
-
 ```html
 <button onclick="openMenu()">Actions</button>
 <div class="menu" style="display:none" id="menu"><!-- bespoke dismiss logic --></div>
@@ -251,7 +233,6 @@ Use `:checked` styling for real form state only (checkboxes and radios that subm
 ### Do
 
 Use a real checkbox for a real on/off setting that submits with the form.
-
 ```html
 <label><input type="checkbox" name="notifications" /> Email notifications</label>
 ```
@@ -259,7 +240,6 @@ Use a real checkbox for a real on/off setting that submits with the form.
 ### Don't
 
 Drive a navigation menu with a hidden checkbox, exposing checkbox semantics for a button-like control.
-
 ```html
 <input type="checkbox" id="nav-toggle" hidden>
 <label for="nav-toggle">Menu</label>

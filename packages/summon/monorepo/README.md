@@ -53,33 +53,33 @@ summon monorepo --name=my-project --description="My awesome project"
 
 ## Parameters
 
-| Parameter          | Type                    | Default                        | Description                            |
-| ------------------ | ----------------------- | ------------------------------ | -------------------------------------- |
-| `name`             | string                  | `my-monorepo`                  | Monorepo name (kebab-case), used as-is |
-| `description`      | string                  | `""`                           | Description                            |
-| `license`          | `LGPL-3.0` \| `GPL-3.0` | `LGPL-3.0`                     | Root license                           |
-| `typescriptConfig` | string                  | `@canonical/typescript-config` | Shared TypeScript config               |
-| `repository`       | string                  | `""`                           | GitHub repository URL                  |
-| `bunVersion`       | string                  | `1.3.9`                        | Pinned Bun version for CI              |
-| `initGit`          | boolean                 | `true`                         | Initialize git repository              |
-| `runInstall`       | boolean                 | `true`                         | Run `bun install` after creation       |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `name` | string | `my-monorepo` | Monorepo name (kebab-case), used as-is |
+| `description` | string | `""` | Description |
+| `license` | `LGPL-3.0` \| `GPL-3.0` | `LGPL-3.0` | Root license |
+| `typescriptConfig` | string | `@canonical/typescript-config` | Shared TypeScript config |
+| `repository` | string | `""` | GitHub repository URL |
+| `bunVersion` | string | `1.3.9` | Pinned Bun version for CI |
+| `initGit` | boolean | `true` | Initialize git repository |
+| `runInstall` | boolean | `true` | Run `bun install` after creation |
 
 ## Opinionated Defaults
 
-| Decision          | Value                                                           |
-| ----------------- | --------------------------------------------------------------- |
-| Package manager   | Bun (pinned, lockfile committed)                                |
-| Module system     | ESM (`"type": "module"`)                                        |
-| Build output      | `dist/esm/` + `dist/types/`                                     |
-| Test runner       | Vitest with v8 coverage                                         |
-| Test file pattern | `*.test.ts`                                                     |
-| Linter/formatter  | Biome via `@canonical/biome-config`                             |
-| Versioning        | Lerna fixed mode                                                |
-| Orchestration     | Lerna + Nx caching                                              |
-| CI                | Two parallel jobs (check + build-and-test)                      |
-| PR lint           | Conventional commits (`amannn/action-semantic-pull-request@v6`) |
-| Merge strategy    | Squash merge with PR title                                      |
-| Release           | `tag.yml` workflow_dispatch, npm OIDC trusted publishing        |
+| Decision | Value |
+|----------|-------|
+| Package manager | Bun (pinned, lockfile committed) |
+| Module system | ESM (`"type": "module"`) |
+| Build output | `dist/esm/` + `dist/types/` |
+| Test runner | Vitest with v8 coverage |
+| Test file pattern | `*.test.ts` |
+| Linter/formatter | Biome via `@canonical/biome-config` |
+| Versioning | Lerna fixed mode |
+| Orchestration | Lerna + Nx caching |
+| CI | Two parallel jobs (check + build-and-test) |
+| PR lint | Conventional commits (`amannn/action-semantic-pull-request@v6`) |
+| Merge strategy | Squash merge with PR title |
+| Release | `tag.yml` workflow_dispatch, npm OIDC trusted publishing |
 
 ## Post-Setup Actions
 

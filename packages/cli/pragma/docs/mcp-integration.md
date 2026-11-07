@@ -56,6 +56,7 @@ Beyond tools, the server exposes three surfaces:
   `resources/list` is CURATED, not paged. MCP defines a `cursor`/`nextCursor` contract, but the SDK's high-level server ignores it, so everything listed is sent on every connect — enumerating all 714 indexed entities cost ~155 KB of an agent's context before it had asked anything. So the listing carries the **collections** (one entry per addressable class, with `pragma/instanceCount`) and the **schema** that describes them, ~35 KB in this distribution. Each entry names itself by its stable prefixed URI, `title`s itself with the graph's human name, and reports `pragma/box` / `pragma/type` / `pragma/instanceCount` in `_meta` so a client can filter without a read. The individuals are not enumerated: reach them by completing the `uri` template variable, which offers every matching entity and reports `total`/`hasMore` truthfully.
 
   A read returns the entity's **graph neighbourhood** as a Turtle document (`text/turtle`) — not just its own triples, and not JSON. The `@prefix` header is declared once, then:
+
   - the subject's own triples, with long literals previewed (`"""…"""`) and a `#` comment stating the full length;
   - its blank-node objects inlined one level as Turtle `[ … ]` records, since a blank node's label is store-local and cannot be read back through the template;
   - a `# ── referenced by ──` section carrying the edges that point **at** the subject, written as ordinary triples in the other direction.
@@ -89,6 +90,6 @@ Two different things introduce the server to its machine peers, and they deliber
 
 ## Plan-first mutations
 
-Every mutating tool is **plan-first**. Called without `confirm: true`, it returns the plan it _would_ apply (`{ planOnly: true, confirmRequired: true }`) instead of acting. Called with `confirm: true`, it executes. A mutating tool also accepts an optional `cwd` — an absolute project directory to write into — which defaults to the server's working directory and is validated as the single write root the security jail and the effect interpreter share.
+Every mutating tool is **plan-first**. Called without `confirm: true`, it returns the plan it *would* apply (`{ planOnly: true, confirmRequired: true }`) instead of acting. Called with `confirm: true`, it executes. A mutating tool also accepts an optional `cwd` — an absolute project directory to write into — which defaults to the server's working directory and is validated as the single write root the security jail and the effect interpreter share.
 
 This mirrors the CLI's `--dry-run` / `--yes` contract: an agent previews, then confirms. See the [tool reference](./reference/tools.md) for the per-tool input schema and the [errors reference](./reference/errors.md) for the response envelope.

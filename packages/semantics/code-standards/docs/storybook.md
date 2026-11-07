@@ -11,7 +11,6 @@ Stories that render container-escaping elements — top-layer dialogs and popove
 ### Do
 
 Render container-escaping stories as iframed previews.
-
 ```typescript
 const meta = {
   title: "patterns/Modal",
@@ -30,7 +29,6 @@ const meta = {
 ### Don't
 
 Render container-escaping stories inline.
-
 ```typescript
 const meta = {
   title: "patterns/Modal",
@@ -57,7 +55,6 @@ Component documentation must primarily come from TSDoc comments on the component
 ### Do
 
 Use TSDoc comments for primary documentation.
-
 ```typescript
 // ContextualMenu/types.ts
 export interface ContextualMenuProps extends HTMLAttributes<HTMLDivElement> {
@@ -83,17 +80,15 @@ const ContextualMenu = ({
 ### Don't
 
 Add documentation in Storybook parameters when TSDoc is sufficient.
-
 ```typescript
 export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        component:
-          "A wrapper component that adds a contextual menu to its children", // Covered in TSDoc
-      },
-    },
-  },
+        component: "A wrapper component that adds a contextual menu to its children" // Covered in TSDoc
+      }
+    }
+  }
 };
 ```
 
@@ -108,7 +103,6 @@ Decorators must be used to wrap stories in common context providers or layout el
 ### Do
 
 Use decorators for static context or layout wrapping.
-
 ```typescript
 // storybook/decorators.tsx
 
@@ -145,7 +139,6 @@ export default meta;
 ### Don't
 
 Use function-based stories for static wrapping that could be done with decorators.
-
 ```typescript
 // Bad: Using function-based story for static wrapping
 export const WithTheme = (args: ComponentProps) => (
@@ -166,7 +159,6 @@ Story documentation must focus on usage patterns and variations, not implementat
 ### Do
 
 Document usage patterns and variations.
-
 ```typescript
 export const WithCustomTrigger: Story = {
   args: {
@@ -185,16 +177,15 @@ export const WithCustomTrigger: Story = {
 ### Don't
 
 Document implementation details or internal behavior.
-
 ```typescript
 export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Uses React.createPortal internally to render the popup", // Bad: Implementation detail
-      },
-    },
-  },
+        story: "Uses React.createPortal internally to render the popup" // Bad: Implementation detail
+      }
+    }
+  }
 };
 ```
 
@@ -213,7 +204,6 @@ Every story title's top segment must be one of the seven order keys — there is
 ### Do
 
 Folder by ontology tier and mirror the tier in each story title.
-
 ```typescript
 // src/lib/component/Accordion/Accordion.stories.tsx
 // Accordion IS an ontology entry of type Component.
@@ -240,7 +230,6 @@ const meta = {
 ### Don't
 
 Title with a maturity tag or an un-foldered segment that matches no order key.
-
 ```typescript
 // Bad: maturity tag as the top segment (not an order key — floats in the sidebar).
 const meta = {
@@ -260,7 +249,6 @@ const meta = {
 **Identifier:** `cs:storybook.story.format`
 
 Stories must use one of three formats, each serving specific needs:
-
 1. CSF3 (object-based) format must be used for standard component variations where args define the component state.
 2. Function-based format must be used when the story needs to directly control component rendering or wrap the component with custom elements.
 3. Template-based format must be used when multiple stories share the same logic but differ in their args, and the template differs from the component markup.
@@ -268,7 +256,6 @@ Stories must use one of three formats, each serving specific needs:
 ### Do
 
 Use the format that matches your specific use case.
-
 ```typescript
 // CSF3: For standard component variations through args
 type Story = StoryObj<typeof meta>;
@@ -308,7 +295,6 @@ Primary.args = { variant: "primary" };
 ### Don't
 
 Use a format that doesn't match your use case.
-
 ```typescript
 // Bad: Using function format for simple args variation
 export const SimpleButton = () => (
@@ -339,7 +325,6 @@ Stories must import their component as 'Component' to maintain a consistent, gen
 ### Do
 
 Import the component generically as 'Component'.
-
 ```typescript
 import Component from "./SkipLink.js";
 
@@ -350,21 +335,20 @@ const meta = {
 
 export const Default: Story = {
   args: {
-    children: "Skip to main content",
-  },
+    children: "Skip to main content"
+  }
 };
 ```
 
 ### Don't
 
 Import the component using its specific name.
-
 ```typescript
 import SkipLink from "./SkipLink.js";
 
 const meta = {
   title: "SkipLink",
-  component: SkipLink, // Bad: Using specific component name
+  component: SkipLink,  // Bad: Using specific component name
 } satisfies Meta<typeof SkipLink>;
 ```
 
@@ -379,34 +363,31 @@ Story names must be descriptive and follow a consistent pattern. Use PascalCase 
 ### Do
 
 Use clear, descriptive names that indicate the variation.
-
 ```typescript
 export const WithCustomStyles: Story = {
   args: {
     className: "custom",
-    children: "Styled Content",
+    children: "Styled Content"
   },
   parameters: {
     docs: {
       description: {
-        story: "Demonstrates custom styling options",
-      },
-    },
-  },
+        story: "Demonstrates custom styling options"
+      }
+    }
+  }
 };
 ```
 
 ### Don't
 
 Use technical or implementation-focused names.
-
 ```typescript
-export const TestCase1: Story = {
-  // Bad: Non-descriptive name
+export const TestCase1: Story = {  // Bad: Non-descriptive name
   args: {
-    _testFlag: true, // Bad: Implementation detail
-    children: "Content",
-  },
+    _testFlag: true,  // Bad: Implementation detail
+    children: "Content"
+  }
 };
 ```
 
@@ -421,37 +402,35 @@ Stories must be organized into logical groups that demonstrate related features 
 ### Do
 
 Group related features with clear, descriptive names.
-
 ```typescript
 // Basic usage
 export const Default: Story = {
   args: {
     mainId: "main",
-    children: "Skip to main content",
-  },
+    children: "Skip to main content"
+  }
 };
 
 // Custom element targeting
 export const CustomMainElement: Story = {
   args: {
     mainId: "my-main-element",
-    children: "Skip to main content",
-  },
+    children: "Skip to main content"
+  }
 };
 
 // Content customization
 export const CustomText: Story = {
   args: {
     mainId: "main",
-    children: "Jump to content",
-  },
+    children: "Jump to content"
+  }
 };
 ```
 
 ### Don't
 
 Use unclear names or mix unrelated features in a single story.
-
 ```typescript
 // Bad: Unclear what this story demonstrates
 export const Variant1: Story = {
@@ -460,8 +439,8 @@ export const Variant1: Story = {
     children: "Skip",
     className: "special",
     onClick: () => {},
-    style: { color: "red" },
-  },
+    style: { color: "red" }
+  }
 };
 ```
 
@@ -478,7 +457,6 @@ Only free-standing subcomponents — those with no parent component — get thei
 ### Do
 
 Nest a parented subcomponent's story under its parent component.
-
 ```typescript
 // src/lib/component/Accordion/common/Item/Item.stories.tsx
 // Item has a parent (Accordion): stays nested, title nests under the parent.
@@ -491,7 +469,6 @@ const meta = {
 ### Don't
 
 Hoist a parented subcomponent to a top-level subcomponent/ folder or the subcomponents/ sidebar group.
-
 ```typescript
 // Bad: hoisting a parented subcomponent to a top-level subcomponent/ folder.
 // Item has a parent Accordion, so it must stay nested in the parent's common/
@@ -514,31 +491,29 @@ Stories that test component behavior must use the `play` function to simulate us
 ### Do
 
 Use play functions to test interactive behavior.
-
 ```typescript
 export const InteractionTest: Story = {
   args: {
     children: "Click Me",
-    onClick: () => {},
+    onClick: () => {}
   },
   play: async ({ canvasElement, args }) => {
     const button = canvasElement.querySelector("button");
     await userEvent.click(button);
     await expect(args.onClick).toHaveBeenCalled();
-  },
+  }
 };
 ```
 
 ### Don't
 
 Test implementation details or internal state.
-
 ```typescript
 export const InternalTest: Story = {
   play: async ({ component }) => {
     // Bad: Testing internal implementation
     expect(component._internalState).toBe(true);
-  },
+  }
 };
 ```
 
@@ -553,36 +528,34 @@ Stories that exist solely for testing or visual coverage but don't represent val
 ### Do
 
 Hide test-only stories that don't represent valid usage.
-
 ```typescript
 export const FocusedState: Story = {
   args: {
     isOpen: true,
-    children: "Test Content",
+    children: "Test Content"
   },
   tags: ["!dev", "!autodocs"],
   play: async ({ canvasElement }) => {
     const element = canvasElement.querySelector(".component");
     element.focus();
-  },
+  }
 };
 ```
 
 ### Don't
 
 Show implementation details or test states in documentation.
-
 ```typescript
 export const InternalTestState: Story = {
   args: {
-    _internalProp: true, // Bad: Exposing internal state
-    children: "Test",
+    _internalProp: true,  // Bad: Exposing internal state
+    children: "Test"
   },
   parameters: {
     docs: {
-      description: { story: "Tests internal state" }, // Bad: Implementation detail
-    },
-  },
+      description: { story: "Tests internal state" }  // Bad: Implementation detail
+    }
+  }
 };
 ```
 

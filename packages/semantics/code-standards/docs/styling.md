@@ -11,7 +11,6 @@ Themes are collections of semantic tokens that provide consistent styling across
 ### Do
 
 Define a theme as a complete set of semantic tokens.
-
 ```
 {
   "theme": {
@@ -32,7 +31,6 @@ Define a theme as a complete set of semantic tokens.
 ### Don't
 
 Mix implementation details into theme definitions.
-
 ```
 {
   "theme": {
@@ -55,7 +53,6 @@ Design tokens must be created for all design decisions in a component. See cs:cs
 ### Do
 
 Create component tokens that reference semantic tokens for design decisions.
-
 ```
 {
   "button": {
@@ -70,7 +67,6 @@ Create component tokens that reference semantic tokens for design decisions.
 ### Don't
 
 Use raw values for design decisions.
-
 ```
 {
   "button": {
@@ -89,7 +85,6 @@ Use raw values for design decisions.
 **Identifier:** `cs:styling.tokens.scoping`
 
 Design tokens must be scoped according to their type:
-
 - Primitive tokens: Global scope (system-wide base values)
 - Semantic tokens: Theme scope (theme-specific bindings to primitive tokens)
 - Component tokens: Component scope (bindings to semantic tokens)
@@ -97,7 +92,6 @@ Design tokens must be scoped according to their type:
 ### Do
 
 Define primitive tokens in global scope.
-
 ```
 {
   "color": {
@@ -114,7 +108,6 @@ Define primitive tokens in global scope.
 ### Don't
 
 Define primitive tokens in theme scope.
-
 ```
 {
   "theme": {
@@ -138,12 +131,14 @@ Define primitive tokens in theme scope.
 
 **Identifier:** `cs:styling.tokens.types`
 
-Design tokens follow a strict hierarchy: - Primitive tokens: Raw values that form the foundation of the design system - Semantic tokens: Map semantic concepts to primitive token values - Component tokens: Map component properties to semantic token values
+Design tokens follow a strict hierarchy:
+      - Primitive tokens: Raw values that form the foundation of the design system
+      - Semantic tokens: Map semantic concepts to primitive token values
+      - Component tokens: Map component properties to semantic token values
 
 ### Do
 
 Define semantic tokens that map to primitive tokens.
-
 ```
 {
   "color": {
@@ -160,7 +155,6 @@ Define semantic tokens that map to primitive tokens.
 ### Don't
 
 Skip the semantic layer by mapping component tokens directly to primitives.
-
 ```
 {
   "button": {

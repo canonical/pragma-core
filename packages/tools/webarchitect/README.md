@@ -10,12 +10,12 @@ webarchitect library
 
 Pragma uses four rulesets:
 
-| Ruleset   | License  | Use Case                                                    |
-| --------- | -------- | ----------------------------------------------------------- |
-| `library` | LGPL-3.0 | Packages consumed by other packages or applications         |
-| `tool`    | GPL-3.0  | Compiled CLI tools with a build step                        |
-| `tool-ts` | GPL-3.0  | TypeScript tools that run directly with Bun (no build)      |
-| `assets`  | LGPL-3.0 | Asset packages (design tokens, fonts) with no build scripts |
+| Ruleset | License | Use Case |
+|---------|---------|----------|
+| `library` | LGPL-3.0 | Packages consumed by other packages or applications |
+| `tool` | GPL-3.0 | Compiled CLI tools with a build step |
+| `tool-ts` | GPL-3.0 | TypeScript tools that run directly with Bun (no build) |
+| `assets` | LGPL-3.0 | Asset packages (design tokens, fonts) with no build scripts |
 
 Each ruleset validates package.json structure, required scripts, TypeScript configuration, Biome setup, and license compliance.
 
@@ -36,7 +36,6 @@ Running `bun run check:webarchitect` validates that the package has correct expo
 ## What It Validates
 
 Webarchitect checks that:
-
 - `package.json` has required fields (name, version, type, module, types, exports)
 - `biome.json` extends `@canonical/biome-config`
 - `tsconfig.json` exists with proper configuration
@@ -105,7 +104,7 @@ Webarchitect comes with several built-in rulesets that cover common project patt
 
 - `base-package`: Extends the base ruleset with comprehensive package requirements. This ruleset validates that your package.json contains required fields like name, version, type, and scripts, ensures consistent module structure with specific entry points, validates biome.json configuration for code formatting and linting, and enforces the use of ES modules and TypeScript.
 
-- `package-react`: - Extends base-package with React-specific requirements. This ruleset includes all the base package validations plus verification that React 19 or higher is specified as a dependency, ensuring your React projects use compatible versions.
+- `package-react`: - Extends base-package with React-specific requirements. This ruleset includes all the base package validations plus verification that React 19 or higher is specified as a dependency, ensuring your React projects use compatible versions. 
 
 - `package-svelte`: Extends the `package` ruleset for Svelte packages by redirecting output to a `dist/` folder built via **`svelte-package`** (necessary to compile components into valid JavaScript with the correct export conditions for bundlers) and requiring `check:ts` to run **`svelte-check`** (essential to leverage Svelte's additional type inference and specific validation logic that standard `tsc` does not provide).
 
@@ -153,8 +152,8 @@ The built-in rulesets use this to enforce the package-name prefix: `package` and
   "name": "package",
   "variables": {
     "prefix": {
-      "default": "@canonical/", // used when no override is supplied
-      "schema": { "type": "string" } // optional: validates override values
+      "default": "@canonical/",        // used when no override is supplied
+      "schema": { "type": "string" }   // optional: validates override values
     }
   },
   "package-structure": {
@@ -186,7 +185,7 @@ Resolution rules:
 - If a variable declares a `schema`, the override value is validated against it (via JSON Schema) before substitution.
 - Overriding a variable that the ruleset does not declare is an error, as is referencing an undeclared `${name}` token inside a rule — both surface typos early. This means `--prefix`/`--var prefix=…` only apply to the prefix-family rulesets above; passing them to a ruleset without a `prefix` variable (e.g. `base`, `assets`) is rejected.
 - Variables declared in a parent ruleset are inherited by rulesets that `extends` it; a child may add or refine variables without dropping inherited ones.
-- Values substituted into a rule's `pattern` are treated as regular-expression fragments, not literals — so `--prefix "@my.org/"` matches `@my.org/` _and_ `@myXorg/` (the `.` is a wildcard). Escape regex metacharacters if you need a literal match.
+- Values substituted into a rule's `pattern` are treated as regular-expression fragments, not literals — so `--prefix "@my.org/"` matches `@my.org/` *and* `@myXorg/` (the `.` is a wildcard). Escape regex metacharacters if you need a literal match.
 
 ### Ruleset Resolution Mechanism
 
@@ -211,18 +210,15 @@ While the command-line interface covers most use cases, webarchitect also provid
 ### Basic Usage Example
 
 ```typescript
-import { validate } from "@canonical/webarchitect";
-import type { ValidationResult } from "@canonical/webarchitect";
+import { validate } from '@canonical/webarchitect';
+import type { ValidationResult } from '@canonical/webarchitect';
 
 // Validate the current directory against a ruleset
 async function checkProjectCompliance(): Promise<void> {
   try {
     // The validate function takes a project path and ruleset identifier
-    const results: ValidationResult[] = await validate(
-      process.cwd(),
-      "base-package",
-    );
-
+    const results: ValidationResult[] = await validate(process.cwd(), 'base-package');
+    
     // Process the results
     for (const result of results) {
       if (result.passed) {
@@ -231,16 +227,16 @@ async function checkProjectCompliance(): Promise<void> {
         console.log(`✗ ${result.rule}: ${result.message}`);
       }
     }
-
+    
     // Check if any validations failed
-    const hasFailures: boolean = results.some((result) => !result.passed);
+    const hasFailures: boolean = results.some(result => !result.passed);
     if (hasFailures) {
-      throw new Error("Project does not meet architectural standards");
+      throw new Error('Project does not meet architectural standards');
     }
-
-    console.log("All validations passed!");
+    
+    console.log('All validations passed!');
   } catch (error) {
-    console.error("Validation failed:", (error as Error).message);
+    console.error('Validation failed:', (error as Error).message);
     process.exit(1);
   }
 }
@@ -251,8 +247,8 @@ checkProjectCompliance();
 ### Advanced Usage with Custom Error Handling
 
 ```typescript
-import { validate } from "@canonical/webarchitect";
-import type { ValidationResult } from "@canonical/webarchitect";
+import { validate } from '@canonical/webarchitect';
+import type { ValidationResult } from '@canonical/webarchitect';
 
 interface ValidationReport {
   summary: {
@@ -268,40 +264,34 @@ interface ValidationReport {
 }
 
 async function validateWithDetailedReporting(
-  projectPath: string,
-  rulesetName: string,
+  projectPath: string, 
+  rulesetName: string
 ): Promise<ValidationReport> {
   try {
-    const results: ValidationResult[] = await validate(
-      projectPath,
-      rulesetName,
-    );
-
+    const results: ValidationResult[] = await validate(projectPath, rulesetName);
+    
     // Separate passed and failed results
-    const passed = results.filter((r) => r.passed);
-    const failed = results.filter((r) => !r.passed);
-
+    const passed = results.filter(r => r.passed);
+    const failed = results.filter(r => !r.passed);
+    
     // Generate a detailed report
     const report: ValidationReport = {
       summary: {
         total: results.length,
         passed: passed.length,
         failed: failed.length,
-        success: failed.length === 0,
+        success: failed.length === 0
       },
       details: {
-        passed: passed.map((r) => ({
-          rule: r.rule,
-          target: r.context?.target,
-        })),
-        failed: failed.map((r) => ({
-          rule: r.rule,
+        passed: passed.map(r => ({ rule: r.rule, target: r.context?.target })),
+        failed: failed.map(r => ({ 
+          rule: r.rule, 
           message: r.message,
-          target: r.context?.target,
-        })),
-      },
+          target: r.context?.target 
+        }))
+      }
     };
-
+    
     return report;
   } catch (error) {
     throw new Error(`Failed to validate project: ${(error as Error).message}`);
@@ -309,20 +299,20 @@ async function validateWithDetailedReporting(
 }
 
 // Usage in a build script
-validateWithDetailedReporting("./my-project", "base-package")
+validateWithDetailedReporting('./my-project', 'base-package')
   .then((report: ValidationReport) => {
     if (report.summary.success) {
-      console.log("✅ Project validation successful");
+      console.log('✅ Project validation successful');
     } else {
-      console.log("❌ Project validation failed");
+      console.log('❌ Project validation failed');
       console.log(`Failed rules: ${report.details.failed.length}`);
-      report.details.failed.forEach((failure) => {
+      report.details.failed.forEach(failure => {
         console.log(`  - ${failure.rule}: ${failure.message}`);
       });
     }
   })
   .catch((error: Error) => {
-    console.error("Validation error:", error.message);
+    console.error('Validation error:', error.message);
   });
 ```
 
@@ -335,3 +325,4 @@ The programmatic API makes it easy to integrate webarchitect into existing build
 - **Plain Text File Validation** - Webarchitect only validates JSON files. While it can verify that plain text files like LICENSE or README.md exist, it cannot validate their contents. This limitation affects license text verification, documentation standards, and configuration files that use non-JSON formats.
 - **IDE Integration** - No real-time validation feedback is available yet in code editors. Developers must run webarchitect manually or through build scripts to see validation results. Real-time diagnostics would require Language Server Protocol implementation or editor-specific plugins.
 - **Error Code Granularity** - All validation failures return the same exit code (1) regardless of failure type. Missing files, invalid JSON syntax, and schema validation failures are not distinguished programmatically. This limits automated error handling and reporting capabilities.
+ 

@@ -11,7 +11,6 @@ Apply ARIA attributes to the element that receives user focus and interaction. I
 ### Do
 
 Forward accessible-name attributes to the inner interactive element.
-
 ```html
 <ds-button aria-label="Close dialog"></ds-button>
 
@@ -20,7 +19,6 @@ Forward accessible-name attributes to the inner interactive element.
 ```
 
 Treat explicit aria props as the primary accessibility contract for icon-only controls.
-
 ```html
 <ds-button aria-label="Close">
   <ds-icon name="close"></ds-icon>
@@ -30,14 +28,12 @@ Treat explicit aria props as the primary accessibility contract for icon-only co
 ### Don't
 
 Set ARIA only on the host when a separate inner control receives focus.
-
 ```typescript
 // Bad: aria on host does not label the focused inner button
 this.setAttribute("aria-label", "Close dialog");
 ```
 
 Rely exclusively on projected content to derive accessible names for critical controls.
-
 ```html
 <!-- Bad: no explicit accessible name contract -->
 <ds-button>
@@ -56,7 +52,6 @@ Use `delegatesFocus: true` when attaching a shadow root so host focus forwards t
 ### Do
 
 Attach shadow root with focus delegation enabled.
-
 ```typescript
 class DsButton extends HTMLElement {
   constructor() {
@@ -72,7 +67,6 @@ customElements.define("ds-button", DsButton);
 ### Don't
 
 Add host tabindex management solely to compensate for missing focus delegation when the component already wraps a native focusable control.
-
 ```typescript
 // Bad: manual host focus plumbing for a wrapped native button
 this.setAttribute("tabindex", "0");
@@ -92,7 +86,6 @@ Interactive components must handle `keydown` events following WAI-ARIA Authoring
 ### Do
 
 Handle keyboard events for the component's widget role.
-
 ```typescript
 private onKeyDown(e: KeyboardEvent): void {
   switch (e.key) {
@@ -122,7 +115,6 @@ private onKeyDown(e: KeyboardEvent): void {
 ```
 
 Bind keydown handling on the interactive container and set an explicit role.
-
 ```html
 <div role="tablist" onkeydown="handleTabs(event)">
   <!-- tab controls -->
@@ -132,7 +124,6 @@ Bind keydown handling on the interactive container and set an explicit role.
 ### Don't
 
 Use only click handlers — keyboard-only users cannot activate the UI.
-
 ```html
 <!-- Bad: no keyboard handling -->
 <div onclick="togglePanel()">Toggle</div>
@@ -149,7 +140,6 @@ A `componentCssClassName` constant should be defined at the top of the component
 ### Do
 
 Define a `componentCssClassName` constant and apply it on the internal root element.
-
 ```typescript
 const componentCssClassName = "ds button";
 
@@ -161,7 +151,6 @@ const template = `
 ```
 
 When the component accepts modifier states, compose the class string from an ordered array.
-
 ```typescript
 const className = [componentCssClassName, emphasis, size]
   .filter(Boolean)
@@ -169,34 +158,26 @@ const className = [componentCssClassName, emphasis, size]
 ```
 
 Use short, role-based child class names and scope them under the root selector in CSS.
-
 ```css
-.ds.button .header {
-  /* ... */
-}
-.ds.button .content {
-  /* ... */
-}
+.ds.button .header { /* ... */ }
+.ds.button .content { /* ... */ }
 ```
 
 ### Don't
 
 Hardcode repeated class strings inline without a shared constant.
-
 ```typescript
 // Bad: repeated magic string
 const template = `<button class="ds button">...</button>`;
 ```
 
 Mutate host classes to inject design-system namespace classes.
-
 ```typescript
 // Bad: host classes are consumer-owned
 this.classList.add("ds", "button");
 ```
 
 Prefix child class names with component names or BEM suffixes when root scoping already provides context.
-
 ```html
 <!-- Bad: redundant prefixes -->
 <div class="my-component__header"></div>
@@ -214,30 +195,27 @@ Component classes must use PascalCase and be descriptive. Custom element names m
 ### Do
 
 Use PascalCase for the class name and a namespaced kebab-case custom element tag.
-
 ```typescript
 class Button extends HTMLElement {}
-customElements.define("ds-button", Button);
+customElements.define('ds-button', Button);
 ```
 
 ### Don't
 
 Include the namespace prefix in the class name. The namespace already exists in the tag name.
-
 ```typescript
 // Bad: class name redundantly repeats namespace intent
 class DsButton extends HTMLElement {}
-customElements.define("ds-button", DsButton);
+customElements.define('ds-button', DsButton);
 ```
 
 Use a non-namespaced or non-kebab-case custom element name.
-
 ```typescript
 // Bad: no namespace
-customElements.define("button", Button);
+customElements.define('button', Button);
 
 // Bad: not kebab-case
-customElements.define("dsButton", Button);
+customElements.define('dsButton', Button);
 ```
 
 ---
@@ -251,7 +229,6 @@ Default to structured data APIs (typed props such as objects and arrays) instead
 ### Do
 
 Model visual content with typed object props so rendering stays controlled by the component.
-
 ```typescript
 interface ButtonContent {
   label: string;
@@ -264,7 +241,6 @@ interface ButtonProps {
 ```
 
 Use arrays/objects for repeatable structured regions instead of requiring projected children.
-
 ```typescript
 interface MenuItem {
   id: string;
@@ -278,7 +254,6 @@ interface MenuProps {
 ```
 
 When slot usage is unavoidable, expose only named slots with a strict contract and keep free-form default content disabled.
-
 ```html
 <ds-popover>
   <button slot="trigger">Open</button>
@@ -289,7 +264,6 @@ When slot usage is unavoidable, expose only named slots with a strict contract a
 ```
 
 Define object-shape contracts and validate inputs at runtime for stable rendering and styling.
-
 ```typescript
 interface CardActions {
   primary: { label: string; disabled?: boolean };
@@ -304,7 +278,6 @@ function hasValidActions(actions?: CardActions): boolean {
 ### Don't
 
 Expose an unrestricted default slot as a public API for core components. This permits arbitrary consumer markup and breaks visual/semantic guarantees.
-
 ```html
 <!-- Bad: unrestricted default content -->
 <ds-button>
@@ -313,7 +286,6 @@ Expose an unrestricted default slot as a public API for core components. This pe
 ```
 
 Use slots as the primary API for data that is already representable as typed objects.
-
 ```typescript
 // Bad: caller must compose markup for simple data
 interface ListProps {
@@ -327,7 +299,6 @@ interface BetterListProps {
 ```
 
 Rely on `::slotted()` for strict design enforcement. Slotted elements keep their own styles and can override component intent.
-
 ```css
 /* Bad: consumer element styles can still win */
 ::slotted(*) {

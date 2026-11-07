@@ -30,18 +30,18 @@ the emitted set legitimately grows PR-by-PR.
 
 ## What's here
 
-| File                                                                                                                  | What it proves                                                                                                                           |
-| --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `liveReadSurface.ts`                                                                                                  | The parameterization helper — every other file imports `liveVerbs`/`listVerbs`/`lookupVerbs` from here rather than deriving its own.     |
-| `harness.foundation.test.ts`                                                                                          | The framework itself boots (fixture graph, foreign-namespace pack, `runCli`, the golden normalizer).                                     |
+| File | What it proves |
+|---|---|
+| `liveReadSurface.ts` | The parameterization helper — every other file imports `liveVerbs`/`listVerbs`/`lookupVerbs` from here rather than deriving its own. |
+| `harness.foundation.test.ts` | The framework itself boots (fixture graph, foreign-namespace pack, `runCli`, the golden normalizer). |
 | `firstRun.e2e.test.ts`, `rootCli.e2e.test.ts`, `exitCodes.e2e.test.ts`, `mcpServe.e2e.test.ts`, `autoLlm.e2e.test.ts` | The THIN spawn-e2e layer — the real process boundary, kept to exactly these cases (R7). Everything else in this package runs in-process. |
-| `parity.test.ts`                                                                                                      | The uniform CLI-json == MCP-json helper (`helpers/parity.ts`), proven on the stable nouns and swept across every read noun (B5).         |
-| `errorMatrix.storeless.test.ts`, `errorMatrix.mcp.test.ts`                                                            | The error/recovery render matrix, storeless + fixture-backed halves.                                                                     |
-| `agentSession.mcp.test.ts`                                                                                            | A multi-step agent MCP session (list → pick → lookup) + the SPARQL escape hatch.                                                         |
-| `mcpSurface.test.ts`                                                                                                  | Every MCP tool the live catalog exposes is callable and well-formed — the "surface ⊆ covenant, exercised" proof.                         |
-| `disclosure.test.ts`                                                                                                  | The cross-noun disclosure sweep (mechanism itself is PR3's/kernel's protected unit test — this only sweeps the noun SET).                |
-| `journeys.cli.test.ts`                                                                                                | The `block list` journey — since L-OPEN-9 it pins that the declared list is UNFILTERED: four tier/channel configs, one answer.           |
-| `completion.test.ts`                                                                                                  | The THIN main-line `__complete` candidate contract (§6 — see "Completion" below).                                                        |
+| `parity.test.ts` | The uniform CLI-json == MCP-json helper (`helpers/parity.ts`), proven on the stable nouns and swept across every read noun (B5). |
+| `errorMatrix.storeless.test.ts`, `errorMatrix.mcp.test.ts` | The error/recovery render matrix, storeless + fixture-backed halves. |
+| `agentSession.mcp.test.ts` | A multi-step agent MCP session (list → pick → lookup) + the SPARQL escape hatch. |
+| `mcpSurface.test.ts` | Every MCP tool the live catalog exposes is callable and well-formed — the "surface ⊆ covenant, exercised" proof. |
+| `disclosure.test.ts` | The cross-noun disclosure sweep (mechanism itself is PR3's/kernel's protected unit test — this only sweeps the noun SET). |
+| `journeys.cli.test.ts` | The `block list` journey — since L-OPEN-9 it pins that the declared list is UNFILTERED: four tier/channel configs, one answer. |
+| `completion.test.ts` | The THIN main-line `__complete` candidate contract (§6 — see "Completion" below). |
 
 Plus `testing/eval/` (the eval harness + seed cases) and `testing/PARITY_GAPS.ts`
 (the consolidated accepted-divergence ledger) — siblings of this directory,
@@ -67,15 +67,9 @@ second graph. If your PR needs new entities for its own journey:
 
 ```ts
 import { bootFixtureRuntime } from "../helpers/fixtureGraph.js";
-import {
-  CANONICAL_TTL,
-  CANONICAL_CONFIG,
-} from "../fixtures/graph/canonical.js";
+import { CANONICAL_TTL, CANONICAL_CONFIG } from "../fixtures/graph/canonical.js";
 
-const fixture = await bootFixtureRuntime({
-  ttl: CANONICAL_TTL,
-  config: CANONICAL_CONFIG,
-});
+const fixture = await bootFixtureRuntime({ ttl: CANONICAL_TTL, config: CANONICAL_CONFIG });
 try {
   // fixture.cwd is pointed at a REAL built pack — bootRuntime(flags, fixture.cwd),
   // executeVerb(...), projectMcp(modules, fixture.cwd), and (if you must)
@@ -111,7 +105,6 @@ deep-equality, not the old condensed-shape byte comparison. Don't reproduce a
 
 Two things this helper does NOT handle — check `PARITY_GAPS.ts` before
 assuming a mismatch is a bug:
-
 - A mutating verb's plan-first preview differs in `meta` shape between a CLI
   `--dry-run` and an unconfirmed MCP call by design (`plan-first-meta-differs`).
 - `sample` verbs draw an independent random selection per call — never assert
