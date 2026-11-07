@@ -21,7 +21,8 @@ node:
                 interaction.cursor: pointer
                 # The header follows the surface it sits on, and falls back to
                 # the plain container background where no surface provides one.
-                appearance.background: [surface.color.background, color.background.container]
+                appearance.background:
+                  [surface.color.background, color.background.container]
                 typography.color: [modifier.color.text, color.text]
                 typography.weight: typography.weight.semiBold
                 spacing.internal.inline.start: spacing.inset.surface.inline

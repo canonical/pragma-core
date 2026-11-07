@@ -8,7 +8,8 @@ node:
   styles:
     layout.type: grid
     spacing.gap: spacing.gap.group.block
-    appearance.background: [surface.color.background, color.background.container]
+    appearance.background:
+      [surface.color.background, color.background.container]
     appearance.radius: dimension.radius.medium
   edges:
     - node:
