@@ -369,84 +369,24 @@ function getConfig() {
 
 **Identifier:** `cs:code.naming.function_verb`
 
-All function and method names must start with a verb that describes the action the function performs. Names like `pathToX` or `dataForUser` describe a result, not an action — use `findPathToX` or `fetchDataForUser` instead. This makes the function's intent immediately clear and distinguishes functions from plain values or constants. One exception: the members of a message record (a `MessageRecord` from `@canonical/i18n-core`) are named after the words they produce, whether a member holds text or a function that returns text, so code reads a record as words (`m.heading`, `m.instanceCount(3)`). Every function outside a record keeps the rule, including each locale's factory, such as `createFrench`.
+Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: components (`Button`); the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add; names a tool fixes (`viteFinal`).
 
 ### Do
 
-Start function names with an action verb
+Start names with a verb, name data keys after the data, and wrappers `with…`
 ```typescript
-const findPathToModule = (name: string): string => { /* ... */ };
-const fetchDataForUser = (userId: string): Promise<User> => { /* ... */ };
-const parseConfigFile = (path: string): Config => { /* ... */ };
-const calculateTotalPrice = (items: Item[]): number => { /* ... */ };
-const isValidEmail = (email: string): boolean => { /* ... */ };
-const hasPermission = (user: User, action: string): boolean => { /* ... */ };
-```
-
-Use descriptive verb prefixes that convey the operation
-```typescript
-// Retrieval: get, fetch, find, resolve, load, read
-const getUser = (id: string): User => { /* ... */ };
-const fetchOrders = (): Promise<Order[]> => { /* ... */ };
-const findMatchingRule = (rules: Rule[], input: string): Rule | undefined => { /* ... */ };
-
-// Transformation: format, parse, convert, transform, map, normalize
-const formatDate = (date: Date): string => { /* ... */ };
-const parseResponse = (raw: string): Response => { /* ... */ };
-
-// Validation: is, has, can, should, validate, check
-const isActive = (user: User): boolean => { /* ... */ };
-const hasExpired = (token: Token): boolean => { /* ... */ };
-const validateInput = (data: unknown): data is FormData => { /* ... */ };
-
-// Mutation: set, update, add, remove, delete, reset, clear
-const setTheme = (theme: Theme): void => { /* ... */ };
-const removeItem = (id: string): void => { /* ... */ };
-
-// Creation: create, build, generate, compose, make
-const createConnection = (config: Config): Connection => { /* ... */ };
-const buildQuery = (params: Params): string => { /* ... */ };
-```
-
-Name the members of a message record after the words they produce, and name the factory that builds the record with a verb
-```typescript
-// A record member is read as words, so it is named after them, not after an action.
-export default function createFrench(f: Formatters): InstanceMessages {
-  return {
-    heading: "Instances",
-    instanceCount: (count) =>
-      f.selectPlural(count, {
-        one: `${f.formatNumber(count)} instance`,
-        many: `${f.formatNumber(count)} d’instances`,
-        other: `${f.formatNumber(count)} instances`,
-      }),
-  };
-}
+const findPathToModule = (name: string) => { /* ... */ };
+const messages = { count: (n: number) => `${n} hosts` };
+const read = READERS[field.kind];
+const withTooltip = (C: ComponentType) => { /* ... */ };
 ```
 
 ### Don't
 
-Name functions as nouns or noun phrases — they read like values, not actions
+Name a non-component function or a method as a noun
 ```typescript
-// Bad: reads like a variable, not a function
-const pathToModule = (name: string): string => { /* ... */ };
-// Good: findPathToModule
-
-const dataForUser = (userId: string): Promise<User> => { /* ... */ };
-// Good: fetchDataForUser
-
-const userPermissions = (user: User): Permission[] => { /* ... */ };
-// Good: getPermissions or listPermissions
-```
-
-Use vague or non-descriptive verbs that don't convey meaning
-```typescript
-// Bad: "do" and "process" are too vague on their own
-const doEmail = (email: string) => { /* ... */ };
-// Good: sendEmail, validateEmail, formatEmail
-
-const processUser = (user: User) => { /* ... */ };
-// Good: activateUser, deactivateUser, updateUser
+const pathToModule = (name: string) => { /* ... */ };
+const label = f.number(count); // a method called by name
 ```
 
 ---
