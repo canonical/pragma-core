@@ -222,75 +222,29 @@ src/operations/
 
 **Identifier:** `cs:packaging.export.declaration`
 
-Exports must be declared on the definition itself (e.g. `export default function` or `export const`), not gathered at the end of the file. When a wrapper (HOC, decorator, middleware) is applied, declare the unwrapped binding with `const`, then export the wrapped result as default on a separate line.
+Declare each export on its definition, never gathered at the end. Except: a story's `meta`, a tool config, a context, and a wrapped or cast component or function are bound to a `const` and exported as the default on a separate line.
 
 ### Do
 
-Declare the export directly on the function or class definition
-```typescript
+Export on the definition, or bind a wrapped value first
+```tsx
 // formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-```
+export default function formatCurrency(n: number) { /* ... */ }
 
-Declare the export directly on a named constant
-```typescript
-// MAX_RETRIES.ts
-export const MAX_RETRIES = 3;
-```
-
-When a wrapper is involved, declare the raw binding with `const`, then export the wrapped result as default
-```typescript
-// UserProfile.tsx
-const UserProfile = ({ user }: UserProfileProps) => {
-  return <div>{user.name}</div>;
-};
-
-export default memo(UserProfile);
-```
-
-Apply the same pattern for higher-order functions and middleware
-```typescript
-// connectDatabase.ts
-const connectDatabase = (config: DbConfig): Connection => {
-  return new Connection(config);
-};
-
-export default withRetry(connectDatabase);
+// Row.tsx
+const Row = <T,>({ row }: RowProps<T>) => <tr>{row.name}</tr>;
+export default memo(Row) as typeof Row;
 ```
 
 ### Don't
 
-Define a symbol and then export it at the end of the file
-```typescript
-// Bad: export is separated from definition
-function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-
+Export away from the definition, or wrap a `function` declaration
+```tsx
+const formatCurrency = (value: number) => { /* ... */ };
 export default formatCurrency;
-```
 
-Gather multiple exports at the bottom of the file
-```typescript
-// Bad: exports collected at the end
-const helperA = () => {};
-const helperB = () => {};
-
-export { helperA, helperB };
-```
-
-Use `export default` on the raw binding when a wrapper is needed
-```typescript
-// Bad: exports the unwrapped version, then wraps elsewhere
-export default function UserProfile({ user }: UserProfileProps) {
-  return <div>{user.name}</div>;
-}
-
-// consumer.ts — has to wrap it themselves
-import UserProfile from "./UserProfile.js";
-const Memoized = memo(UserProfile);
+function Row({ row }: RowProps) { /* ... */ }
+export default memo(Row);
 ```
 
 ---
@@ -299,7 +253,7 @@ const Memoized = memo(UserProfile);
 
 **Identifier:** `cs:packaging.export.shape`
 
-A module that exports has one default export, named as the file. Except: barrels (`index.ts`); files of only types or only plain values (`types.ts`, `constants.ts`, `testing/fixtures.ts`), which use named exports.
+A module that exports has one default export, named as the file. Except: barrels (`index.ts`); files of only types or only plain values (`types.ts`, `constants.ts`, `testing/fixtures.ts`), which use named exports; story files, and the configs and entry files a tool loads.
 
 ### Do
 
