@@ -369,7 +369,7 @@ function getConfig() {
 
 **Identifier:** `cs:code.naming.function_verb`
 
-Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: components (`Button`); the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add.
+Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: components (`Button`); the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add; names a tool fixes (`viteFinal`).
 
 ### Do
 
