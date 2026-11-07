@@ -161,103 +161,22 @@ packages/build-tools/
 cs:packaging.library.structure a cs:CodeStandard ;
     rdfs:label "Libraries export from src/lib"@en ;
     cs:hasCategory cs:packaging ;
-    cs:description "Library packages export reusable code (components, utilities, hooks, types) for consumption by other packages. They must organize their exportable code in a `src/lib/` folder and re-export through a root barrel. This convention ensures consistency across the monorepo and clearly separates public API code from non-exported concerns like storybook configuration or test utilities. Each domain folder within `lib/` must have its own barrel (`index.ts`)." ;
+    cs:description "A library keeps its exported code in `src/lib/`, with a barrel in each domain folder, re-exported through the root barrel. Except: entry files a tool loads by path sit where the tool expects them." ;
     cs:do [
-        cs:description "Recognise a library package by its `package.json` signals — `main`/`exports` field, publishable, no `bin`" ;
-        cs:language "json" ;
+        cs:description "Keep exported code in `src/lib/`, and tool entry files where the tool loads them" ;
         cs:code """
-{
-  "name": "@scope/design-system",
-  "main": "./dist/index.js",
-  "exports": { ".": "./dist/index.js" }
-}
-    """
-    ] ;
-    cs:do [
-        cs:description "Place all reusable/exportable code in `src/lib/`, with a barrel in each domain folder" ;
-        cs:code """
-packages/my-package/
-├── src/
-│   ├── lib/
-│   │   ├── Button/
-│   │   │   ├── Button.tsx
-│   │   │   ├── Button.test.tsx
-│   │   │   ├── types.ts
-│   │   │   └── index.ts       # Barrel: exports Button public API
-│   │   ├── hooks/
-│   │   │   ├── useToggle.ts
-│   │   │   └── index.ts       # Barrel: exports hooks
-│   │   ├── types/
-│   │   │   └── index.ts       # Barrel: exports shared types
-│   │   └── index.ts           # Barrel: lib public API
-│   ├── storybook/             # Storybook-specific files (not exported)
-│   └── index.ts               # Re-exports from lib
-└── package.json
-    """
-    ] ;
-    cs:do [
-        cs:description "Re-export from the lib folder in the package entry point" ;
-        cs:language "typescript" ;
-        cs:code """
-// src/index.ts
-export * from "./lib/index.js";
-    """
-    ] ;
-    cs:do [
-        cs:description "Use the lib barrel to compose the package's public API from domain barrels" ;
-        cs:language "typescript" ;
-        cs:code """
-// src/lib/index.ts
-export * from "./Button/index.js";
-export * from "./hooks/index.js";
-export type * from "./types/index.js";
+src/lib/            # exported, behind the root barrel
+src/preset.ts       # loaded by Storybook by path
+src/preset.test.ts
+src/preview.ts      # loaded by Storybook by path
+src/preview.test.ts
     """
     ] ;
     cs:dont [
-        cs:description "Use alternative folder names like `ui`, `components`, or `utils` for exportable code at the package level" ;
+        cs:description "Export code from outside `src/lib/`, or leave a domain folder without a barrel" ;
         cs:code """
-// Bad: Using 'ui' instead of 'lib'
-packages/my-package/
-├── src/
-│   ├── ui/              # Wrong: should be 'lib'
-│   │   └── Button/
-│   └── index.ts
-    """
-    ] ;
-    cs:dont [
-        cs:description "Mix exportable and non-exportable code at the same level" ;
-        cs:code """
-// Bad: Mixing concerns
-packages/my-package/
-├── src/
-│   ├── Button/          # Component mixed with...
-│   ├── storybook/       # ...non-exportable storybook config
-│   └── test-utils/      # ...and test utilities
-    """
-    ] ;
-    cs:dont [
-        cs:description "Create deeply nested lib-like structures; keep lib at the top level of src" ;
-        cs:code """
-// Bad: Nested lib folders
-packages/my-package/
-├── src/
-│   ├── features/
-│   │   └── lib/         # Wrong: lib should be at src level
-    """
-    ] ;
-    cs:dont [
-        cs:description "Omit barrels from domain folders within lib" ;
-        cs:code """
-// Bad: no barrels — consumers must know individual file paths
-packages/my-package/
-├── src/
-│   ├── lib/
-│   │   ├── Button/
-│   │   │   ├── Button.tsx
-│   │   │   └── types.ts    # No index.ts — fragile imports
-│   │   ├── hooks/
-│   │   │   └── useToggle.ts # No index.ts
-│   │   └── index.ts
+src/components/Button.tsx   # Bad: exported from outside src/lib/
+src/lib/hooks/useToggle.ts  # Bad: hooks/ has no barrel
     """
     ] .
 
