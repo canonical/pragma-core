@@ -70,7 +70,7 @@ cs:css.component.encapsulation a cs:CodeStandard ;
 cs:css.component.states a cs:CodeStandard ;
     rdfs:label "State attributes and modifier classes"@en ;
     cs:hasCategory cs:css ;
-    cs:description "Native states use attribute selectors and custom states use modifier classes. Except: a transient interaction state, or a value from a closed set the data supplies, is a `data-*` attribute on the root." ;
+    cs:description "Native states use attribute selectors and custom states use modifier classes. Except: a transient interaction state, a value from a closed set the data supplies, and `data-hydrated`, present once the root's script runs, are `data-*` attributes on the root." ;
     cs:do [
         cs:description "Select native states by attribute, and the admitted states by `data-*` on the root" ;
         cs:language "css" ;
@@ -78,6 +78,7 @@ cs:css.component.states a cs:CodeStandard ;
 .ds.button[disabled] { opacity: var(--disabled-opacity); }
 .ds.resize-handle[data-mode="placing"] { cursor: col-resize; }
 .ds.load-status[data-status="failed"] { color: var(--color-text-error); }
+.ds.pagination[data-hydrated] > .submit { display: none; }
     """
     ] ;
     cs:dont [

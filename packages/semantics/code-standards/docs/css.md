@@ -114,7 +114,7 @@ Don't style internal elements without the component namespace.
 
 **Identifier:** `cs:css.component.states`
 
-Native states use attribute selectors and custom states use modifier classes. Except: a transient interaction state, or a value from a closed set the data supplies, is a `data-*` attribute on the root.
+Native states use attribute selectors and custom states use modifier classes. Except: a transient interaction state, a value from a closed set the data supplies, and `data-hydrated`, present once the root's script runs, are `data-*` attributes on the root.
 
 ### Do
 
@@ -123,6 +123,7 @@ Select native states by attribute, and the admitted states by `data-*` on the ro
 .ds.button[disabled] { opacity: var(--disabled-opacity); }
 .ds.resize-handle[data-mode="placing"] { cursor: col-resize; }
 .ds.load-status[data-status="failed"] { color: var(--color-text-error); }
+.ds.pagination[data-hydrated] > .submit { display: none; }
 ```
 
 ### Don't
