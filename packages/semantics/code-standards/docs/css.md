@@ -375,10 +375,7 @@ Omit the `.ds` namespace from component selectors.
 
 **Identifier:** `cs:css.selectors.naming_convention`
 
-Convert PascalCase component names to kebab-case for CSS classes:
-- `MyComponent` -> `.ds.my-component`
-- `UserProfile` -> `.ds.user-profile`
-- `Button` -> `.ds.button`
+Component CSS class names must be the kebab-case version of the component's PascalCase name.
 
 ### Do
 
