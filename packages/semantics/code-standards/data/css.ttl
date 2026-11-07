@@ -353,29 +353,25 @@ ro.observe(card);
 cs:css.media.scripting a cs:CodeStandard ;
     rdfs:label "Guard hydration flash with scripting"@en ;
     cs:hasCategory cs:css ;
-    cs:description """Use the `scripting` media feature when hydration gating would cause a FOUC-like "flash of un-javascripted content" on first paint.""" ;
+    cs:description "Reveal script-only controls with `@media (scripting: enabled)`, so nothing flashes before hydration. Never hide the only way to finish a task with it, since the script can still fail: hide that on `[data-hydrated]`." ;
     cs:do [
-        cs:description "When hydration gating causes first-paint flash, hide JS-only affordances by default and reveal them when scripting is enabled." ;
+        cs:description "Reveal script-only controls by the query, and hide baseline ones on `[data-hydrated]`" ;
         cs:language "css" ;
         cs:code """
-.menu-button {
-  display: none;
-}
-
+.ds.pagination > .scripted { display: none; }
 @media (scripting: enabled) {
-  .menu-button { display: inline-flex; }
+  .ds.pagination > .scripted { display: inline-flex; }
 }
+.ds.pagination[data-hydrated] > .submit { display: none; }
         """
     ] ;
     cs:dont [
-        cs:description "Allow JS-only affordances to flash on first paint when they are hydration-gated." ;
-        cs:language "html" ;
+        cs:description "Hide the only way to finish a task under the query" ;
+        cs:language "css" ;
         cs:code """
-<button hidden class="menu-button">Menu</button>
-
-<script type="module">
-  document.querySelector('.menu-button').removeAttribute('hidden');
-</script>
+@media (scripting: enabled) {
+  .ds.pagination > .submit { display: none; }
+}
         """
     ] .
 

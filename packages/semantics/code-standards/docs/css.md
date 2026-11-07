@@ -172,30 +172,26 @@ ro.observe(card);
 
 **Identifier:** `cs:css.media.scripting`
 
-Use the `scripting` media feature when hydration gating would cause a FOUC-like "flash of un-javascripted content" on first paint.
+Reveal script-only controls with `@media (scripting: enabled)`, so nothing flashes before hydration. Never hide the only way to finish a task with it, since the script can still fail: hide that on `[data-hydrated]`.
 
 ### Do
 
-When hydration gating causes first-paint flash, hide JS-only affordances by default and reveal them when scripting is enabled.
+Reveal script-only controls by the query, and hide baseline ones on `[data-hydrated]`
 ```css
-.menu-button {
-  display: none;
-}
-
+.ds.pagination > .scripted { display: none; }
 @media (scripting: enabled) {
-  .menu-button { display: inline-flex; }
+  .ds.pagination > .scripted { display: inline-flex; }
 }
+.ds.pagination[data-hydrated] > .submit { display: none; }
 ```
 
 ### Don't
 
-Allow JS-only affordances to flash on first paint when they are hydration-gated.
-```html
-<button hidden class="menu-button">Menu</button>
-
-<script type="module">
-  document.querySelector('.menu-button').removeAttribute('hidden');
-</script>
+Hide the only way to finish a task under the query
+```css
+@media (scripting: enabled) {
+  .ds.pagination > .submit { display: none; }
+}
 ```
 
 ---
