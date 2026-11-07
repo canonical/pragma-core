@@ -147,7 +147,9 @@ cs:react.component.structure.folder a cs:CodeStandard ;
   ├── [MyComponent].test.tsx
   ├── index.ts
   ├── styles.css
-  └── types.ts
+  ├── styles.test.tsx
+  ├── types.ts
+  └── types.types.test.ts
     """
     ] ;
     cs:dont [
@@ -210,8 +212,11 @@ cs:react.component.file_naming a cs:CodeStandard ;
   ├── [MyComponent].stories.tsx   # Component-specific
   ├── [MyComponent].test.tsx      # Component-specific
   ├── Context.tsx               # Domain-level
+  ├── Context.test.tsx          # Domain-level
   ├── types.ts                  # Domain-level
-  └── styles.css                # Domain-level
+  ├── types.types.test.ts       # Domain-level
+  ├── styles.css                # Domain-level
+  └── styles.test.tsx           # Domain-level
     """
     ] ;
     cs:dont [
