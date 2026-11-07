@@ -369,15 +369,16 @@ function getConfig() {
 
 **Identifier:** `cs:code.naming.function_verb`
 
-Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: the keys of a record keyed by data, such as messages or a table looked up by kind.
+Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add.
 
 ### Do
 
-Start names with a verb, and name data keys after the data
+Start names with a verb, name data keys after the data, and wrappers `with…`
 ```typescript
 const findPathToModule = (name: string) => { /* ... */ };
-const messages = { heading: "Hosts", count: (n: number) => `${n} hosts` };
+const messages = { count: (n: number) => `${n} hosts` };
 const read = READERS[field.kind];
+const withTooltip = (C: ComponentType) => { /* ... */ };
 ```
 
 ### Don't

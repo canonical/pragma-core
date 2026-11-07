@@ -204,14 +204,15 @@ interface QueueConfig {
 cs:code.naming.function_verb a cs:CodeStandard ;
     rdfs:label "Name functions with a verb"@en ;
     cs:hasCategory cs:code ;
-    cs:description "Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: the keys of a record keyed by data, such as messages or a table looked up by kind." ;
+    cs:description "Function and method names start with a verb: `findPathToModule`, not `pathToModule`. Except: the keys of a record keyed by data, such as messages or a table looked up by kind; wrappers named `with` plus what they add." ;
     cs:do [
-        cs:description "Start names with a verb, and name data keys after the data" ;
+        cs:description "Start names with a verb, name data keys after the data, and wrappers `with…`" ;
         cs:language "typescript" ;
         cs:code """
 const findPathToModule = (name: string) => { /* ... */ };
-const messages = { heading: "Hosts", count: (n: number) => `${n} hosts` };
+const messages = { count: (n: number) => `${n} hosts` };
 const read = READERS[field.kind];
+const withTooltip = (C: ComponentType) => { /* ... */ };
     """
     ] ;
     cs:dont [
