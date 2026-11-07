@@ -4,6 +4,6 @@
 
 ds:tag.upstream-compliant a ds:Tag;
     ds:name "upstream-compliant";
-    ds:category ds:tagcategory.lpupstream;
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "Tag to be used by Launchpad in cycle 26.10 to mark components that should be upstreamed";
     ds:whenToRemove "".

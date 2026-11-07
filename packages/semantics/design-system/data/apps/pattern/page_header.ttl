@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.pattern.page_header a ds:Pattern;
+    ds:name "PageHeader";
+    ds:summary "The **Page Header** (l-main_header) establishes user orientation by clearly communicating where the user is within an application and provides immediate access to page-level context and actions.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "Figma preview pending\n\n\n\nThe header component is made up of three elements:\n\nTable 82";
+    ds:usage "**When to use**\n\n1. Should be used at the top of every page in an application.";
+    ds:guidelines "";
+    ds:tier ds:apps.

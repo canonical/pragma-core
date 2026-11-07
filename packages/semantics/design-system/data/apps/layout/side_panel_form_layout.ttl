@@ -1,0 +1,13 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.layout.side_panel_form_layout a ds:Layout;
+    ds:name "SidePanelFormLayout";
+    ds:summary "**Definition**\n\nForm layout is the set of rules that determines how a form’s elements (sections, section headings, fields, and the button group) are arranged within a container. It governs where each element sits on the grid, how wide it is, how fields are grouped, how much space separates them, and how the arrangement adapts as the container narrows.\n\nForm layout defines the structure of a form, not the behavior of its individual inputs. Its purpose is to make the reading order, grouping, and path to completion predictable, so that users can understand and complete a form the same way regardless of where it appears.\n\n**Draft spec link**\n\nOpen link  \n\n\n\nThe side panel form layout is a contextual container that opens beside related content, primarily designed so that the underlying record stays visible while the user edits or creates it. This layout supports single-section, multi-section, and multi-step form structures.\n\n**When to use a Side Panel Form:**\n\n- **Low to medium complexity tasks:** It is best suited for tasks that do not require the user’s whole attention.\n- **Preserving context:** Use it when you need a low context interruption, allowing users to edit or create information alongside the record they are currently viewing.\n\n**When NOT to use a Side Panel Form:**\n\n- Do not use this layout for tasks that need the user’s whole attention. For highly complex, substantial tasks that require full focus, a full-page form should be used instead.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.designin-progress.

@@ -4,6 +4,6 @@
 
 ds:tag.has-no-global-entry a ds:Tag;
     ds:name "has-no-global-entry";
-    ds:category ds:tagcategory.lpupstream;
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "";
     ds:whenToRemove "".

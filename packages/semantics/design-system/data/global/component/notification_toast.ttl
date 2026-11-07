@@ -10,4 +10,4 @@ ds:global.component.notification_toast a ds:Component;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needstriage.
+    ds:documentationStage ds:tag.needsdesign.

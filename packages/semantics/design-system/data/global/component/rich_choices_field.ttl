@@ -10,7 +10,7 @@ ds:global.component.rich_choices_field a ds:Component;
     ds:usage "A labelled set of selectable options, single- or multiple-choice, with richly-labelled choices.\n\n\n\n### When to use\n\n- Choosing one or several options from a small, visible set where the choices benefit from rich labels.\n\n\n\n### When not to use\n\n- A long list better searched than scanned — use [ComboboxField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-kfEQ25cX4a) .\n\n- A single binary decision — use [CheckboxField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-vwBCoHgXoG) .\n\n- Text-only options where layout control matters more than rich labels — use [ChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-IFk-NNRL3C) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needsdesign;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.rich_choices_field;

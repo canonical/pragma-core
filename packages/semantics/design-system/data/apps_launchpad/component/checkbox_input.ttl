@@ -15,15 +15,15 @@ ds:apps_launchpad.component.checkbox_input a ds:Component;
         ds:name "checked";
         ds:summary "Whether the checkbox is checked or not.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
-        ds:optional "true"
+        ds:optional "true";
+        ds:defaultValue "false"
     ], [
         a ds:Property;
         ds:name "disabled";
         ds:summary "Whether the checkbox is disabled or not.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
-        ds:optional "true"
+        ds:optional "true";
+        ds:defaultValue "false"
     ], [
         a ds:Property;
         ds:name "value";

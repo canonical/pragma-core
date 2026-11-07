@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devin-progress a ds:Tag;
+    ds:name "dev:in-progress";
+    ds:category ds:tagcategory.implementationstatus;
+    ds:whenToApply "";
+    ds:whenToRemove "".

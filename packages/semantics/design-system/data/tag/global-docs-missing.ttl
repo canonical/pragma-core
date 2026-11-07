@@ -4,6 +4,6 @@
 
 ds:tag.global-docs-missing a ds:Tag;
     ds:name "global-docs-missing";
-    ds:category ds:tagcategory.lpupstream;
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "";
     ds:whenToRemove "".

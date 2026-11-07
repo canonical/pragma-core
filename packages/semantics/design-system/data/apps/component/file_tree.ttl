@@ -10,5 +10,5 @@ ds:apps.component.file_tree a ds:Component;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needsdesign;
     ds:hasSubcomponent ds:apps.subcomponent.file_tree-node.

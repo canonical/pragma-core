@@ -15,13 +15,13 @@ ds:apps_launchpad.component.switch a ds:Component;
         ds:name "checked";
         ds:summary "Whether the switch is checked or not.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
-        ds:optional "true"
+        ds:optional "true";
+        ds:defaultValue "false"
     ], [
         a ds:Property;
         ds:name "disabled";
-        ds:summary "Whether the switch is disabled or not. ";
+        ds:summary "Whether the switch is disabled or not.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
-        ds:optional "true"
+        ds:optional "true";
+        ds:defaultValue "false"
     ].

@@ -10,4 +10,4 @@ ds:global.subcomponent.rich_text_input a ds:Subcomponent;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needsdesign.

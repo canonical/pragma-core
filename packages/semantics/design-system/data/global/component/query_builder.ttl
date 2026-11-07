@@ -1,0 +1,12 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global.component.query_builder a ds:Component;
+    ds:name "Query builder";
+    ds:summary "The query builder is an input for constructing structured search queries from key, operator and value filters. Each filter is displayed as a chip that can be edited in place, and suggestions guide users towards valid keys and values as they type. It makes complex, multi-condition queries faster to write and easier to read back. It is often used for searching and filtering large datasets, such as packages, machines, releases or security notices.\n\nFor a simple search on a single text term, use Search instead. For a small, fixed set of filters, use drop-downs or checkboxes instead.";
+    ds:anatomyDsl "";
+    ds:anatomyClassic "https://www.figma.com/design/OLXsqpflIke6fLt2Mt2H1e/26.10-Query-builder---Design-system-contributions?node-id=5660-55146&t=Cf1mzxkKUid0iYmX-1";
+    ds:usage "";
+    ds:guidelines "";
+    ds:tier ds:global.

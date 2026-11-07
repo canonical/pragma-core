@@ -10,7 +10,7 @@ ds:global.subcomponent.combobox_input a ds:Subcomponent;
     ds:usage "The filterable single-choice entry part a host places in context when the option set is large or searchable.\n\n### When to use\n- A host presents many options and the person narrows them by typing before choosing one.\n- The option set is long enough that scanning alone is slow.\n- A free-text query should surface and match against a known set of choices.\n\n### When not to use\n- The option set is short and scannable without filtering — compose **SelectInput**.\n- Choices are few and benefit from being shown all at once — compose **RadioInput**.\n- The entry is open prose with no fixed option set — compose **TextInput**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needsdesign;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.combobox_input;

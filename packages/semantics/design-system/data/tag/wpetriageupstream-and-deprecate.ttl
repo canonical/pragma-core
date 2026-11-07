@@ -4,5 +4,6 @@
 
 ds:tag.wpetriageupstream-and-deprecate a ds:Tag;
     ds:name "wpe:triage:upstream-and-deprecate";
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "";
     ds:whenToRemove "".

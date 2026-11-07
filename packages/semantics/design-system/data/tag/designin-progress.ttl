@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.designin-progress a ds:Tag;
+    ds:name "design:in progress";
+    ds:category ds:tagcategory.design--documentation-status;
+    ds:whenToApply "UI block has been triaged and design is in progress, with a clear owner";
+    ds:whenToRemove "".

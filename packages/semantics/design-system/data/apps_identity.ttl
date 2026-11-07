@@ -2,5 +2,5 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:stores a ds:Tier;
-    ds:name "Stores".
+ds:apps_identity a ds:Tier;
+    ds:name "Apps/Identity".

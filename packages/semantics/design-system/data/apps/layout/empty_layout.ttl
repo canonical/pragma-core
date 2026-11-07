@@ -10,4 +10,4 @@ ds:apps.layout.empty_layout a ds:Layout;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needstriage.

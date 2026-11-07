@@ -2,5 +2,5 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:tagcategory.lpupstream a ds:TagCategory;
-    ds:name "lp:upstream".
+ds:tagcategory.implementationstatus a ds:TagCategory;
+    ds:name "implementation:status".

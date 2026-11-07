@@ -9,4 +9,5 @@ ds:global.component.timestamp a ds:Component;
     ds:anatomyClassic "";
     ds:usage "";
     ds:guidelines "";
-    ds:tier ds:global.
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.needstriage.

@@ -5,5 +5,5 @@
 ds:tag.devreactpreapproved a ds:Tag;
     ds:name "dev:react:pre_approved";
     ds:category ds:tagcategory.implementation-status;
-    ds:whenToApply "Design : approved but requires follow-up";
+    ds:whenToApply "Design : approved for careful use, requires follow-up";
     ds:whenToRemove "".

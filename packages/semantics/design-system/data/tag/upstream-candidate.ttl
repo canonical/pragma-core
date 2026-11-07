@@ -4,6 +4,6 @@
 
 ds:tag.upstream-candidate a ds:Tag;
     ds:name "upstream-candidate";
-    ds:category ds:tagcategory.lpupstream;
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "";
     ds:whenToRemove "".

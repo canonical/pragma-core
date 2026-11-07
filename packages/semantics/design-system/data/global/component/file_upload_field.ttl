@@ -10,7 +10,7 @@ ds:global.component.file_upload_field a ds:Component;
     ds:usage "A labelled control for attaching one or more files within a form.\n\n### When to use\n- One or more files need to be attached as part of a submission, whether by selecting them or dragging them onto a drop area.\n- Chosen files benefit from being listed with their details and removable before the form is committed.\n\n### When not to use\n- A short, free-form value is wanted rather than a file — use **Text**.\n- A reference or location pointing to an external resource is collected rather than the resource itself — use **Text**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needsdesign;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.file_upload_field;

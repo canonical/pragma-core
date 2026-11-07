@@ -4,6 +4,6 @@
 
 ds:tag.lptriageno-upstream a ds:Tag;
     ds:name "lp:triage:no-upstream";
-    ds:category ds:tagcategory.lpupstream;
+    ds:category ds:tagcategory.implementationnotes;
     ds:whenToApply "";
     ds:whenToRemove "".

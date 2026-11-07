@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:tag.devsveltepreapproved a ds:Tag;
+    ds:name "dev:svelte:pre_approved";
+    ds:category ds:tagcategory.implementation-status;
+    ds:whenToApply "Design : approved for careful use, requires follow-up";
+    ds:whenToRemove "".

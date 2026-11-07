@@ -15,15 +15,15 @@ ds:apps_launchpad.component.drawer a ds:Component;
         ds:name "trigger";
         ds:summary "Snippet that renders the trigger element used to open the side panel.";
         ds:propertyType "Snippet";
-        ds:constraints "Receives commandfor, command show-modal, aria-haspopup dialog, and optional onclick fallback when invoker commands are unsupported.";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "Receives commandfor, command show-modal, aria-haspopup dialog, and optional onclick fallback when invoker commands are unsupported."
     ], [
         a ds:Property;
         ds:name "children";
         ds:summary "Snippet that renders side panel content.";
         ds:propertyType "Snippet";
-        ds:constraints "Receives commandfor and close callback. Can use SidePanel.Content or custom markup.";
-        ds:optional "true"
+        ds:optional "true";
+        ds:constraints "Receives commandfor and close callback. Can use SidePanel.Content or custom markup."
     ], [
         a ds:Property;
         ds:name "closeOnOutsideClick";

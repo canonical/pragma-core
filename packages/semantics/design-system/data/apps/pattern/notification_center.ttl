@@ -10,18 +10,18 @@ ds:apps.pattern.notification_center a ds:Pattern;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needstriage;
     ds:hasProperty [
         a ds:Property;
         ds:name "datetimeFormat";
         ds:summary "Represents variation along the X axis, refer to variant_guidelines for usage details.";
         ds:propertyType "choice";
-        ds:defaultValue "normal";
+        ds:optional "false";
         ds:constraints "[normal, inverted]";
-        ds:optional "false"
+        ds:defaultValue "normal"
     ], [
         a ds:Property;
         ds:name "avatarType";
         ds:propertyType "choice";
         ds:optional "false"
-    ].
+    ];
+    ds:documentationStage ds:tag.needstriage.

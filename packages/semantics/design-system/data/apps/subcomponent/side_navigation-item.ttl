@@ -1,0 +1,80 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.subcomponent.side_navigation-item a ds:Subcomponent;
+    ds:name "SideNavigation.Item";
+    ds:summary "A navigation item is an interactive element that allows users to navigate to a page or access child navigation within an application. In primary navigation, items can link to a page, expand their children inline, or open secondary navigation. In secondary navigation, items link directly to pages.";
+    ds:anatomyDsl "SideNavigation.Item\n├── Icon (optional, primary navigation only)\n├── Label\n├── Trailing element (optional, one of)\n│   ├── Child navigation indicator (chevron; requires child navigation)\n│   │   ├── Right: opens secondary navigation\n│   │   └── Down: expands children inline\n│   └── Badge (includes collapsed notification indicator)\n└── Children (only when using inline expansion)\n    └── Navigation item (repeatable)\n```\n\n```\n---\n# SideNavigation.Item — one navigation row.\n#\n# Authored 2026-10-16 from the supplied planning tree ALONE. No\n# implementation was read, so this anatomy carries STRUCTURE ONLY.\n#\n# The tree gives the trailing element as \"optional, one of\", which is a\n# switch on a single optional position. Its two branches are a\n# child-navigation chevron and a badge; the chevron's two directions are\n# part of the same choice, so all three alternatives are cases of one\n# switch. The discriminator is `props`: which trailing element appears\n# follows from the item the consumer supplies.\n#\n# The tree marks the children \"only when using inline expansion\" — the same\n# condition that selects the down-pointing chevron. Conditional display is\n# not expressible in the DSL, so the edge is optional and the condition is\n# recorded here.\n#\n# The children edge is recursive: a child is itself a SideNavigation.Item.\n# The tree sets no depth limit, and this anatomy asserts none.\nnode:\n  uri: apps.subcomponent.side_navigation-item\n  edges:\n    # Primary navigation only.\n    - node:\n        uri: global.component.icon\n      relation:\n        cardinality: \"0..1\"\n        slotName: icon\n    - node:\n        role: label\n      relation:\n        cardinality: \"1\"\n        slotName: label\n    - switch:\n        on: props\n        cases:\n          # Chevron, where the item has child navigation. Pointing to the\n          # inline end, it opens the secondary navigation.\n          - node:\n              uri: global.component.icon\n              props:\n                icon: chevron-right\n          # Pointing to the block end, it expands the children inline.\n          - node:\n              uri: global.component.icon\n              props:\n                icon: chevron-down\n          # Also carries the collapsed-rail notification indicator.\n          - uri: global.component.badge\n      relation:\n        cardinality: \"0..1\"\n        slotName: end\n    # Inline expansion only.\n    - node:\n        uri: apps.subcomponent.side_navigation-item\n      relation:\n        cardinality: \"0..*\"\n        slotName: children";
+    ds:anatomyClassic "Navigation item anatomy\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=10063-14807&t=HfRgpBcYWYYrZVn8-1\n\nNavigation item styling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=10064-25717&t=HfRgpBcYWYYrZVn8-1";
+    ds:usage "### When to use\n\nUse navigation items to link to pages within an application or provide access to child navigation through expandable items or secondary navigation.\n\n### When not to use\n\nDo not use an expandable navigation item as a direct link to a page. Its only click interaction is expanding or collapsing its children. Use the children to link to pages instead.";
+    ds:guidelines "## Content specification\n\n### Navigation items\n\nNavigation items constitute the side navigation.\n\nIn primary navigation, items can have icons and can be expandable or open secondary navigation.\n\nIn secondary navigation, items cannot have icons or be expandable.\n\n### Icons\n\nIcons are used to graphically represent the meaning of the item text. They are optional, as not every concept can be represented with an icon.\n\n### Item text\n\nNavigation item labels should be descriptive and intuitive, allowing users to understand the purpose of each item.\n\nDesigners should choose labels that do not overflow. If there is insufficient space, the item text is truncated to a single line.\n\nWhen text is truncated, a tooltip displaying the full text appears after an 800 ms hover delay.\n\n### Expandable items\n\nNavigation items can have children. An expandable item itself cannot link to a page. Its only click interaction is expanding or collapsing its children.\n\nChildren should be grouped either inside an expandable item or displayed in secondary navigation.\n\nExpandable navigation items cannot contain nested expandable items.\n\nThe parent item should have a name that allows users to discover its children, as child items are not always displayed.\n\nOn desktop, a right-pointing chevron indicates that the item opens secondary navigation, while a downward-pointing chevron indicates that the item expands or collapses its children inline.\n\n### Badges\n\nBadges are used within navigation items to convey dynamic information related to that item, such as notifications that require action or highlight a change.\n\nBadges cannot be displayed together with chevrons.\n\nIn the collapsed primary navigation, badges on footer items are displayed as notification indicators to signal new or unread activity.\n\n## Responsive behaviour\n\n### Mobile\n\nOn mobile, navigation items with children are indicated by a chevron pointing to the right, regardless of whether they are expandable or open secondary navigation on desktop.\n\nWhen the user clicks one of these items, its children are displayed on a new page within the navigation.\n\nA back button with a chevron pointing to the left is displayed at the top of the navigation.\n\n## Interaction\n\n### Navigation item\n\n**Hover**\n\nOn hover, the background colour of the navigation item changes and the cursor changes to a pointer.\n\n**Click**\n\nWhen a standard navigation item is clicked, the user is forwarded to the page specified in its target property.\n\n### Expandable navigation item\n\n**Click**\n\nWhen an expandable navigation item is clicked, its state changes to expanded or collapsed depending on its previous state. The chevron rotates between the open and closed positions.\n\nThe transition is animated.\n\n### Navigation item opening secondary navigation\n\n**Click**\n\nWhen a navigation item configured to display its children in secondary navigation is clicked, the secondary navigation opens.\n\n## Accessibility\n\n### Keyboard navigation\n\n**Standard navigation items**\n\nWhen a navigation item has focus, pressing Enter opens the page specified by its target.\n\n**Expandable navigation items**\n\nWhen an expandable navigation item has focus, pressing Enter toggles its expanded or collapsed state.\n\nWhen an expandable navigation item is expanded using the keyboard, the first child item receives focus.\n\n### Screen reader\n\n**Navigation item labels**\n\nNavigation item labels must be descriptive and intuitive so users can understand the purpose of each link without additional context.\n\n**Expandable navigation items**\n\nUse `aria-expanded` to indicate whether an expandable navigation item is expanded or collapsed.\n\n**Current page**\n\nUse `aria-current=\"page\"` to indicate which navigation link corresponds to the current page or view.\n\n### Reduced motion\n\nFor users with a preference for reduced motion, animations when expanding or collapsing navigation items should be disabled.";
+    ds:tier ds:apps;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "target";
+        ds:summary "Defines the page opened when the item is clicked.";
+        ds:propertyType "url";
+        ds:optional "true";
+        ds:constraints "Cannot be set when `expandable` is true."
+    ], [
+        a ds:Property;
+        ds:name "icon";
+        ds:summary "Defines the icon displayed at the start of the item.";
+        ds:propertyType "choice";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "show-icon";
+        ds:summary "Controls whether the icon is displayed.";
+        ds:propertyType "boolean";
+        ds:optional "false";
+        ds:constraints "Must be false when `indented` is false.";
+        ds:defaultValue "`true`"
+    ], [
+        a ds:Property;
+        ds:name "indented";
+        ds:summary "Controls whether the item text is indented.";
+        ds:propertyType "boolean";
+        ds:optional "false";
+        ds:constraints "Must be true when an icon is displayed.";
+        ds:defaultValue "`true`"
+    ], [
+        a ds:Property;
+        ds:name "item-text";
+        ds:summary "Defines the navigation item label.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "badge";
+        ds:summary "Controls whether a badge is displayed.";
+        ds:propertyType "boolean";
+        ds:optional "false";
+        ds:constraints "Cannot be used together with a chevron.";
+        ds:defaultValue "`false`"
+    ], [
+        a ds:Property;
+        ds:name "expandable";
+        ds:summary "Controls whether the item expands to display children.";
+        ds:propertyType "boolean";
+        ds:optional "false";
+        ds:constraints "Requires children. Cannot have a badge or target.";
+        ds:defaultValue "`false`"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "Defines the child navigation items.";
+        ds:propertyType "list of nodes";
+        ds:optional "true";
+        ds:constraints "Only navigation items are allowed. Children cannot contain further children."
+    ], [
+        a ds:Property;
+        ds:name "is-expanded";
+        ds:summary "Controls whether an expandable item is expanded or collapsed.";
+        ds:propertyType "boolean";
+        ds:optional "false";
+        ds:constraints "Can only be true when `expandable` is true.";
+        ds:defaultValue "`false`"
+    ];
+    ds:parentComponent ds:apps.component.side_navigation.
