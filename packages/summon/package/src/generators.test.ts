@@ -479,7 +479,12 @@ describe("generated manifest — validity matrix", () => {
       if (withStorybook) {
         expect(manifest.scripts["build:storybook"]).toBeDefined();
         expect(allDependencies.storybook).toBeDefined();
-        expect(allDependencies["@canonical/storybook-config"]).toBeDefined();
+        // Storybook runs only while developing the package, so consumers of
+        // the published package must not install it.
+        expect(devDependencies["@canonical/storybook-config"]).toBeDefined();
+        expect(
+          manifest.dependencies?.["@canonical/storybook-config"],
+        ).toBeUndefined();
         if (isSvelte) {
           expect(allDependencies["@storybook/svelte-vite"]).toBeDefined();
           expect(allDependencies["@storybook/addon-svelte-csf"]).toBeDefined();

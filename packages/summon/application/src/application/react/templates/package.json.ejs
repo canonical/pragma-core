@@ -88,11 +88,6 @@
 <% } -%>
     "@canonical/router-core": "<%= pragmaWebVersion %>",
     "@canonical/router-react": "<%= pragmaWebVersion %>",
-<% if (relay) { -%>
-    "@canonical/storybook-addon-relay": "<%= pragmaWebVersion %>",
-<% } -%>
-    "@canonical/storybook-addon-utils": "<%= pragmaWebVersion %>",
-    "@canonical/storybook-config": "<%= pragmaWebVersion %>",
     "@canonical/styles": "<%= pragmaWebVersion %>",
 <% if (!spa) { -%>
     "express": "^5.2.1",
@@ -109,6 +104,11 @@
   "devDependencies": {
     "@biomejs/biome": "2.6.6",
     "@canonical/biome-config": "<%= pragmaVersion %>",
+<% if (relay) { -%>
+    "@canonical/storybook-addon-relay": "<%= pragmaWebVersion %>",
+<% } -%>
+    "@canonical/storybook-addon-utils": "<%= pragmaWebVersion %>",
+    "@canonical/storybook-config": "<%= pragmaWebVersion %>",
     "@canonical/typescript-config-react": "<%= pragmaWebVersion %>",
 <% if (intl) { -%>
     "@chromatic-com/storybook": "^5.0.1",
