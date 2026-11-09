@@ -394,16 +394,12 @@ symbol is judgement, which is why it happens in a file under review.
 - **Brevity:** Keep comments concise and factual.
 - **Maintenance:** Review and update comments whenever the anatomy changes.
 - **Placement:** Place comments immediately above the relevant property or node, not inline.
-- **Omitted elements:** Place comments for omitted anatomy or styling properties immediately above the relevant YAML `styles` block, or above the relevant node for omitted structural features.
-- **Omission prefix:** Start comments for omitted properties or structural features with `# Omitted:`, identifying what was omitted and why.
 
 ### Required comments
 
 Include the following comments when applicable:
 
-- **Source references:** In the YAML header, identify the source used to create the anatomy (e.g., an implementation file and CSS selector, or a design file or component URL).
 - **Non-obvious decisions:** Explain structural choices, exceptions, agreed assumptions, or limitations when the reason is not clear from the DSL. This includes CSS pseudo-elements and anonymous nodes used for components that do not yet exist.
-- **Unsupported properties and structures:** Document anatomy or styling properties and structural features that cannot be represented in the DSL, explaining why they were omitted.
 - **Differences:** Explain any known differences between the documented anatomy and the design or implementation specifications, identifying what differs and why.
 
 ### Excluded comments
@@ -412,6 +408,7 @@ Include the following comments when applicable:
 - **Outdated information:** Remove previous-version details, old decisions, and resolved limitations. Keep historical information in version history or changelogs instead.
 - **Irrelevant implementation details:** Exclude implementation details that do not help explain the anatomy.
 - **Unverified information:** Do not present unsupported assumptions or guesses as facts, including speculation about future implementations. Flag open decisions for review instead.
+- **Source references:** Do not include references to design files, component URLs, implementation files, CSS selectors, repositories, documentation, or any other source materials.
 
 ## DSL Reference
 
