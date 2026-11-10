@@ -368,7 +368,7 @@ GraphiQL's assets load as version-pinned UMD bundles from unpkg; air-gapped depl
 
 `incremental: true` on the plugin adds the `@defer`/`@stream` directives (graphql v17 doesn't define them by default), and `incremental: true` on the handler streams deferred payloads as `multipart/mixed` to clients that accept it — everyone else gets a single, complete, drained-and-merged JSON response. Correctness can't be lost to a transport mismatch, only streaming.
 
-One ecosystem wrinkle this package absorbs for you: graphql v17 emits the 2023 incremental payload format (`pending`/`incremental`/`completed`), while Relay's network layer still consumes the legacy shape (`path`/`label` per payload, `is_final`). The `relayFormatAdapter` translates between them — used in-process for SSR and by the handler's `incrementalFormat: "relay-legacy"` option. This is also why `graphql` is **pinned exactly**: the adapter is coupled to the RC's payload format, and upgrades should be deliberate, snapshot-diffed events.
+One ecosystem wrinkle this package absorbs for you: graphql v17 emits the 2023 incremental payload format (`pending`/`incremental`/`completed`), while Relay's network layer still consumes the legacy shape (`path`/`label` per payload, `is_final`). The `relayFormatAdapter` translates between them — used in-process for SSR and by the handler's `incrementalFormat: "relay-legacy"` option. This is also why `graphql` is **pinned exactly**: the adapter is coupled to the pinned version's payload format, and upgrades should be deliberate, snapshot-diffed events.
 
 ## Executing without a server
 

@@ -51,7 +51,7 @@ export interface ExecuteLocalArgs {
 const usesIncrementalDirectives = (source: string): boolean =>
   source.includes("@defer") || source.includes("@stream");
 
-// graphql v17 RC's execute() throws on any schema that carries the @defer or
+// graphql v17's execute() throws on any schema that carries the @defer or
 // @stream directives — even for operations that use neither. Schemas compiled
 // with `incremental: true` must therefore always go through the experimental
 // executor (which still returns a plain ExecutionResult for plain operations).
@@ -181,9 +181,9 @@ export const mergeIncremental = async (
  * stream: the initial payload plain, then one payload per deferred fragment /
  * streamed item with path + label, and is_final on the last payload.
  *
- * @experimental Coupled to the graphql v17 RC's 2023 incremental payload
+ * @experimental Coupled to graphql v17's 2023 incremental payload
  * format (pending/incremental/completed) — the reason `graphql` is pinned
- * exactly. May need adjustment when the RC payload shape changes.
+ * exactly. May need adjustment when the payload shape changes.
  */
 export async function* relayFormatAdapter(
   results: IncrementalResults,

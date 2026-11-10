@@ -76,7 +76,7 @@ The header is skipped on the `skipValidation` artifact-boot path, where `sdl` st
 - **Resolution & DataLoader.** A `CompilerContext` carries three batched loaders — entity (one CONSTRUCT with a `VALUES` clause + blank-node closure), list (one SELECT per class, name-sorted), inverse (one SELECT over reverse assertions). The eight resolver templates in `resolver/templates.ts` read the parent `EntityValue`'s `TripleSet` and dispatch to these loaders.
 - **Lazy store.** The context accepts `Store | Promise<Store>`; ABox loaders `await` it at query time, TBox resolvers never touch it. This lets the schema be ready before the store finishes loading.
 - **Local execution.** `executeLocal` runs an operation in-process (SSR, tests, scripts) — `graphql()` for plain documents, `experimentalExecuteIncrementally` when the schema or document involves `@defer`/`@stream`. Path B (`extractStatic`) runs a fixed query set for fully static deployments.
-- **Incremental delivery.** `graphql@17.0.0-rc.0`; the `incremental` compile option adds `@defer`/`@stream`; `relayFormatAdapter` translates v17's 2023 payload format to Relay's legacy `path`/`label`/`is_final` shape. A drain-and-merge fallback (`mergeIncremental`) means a format break can cost streaming, never correctness.
+- **Incremental delivery.** `graphql@17.1.0`; the `incremental` compile option adds `@defer`/`@stream`; `relayFormatAdapter` translates v17's 2023 payload format to Relay's legacy `path`/`label`/`is_final` shape. A drain-and-merge fallback (`mergeIncremental`) means a format break can cost streaming, never correctness.
 
 ## 6. Package boundary
 
