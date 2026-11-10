@@ -10,6 +10,7 @@ ds:global.subcomponent.timeline-event a ds:Subcomponent;
     ds:usage "### Event content\n\nAn Event item can include default content, custom content, or both. The default content contains the actor name, the description and the dateTime. Each can be hidden individually. Custom content can also span the full width of the component, in which case the marker and the default content is hidden.\n\n### Actor profile link\n\nAn Event can include an actor profile link. When doing so, all Markers representing the actor and the Actor name become clickable and link to the provided profile.\n\n### DateTime\n\nThe dateTime defaults to displaying the date and time in the user’s local format. It can be configured by the DS consumer to exclude the time or to use a specific format for all users. Additionally, dateTime can be displayed as relative time.\n\n### Marker styles\n\nThe component provides flexible marker styles to accommodate different use cases. A marker can be one of three sizes and can include one of three graphical elements. What marker style an event uses is determined by the Timeline component's marker combination property.";
     ds:guidelines "";
     ds:tier ds:global;
+    ds:documentationStage ds:tag.needsdocumentation;
     ds:hasProperty [
         a ds:Property;
         ds:name "Is fully custom";
@@ -49,7 +50,6 @@ ds:global.subcomponent.timeline-event a ds:Subcomponent;
         ds:propertyType "datetime";
         ds:optional "false"
     ];
-    ds:documentationStage ds:tag.needsdocumentation;
     ds:parentComponent ds:global.pattern.timeline;
     ds:hasTokenBinding [
         a ds:TokenBinding;

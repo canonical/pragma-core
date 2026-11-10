@@ -10,6 +10,7 @@ ds:apps.pattern.notification_center a ds:Pattern;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
+    ds:documentationStage ds:tag.needstriage;
     ds:hasProperty [
         a ds:Property;
         ds:name "datetimeFormat";
@@ -23,5 +24,4 @@ ds:apps.pattern.notification_center a ds:Pattern;
         ds:name "avatarType";
         ds:propertyType "choice";
         ds:optional "false"
-    ];
-    ds:documentationStage ds:tag.needstriage.
+    ].
