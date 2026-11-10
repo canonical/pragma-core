@@ -136,26 +136,10 @@ ds:apps.subcomponent.side_panel-footer a ds:Subcomponent;
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.button;
         ds:node "$root";
-        anatomy:styleKey "typography.weight";
-        anatomy:styleState "default";
-        ds:rank 1;
-        ds:consumesSymbol dt:typography.weight.medium
-    ], [
-        a ds:TokenBinding;
-        ds:viaBlock ds:global.component.button;
-        ds:node "$root";
-        anatomy:styleKey "typography.size";
-        anatomy:styleState "default";
-        ds:rank 1;
-        ds:consumesSymbol dt:dimension.size.fontSize.300
-    ], [
-        a ds:TokenBinding;
-        ds:viaBlock ds:global.component.button;
-        ds:node "$root";
         anatomy:styleKey "typography.font";
         anatomy:styleState "default";
         ds:rank 1;
-        ds:consumesSymbol dt:typography.text.secondary
+        ds:consumesSymbol dt:typography.text.primary
     ], [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.button;

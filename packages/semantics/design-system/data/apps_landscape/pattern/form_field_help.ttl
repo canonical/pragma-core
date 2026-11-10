@@ -10,6 +10,7 @@ ds:apps_landscape.pattern.form_field_help a ds:Pattern;
     ds:usage "### When to use\n\n**Contextual clarification**\n\nUse for short, optional explanation that would otherwise interrupt a compact form.\n\n**Unfamiliar settings**\n\nUse beside technical labels or checkbox choices whose consequences need clarification.\n\n**Supplementary information**\n\nUse only when users can understand and operate the control without opening the tooltip.\n\n### When not to use\n\n**Required instructions**\n\nEssential information users must read before completing a field.\n\n**Incorrect pattern**: Hiding critical setup steps or prerequisites behind a tooltip.\n\n**Remediation strategy**: Place required instructions persistently as label text or use persistent help text instead.\n\n**Validation feedback**\n\nErrors, warnings, or status messages that must remain visible.\n\n**Incorrect pattern**: Using a tooltip for validation errors or status that changes dynamically.\n\n**Remediation strategy**: Use persistent error/help text or use a dedicated validation pattern paired with the form control.\n\n**Long or interactive content**\n\nRich content like multi-step guidance, links, tables, or content that should remain open.\n\n**Incorrect pattern**: Forcing multi-paragraph help, clickable links, or complex structures into a tooltip.\n\n**Remediation strategy**: Use persistent help text, a disclosure/accordion, or a dedicated help panel for rich content.\n\n**Accessible label replacement**\n\nUsing the help icon or text as the only way to identify a form control.\n\n**Incorrect pattern**: Treating the icon or FieldDescription text span as a substitute for a form control’s native label.\n\n**Remediation strategy**: Always provide an explicit `<label>` or aria-label on the control itself; use help only as supplementary context.";
     ds:guidelines "";
     ds:tier ds:apps_landscape;
+    ds:documentationStage ds:tag.specialadoption-docs;
     ds:hasProperty [
         a ds:Property;
         ds:name "FieldDescription.label";
@@ -63,5 +64,4 @@ ds:apps_landscape.pattern.form_field_help a ds:Pattern;
         ds:constraints "Exact contract: CheckboxInputWithHelpProps extends InputProps { readonly tooltipMessage: string }. Inherited props use their Canonical defaults. Because the spread is last, props such as type may override type=\"checkbox\"; consumers should not do so.";
         ds:defaultValue "—";
         ds:optional "true"
-    ];
-    ds:documentationStage ds:tag.specialadoption-docs.
+    ].
