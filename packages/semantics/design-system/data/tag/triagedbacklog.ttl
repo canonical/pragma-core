@@ -5,5 +5,5 @@
 ds:tag.triagedbacklog a ds:Tag;
     ds:name "triaged:backlog";
     ds:category ds:tagcategory.design--documentation-status;
-    ds:whenToApply "UIBlock inclusion to the DS is postponed";
+    ds:whenToApply "UIBlock inclusion to the DS has been accepted, but the design of it is postponed";
     ds:whenToRemove "".
