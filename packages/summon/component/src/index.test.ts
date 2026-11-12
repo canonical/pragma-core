@@ -647,11 +647,11 @@ describe("generated stylesheet layer", () => {
   it("follows the target package for svelte too", () => {
     expect(
       generateStyles(
-        "/repo/packages/svelte/ds-app-wpe",
+        "/repo/packages/svelte/ds-app-workplace",
         "component/svelte",
         "src/lib/components/Banner",
       ),
-    ).toContain("@layer ds.components.apps-wpe {");
+    ).toContain("@layer ds.components.apps-workplace {");
     expect(
       generateStyles(
         "/repo/packages/svelte/ds-global",
@@ -687,7 +687,7 @@ describe("generated stylesheet layer", () => {
 
   it("leaves the lit stylesheet unlayered: a shadow tree has its own cascade", () => {
     const content = generateStyles(
-      "/repo/packages/lit/ds-app-wpe",
+      "/repo/packages/lit/ds-app-workplace",
       "component/lit",
       "src/lib/Banner",
     );

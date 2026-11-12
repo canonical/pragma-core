@@ -190,7 +190,7 @@ describe("a shared block name reaches every block that carries it (PROTECTED)", 
   });
 
   it("answers a name shared by two EQUALLY deep tiers deterministically", async () => {
-    // `ThemeSwitcher` is Apps/Anbox against Apps/WorkplaceEngineering — same
+    // `ThemeSwitcher` is Apps/Anbox against Apps/Workplace — same
     // depth, so the ranking has nothing to say and the total order's final key
     // decides. This is the residual the ranking does NOT resolve, asserted as
     // such: the claim is not that the right one wins, it is that the same one
