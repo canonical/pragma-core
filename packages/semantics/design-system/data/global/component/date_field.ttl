@@ -10,7 +10,7 @@ ds:global.component.date_field a ds:Component;
     ds:usage "A labelled calendar-date entry within a form.\n\n### When to use\n- Collecting one specific calendar day (start date, deadline, date of birth, appointment day).\n- The date is an absolute point that benefits from a calendar metaphor rather than free typing.\n- The allowable dates form a continuous range that can be bounded by an earliest and latest day.\n\n### When not to use\n- A time of day with no calendar day attached — use **Time**.\n- A calendar day together with a time of day — use **DateTime**.\n- A day drawn from a small, named set rather than the open calendar — use **Select** or **Choices**.\n- A span between two days rather than a single point — use a date-range field.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.date_field;

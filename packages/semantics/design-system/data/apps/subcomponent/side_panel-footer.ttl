@@ -10,7 +10,7 @@ ds:apps.subcomponent.side_panel-footer a ds:Subcomponent;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:parentComponent ds:apps.pattern.side_panel;
     ds:hasTokenBinding [
         a ds:TokenBinding;

@@ -10,7 +10,7 @@ ds:global.subcomponent.range_input a ds:Subcomponent;
     ds:usage "The bounded-quantity entry part a host places in context when a value is selected along a continuous span.\n\n\n\n### When to use\n\n- A host collects a numeric value between a known minimum and maximum.\n\n- Approximate, relative selection along a scale matters more than an exact figure.\n\n\n\n### When not to use\n\n- A precise number or arbitrary text is needed — compose [TextInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-csRvI-VTpO) .\n\n- The value is one option from a labelled set — compose [SelectInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-EVwqNhd3WH)  or [RadioInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-x_sKubP8Qh) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.range_input;

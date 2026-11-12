@@ -10,7 +10,7 @@ ds:global.component.date_time_field a ds:Component;
     ds:usage "A labelled combined date-and-time entry within a form.\n\n\n\n### When to use\n\n- Collecting a single moment that needs both a calendar day and a time of day (scheduled event, deadline with a cut-off hour, timestamp).\n\n- The value is an absolute point in time that benefits from a combined calendar-and-clock metaphor.\n\n- The allowable moments form a continuous range that can be bounded by an earliest and latest moment, optionally snapped to set increments.\n\n### When not to use\n\n- A calendar day with no time attached — use [DateField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Btd18SrL7F) \n\n- A time of day with no calendar day attached — use [TimeField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-BoM_2nGCi9) .\n\n- A moment drawn from a small, named set rather than the open range — use [SelectField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-u5dH7O-tHI)  or [RichChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-OE7Ygmz_vT) .\n\n- A span between two moments rather than a single point — use a date-range field.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.date_time_field;

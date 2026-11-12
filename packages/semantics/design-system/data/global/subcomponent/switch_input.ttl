@@ -10,7 +10,7 @@ ds:global.subcomponent.switch_input a ds:Subcomponent;
     ds:usage "The instant on/off entry part a host places in context for a single setting that takes effect immediately.\n\n### When to use\n- A host toggles one binary setting whose change applies at once, like enabling a mode.\n- The choice reads as turning something on or off rather than ticking a list.\n\n### When not to use\n- The choice is one of several that may each be selected — compose **CheckboxInput**.\n- Exactly one option must win from a set — compose **RadioInput**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.switch_input;

@@ -10,7 +10,7 @@ ds:global.component.checkbox_field a ds:Component;
     ds:usage "A labelled binary choice within a form.\n\n\n\n### When to use\n\n- A single opt-in or acceptance (e.g. agree to terms).\n\n- Toggling one independent option whose value is committed with the form.\n\n\n\n### When not to use\n\n- Several related, mutually-exclusive options — use [RichChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-OE7Ygmz_vT)  or [ChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-IFk-NNRL3C) .\n\n- A setting that takes effect immediately on toggle — use [SwitchField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-vZovGhu5_P) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.checkbox_field;

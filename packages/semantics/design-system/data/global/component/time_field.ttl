@@ -10,7 +10,7 @@ ds:global.component.time_field a ds:Component;
     ds:usage "A labelled time-of-day entry within a form.\n\n\n\n### When to use\n\n- Collecting one specific time of day (appointment slot, opening hour, reminder time).\n\n- The time is an absolute point in the day that benefits from a clock metaphor rather than free typing.\n\n- The allowable times form a continuous range that can be bounded by an earliest and latest time, optionally snapped to set increments.\n\n\n\n### When not to use\n\n- A calendar day with no time attached — use [DateField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Btd18SrL7F) .\n\n- A calendar day together with a time of day — use [DateTimeField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-iMMaj5QewN) .\n\n- A time drawn from a small, named set rather than the open clock — use [SelectField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-u5dH7O-tHI)  or [RichChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-OE7Ygmz_vT) .\n\n- A length of time rather than a point in the day — use a duration field.\n\n";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.time_field;

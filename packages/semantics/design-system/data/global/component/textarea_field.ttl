@@ -10,7 +10,7 @@ ds:global.component.textarea_field a ds:Component;
     ds:usage "A labelled multi-line text entry within a form.\n\n\n\n### When to use\n\n- Longer, free-form text is collected over several lines, such as notes, descriptions, or comments.\n\n- The user benefits from writing and revising across multiple lines rather than a single line.\n\n\n\n### When not to use\n\n- A short, single-line value is wanted — use [TextField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-QAuX4qtecx) .\n\n- The value is chosen from a known set rather than written freely — use [SelectField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-u5dH7O-tHI) , [ComboboxField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-kfEQ25cX4a) , [RichChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-OE7Ygmz_vT) , or [ChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-IFk-NNRL3C) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.textarea_field;

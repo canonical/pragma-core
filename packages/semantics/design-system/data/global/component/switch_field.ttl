@@ -10,7 +10,7 @@ ds:global.component.switch_field a ds:Component;
     ds:usage "Captures a single binary on/off setting where a toggle metaphor communicates the state more naturally than a checkmark.\n\n### When to use\n- The setting has exactly two states, on and off, with an immediate sense of being enabled or disabled.\n- A toggle reads more naturally than a tick, such as turning a feature or preference on or off.\n\n### When not to use\n- The user is agreeing to terms or opting in as part of submitting a form — use **Checkbox**.\n- The user must pick among several distinct options rather than flip one setting — use **Choices**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.switch_field;

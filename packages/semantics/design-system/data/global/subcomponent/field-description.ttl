@@ -10,7 +10,7 @@ ds:global.subcomponent.field-description a ds:Subcomponent;
     ds:usage "The supporting chrome part a field composes to guide, hint, or constrain the value it collects.\n\n\n\n### When to use\n\n- A field needs format guidance, examples, or constraints beyond its name.\n\n- Helper text should sit with the input to reduce errors before entry.\n\n\n\n### When not to use\n\n- The text names the field rather than explaining it — compose **Field.Label**.\n\n- The message reports a validation outcome tied to entry state — use the field's status messaging, not this chrome.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.field-description;

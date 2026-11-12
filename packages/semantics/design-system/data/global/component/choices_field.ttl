@@ -10,7 +10,7 @@ ds:global.component.choices_field a ds:Component;
     ds:usage "Presents a small, fully visible set of options as text-only labels, where the arrangement (inline or stacked) carries meaning.\n\n\n\n### When to use\n\n- The full set of options is short enough to show at once without scrolling or filtering.\n\n- Each option is described well by a plain text label, with no supporting imagery or secondary detail.\n\n- The way options are laid out — side by side or stacked — is part of how the choice reads.\n\n\n\n### When not to use\n\n- Options need rich labels with supporting detail or imagery — use [RichChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-OE7Ygmz_vT) .\n\n- The list is long enough that filtering would help find an option — use [ComboboxField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-kfEQ25cX4a) \n\n- The choice is a single yes/no decision — use [CheckboxField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-vwBCoHgXoG) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.choices_field;

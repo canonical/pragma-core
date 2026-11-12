@@ -10,7 +10,7 @@ ds:global.component.phone_field a ds:Component;
     ds:usage "A labelled telephone-number entry, paired with its country, within a form.\n\n\n\n### When to use\n\n- A telephone number is collected and the country (and its dialling prefix) is part of the value.\n\n- The entry benefits from picking a country alongside typing the national number.\n\n\n\n### When not to use\n\n- A generic short value with no country context is wanted — use [TextField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-QAuX4qtecx) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.phone_field;

@@ -10,7 +10,7 @@ ds:global.subcomponent.card-thumbnail a ds:Subcomponent;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdocumentation;
+    ds:documentationStage ds:tag.needsfulldocumentation;
     ds:parentComponent ds:global.component.card;
     ds:hasTokenBinding [
         a ds:TokenBinding;

@@ -10,7 +10,7 @@ ds:global.subcomponent.select_input a ds:Subcomponent;
     ds:usage "The condensed single-choice entry part a host places in context to pick one option from a list revealed on demand.\n\n### When to use\n- A host offers a moderate set of options that should stay collapsed until needed.\n- Conserving space matters and all options need not be shown at once.\n\n### When not to use\n- The set is short and choosing benefits from full visibility — compose **RadioInput**.\n- The set is large enough to need typing to filter — compose **ComboboxInput**.\n- Several options may be selected together — compose **CheckboxInput**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.select_input;

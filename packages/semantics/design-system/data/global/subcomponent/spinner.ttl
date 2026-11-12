@@ -10,4 +10,4 @@ ds:global.subcomponent.spinner a ds:Subcomponent;
     ds:usage "### When to use\n\n- **Indeterminate waits:** an action is in progress and its duration is unknown (button submitting, options loading).\n\n### When not to use\n\n- **Determinate progress:** use a progress bar when completion  \ncan be measured.";
     ds:guidelines "- **Motion:** rotates via a motion token; honours `prefers-reduced-motion`.\n- **Accessibility:** decorative by default; the  \nsurrounding control owns the accessible status text.\n\n";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needscoredocumentation.

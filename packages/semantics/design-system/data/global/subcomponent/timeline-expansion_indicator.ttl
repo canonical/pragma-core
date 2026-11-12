@@ -10,5 +10,5 @@ ds:global.subcomponent.timeline-expansion_indicator a ds:Subcomponent;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdocumentation;
+    ds:documentationStage ds:tag.needsfulldocumentation;
     ds:parentComponent ds:global.pattern.timeline.
