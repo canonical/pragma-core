@@ -10,7 +10,7 @@ ds:global.subcomponent.checkbox_input a ds:Subcomponent;
     ds:usage "The independent on/off entry part a host places in context for a single, self-contained choice.\n\n\n\n### When to use\n\n- A host needs one or more choices that each toggle independently, where any combination may be selected.\n\n- A choice represents a discrete opt-in or opt-out that carries meaning on its own.\n\n- A group of related choices may all be active at once.\n\n\n\n### When not to use\n\n- Choices are mutually exclusive and exactly one must win — compose [RadioInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-x_sKubP8Qh) .\n\n- A single setting flips an immediate, system-like state — compose [SwitchInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-rCfe2Hk8yE) .\n\n- The host offers many choices better presented as a condensed list — compose [SelectInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-EVwqNhd3WH) .\n\n";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.checkbox_input;

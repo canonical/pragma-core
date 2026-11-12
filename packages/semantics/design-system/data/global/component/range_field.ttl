@@ -10,7 +10,7 @@ ds:global.component.range_field a ds:Component;
     ds:usage "A labelled control for choosing a number within a fixed minimum and maximum by sliding.\n\n\n\n### When to use\n\n- An approximate number is chosen within a known, bounded scale, with the current value shown as it changes.\n\n- Sliding along a continuous track communicates the choice more naturally than typing an exact figure.\n\n\n\n### When not to use\n\n- A precise or open-ended number is required rather than an approximate one within bounds — use [TextInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-csRvI-VTpO) .";
     ds:guidelines "## Accessibility (draft)  \n\n\nHow to ensure accessibility requirements are met:\n\n1. Group the slider and the input into a fieldset.\n2. Add a legend to the fieldset.\n3. Programatically: keep the `<label>`s; or use the `title` attribute to replace the `<label>`.\n4. Visually: hide the labels .\n5. Visually: make sure the slider and the input are clearly a group associated with the legend.  \nSee spec: [https://docs.google.com/document/d/19k-5YOuQc6B82mYPEwvmlJpui3Oex4o8ACwKBbo-d44/edit?tab=t.0](https://docs.google.com/document/d/19k-5YOuQc6B82mYPEwvmlJpui3Oex4o8ACwKBbo-d44/edit?tab=t.0)\n\n*Future work: revisit the styling in the future so that it's clearly a group*\n\n";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needsfulldocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.range_field;

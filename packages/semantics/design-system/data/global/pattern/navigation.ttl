@@ -10,4 +10,4 @@ ds:global.pattern.navigation a ds:Pattern;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needscoredocumentation.

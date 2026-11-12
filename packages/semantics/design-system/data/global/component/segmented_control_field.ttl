@@ -10,4 +10,4 @@ ds:global.component.segmented_control_field a ds:Component;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needscoredocumentation.

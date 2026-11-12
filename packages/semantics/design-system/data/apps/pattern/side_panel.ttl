@@ -10,7 +10,7 @@ ds:apps.pattern.side_panel a ds:Pattern;
     ds:usage "**When to use**\n\n- When showing details of a selected entity.\n- When there is work that accompanies the current view — inspecting or editing an item while the list/app behind stays visible and usable.  \n- When the user needs to fill a form in applications (per Modal guidance: websites → modals,  apps → side panels or full pages). Use side panels when there are multi-step flows that need layer/nesting.\n- Viewing an item's associated entities when the main listing page can't be filtered to just those.\n\n\n\n**When not to use:**\n\n- Interruptive moments needing an explicit decision — for confirmations, destructive actions, warnings, unsaved-changes alerts  use Modal.\n- Anything requiring the page behind to be inert: the panel has no backdrop, no focus trap, no aria-modal; the application stays clickable and tabbable by design.\n- Opening from inside a modal — a side panel can trigger a modal, never the reverse.\n- When there is Information the user must acknowledge before continuing.";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasSubcomponent ds:apps.subcomponent.side_panel-footer, ds:apps.subcomponent.side_panel-header, ds:apps.subcomponent.side_panel-content;
     ds:hasTokenBinding [
         a ds:TokenBinding;

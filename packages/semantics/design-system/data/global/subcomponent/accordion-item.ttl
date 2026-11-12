@@ -10,7 +10,7 @@ ds:global.subcomponent.accordion-item a ds:Subcomponent;
     ds:usage "The accordion item is intended to reduce visual noise and page length by keeping details hidden until requested. Use only as part of the Accordion.  \n";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdocumentation;
+    ds:documentationStage ds:tag.needsfulldocumentation;
     ds:hasProperty [
         a ds:Property;
         ds:name "heading";

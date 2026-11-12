@@ -10,7 +10,7 @@ ds:global.subcomponent.phone_input a ds:Subcomponent;
     ds:usage "The telephone-number entry part a host places in context when the value follows dialling conventions.\n\n\n\n### When to use\n\n- A host collects a phone number that benefits from regional formatting and validation.\n\n- The value should be guided toward a recognised dialling pattern.\n\n\n\n### When not to use\n\n- The value is free-form text with no number conventions — compose [TextInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-csRvI-VTpO) .\n\n- The value is a general numeric quantity within a range — compose [RangeInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-UoMsaXBhOs) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.phone_input;

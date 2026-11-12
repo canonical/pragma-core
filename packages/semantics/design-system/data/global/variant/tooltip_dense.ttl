@@ -10,7 +10,7 @@ ds:global.variant.tooltip_dense a ds:Variant;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasSubcomponent ds:global.variant.tooltip_dense;
     ds:variantOf ds:global.component.tooltip;
     ds:parentComponent ds:global.variant.tooltip_dense.

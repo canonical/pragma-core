@@ -10,7 +10,7 @@ ds:global.pattern.table_of_contents a ds:Pattern;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.pattern.table_of_contents;

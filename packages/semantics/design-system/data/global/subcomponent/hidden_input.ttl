@@ -10,4 +10,4 @@ ds:global.subcomponent.hidden_input a ds:Subcomponent;
     ds:usage "The non-visible carrier part a host places in context to hold a value that travels with a submission but is never edited.\n\n\n\n### When to use\n\n- A host must retain a fixed or system-derived value alongside visible entries.\n\n- A value needs to accompany the field's data without inviting interaction.\n\n\n\n### When not to use\n\n- The person should see or change the value — compose **TextInput**.\n\n- The value is purely presentational and not part of the field's data — it belongs in the host's content, not an input part.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needscoredocumentation.

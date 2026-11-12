@@ -10,7 +10,7 @@ ds:global.subcomponent.date_time_input a ds:Subcomponent;
     ds:usage "The combined date-and-time entry a host composes when the value it collects is a date and time together.\n\n### When to use\n\n- The host (a field, a filter, a choices group) needs the user to set both a calendar day and a time of day as a single moment, and bounds it by an earliest and latest moment, optionally snapped to set increments.\n\n- The collected value is a single point in time carrying both a day and a time.\n\n### When not to use\n\n- The host needs only a calendar day — compose [DateInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-fQZpZDU2_9) \n\n- The host needs only a time of day — compose [TimeInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-mzx6TJ4AGG) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.date_time_input;

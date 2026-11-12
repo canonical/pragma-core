@@ -10,7 +10,7 @@ ds:global.subcomponent.field-label a ds:Subcomponent;
     ds:usage "The naming chrome part a field composes to announce what the input collects.\n\n\n\n### When to use\n\n- A field must state, in a few words, the meaning of the value it gathers.\n\n- Every field that takes input needs a persistent name people can read at a glance.\n\n\n\n### When not to use\n\n- Supplementary guidance, format hints, or constraints accompany the name — compose [Field.Description](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-EtN3NdpDS2) .\n\n- The text is body content unrelated to a field's value — use a standalone text part, not this chrome.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.field-label;

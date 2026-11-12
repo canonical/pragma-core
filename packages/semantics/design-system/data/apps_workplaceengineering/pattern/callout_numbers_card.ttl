@@ -10,4 +10,4 @@ ds:apps_workplaceengineering.pattern.callout_numbers_card a ds:Pattern;
     ds:usage "## \n\n- Tracking time-to-hire, seats filled, and pending onboarding actions.\n- Reviewing quarterly targets, open leads, or overdue tasks.\n- Monitoring completed milestones, or backlog items.";
     ds:guidelines "";
     ds:tier ds:apps_workplaceengineering;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needscoredocumentation.

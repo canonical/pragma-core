@@ -10,11 +10,4 @@ ds:global.group.buttons a ds:Group;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
-    ds:hasProperty [
-        a ds:Property;
-        ds:optional "false"
-    ], [
-        a ds:Property;
-        ds:optional "false"
-    ].
+    ds:documentationStage ds:tag.needscoredocumentation.

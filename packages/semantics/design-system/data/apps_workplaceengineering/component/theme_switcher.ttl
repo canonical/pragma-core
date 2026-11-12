@@ -10,4 +10,4 @@ ds:apps_workplaceengineering.component.theme_switcher a ds:Component;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:apps_workplaceengineering;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needscoredocumentation.

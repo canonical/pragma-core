@@ -10,7 +10,7 @@ ds:global.subcomponent.date_input a ds:Subcomponent;
     ds:usage "The calendar-date entry a host composes when the value it collects is a single calendar day.\n\n\n\n### When to use\n\n- The host (a field, a filter, a choices group) needs the user to set one calendar date and bounds it by an earliest and latest day.\n\n- The collected value is a calendar day with no time-of-day component.\n\n\n\n### When not to use\n\n- The host needs only a time of day — compose [TimeInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-mzx6TJ4AGG) .\n\n- The host needs a calendar day together with a time of day — compose [DateTimeInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui--azXSh_q2l) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.date_input;

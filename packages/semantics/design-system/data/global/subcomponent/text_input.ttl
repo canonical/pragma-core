@@ -10,7 +10,7 @@ ds:global.subcomponent.text_input a ds:Subcomponent;
     ds:usage "The single-line free-text entry part a host places in context for short, open-ended written values.\n\n\n\n### When to use\n\n- A host collects a brief line of text such as a name or label.\n\n- The value is open prose with no fixed option set and fits on one line.\n\n\n\n### When not to use\n\n- The value runs to several lines — compose [TextareaInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-AhD9dYg2Q9) .\n\n- The value is a sensitive secret — compose [PasswordInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-56yPjE3O1S) , or a phone number — [PhoneInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-TOwhvjdQ8a) .\n\n- The value is a choice from a known set — compose [SelectInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-EVwqNhd3WH) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.text_input;

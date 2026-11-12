@@ -10,7 +10,7 @@ ds:global.subcomponent.radio_input a ds:Subcomponent;
     ds:usage "The mutually-exclusive single-choice entry part a host places in context when exactly one option must win from a small set.\n\n### When to use\n- A host presents a short, fully visible set of options where only one may be chosen.\n- Seeing all options side by side aids the decision.\n\n### When not to use\n- Several choices may be active at once — compose **CheckboxInput**.\n- The option set is long or searchable — compose **SelectInput** or **ComboboxInput**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.radio_input;

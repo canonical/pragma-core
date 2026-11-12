@@ -10,4 +10,4 @@ ds:global.component.hidden_field a ds:Component;
     ds:usage "Carries a fixed or derived value along with the form without presenting any visible part to the user.\n\n\n\n### When to use\n\n- A value must travel with the form but is set programmatically or derived rather than entered.\n\n- The value should remain constant and is not meant to be reviewed or changed during completion.\n\n\n\n### When not to use\n\n- The user should be able to see, confirm, or change the value — use [TextField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-QAuX4qtecx)  (or another visible field).";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needscoredocumentation.

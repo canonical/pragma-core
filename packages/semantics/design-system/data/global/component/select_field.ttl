@@ -10,7 +10,7 @@ ds:global.component.select_field a ds:Component;
     ds:usage "A labelled control for choosing exactly one value from a compact dropdown list.\n\n### When to use\n- Exactly one value is chosen from a short, known set that stays collapsed until opened.\n- The set is small enough to scan in full without typing to filter.\n\n### When not to use\n- The set is large enough that filtering by typing would help — use **Combobox**.\n- Several options may be chosen at once, or the choices benefit from rich labels shown in full — use **Choices** or **SimpleChoices**.\n- A single binary decision is being made — use **Checkbox**.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.select_field;

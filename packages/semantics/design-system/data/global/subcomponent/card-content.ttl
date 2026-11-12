@@ -10,7 +10,7 @@ ds:global.subcomponent.card-content a ds:Subcomponent;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdocumentation;
+    ds:documentationStage ds:tag.needsfulldocumentation;
     ds:hasProperty [
         a ds:Property;
         ds:name "children";

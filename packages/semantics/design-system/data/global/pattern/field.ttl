@@ -10,4 +10,4 @@ ds:global.pattern.field a ds:Pattern;
     ds:usage "The shared frame for a single form control.\n\n\n\n### When to use\n\n- Whenever a form collects one value from the user and needs to label it, optionally describe it, and report validation outcomes consistently.\n\n\n\n### When not to use\n\n- For purely presentational, non-collecting controls (no value, no validation).\n\n- To group several fields — that is the job of a form section/group, not a single Field.";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition.
+    ds:documentationStage ds:tag.needscoredocumentation.

@@ -10,7 +10,7 @@ ds:global.component.text_field a ds:Component;
     ds:usage "A labelled single-line text entry within a form.\n\n\n\n### When to use\n\n- Collecting a short, free-form value on one line (name, code, email, URL, telephone).\n\n\n\n\n\n### When not to use\n\n- Multi-line or long-form text — use [TextareaField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-1BX4RBEZu6) .\n\n- Masking sensitive entry (password) — a content-type variant of this control, [PasswordField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-wg-OYudWS0) .\n\n- Choosing from a known set of values — use [SelectField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-u5dH7O-tHI) , [ComboboxField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-kfEQ25cX4a) , [RichChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-OE7Ygmz_vT) , or [ChoicesField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-IFk-NNRL3C) .\n\n- Numeric selection within a bounded range — use [RangeField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-N4ek7saDSq) .";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needsdefinition;
+    ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.text_field;
