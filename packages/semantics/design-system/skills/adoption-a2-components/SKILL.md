@@ -283,6 +283,22 @@ prop's values are the family's values lowercased with spaces as underscores
 the lowercase form. A family listed on the block may have no prop on the component
 yet — check the component's types before writing it.
 
+## Inputs come with their form
+
+Standalone inputs (`TextInput`, `SelectInput`, …) carry input chrome but no spacing
+of their own: the gaps between fields are owned by `Field`/`Form`, the
+react-hook-form model of `adoption-a3-forms`. The standalone inputs exist for
+controls that live outside a form — a filter bar, a theme picker. Placing them by
+hand to build a form — stacking bare inputs in a modal or a settings panel — is the
+failure mode: the fields render with no gaps, because the spacing lives in the form
+system that a component swap never reaches.
+
+So a form is not a type to swap piecemeal. In a one-shot migration forms are in
+scope: run the A3 steps for each form as part of the change, and the `Field`/`Form`
+frame brings the label, description, error wiring and field spacing with it. A
+presentational, non-react-hook-form layout is not shipped yet — report that as a
+finding rather than hand-stacking the inputs.
+
 ## Verify per PR
 
 - [ ] Root context and density classes present (track A1) — swapped components size
