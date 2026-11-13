@@ -163,6 +163,25 @@ propose a change to the standard itself. The standards apply even when the app h
 pragma dependency, and they are open to contribution: a missing or wrong standard is
 something to propose a change for, not to silently work around.
 
+## Read the foundations before writing app CSS
+
+The type scale, spacing and grid are documented concepts, and app CSS should be
+written against them rather than rediscovered from the tokens. Read them before the
+first stylesheet edit:
+
+```bash
+pragma concept list --search Foundations          # the live set of foundation concepts
+pragma concept lookup "Foundations: Typography"   # per-tier heading hierarchies
+pragma concept lookup "Foundations: Spacing"      # inter- and intra-component spacing
+pragma concept lookup "Foundations: Grid & Layout"
+pragma concept lookup "Foundations: Density & the form channel"
+```
+
+`concept list` is the live source of concept names — take them from its output, never
+from memory or this list. `concept lookup` answers with the concept's content, which
+carries the per-tier guidance (heading hierarchies, spacing models, grid columns) the
+app's own tier falls under. (MCP: `concept_list`, `concept_lookup { name: [...] }`.)
+
 ## Fonts before styles
 
 Fonts are opt-in and must be imported FIRST. The canonical form, in the root stylesheet:

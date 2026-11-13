@@ -287,6 +287,9 @@ yet — check the component's types before writing it.
 
 - [ ] Root context and density classes present (track A1) — swapped components size
       from the `--density-*` channel, not from luck.
+- [ ] Heading sizes and weights follow the tier's scale in "Foundations: Typography",
+      with no app CSS overriding them; the outline is real: one `h1` per page, in
+      the page header, and the product name is not a heading.
 - [ ] Zero dev-console warnings from the swapped components.
 - [ ] Keyboard pass on each swapped instance (focus, activation, escape where relevant).
 - [ ] Visual pass against the component's Storybook stories.
