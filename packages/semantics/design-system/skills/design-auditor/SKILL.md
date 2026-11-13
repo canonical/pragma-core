@@ -48,7 +48,8 @@ Decision gates — in collaboration, pause at each and resolve it WITH the perso
 ## When NOT to Use
 
 - Auditing an APP's adoption of the design system — that is the
-  `adoption-a1-styles`/`a2`/`a3` tracks
+  `adoption-a1-styles`/`a2`/`a3` tracks. The one exception is the Standards Audit
+  dimension, which `adoption-a2-components` borrows for its design-conformance pass
 - Fixing what the audit finds — route gaps to `specify-component`/`specify-pattern`,
   missing anatomies to `anatomy-author`
 
