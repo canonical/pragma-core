@@ -108,6 +108,28 @@ So, asked what this skill is:
 
 Then, and only then, the breakdown.
 
+## What "migrate" means
+
+In a one-shot migration — the person asks for the whole app in one change —
+"migrate" means re-platforming the app onto pragma's structure and conventions, not
+rendering the old app's look with pragma parts. The app keeps its FUNCTIONAL
+behaviour: its pages, routes, data and interactions. Its layout and visual
+decisions are replaced by pragma's.
+
+For an application, the structure starts with the shell from
+`@canonical/react-ds-app`: `ApplicationLayout` with `SideNavigation`, and
+`ViewLayout` for each page (the package also exports `ContentLayout` and
+`SidePanel`). Its router peers (`@canonical/router-core`, `@canonical/router-react`)
+are optional, and `SideNavigation` takes a `LinkComponent` prop, so the app's own
+router link plugs in. A custom top navigation bar, a username and logout in the
+top-right corner, or a product name styled as a heading are the old app's
+decisions, not features to keep: the navigation moves into `SideNavigation`, the
+user and logout into its footer, and the product name into its header.
+
+If that reading cannot be assumed, ask exactly one scope question before starting:
+
+> Same look, or pragma conventions?
+
 ## Install
 
 ```bash
