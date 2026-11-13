@@ -42,3 +42,4 @@ export {
 } from "./packageManager.js";
 export type { RegistryCheckResult } from "./registry.js";
 export { checkRegistryVersion, PRAGMA_PACKAGE } from "./registry.js";
+export { isSemverNewer } from "./semver.js";
