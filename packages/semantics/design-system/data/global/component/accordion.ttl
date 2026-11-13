@@ -63,12 +63,10 @@ ds:global.component.accordion a ds:Component;
     ], [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-06-10T00:00:00.000+02:00";
-        ds:changeType "change";
-        ds:change "Added properties"
+        ds:changeType "change"
     ], [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-06-26T00:00:00.000+02:00";
-        ds:changeType "change";
-        ds:change "Added accessibility guidelines"
+        ds:changeType "change"
     ];
     ds:hasSubcomponent ds:global.subcomponent.accordion-item.

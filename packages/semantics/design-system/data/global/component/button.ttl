@@ -50,12 +50,10 @@ ds:global.component.button a ds:Component;
     ds:changeLog [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-02-20T00:00:00.000+01:00";
-        ds:change "Decided to split the button into multiple components: the select and the dropdown became their own components. This means there is no need to have a right side icon for the button";
         ds:changeType "decision"
     ], [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-03-06T11:00:00.000+01:00";
-        ds:change "In order to disambiguate the button and the button link components there was a decision made in the contribution process meeting to keep the components together, until the discussion of affordances (and potentially use cases) have been finalized. In the documentation review meeting we came to the same decision.";
         ds:changeType "decision"
     ];
     ds:hasModifierFamily ds:global.modifier_family.anticipation, ds:global.modifier_family.importance;

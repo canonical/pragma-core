@@ -73,27 +73,22 @@ ds:global.pattern.timeline a ds:Pattern;
     ds:changeLog [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-01-15T14:00:00.000+01:00";
-        ds:change "added innitial description for the timeline UI blocl";
         ds:changeType "change"
     ], [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-01-16T00:00:00.000+01:00";
-        ds:change "updated description, usage";
         ds:changeType "change"
     ], [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-03-03T00:00:00.000+01:00";
-        ds:change "updated usage and properties";
         ds:changeType "change"
     ], [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-03-12T17:30:00.000+01:00";
-        ds:change "updated usage";
         ds:changeType "change"
     ], [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-03-13T00:00:00.000+01:00";
-        ds:change "updated anatomy_dsl";
         ds:changeType "change"
     ];
     ds:hasSubcomponent ds:global.subcomponent.timeline-event, ds:global.subcomponent.timeline-expansion_indicator, ds:global.subcomponent.timeline-content, ds:global.subcomponent.timeline-header;
