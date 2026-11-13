@@ -181,8 +181,9 @@ function renderData(
     // and as a tool call there, because each is printed where it will be used.
     const notice = verb.output.formatters.notice?.(data, "cli");
     // The machine half of the same seam: facts the read wants to hand an agent
-    // as data rather than prose (`meta.scope`). MCP merges the same seam into
-    // the same keys (`mcp/registerVerb.ts#readMeta`).
+    // as data rather than prose (`meta.scope`, a truncated page's
+    // `meta.nextCursor`). MCP merges the same seam into the same keys
+    // (`mcp/registerVerb.ts#noticeMeta`).
     const extra = verb.output.formatters.meta?.(data);
     return {
       stdout: `${JSON.stringify(

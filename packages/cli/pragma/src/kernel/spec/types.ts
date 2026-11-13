@@ -226,10 +226,14 @@ export interface Formatters<T> {
    *
    * `notice` is a sentence, and a sentence is the right shape for a human
    * reading stderr and the wrong shape for an agent deciding what to do next.
-   * The standing case is the tier scope: `meta.scope` names the tiers a list
-   * answered from and counts the whole filtered answer per tier, so a caller that wants the rest can widen the read without
-   * parsing prose for tier names. Both machine surfaces read this ONE seam, the
-   * way they already read one `notice`, so CLI-JSON and MCP stay byte-equal.
+   * Two facts ride it today, both from list-shaped reads. `meta.scope` names
+   * the tiers a list answered from and counts the whole filtered answer per
+   * tier, so a caller that wants the rest can widen the read without parsing
+   * prose for tier names. `meta.nextCursor` is the opaque cursor that fetches
+   * the rows after a truncated page — the same token `meta.notice` prints as
+   * the `after` argument, exposed so an agent can spend it without scraping
+   * prose. Both machine surfaces read this ONE seam, the way they already read
+   * one `notice`, so CLI-JSON and MCP stay byte-equal.
    *
    * Plain and llm ignore it — they carry the same facts in their own register
    * (the notice on stderr, the heading in the condensed form). Return

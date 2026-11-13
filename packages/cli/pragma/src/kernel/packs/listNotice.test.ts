@@ -132,7 +132,7 @@ describe("a truncated page says so in every format", () => {
     );
   });
 
-  it("json: the notice keeps riding meta", async () => {
+  it("json: the notice keeps riding meta, and the cursor rides it as data", async () => {
     const outcome = await executeVerb(
       listVerb(WIDGET_PACK),
       { limit: 2 },
@@ -141,7 +141,24 @@ describe("a truncated page says so in every format", () => {
     );
     const envelope = JSON.parse(outcome.stdout as string);
     expect(envelope.meta.notice).toContain("and more exist");
+    // The structured field is the same token the prose prints for `after`, so
+    // an agent walks to the next page without scraping a sentence.
+    const cursor = envelope.meta.nextCursor as string;
+    expect(typeof cursor).toBe("string");
+    expect(cursor.length).toBeGreaterThan(0);
+    expect(envelope.meta.notice).toContain(cursor);
     expect(envelope.data).toHaveLength(2);
+    // …and it is spendable: page two is the last row, cut with nothing left.
+    const next = await executeVerb(
+      listVerb(WIDGET_PACK),
+      { limit: 2, after: cursor },
+      REAL,
+      as(JSON_FLAGS),
+    );
+    const nextEnvelope = JSON.parse(next.stdout as string);
+    expect(nextEnvelope.data).toHaveLength(1);
+    expect(nextEnvelope.meta.nextCursor).toBeUndefined();
+    expect(nextEnvelope.meta.notice).toBeUndefined();
   });
 
   it("a whole answer says nothing extra, in any format", async () => {
@@ -152,5 +169,14 @@ describe("a truncated page says so in every format", () => {
     const llm = await executeVerb(listVerb(WIDGET_PACK), {}, REAL, as(LLM));
     expect(llm.stdout).toContain("## Widget (3)");
     expect(llm.stdout).not.toContain("more exist");
+    // The machine envelope has nothing to page on either: no nextCursor.
+    const json = await executeVerb(
+      listVerb(WIDGET_PACK),
+      {},
+      REAL,
+      as(JSON_FLAGS),
+    );
+    const envelope = JSON.parse(json.stdout as string);
+    expect(envelope.meta.nextCursor).toBeUndefined();
   });
 });
