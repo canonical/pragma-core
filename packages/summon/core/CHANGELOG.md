@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.45.0](https://github.com/canonical/pragma-core/compare/v0.44.0...v0.45.0) (2026-11-13)
+
+### Features
+
+* **summon-package:** scaffolds a Svelte library when --framework is svelte ([#46](https://github.com/canonical/pragma-core/issues/46)) ([c5a6055](https://github.com/canonical/pragma-core/commit/c5a6055c5dab831f8d867b5eb06d3024b0085557))
+
+
 # [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
 
 ### Bug Fixes

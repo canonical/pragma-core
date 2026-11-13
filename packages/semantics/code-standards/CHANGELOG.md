@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.45.0](https://github.com/canonical/pragma-core/compare/v0.44.0...v0.45.0) (2026-11-13)
+
+### Bug Fixes
+
+* **code-standards:** writes the example titles of two git standards in the third person ([#83](https://github.com/canonical/pragma-core/issues/83)) ([b703cf8](https://github.com/canonical/pragma-core/commit/b703cf88b511dec50e59f02c8c92b1d98d188215))
+
+### Features
+
+* **code-standards:** exempts message-record members from the verb rule ([#121](https://github.com/canonical/pragma-core/issues/121)) ([07a0d74](https://github.com/canonical/pragma-core/commit/07a0d746dfb90431915277275c75388e9ec9fb04))
+* **code-standards:** requires tests and coverage for testing/ helpers ([#122](https://github.com/canonical/pragma-core/issues/122)) ([ebf8f8f](https://github.com/canonical/pragma-core/commit/ebf8f8f8079dd3b6a5ca1d1e54e2f4c946cb31f6))
+
+
 # [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
 
 ### Bug Fixes

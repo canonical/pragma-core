@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.45.0](https://github.com/canonical/pragma-core/compare/v0.44.0...v0.45.0) (2026-11-13)
+
+### Bug Fixes
+
+* **terrazzo-plugin-css:** refreshes the build snapshots after the palette update ([#128](https://github.com/canonical/pragma-core/issues/128)) ([d909c42](https://github.com/canonical/pragma-core/commit/d909c429bed2aa7fbab4afd9238d52dae4c65569))
+
+### Features
+
+* **design-tokens:** publishes the motion duration and easing stratum ([#129](https://github.com/canonical/pragma-core/issues/129)) ([c11f6ec](https://github.com/canonical/pragma-core/commit/c11f6ecfa79aaae9925640fdac46751071140dc2))
+
+
 # [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
 
 **Note:** Version bump only for package @canonical/terrazzo-plugin-css

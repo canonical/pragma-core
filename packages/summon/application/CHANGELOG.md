@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.45.0](https://github.com/canonical/pragma-core/compare/v0.44.0...v0.45.0) (2026-11-13)
+
+### Bug Fixes
+
+* **summon-application:** pins pragma-web packages to pragma-web's release line ([#109](https://github.com/canonical/pragma-core/issues/109)) ([a816dfc](https://github.com/canonical/pragma-core/commit/a816dfc7350beeb515a8ba3c2e6f82ecfcbb1fea))
+
+### Features
+
+* **summon-application:** port the boilerplate's application shell and dashboard ([#108](https://github.com/canonical/pragma-core/issues/108)) ([3571216](https://github.com/canonical/pragma-core/commit/3571216c93a1c8f002dd8c95d36fbc4a98eb26df))
+
+
 # [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
 
 ### Bug Fixes

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.45.0](https://github.com/canonical/pragma-core/compare/v0.44.0...v0.45.0) (2026-11-13)
+
+### Bug Fixes
+
+* **code-standards:** writes the example titles of two git standards in the third person ([#83](https://github.com/canonical/pragma-core/issues/83)) ([b703cf8](https://github.com/canonical/pragma-core/commit/b703cf88b511dec50e59f02c8c92b1d98d188215))
+* **summon-application:** pins pragma-web packages to pragma-web's release line ([#109](https://github.com/canonical/pragma-core/issues/109)) ([a816dfc](https://github.com/canonical/pragma-core/commit/a816dfc7350beeb515a8ba3c2e6f82ecfcbb1fea))
+* **terrazzo-plugin-css:** refreshes the build snapshots after the palette update ([#128](https://github.com/canonical/pragma-core/issues/128)) ([d909c42](https://github.com/canonical/pragma-core/commit/d909c429bed2aa7fbab4afd9238d52dae4c65569))
+
+### Features
+
+* **code-standards:** exempts message-record members from the verb rule ([#121](https://github.com/canonical/pragma-core/issues/121)) ([07a0d74](https://github.com/canonical/pragma-core/commit/07a0d746dfb90431915277275c75388e9ec9fb04))
+* **code-standards:** requires tests and coverage for testing/ helpers ([#122](https://github.com/canonical/pragma-core/issues/122)) ([ebf8f8f](https://github.com/canonical/pragma-core/commit/ebf8f8f8079dd3b6a5ca1d1e54e2f4c946cb31f6))
+* **design-tokens:** publishes the motion duration and easing stratum ([#129](https://github.com/canonical/pragma-core/issues/129)) ([c11f6ec](https://github.com/canonical/pragma-core/commit/c11f6ecfa79aaae9925640fdac46751071140dc2))
+* **design-tokens:** updates color palettes and semantic states ([#101](https://github.com/canonical/pragma-core/issues/101)) ([568e372](https://github.com/canonical/pragma-core/commit/568e372458da46cd367629ab8613682e9544779e))
+* **summon-application:** port the boilerplate's application shell and dashboard ([#108](https://github.com/canonical/pragma-core/issues/108)) ([3571216](https://github.com/canonical/pragma-core/commit/3571216c93a1c8f002dd8c95d36fbc4a98eb26df))
+* **summon-package:** scaffolds a Svelte library when --framework is svelte ([#46](https://github.com/canonical/pragma-core/issues/46)) ([c5a6055](https://github.com/canonical/pragma-core/commit/c5a6055c5dab831f8d867b5eb06d3024b0085557))
+
+
 # [0.44.0](https://github.com/canonical/pragma-core/compare/v0.43.0...v0.44.0) (2026-10-23)
 
 ### Bug Fixes
