@@ -68,12 +68,10 @@ ds:global.component.chip a ds:Component;
     ds:changeLog [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-02-20T09:00:00.000+01:00";
-        ds:change "added initial documentation";
         ds:changeType "change"
     ], [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-05-01T00:00:00.000+02:00";
-        ds:change "we decided to not use chips as filters - in the sense as they are the only option to filtering, however, we want the chips to act as a shortcut to a filter: so when clicking on a chip triggers a filter selection";
         ds:changeType "decision"
     ], [
         a ds:ChangeLogEntry;
