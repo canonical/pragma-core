@@ -4,11 +4,13 @@
  * Routes to specific scripts based on command.
  */
 
-const command = process.argv[2];
+const command = process.argv.at(2);
 
 switch (command) {
   case "docs":
   case "generate-docs":
+    // The generator reads its own arguments from argv[2] onwards.
+    process.argv.splice(2, 1);
     await import("./generate-docs.js");
     break;
   default:
@@ -16,6 +18,6 @@ switch (command) {
     console.log("");
     console.log("Commands:");
     console.log(
-      "  docs [output-dir]  Generate markdown docs (default: ./docs)",
+      "  docs [output-dir] [data-dir]  Generate markdown docs (default: ./docs)",
     );
 }
