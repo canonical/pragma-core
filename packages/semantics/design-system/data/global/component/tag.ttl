@@ -17,7 +17,7 @@ ds:global.component.tag a ds:Component;
         ds:propertyType "text";
         ds:optional "false"
     ];
-    ds:hasModifierFamily ds:global.modifier_family.anticipation, ds:global.modifier_family.importance, ds:global.modifier_family.criticality;
+    ds:hasModifierFamily ds:global.modifier_family.criticality;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.tag;
