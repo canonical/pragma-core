@@ -250,10 +250,7 @@ const Item = ({ href, active, as: As = "a" }: ItemProps) => (
 
 **Identifier:** `cs:react.component.naming`
 
-Use PascalCase and descriptive names for components:
-UserProfile
-NavigationBar
-SearchResultList
+Components must use PascalCase naming and be descriptive of their purpose.
 
 ### Do
 
@@ -840,7 +837,7 @@ Add the backtick-wrapped import line before @implements.
  * The label component is a compact, non-interactive visual element used to
  * categorize content or indicate a status.
  *
- * `import { Label } from \"@canonical/react-ds-global\";`
+ * `import { Label } from "@canonical/react-ds-global";`
  *
  * @implements ds:global.component.label
  */
@@ -855,7 +852,7 @@ Use an @example or a fenced code block instead of the single backtick line.
  * The label component is a compact...
  *
  * @example
- * import { Label } from \"@canonical/react-ds-global\";
+ * import { Label } from "@canonical/react-ds-global";
  */
 ```
 
@@ -864,7 +861,7 @@ Omit the blank line before the import, or drop the backticks.
 // Bad: no blank line before, and no backticks
 /**
  * The label component is a compact...
- * import { Label } from \"@canonical/react-ds-global\";
+ * import { Label } from "@canonical/react-ds-global";
  * @implements ds:global.component.label
  */
 ```
@@ -874,11 +871,11 @@ Use the local declaration name when the barrel re-exports it under a different n
 // The component is declared locally as FieldError but exported as `Error`.
 // Bad: imports the local name, which the consumer cannot import
 /**
- * `import { FieldError } from \"@canonical/react-ds-global-form\";`
+ * `import { FieldError } from "@canonical/react-ds-global-form";`
  */
 // Good: use the exported (consumer-facing) name
 /**
- * `import { Error } from \"@canonical/react-ds-global-form\";`
+ * `import { Error } from "@canonical/react-ds-global-form";`
  */
 ```
 
