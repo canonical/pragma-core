@@ -794,7 +794,7 @@ Test invariants that should hold for all valid inputs.
 ```rust
 proptest! {
     #[test]
-    fn validated_email_contains_at(s in ".+@.+\\..+") {
+    fn validated_email_contains_at(s in ".+@.+\..+") {
         if let Ok(email) = Email::parse(&s) {
             assert!(email.as_str().contains('@'));
         }
