@@ -109,8 +109,8 @@ packages/my-cli/
 Import directly from files inside a sibling domain — always go through the domain barrel
 ```typescript
 // Bad: reaching into a sibling domain's internals
-import { resolveConfig } from "../operations/resolveConfig.js";
-import { formatOutput } from "../utils/formatOutput.js";
+import resolveConfig from "../operations/resolveConfig.js";
+import formatOutput from "../utils/formatOutput.js";
 
 // Good: import through the domain barrel
 import { resolveConfig } from "../operations/index.js";
@@ -153,22 +153,21 @@ Every domain folder must have a barrel file (`index.ts`) that defines its API su
 Use a barrel at the package entry point to define the public API (library packages)
 ```typescript
 // src/index.ts
-export { Button } from "./components/Button.js";
-export type { ButtonProps } from "./components/Button.types.js";
+export { Button, type ButtonProps } from "./lib/index.js";
 ```
 
 Use a barrel at each domain folder to define the domain's API (application packages)
 ```typescript
 // src/operations/index.ts
-export { resolveConfig } from "./resolveConfig.js";
-export { runValidation } from "./runValidation.js";
+export { default as resolveConfig } from "./resolveConfig.js";
+export { default as runValidation } from "./runValidation.js";
 ```
 
 Import internal implementation code within a domain from the owning file directly
 ```typescript
 // src/build/buildTheme.ts — same domain, import the file
-import { computeDeltas } from "./computeDeltas.js";
-import { recoverPrimitiveRef } from "./recoverPrimitiveRef.js";
+import computeDeltas from "./computeDeltas.js";
+import recoverPrimitiveRef from "./recoverPrimitiveRef.js";
 ```
 
 Import cross-domain code through the sibling domain's barrel
@@ -180,8 +179,8 @@ import { resolveConfig } from "../operations/index.js";
 Keep compatibility barrels thin and documented as public facades
 ```typescript
 /** Public compatibility surface. */
-export { computeDeltas } from "./computeDeltas.js";
-export { formatDelta } from "./formatDelta.js";
+export { default as computeDeltas } from "./computeDeltas.js";
+export { default as formatDelta } from "./formatDelta.js";
 ```
 
 ### Don't
@@ -196,7 +195,7 @@ import { computeDeltas, recoverPrimitiveRef } from "./index.js";
 Import cross-domain code by reaching into individual files
 ```typescript
 // Bad: bypassing the domain barrel
-import { resolveConfig } from "../operations/resolveConfig.js";
+import resolveConfig from "../operations/resolveConfig.js";
 
 // Good: through the barrel
 import { resolveConfig } from "../operations/index.js";
@@ -391,7 +390,7 @@ Use `paths` in `tsconfig.json` as a substitute for subpath imports — it's a ma
 Reach across domains into individual files — cross-domain imports go through the domain's barrel: behind the `#` alias in an application, via a relative path to the barrel in a distributable package
 ```typescript
 // Bad: bypasses the barrel, couples to internal file structure
-import { PragmaError } from "../../error/PragmaError.js";
+import PragmaError from "../../error/PragmaError.js";
 
 // Good (application): the alias points at the barrel
 import { PragmaError } from "#error";
@@ -403,7 +402,7 @@ import { PragmaError } from "../error/index.js";
 Import specific files through the `#` alias — go through the barrel instead
 ```typescript
 // Bad: bypasses the barrel, couples to internal file structure
-import { readConfig } from "#config/readConfig.js";
+import readConfig from "#config/readConfig.js";
 
 // Good: import through the barrel
 import { readConfig } from "#config";

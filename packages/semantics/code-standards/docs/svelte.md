@@ -313,7 +313,7 @@ setContext('my-context', {
 (Do) Use getter functions (prefixed with `get…`) when passing state to functions like `use…` hooks.
 ```typescript
 // useStorage.ts
-export function useStorage(getGreeting: () => string) {
+export default function useStorage(getGreeting: () => string) {
   $effect(() => {
     localStorage.setItem('greeting', getGreeting());
   });

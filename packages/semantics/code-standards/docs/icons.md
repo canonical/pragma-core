@@ -281,14 +281,11 @@ Icon names must be:
 
 Define a constant array of icon names and derive the `IconName` type from it in the icon exporter package.
 ```typescript
-// In the icon exporter package
-export const ICON_NAMES = [
-  "warning",
-  "search",
-  "github"
-] as const;
+// constants.ts
+export const ICON_NAMES = ["warning", "search"] as const;
 
-export type IconName = typeof ICON_NAMES[number];
+// types.ts
+export type IconName = (typeof ICON_NAMES)[number];
 ```
 
 Import the `IconName` type in consumer code to ensure type safety.
