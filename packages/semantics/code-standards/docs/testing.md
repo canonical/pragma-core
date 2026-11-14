@@ -8,7 +8,7 @@ Standards for testing development.
 
 **Identifier:** `cs:testing.file.structure`
 
-Every source file has a colocated test named after it: `X.test.ts(x)` or `X.<facet>.test.ts(x)`. Except: barrels, `*.d.ts`, pure type files, stories, stylesheets, and the configs and entry files a tool loads.
+Every source file has a colocated, type-checked test named after it: `X.test.ts(x)` or `X.<facet>.test.ts(x)`. Except: barrels, `*.d.ts`, pure type files, stories, stylesheets, and the configs and entry files a tool loads.
 
 ### Do
 
