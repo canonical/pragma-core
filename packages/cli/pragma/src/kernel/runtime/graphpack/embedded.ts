@@ -37,8 +37,8 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
-import { join } from "node:path";
-import { packDir, packsCacheDir } from "../paths.js";
+import { dirname, join } from "node:path";
+import { packDir } from "../paths.js";
 import { indexJson } from "./embedded/pack.index.generated.js";
 import { manifestJson } from "./embedded/pack.manifest.generated.js";
 import { storiesJson } from "./embedded/pack.stories.generated.js";
@@ -86,8 +86,10 @@ export async function materializeEmbeddedPack(): Promise<string> {
   // reach a return statement six lines above.
   const { dataNq, schemaJson } = await import("./embedded/pack.generated.js");
 
-  mkdirSync(packsCacheDir(), { recursive: true });
-  const temp = mkdtempSync(join(packsCacheDir(), ".embed-"));
+  // The temp directory is a sibling of the pack, so the rename that publishes
+  // it never crosses a filesystem.
+  mkdirSync(dirname(dir), { recursive: true });
+  const temp = mkdtempSync(join(dirname(dir), ".embed-"));
   try {
     writeFileSync(join(temp, DATA_FILE), dataNq);
     writeFileSync(

@@ -1,5 +1,6 @@
 import {
   existsSync,
+  mkdirSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
@@ -10,6 +11,7 @@ import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
 import { executeLocal } from "@canonical/ke-graphql";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { packDir, packsCacheDir } from "../paths.js";
 import { buildPack } from "./build.js";
 import { embeddedManifest, materializeEmbeddedPack } from "./embedded.js";
 import { contentHash } from "./hash.js";
@@ -22,6 +24,7 @@ import {
   DATA_FILE,
   INDEX_FILE,
   MANIFEST_FILE,
+  PACK_INDEX_VERSION,
   SCHEMA_FILE,
   STORIES_FILE,
 } from "./types.js";
@@ -464,4 +467,146 @@ describe("the builder version recorded on reuse", () => {
     expect(await stampedBy("2.1.0")).toBe("2.2.0");
     expect(await stampedBy("2.3.0")).toBe("2.3.0");
   });
+});
+
+/**
+ * Plant a complete pack with a version-2 index at the flat `packs/<hash>/`
+ * path, where a CLI that writes index format 2 put its packs.
+ */
+function writeLegacyPack(hash: string, manifest: object): string {
+  const dir = join(packsCacheDir(), hash);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, DATA_FILE), "<urn:s> <urn:p> <urn:o> .\n");
+  writeFileSync(join(dir, SCHEMA_FILE), "{}");
+  writeFileSync(
+    join(dir, INDEX_FILE),
+    JSON.stringify({
+      version: 2,
+      contentHash: hash,
+      prefixes: {},
+      entities: [],
+      instanceCountByType: {},
+    }),
+  );
+  writeFileSync(join(dir, STORIES_FILE), "[]");
+  writeFileSync(join(dir, MANIFEST_FILE), JSON.stringify(manifest));
+  return dir;
+}
+
+/** The `version` field of a pack directory's `index.json`. */
+function readIndexVersion(dir: string): unknown {
+  return (
+    JSON.parse(readFileSync(join(dir, INDEX_FILE), "utf-8")) as {
+      version: unknown;
+    }
+  ).version;
+}
+
+describe("the pack cache is keyed by index format", () => {
+  it("materializeEmbeddedPack does not reuse a complete pack in the old flat layout", async () => {
+    // A cache of its own, so the embedded pack is not already materialized by
+    // another test under the format segment.
+    const shared = process.env.XDG_CACHE_HOME;
+    const isolated = mkdtempSync(join(tmpdir(), "pragma-graphpack-legacy-"));
+    process.env.XDG_CACHE_HOME = isolated;
+    try {
+      const manifest = embeddedManifest();
+      const legacy = writeLegacyPack(manifest.contentHash, manifest);
+
+      const dir = await materializeEmbeddedPack();
+      expect(dir).toBe(packDir(manifest.contentHash));
+      expect(dir).not.toBe(legacy);
+      expect(readIndexVersion(dir)).toBe(PACK_INDEX_VERSION);
+      // The old CLI's pack is left for the old CLI.
+      expect(readIndexVersion(legacy)).toBe(2);
+    } finally {
+      process.env.XDG_CACHE_HOME = shared;
+      rmSync(isolated, { recursive: true, force: true });
+    }
+    // 60s: a cold cache imports the multi-megabyte embedded payload.
+  }, 60_000);
+
+  it("buildPack does not reuse a complete pack in the old flat layout", async () => {
+    const input = {
+      path: "legacy.ttl",
+      content: `${TTL}\nex:Legacy a ex:Component ; rdfs:label "Legacy" .\n`,
+    };
+    const hash = await contentHash([input]);
+    const legacy = writeLegacyPack(hash, {
+      name: "test-pack",
+      version: "0.0.0",
+      sourceRef: "test:inline",
+      contentHash: hash,
+      prefixes: PREFIXES,
+      createdAt: new Date().toISOString(),
+    });
+
+    const result = await build([input]);
+    expect(result.reused).toBe(false);
+    expect(result.dir).toBe(packDir(hash));
+    expect(result.dir).not.toBe(legacy);
+    expect(readIndexVersion(result.dir)).toBe(PACK_INDEX_VERSION);
+  });
+});
+
+describe("graphpack read — index format", () => {
+  /** Build a pack of its own, then replace its index with `content`. */
+  const packWithIndex = async (label: string, content: string) => {
+    const { dir } = await build([
+      {
+        path: `${label}.ttl`,
+        content: `${TTL}\nex:${label} a ex:Component ; rdfs:label "${label}" .\n`,
+      },
+    ]);
+    writeFileSync(join(dir, INDEX_FILE), content);
+    return dir;
+  };
+
+  /** The error `readPack` rejects with. */
+  const readError = async (dir: string): Promise<unknown> => {
+    try {
+      const session = await readPack(dir);
+      session.store.dispose();
+    } catch (error) {
+      return error;
+    }
+    return undefined;
+  };
+
+  it("an index from a newer CLI is STORE_UNAVAILABLE naming the upgrade", async () => {
+    const dir = await packWithIndex(
+      "NewerFormat",
+      JSON.stringify({ version: 99, contentHash: "x", entities: [] }),
+    );
+    const caught = (await readError(dir)) as {
+      code?: string;
+      message?: string;
+      recovery?: Record<string, unknown>;
+    };
+    expect(caught).toMatchObject({ code: "STORE_UNAVAILABLE" });
+    expect(caught.message).toContain("newer");
+    expect(caught.message).not.toMatch(/expected|received|invalid/i);
+    expect(caught.recovery?.cli).toBe("pragma upgrade");
+    expect(caught.recovery?.mcp).toMatchObject({ tool: "upgrade" });
+    expect(caught.recovery?.message).toContain(dir);
+  });
+
+  it.each([
+    ["malformed JSON", "not json"],
+    ["a shape the schema rejects", JSON.stringify({ version: 3 })],
+  ])(
+    "an index holding %s is STORE_UNAVAILABLE, unreadable",
+    async (_label, content) => {
+      const dir = await packWithIndex(`Unreadable${content.length}`, content);
+      const caught = (await readError(dir)) as {
+        code?: string;
+        message?: string;
+        recovery?: Record<string, unknown>;
+      };
+      expect(caught).toMatchObject({ code: "STORE_UNAVAILABLE" });
+      expect(caught.message).toContain("unreadable");
+      expect(caught.message).not.toMatch(/expected|received/i);
+      expect(caught.recovery?.cli).toBe("pragma sources update");
+    },
+  );
 });

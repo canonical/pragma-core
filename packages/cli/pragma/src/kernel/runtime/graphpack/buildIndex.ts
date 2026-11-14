@@ -31,7 +31,11 @@
 
 import { compactUri } from "../../render/index.js";
 import { VOCABULARY } from "../../vocabulary.js";
-import type { PackIndex, PackIndexEntity } from "./types.js";
+import {
+  PACK_INDEX_VERSION,
+  type PackIndex,
+  type PackIndexEntity,
+} from "./types.js";
 
 type Store = import("@canonical/ke").Store;
 
@@ -355,7 +359,7 @@ export async function buildIndex(
   });
 
   return {
-    version: 3,
+    version: PACK_INDEX_VERSION,
     contentHash,
     prefixes,
     entities,

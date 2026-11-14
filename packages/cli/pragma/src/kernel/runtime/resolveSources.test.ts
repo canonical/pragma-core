@@ -6,7 +6,7 @@ import { VERSION } from "../../constants.js";
 import type { ConfigLayers } from "../config/types.js";
 import { loadStoreSession } from "./loadSession.js";
 import { parseSemver } from "./packVersion.js";
-import { activePackPath, packDir } from "./paths.js";
+import { activePackPath, packDir, packsCacheDir } from "./paths.js";
 import { describeIgnoredPack, resolveSources } from "./resolveSources.js";
 
 /**
@@ -70,7 +70,15 @@ const BUILT_AT = "2026-09-10T21:49:00.411Z";
 
 /** Materialize a COMPLETE pack — manifest + non-empty dump, schema, and index. */
 function writeCompletePack(hash: string, version?: string): string {
-  const dir = packDir(hash);
+  return writeCompletePackAt(packDir(hash), hash, version);
+}
+
+/** {@link writeCompletePack} at an explicit directory, such as a legacy path. */
+function writeCompletePackAt(
+  dir: string,
+  hash: string,
+  version?: string,
+): string {
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "data.nq"), "<urn:s> <urn:p> <urn:o> .\n");
   writeFileSync(join(dir, "schema.json"), "{}");
@@ -121,6 +129,21 @@ describe("resolveSources decision table", () => {
     const cwd = tmp();
     // A pointer whose content-addressed pack is absent from the cache.
     writePointer(cwd, "b".repeat(64));
+
+    expect(resolveSources(layersWith("default"), cwd)).toEqual({
+      kind: "unavailable",
+      reason: "the built pack is missing from the cache",
+    });
+  });
+
+  it("pointer present + pack only in the layout before the format segment → missing", () => {
+    // A pack an older CLI built straight under `packs/<hash>/` holds an index
+    // in that CLI's format. It is not this CLI's pack, so the pointer resolves
+    // as missing and `sources update` rebuilds it under the format segment.
+    const cwd = tmp();
+    const hash = "7".repeat(64);
+    writeCompletePackAt(join(packsCacheDir(), hash), hash);
+    writePointer(cwd, hash);
 
     expect(resolveSources(layersWith("default"), cwd)).toEqual({
       kind: "unavailable",
@@ -259,6 +282,23 @@ describe("resolveSources — a pack an older CLI built (the upgrade row)", () =>
 });
 
 describe("loadStoreSession recovery", () => {
+  it("surfaces the `pragma sources update` recovery for a pack only in the old layout", async () => {
+    const cwd = tmp();
+    const hash = "8".repeat(64);
+    writeCompletePackAt(join(packsCacheDir(), hash), hash);
+    writePointer(cwd, hash);
+    const ctx = { cwd, loadConfig: async () => layersWith("default") };
+
+    await expect(loadStoreSession(ctx)).rejects.toMatchObject({
+      code: "STORE_UNAVAILABLE",
+      message: expect.stringContaining("missing from the cache"),
+      recovery: {
+        cli: "pragma sources update",
+        mcp: { tool: "sources_update" },
+      },
+    });
+  });
+
   it("surfaces the `pragma sources update` recovery (CLI + MCP tool) when cold", async () => {
     const cwd = tmp();
     const ctx = { cwd, loadConfig: async () => layersWith("project") };

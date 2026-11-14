@@ -6,7 +6,7 @@
  * TTL and writing the `data.nq` n-quads dump via ke's cache), the schema is
  * extracted and serialized, the entity index is built, and a manifest is
  * written LAST so the directory is only ever observed complete. Writes go to a
- * temp directory and are atomically renamed into `packs/<contentHash>/`, so a
+ * temp directory and are atomically renamed into `packs/v<format>/<contentHash>/`, so a
  * crashed build never leaves a half-written pack; a hash whose directory is
  * already complete is reused untouched.
  *
@@ -22,7 +22,7 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { createStore } from "@canonical/ke";
 import {
   compile,
@@ -30,7 +30,7 @@ import {
   serializeExtraction,
 } from "@canonical/ke-graphql";
 import { packIsOlderThanCli } from "../packVersion.js";
-import { packDir, packsCacheDir } from "../paths.js";
+import { packDir } from "../paths.js";
 import { buildIndex } from "./buildIndex.js";
 import { contentHash, hashSources } from "./hash.js";
 import { packIsComplete, readManifest } from "./manifest.js";
@@ -114,10 +114,10 @@ export async function buildPack(
       };
   }
 
-  mkdirSync(packsCacheDir(), { recursive: true });
-  const temp = mkdtempSync(
-    join(packsCacheDir(), `.build-${hash.slice(0, 12)}-`),
-  );
+  // The temp directory is a sibling of the pack, so the rename that publishes
+  // it never crosses a filesystem.
+  mkdirSync(dirname(dir), { recursive: true });
+  const temp = mkdtempSync(join(dirname(dir), `.build-${hash.slice(0, 12)}-`));
   try {
     const prefixes = options.prefixes ?? {};
     const store = await createStore({

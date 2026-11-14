@@ -32,9 +32,9 @@ function projectWithIndex(index: unknown): string {
   const pointer = activePackPath(cwd);
   mkdirSync(dirname(pointer), { recursive: true });
   writeFileSync(pointer, CRAFTED_HASH);
-  const packDir = join(cache, "pragma", "packs", CRAFTED_HASH);
-  mkdirSync(packDir, { recursive: true });
-  writeFileSync(join(packDir, "index.json"), JSON.stringify(index));
+  const dir = packDir(CRAFTED_HASH);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "index.json"), JSON.stringify(index));
   return cwd;
 }
 
