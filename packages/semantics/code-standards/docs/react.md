@@ -688,7 +688,7 @@ styles/
 
 **Identifier:** `cs:react.component.subcomponent_export_api`
 
-A public subcomponent attaches to its parent, one level deep (`Card.Header`). A private part never reaches the package root; its file and barrel serve only its parent's folder.
+A public subcomponent attaches to its parent, one level deep (`Card.Header`). A private part never reaches the package root; its file and barrel serve only its parent's folder. Except: a part that is its own category (Spinner) is exported by name.
 
 ### Do
 
