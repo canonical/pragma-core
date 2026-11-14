@@ -506,148 +506,24 @@ const ThumbnailSection = ({ src, alt, width, ...props }: ThumbnailSectionProps) 
 
 **Identifier:** `cs:react.component.structure.context`
 
-Context providers must use `Provider.tsx` as the main component file instead of the standard component naming pattern `[MyComponent].tsx`. Provider prop and return types must be defined in the hook-level types file `hooks/types.ts` with `UseProviderStateProps` (containing all `ProviderProps` minus `children`) and `UseProviderStateResult` (matching the context options).
+A context provider's main file is `Provider.tsx`, beside `Context.tsx` and `hooks/useProviderState.ts`, with its types in `types.ts` and `hooks/types.ts`. Its value is `useProviderState`'s result, which may carry handles, such as an announcer, beside state and setters.
 
 ### Do
 
-Organize provider-related files by separating concerns into distinct files: place the context definition in `Context.tsx`, the provider implementation in `Provider.tsx`, and provider-specific hooks in a `hooks/` directory. Create a `hooks/useProviderState.ts` file to centrally manage the state of the provider.`
-```
-[MyComponent]/
-  ├── Context.tsx
-  ├── Provider.tsx
-  ├── index.ts
-  ├── types.ts
-  └── common/
-    └─ [SubComponent]/
-        ├── index.ts
-        ├── [SubComponent].tsx
-        └── types.ts
-  └── hooks/
-      ├── index.ts
-      ├── types.ts
-      └── useProviderState.ts
-```
-
-Create the context type within `types.ts`.
-```typescript
-// [MyComponent]/types.ts
-/** The value of the config context */
-export interface ContextOptions {
-  /** Whether the baseline grid should be shown */
-  showBaselineGrid: boolean;
-  /** Toggles the baseline grid's visibility. */
-  toggleShowBaselineGrid: () => void;
-}
-```
-
-create the provider props type within `types.ts`, accepting `children` at a minimum and more props as needed.
-```typescript
-// [MyComponent]/types.ts
-
-export interface ProviderProps {
-    // The child nodes which will have access to the provider state
-    children: React.ReactNode;
-    // ...other props...
-}
-```
-
-Create a `Context.tsx` file for the context definition.
+Provide `useProviderState`'s result, handles included
 ```tsx
-// [MyComponent]/Context.tsx
-import { createContext } from "react";
-import type { ContextOptions } from "./types.js";
-
-const Context = createContext<ContextOptions | undefined>(undefined);
-
-export default Context;
-```
-
-Use `Provider.tsx` as the main component file. The provider is responsible for wrapping children with the context.
-```tsx
-// [MyComponent]/Provider.tsx
-import Context from "./Context.js";
-import { useProviderState } from "./hooks/index.js";
-import { SubComponent } from "./common/index.js";
-import type { [MyComponent]Component, ProviderProps } from "./types.js";
-
-const Provider = ({ children }: ProviderProps) => (
-  <Context.Provider value={useProviderState()}>{children}</Context.Provider>
-);
-
-export default Object.assign(Provider, { SubComponent }) as [MyComponent]Component;
-```
-
-Use `index.ts` to export the `Provider` as a named component that matches the folder name.
-```typescript
-// [MyComponent]/types.ts
-import type { ReactElement } from "react";
-
-export type [MyComponent]Component = ((props: ProviderProps) => ReactElement) & {
-  SubComponent: (props: SubComponentProps) => ReactElement | null;
-};
-
-// [MyComponent]/index.ts
-export { default as [MyComponent] } from "./Provider.js";
-```
-
-Create provider state hook types in `hooks/types.ts` for context providers.
-```typescript
-// [MyComponent]/hooks/types.ts
-import type { ContextOptions, ProviderProps } from "../types.js";
-
-// The props expected by the provider state hook. The children prop is omitted, as it is not passed to the hook - it is only rendered by the provider component.
-export type UseProviderStateProps = Omit<ProviderProps, "children">;
-
-// The result of the provider state hook. This should match the context options defined in the main component types file.
-export type UseProviderStateResult = ContextOptions;
-```
-
-Create a provider state hook implementation.
-```tsx
-// [MyComponent]/hooks/useProviderState.ts
-import { useContext } from "react";
-import type { UseProviderStateProps, UseProviderStateResult } from "./types.js";
-
-/**
- * Hook to manage the state of the provider
- */
-export default function useProviderState({
-    // ..props...
-}: UseProviderStateProps): UseProviderStateResult {
- // centralize the entire provider state here...
+// [MyComponent]/Provider.tsx: useProviderState returns { ...state, announce }
+export default function Provider({ children }: ProviderProps) {
+  return <Context.Provider value={useProviderState()}>{children}</Context.Provider>;
 }
 ```
 
 ### Don't
 
-Create a separate component file (e.g., `[MyComponent].tsx`) when `Provider.tsx` exists. The provider is the main component.
-```
-[MyComponent]/
-  ├── [MyComponent].tsx
-  └── Provider.tsx
-```
-
-Nest context-related files in a `context/` subfolder.
-```
-[MyComponent]/
-  └── context/ # Unnecessary nesting
-      ├── Context.tsx
-      └── Provider.tsx
-```
-
-Create multiple provider files within the same component folder.
-```
-[MyComponent]/
-  ├── Provider.tsx
-  └── AnotherProvider.tsx # Only one provider per component
-```
-
-Mix concerns of the Provider and its state.
+Name the provider after the component, or declare its types inline
 ```tsx
-exort const Provider = ({ children }: ProviderProps) => {
-  const [state, setState] = useState(...); // Bad: State logic mixed in
-  return <Context.Provider value={{ state, setState }}>{children}</Context.Provider>;
-};
+// [MyComponent]/[MyComponent].tsx
+export default function MyComponent({ children }: { children: ReactNode }) { /* ... */ }
 ```
 
 ---
