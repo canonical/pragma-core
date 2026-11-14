@@ -114,9 +114,19 @@ bun add @canonical/styles @canonical/ds-assets
 One import of `@canonical/styles` aggregates the normalize/reset, typography, and design
 tokens. Two things come with it:
 
-- Cascade layers `@layer normalize, ds.reset, ds.modifiers, ds.components` — component
-  styles beat modifiers beat reset regardless of import order, so adopting apps do not
-  fight specificity.
+- Cascade layers — the order is fixed in `@canonical/styles`' `layers.css`, and the
+  current statement is
+
+  ```css
+  @layer normalize, ds.tokens, ds.reset, ds.typography, ds.modifiers, ds.surfaces,
+    ds.states, ds.components, ds.components.global, ds.components.sites,
+    ds.components.documentation, ds.components.stores, ds.components.apps, lib, app;
+  ```
+
+  Component styles beat modifiers beat reset regardless of import order, so
+  adopting apps do not fight specificity. `app` is the reserved top layer, for the
+  application's own CSS: write your styles in `@layer app { … }` —
+  `@canonical/styles` already declares the layer, so there is nothing to add.
 - `color-scheme: light dark` on `:root` — the foundation is theme-aware out of the box.
 
 ## Which variable to write
@@ -137,8 +147,8 @@ exist). Filter to what an app may read with `--visibility public`: a variable ma
 `variable lookup` takes the name WITHOUT its leading dashes and answers with the
 `- Symbol:` behind it and a `### Declarations` list — one row per declaration, each
 naming the `selector`, the `inAtRule` cascade layer, what it `emits` and the
-`file:line`. The layer in that row is the one the install's `@layer` order above is
-about, so a variable that is not doing what you expect is usually a layer question
+`file:line`. The layer in that row is a name in the install's `@layer` order above,
+so a variable that is not doing what you expect is usually a layer question
 with a visible answer. A name the graph does not know comes back `ENTITY_NOT_FOUND`,
 which is what an app-local property looks like. (MCP: `variable_list`,
 `variable_lookup`.)
@@ -162,6 +172,25 @@ name — and ideally file it as an issue, either to bring the app into line late
 propose a change to the standard itself. The standards apply even when the app has no
 pragma dependency, and they are open to contribution: a missing or wrong standard is
 something to propose a change for, not to silently work around.
+
+## Read the foundations before writing app CSS
+
+The type scale, spacing and grid are documented concepts, and app CSS should be
+written against them rather than rediscovered from the tokens. Read them before the
+first stylesheet edit:
+
+```bash
+pragma concept list --search Foundations          # the live set of foundation concepts
+pragma concept lookup "Foundations: Typography"   # per-tier heading hierarchies
+pragma concept lookup "Foundations: Spacing"      # inter- and intra-component spacing
+pragma concept lookup "Foundations: Grid & Layout"
+pragma concept lookup "Foundations: Density & the form channel"
+```
+
+`concept list` is the live source of concept names — take them from its output, never
+from memory or this list. `concept lookup` answers with the concept's content, which
+carries the per-tier guidance (heading hierarchies, spacing models, grid columns) the
+app's own tier falls under. (MCP: `concept_list`, `concept_lookup { name: [...] }`.)
 
 ## Fonts before styles
 
@@ -271,8 +300,9 @@ imported preview.
       value on a class-less root passes visual inspection and still fails this check
       on non-app surfaces.
 - [ ] `/icons/<name>.svg` returns 200 with SVG content, and an icon visibly renders.
-- [ ] The `@layer normalize, ds.reset, ds.modifiers, ds.components` rule is present in
-      the served CSS.
+- [ ] The served CSS's `@layer` statement starts with `normalize` and ends with
+      `lib, app` — check it against `@canonical/styles`' `layers.css`, not a fixed
+      short list.
 - [ ] Typography baseline behaves. Note: the baseline grid is computed with the CSS
       `mod()` function and cannot be downleveled — check the support table in the
       `@canonical/styles-typography` README against the browsers you target.

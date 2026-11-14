@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.46.0](https://github.com/canonical/pragma-core/compare/v0.45.0...v0.46.0) (2026-11-14)
+
+### Bug Fixes
+
+* **deps:** bumps dependency graphql to v17.1.0 ([#145](https://github.com/canonical/pragma-core/issues/145)) ([b4610f4](https://github.com/canonical/pragma-core/commit/b4610f4155e8d707bcfac2bfbd45060c2f863f88))
+
+
 # [0.45.0](https://github.com/canonical/pragma-core/compare/v0.44.0...v0.45.0) (2026-11-13)
 
 **Note:** Version bump only for package @canonical/ke-graphql

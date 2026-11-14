@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.46.0](https://github.com/canonical/pragma-core/compare/v0.45.0...v0.46.0) (2026-11-14)
+
+### Bug Fixes
+
+* **summon:** lists Storybook packages under devDependencies in genera… ([#142](https://github.com/canonical/pragma-core/issues/142)) ([75a95c8](https://github.com/canonical/pragma-core/commit/75a95c87f650069b5891fe22bbc9d01fd6c9c563))
+
+
 # [0.45.0](https://github.com/canonical/pragma-core/compare/v0.44.0...v0.45.0) (2026-11-13)
 
 ### Bug Fixes

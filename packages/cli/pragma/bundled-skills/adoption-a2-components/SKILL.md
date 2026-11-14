@@ -108,6 +108,28 @@ So, asked what this skill is:
 
 Then, and only then, the breakdown.
 
+## What "migrate" means
+
+In a one-shot migration — the person asks for the whole app in one change —
+"migrate" means re-platforming the app onto pragma's structure and conventions, not
+rendering the old app's look with pragma parts. The app keeps its FUNCTIONAL
+behaviour: its pages, routes, data and interactions. Its layout and visual
+decisions are replaced by pragma's.
+
+For an application, the structure starts with the shell from
+`@canonical/react-ds-app`: `ApplicationLayout` with `SideNavigation`, and
+`ViewLayout` for each page (the package also exports `ContentLayout` and
+`SidePanel`). Its router peers (`@canonical/router-core`, `@canonical/router-react`)
+are optional, and `SideNavigation` takes a `LinkComponent` prop, so the app's own
+router link plugs in. A custom top navigation bar, a username and logout in the
+top-right corner, or a product name styled as a heading are the old app's
+decisions, not features to keep: the navigation moves into `SideNavigation`, the
+user and logout into its footer, and the product name into its header.
+
+If that reading cannot be assumed, ask exactly one scope question before starting:
+
+> Same look, or pragma conventions?
+
 ## Install
 
 ```bash
@@ -255,9 +277,8 @@ Do NOT assume a 1:1 mapping from Vanilla names and `p-*` classes. Boundaries mov
 what was one blob may now be a component plus subcomponents (e.g. `Accordion` with
 `Accordion.Item`), and icon semantics changed to `currentColor`. The block's `ds:usage`
 When-to-use / When-not-to-use guidance decides what replaces what — read it with
-`pragma graph inspect <block IRI>` (the IRI from the block's `pragma block list` row;
-`block lookup` does not render the usage field today) — often the honest swap is a
-DIFFERENT component than the old name suggests.
+`pragma block lookup <Name or ds: IRI>` (MCP: `block_lookup`) — often the honest swap
+is a DIFFERENT component than the old name suggests.
 
 ## Accessibility warnings are contract
 
@@ -283,10 +304,29 @@ prop's values are the family's values lowercased with spaces as underscores
 the lowercase form. A family listed on the block may have no prop on the component
 yet — check the component's types before writing it.
 
+## Inputs come with their form
+
+Standalone inputs (`TextInput`, `SelectInput`, …) carry input chrome but no spacing
+of their own: the gaps between fields are owned by `Field`/`Form`, the
+react-hook-form model of `adoption-a3-forms`. The standalone inputs exist for
+controls that live outside a form — a filter bar, a theme picker. Placing them by
+hand to build a form — stacking bare inputs in a modal or a settings panel — is the
+failure mode: the fields render with no gaps, because the spacing lives in the form
+system that a component swap never reaches.
+
+So a form is not a type to swap piecemeal. In a one-shot migration forms are in
+scope: run the A3 steps for each form as part of the change, and the `Field`/`Form`
+frame brings the label, description, error wiring and field spacing with it. A
+presentational, non-react-hook-form layout is not shipped yet — report that as a
+finding rather than hand-stacking the inputs.
+
 ## Verify per PR
 
 - [ ] Root context and density classes present (track A1) — swapped components size
       from the `--density-*` channel, not from luck.
+- [ ] Heading sizes and weights follow the tier's scale in "Foundations: Typography",
+      with no app CSS overriding them; the outline is real: one `h1` per page, in
+      the page header, and the product name is not a heading.
 - [ ] Zero dev-console warnings from the swapped components.
 - [ ] Keyboard pass on each swapped instance (focus, activation, escape where relevant).
 - [ ] Visual pass against the component's Storybook stories.

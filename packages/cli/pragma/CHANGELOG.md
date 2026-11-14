@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.46.0](https://github.com/canonical/pragma-core/compare/v0.45.0...v0.46.0) (2026-11-14)
+
+### Bug Fixes
+
+* **deps:** bumps dependency graphql to v17.1.0 ([#145](https://github.com/canonical/pragma-core/issues/145)) ([b4610f4](https://github.com/canonical/pragma-core/commit/b4610f4155e8d707bcfac2bfbd45060c2f863f88))
+* **pragma-cli:** reports an update only for a strictly newer release ([#164](https://github.com/canonical/pragma-core/issues/164)) ([991dbb0](https://github.com/canonical/pragma-core/commit/991dbb0d5ea255f51ff926f5a1da3708439a55d6))
+
+### Features
+
+* **pragma-cli:** returns the next-page cursor as structured meta ([#167](https://github.com/canonical/pragma-core/issues/167)) ([417759e](https://github.com/canonical/pragma-core/commit/417759e2ee44e90914d629c099d827d5f3e01c6a))
+
+
 # [0.45.0](https://github.com/canonical/pragma-core/compare/v0.44.0...v0.45.0) (2026-11-13)
 
 ### Features
