@@ -84,6 +84,9 @@
   "devDependencies": {
     "@biomejs/biome": "2.6.6",
     "@canonical/biome-config": "^<%= coreVersion %>",
+<% if (withStorybook) { -%>
+    "@canonical/storybook-config": "^<%= webVersion %>",
+<% } -%>
 <% if (framework === 'react') { -%>
     "@canonical/typescript-config-react": "^<%= webVersion %>",
 <% } else { -%>
@@ -112,15 +115,10 @@
 <% } -%>
     "typescript": "^7.0.2",
     "vitest": "^5.0.0"
-  }<% if (withStorybook || framework === 'react') { %>,
+  }<% if (framework === 'react') { %>,
   "dependencies": {
-<% if (withStorybook) { -%>
-    "@canonical/storybook-config": "^<%= webVersion %>"<%= framework === 'react' ? "," : "" %>
-<% } -%>
-<% if (framework === 'react') { -%>
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
-<% } -%>
   }<% } %>
 <% } else { -%>
   "devDependencies": {

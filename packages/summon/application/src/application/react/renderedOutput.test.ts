@@ -333,3 +333,29 @@ describe("the rendered package.json pins each repository's release line", () => 
     });
   }
 });
+
+/**
+ * Storybook runs only while developing the application, so a production
+ * install (`--production`) must not pull it, or its toolchain, in.
+ */
+describe("the rendered package.json keeps Storybook out of production dependencies", () => {
+  for (const combo of combos) {
+    it(`${label(combo)}: Storybook packages are devDependencies`, () => {
+      const manifest = JSON.parse(
+        renderString(
+          readFileSync(path.join(templatesDir, "package.json.ejs"), "utf8"),
+          varsFor(combo),
+        ),
+      ) as Record<string, Record<string, string> | undefined>;
+
+      expect(manifest.devDependencies?.["@canonical/storybook-config"]).toBe(
+        "^0.0.0-web-test",
+      );
+      expect(
+        Object.keys(manifest.dependencies ?? {}).filter((name) =>
+          name.includes("storybook"),
+        ),
+      ).toEqual([]);
+    });
+  }
+});
