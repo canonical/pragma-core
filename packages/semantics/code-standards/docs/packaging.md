@@ -512,15 +512,17 @@ import { readConfig } from "#config";
 
 **Identifier:** `cs:packaging.library.structure`
 
-A library keeps its exported code in `src/lib/`, with a barrel in each domain folder, re-exported through the root barrel. Except: an `@experimental` `./testing` subpath.
+A library keeps its exported code in `src/lib/`, with a barrel in each domain folder, re-exported through the root barrel. Except: an `@experimental` `./testing` subpath; entry files a tool loads by path sit where the tool expects them.
 
 ### Do
 
-Keep exported code in `src/lib/`, behind barrels
+Keep exported code in `src/lib/` behind barrels, and tool entry files where the tool loads them
 ```
 src/lib/hooks/index.ts  # domain barrel
 src/lib/index.ts        # lib barrel
 src/index.ts            # root barrel
+src/preset.ts           # loaded by Storybook by path
+src/preview.ts          # loaded by Storybook by path
 ```
 
 ### Don't
