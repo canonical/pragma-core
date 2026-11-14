@@ -9,7 +9,7 @@ Each standard is identified by its compact prefixed subject, not by a separate s
 ```text
 CodeStandard
 ├── identifier   - compact prefixed IRI, e.g. cs:react.component.structure.folder
-├── name         - optional human-readable title, e.g. "Component Folder Structure"
+├── label        - human-readable title (rdfs:label, language-tagged), e.g. "Component Folder Structure"@en
 ├── description  - requirement and rationale
 ├── do / dont    - structured positive and negative examples
 ├── hasCategory  - compact category IRI, e.g. cs:react
@@ -41,9 +41,10 @@ Recommended pattern after the `cs:` prefix:
 
 ```turtle
 @prefix cs: <http://pragma.canonical.com/codestandards#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 cs:react.component.structure.folder a cs:CodeStandard ;
-  cs:name "Component Folder Structure" ;
+    rdfs:label "Component Folder Structure"@en ;
     cs:hasCategory cs:react ;
     cs:description "Each component must reside in its own folder containing all related files." ;
     cs:do [
@@ -74,8 +75,9 @@ styles/Button.css
 
 - Use the subject IRI as the canonical identifier.
 - Use snake_case inside multi-word IRI segments, not kebab-case.
-- Use `cs:name` only as an optional human-readable display title for standards.
-- Do not use `cs:name` as a slug, lookup key, or duplicate identifier.
+- Use `rdfs:label` for the human-readable display title, language-tagged (`"…"@en`).
+- Never use a label as a slug, lookup key, or duplicate identifier; the subject IRI is the only identifier.
+- Do not use `cs:name`: it is deprecated in favour of `rdfs:label` (ontology 2.1.0) and kept only so a reader who meets it in an older graph is told what replaced it.
 - Use `cs:hasCategory` with compact category IDs such as `cs:react`.
 - Use `cs:extends` with compact standard IDs such as `cs:react.component.props`.
 - Model examples as blank nodes with `cs:description`, optional `cs:language`, and optional `cs:code`.
@@ -91,7 +93,7 @@ Example:
 
 ```turtle
 cs:react.hooks.cleanup a cs:CodeStandard ;
-  cs:name "Hooks Cleanup" ;
+    rdfs:label "Hooks Cleanup"@en ;
     cs:hasCategory cs:react ;
     cs:description "Effects that create subscriptions, timers, or listeners must return cleanup functions." ;
     cs:do [
@@ -110,7 +112,7 @@ useEffect(() => {
 
 ```turtle
 cs:react.component.structure.context a cs:CodeStandard ;
-  cs:name "Context Folder Structure" ;
+    rdfs:label "Context Folder Structure"@en ;
     cs:extends cs:react.component.structure.folder ;
     cs:hasCategory cs:react ;
     cs:description "Context providers extend the standard component folder structure with provider-specific files." .
@@ -146,20 +148,25 @@ SELECT ?standard WHERE {
 ```text
 code-standards/
 ├── definitions/
-│   └── CodeStandard.ttl
+│   ├── CodeStandard.ttl
+│   └── shapes.ttl
 ├── data/
 │   ├── code.ttl
-│   ├── ui-blocks.ttl
 │   ├── css.ttl
 │   ├── git.ttl
 │   ├── icons.ttl
+│   ├── lit.ttl
 │   ├── packaging.ttl
 │   ├── react.ttl
 │   ├── rust.ttl
 │   ├── storybook.ttl
 │   ├── styling.ttl
+│   ├── svelte.ttl
+│   ├── testing.ttl
 │   ├── tsdoc.ttl
-│   └── turtle.ttl
+│   ├── turtle.ttl
+│   ├── ui-blocks.ttl
+│   └── webcomponents.ttl
 ├── docs/
 ├── skills/
 └── src/scripts/generate-docs.ts
