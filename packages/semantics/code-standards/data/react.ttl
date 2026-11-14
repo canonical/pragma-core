@@ -465,50 +465,26 @@ formValidation()
 cs:react.component.dependencies a cs:CodeStandard ;
     rdfs:label "Unidirectional component dependencies"@en ;
     cs:hasCategory cs:react ;
-    cs:description """Component dependencies must follow a strict unidirectional flow:
-- Subcomponents must be in a `common/` folder within the parent component's directory
-- Dependencies can flow downwards (parent to subcomponent) or sideways (between siblings)
-- Dependencies must not flow upwards (subcomponent to parent)""" ;
+    cs:description "Subcomponents live in their parent's `common/`, and dependencies flow down or sideways, never up. Except: a part that cannot render alone is tested under its parent's provider, and its test may import the parent." ;
     cs:do [
-        cs:description "Place subcomponents in a `common/` folder inside the parent component directory." ;
+        cs:description "Keep parts in `common/`, and test a dependent part under its parent" ;
         cs:code """
 Card/
-  ├── Card.tsx
-  ├── common/
-  │   ├── Header/
-  │   │   └── Header.tsx
-  │   ├── Footer/
-  │   │   └── Footer.tsx
-  │   └── utils/
-  │       └── formatLabel.ts
-  └── index.ts
-    """
-    ] ;
-    cs:do [
-        cs:description "Allow subcomponents to depend on siblings or shared utilities within the same component scope." ;
-        cs:language "typescript" ;
-        cs:code """
-// Header.tsx can import from utils/
-import formatLabel from '../utils/formatLabel.js';
-
-// Footer.tsx can import from Header.tsx
-import Header from '../Header.js';
+├── index.ts
+├── Card.tsx
+├── Card.test.tsx
+└── common/Header/
+    ├── index.ts
+    ├── Header.tsx
+    └── Header.test.tsx   # renders Header inside Card
     """
     ] ;
     cs:dont [
-        cs:description "Create dependencies that flow upwards from a subcomponent to its parent." ;
+        cs:description "Import the parent from a part" ;
         cs:language "typescript" ;
         cs:code """
-// Bad: Header.tsx in Card/common/ should not import from Card.tsx
-import Card from '../../Card.js';
-    """
-    ] ;
-    cs:dont [
-        cs:description "Allow external components to depend on the internal structure of another component." ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: AnotherComponent should not import from Card's internal common folder
-import Header from '../Card/common/Header.js';
+// common/Header/Header.tsx
+import Card from "../../Card.js";
     """
     ] .
 
