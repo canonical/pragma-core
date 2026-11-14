@@ -314,13 +314,13 @@ function header(provenance: Provenance): string {
 #                          may admit more than one base namespace, and then it
 #                          carries the three spellings of each.
 #
-# PROVENANCE. The roster is not designed: these ${provenance.keys} keys were measured from
-# the ${provenance.stylesheets} published component stylesheets of
+# PROVENANCE. Most of the roster is not designed: ${provenance.keys} of its keys were
+# measured from the ${provenance.stylesheets} published component stylesheets of
 #
 ${packages}
 #
 # on ${provenance.measured} — every CSS property those stylesheets bind on a
-# component selector, mapped onto a key — so a key exists because an
+# component selector, mapped onto a key — so a measured key exists because an
 # implementation binds the property. The measurement itself lives in
 # ${provenance.measurement}, which reads the reference stylesheets; this
 # package reads no CSS and holds the roster the measurement produced.

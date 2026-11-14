@@ -259,12 +259,14 @@ StyleValue = Symbol | Primitive | [Symbol, ...(Symbol | Primitive)]
 **The key roster is closed.** Keys are declared one `anatomy:StyleKey`
 individual each in `definitions/registry.ttl`, generated from the roster in
 `definitions/style-keys.yaml`, and `anatomy:styleKey`'s `sh:in` is projected
-from the same roster. The roster is not designed: it is the right-hand column
-of a table whose left-hand column was every CSS property the reference
-implementations bind, measured over 89 published component stylesheets, so a
-key exists because an implementation binds the property. Both files state
-that provenance, and the measurement itself lives in `canonical/design-system`
-— this package reads no CSS.
+from the same roster. Most of the roster is not designed: 111 of its 115 keys
+are the right-hand column of a table whose left-hand column was every CSS
+property the reference implementations bind, measured over 89 published
+component stylesheets, so such a key exists because an implementation binds
+the property. The other four, one per logical corner, were admitted before any
+reference binds them and are listed under `provenance.admitted`. Both files
+state that provenance, and the measurement itself lives in
+`canonical/design-system` — this package reads no CSS.
 
 **Key naming**: `namespace.segment[.segment…]` — the same shape as a symbol, a
 lowercase namespace then one or more segments, camelCase admitted
@@ -387,6 +389,10 @@ In Turtle, the state is one optional dimension on the Style tuple:
 | `spacing.gap`            | `gap`                     | `spacing` parameter              | `SizedBox` between               |
 | `appearance.background`  | `background`              | `.background()`                  | `Container` color                |
 | `appearance.radius`      | `border-radius`           | `.cornerRadius()`                | `BorderRadius`                   |
+| `appearance.radius.block.start.inline.start` | `border-start-start-radius` | `UnevenRoundedRectangle(topLeadingRadius:)` | `BorderRadiusDirectional.only(topStart:)` |
+| `appearance.radius.block.start.inline.end` | `border-start-end-radius` | `UnevenRoundedRectangle(topTrailingRadius:)` | `BorderRadiusDirectional.only(topEnd:)` |
+| `appearance.radius.block.end.inline.start` | `border-end-start-radius` | `UnevenRoundedRectangle(bottomLeadingRadius:)` | `BorderRadiusDirectional.only(bottomStart:)` |
+| `appearance.radius.block.end.inline.end` | `border-end-end-radius` | `UnevenRoundedRectangle(bottomTrailingRadius:)` | `BorderRadiusDirectional.only(bottomEnd:)` |
 | `size.width: 100%`       | `width: 100%`             | `.frame(maxWidth: .infinity)`    | `double.infinity`                |
 
 ### 3.8 Switch

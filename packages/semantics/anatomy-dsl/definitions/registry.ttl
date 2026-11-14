@@ -18,8 +18,8 @@
 #                          may admit more than one base namespace, and then it
 #                          carries the three spellings of each.
 #
-# PROVENANCE. The roster is not designed: these 111 keys were measured from
-# the 89 published component stylesheets of
+# PROVENANCE. Most of the roster is not designed: 111 of its keys were
+# measured from the 89 published component stylesheets of
 #
 #   @canonical/react-ds-global@0.37.0,
 #   @canonical/react-ds-global-form@0.37.0,
@@ -27,10 +27,26 @@
 #   @canonical/react-ds-app-launchpad@0.37.0
 #
 # on 2026-09-10 — every CSS property those stylesheets bind on a
-# component selector, mapped onto a key — so a key exists because an
+# component selector, mapped onto a key — so a measured key exists because an
 # implementation binds the property. The measurement itself lives in
 # canonical/design-system, which reads the reference stylesheets; this
 # package reads no CSS and holds the roster the measurement produced.
+#
+# ADMITTED. 4 more keys were admitted without a measurement: no reference
+# stylesheet binds the property yet, so each one states when and why.
+#
+#   appearance.radius.block.start.inline.start (2026-11-14)
+#     a part rounded on some corners only, such as the ends of a joined group,
+#     binds each logical corner; no reference stylesheet binds one yet
+#   appearance.radius.block.start.inline.end (2026-11-14)
+#     a part rounded on some corners only, such as the ends of a joined group,
+#     binds each logical corner; no reference stylesheet binds one yet
+#   appearance.radius.block.end.inline.start (2026-11-14)
+#     a part rounded on some corners only, such as the ends of a joined group,
+#     binds each logical corner; no reference stylesheet binds one yet
+#   appearance.radius.block.end.inline.end (2026-11-14)
+#     a part rounded on some corners only, such as the ends of a joined group,
+#     binds each logical corner; no reference stylesheet binds one yet
 #
 # The roster is closed: shapes.ttl's anatomy:styleKey sh:in is projected from
 # the same file, and both are diffed in CI.
@@ -147,6 +163,30 @@ anatomy:key.appearance.outline.width
 anatomy:key.appearance.radius
     a anatomy:StyleKey ;
     rdfs:label "appearance.radius" ;
+    anatomy:valueKind "either" ;
+    anatomy:tokenNamespace "dimension." , "modifier.dimension." , "surface.dimension." .
+
+anatomy:key.appearance.radius.block.end.inline.end
+    a anatomy:StyleKey ;
+    rdfs:label "appearance.radius.block.end.inline.end" ;
+    anatomy:valueKind "either" ;
+    anatomy:tokenNamespace "dimension." , "modifier.dimension." , "surface.dimension." .
+
+anatomy:key.appearance.radius.block.end.inline.start
+    a anatomy:StyleKey ;
+    rdfs:label "appearance.radius.block.end.inline.start" ;
+    anatomy:valueKind "either" ;
+    anatomy:tokenNamespace "dimension." , "modifier.dimension." , "surface.dimension." .
+
+anatomy:key.appearance.radius.block.start.inline.end
+    a anatomy:StyleKey ;
+    rdfs:label "appearance.radius.block.start.inline.end" ;
+    anatomy:valueKind "either" ;
+    anatomy:tokenNamespace "dimension." , "modifier.dimension." , "surface.dimension." .
+
+anatomy:key.appearance.radius.block.start.inline.start
+    a anatomy:StyleKey ;
+    rdfs:label "appearance.radius.block.start.inline.start" ;
     anatomy:valueKind "either" ;
     anatomy:tokenNamespace "dimension." , "modifier.dimension." , "surface.dimension." .
 

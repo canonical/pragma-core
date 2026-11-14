@@ -42,15 +42,19 @@ implementation's chain ends in a literal
 (`[modifier.color.icon, modifier.color.text, currentColor]`).
 
 Keys come from a **closed roster** — `definitions/style-keys.yaml`, from
-which `definitions/registry.ttl` is generated. The roster is measured, not
-designed: its 111 keys are the right-hand column of a table whose left-hand
-column was every CSS property bound on a component selector across 89
-published component stylesheets, so a key exists because an implementation
-binds the property. That measurement lives in `canonical/design-system`,
-where the reference stylesheets are an input; this package reads no CSS and
-holds the roster, with its provenance stated in both files. The
-slash-delimited path and the trailing `?` marker of earlier versions are
-retired — see `docs/api-reference.md` §5, §11 and §12.
+which `definitions/registry.ttl` is generated. The roster is mostly measured,
+not designed: 111 of its 115 keys are the right-hand column of a table whose
+left-hand column was every CSS property bound on a component selector across
+89 published component stylesheets, so such a key exists because an
+implementation binds the property. The measurement lives in
+`canonical/design-system`, where the reference stylesheets are an input; this
+package reads no CSS and holds the roster, with its provenance stated in both
+files. The other four keys, one per logical corner
+(`appearance.radius.block.start.inline.start` and its siblings), were
+admitted before any reference binds them, and the roster lists them under
+`provenance.admitted`. The slash-delimited path and the trailing `?` marker
+of earlier versions are retired — see `docs/api-reference.md` §5, §11 and
+§12.
 
 ## Projections
 

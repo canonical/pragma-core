@@ -123,11 +123,14 @@ anatomy:SwitchCase a owl:Class ;
 anatomy:StyleKey a owl:Class ;
     rdfs:label "Style Key" ;
     skos:definition """One canonical style key: a platform-agnostic property
-    the anatomy may bind. The roster was measured, not designed: it is the
-    right-hand column of a table whose left-hand column was every CSS property
-    the reference implementations bind, so a key exists because an
-    implementation binds the property, never because the vocabulary looked
-    incomplete. registry.ttl states where that measurement lives.""" ;
+    the anatomy may bind. Most of the roster was measured, not designed: it is
+    the right-hand column of a table whose left-hand column was every CSS
+    property the reference implementations bind, so a measured key exists
+    because an implementation binds the property, never because the
+    vocabulary looked incomplete. The rest are admitted keys, needed before
+    any reference binds their property; registry.ttl states where the
+    measurement lives and lists each admitted key with its date and its
+    reason.""" ;
     skos:example "appearance.background" ,
                  "spacing.internal.inline.start" ,
                  "typography.color" .

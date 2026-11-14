@@ -953,7 +953,7 @@ as the scalar instead, and a primitive anywhere but last is a parse error.
 
 ### The style keys are a closed roster
 
-There are 111 style keys and they are the DSL's own vocabulary, published as
+There are 115 style keys and they are the DSL's own vocabulary, published as
 `@canonical/anatomy-dsl`'s `definitions/style-keys.yaml`. That file is the authority
 on every question of the form "what does this key take" — it is installed, so read it
 rather than reasoning from the examples here:
@@ -967,8 +967,9 @@ token, the one `namespace` whose symbols it admits. Those two fields settle it: 
 says `either`, a literal is legal there whatever the examples below happen to show, and
 if it names a namespace, a symbol outside that namespace is not legal there however
 well it reads. The roster's own header says how each value was measured, which is worth
-reading once — a key exists because an implementation binds the property, and
-`valueKind` is what the measurement found, not a preference.
+reading once — a measured key exists because an implementation binds the property, the
+admitted ones are listed under `provenance.admitted` with their reason, and `valueKind`
+is what the measurement found, not a preference.
 
 A key outside the roster is rejected, and each key states what it admits:
 
@@ -983,7 +984,7 @@ modifier channel and its surface channel:
 | Key family | Namespace it admits |
 |---|---|
 | `appearance.background`, `appearance.border.*.color`, `appearance.outline.color`, `typography.color` | `color.`, `modifier.color.`, `surface.color.` |
-| `appearance.border.width`, `appearance.outline.*`, `appearance.radius`, `layout.flex.basis`, `layout.offset.*`, `size.*`, `typography.letterSpacing`, `typography.size`, `typography.decoration.*` | `dimension.`, `modifier.dimension.`, `surface.dimension.` |
+| `appearance.border.width`, `appearance.outline.*`, `appearance.radius`, `appearance.radius.block.*.inline.*`, `layout.flex.basis`, `layout.offset.*`, `size.*`, `typography.letterSpacing`, `typography.size`, `typography.decoration.*` | `dimension.`, `modifier.dimension.`, `surface.dimension.` |
 | `spacing.gap*`, `spacing.internal.*`, `spacing.external.*` | `spacing.`, `modifier.spacing.`, `surface.spacing.` |
 | `typography.font`, `typography.fontFamily`, `typography.lineHeight`, `typography.weight` | `typography.`, `modifier.typography.`, `surface.typography.` |
 | `motion.duration`, `motion.easing` | `motion.`, `modifier.motion.`, `surface.motion.` |
@@ -994,6 +995,12 @@ keys in the `dimension.` row are `either`, not `token` — `appearance.radius` i
 `appearance.radius: 1rem` is a lawful binding where the implementation writes `1rem`
 literally and declares no variable. The namespace constrains which SYMBOL may go on a
 key; it does not turn an `either` key into a token-only one.
+
+**One corner is its own key.** Where the stylesheet rounds some corners only, bind each
+one on its logical corner, axis before side: `appearance.radius.block.start.inline.start`
+is `border-start-start-radius`, `…block.start.inline.end` is `border-start-end-radius`,
+and so on. They take what `appearance.radius` takes. Never write a physical corner
+(`top-left`); the logical one follows the writing direction.
 
 **Spacing keys admit `dimension.*` too, for now.** Not one of the twelve `spacing.*`
 roles resolves to the same dimension in every product context, and the implementations

@@ -11,17 +11,19 @@
 # an edit here that is not reflected in the graph is a red bar.
 #
 # ───────────────────────────────────────────────────────────────────────────
-# PROVENANCE — this roster was measured, not designed
+# PROVENANCE — most of this roster was measured, not designed
 # ───────────────────────────────────────────────────────────────────────────
 #
-# The 111 keys below are the right-hand column of a table whose left-hand
+# 111 of the keys below are the right-hand column of a table whose left-hand
 # column was every CSS property bound on a component selector across the 89
 # published component stylesheets of the reference packages named in
 # `provenance.packages`, at the exact versions stated, measured on
 # 2026-09-10. A key exists because an implementation binds the property,
 # never because the vocabulary looked incomplete — and `valueKind` below is
 # that measurement's reading of what the property carries, not an opinion
-# about it.
+# about it. The rest are listed under `provenance.admitted`: keys the DSL
+# needed before any reference binds their property, each with its date and
+# its reason.
 #
 # THE MEASUREMENT ITSELF NO LONGER LIVES HERE. The property census and the
 # CSS reader that fed it moved to `canonical/design-system`, where the
@@ -61,6 +63,11 @@
 #               emitted as the key's `rdfs:comment`, so the exception is
 #               stated and not silent. Forbidden on a key that takes a token.
 #
+# The four `appearance.radius.block.<side>.inline.<side>` keys are one
+# corner each, named axis before side like every other logical key here:
+# `appearance.radius.block.start.inline.start` is `border-start-start-radius`,
+# and so on round the box. They take what `appearance.radius` takes.
+#
 # `spacing.*` keys admit `spacing.` and, for now, `dimension.` too: the
 # reference binds `dimension.*` there throughout, and until semantic spacing
 # lands the roster admits both rather than leaving every real binding out
@@ -95,7 +102,19 @@ provenance:
     - "@canonical/react-ds-global-form@0.37.0"
     - "@canonical/lit-ds-prototype@0.37.0"
     - "@canonical/react-ds-app-launchpad@0.37.0"
-  admitted: []
+  admitted:
+    - key: appearance.radius.block.start.inline.start
+      date: "2026-11-14"
+      why: "a part rounded on some corners only, such as the ends of a joined group, binds each logical corner; no reference stylesheet binds one yet"
+    - key: appearance.radius.block.start.inline.end
+      date: "2026-11-14"
+      why: "a part rounded on some corners only, such as the ends of a joined group, binds each logical corner; no reference stylesheet binds one yet"
+    - key: appearance.radius.block.end.inline.start
+      date: "2026-11-14"
+      why: "a part rounded on some corners only, such as the ends of a joined group, binds each logical corner; no reference stylesheet binds one yet"
+    - key: appearance.radius.block.end.inline.end
+      date: "2026-11-14"
+      why: "a part rounded on some corners only, such as the ends of a joined group, binds each logical corner; no reference stylesheet binds one yet"
 
 # Placeholder segments. A value that satisfies the symbol grammar but carries
 # one of these is a placeholder rather than a symbol: `dimension.radius.sth`
@@ -163,6 +182,18 @@ keys:
     valueKind: either
     namespace: dimension.
   appearance.radius:
+    valueKind: either
+    namespace: dimension.
+  appearance.radius.block.end.inline.end:
+    valueKind: either
+    namespace: dimension.
+  appearance.radius.block.end.inline.start:
+    valueKind: either
+    namespace: dimension.
+  appearance.radius.block.start.inline.end:
+    valueKind: either
+    namespace: dimension.
+  appearance.radius.block.start.inline.start:
     valueKind: either
     namespace: dimension.
   appearance.visibility:
