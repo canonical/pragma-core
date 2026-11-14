@@ -111,13 +111,17 @@ Place subcomponents in a `common/` folder inside the parent component directory.
 ```
 Card/
   ├── Card.tsx
+  ├── Card.test.tsx
   ├── common/
   │   ├── Header/
-  │   │   └── Header.tsx
+  │   │   ├── Header.tsx
+  │   │   └── Header.test.tsx
   │   ├── Footer/
-  │   │   └── Footer.tsx
+  │   │   ├── Footer.tsx
+  │   │   └── Footer.test.tsx
   │   └── utils/
-  │       └── helpers.ts
+  │       ├── helpers.ts
+  │       └── helpers.test.ts
   └── index.ts
 ```
 
@@ -161,6 +165,7 @@ Prefix component-specific files and use generic names for domain-level files.
   ├── [MyComponent].stories.tsx   # Component-specific
   ├── [MyComponent].test.tsx      # Component-specific
   ├── Context.tsx               # Domain-level
+  ├── Context.test.tsx          # Domain-level
   ├── types.ts                  # Domain-level
   └── styles.css                # Domain-level
 ```
@@ -514,18 +519,22 @@ Organize provider-related files by separating concerns into distinct files: plac
 ```
 [MyComponent]/
   ├── Context.tsx
+  ├── Context.test.tsx
   ├── Provider.tsx
+  ├── Provider.test.tsx
   ├── index.ts
   ├── types.ts
   └── common/
     └─ [SubComponent]/
         ├── index.ts
         ├── [SubComponent].tsx
+        ├── [SubComponent].test.tsx
         └── types.ts
   └── hooks/
       ├── index.ts
       ├── types.ts
-      └── useProviderState.ts
+      ├── useProviderState.ts
+      └── useProviderState.test.ts
 ```
 
 Create the context type within `types.ts`.

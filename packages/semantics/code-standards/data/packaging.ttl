@@ -33,14 +33,19 @@ packages/my-cli/
 ├── src/
 │   ├── commands/              # CLI command handlers
 │   │   ├── build.ts
+│   │   ├── build.test.ts
 │   │   ├── deploy.ts
+│   │   ├── deploy.test.ts
 │   │   └── index.ts           # Barrel: exports all commands
 │   ├── operations/            # Shared internal logic across commands
 │   │   ├── resolveConfig.ts
+│   │   ├── resolveConfig.test.ts
 │   │   ├── runValidation.ts
+│   │   ├── runValidation.test.ts
 │   │   └── index.ts           # Barrel: exports shared operations
 │   ├── utils/                 # Internal helpers
 │   │   ├── formatOutput.ts
+│   │   ├── formatOutput.test.ts
 │   │   └── index.ts           # Barrel: exports utilities
 │   └── index.ts               # Entry point (bootstraps CLI)
 └── package.json
@@ -62,10 +67,13 @@ packages/my-mcp/
 ├── src/
 │   ├── tools/                 # MCP tool handlers
 │   │   ├── query.ts
+│   │   ├── query.test.ts
 │   │   ├── mutate.ts
+│   │   ├── mutate.test.ts
 │   │   └── index.ts           # Barrel: exports tool handlers
 │   ├── operations/            # Shared internal logic
 │   │   ├── executeQuery.ts
+│   │   ├── executeQuery.test.ts
 │   │   └── index.ts           # Barrel: exports shared operations
 │   └── index.ts               # MCP server entry point
 └── package.json
@@ -81,10 +89,13 @@ packages/my-mcp/
 │   │   └── index.ts           # Barrel: public API for external consumers
 │   ├── tools/                 # MCP tool handlers (not exported)
 │   │   ├── query.ts
+│   │   ├── query.test.ts
 │   │   ├── mutate.ts
+│   │   ├── mutate.test.ts
 │   │   └── index.ts           # Barrel: exports tool handlers
 │   ├── operations/            # Shared internal logic
 │   │   ├── executeQuery.ts
+│   │   ├── executeQuery.test.ts
 │   │   └── index.ts           # Barrel: exports shared operations
 │   └── index.ts               # MCP server entry point
 └── package.json
