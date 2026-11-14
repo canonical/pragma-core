@@ -215,7 +215,7 @@ export const DEFAULT_LANG = "en";
  * The single `lang` argument carried by every descriptive field on EntityMeta
  * (`title`, `label`, `comment`, `definition`).
  *
- * `default: { value }` — NOT `defaultValue`, which graphql@17.0.0-rc.0
+ * `default: { value }` — NOT `defaultValue`, which graphql v17
  * deprecates. printSchema renders this as `lang: String = "en"`. The default
  * applies only when the argument is OMITTED: an explicit `lang: null` is a
  * legal value for this nullable String and reaches the resolver as null, so

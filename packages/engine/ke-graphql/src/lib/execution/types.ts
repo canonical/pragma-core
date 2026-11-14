@@ -4,9 +4,9 @@
 // Grouped here because executeLocal, the drain-and-merge fallback, the Relay
 // adapter, and the HTTP handler all exchange these shapes.
 //
-// The structural types mirror the v17 RC shapes rather than importing them:
-// the RC type surface is still settling, and this module is the single
-// place that would absorb a format change.
+// The structural types mirror graphql v17's published shapes rather than
+// importing them: this module is the single place that would absorb a
+// format change.
 // =============================================================================
 
 import type { ExecutionResult } from "graphql";

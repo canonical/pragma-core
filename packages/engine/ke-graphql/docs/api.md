@@ -100,7 +100,7 @@ Drain an `IncrementalResults` stream into one complete `{ data, errors }`; the t
 ```ts
 relayFormatAdapter(results: IncrementalResults): AsyncGenerator<RelayLegacyPayload>
 ```
-Translate v17 incremental payloads to Relay's legacy `path`/`label`/`is_final` shape. **`@experimental`** — coupled to the graphql v17-RC payload format.
+Translate v17 incremental payloads to Relay's legacy `path`/`label`/`is_final` shape. **`@experimental`** — coupled to the graphql v17 payload format.
 
 ### `extractStatic(options)`
 ```ts
