@@ -15,7 +15,9 @@
  * already an input. So this module reads no CSS and this package installs no
  * component library: it reads the roster the measurement produced, and the
  * roster states its own provenance, which is rendered into `registry.ttl`'s
- * header so a reader of the graph form meets it too.
+ * header so a reader of the graph form meets it too. A key the DSL needs
+ * before any reference binds its property is admitted rather than measured,
+ * and the provenance lists it with its date and its reason.
  *
  * Nothing here is imported by the published build: the outputs are committed
  * files and the diff is the check.
@@ -30,9 +32,24 @@ export type ValueKind = "token" | "primitive" | "either";
 
 const VALUE_KINDS: readonly ValueKind[] = ["token", "primitive", "either"];
 
+/**
+ * A key the roster holds although no reference stylesheet binds its property
+ * yet, so no measurement produced it.
+ */
+export interface AdmittedKey {
+  key: string;
+  /** The date it was admitted, `YYYY-MM-DD`. */
+  date: string;
+  /** Why it was admitted without a measurement. */
+  why: string;
+}
+
 /** Where the roster came from, stated in the roster itself. */
 export interface Provenance {
-  /** The roster's size, asserted against the roster's own length. */
+  /**
+   * How many keys the measurement produced. With the admitted keys it is
+   * asserted against the roster's own length.
+   */
   keys: number;
   /** The component stylesheets the measurement read. */
   stylesheets: number;
@@ -42,6 +59,8 @@ export interface Provenance {
   measurement: string;
   /** The reference packages measured, `name@version`. */
   packages: string[];
+  /** The keys admitted without a measurement, each with its reason. */
+  admitted?: AdmittedKey[];
 }
 
 interface RosterEntry {
@@ -175,11 +194,14 @@ export function buildRegistry(roster = readRoster()): Registry {
   }
   keys.sort((a, b) => a.key.localeCompare(b.key));
 
-  // The stated size is checked against the data, so the provenance the
-  // header carries cannot drift from the roster it describes.
-  if (roster.provenance.keys !== keys.length) {
+  // The stated sizes are checked against the data, so the provenance the
+  // header carries cannot drift from the roster it describes: every key was
+  // either measured or admitted, and an admitted key says why.
+  const admitted = roster.provenance.admitted ?? [];
+  checkAdmitted(admitted, new Set(keys.map((entry) => entry.key)));
+  if (roster.provenance.keys + admitted.length !== keys.length) {
     throw new Error(
-      `the roster states ${roster.provenance.keys} keys and holds ${keys.length}`,
+      `the roster states ${roster.provenance.keys} measured keys and ${admitted.length} admitted, and holds ${keys.length}`,
     );
   }
 
@@ -188,6 +210,76 @@ export function buildRegistry(roster = readRoster()): Registry {
     placeholders: roster.placeholders,
     provenance: roster.provenance,
   };
+}
+
+/** True for a real calendar date written `YYYY-MM-DD`: not `2026-13-45`. */
+function isCalendarDate(text: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return false;
+  const date = new Date(`${text}T00:00:00Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().startsWith(text);
+}
+
+/** Hold each admitted key to the roster and to its own record. */
+function checkAdmitted(
+  admitted: readonly AdmittedKey[],
+  keys: ReadonlySet<string>,
+): void {
+  const seen = new Set<string>();
+  for (const entry of admitted) {
+    if (!keys.has(entry.key)) {
+      throw new Error(`admitted key "${entry.key}" is not in the roster`);
+    }
+    if (seen.has(entry.key)) {
+      throw new Error(`admitted key "${entry.key}" is stated twice`);
+    }
+    seen.add(entry.key);
+    if (!isCalendarDate(String(entry.date))) {
+      throw new Error(
+        `admitted key "${entry.key}": date must be YYYY-MM-DD, quoted`,
+      );
+    }
+    if (typeof entry.why !== "string" || entry.why.trim() === "") {
+      throw new Error(`admitted key "${entry.key}" owes a why`);
+    }
+  }
+}
+
+/** Break text into comment lines no wider than the header's rule. */
+function wrapComment(text: string, prefix: string): string[] {
+  const lines: string[] = [];
+  let line = prefix;
+  for (const word of text.split(/\s+/)) {
+    if (line !== prefix && line.length + 1 + word.length > 79) {
+      lines.push(line);
+      line = prefix;
+    }
+    line = line === prefix ? `${prefix}${word}` : `${line} ${word}`;
+  }
+  lines.push(line);
+  return lines;
+}
+
+/**
+ * The header's account of the keys admitted without a measurement, or
+ * nothing when every key was measured.
+ */
+function renderAdmittedSection(provenance: Provenance): string {
+  const admitted = provenance.admitted ?? [];
+  if (admitted.length === 0) return "";
+  const entries = admitted
+    .map((entry) =>
+      [
+        `#   ${entry.key} (${entry.date})`,
+        ...wrapComment(entry.why, "#     "),
+      ].join("\n"),
+    )
+    .join("\n");
+  return `#
+# ADMITTED. ${admitted.length} more ${admitted.length === 1 ? "key was" : "keys were"} admitted without a measurement: no reference
+# stylesheet binds the property yet, so each one states when and why.
+#
+${entries}
+`;
 }
 
 /**
@@ -232,7 +324,7 @@ ${packages}
 # implementation binds the property. The measurement itself lives in
 # ${provenance.measurement}, which reads the reference stylesheets; this
 # package reads no CSS and holds the roster the measurement produced.
-#
+${renderAdmittedSection(provenance)}#
 # The roster is closed: shapes.ttl's anatomy:styleKey sh:in is projected from
 # the same file, and both are diffed in CI.
 ###############################################################################

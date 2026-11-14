@@ -190,7 +190,80 @@ describe("the style-key registry", () => {
         ...roster,
         provenance: { ...roster.provenance, keys: 1 },
       }),
-    ).toThrow(/states 1 keys and holds 111/);
+    ).toThrow(/states 1 measured keys and 0 admitted, and holds 111/);
+  });
+
+  it("counts a key admitted without a measurement, and says why in the header", () => {
+    const admitted = (entries: unknown[], keys = roster.provenance.keys) =>
+      buildRegistry({
+        ...roster,
+        provenance: {
+          ...roster.provenance,
+          keys,
+          admitted: entries as typeof roster.provenance.admitted,
+        },
+      });
+    const one = {
+      key: "layout.type",
+      date: "2026-11-14",
+      why: "no stylesheet binds it yet",
+    };
+    // Measured plus admitted is the roster's size, so admitting a key that is
+    // already counted as measured is refused.
+    expect(() => admitted([one])).toThrow(
+      /states 111 measured keys and 1 admitted, and holds 111/,
+    );
+    const registryWithOne = admitted([one], roster.provenance.keys - 1);
+    const header = serialiseRegistry(registryWithOne);
+    expect(header).toContain(
+      "# ADMITTED. 1 more key was admitted without a measurement",
+    );
+    expect(header).toContain(
+      "#   layout.type (2026-11-14)\n#     no stylesheet binds it yet",
+    );
+    const two = [one, { ...one, key: "layout.direction" }];
+    expect(serialiseRegistry(admitted(two, ROSTER_SIZE - 2))).toContain(
+      "# ADMITTED. 2 more keys were admitted",
+    );
+    // A long reason is wrapped to the header's width.
+    const long = "a reason long enough to need a second line ".repeat(3).trim();
+    const lines = serialiseRegistry(
+      admitted([{ ...one, why: long }], roster.provenance.keys - 1),
+    ).split("\n");
+    const from = lines.indexOf("#   layout.type (2026-11-14)") + 1;
+    const wrapped = lines.slice(from, lines.indexOf("#", from));
+    expect(wrapped.length).toBeGreaterThan(1);
+    expect(wrapped.every((line) => line.length <= 79)).toBe(true);
+    expect(wrapped.map((line) => line.slice(6)).join(" ")).toBe(long);
+    // An empty block renders nothing, so a roster that admits no key has the
+    // header a measured roster always had.
+    expect(serialiseRegistry(admitted([]))).not.toContain("# ADMITTED.");
+  });
+
+  it("refuses an admitted key the roster does not hold or that owes its record", () => {
+    const admitted =
+      (entry: Record<string, unknown>, extra: unknown[] = []) =>
+      () =>
+        buildRegistry({
+          ...roster,
+          provenance: {
+            ...roster.provenance,
+            keys: roster.provenance.keys - 1 - extra.length,
+            admitted: [...extra, entry] as typeof roster.provenance.admitted,
+          },
+        });
+    const base = { key: "layout.type", date: "2026-11-14", why: "a reason" };
+    expect(admitted({ ...base, key: "no.such.key" })).toThrow(
+      /"no.such.key" is not in the roster/,
+    );
+    expect(admitted(base, [base])).toThrow(/"layout.type" is stated twice/);
+    for (const date of ["14 November", "2026-13-45", "2026-02-30"]) {
+      expect(admitted({ ...base, date }), date).toThrow(
+        /date must be YYYY-MM-DD/,
+      );
+    }
+    expect(admitted({ ...base, why: " " })).toThrow(/owes a why/);
+    expect(admitted({ ...base, why: undefined })).toThrow(/owes a why/);
   });
 
   it("refuses a roster that contradicts itself", () => {

@@ -75,10 +75,16 @@
 
 version: 1
 
-# Where the roster came from. `keys` is asserted against the roster's own
-# length by the generator, so the stated number cannot drift from the data,
-# and the whole block is rendered into `registry.ttl`'s header, where a
-# reader of the graph form meets it too.
+# Where the roster came from. `keys` counts the measured keys and `admitted`
+# lists the keys that entered without a measurement; the generator asserts
+# that the two together are the roster's own length, so the stated numbers
+# cannot drift from the data, and the whole block is rendered into
+# `registry.ttl`'s header, where a reader of the graph form meets it too.
+#
+# A key is ADMITTED when the DSL needs it before any reference stylesheet
+# binds its property. Each entry states the key, the date (quoted) and why,
+# and the header prints all three, so an admitted key never reads as a
+# measured one.
 provenance:
   keys: 111
   stylesheets: 89
@@ -89,6 +95,7 @@ provenance:
     - "@canonical/react-ds-global-form@0.37.0"
     - "@canonical/lit-ds-prototype@0.37.0"
     - "@canonical/react-ds-app-launchpad@0.37.0"
+  admitted: []
 
 # Placeholder segments. A value that satisfies the symbol grammar but carries
 # one of these is a placeholder rather than a symbol: `dimension.radius.sth`
