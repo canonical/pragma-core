@@ -888,91 +888,24 @@ Use the local declaration name when the barrel re-exports it under a different n
 
 **Identifier:** `cs:react.hooks.custom`
 
-Custom hooks must separate concerns at the domain level. All hooks within a ComponentDomain/hooks directory are considered within the domain scope and should focus on a single concern. Custom hooks must be used when:
-    - Logic needs to be shared between components
-    - Component logic becomes complex
-    - State management needs to be abstracted
-    - Side effects need to be encapsulated
-
-All of the types for a domain level's hooks must be defined in the `hooks/types.ts` file of that folder.
-Each hook must define a [HookName]Props and [HookName]Result type in `hooks/types.ts`.
-A hook with exactly one input and no options may take that input positionally, typed as its [HookName]Props. A hook with two or more inputs, or with options, takes one object of props as the example shows.
+A custom hook holds one concern, and its `[Hook]Props` and `[Hook]Result` types live in `hooks/types.ts`. Except: a hook with one input and no options may take it positionally; a hook with no input defines only its Result.
 
 ### Do
 
-Create a custom hook that focuses on a single concern within the domain.
+Type the hook's props and result in `hooks/types.ts`
 ```typescript
-// [MyComponent]/hooks/useWindowFitment.ts
-const useWindowFitment = ({
-  onBestPositionChange,
-  autoFit = false,
-}: UseWindowFitmentProps): UseWindowFitmentResult => {
-```
-
-Create hook types in `hooks/types.ts`.
-```typescript
-// [MyComponent]/hooks/types.ts
-export interface UseWindowFitmentProps {
-  /**
-   * Whether the popup should automatically fit into the viewport.
-   * If true, the hook will try to fit the popup into the viewport if it doesn't fit in the preferred directions.
-   * Defaults to false.
-   */
-  autoFit?: boolean;
-  /**
-   * An optional callback to be called when the best position of the popup changes.
-   */
-  onBestPositionChange?: (bestPosition?: BestPosition) => void;
-}
-
-export interface UseWindowFitmentResult {
-  /**
-   * A ref to be attached to the target element.
-   */
-  targetRef: RefObject<HTMLDivElement | null>;
-  /**
-   * A ref to be attached to the popup element.
-   */
-  popupRef: RefObject<HTMLDivElement | null>;
-  /**
-   * The calculated best possible position of the popup element.
-   */
-  bestPosition?: BestPosition;
-  /**
-   * The style object to be applied to the popup element.
-   */
-  popupPositionStyle: CSSProperties;
-}
-```
-
-Take a single input positionally when the hook has exactly one input and no options.
-```typescript
-// [MyComponent]/hooks/useLocalized.ts
-const useLocalized = <T>(
-  messages: UseLocalizedProps<T>,
-): UseLocalizedResult<T> => {
+const useFitment = (props: UseFitmentProps): UseFitmentResult => { /* … */ };
+const useLabel = (key: UseLabelProps): UseLabelResult => { /* … */ };
+const useIsHydrated = (): UseIsHydratedResult => { /* … */ };
 ```
 
 ### Don't
 
-Create a custom hook for simple, non-reusable state.
-```tsx
-// Bad: Unnecessary abstraction for a simple counter
-const useCounter = () => {
-  const [count, setCount] = useState(0);
-  return { count, setCount };
-};
-```
-
-Mix multiple concerns in a single hook
+Mix several concerns in one hook
 ```typescript
-// Bad: Multiple concerns in one hook
 const useUserData = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [profile, setProfile] = useState(null);
   const [settings, setSettings] = useState({});
-  const [notifications, setNotifications] = useState([]);
-  return { isAuthenticated, profile, settings, notifications };
 };
 ```
 
