@@ -91,9 +91,19 @@ export interface PackIndexEntity {
 }
 
 /**
+ * The `index.json` format this kernel writes, and the newest it can read.
+ *
+ * Also a segment of every pack's cache path (`packs/v<version>/<contentHash>/`):
+ * the content hash covers the sources, not the index format, so without the
+ * segment two CLI versions that write different formats would reuse each
+ * other's packs. Bump it whenever the index gains a field a reader depends on.
+ */
+export const PACK_INDEX_VERSION = 3;
+
+/**
  * The storeless entity index a pack ships as `index.json`.
  *
- * `version` is `3` for packs built by this kernel: v2 added the enrichment
+ * `version` is {@link PACK_INDEX_VERSION} for packs built by this kernel: v2 added the enrichment
  * fields on each entity (which the resource browser depends on), v3 adds the
  * anonymous per-type instance counts. `1` is a legacy artifact whose
  * enrichment is absent — the resources provider degrades to a "run

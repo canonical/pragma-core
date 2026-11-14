@@ -2,9 +2,11 @@
  * Filesystem locations for the store layer: the content-addressed pack cache,
  * the git-ref checkout cache, and the per-project active-pack pointer.
  *
- * The pack cache lives under `$XDG_CACHE_HOME/<bin>/packs/<contentHash>/`
+ * The pack cache lives under `$XDG_CACHE_HOME/<bin>/packs/v<format>/<contentHash>/`
  * (content-addressed, so a new source set is a new directory and invalidation
- * is free); ref checkouts under `.../<bin>/refs/`. Which pack answers a
+ * is free; partitioned by index format, because the content hash covers the
+ * sources and not the format, and CLI versions that write different formats
+ * share the cache); ref checkouts under `.../<bin>/refs/`. Which pack answers a
  * project's reads is recorded by a one-line POINTER under
  * `.../<bin>/projects/` — the content hash `sources update` last built there,
  * and nothing else. It lives in the cache rather than the repo because the pack
@@ -12,7 +14,7 @@
  * machine does not have.
  *
  * A LEAF module on purpose: it imports node builtins and the distribution's
- * {@link BIN_NAME}, and owns the cache root's XDG resolution outright
+ * {@link BIN_NAME} and index format, and owns the cache root's XDG resolution outright
  * (`kernel/config/paths.ts` keeps config and state). The storeless `__complete`
  * fast path (`kernel/completion/entitySource.ts`) has to read the pointer, and
  * `completion/safety.test.ts` forbids the config LAYER anywhere on that import
@@ -26,6 +28,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 import { BIN_NAME } from "../../constants.js";
+import { PACK_INDEX_VERSION } from "./graphpack/types.js";
 
 /** `$XDG_CACHE_HOME/<bin>` (default `~/.cache/<bin>`) — the cache root. */
 function cacheDir(): string {
@@ -43,9 +46,16 @@ export function refsCacheDir(): string {
   return join(cacheDir(), "refs");
 }
 
-/** The cache directory for a pack, named by its content hash. */
+/**
+ * The cache directory for a pack: `packs/v<PACK_INDEX_VERSION>/<contentHash>`.
+ *
+ * The format segment keeps a pack written by a CLI with another index format
+ * out of reach. Such a pack sits in its own `v<n>/` folder (or directly under
+ * `packs/`, the layout before the segment existed), so it is neither reused by
+ * a build nor read by this CLI; a pointer naming it resolves as missing.
+ */
 export function packDir(contentHash: string): string {
-  return join(packsCacheDir(), contentHash);
+  return join(packsCacheDir(), `v${PACK_INDEX_VERSION}`, contentHash);
 }
 
 /**
