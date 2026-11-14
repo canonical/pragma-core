@@ -294,107 +294,22 @@ const processUser = (user: User) => { /* ... */ };
 cs:code.constants.file a cs:CodeStandard ;
     rdfs:label "Domain constants in constants.ts"@en ;
     cs:hasCategory cs:code ;
-    cs:description "Domain constants must be collected in a `constants.ts` file using named exports (no default export). The file must be colocated at the level of the domain that owns the constants — inside the domain folder when one exists. Constants files always use named exports so consumers can import exactly what they need. Single-use constants that are only referenced in one file may be declared inline in that file instead of being extracted to `constants.ts`." ;
+    cs:description "Domain constants live in their domain's `constants.ts` as named plain values; frozen records, frozen arrays and `as const` literals are plain values. Except: a constant one file uses stays in that file." ;
     cs:do [
-        cs:description "Create a `constants.ts` file with named exports at the domain level" ;
+        cs:description "Name plain and frozen values in `constants.ts`" ;
         cs:language "typescript" ;
         cs:code """
 // features/pricing/constants.ts
-export const DEFAULT_CURRENCY = "USD";
 export const TAX_RATE = 0.21;
-export const MAX_DISCOUNT_PERCENT = 50;
-    """
-    ] ;
-    cs:do [
-        cs:description "Colocate `constants.ts` inside the domain folder it belongs to" ;
-        cs:code """
-features/
-├── pricing/
-│   ├── constants.ts          # Domain constants live here
-│   ├── constants.test.ts
-│   ├── calculatePrice.ts
-│   ├── calculatePrice.test.ts
-│   └── index.ts
-├── auth/
-│   ├── constants.ts          # Auth-specific constants
-│   ├── constants.test.ts
-│   ├── validateToken.ts
-│   ├── validateToken.test.ts
-│   └── index.ts
-    """
-    ] ;
-    cs:do [
-        cs:description "Import constants directly from the owning domain's `constants.ts`" ;
-        cs:language "typescript" ;
-        cs:code """
-// features/pricing/calculatePrice.ts
-import { TAX_RATE, DEFAULT_CURRENCY } from "./constants.js";
-    """
-    ] ;
-    cs:do [
-        cs:description "Keep all exports in `constants.ts` as named exports with the same shape (plain values)" ;
-        cs:language "typescript" ;
-        cs:code """
-// constants.ts
-export const RECONNECT_INTERVAL_MS = 5000;
-export const MAX_RETRIES = 3;
-export const DEFAULT_TIMEOUT_MS = 30_000;
-    """
-    ] ;
-    cs:do [
-        cs:description "Keep single-use constants inline in the file that uses them" ;
-        cs:language "typescript" ;
-        cs:code """
-// features/pricing/applyDiscount.ts
-const MAX_DISCOUNT_PERCENT = 50;
-
-export default function applyDiscount(price: number, rate: number): number {
-  const capped = Math.min(rate, MAX_DISCOUNT_PERCENT / 100);
-  return price * (1 - capped);
-}
+export const CURRENCIES = Object.freeze(["USD", "EUR"] as const);
     """
     ] ;
     cs:dont [
-        cs:description "Use a default export in a constants file" ;
+        cs:description "Put functions or types in `constants.ts`" ;
         cs:language "typescript" ;
         cs:code """
-// Bad: default export forces consumers to name the import
-export default {
-  DEFAULT_CURRENCY: "USD",
-  TAX_RATE: 0.21,
-};
-    """
-    ] ;
-    cs:dont [
-        cs:description "Scatter constants across unrelated files instead of collecting them in `constants.ts`" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: constants buried inside implementation files
-// calculatePrice.ts
-export const TAX_RATE = 0.21;
-const calculatePrice = (base: number) => base * (1 + TAX_RATE);
-export default calculatePrice;
-    """
-    ] ;
-    cs:dont [
-        cs:description "Place constants far from the domain that owns them" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: pricing constants in a top-level shared file
-// src/constants.ts
-export const TAX_RATE = 0.21;        // Belongs in pricing/
-export const MAX_RETRIES = 3;        // Belongs in network/
-export const SESSION_TTL_MS = 3600;  // Belongs in auth/
-    """
-    ] ;
-    cs:dont [
-        cs:description "Mix constants with functions, types, or other non-constant exports" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: constants.ts should only contain constant values
-export const MAX_RETRIES = 3;
-export const formatRetryMessage = (n: number) => `Retry ${n} of ${MAX_RETRIES}`;
-export type RetryConfig = { max: number };
+export const formatRetry = (n: number) => `Retry ${n}`;
+export type Currency = "USD" | "EUR";
     """
     ] .
 
