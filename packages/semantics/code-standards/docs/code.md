@@ -147,10 +147,12 @@ features/
 ├── pricing/
 │   ├── constants.ts          # Domain constants live here
 │   ├── calculatePrice.ts
+│   ├── calculatePrice.test.ts
 │   └── index.ts
 ├── auth/
 │   ├── constants.ts          # Auth-specific constants
 │   ├── validateToken.ts
+│   ├── validateToken.test.ts
 │   └── index.ts
 ```
 
@@ -478,10 +480,12 @@ features/
 │   ├── types.ts              # Shared domain types live here
 │   ├── constants.ts
 │   ├── calculatePrice.ts
+│   ├── calculatePrice.test.ts
 │   └── index.ts
 ├── auth/
 │   ├── types.ts              # Auth-specific types
 │   ├── validateToken.ts
+│   ├── validateToken.test.ts
 │   └── index.ts
 ```
 

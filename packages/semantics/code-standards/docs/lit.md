@@ -362,9 +362,11 @@ MyComponent/
   ├── index.ts                 # Domain-level
   ├── types.ts                 # Domain-level
   ├── constants.ts             # Domain-level
+  ├── constants.test.ts        # Domain-level
   ├── styles.css               # Domain-level
   └── common/
-      └── SubComponent.ts
+      ├── SubComponent.ts
+      └── SubComponent.test.ts
 ```
 
 ### Don't
