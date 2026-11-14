@@ -254,7 +254,7 @@ Each function must handle exactly one specific task. Complex operations must be 
 Define functions with a single, clear responsibility.
 ```typescript
 const validateEmail = (email: string): boolean => {
-  return /^[^@]+@[^@]+\\.[^@]+$/.test(email);
+  return /^[^@]+@[^@]+\.[^@]+$/.test(email);
 };
 ```
 
