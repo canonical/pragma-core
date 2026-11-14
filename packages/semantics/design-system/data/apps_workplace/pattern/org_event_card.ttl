@@ -2,11 +2,11 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:apps_workplaceengineering.pattern.confirmation_modal a ds:Pattern;
-    ds:name "ConfirmationModal";
+ds:apps_workplace.pattern.org_event_card a ds:Pattern;
+    ds:name "OrgEventCard";
     ds:summary "";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";
     ds:guidelines "";
-    ds:tier ds:apps_workplaceengineering.
+    ds:tier ds:apps_workplace.
