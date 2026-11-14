@@ -18,7 +18,7 @@ UIElement (root)
     ├── Component  - Implementable UI piece (Button, Badge, Card...)
     ├── Pattern    - Reusable solution to UX problems
     ├── Layout     - Opinionated space division for navigation
-    ├── Subcomponent - Part of a parent component
+    ├── Subcomponent - Part of a UIBlock
     └── Group      - Repeating series of one sibling block (Cards, Tiles...)
 ```
 
@@ -170,7 +170,7 @@ pragma graph query "SELECT ?c WHERE { ?c ds:hasModifierFamily <https://ds.canoni
 | `Component` | Implementable UI piece |
 | `Pattern` | Reusable UX solution |
 | `Layout` | Space division for navigation |
-| `Subcomponent` | Part of a component |
+| `Subcomponent` | Part of a UIBlock |
 | `Modifier` | Variant option |
 | `ModifierFamily` | Grouping of related modifiers |
 | `Tier` | Scope/applicability level |
@@ -215,8 +215,8 @@ Run `pragma ontology lookup ds --class UIBlock` for the full declared set —
 
 | Property | Domain | Range | Description |
 |----------|--------|-------|-------------|
-| `hasSubcomponent` | Component | Subcomponent | Composition |
-| `parentComponent` | Subcomponent | Component | Inverse of above |
+| `hasSubcomponent` | UIBlock | Subcomponent | Composition |
+| `parentComponent` | Subcomponent | UIBlock | Inverse of above |
 | `hasModifierFamily` | UIBlock | ModifierFamily | Variant axes |
 | `hasModifier` | ModifierFamily | Modifier | Variant options |
 
