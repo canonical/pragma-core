@@ -47,7 +47,7 @@ cs:testing.regression a cs:Category ;
 cs:testing.file.structure a cs:CodeStandard ;
     rdfs:label "Colocate tests with source"@en ;
     cs:hasCategory cs:testing ;
-    cs:description "Every source file has a colocated, type-checked test named after it: `X.test.ts(x)` or `X.<facet>.test.ts(x)`. Except: barrels, `*.d.ts`, pure type files, stories, stylesheets, and the configs and entry files a tool loads." ;
+    cs:description "Every source file has a colocated, type-checked test named after it: `X.test.ts(x)` or `X.<facet>.test.ts(x)`. Except: barrels, `*.d.ts`, pure type files, stories, stylesheets, and the configs and entry files a tool loads. `testing/` may ship only as an `@experimental` `./testing` subpath." ;
     cs:do [
         cs:description "Name each unit test after the file it covers, with shared helpers in a root `testing/`" ;
         cs:code """
