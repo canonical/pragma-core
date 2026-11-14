@@ -2,11 +2,12 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:apps_workplaceengineering.component.skip_link a ds:Component;
-    ds:name "SkipLink";
+ds:apps_workplace.component.theme_switcher a ds:Component;
+    ds:name "ThemeSwitcher";
     ds:summary "";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";
     ds:guidelines "";
-    ds:tier ds:apps_workplaceengineering.
+    ds:tier ds:apps_workplace;
+    ds:documentationStage ds:tag.needscoredocumentation.

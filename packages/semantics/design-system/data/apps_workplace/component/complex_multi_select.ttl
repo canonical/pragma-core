@@ -2,11 +2,12 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:apps_workplaceengineering.component.org_chart a ds:Component;
-    ds:name "OrgChart";
+ds:apps_workplace.component.complex_multi_select a ds:Component;
+    ds:name "Complex multi select";
     ds:summary "";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";
     ds:guidelines "";
-    ds:tier ds:apps_workplaceengineering.
+    ds:tier ds:apps_workplace;
+    ds:parentComponent ds:apps_workplace.component.label-highlight.

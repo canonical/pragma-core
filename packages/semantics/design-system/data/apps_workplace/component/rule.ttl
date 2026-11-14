@@ -2,12 +2,12 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:apps_workplaceengineering.component.complex_multi_select a ds:Component;
-    ds:name "Complex multi select";
+ds:apps_workplace.component.rule a ds:Component;
+    ds:name "Rule";
     ds:summary "";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";
     ds:guidelines "";
-    ds:tier ds:apps_workplaceengineering;
-    ds:parentComponent ds:apps_workplaceengineering.component.label-highlight.
+    ds:tier ds:apps_workplace;
+    ds:documentationStage ds:tag.needstriage.

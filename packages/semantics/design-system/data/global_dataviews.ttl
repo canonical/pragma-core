@@ -2,5 +2,5 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:apps_workplaceengineering a ds:Tier;
-    ds:name "Apps/WorkplaceEngineering".
+ds:global_dataviews a ds:Tier;
+    ds:name "Global/DataViews".
