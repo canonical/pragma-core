@@ -67,10 +67,10 @@ export default function buildCompletionItem(name: string) { /* ... */ }
 
 Omit file-level docs on multi-export modules where the grouping rationale is non-obvious.
 ```typescript
-// Bad: reader cannot tell why these live together
-export function isCompletionRequest(req: WorkerRequest) { /* ... */ }
-export function isHoverRequest(req: WorkerRequest) { /* ... */ }
-export function isDiagnosticsRequest(req: WorkerRequest) { /* ... */ }
+// types.ts — Bad: reader cannot tell why these live together
+export interface CompletionRequest { /* ... */ }
+export interface HoverRequest { /* ... */ }
+export interface DiagnosticsRequest { /* ... */ }
 ```
 
 ---
@@ -139,7 +139,7 @@ Explain the concept inline so the reader needs nothing else
  * Replaces every character that is not an unreserved character
  * (A-Z, a-z, 0-9, `-`, `.`, `_`, `~`) with its UTF-8 percent-encoded form.
  */
-export function encodeComponent(value: string): string {
+export default function encodeComponent(value: string): string {
   // ...
 }
 ```
@@ -149,13 +149,12 @@ Add an external link as a supplementary reference after a self-sufficient explan
 /**
  * Compare two semantic version strings.
  *
- * Compares major, minor, and patch numerically in that order.
- * Returns a negative number if `a < b`, zero if equal, or a positive number if `a > b`.
- * Pre-release versions (e.g. `1.0.0-alpha`) sort before their release counterpart.
+ * Compares major, minor, and patch numerically in that order, and returns a
+ * negative number, zero or a positive number as `a` is lower, equal or higher.
  *
  * @see https://semver.org
  */
-export function compareVersions(a: string, b: string): number {
+export default function compareVersions(a: string, b: string): number {
   // ...
 }
 ```
@@ -171,7 +170,7 @@ Reference a GitHub issue for additional context when the comment already explain
  *
  * @see https://github.com/acme/backend/issues/412
  */
-export function truncateToken(token: string): string {
+export default function truncateToken(token: string): string {
   // ...
 }
 ```
@@ -186,7 +185,7 @@ Point the reader to an external resource instead of explaining the behaviour
  * Implements RFC 3986 §2.1.
  * @see https://datatracker.ietf.org/doc/html/rfc3986#section-2.1
  */
-export function encodeComponent(value: string): string {
+export default function encodeComponent(value: string): string {
   // ...
 }
 ```
@@ -199,7 +198,7 @@ Reference a wiki or internal doc as a substitute for inline explanation
  * See the security review document for rationale:
  * https://wiki.internal/security/session-token-length
  */
-export function truncateToken(token: string): string {
+export default function truncateToken(token: string): string {
   // ...
 }
 ```
@@ -211,7 +210,7 @@ Leave the reader unable to understand the symbol without following a link
  *
  * @see https://semver.org for the full specification.
  */
-export function compareVersions(a: string, b: string): number {
+export default function compareVersions(a: string, b: string): number {
   // ...
 }
 ```

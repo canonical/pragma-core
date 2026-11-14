@@ -480,7 +480,7 @@ Card/
   │   ├── Footer/
   │   │   └── Footer.tsx
   │   └── utils/
-  │       └── helpers.ts
+  │       └── formatLabel.ts
   └── index.ts
     """
     ] ;
@@ -489,7 +489,7 @@ Card/
         cs:language "typescript" ;
         cs:code """
 // Header.tsx can import from utils/
-import { helper } from '../utils/helpers.js';
+import formatLabel from '../utils/formatLabel.js';
 
 // Footer.tsx can import from Header.tsx
 import Header from '../Header.js';
@@ -532,8 +532,7 @@ Private subcomponents must remain internal to the component's implementation and
         cs:code """
 const Item = (props: ItemProps) => { /* ... */ };
 const Accordion = (props: AccordionProps) => { /* ... */ };
-Accordion.Item = Item;
-export default Accordion;
+export default Object.assign(Accordion, { Item });
     """
     ] ;
     cs:do [
@@ -933,19 +932,18 @@ export default Context;
         cs:code """
 // [MyComponent]/Provider.tsx
 import Context from "./Context.js";
-import { useProviderState } from "./hooks/useProviderState.js";
-import type { ProviderProps } from "./types.js";
+import { useProviderState } from "./hooks/index.js";
+import { SubComponent } from "./common/index.js";
 
-const Provider = ({ children }: ProviderProps) => {
-  const state = useProviderState();
-  return <Context.Provider value={state}>{children}</Context.Provider>;
-};
+const Provider = ({ children }: ProviderProps) => (
+  <Context.Provider value={useProviderState()}>{children}</Context.Provider>
+);
 
-export default Provider;
+export default Object.assign(Provider, { SubComponent }) as [MyComponent]Component;
     """
     ] ;
     cs:do [
-        cs:description "Use `index.ts` to export the `Provider` as a named component that matches the folder name, casting it to the component type." ;
+        cs:description "Use `index.ts` to export the `Provider` as a named component that matches the folder name." ;
         cs:language "typescript" ;
         cs:code """
 // [MyComponent]/types.ts
@@ -956,11 +954,7 @@ export type [MyComponent]Component = ((props: ProviderProps) => ReactElement) & 
 };
 
 // [MyComponent]/index.ts
-import Provider from "./Provider.js";
-import type { [MyComponent] } from "./types.js";
-
-export const [MyComponent] = Provider as [MyComponent]Component;
-export default [MyComponent];
+export { default as [MyComponent] } from "./Provider.js";
     """
     ] ;
     cs:do [
@@ -982,15 +976,12 @@ export type UseProviderStateResult = ContextOptions;
         cs:language "tsx" ;
         cs:code """
 // [MyComponent]/hooks/useProviderState.ts
-import { useContext } from "react";
 import type { UseProviderStateProps, UseProviderStateResult } from "./types.js";
 
-/**
- * Hook to manage the state of the provider
- */
-const useProviderState = ({
+/** Manages the state of the provider. */
+export default function useProviderState({
     // ..props...
-}: UseProviderStateProps): UseProviderStateResult => {
+}: UseProviderStateProps): UseProviderStateResult {
  // centralize the entire provider state here...
 }
     """
