@@ -61,8 +61,8 @@ describe("componentLayerFor", () => {
     expect(componentLayerFor("@canonical/react-ds-app-lxd")).toBe(
       "ds.components.apps-lxd",
     );
-    expect(componentLayerFor("@canonical/svelte-ds-app-wpe")).toBe(
-      "ds.components.apps-wpe",
+    expect(componentLayerFor("@canonical/svelte-ds-app-workplace")).toBe(
+      "ds.components.apps-workplace",
     );
     expect(componentLayerFor("@canonical/react-ds-site-ubuntu")).toBe(
       "ds.components.sites-ubuntu",

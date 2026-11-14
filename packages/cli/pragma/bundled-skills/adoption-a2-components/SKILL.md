@@ -141,8 +141,8 @@ follow a naming convention — the mapping is convention, not a graph field:
 `@canonical/<framework>-ds-global` for the `global` tier, `-ds-app` for the shared
 `apps` tier, and `-ds-app-<app>` for an app-specific tier (so the `apps_lxd` tier
 installs `@canonical/react-ds-app-lxd`). The `<app>` segment is the package's own
-short name, not always the tier suffix (the `apps_workplaceengineering` tier's
-package is `@canonical/svelte-ds-app-wpe`) — `pragma tier list` shows which tiers
+short name, not always the tier suffix (the `apps_workplace` tier's
+package is `@canonical/svelte-ds-app-workplace`) — `pragma tier list` shows which tiers
 exist, and the derived package name must resolve before you install it. Tiers
 outside `global`/`apps*` have no package convention today: there the target package
 is a decision to raise, not to derive.

@@ -221,8 +221,8 @@ Then, and only then, the breakdown.
    for the `global` tier, `@canonical/<framework>-ds-app` for the shared `apps` tier,
    and `@canonical/<framework>-ds-app-<app>` for an app-specific tier
    (`apps_lxd` → `@canonical/react-ds-app-lxd`). The `<app>` segment is the package's
-   own short name, not always the tier suffix (the `apps_workplaceengineering` tier's
-   package is `@canonical/svelte-ds-app-wpe`) — confirm the derived package actually
+   own short name, not always the tier suffix (the `apps_workplace` tier's
+   package is `@canonical/svelte-ds-app-workplace`) — confirm the derived package actually
    resolves in the workspace before installing or scaffolding into it. Tiers outside
    `global`/`apps*` have no package convention today: there the target package is a
    decision to raise, not to derive.
