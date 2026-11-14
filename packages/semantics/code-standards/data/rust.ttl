@@ -1568,7 +1568,7 @@ proptest! {
         cs:code """
 proptest! {
     #[test]
-    fn validated_email_contains_at(s in ".+@.+\\..+") {
+    fn validated_email_contains_at(s in ".+@.+\\\\..+") {
         if let Ok(email) = Email::parse(&s) {
             assert!(email.as_str().contains('@'));
         }
