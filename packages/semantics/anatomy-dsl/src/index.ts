@@ -1,3 +1,4 @@
+export { default as AnatomyKeyError } from "./AnatomyKeyError.js";
 export { STYLE_STATES } from "./constants.js";
 export { AnatomySyntaxError, parseAnatomyDocument } from "./document/index.js";
 export { parseAnatomyYAML } from "./parse.js";

@@ -6,7 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   DUPLICATE_KEY,
   MINIMAL,
-  NO_NODE,
+  NOT_A_MAPPING,
   PRIMITIVE_NOT_LAST,
   PRIMITIVE_NOT_LAST_MESSAGE,
   VALID_FILE,
@@ -109,7 +109,7 @@ describe("runCheck", () => {
   });
 
   it("prints a problem without a location as file and message", async () => {
-    expect(await runWith(Readable.from([NO_NODE]), "check")).toEqual({
+    expect(await runWith(Readable.from([NOT_A_MAPPING]), "check")).toEqual({
       exitCode: 1,
       out: ["<stdin>: An anatomy document is a mapping with one `node` key"],
       err: [],

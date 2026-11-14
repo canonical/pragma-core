@@ -117,6 +117,38 @@ node:
 
 The children one-to-many relation is structured following inspiration by the [Relay connection pattern](https://relay.dev/graphql/connections.htm), reifying the relationship between parent and child as a first-class **Edge** carrying metadata.
 
+**Every mapping is closed.** Each table below lists every key its mapping
+takes, and the parser MUST reject, rather than drop or repair, each of these,
+naming the key and its path; `anatomy-dsl check` adds its line and column.
+A key with no value (`props:`) reads as absent, whether or not the mapping
+takes it.
+
+- an unknown key, named before any rule below;
+- a value of the wrong shape: a sequence or a scalar where a mapping belongs,
+  a mapping or a scalar where a sequence (`edges`, `cases`) belongs, or
+  anything but a non-empty string where a name (`uri`, `role`, `slotName`,
+  `on`, `field`) belongs;
+- a mapping document whose only key is an empty `node`, or that has no key at
+  all, or an anonymous root (a mapping with other keys and no `node` is
+  reported by its first unknown key; a document that is not a mapping, such as
+  an empty one, a sequence or prose without a colon, throws a plain `Error`
+  instead, without a location);
+- a named node without its `uri`, or an anonymous node without its `role`;
+- an edge that is not a mapping, or that has no target or more than one of
+  `node`, `uri` and `switch`;
+- an edge without its `relation`;
+- a relation without a quoted `cardinality`;
+- a projection with neither `on` nor `field`, or a relation projection without
+  its `field`;
+- a style key whose `@state` marker is empty, compound or `@default`;
+- a switch `on` anything but `props`, `internal` or `override`, or with fewer
+  than two `cases`;
+- a switch case with neither or both of `uri` and `node`;
+- a pin with no value, or a mapping or a sequence as its value.
+
+An `edges` key beside an edge's `node` is the common slip: the child edges
+belong inside that `node:` mapping.
+
 ### 3.1 AnatomySpec (root)
 
 The root of every anatomy file. Contains exactly one top-level named node.
@@ -184,15 +216,16 @@ node:
 
 ### 3.5 Edge
 
-Represents a parent-child relationship in the anatomy tree. An edge contains either a `node` or a `switch` (mutually exclusive), plus a `relation`.
+Represents a parent-child relationship in the anatomy tree. An edge contains exactly one of `node`, `uri` or `switch`, plus a `relation`.
 
 | Field      | Type     | Required | Description                                                         |
 |------------|----------|----------|---------------------------------------------------------------------|
 | `node`     | Node     | No*      | A single child node (named or anonymous).                           |
+| `uri`      | string   | No*      | Shorthand for `node: { uri: ... }`.                                 |
 | `switch`   | Switch   | No*      | A polymorphic position. See [Switch Construct](#10-switch-construct).|
 | `relation` | Relation | Yes      | Cardinality and slot metadata.                                      |
 
-> \* Exactly one of `node` or `switch` MUST be present.
+> \* Exactly one of `node`, `uri` or `switch` MUST be present.
 
 **Shorthand**: When an edge references a named node by URI only, `- uri: X` expands to `- node: { uri: X }`:
 
@@ -1442,10 +1475,13 @@ interface Switch {
 // ─── Edge ───────────────────────────────────────────────────────
 
 interface Edge {
-  /** Single node (mutually exclusive with switch). */
+  /** Single node — exactly one of node, uri or switch. */
   node?: Node;
 
-  /** Polymorphic alternatives (mutually exclusive with node). */
+  /** Shorthand for node: { uri } — exactly one of node, uri or switch. */
+  uri?: string;
+
+  /** Polymorphic alternatives — exactly one of node, uri or switch. */
   switch?: Switch;
 
   /** Relationship metadata. */

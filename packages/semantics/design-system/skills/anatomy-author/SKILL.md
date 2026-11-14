@@ -448,7 +448,9 @@ AnonymousNode
 
 Edge
   -> node?: NamedNode | AnonymousNode
-  -> switch?: Switch (mutually exclusive with node)
+  -> uri?: string (shorthand for node: { uri })
+  -> switch?: Switch
+  (exactly one of node, uri or switch)
   -> relation: Relation
 
 Switch
@@ -1550,6 +1552,7 @@ kind they are: the ones the gate will confirm, and the ones only a reader can.
 
 Check your anatomy against:
 - [ ] Root node is named (has `uri`)
+- [ ] Every mapping holds only its own keys — an unknown key is rejected, not dropped, and a child's `edges` sits inside its edge's `node:`, never beside it
 - [ ] All cardinalities are valid notation
 - [ ] Every style key is in the roster — the gate confirms this one
 - [ ] Each key is the key for the CSS property the stylesheet actually wrote (judgment: `layout.align` for `align-items`, `layout.alignSelf` for `align-self`; the gate accepts either)
@@ -1843,10 +1846,13 @@ interface SwitchCase {
 }
 
 interface Edge {
-  /** The child node — exactly one of `node` or `switch`. */
+  /** The child node — exactly one of `node`, `uri` or `switch`. */
   node?: Node;
 
-  /** A polymorphic position (mutually exclusive with node). */
+  /** Shorthand for node: { uri } — exactly one of node, uri or switch. */
+  uri?: string;
+
+  /** A polymorphic position — exactly one of node, uri or switch. */
   switch?: Switch;
 
   relation: Relation;

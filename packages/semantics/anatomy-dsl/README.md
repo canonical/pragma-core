@@ -320,15 +320,33 @@ from the project's scripts or `bunx anatomy-dsl`, and a global install
 puts it on the `PATH`.
 
 It prints one line per file, with the line and column of a YAML syntax error
-(an unclosed `[`, a duplicate key, a second `---` document) or of a rejected
-style value. The exit code is 0 when every file passes, 1 when any fails, and 2 when
+(an unclosed `[`, a duplicate key, a second `---` document), of a rejected
+key (an unknown key, a second edge target, a missing `relation`, a rejected
+`@state` marker) or of a rejected style value. The exit code is 0 when every file passes, 1 when any fails, and 2 when
 no file is given or a file cannot be read.
 
 ## API
 
 ### `parseAnatomyYAML(raw: string | unknown): Specification`
 
-Converts anatomy YAML text, or an already-parsed YAML object (from any YAML library), into the typed `Specification` structure. Handles field mapping between the YAML format and the TypeScript types. Text is parsed with `parseAnatomyDocument`, so text that is not well-formed YAML throws an `AnatomySyntaxError`.
+Converts anatomy YAML text, or an already-parsed YAML object (from any YAML library), into the typed `Specification` structure. Handles field mapping between the YAML format and the TypeScript types. Text is parsed with `parseAnatomyDocument`, so text that is not well-formed YAML throws an `AnatomySyntaxError`. Every mapping is closed, and each of these throws an `AnatomyKeyError`. A key with no value reads as absent, whether or not the mapping takes it.
+
+- an unknown key, named before any rule below;
+- a value of the wrong shape: a sequence or a scalar where a mapping belongs, a mapping or a scalar where a sequence (`edges`, `cases`) belongs, or anything but a non-empty string where a name (`uri`, `role`, `slotName`, `on`, `field`) belongs;
+- a mapping document whose only key is an empty `node`, or that has no key at all, or an anonymous root (a mapping with other keys and no `node` is reported by its first unknown key; a document that is not a mapping, such as an empty one, a sequence or prose without a colon, throws a plain `Error` instead, without a location);
+- a named node without its `uri`, or an anonymous node without its `role`;
+- an edge that is not a mapping, or that has no target or more than one of `node`, `uri` and `switch`;
+- an edge without its `relation`;
+- a relation without a quoted `cardinality`;
+- a projection with neither `on` nor `field`, or a relation projection without its `field`;
+- a style key whose `@state` marker is empty, compound or `@default`;
+- a switch `on` anything but `props`, `internal` or `override`, or with fewer than two `cases`;
+- a switch case with neither or both of `uri` and `node`;
+- a pin with no value, or a mapping or a sequence as its value.
+
+### `AnatomyKeyError`
+
+What `parseAnatomyYAML` throws on a key: `key` names it, `path` is the steps from the document root to the mapping that holds it (`["node", "edges", 0]`), `allowed` lists the keys that mapping takes (for an open mapping, a pin's `props` or a node's `styles`, the keys present), and `rule` says what was wrong. Its message opens with "unknown anatomy key" for a key the mapping does not take, and with "anatomy key" otherwise. `anatomy-dsl check` turns the path into a line and column.
 
 ### `parseAnatomyDocument(text: string, lineCounter?: LineCounter): Document`
 

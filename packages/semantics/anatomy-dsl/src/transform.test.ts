@@ -359,7 +359,7 @@ describe("projections", () => {
       parseAnatomyYAML({
         node: { uri: "global.component.chip", projection: {} },
       }),
-    ).toThrow("Projection must have at least one of on, field");
+    ).toThrow("a projection needs `on`, `field` or both");
   });
 
   it("parse rejects a relation projection without a field", () => {
@@ -375,7 +375,7 @@ describe("projections", () => {
           ],
         },
       }),
-    ).toThrow("Relation projection requires a field");
+    ).toThrow("a relation projection needs its `field`");
   });
 });
 
