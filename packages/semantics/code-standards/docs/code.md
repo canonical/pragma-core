@@ -129,95 +129,23 @@ const config = loadConfig() as Config;
 
 **Identifier:** `cs:code.constants.file`
 
-Domain constants must be collected in a `constants.ts` file using named exports (no default export). The file must be colocated at the level of the domain that owns the constants — inside the domain folder when one exists. Constants files always use named exports so consumers can import exactly what they need. Single-use constants that are only referenced in one file may be declared inline in that file instead of being extracted to `constants.ts`.
+Domain constants live in their domain's `constants.ts` as named plain values; frozen records, frozen arrays and `as const` literals are plain values. Except: a constant one file uses stays in that file.
 
 ### Do
 
-Create a `constants.ts` file with named exports at the domain level
+Name plain and frozen values in `constants.ts`
 ```typescript
 // features/pricing/constants.ts
-export const DEFAULT_CURRENCY = "USD";
 export const TAX_RATE = 0.21;
-export const MAX_DISCOUNT_PERCENT = 50;
-```
-
-Colocate `constants.ts` inside the domain folder it belongs to
-```
-features/
-├── pricing/
-│   ├── constants.ts          # Domain constants live here
-│   ├── constants.test.ts
-│   ├── calculatePrice.ts
-│   ├── calculatePrice.test.ts
-│   └── index.ts
-├── auth/
-│   ├── constants.ts          # Auth-specific constants
-│   ├── constants.test.ts
-│   ├── validateToken.ts
-│   ├── validateToken.test.ts
-│   └── index.ts
-```
-
-Import constants directly from the owning domain's `constants.ts`
-```typescript
-// features/pricing/calculatePrice.ts
-import { TAX_RATE, DEFAULT_CURRENCY } from "./constants.js";
-```
-
-Keep all exports in `constants.ts` as named exports with the same shape (plain values)
-```typescript
-// constants.ts
-export const RECONNECT_INTERVAL_MS = 5000;
-export const MAX_RETRIES = 3;
-export const DEFAULT_TIMEOUT_MS = 30_000;
-```
-
-Keep single-use constants inline in the file that uses them
-```typescript
-// features/pricing/applyDiscount.ts
-const MAX_DISCOUNT_PERCENT = 50;
-
-export default function applyDiscount(price: number, rate: number): number {
-  const capped = Math.min(rate, MAX_DISCOUNT_PERCENT / 100);
-  return price * (1 - capped);
-}
+export const CURRENCIES = Object.freeze(["USD", "EUR"] as const);
 ```
 
 ### Don't
 
-Use a default export in a constants file
+Put functions or types in `constants.ts`
 ```typescript
-// Bad: default export forces consumers to name the import
-export default {
-  DEFAULT_CURRENCY: "USD",
-  TAX_RATE: 0.21,
-};
-```
-
-Scatter constants across unrelated files instead of collecting them in `constants.ts`
-```typescript
-// Bad: constants buried inside implementation files
-// calculatePrice.ts
-export const TAX_RATE = 0.21;
-const calculatePrice = (base: number) => base * (1 + TAX_RATE);
-export default calculatePrice;
-```
-
-Place constants far from the domain that owns them
-```typescript
-// Bad: pricing constants in a top-level shared file
-// src/constants.ts
-export const TAX_RATE = 0.21;        // Belongs in pricing/
-export const MAX_RETRIES = 3;        // Belongs in network/
-export const SESSION_TTL_MS = 3600;  // Belongs in auth/
-```
-
-Mix constants with functions, types, or other non-constant exports
-```typescript
-// Bad: constants.ts should only contain constant values
-export const MAX_RETRIES = 3;
-export const formatRetryMessage = (n: number) => `Retry ${n} of ${MAX_RETRIES}`;
-export type RetryConfig = { max: number };
+export const formatRetry = (n: number) => `Retry ${n}`;
+export type Currency = "USD" | "EUR";
 ```
 
 ---
@@ -459,93 +387,25 @@ const processUser = (user: User) => { /* ... */ };
 
 **Identifier:** `cs:code.types.file`
 
-Reusable domain types must be collected in a `types.ts` file using named exports (no default export), colocated at the level of the domain that owns them. Types that are only used in a single file may be declared inline in that file instead of being extracted to `types.ts`.
+Types several files use live in their domain's `types.ts`; a type one file uses stays inline. Except: a framework standard's types file wins (component Props in the folder's `types.ts`, hook types in `hooks/types.ts`); shared test and story types live in `testing/types.ts`.
 
 ### Do
 
-Create a `types.ts` file with named exports for types shared across the domain
-```typescript
-// features/pricing/types.ts
-export type Currency = "USD" | "EUR" | "GBP";
-export interface PriceBreakdown {
-  base: number;
-  tax: number;
-  total: number;
-}
-export type DiscountStrategy = "percentage" | "fixed";
+Keep a domain's shared types in its `types.ts`
 ```
-
-Colocate `types.ts` inside the domain folder it belongs to
-```
-features/
-├── pricing/
-│   ├── types.ts              # Shared domain types live here
-│   ├── constants.ts
-│   ├── constants.test.ts
-│   ├── calculatePrice.ts
-│   ├── calculatePrice.test.ts
-│   └── index.ts
-├── auth/
-│   ├── types.ts              # Auth-specific types
-│   ├── validateToken.ts
-│   ├── validateToken.test.ts
-│   └── index.ts
-```
-
-Keep single-use types inline in the file that uses them
-```typescript
-// features/pricing/applyDiscount.ts
-type DiscountResult = { discounted: number; savings: number };
-
-export default function applyDiscount(price: number, rate: number): DiscountResult {
-  const savings = price * rate;
-  return { discounted: price - savings, savings };
-}
-```
-
-Import shared types from the owning domain's `types.ts`
-```typescript
-// features/pricing/calculatePrice.ts
-import type { Currency, PriceBreakdown } from "./types.js";
+features/pricing/
+├── index.ts
+├── types.ts            # shared pricing types
+├── calculatePrice.ts
+└── calculatePrice.test.ts
 ```
 
 ### Don't
 
-Use a default export in a types file
+Declare a shared type in an implementation file
 ```typescript
-// Bad: default export for a collection of types
-export default interface PriceBreakdown {
-  base: number;
-  tax: number;
-  total: number;
-}
-```
-
-Extract single-use types to `types.ts` when they are only used in one file
-```typescript
-// Bad: types.ts contains a type only used in applyDiscount.ts
-// types.ts
-export type DiscountResult = { discounted: number; savings: number };
-
-// applyDiscount.ts
-import type { DiscountResult } from "./types.js"; // Unnecessary indirection
-```
-
-Place types far from the domain that owns them
-```typescript
-// Bad: all types dumped in a top-level shared file
-// src/types.ts
-export type Currency = "USD" | "EUR" | "GBP";  // Belongs in pricing/
-export type AuthToken = { jwt: string };         // Belongs in auth/
-export type RetryPolicy = { max: number };       // Belongs in network/
-```
-
-Mix types with functions, constants, or other non-type exports
-```typescript
-// Bad: types.ts should only contain type declarations
-export type Currency = "USD" | "EUR" | "GBP";
-export const DEFAULT_CURRENCY: Currency = "USD";
-export const formatCurrency = (value: number, currency: Currency) => `${currency} ${value}`;
+// calculatePrice.ts
+export type Currency = "USD" | "EUR";
 ```
 
 ---
