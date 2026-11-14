@@ -471,6 +471,52 @@ describe("deriveBindingRecords", () => {
   });
 });
 
+describe("deriveBindingRecords — the experimental state", () => {
+  const EDITABLE = anatomy([
+    "node:",
+    "  uri: global.component.editable",
+    "  styles:",
+    "    appearance.background@editing: color.background",
+    "    appearance.border.style@editing: solid",
+    "    appearance.border.style@hover: dashed",
+    "    appearance.border.style@bogus: dotted",
+  ]);
+
+  it("warns once per binding under an experimental state, a primitive one included", () => {
+    const { findings } = derive({ "global.component.editable": EDITABLE });
+    const warnings = findings.filter((finding) => finding.code === "AT24");
+    expect(warnings).toHaveLength(2);
+    expect(warnings.every((finding) => finding.severity === "warning")).toBe(
+      true,
+    );
+    expect(warnings.map((finding) => finding.message)).toEqual([
+      `${ds}global.component.editable $root appearance.background@editing uses an experimental state, whose meaning and platform mapping may still change`,
+      `${ds}global.component.editable $root appearance.border.style@editing uses an experimental state, whose meaning and platform mapping may still change`,
+    ]);
+    expect(hasFinding(findings)).toBe(false);
+  });
+
+  it("warns on the anatomy's own tree alone, never again through a reference", () => {
+    const host = anatomy([
+      "node:",
+      "  uri: global.component.host",
+      "  edges:",
+      "    - node: { uri: global.component.editable }",
+      '      relation: { cardinality: "1" }',
+    ]);
+    const { findings } = derive({
+      "global.component.editable": EDITABLE,
+      "global.component.host": host,
+    });
+    const warned = findings
+      .filter((finding) => finding.code === "AT24")
+      .map((finding) => finding.block);
+    expect(new Set(warned)).toEqual(
+      new Set([`${ds}global.component.editable`]),
+    );
+  });
+});
+
 describe("hasFinding and exitCodeFor", () => {
   it("treats a warning as printable and not as a failure", () => {
     const warnings = [

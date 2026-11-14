@@ -1139,6 +1139,8 @@ schema locally. If an anatomy seems to need a tenth state, that is a registry
 proposal, not a local decision. `open` is not a second spelling of `expanded`.
 `editing` re-values the edited part's fill or border; swapping a label for an
 input is a `switch`, never `@editing`.
+`editing` is experimental — its meaning and mapping may still change — so
+`anatomies validate` warns (`AT24`) wherever you use it. Use it only for a real inline edit.
 
 **States re-value channels; they never add structure.** This is the line to
 hold:

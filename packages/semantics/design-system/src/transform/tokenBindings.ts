@@ -18,8 +18,14 @@
  * (`src/anatomies/`). This module reads the anatomy literals the graph already holds.
  */
 
-import type { Edge, Node, Specification, Switch } from "@canonical/anatomy-dsl";
-import { parseAnatomyYAML } from "@canonical/anatomy-dsl";
+import type {
+  Edge,
+  Node,
+  Specification,
+  StyleStateEntry,
+  Switch,
+} from "@canonical/anatomy-dsl";
+import { parseAnatomyYAML, STYLE_STATES } from "@canonical/anatomy-dsl";
 import { DataFactory } from "n3";
 import { CLASSES, NAMESPACES, PREDICATES } from "../constants.js";
 import type { GraphStore } from "../graph/index.js";
@@ -39,6 +45,15 @@ const ROOT_STEP = "$root";
 
 /** The state a record carries for the unmarked key. */
 export const DEFAULT_STATE = "default";
+
+/** The lint for a binding under a state the vocabulary marks experimental (AT.24). */
+export const EXPERIMENTAL_STATE_CODE = "AT24";
+
+/** True when the vocabulary marks the state experimental. */
+function isExperimentalState(state: string | undefined): boolean {
+  const states: Readonly<Record<string, StyleStateEntry>> = STYLE_STATES;
+  return state !== undefined && states[state]?.experimental === true;
+}
 
 /**
  * The prefixes the records introduce. The store carries no `PrefixMap`, so the
@@ -238,6 +253,17 @@ function walkNode(
   path: string,
 ): void {
   for (const style of node.styles ?? []) {
+    // Warned on the anatomy's own tree alone, so a state written once is reported
+    // once, however many trees reach it — and over the styles rather than over the
+    // records, because a primitive value under the state produces no record.
+    if (viaBlock === context.block && isExperimentalState(style.state)) {
+      context.findings.push({
+        code: EXPERIMENTAL_STATE_CODE,
+        severity: "warning",
+        message: `${context.block} ${path} ${style.key}@${style.state} uses an experimental state, whose meaning and platform mapping may still change`,
+        block: context.block,
+      });
+    }
     for (const [index, symbol] of style.symbols.entries()) {
       context.records.push({
         block: context.block,

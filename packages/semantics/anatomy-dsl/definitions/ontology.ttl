@@ -351,6 +351,10 @@ anatomy:styleState a owl:DatatypeProperty ;
     add structure (that is the Switch construct) and never define transitions
     or interaction logic (state machines stay out of scope). Authored as an
     @state suffix on the style key.""" ;
+    skos:scopeNote """'editing' is experimental: it was admitted for inline
+    editing before any reference implementation binds it, so its meaning and
+    its platform mapping may still change. design-system's anatomies validate
+    command warns where an anatomy uses it, and never refuses it.""" ;
     skos:example "hover" , "active" , "focus" , "disabled" , "selected" ,
                  "expanded" , "indeterminate" , "invalid" , "editing" .
 

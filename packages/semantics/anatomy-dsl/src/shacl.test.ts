@@ -4,6 +4,7 @@ import { Parser, type Quad } from "n3";
 import SHACLValidator from "rdf-validate-shacl";
 import env from "rdf-validate-shacl/src/defaultEnv.js";
 import { beforeAll, describe, expect, it } from "vitest";
+import { STYLE_STATES } from "./constants.js";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DEFINITIONS = resolve(ROOT, "definitions");
@@ -167,6 +168,35 @@ describe("SHACL over the goldens", () => {
       expect(report.messages, state).toEqual([]);
       expect(report.conforms, state).toBe(true);
     }
+  });
+
+  it("closes styleState on exactly the states STYLE_STATES records", () => {
+    // The vocabulary is written twice, as the shapes' sh:in and as the
+    // exported record the validator reads, so the two are held equal here.
+    const shapes = quads(resolve(DEFINITIONS, "shapes.ttl"));
+    const SH = "http://www.w3.org/ns/shacl#";
+    const RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    const objects = (subject: Quad["subject"], predicate: string) =>
+      shapes
+        .filter(
+          (quad) =>
+            quad.subject.equals(subject) && quad.predicate.value === predicate,
+        )
+        .map((quad) => quad.object);
+    const property = shapes.find(
+      (quad) =>
+        quad.predicate.value === `${SH}path` &&
+        quad.object.value === "https://anatomy.canonical.com/styleState",
+    );
+    expect(property).toBeDefined();
+    const members: string[] = [];
+    let list = objects(property?.subject as Quad["subject"], `${SH}in`).at(0);
+    while (list !== undefined && list.value !== `${RDF}nil`) {
+      const item = list as Quad["subject"];
+      members.push(...objects(item, `${RDF}first`).map((term) => term.value));
+      list = objects(item, `${RDF}rest`).at(0);
+    }
+    expect(members).toEqual(Object.keys(STYLE_STATES));
   });
 
   it("needs the union: dt.shapes.ttl is in the shapes graph", () => {

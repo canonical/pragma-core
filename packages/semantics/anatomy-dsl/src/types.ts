@@ -70,9 +70,19 @@ export interface Style {
    * Authored as an `@state` suffix on the style key
    * (`appearance.background@hover`). The set is closed by the shapes rather
    * than by the parser: the parser splits the marker off and carries it
-   * verbatim.
+   * verbatim. `editing` is experimental: its meaning and its platform
+   * mapping may still change (`STYLE_STATES`).
    */
   state?: string;
+}
+
+/** What the vocabulary records about one state an `@state` suffix may name. */
+export interface StyleStateEntry {
+  /**
+   * True on a state admitted before any reference implementation binds it,
+   * whose meaning and platform mapping may still change.
+   */
+  readonly experimental: boolean;
 }
 
 /**

@@ -327,6 +327,10 @@ presence is not. `open` is not admitted as a second spelling of `expanded`.
 fill and border of the part being edited while its edit is open, so it is a
 state. Swapping what is shown, a label for an input, changes what exists and
 stays the Switch construct's job; `editing` never carries that swap.
+`editing` is **experimental**: it was admitted before any reference
+implementation binds it, so its meaning and its platform mapping may still
+change. design-system's `anatomies validate` warns (`AT24`) wherever an
+anatomy uses it, and never refuses it; `anatomy-dsl check` does not warn.
 
 **Rules:**
 

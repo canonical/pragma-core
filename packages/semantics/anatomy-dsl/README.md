@@ -206,7 +206,10 @@ own token tree); `focus` maps to CSS `:focus-visible` (Spectrum's
 neither setting; `invalid` is a failed validation (`:invalid`,
 `aria-invalid`); `editing` is an inline-editable value while its edit is
 open, re-valuing the edited part's fill or border (swapping a label for an
-input is still a `switch`). `@default` is not admitted — absence is the default.
+input is still a `switch`). `editing` is experimental: its meaning and its
+platform mapping may still change. design-system's `anatomies validate` warns
+(`AT24`) where it is used; `anatomy-dsl check` does not.
+`@default` is not admitted — absence is the default.
 Candidate additions (`checked`, `visited`, `dragged`, `pending`, `error`,
 `read-only`) go through the registry, never by loosening the schema.
 
@@ -331,6 +334,10 @@ Converts anatomy YAML text, or an already-parsed YAML object (from any YAML libr
 
 Parses anatomy text into a `yaml` `Document` and throws an `AnatomySyntaxError` on the first YAML syntax error — an unclosed flow collection, a duplicate key, a second `---` document — with its `line`, `col` and `reason`. Every consumer that reads anatomy text goes through it, so all of them reject the same text the same way.
 
+### `STYLE_STATES`
+
+The closed state vocabulary an `@state` suffix may name, as a record from each state to its `StyleStateEntry` (`{ experimental }`). `editing` is the one experimental state: its meaning and platform mapping may still change. The shapes' `sh:in` on `anatomy:styleState` holds the same names.
+
 ### `anatomyToTTL(spec: Specification): string`
 
 Pure function. Takes a `Specification`, returns a Turtle (RDF) string. No I/O, no side effects.
@@ -348,6 +355,7 @@ All types mirror the [OWL ontology](definitions/ontology.ttl) exactly:
 | `Edge` | Reified parent→child relationship |
 | `Relation` | Cardinality and optional slot name |
 | `Style` | Reified key-value tuple, with an optional interaction `state` dimension |
+| `StyleStateEntry` | What `STYLE_STATES` records about one state: whether it is `experimental` |
 | `Switch` | Polymorphic position (discriminator: `props \| internal \| override`) |
 | `SwitchCase` | One alternative within a switch |
 | `Projection` | Fragment-style graph binding on a node (`on` type condition and/or `field` path) |
