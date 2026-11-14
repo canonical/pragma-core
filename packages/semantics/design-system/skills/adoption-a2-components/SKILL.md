@@ -291,6 +291,33 @@ yet — check the component's types before writing it.
 - [ ] Keyboard pass on each swapped instance (focus, activation, escape where relevant).
 - [ ] Visual pass against the component's Storybook stories.
 
+## Design-conformance pass
+
+The per-PR checklist and a green build prove that a swap renders, not that the app
+conforms to the design system. A migration can clear every check above and still
+carry design problems a designer finds in minutes — spacing, token use, alignment,
+hierarchy. So at the END of the swap work — the last PR, or the end of a
+single-change migration — run a conformance pass before hand-off.
+
+The code half comes from the `design-auditor` skill. It audits the design system
+itself, and only its Standards Audit dimension applies to an app: pull the live
+code standards and read their Do/Don't pairs against the swapped code.
+
+```bash
+pragma skill lookup design-auditor          # the skill in full (MCP: skill_lookup)
+pragma standard categories                  # then, per applicable category:
+pragma standard list --category <framework>
+```
+
+Treat each violation like any other adoption finding: fix it, or report it with the
+standard's name attached.
+
+The visual half needs eyes. Neither the auditor nor the build sees pixels. When the
+run has no browser or screenshots to check against, its summary says so and lists
+what a person still has to check by eye: spacing, colour and token use, alignment,
+density, heading hierarchy, and focus and hover treatment. Passing type-checks,
+tests and the build is never a claim of visual conformance.
+
 ## Next
 
 Forms are their own programming model — continue with `adoption-a3-forms`.
