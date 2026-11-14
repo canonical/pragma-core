@@ -70,26 +70,24 @@ cs:css.component.encapsulation a cs:CodeStandard ;
 cs:css.component.states a cs:CodeStandard ;
     rdfs:label "State attributes and modifier classes"@en ;
     cs:hasCategory cs:css ;
-    cs:description "Component states must be handled using attribute selectors for native states and class modifiers for custom states." ;
+    cs:description "Native states use attribute selectors and custom states use modifier classes. Except: a transient interaction state, a value from a closed set the data supplies, and `data-hydrated`, present once the root's script runs, are `data-*` attributes on the root." ;
     cs:do [
-        cs:description "Use attribute selectors for native element states." ;
+        cs:description "Select native states by attribute, and the admitted states by `data-*` on the root" ;
         cs:language "css" ;
         cs:code """
-.ds.button {
-  &[disabled] {
-    opacity: var(--button-disabled-opacity);
-  }
-}
+.ds.button[disabled] { opacity: var(--disabled-opacity); }
+.ds.resize-handle[data-mode="placing"] { cursor: col-resize; }
+.ds.load-status[data-status="failed"] { color: var(--color-text-error); }
+.ds.pagination[data-hydrated] > .submit { display: none; }
     """
     ] ;
     cs:dont [
-        cs:description "Use class modifiers for native states." ;
+        cs:description "Use a class for a native state, `data-*` for a variant, or a state on a part" ;
         cs:language "css" ;
         cs:code """
-/* Bad: Using class for native state */
-.ds.button.disabled {
-  opacity: var(--button-disabled-opacity);
-}
+.ds.button.disabled { /* ... */ }
+.ds.button[data-importance="primary"] { /* ... */ }
+.ds.resize-handle > .strip[data-mode="placing"] { /* ... */ }
     """
     ] .
 
