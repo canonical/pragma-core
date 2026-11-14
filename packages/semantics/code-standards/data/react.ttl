@@ -176,8 +176,6 @@ cs:react.component.barrel_exports a cs:CodeStandard ;
 // index.ts
 export { default as [MyComponent] } from './[MyComponent].js';
 export type * from './types.js';
-// If you have multiple components:
-export { default as SubComponent } from './SubComponent.js';
     """
     ] ;
     cs:dont [
@@ -516,84 +514,25 @@ import Header from '../Card/common/Header.js';
 cs:react.component.subcomponent_export_api a cs:CodeStandard ;
     rdfs:label "Public and private subcomponent exports"@en ;
     cs:hasCategory cs:react ;
-    cs:description """Subcomponents are **public** if they are intended to be directly used by the consumer of the parent component to construct a UI.
-
-Subcomponents are **private** if they are internal implementation details of the parent component, and are not intended for direct use by the consumer.
-
-Public subcomponents must be:
-- Exported by attaching them to the parent component using dot notation.
-- Named semantically.
-- Kept to a single level of nesting.
-
-Private subcomponents must remain internal to the component's implementation and not be exported by any file.""" ;
+    cs:description "A public subcomponent attaches to its parent, one level deep (`Card.Header`). A private part never reaches the package root; its file and barrel serve only its parent's folder." ;
     cs:do [
-        cs:description "Export public subcomponents by attaching them to the parent component using dot notation" ;
+        cs:description "Attach public parts to the parent, and keep private ones behind it" ;
         cs:language "typescript" ;
         cs:code """
-const Item = (props: ItemProps) => { /* ... */ };
-const Accordion = (props: AccordionProps) => { /* ... */ };
-export default Object.assign(Accordion, { Item });
-    """
-    ] ;
-    cs:do [
-        cs:description "Use semantic, self-descriptive names for subcomponents" ;
-        cs:language "typescript" ;
-        cs:code """
-Accordion.Item
-Card.Header
-Card.Footer
-    """
-    ] ;
-    cs:do [
-        cs:description "Keep subcomponent nesting to a single level" ;
-        cs:language "typescript" ;
-        cs:code """
-<Card>
-  <Card.Header />
-  <Card.Footer />
-</Card>
+// Card.tsx
+export default Object.assign(Card, { Header });
+
+// Slider/common/Thumb/index.ts: imported only by Slider
+export { default as Thumb } from "./Thumb.js";
     """
     ] ;
     cs:dont [
-        cs:description "Repeat the parent component name in subcomponent names" ;
+        cs:description "Repeat the parent's name, nest twice, or export a private part from the root" ;
         cs:language "typescript" ;
         cs:code """
-Card.CardHeader = Header; // Bad: Redundant 'Card' prefix
-    """
-    ] ;
-    cs:dont [
-        cs:description "Map a subcomponent to a different name (renaming)" ;
-        cs:language "typescript" ;
-        cs:code """
-Card.Top = Header; // Bad: Mapping 'Header' to 'Top' is not allowed
-    """
-    ] ;
-    cs:dont [
-        cs:description "Use non-semantic or unclear subcomponent names" ;
-        cs:code """
-Card/
-  └── common/
-      ├── Part/           # Bad: Too vague, not semantic - what part?
-      ├── Element/        # Bad: Too vague, not semantic - what element?
-    """
-    ] ;
-    cs:dont [
-        cs:description "Nest subcomponents more than one level deep" ;
-        cs:language "typescript" ;
-        cs:code """
-<Card>
-  <Card.Header>
-    <Card.Header.Title />
-  </Card.Header>
-</Card>
-    """
-    ] ;
-    cs:dont [
-        cs:description "Export private subcomponents that are not intended for public use." ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: Exporting internal-only subcomponents
-export { InternalHelper };
+Card.CardHeader = Header;
+Card.Header.Title = Title;
+export { Thumb } from "./lib/Slider/common/Thumb/index.js";
     """
     ] .
 

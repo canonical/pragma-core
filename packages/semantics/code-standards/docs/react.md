@@ -15,8 +15,6 @@ Create an index.ts file that re-exports all public APIs from the component folde
 // index.ts
 export { default as [MyComponent] } from './[MyComponent].js';
 export type * from './types.js';
-// If you have multiple components:
-export { default as SubComponent } from './SubComponent.js';
 ```
 
 ### Don't
@@ -690,74 +688,26 @@ styles/
 
 **Identifier:** `cs:react.component.subcomponent_export_api`
 
-Subcomponents are **public** if they are intended to be directly used by the consumer of the parent component to construct a UI.
-
-Subcomponents are **private** if they are internal implementation details of the parent component, and are not intended for direct use by the consumer.
-
-Public subcomponents must be:
-- Exported by attaching them to the parent component using dot notation.
-- Named semantically.
-- Kept to a single level of nesting.
-
-Private subcomponents must remain internal to the component's implementation and not be exported by any file.
+A public subcomponent attaches to its parent, one level deep (`Card.Header`). A private part never reaches the package root; its file and barrel serve only its parent's folder.
 
 ### Do
 
-Export public subcomponents by attaching them to the parent component using dot notation
+Attach public parts to the parent, and keep private ones behind it
 ```typescript
-const Item = (props: ItemProps) => { /* ... */ };
-const Accordion = (props: AccordionProps) => { /* ... */ };
-export default Object.assign(Accordion, { Item });
-```
+// Card.tsx
+export default Object.assign(Card, { Header });
 
-Use semantic, self-descriptive names for subcomponents
-```typescript
-Accordion.Item
-Card.Header
-Card.Footer
-```
-
-Keep subcomponent nesting to a single level
-```typescript
-<Card>
-  <Card.Header />
-  <Card.Footer />
-</Card>
+// Slider/common/Thumb/index.ts: imported only by Slider
+export { default as Thumb } from "./Thumb.js";
 ```
 
 ### Don't
 
-Repeat the parent component name in subcomponent names
+Repeat the parent's name, nest twice, or export a private part from the root
 ```typescript
-Card.CardHeader = Header; // Bad: Redundant 'Card' prefix
-```
-
-Map a subcomponent to a different name (renaming)
-```typescript
-Card.Top = Header; // Bad: Mapping 'Header' to 'Top' is not allowed
-```
-
-Use non-semantic or unclear subcomponent names
-```
-Card/
-  └── common/
-      ├── Part/           # Bad: Too vague, not semantic - what part?
-      ├── Element/        # Bad: Too vague, not semantic - what element?
-```
-
-Nest subcomponents more than one level deep
-```typescript
-<Card>
-  <Card.Header>
-    <Card.Header.Title />
-  </Card.Header>
-</Card>
-```
-
-Export private subcomponents that are not intended for public use.
-```typescript
-// Bad: Exporting internal-only subcomponents
-export { InternalHelper };
+Card.CardHeader = Header;
+Card.Header.Title = Title;
+export { Thumb } from "./lib/Slider/common/Thumb/index.js";
 ```
 
 ---
