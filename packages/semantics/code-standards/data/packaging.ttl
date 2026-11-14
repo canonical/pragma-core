@@ -161,13 +161,15 @@ packages/build-tools/
 cs:packaging.library.structure a cs:CodeStandard ;
     rdfs:label "Libraries export from src/lib"@en ;
     cs:hasCategory cs:packaging ;
-    cs:description "A library keeps its exported code in `src/lib/`, with a barrel in each domain folder, re-exported through the root barrel. Except: an `@experimental` `./testing` subpath." ;
+    cs:description "A library keeps its exported code in `src/lib/`, with a barrel in each domain folder, re-exported through the root barrel. Except: an `@experimental` `./testing` subpath; entry files a tool loads by path sit where the tool expects them." ;
     cs:do [
-        cs:description "Keep exported code in `src/lib/`, behind barrels" ;
+        cs:description "Keep exported code in `src/lib/` behind barrels, and tool entry files where the tool loads them" ;
         cs:code """
 src/lib/hooks/index.ts  # domain barrel
 src/lib/index.ts        # lib barrel
 src/index.ts            # root barrel
+src/preset.ts           # loaded by Storybook by path
+src/preview.ts          # loaded by Storybook by path
     """
     ] ;
     cs:dont [
