@@ -584,57 +584,30 @@ const icon = elem.shadowRoot?.querySelector("ds-icon[slot='icon']");
 
 **Identifier:** `cs:lit.component.tsdoc`
 
-Component TSDoc documentation must use the description from the design system ontology (DSL). The TSDoc should NOT include `@example` blocks since stories serve as the examples. The description should be copied verbatim from the DSL, maintaining the original wording and meaning.
+A component's TSDoc copies its block's `ds:summary` verbatim and whole, names the block in `@implements`, and has no `@example`. Except: in `_work_in_progress/`, a block drafted under `specs/` and not yet entered in `data/` is that source.
 
 ### Do
 
-Use the description from the DSL ontology verbatim.
+Copy the whole summary and name the block
 ```typescript
 /**
- * The label component is a compact, non-interactive visual element used to
- * categorize content or indicate a status. Its primary role is metadata
- * visualization. While it has similar visual properties to the Chip, it is
- * purely informational and does not trigger actions or allow for removal.
+ * Displays a small thumbnail image within a card, typically used alongside
+ * content for logo/icon representation.
  *
- * @implements ds:global.component.label
+ * @implements ds:global.subcomponent.card-thumbnail
  */
-@customElement('ds-label')
-export default class Label extends LitElement implements LabelProps {
-  @property() criticality?: string;
-}
+export default class CardThumbnail extends LitElement {}
 ```
 
 ### Don't
 
-Write custom descriptions that deviate from the DSL.
+Paraphrase the summary, add an `@example`, or omit `@implements`
 ```typescript
-// Bad: Custom title and paraphrased description
 /**
- * Label component
- *
- * A compact visual element for status indication.
- */
-```
-
-Include `@example` blocks — stories fulfill this role.
-```typescript
-// Bad: Examples belong in stories, not TSDoc
-/**
- * The label component is a compact...
+ * Card thumbnail element.
  *
  * @example
- * ```html
- * <ds-label>Default</ds-label>
- * <ds-label criticality="warning">Warning</ds-label>
- * ```
- */
-```
-
-Omit the `@implements` tag — it is the link between the component implementation and the DSL definition.
-```typescript
-// Bad: Missing @implements tag
-/**
- * The label component is a compact...
+ * <ds-card-thumbnail></ds-card-thumbnail>
  */
 ```
 

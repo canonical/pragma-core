@@ -418,60 +418,29 @@ export default class Button extends LitElement {}
 cs:lit.component.tsdoc a cs:CodeStandard ;
     rdfs:label "Component TSDoc from the ontology"@en ;
     cs:hasCategory cs:lit ;
-    cs:description "Component TSDoc documentation must use the description from the design system ontology (DSL). The TSDoc should NOT include `@example` blocks since stories serve as the examples. The description should be copied verbatim from the DSL, maintaining the original wording and meaning." ;
+    cs:description "A component's TSDoc copies its block's `ds:summary` verbatim and whole, names the block in `@implements`, and has no `@example`. Except: in `_work_in_progress/`, a block drafted under `specs/` and not yet entered in `data/` is that source." ;
     cs:do [
-        cs:description "Use the description from the DSL ontology verbatim." ;
+        cs:description "Copy the whole summary and name the block" ;
         cs:language "typescript" ;
         cs:code """
 /**
- * The label component is a compact, non-interactive visual element used to
- * categorize content or indicate a status. Its primary role is metadata
- * visualization. While it has similar visual properties to the Chip, it is
- * purely informational and does not trigger actions or allow for removal.
+ * Displays a small thumbnail image within a card, typically used alongside
+ * content for logo/icon representation.
  *
- * @implements ds:global.component.label
+ * @implements ds:global.subcomponent.card-thumbnail
  */
-@customElement('ds-label')
-export default class Label extends LitElement implements LabelProps {
-  @property() criticality?: string;
-}
+export default class CardThumbnail extends LitElement {}
     """
     ] ;
     cs:dont [
-        cs:description "Write custom descriptions that deviate from the DSL." ;
+        cs:description "Paraphrase the summary, add an `@example`, or omit `@implements`" ;
         cs:language "typescript" ;
         cs:code """
-// Bad: Custom title and paraphrased description
 /**
- * Label component
- *
- * A compact visual element for status indication.
- */
-    """
-    ] ;
-    cs:dont [
-        cs:description "Include `@example` blocks — stories fulfill this role." ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: Examples belong in stories, not TSDoc
-/**
- * The label component is a compact...
+ * Card thumbnail element.
  *
  * @example
- * ```html
- * <ds-label>Default</ds-label>
- * <ds-label criticality="warning">Warning</ds-label>
- * ```
- */
-    """
-    ] ;
-    cs:dont [
-        cs:description "Omit the `@implements` tag — it is the link between the component implementation and the DSL definition." ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: Missing @implements tag
-/**
- * The label component is a compact...
+ * <ds-card-thumbnail></ds-card-thumbnail>
  */
     """
     ] .
