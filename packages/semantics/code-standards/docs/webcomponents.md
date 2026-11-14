@@ -87,7 +87,7 @@ Interactive components must handle `keydown` events following WAI-ARIA Authoring
 
 Handle keyboard events for the component's widget role.
 ```typescript
-private onKeyDown(e: KeyboardEvent): void {
+private handleKeyDown(e: KeyboardEvent): void {
   switch (e.key) {
     case "ArrowDown":
       e.preventDefault();
