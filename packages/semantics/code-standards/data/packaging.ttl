@@ -283,86 +283,23 @@ export { ABC };
 cs:packaging.export.barrel a cs:CodeStandard ;
     rdfs:label "Barrels define the API surface"@en ;
     cs:hasCategory cs:packaging ;
-    cs:description "Every domain folder must have a barrel file (`index.ts`) that defines its API surface. In library packages, barrels define the public API for external consumers. In application packages, barrels define the internal API between sibling domains. Within a domain, implementation files import from siblings directly; cross-domain imports always go through the barrel." ;
+    cs:description "Each domain folder (a component, a `common/<Part>`, a hooks or utils folder) has an `index.ts` barrel, the only route in from other domains; inside a domain, files, tests and stories import directly. The package root names each export, never `export *` of a domain." ;
     cs:do [
-        cs:description "Use a barrel at the package entry point to define the public API (library packages)" ;
+        cs:description "Import across domains through barrels, and name the root's exports" ;
         cs:language "typescript" ;
         cs:code """
 // src/index.ts
-export { Button } from "./components/Button.js";
-export type { ButtonProps } from "./components/Button.types.js";
-    """
-    ] ;
-    cs:do [
-        cs:description "Use a barrel at each domain folder to define the domain's API (application packages)" ;
-        cs:language "typescript" ;
-        cs:code """
-// src/operations/index.ts
-export { resolveConfig } from "./resolveConfig.js";
-export { runValidation } from "./runValidation.js";
-    """
-    ] ;
-    cs:do [
-        cs:description "Import internal implementation code within a domain from the owning file directly" ;
-        cs:language "typescript" ;
-        cs:code """
-// src/build/buildTheme.ts — same domain, import the file
-import { computeDeltas } from "./computeDeltas.js";
-import { recoverPrimitiveRef } from "./recoverPrimitiveRef.js";
-    """
-    ] ;
-    cs:do [
-        cs:description "Import cross-domain code through the sibling domain's barrel" ;
-        cs:language "typescript" ;
-        cs:code """
-// src/commands/deploy.ts — different domain, import through barrel
-import { resolveConfig } from "../operations/index.js";
-    """
-    ] ;
-    cs:do [
-        cs:description "Keep compatibility barrels thin and documented as public facades" ;
-        cs:language "typescript" ;
-        cs:code """
-/** Public compatibility surface. */
-export { computeDeltas } from "./computeDeltas.js";
-export { formatDelta } from "./formatDelta.js";
-    """
-    ] ;
-    cs:dont [
-        cs:description "Route internal same-domain code through its own barrel" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: internal implementation depends on its own barrel
-// src/build/applyTheme.ts
-import { computeDeltas, recoverPrimitiveRef } from "./index.js";
-    """
-    ] ;
-    cs:dont [
-        cs:description "Import cross-domain code by reaching into individual files" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: bypassing the domain barrel
-import { resolveConfig } from "../operations/resolveConfig.js";
-
-// Good: through the barrel
+export { Button, type ButtonProps } from "./lib/index.js";
+// src/commands/deploy.ts
 import { resolveConfig } from "../operations/index.js";
     """
     ] ;
     cs:dont [
-        cs:description "Hide domain ownership behind convenience barrels" ;
+        cs:description "Reach into another domain's files, or re-export a domain from the root" ;
         cs:language "typescript" ;
         cs:code """
-// Bad: types appear to belong to context.ts instead of their owning domains
-import type { Artifact, CSSNode, OverlayToken } from "./context.js";
-    """
-    ] ;
-    cs:dont [
-        cs:description "Omit the barrel from a domain folder" ;
-        cs:code """
-// Bad: no index.ts — consumers must know internal file names
-src/operations/
-├── resolveConfig.ts
-└── runValidation.ts
+import resolveConfig from "../operations/resolveConfig.js";
+export * from "./lib/hooks/index.js";
     """
     ] .
 

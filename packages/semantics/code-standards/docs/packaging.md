@@ -157,74 +157,24 @@ packages/build-tools/
 
 **Identifier:** `cs:packaging.export.barrel`
 
-Every domain folder must have a barrel file (`index.ts`) that defines its API surface. In library packages, barrels define the public API for external consumers. In application packages, barrels define the internal API between sibling domains. Within a domain, implementation files import from siblings directly; cross-domain imports always go through the barrel.
+Each domain folder (a component, a `common/<Part>`, a hooks or utils folder) has an `index.ts` barrel, the only route in from other domains; inside a domain, files, tests and stories import directly. The package root names each export, never `export *` of a domain.
 
 ### Do
 
-Use a barrel at the package entry point to define the public API (library packages)
+Import across domains through barrels, and name the root's exports
 ```typescript
 // src/index.ts
-export { Button } from "./components/Button.js";
-export type { ButtonProps } from "./components/Button.types.js";
-```
-
-Use a barrel at each domain folder to define the domain's API (application packages)
-```typescript
-// src/operations/index.ts
-export { resolveConfig } from "./resolveConfig.js";
-export { runValidation } from "./runValidation.js";
-```
-
-Import internal implementation code within a domain from the owning file directly
-```typescript
-// src/build/buildTheme.ts — same domain, import the file
-import { computeDeltas } from "./computeDeltas.js";
-import { recoverPrimitiveRef } from "./recoverPrimitiveRef.js";
-```
-
-Import cross-domain code through the sibling domain's barrel
-```typescript
-// src/commands/deploy.ts — different domain, import through barrel
+export { Button, type ButtonProps } from "./lib/index.js";
+// src/commands/deploy.ts
 import { resolveConfig } from "../operations/index.js";
-```
-
-Keep compatibility barrels thin and documented as public facades
-```typescript
-/** Public compatibility surface. */
-export { computeDeltas } from "./computeDeltas.js";
-export { formatDelta } from "./formatDelta.js";
 ```
 
 ### Don't
 
-Route internal same-domain code through its own barrel
+Reach into another domain's files, or re-export a domain from the root
 ```typescript
-// Bad: internal implementation depends on its own barrel
-// src/build/applyTheme.ts
-import { computeDeltas, recoverPrimitiveRef } from "./index.js";
-```
-
-Import cross-domain code by reaching into individual files
-```typescript
-// Bad: bypassing the domain barrel
-import { resolveConfig } from "../operations/resolveConfig.js";
-
-// Good: through the barrel
-import { resolveConfig } from "../operations/index.js";
-```
-
-Hide domain ownership behind convenience barrels
-```typescript
-// Bad: types appear to belong to context.ts instead of their owning domains
-import type { Artifact, CSSNode, OverlayToken } from "./context.js";
-```
-
-Omit the barrel from a domain folder
-```
-// Bad: no index.ts — consumers must know internal file names
-src/operations/
-├── resolveConfig.ts
-└── runValidation.ts
+import resolveConfig from "../operations/resolveConfig.js";
+export * from "./lib/hooks/index.js";
 ```
 
 ---
