@@ -114,27 +114,24 @@ Don't style internal elements without the component namespace.
 
 **Identifier:** `cs:css.component.states`
 
-Component states must be handled using attribute selectors for native states and class modifiers for custom states.
+Native states use attribute selectors and custom states use modifier classes. Except: a transient interaction state, or a value from a closed set the data supplies, is a `data-*` attribute on the root.
 
 ### Do
 
-Use attribute selectors for native element states.
+Select native states by attribute, and the admitted states by `data-*` on the root
 ```css
-.ds.button {
-  &[disabled] {
-    opacity: var(--button-disabled-opacity);
-  }
-}
+.ds.button[disabled] { opacity: var(--disabled-opacity); }
+.ds.resize-handle[data-mode="placing"] { cursor: col-resize; }
+.ds.load-status[data-status="failed"] { color: var(--color-text-error); }
 ```
 
 ### Don't
 
-Use class modifiers for native states.
+Use a class for a native state, `data-*` for a variant, or a state on a part
 ```css
-/* Bad: Using class for native state */
-.ds.button.disabled {
-  opacity: var(--button-disabled-opacity);
-}
+.ds.button.disabled { /* ... */ }
+.ds.button[data-importance="primary"] { /* ... */ }
+.ds.resize-handle > .strip[data-mode="placing"] { /* ... */ }
 ```
 
 ---
