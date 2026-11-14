@@ -355,47 +355,23 @@ import fixture from "../fixtures/config.json";
 
 **Identifier:** `cs:testing.unit.mocking_minimal`
 
-Prefer real execution over mocks. Mock only at system boundaries where real execution is impossible or destructive. Mocking internal modules to simplify test setup produces tests that pass when the contract is broken. Acceptable mocking targets: filesystem (`node:fs/promises`), network (HTTP clients, external API calls), process/runtime (`process.exit`), and time (`vi.useFakeTimers()`). Mocking internal modules is acceptable when needed to trigger specific edge cases (error paths, race conditions) that are impractical to reproduce otherwise. Avoid mocking: pure functions, configuration/constants, or other packages in the monorepo.
+Mock only at system boundaries (filesystem, network, process, time), or to reach an edge case real execution cannot. A spy that counts calls or renders and still runs the real code is real execution.
 
 ### Do
 
-Use a factory helper to create real test dependencies instead of mocking them.
-```typescript
-// testing/createTestDb.ts
-export default function createTestDb(seed: Record<string, unknown>[]): Database {
-  const db = new Database(":memory:");
-  for (const row of seed) db.insert(row);
-  return db;
-}
-```
-
-Mock only at genuine system boundaries like the filesystem.
-```typescript
-import { vi } from "vitest";
-import * as fs from "node:fs/promises";
-
-vi.mock("node:fs/promises");
-
-it("discovers config files in directory", async () => {
-  vi.mocked(fs.readdir).mockResolvedValue(["config.json", "README.md"]);
-  const configs = await discoverConfigs("/app");
-  expect(configs).toEqual(["config.json"]);
-});
+Count calls with a spy that runs the real code
+```tsx
+const renderRow = vi.fn(Row);
+render(<Table rows={rows} renderRow={renderRow} />);
+expect(renderRow).toHaveBeenCalledTimes(rows.length);
 ```
 
 ### Don't
 
-Mock internal modules within the same package to simplify test setup.
+Fake an internal module
 ```typescript
-// Bad: mocking an internal module hides contract breakage
-vi.mock("./parseConfig");
+vi.mock("./parseConfig.js");
 vi.mocked(parseConfig).mockReturnValue({ host: "localhost" });
-
-it("uses parsed config", () => {
-  const result = buildConnection();
-  // This test passes even if parseConfig's real output changes
-  expect(result.host).toBe("localhost");
-});
 ```
 
 ---

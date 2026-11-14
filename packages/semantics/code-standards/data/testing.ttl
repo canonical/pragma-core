@@ -202,49 +202,23 @@ export default defineConfig({
 cs:testing.unit.mocking_minimal a cs:CodeStandard ;
     rdfs:label "Mock only at boundaries"@en ;
     cs:hasCategory cs:testing.unit ;
-    cs:description "Prefer real execution over mocks. Mock only at system boundaries where real execution is impossible or destructive. Mocking internal modules to simplify test setup produces tests that pass when the contract is broken. Acceptable mocking targets: filesystem (`node:fs/promises`), network (HTTP clients, external API calls), process/runtime (`process.exit`), and time (`vi.useFakeTimers()`). Mocking internal modules is acceptable when needed to trigger specific edge cases (error paths, race conditions) that are impractical to reproduce otherwise. Avoid mocking: pure functions, configuration/constants, or other packages in the monorepo." ;
+    cs:description "Mock only at system boundaries (filesystem, network, process, time), or to reach an edge case real execution cannot. A spy that counts calls or renders and still runs the real code is real execution." ;
     cs:do [
-        cs:description "Use a factory helper to create real test dependencies instead of mocking them." ;
-        cs:language "typescript" ;
+        cs:description "Count calls with a spy that runs the real code" ;
+        cs:language "tsx" ;
         cs:code """
-// testing/createTestDb.ts
-export default function createTestDb(seed: Record<string, unknown>[]): Database {
-  const db = new Database(":memory:");
-  for (const row of seed) db.insert(row);
-  return db;
-}
-        """
-    ] ;
-    cs:do [
-        cs:description "Mock only at genuine system boundaries like the filesystem." ;
-        cs:language "typescript" ;
-        cs:code """
-import { vi } from "vitest";
-import * as fs from "node:fs/promises";
-
-vi.mock("node:fs/promises");
-
-it("discovers config files in directory", async () => {
-  vi.mocked(fs.readdir).mockResolvedValue(["config.json", "README.md"]);
-  const configs = await discoverConfigs("/app");
-  expect(configs).toEqual(["config.json"]);
-});
-        """
+const renderRow = vi.fn(Row);
+render(<Table rows={rows} renderRow={renderRow} />);
+expect(renderRow).toHaveBeenCalledTimes(rows.length);
+    """
     ] ;
     cs:dont [
-        cs:description "Mock internal modules within the same package to simplify test setup." ;
+        cs:description "Fake an internal module" ;
         cs:language "typescript" ;
         cs:code """
-// Bad: mocking an internal module hides contract breakage
-vi.mock("./parseConfig");
+vi.mock("./parseConfig.js");
 vi.mocked(parseConfig).mockReturnValue({ host: "localhost" });
-
-it("uses parsed config", () => {
-  const result = buildConnection();
-  // This test passes even if parseConfig's real output changes
-  expect(result.host).toBe("localhost");
-});
-        """
+    """
     ] .
 
 # Fixtures Pattern Standard
