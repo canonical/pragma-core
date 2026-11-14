@@ -237,8 +237,19 @@ inside the component's package in the pragma monorepo (e.g. `packages/react/ds-g
 > The covered set is whatever the graph answers today. Query it live — never copy its
 > output into documentation, PRs, or this skill.
 
-A gap found is a FINDING to report (and a `specify-component` candidate) — skip that
-type and keep swapping the types the system does cover; never hand-roll a lookalike
+A gap found is a FINDING to report (and a `specify-component` candidate). A type the
+system does not document at all is skipped: keep swapping the types it does cover.
+When the block the element's intent needs IS documented but the package does not
+ship it, fall back in order:
+
+1. The nearest shipped sibling whose anatomy and intent match the block. For
+   example, if the export check finds no `Tag`, a read-only status can use a `Chip`
+   with no `onClick` or `onDismiss`, which renders a static `<span>`. Check that the
+   sibling renders the state you need before adopting it.
+2. Otherwise an app-local stand-in that follows the block's anatomy (`block lookup`)
+   and the design-system tokens — never the old app's look.
+
+Either fallback is still reported as a finding. Never hand-roll a lookalike
 silently.
 
 ## One component type per PR
