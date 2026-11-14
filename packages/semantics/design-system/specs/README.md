@@ -7,7 +7,7 @@ here because `data/` is regenerated destructively from Coda by CI
 (`.github/workflows/sync-coda.yml`) — any hand edit there is overwritten by the next
 scheduled sync.
 
-- One file per drafted block: `specs/<tier>.<type>.<snake_name>.{md,ttl}`
+- One file per drafted block, or an amendment to an existing block's fields: `specs/<tier>.<type>.<snake_name>.{md,ttl}`
   (e.g. `specs/global.component.carousel.md`), markdown or Turtle following the
   ontology structure (`pragma ontology lookup ds`). An anatomy-only draft for an
   existing block uses the same name — `specs/<tier>.<type>.<snake_name>.md` with just

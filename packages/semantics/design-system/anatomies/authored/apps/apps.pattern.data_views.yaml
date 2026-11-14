@@ -1,0 +1,50 @@
+---
+# Authored 2026-11-14 from @canonical/dataviews-react DataViews and its connected parts
+node:
+  uri: apps.pattern.data_views
+  edges:
+    - node:
+        uri: global.subcomponent.search_input
+      relation:
+        cardinality: "0..1"
+        slotName: search
+    - node:
+        role: filters
+      relation:
+        cardinality: "0..1"
+        slotName: filters
+    - node:
+        role: sort panel
+      relation:
+        cardinality: "0..1"
+        slotName: sort
+    - node:
+        role: saved views
+      relation:
+        cardinality: "0..1"
+        slotName: views
+    - node:
+        uri: apps.pattern.datatable
+      relation:
+        cardinality: "0..*"
+        slotName: table
+    - node:
+        uri: global.group.cards
+      relation:
+        cardinality: "0..*"
+        slotName: cards
+    - node:
+        uri: apps.subcomponent.data_table-settings_menu
+      relation:
+        cardinality: "0..1"
+        slotName: settings
+    - node:
+        uri: apps.subcomponent.data_table-action_bar
+      relation:
+        cardinality: "0..1"
+        slotName: actions
+    - node:
+        uri: apps.subcomponent.data_table-pagination_bar
+      relation:
+        cardinality: "0..1"
+        slotName: pagination
