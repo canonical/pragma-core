@@ -687,11 +687,11 @@ export type PackRow = Record<string, string>;
  * The ROWS are still the payload — `formatters.json` projects this to
  * {@link rows} alone, so `--format json` and the MCP tool result stay the bare
  * array they always were and nothing downstream had to learn a new shape. The
- * page's own facts ride the `notice` seam into the envelope's `meta`, the same
- * channel a calm empty result already uses. That is deliberate: a caller
- * reading the data reads data, and a caller who needs to know there is more is
- * told in the one place this surface already puts things the data cannot say
- * about itself.
+ * page's own facts ride the `meta` seam into the envelope's `meta` (the tier
+ * scope and the next-page cursor, merged by both projectors), the same channel
+ * a calm empty result already uses. That is deliberate: a caller reading the
+ * data reads data, and a caller who needs to know there is more is told in the
+ * one place this surface already puts things the data cannot say about itself.
  */
 export interface PackPage {
   /** This page's rows, in the story's own order. */
@@ -713,7 +713,8 @@ export interface PackPage {
   readonly filters?: readonly PackAppliedFilter[];
   /**
    * The cursor that asks for the rows after this page, absent when this page is
-   * the last. Its presence IS the "more rows exist" answer.
+   * the last. Its presence IS the "more rows exist" answer. The list formatters
+   * project it onto the envelope as `meta.nextCursor`.
    */
   readonly nextAfter?: string;
   /** The limit this page was cut to, for the notice that reports it. */

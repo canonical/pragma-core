@@ -82,7 +82,9 @@ const FILTERED_EMPTY_HINT =
  * what they were before a list carried a page: `plain` a table, `llm` its
  * frozen condensed form, `json` the bare array. What the page adds rides the
  * `notice` seam — the channel that already exists for what the data cannot say
- * about itself, and which both machine surfaces project into `meta.notice`.
+ * about itself, and which both machine surfaces project into `meta.notice` —
+ * plus its machine half (`meta`), the facts an agent reads as data rather than
+ * prose (`meta.scope`, and a truncated page's `meta.nextCursor`).
  *
  * EVERY format says it, though, because a truncation nobody is told about is a
  * wrong answer in any dialect. The seam alone did not reach `llm`: the
@@ -168,10 +170,16 @@ export function listFormatters(
             scopeNotice(page, surface),
           ])
         : listNotice(page, meta, surface),
-    // The scope rides the envelope as DATA as well as prose: an agent deciding
-    // whether to widen the read should not have to parse a sentence to learn
-    // which tiers it got.
-    meta: (page) => (page.scope ? { scope: page.scope } : undefined),
+    // The scope and the next-page cursor ride the envelope as DATA as well as
+    // prose: an agent deciding whether to widen the read or walk to the next
+    // page should not have to parse a sentence to learn the tiers it got or the
+    // cursor to spend. A whole, unscoped answer adds nothing.
+    meta: (page) => {
+      const facts: Record<string, unknown> = {};
+      if (page.scope) facts.scope = page.scope;
+      if (page.nextAfter !== undefined) facts.nextCursor = page.nextAfter;
+      return Object.keys(facts).length > 0 ? facts : undefined;
+    },
   };
 }
 

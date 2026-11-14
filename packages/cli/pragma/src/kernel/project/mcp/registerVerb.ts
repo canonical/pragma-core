@@ -177,9 +177,10 @@ function withDetail(
  */
 function noticeMeta(verb: VerbSpec, data: unknown): Record<string, unknown> {
   const notice = verb.output.formatters.notice?.(data as never, "mcp");
-  // The seam's machine half, merged here so an agent gets the tier scope as
-  // DATA (`meta.scope`) and not only as the sentence `notice` carries. The CLI
-  // merges the same seam into the same keys (`cli/dispatch.ts#renderData`).
+  // The seam's machine half, merged here so an agent gets the tier scope and a
+  // truncated page's cursor as DATA (`meta.scope`, `meta.nextCursor`) and not
+  // only as the sentence `notice` carries. The CLI merges the same seam into
+  // the same keys (`cli/dispatch.ts#renderData`).
   const extra = verb.output.formatters.meta?.(data as never);
   return { ...(extra ?? {}), ...(notice ? { notice } : {}) };
 }
