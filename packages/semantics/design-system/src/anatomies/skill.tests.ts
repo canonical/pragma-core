@@ -208,9 +208,10 @@ describe("the anatomy-author skill's examples", () => {
     expect(skill).toContain("The comment is the record");
     expect(skill).toContain("no symbol declares it");
     expect(skill).not.toContain("anatomies/register.yaml");
-    // The states the notation admits, the three newest included.
-    expect(skill).toContain("Eight states, and only these");
+    // The states the notation admits, the four newest included.
+    expect(skill).toContain("Nine states, and only these");
     expect(skill).toContain("`indeterminate`");
+    expect(skill).toContain("`editing`");
     // And the retirements, so an author who knows the old notation is told.
     expect(skill).toContain("a trailing `?` marker");
   });

@@ -359,6 +359,27 @@ describe("deriveBindingRecords", () => {
     expect(parseFailures[0].message).toContain("slash-delimited token path");
   });
 
+  it("reports a key the parser rejects under its own code, AT23", () => {
+    const { findings, parsed } = derive({
+      "global.component.misspelt": anatomy([
+        "node:",
+        "  uri: global.component.misspelt",
+        "  style:",
+        "    layout.type: flow",
+      ]),
+    });
+    expect(parsed).toBe(0);
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({
+      code: "AT23",
+      severity: "finding",
+      block: `${ds}global.component.misspelt`,
+    });
+    expect(findings[0].message).toContain(
+      'does not parse as an anatomy document — unknown anatomy key "style" at node',
+    );
+  });
+
   it("skips a referenced anatomy that does not parse, keeping the referring block's own records", () => {
     const { findings, records } = derive({
       "global.component.button": BUTTON,
@@ -468,6 +489,52 @@ describe("deriveBindingRecords", () => {
     // Three distinct identities from three identical bindings — the collision the
     // path exists to resolve.
     expect(new Set(records.map(identityKey)).size).toBe(3);
+  });
+});
+
+describe("deriveBindingRecords — the experimental state", () => {
+  const EDITABLE = anatomy([
+    "node:",
+    "  uri: global.component.editable",
+    "  styles:",
+    "    appearance.background@editing: color.background",
+    "    appearance.border.style@editing: solid",
+    "    appearance.border.style@hover: dashed",
+    "    appearance.border.style@bogus: dotted",
+  ]);
+
+  it("warns once per binding under an experimental state, a primitive one included", () => {
+    const { findings } = derive({ "global.component.editable": EDITABLE });
+    const warnings = findings.filter((finding) => finding.code === "AT24");
+    expect(warnings).toHaveLength(2);
+    expect(warnings.every((finding) => finding.severity === "warning")).toBe(
+      true,
+    );
+    expect(warnings.map((finding) => finding.message)).toEqual([
+      `${ds}global.component.editable $root appearance.background@editing uses an experimental state, whose meaning and platform mapping may still change`,
+      `${ds}global.component.editable $root appearance.border.style@editing uses an experimental state, whose meaning and platform mapping may still change`,
+    ]);
+    expect(hasFinding(findings)).toBe(false);
+  });
+
+  it("warns on the anatomy's own tree alone, never again through a reference", () => {
+    const host = anatomy([
+      "node:",
+      "  uri: global.component.host",
+      "  edges:",
+      "    - node: { uri: global.component.editable }",
+      '      relation: { cardinality: "1" }',
+    ]);
+    const { findings } = derive({
+      "global.component.editable": EDITABLE,
+      "global.component.host": host,
+    });
+    const warned = findings
+      .filter((finding) => finding.code === "AT24")
+      .map((finding) => finding.block);
+    expect(new Set(warned)).toEqual(
+      new Set([`${ds}global.component.editable`]),
+    );
   });
 });
 

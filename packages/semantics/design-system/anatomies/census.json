@@ -1,6 +1,6 @@
 {
   "anatomies": 188,
-  "parseable": 83,
+  "parseable": 82,
   "records": 1074,
   "unparseableFiles": 0,
   "symbols": 760,
@@ -15,6 +15,6 @@
     "X11": 1,
     "X14": 0,
     "X15": 0,
-    "X16": 105
+    "X16": 106
   }
 }

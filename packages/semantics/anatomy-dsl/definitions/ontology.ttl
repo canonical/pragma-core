@@ -123,11 +123,14 @@ anatomy:SwitchCase a owl:Class ;
 anatomy:StyleKey a owl:Class ;
     rdfs:label "Style Key" ;
     skos:definition """One canonical style key: a platform-agnostic property
-    the anatomy may bind. The roster was measured, not designed: it is the
-    right-hand column of a table whose left-hand column was every CSS property
-    the reference implementations bind, so a key exists because an
-    implementation binds the property, never because the vocabulary looked
-    incomplete. registry.ttl states where that measurement lives.""" ;
+    the anatomy may bind. Most of the roster was measured, not designed: it is
+    the right-hand column of a table whose left-hand column was every CSS
+    property the reference implementations bind, so a measured key exists
+    because an implementation binds the property, never because the
+    vocabulary looked incomplete. The rest are admitted keys, needed before
+    any reference binds their property; registry.ttl states where the
+    measurement lives and lists each admitted key with its date and its
+    reason.""" ;
     skos:example "appearance.background" ,
                  "spacing.internal.inline.start" ,
                  "typography.color" .
@@ -340,17 +343,23 @@ anatomy:styleState a owl:DatatypeProperty ;
     rdfs:range xsd:string ;
     skos:definition """Interaction state this style value applies in. Absent
     means the default state. Closed vocabulary (hover, active, focus,
-    disabled, selected, expanded, indeterminate, invalid), governed by
+    disabled, selected, expanded, indeterminate, invalid, editing), governed by
     registry — 'active' subsumes Material's 'pressed' and Spectrum's 'down';
     'focus' maps to CSS :focus-visible (Spectrum's 'key-focus'); 'expanded'
     is a disclosure's open state ([open], aria-expanded); 'indeterminate' is
     a mixed checkbox or progress bar; 'invalid' is a failed validation
-    (:invalid, aria-invalid). States re-value style channels only: they never
+    (:invalid, aria-invalid); 'editing' is an inline-editable value while
+    its edit is open (the part re-valued, not the label swapped for an
+    input). States re-value style channels only: they never
     add structure (that is the Switch construct) and never define transitions
     or interaction logic (state machines stay out of scope). Authored as an
     @state suffix on the style key.""" ;
+    skos:scopeNote """'editing' is experimental: it was admitted for inline
+    editing before any reference implementation binds it, so its meaning and
+    its platform mapping may still change. design-system's anatomies validate
+    command warns where an anatomy uses it, and never refuses it.""" ;
     skos:example "hover" , "active" , "focus" , "disabled" , "selected" ,
-                 "expanded" , "indeterminate" , "invalid" .
+                 "expanded" , "indeterminate" , "invalid" , "editing" .
 
 anatomy:projectionType a owl:DatatypeProperty ;
     rdfs:label "projection type" ;

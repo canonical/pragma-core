@@ -117,6 +117,38 @@ node:
 
 The children one-to-many relation is structured following inspiration by the [Relay connection pattern](https://relay.dev/graphql/connections.htm), reifying the relationship between parent and child as a first-class **Edge** carrying metadata.
 
+**Every mapping is closed.** Each table below lists every key its mapping
+takes, and the parser MUST reject, rather than drop or repair, each of these,
+naming the key and its path; `anatomy-dsl check` adds its line and column.
+A key with no value (`props:`) reads as absent, whether or not the mapping
+takes it.
+
+- an unknown key, named before any rule below;
+- a value of the wrong shape: a sequence or a scalar where a mapping belongs,
+  a mapping or a scalar where a sequence (`edges`, `cases`) belongs, or
+  anything but a non-empty string where a name (`uri`, `role`, `slotName`,
+  `on`, `field`) belongs;
+- a mapping document whose only key is an empty `node`, or that has no key at
+  all, or an anonymous root (a mapping with other keys and no `node` is
+  reported by its first unknown key; a document that is not a mapping, such as
+  an empty one, a sequence or prose without a colon, throws a plain `Error`
+  instead, without a location);
+- a named node without its `uri`, or an anonymous node without its `role`;
+- an edge that is not a mapping, or that has no target or more than one of
+  `node`, `uri` and `switch`;
+- an edge without its `relation`;
+- a relation without a quoted `cardinality`;
+- a projection with neither `on` nor `field`, or a relation projection without
+  its `field`;
+- a style key whose `@state` marker is empty, compound or `@default`;
+- a switch `on` anything but `props`, `internal` or `override`, or with fewer
+  than two `cases`;
+- a switch case with neither or both of `uri` and `node`;
+- a pin with no value, or a mapping or a sequence as its value.
+
+An `edges` key beside an edge's `node` is the common slip: the child edges
+belong inside that `node:` mapping.
+
 ### 3.1 AnatomySpec (root)
 
 The root of every anatomy file. Contains exactly one top-level named node.
@@ -184,15 +216,16 @@ node:
 
 ### 3.5 Edge
 
-Represents a parent-child relationship in the anatomy tree. An edge contains either a `node` or a `switch` (mutually exclusive), plus a `relation`.
+Represents a parent-child relationship in the anatomy tree. An edge contains exactly one of `node`, `uri` or `switch`, plus a `relation`.
 
 | Field      | Type     | Required | Description                                                         |
 |------------|----------|----------|---------------------------------------------------------------------|
 | `node`     | Node     | No*      | A single child node (named or anonymous).                           |
+| `uri`      | string   | No*      | Shorthand for `node: { uri: ... }`.                                 |
 | `switch`   | Switch   | No*      | A polymorphic position. See [Switch Construct](#10-switch-construct).|
 | `relation` | Relation | Yes      | Cardinality and slot metadata.                                      |
 
-> \* Exactly one of `node` or `switch` MUST be present.
+> \* Exactly one of `node`, `uri` or `switch` MUST be present.
 
 **Shorthand**: When an edge references a named node by URI only, `- uri: X` expands to `- node: { uri: X }`:
 
@@ -245,12 +278,14 @@ StyleValue = Symbol | Primitive | [Symbol, ...(Symbol | Primitive)]
 **The key roster is closed.** Keys are declared one `anatomy:StyleKey`
 individual each in `definitions/registry.ttl`, generated from the roster in
 `definitions/style-keys.yaml`, and `anatomy:styleKey`'s `sh:in` is projected
-from the same roster. The roster is not designed: it is the right-hand column
-of a table whose left-hand column was every CSS property the reference
-implementations bind, measured over 89 published component stylesheets, so a
-key exists because an implementation binds the property. Both files state
-that provenance, and the measurement itself lives in `canonical/design-system`
-— this package reads no CSS.
+from the same roster. Most of the roster is not designed: 111 of its 115 keys
+are the right-hand column of a table whose left-hand column was every CSS
+property the reference implementations bind, measured over 89 published
+component stylesheets, so such a key exists because an implementation binds
+the property. The other four, one per logical corner, were admitted before any
+reference binds them and are listed under `provenance.admitted`. Both files
+state that provenance, and the measurement itself lives in
+`canonical/design-system` — this package reads no CSS.
 
 **Key naming**: `namespace.segment[.segment…]` — the same shape as a symbol, a
 lowercase namespace then one or more segments, camelCase admitted
@@ -310,6 +345,7 @@ styles:
 | `expanded` | A disclosure is open | `[open]`, `aria-expanded`, MD3 *expanded* |
 | `indeterminate` | A checkbox or progress is mixed, on neither setting | CSS `:indeterminate`, `aria-checked="mixed"` |
 | `invalid` | Validation has failed | CSS `:invalid`, `aria-invalid` |
+| `editing` | An inline-editable value has its edit open | custom element `:state(editing)`, otherwise `[data-editing]`; no ARIA equivalent |
 
 Every mature system governs states as closed-with-registry (Spectrum's states
 registry, ARIA's list of ten, SLDS's linted grammar). Candidate additions —
@@ -322,6 +358,14 @@ exists. A disclosure header that takes a different background while open is
 the first; the panel that exists only while open is the second, and stays the
 Switch construct's territory — so `expanded` is a state and the panel's
 presence is not. `open` is not admitted as a second spelling of `expanded`.
+`editing` entered on the same line: an inline-editable value re-values the
+fill and border of the part being edited while its edit is open, so it is a
+state. Swapping what is shown, a label for an input, changes what exists and
+stays the Switch construct's job; `editing` never carries that swap.
+`editing` is **experimental**: it was admitted before any reference
+implementation binds it, so its meaning and its platform mapping may still
+change. design-system's `anatomies validate` warns (`AT24`) wherever an
+anatomy uses it, and never refuses it; `anatomy-dsl check` does not warn.
 
 **Rules:**
 
@@ -364,6 +408,10 @@ In Turtle, the state is one optional dimension on the Style tuple:
 | `spacing.gap`            | `gap`                     | `spacing` parameter              | `SizedBox` between               |
 | `appearance.background`  | `background`              | `.background()`                  | `Container` color                |
 | `appearance.radius`      | `border-radius`           | `.cornerRadius()`                | `BorderRadius`                   |
+| `appearance.radius.block.start.inline.start` | `border-start-start-radius` | `UnevenRoundedRectangle(topLeadingRadius:)` | `BorderRadiusDirectional.only(topStart:)` |
+| `appearance.radius.block.start.inline.end` | `border-start-end-radius` | `UnevenRoundedRectangle(topTrailingRadius:)` | `BorderRadiusDirectional.only(topEnd:)` |
+| `appearance.radius.block.end.inline.start` | `border-end-start-radius` | `UnevenRoundedRectangle(bottomLeadingRadius:)` | `BorderRadiusDirectional.only(bottomStart:)` |
+| `appearance.radius.block.end.inline.end` | `border-end-end-radius` | `UnevenRoundedRectangle(bottomTrailingRadius:)` | `BorderRadiusDirectional.only(bottomEnd:)` |
 | `size.width: 100%`       | `width: 100%`             | `.frame(maxWidth: .infinity)`    | `double.infinity`                |
 
 ### 3.8 Switch
@@ -753,7 +801,7 @@ over raw text.
 Binding    = Key ("@" State)? Value       ; a mapping entry: the key scalar, then the value node
 Key        = Path                         ; the registry closes the roster (§3.7)
 State      = "hover" | "active" | "focus" | "disabled" | "selected"
-           | "expanded" | "indeterminate" | "invalid"
+           | "expanded" | "indeterminate" | "invalid" | "editing"
 Value      = Symbol | Primitive | List
 List       = Symbol+ (Symbol | Primitive) ; a sequence of two or more scalars, in fallback order
 Symbol     = Path
@@ -1433,10 +1481,13 @@ interface Switch {
 // ─── Edge ───────────────────────────────────────────────────────
 
 interface Edge {
-  /** Single node (mutually exclusive with switch). */
+  /** Single node — exactly one of node, uri or switch. */
   node?: Node;
 
-  /** Polymorphic alternatives (mutually exclusive with node). */
+  /** Shorthand for node: { uri } — exactly one of node, uri or switch. */
+  uri?: string;
+
+  /** Polymorphic alternatives — exactly one of node, uri or switch. */
   switch?: Switch;
 
   /** Relationship metadata. */

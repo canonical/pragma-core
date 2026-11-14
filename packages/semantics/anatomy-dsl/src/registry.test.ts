@@ -26,8 +26,17 @@ const shapes = readFileSync(resolve(DEFINITIONS, "shapes.ttl"), "utf8");
  * measurement in design-system is redone and lands here as a reviewed edit,
  * never on its own.
  */
-const ROSTER_SIZE = 111;
-const KIND_COUNTS = { token: 13, either: 45, primitive: 53 };
+const ROSTER_SIZE = 115;
+const KIND_COUNTS = { token: 13, either: 49, primitive: 53 };
+/** How many of them the measurement produced; the rest were admitted. */
+const MEASURED = 111;
+/** The keys admitted without a measurement: the four logical corners. */
+const ADMITTED = [
+  "appearance.radius.block.start.inline.start",
+  "appearance.radius.block.start.inline.end",
+  "appearance.radius.block.end.inline.start",
+  "appearance.radius.block.end.inline.end",
+];
 /** The keys that admit two namespaces rather than one: every `spacing.*`. */
 const SPACING_KEYS = 18;
 
@@ -95,14 +104,14 @@ describe("the style-key registry", () => {
     // either, and nothing downstream can tell which was written.
     const scalar = buildRegistry({
       ...roster,
-      provenance: { ...roster.provenance, keys: 1 },
+      provenance: { ...roster.provenance, keys: 1, admitted: [] },
       keys: {
         "typography.color": { valueKind: "either", namespace: "color." },
       } as unknown as typeof roster.keys,
     });
     const list = buildRegistry({
       ...roster,
-      provenance: { ...roster.provenance, keys: 1 },
+      provenance: { ...roster.provenance, keys: 1, admitted: [] },
       keys: {
         "typography.color": { valueKind: "either", namespace: ["color."] },
       } as unknown as typeof roster.keys,
@@ -173,7 +182,10 @@ describe("the style-key registry", () => {
     // opinion. `keys` is checked against the data, so the number in the file
     // — and in registry.ttl's header, which is rendered from it — cannot
     // drift from the roster it describes.
-    expect(roster.provenance.keys).toBe(ROSTER_SIZE);
+    expect(roster.provenance.keys).toBe(MEASURED);
+    expect(roster.provenance.admitted?.map((entry) => entry.key)).toEqual(
+      ADMITTED,
+    );
     expect(roster.provenance.stylesheets).toBe(89);
     expect(roster.provenance.measured).toBe("2026-09-10");
     expect(roster.provenance.measurement).toBe("canonical/design-system");
@@ -183,14 +195,92 @@ describe("the style-key registry", () => {
       "@canonical/lit-ds-prototype@0.37.0",
       "@canonical/react-ds-app-launchpad@0.37.0",
     ]);
-    expect(ttl).toContain(`these ${ROSTER_SIZE} keys were measured`);
+    expect(ttl).toContain(`${MEASURED} of its keys were\n# measured`);
+    expect(ttl).toContain(
+      `# ADMITTED. ${ADMITTED.length} more keys were admitted without a measurement`,
+    );
     expect(ttl).toContain("canonical/design-system");
     expect(() =>
       buildRegistry({
         ...roster,
         provenance: { ...roster.provenance, keys: 1 },
       }),
-    ).toThrow(/states 1 keys and holds 111/);
+    ).toThrow(
+      `states 1 measured keys and ${ADMITTED.length} admitted, and holds ${ROSTER_SIZE}`,
+    );
+  });
+
+  it("counts a key admitted without a measurement, and says why in the header", () => {
+    const admitted = (entries: unknown[], keys = ROSTER_SIZE) =>
+      buildRegistry({
+        ...roster,
+        provenance: {
+          ...roster.provenance,
+          keys,
+          admitted: entries as typeof roster.provenance.admitted,
+        },
+      });
+    const one = {
+      key: "layout.type",
+      date: "2026-11-14",
+      why: "no stylesheet binds it yet",
+    };
+    // Measured plus admitted is the roster's size, so admitting a key that is
+    // already counted as measured is refused.
+    expect(() => admitted([one])).toThrow(
+      `states ${ROSTER_SIZE} measured keys and 1 admitted, and holds ${ROSTER_SIZE}`,
+    );
+    const registryWithOne = admitted([one], ROSTER_SIZE - 1);
+    const header = serialiseRegistry(registryWithOne);
+    expect(header).toContain(
+      "# ADMITTED. 1 more key was admitted without a measurement",
+    );
+    expect(header).toContain(
+      "#   layout.type (2026-11-14)\n#     no stylesheet binds it yet",
+    );
+    const two = [one, { ...one, key: "layout.direction" }];
+    expect(serialiseRegistry(admitted(two, ROSTER_SIZE - 2))).toContain(
+      "# ADMITTED. 2 more keys were admitted",
+    );
+    // A long reason is wrapped to the header's width.
+    const long = "a reason long enough to need a second line ".repeat(3).trim();
+    const lines = serialiseRegistry(
+      admitted([{ ...one, why: long }], ROSTER_SIZE - 1),
+    ).split("\n");
+    const from = lines.indexOf("#   layout.type (2026-11-14)") + 1;
+    const wrapped = lines.slice(from, lines.indexOf("#", from));
+    expect(wrapped.length).toBeGreaterThan(1);
+    expect(wrapped.every((line) => line.length <= 79)).toBe(true);
+    expect(wrapped.map((line) => line.slice(6)).join(" ")).toBe(long);
+    // An empty block renders nothing, so a roster that admits no key has the
+    // header a measured roster always had.
+    expect(serialiseRegistry(admitted([]))).not.toContain("# ADMITTED.");
+  });
+
+  it("refuses an admitted key the roster does not hold or that owes its record", () => {
+    const admitted =
+      (entry: Record<string, unknown>, extra: unknown[] = []) =>
+      () =>
+        buildRegistry({
+          ...roster,
+          provenance: {
+            ...roster.provenance,
+            keys: ROSTER_SIZE - 1 - extra.length,
+            admitted: [...extra, entry] as typeof roster.provenance.admitted,
+          },
+        });
+    const base = { key: "layout.type", date: "2026-11-14", why: "a reason" };
+    expect(admitted({ ...base, key: "no.such.key" })).toThrow(
+      /"no.such.key" is not in the roster/,
+    );
+    expect(admitted(base, [base])).toThrow(/"layout.type" is stated twice/);
+    for (const date of ["14 November", "2026-13-45", "2026-02-30"]) {
+      expect(admitted({ ...base, date }), date).toThrow(
+        /date must be YYYY-MM-DD/,
+      );
+    }
+    expect(admitted({ ...base, why: " " })).toThrow(/owes a why/);
+    expect(admitted({ ...base, why: undefined })).toThrow(/owes a why/);
   });
 
   it("refuses a roster that contradicts itself", () => {
@@ -200,7 +290,7 @@ describe("the style-key registry", () => {
     const one = (key: string, entry: Record<string, unknown>) => () =>
       buildRegistry({
         ...roster,
-        provenance: { ...roster.provenance, keys: 1 },
+        provenance: { ...roster.provenance, keys: 1, admitted: [] },
         keys: { [key]: entry } as unknown as typeof roster.keys,
       });
     expect(one("appearance/background", { valueKind: "primitive" })).toThrow(

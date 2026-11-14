@@ -159,7 +159,7 @@ describe("interaction states", () => {
 
   it("parses every state the closed vocabulary admits", () => {
     // The closed set is the shapes' to enforce; this is the parser's half —
-    // each marker is split off the key and carried verbatim, the three
+    // each marker is split off the key and carried verbatim, the later
     // additions included.
     const states = [
       "hover",
@@ -170,6 +170,7 @@ describe("interaction states", () => {
       "expanded",
       "indeterminate",
       "invalid",
+      "editing",
     ];
     for (const state of states) {
       const spec = parseAnatomyYAML({
@@ -358,7 +359,7 @@ describe("projections", () => {
       parseAnatomyYAML({
         node: { uri: "global.component.chip", projection: {} },
       }),
-    ).toThrow("Projection must have at least one of on, field");
+    ).toThrow("a projection needs `on`, `field` or both");
   });
 
   it("parse rejects a relation projection without a field", () => {
@@ -374,7 +375,7 @@ describe("projections", () => {
           ],
         },
       }),
-    ).toThrow("Relation projection requires a field");
+    ).toThrow("a relation projection needs its `field`");
   });
 });
 

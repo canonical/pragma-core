@@ -2,6 +2,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { classifyAdmission } from "../anatomies/admission.js";
 import { AUTHORED_DIR } from "../anatomies/authored.js";
 import { type Census, readCensus } from "../anatomies/census.js";
 import type {
@@ -12,6 +13,7 @@ import type {
 } from "../providers/index.js";
 import type { CellWriter } from "../sync/applyCells.js";
 import { SNAPSHOT_DIR } from "../sync/cellSnapshot.js";
+import type { BindingFinding } from "../transform/tokenBindings.js";
 import anatomies, {
   type AnatomiesOptions,
   restore,
@@ -278,12 +280,13 @@ describe("validate", () => {
 
     // What makes the non-zero exit a registration gap rather than a defect: every
     // refusal is an exception the register carries a category for, and the committed
-    // census counts a row under each of those categories. A finding whose code the
-    // census does not count would be something else entirely.
+    // census counts a row under each of those categories — an unknown key's AT23 under
+    // X16, where the register files it. A finding whose category the census does not
+    // count would be something else entirely.
     const refused = new Set<string>(
-      (parsed.findings as Array<{ code: string; severity: string }>)
+      (parsed.findings as BindingFinding[])
         .filter((finding) => finding.severity === "finding")
-        .map((finding) => finding.code),
+        .map((finding) => classifyAdmission(finding).category),
     );
     expect(refused.size).toBeGreaterThan(0);
     for (const code of refused) {

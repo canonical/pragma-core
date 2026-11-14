@@ -42,15 +42,19 @@ implementation's chain ends in a literal
 (`[modifier.color.icon, modifier.color.text, currentColor]`).
 
 Keys come from a **closed roster** — `definitions/style-keys.yaml`, from
-which `definitions/registry.ttl` is generated. The roster is measured, not
-designed: its 111 keys are the right-hand column of a table whose left-hand
-column was every CSS property bound on a component selector across 89
-published component stylesheets, so a key exists because an implementation
-binds the property. That measurement lives in `canonical/design-system`,
-where the reference stylesheets are an input; this package reads no CSS and
-holds the roster, with its provenance stated in both files. The
-slash-delimited path and the trailing `?` marker of earlier versions are
-retired — see `docs/api-reference.md` §5, §11 and §12.
+which `definitions/registry.ttl` is generated. The roster is mostly measured,
+not designed: 111 of its 115 keys are the right-hand column of a table whose
+left-hand column was every CSS property bound on a component selector across
+89 published component stylesheets, so such a key exists because an
+implementation binds the property. The measurement lives in
+`canonical/design-system`, where the reference stylesheets are an input; this
+package reads no CSS and holds the roster, with its provenance stated in both
+files. The other four keys, one per logical corner
+(`appearance.radius.block.start.inline.start` and its siblings), were
+admitted before any reference binds them, and the roster lists them under
+`provenance.admitted`. The slash-delimited path and the trailing `?` marker
+of earlier versions are retired — see `docs/api-reference.md` §5, §11 and
+§12.
 
 ## Projections
 
@@ -196,14 +200,20 @@ styles:
 ```
 
 The state vocabulary is **closed and registry-governed**: `hover`, `active`,
-`focus`, `disabled`, `selected`, `expanded`, `indeterminate`, `invalid`.
+`focus`, `disabled`, `selected`, `expanded`, `indeterminate`, `invalid`,
+`editing`.
 Naming follows the industry consensus where systems diverge — `active`
 subsumes Material's *pressed* and Spectrum's *down* (and matches Canonical's
 own token tree); `focus` maps to CSS `:focus-visible` (Spectrum's
 *key-focus*); `expanded` is a disclosure's open state (`[open]`,
 `aria-expanded`); `indeterminate` is a mixed checkbox or progress bar, on
 neither setting; `invalid` is a failed validation (`:invalid`,
-`aria-invalid`). `@default` is not admitted — absence is the default.
+`aria-invalid`); `editing` is an inline-editable value while its edit is
+open, re-valuing the edited part's fill or border (swapping a label for an
+input is still a `switch`). `editing` is experimental: its meaning and its
+platform mapping may still change. design-system's `anatomies validate` warns
+(`AT24`) where it is used; `anatomy-dsl check` does not.
+`@default` is not admitted — absence is the default.
 Candidate additions (`checked`, `visited`, `dragged`, `pending`, `error`,
 `read-only`) go through the registry, never by loosening the schema.
 
@@ -314,19 +324,41 @@ from the project's scripts or `bunx anatomy-dsl`, and a global install
 puts it on the `PATH`.
 
 It prints one line per file, with the line and column of a YAML syntax error
-(an unclosed `[`, a duplicate key, a second `---` document) or of a rejected
-style value. The exit code is 0 when every file passes, 1 when any fails, and 2 when
+(an unclosed `[`, a duplicate key, a second `---` document), of a rejected
+key (an unknown key, a second edge target, a missing `relation`, a rejected
+`@state` marker) or of a rejected style value. The exit code is 0 when every file passes, 1 when any fails, and 2 when
 no file is given or a file cannot be read.
 
 ## API
 
 ### `parseAnatomyYAML(raw: string | unknown): Specification`
 
-Converts anatomy YAML text, or an already-parsed YAML object (from any YAML library), into the typed `Specification` structure. Handles field mapping between the YAML format and the TypeScript types. Text is parsed with `parseAnatomyDocument`, so text that is not well-formed YAML throws an `AnatomySyntaxError`.
+Converts anatomy YAML text, or an already-parsed YAML object (from any YAML library), into the typed `Specification` structure. Handles field mapping between the YAML format and the TypeScript types. Text is parsed with `parseAnatomyDocument`, so text that is not well-formed YAML throws an `AnatomySyntaxError`. Every mapping is closed, and each of these throws an `AnatomyKeyError`. A key with no value reads as absent, whether or not the mapping takes it.
+
+- an unknown key, named before any rule below;
+- a value of the wrong shape: a sequence or a scalar where a mapping belongs, a mapping or a scalar where a sequence (`edges`, `cases`) belongs, or anything but a non-empty string where a name (`uri`, `role`, `slotName`, `on`, `field`) belongs;
+- a mapping document whose only key is an empty `node`, or that has no key at all, or an anonymous root (a mapping with other keys and no `node` is reported by its first unknown key; a document that is not a mapping, such as an empty one, a sequence or prose without a colon, throws a plain `Error` instead, without a location);
+- a named node without its `uri`, or an anonymous node without its `role`;
+- an edge that is not a mapping, or that has no target or more than one of `node`, `uri` and `switch`;
+- an edge without its `relation`;
+- a relation without a quoted `cardinality`;
+- a projection with neither `on` nor `field`, or a relation projection without its `field`;
+- a style key whose `@state` marker is empty, compound or `@default`;
+- a switch `on` anything but `props`, `internal` or `override`, or with fewer than two `cases`;
+- a switch case with neither or both of `uri` and `node`;
+- a pin with no value, or a mapping or a sequence as its value.
+
+### `AnatomyKeyError`
+
+What `parseAnatomyYAML` throws on a key: `key` names it, `path` is the steps from the document root to the mapping that holds it (`["node", "edges", 0]`), `allowed` lists the keys that mapping takes (for an open mapping, a pin's `props` or a node's `styles`, the keys present), and `rule` says what was wrong. Its message opens with "unknown anatomy key" for a key the mapping does not take, and with "anatomy key" otherwise. `anatomy-dsl check` turns the path into a line and column.
 
 ### `parseAnatomyDocument(text: string, lineCounter?: LineCounter): Document`
 
 Parses anatomy text into a `yaml` `Document` and throws an `AnatomySyntaxError` on the first YAML syntax error — an unclosed flow collection, a duplicate key, a second `---` document — with its `line`, `col` and `reason`. Every consumer that reads anatomy text goes through it, so all of them reject the same text the same way.
+
+### `STYLE_STATES`
+
+The closed state vocabulary an `@state` suffix may name, as a record from each state to its `StyleStateEntry` (`{ experimental }`). `editing` is the one experimental state: its meaning and platform mapping may still change. The shapes' `sh:in` on `anatomy:styleState` holds the same names.
 
 ### `anatomyToTTL(spec: Specification): string`
 
@@ -345,6 +377,7 @@ All types mirror the [OWL ontology](definitions/ontology.ttl) exactly:
 | `Edge` | Reified parent→child relationship |
 | `Relation` | Cardinality and optional slot name |
 | `Style` | Reified key-value tuple, with an optional interaction `state` dimension |
+| `StyleStateEntry` | What `STYLE_STATES` records about one state: whether it is `experimental` |
 | `Switch` | Polymorphic position (discriminator: `props \| internal \| override`) |
 | `SwitchCase` | One alternative within a switch |
 | `Projection` | Fragment-style graph binding on a node (`on` type condition and/or `field` path) |

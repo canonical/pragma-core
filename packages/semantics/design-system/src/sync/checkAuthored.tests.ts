@@ -133,6 +133,42 @@ describe("checkAuthored", () => {
     expect(codes(run(entries))).toContain("X16");
   });
 
+  it("refuses a key the parser rejects, under AT23", async () => {
+    const entries = await authored({
+      "global.component.button":
+        "node:\n  uri: global.component.button\n  style:\n    layout.type: flow\n",
+    });
+
+    expect(codes(run(entries))).toEqual(["AT23"]);
+  });
+
+  it("refuses a style key outside the roster and a state outside the vocabulary, at any depth", async () => {
+    const entries = await authored({
+      "global.component.button": [
+        "node:",
+        "  uri: global.component.button",
+        "  styles:",
+        "    layout.float: left",
+        "  edges:",
+        "    - node:",
+        "        role: label",
+        "        styles:",
+        "          layout.type@pressed: flow",
+        '      relation: { cardinality: "1" }',
+        "",
+      ].join("\n"),
+    });
+
+    const findings = run(entries);
+    expect(codes(findings)).toEqual(["AT23", "AT23"]);
+    expect(findings.map((finding) => finding.message)).toEqual([
+      "https://ds.canonical.com/global.component.button $root layout.float is not a style key the roster holds",
+      expect.stringMatching(
+        /^https:\/\/ds\.canonical\.com\/global\.component\.button \$root\/label layout\.type@pressed names a state outside the vocabulary \(hover, /,
+      ),
+    ]);
+  });
+
   it("reads the committed graph when no directory is given", () => {
     // The default seam. Over no authored files, so the assertion is that reading the
     // committed corpus is what it does — not that the corpus says anything.

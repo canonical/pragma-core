@@ -448,7 +448,9 @@ AnonymousNode
 
 Edge
   -> node?: NamedNode | AnonymousNode
-  -> switch?: Switch (mutually exclusive with node)
+  -> uri?: string (shorthand for node: { uri })
+  -> switch?: Switch
+  (exactly one of node, uri or switch)
   -> relation: Relation
 
 Switch
@@ -951,7 +953,7 @@ as the scalar instead, and a primitive anywhere but last is a parse error.
 
 ### The style keys are a closed roster
 
-There are 111 style keys and they are the DSL's own vocabulary, published as
+There are 115 style keys and they are the DSL's own vocabulary, published as
 `@canonical/anatomy-dsl`'s `definitions/style-keys.yaml`. That file is the authority
 on every question of the form "what does this key take" — it is installed, so read it
 rather than reasoning from the examples here:
@@ -965,8 +967,9 @@ token, the one `namespace` whose symbols it admits. Those two fields settle it: 
 says `either`, a literal is legal there whatever the examples below happen to show, and
 if it names a namespace, a symbol outside that namespace is not legal there however
 well it reads. The roster's own header says how each value was measured, which is worth
-reading once — a key exists because an implementation binds the property, and
-`valueKind` is what the measurement found, not a preference.
+reading once — a measured key exists because an implementation binds the property, the
+admitted ones are listed under `provenance.admitted` with their reason, and `valueKind`
+is what the measurement found, not a preference.
 
 A key outside the roster is rejected, and each key states what it admits:
 
@@ -981,7 +984,7 @@ modifier channel and its surface channel:
 | Key family | Namespace it admits |
 |---|---|
 | `appearance.background`, `appearance.border.*.color`, `appearance.outline.color`, `typography.color` | `color.`, `modifier.color.`, `surface.color.` |
-| `appearance.border.width`, `appearance.outline.*`, `appearance.radius`, `layout.flex.basis`, `layout.offset.*`, `size.*`, `typography.letterSpacing`, `typography.size`, `typography.decoration.*` | `dimension.`, `modifier.dimension.`, `surface.dimension.` |
+| `appearance.border.width`, `appearance.outline.*`, `appearance.radius`, `appearance.radius.block.*.inline.*`, `layout.flex.basis`, `layout.offset.*`, `size.*`, `typography.letterSpacing`, `typography.size`, `typography.decoration.*` | `dimension.`, `modifier.dimension.`, `surface.dimension.` |
 | `spacing.gap*`, `spacing.internal.*`, `spacing.external.*` | `spacing.`, `modifier.spacing.`, `surface.spacing.` |
 | `typography.font`, `typography.fontFamily`, `typography.lineHeight`, `typography.weight` | `typography.`, `modifier.typography.`, `surface.typography.` |
 | `motion.duration`, `motion.easing` | `motion.`, `modifier.motion.`, `surface.motion.` |
@@ -992,6 +995,12 @@ keys in the `dimension.` row are `either`, not `token` — `appearance.radius` i
 `appearance.radius: 1rem` is a lawful binding where the implementation writes `1rem`
 literally and declares no variable. The namespace constrains which SYMBOL may go on a
 key; it does not turn an `either` key into a token-only one.
+
+**One corner is its own key.** Where the stylesheet rounds some corners only, bind each
+one on its logical corner, axis before side: `appearance.radius.block.start.inline.start`
+is `border-start-start-radius`, `…block.start.inline.end` is `border-start-end-radius`,
+and so on. They take what `appearance.radius` takes. Never write a physical corner
+(`top-left`); the logical one follows the writing direction.
 
 **Spacing keys admit `dimension.*` too, for now.** Not one of the twelve `spacing.*`
 roles resolves to the same dimension in every product context, and the implementations
@@ -1118,7 +1127,7 @@ styles:
   appearance.outline.color@focus: [modifier.color.focusRing, color.focusRing]   # a channel may exist only in a state
 ```
 
-**Vocabulary — closed, registry-governed.** Eight states, and only these:
+**Vocabulary — closed, registry-governed.** Nine states, and only these:
 
 | State | Meaning | What the implementation keys off |
 |-------|---------|----------------------------------|
@@ -1130,12 +1139,17 @@ styles:
 | `expanded` | A disclosure is open | `[open]`, `aria-expanded` |
 | `indeterminate` | A checkbox or a progress is mixed, on neither setting | `:indeterminate`, `aria-checked="mixed"` |
 | `invalid` | Validation has failed | `:invalid`, `aria-invalid` |
+| `editing` | An inline-editable value has its edit open | `:state(editing)` on a custom element, otherwise `[data-editing]`; no ARIA equivalent |
 
-The last three are the newest, and how they arrived is the rule: candidates
+The last four are the newest, and how they arrived is the rule: candidates
 (`checked`, `visited`, `dragged`, `pending`, `error`, `read-only`) enter through
 the registry with a definition and a per-platform mapping — NEVER by loosening the
-schema locally. If an anatomy seems to need a ninth state, that is a registry
+schema locally. If an anatomy seems to need a tenth state, that is a registry
 proposal, not a local decision. `open` is not a second spelling of `expanded`.
+`editing` re-values the edited part's fill or border; swapping a label for an
+input is a `switch`, never `@editing`.
+`editing` is experimental — its meaning and mapping may still change — so
+`anatomies validate` warns (`AT24`) wherever you use it. Use it only for a real inline edit.
 
 **States re-value channels; they never add structure.** This is the line to
 hold:
@@ -1545,6 +1559,7 @@ kind they are: the ones the gate will confirm, and the ones only a reader can.
 
 Check your anatomy against:
 - [ ] Root node is named (has `uri`)
+- [ ] Every mapping holds only its own keys — an unknown key is rejected, not dropped, and a child's `edges` sits inside its edge's `node:`, never beside it
 - [ ] All cardinalities are valid notation
 - [ ] Every style key is in the roster — the gate confirms this one
 - [ ] Each key is the key for the CSS property the stylesheet actually wrote (judgment: `layout.align` for `align-items`, `layout.alignSelf` for `align-self`; the gate accepts either)
@@ -1559,7 +1574,7 @@ Check your anatomy against:
 - [ ] Nested components make semantic sense (judgment — nothing checks this but a reader)
 - [ ] Every symbol is the right symbol for the part, not merely one that resolves in the key's namespace (judgment — the gate checks resolution and namespace, never fit)
 - [ ] Switch cases carry `uri` or `node` and nothing else — no `default:`
-- [ ] Every `@state` marker is one of hover, active, focus, disabled, selected, expanded, indeterminate, invalid — one `@` per key, never `@default`
+- [ ] Every `@state` marker is one of hover, active, focus, disabled, selected, expanded, indeterminate, invalid, editing — one `@` per key, never `@default`
 - [ ] No `@state` stands in for a structural difference — that is a `switch`
 - [ ] Every node `projection` has at least one of `on` / `field`; every relation `projection` has `field` and no `on`
 - [ ] No projection spells an unwrapping path (`edges.node`), and every projected field name exists in the provider SDL
@@ -1576,7 +1591,9 @@ bun src/cli.ts anatomies validate --authored
 
 Exit 0 with `0 findings` is the verdict on lawfulness; a finding names the file, the uri
 and the rule it broke, and a warning — `AT11`, a state binding differing from its base —
-is usually the implementation telling the truth. What exit 0 does NOT settle is
+is usually the implementation telling the truth. `AT23` is a key the parser or the vocabulary rejects:
+a mapping key that is unknown, missing or of the wrong shape (any of the parser's
+rules), a style key outside the roster, or a state outside the vocabulary. What exit 0 does NOT settle is
 anything in the paragraphs above: the semantic calls travel to review, so say in the
 pull request which ones you made and what you read to make them.
 
@@ -1693,7 +1710,7 @@ The children one-to-many relation follows inspiration from the [Relay connection
  * Keys may carry an "@state" suffix scoping the value to one interaction
  * state: "appearance.background@hover". The unmarked key is the default
  * state; "@default" is invalid. Vocabulary is closed: hover, active, focus,
- * disabled, selected, expanded, indeterminate, invalid.
+ * disabled, selected, expanded, indeterminate, invalid, editing.
  */
 type Styles = Record<StyleKey, Symbol | [...Symbol[], Primitive?] | Primitive>;
 
@@ -1838,10 +1855,13 @@ interface SwitchCase {
 }
 
 interface Edge {
-  /** The child node — exactly one of `node` or `switch`. */
+  /** The child node — exactly one of `node`, `uri` or `switch`. */
   node?: Node;
 
-  /** A polymorphic position (mutually exclusive with node). */
+  /** Shorthand for node: { uri } — exactly one of node, uri or switch. */
+  uri?: string;
+
+  /** A polymorphic position — exactly one of node, uri or switch. */
   switch?: Switch;
 
   relation: Relation;

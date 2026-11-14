@@ -62,10 +62,10 @@ export const FLOW_ALIAS = joinLines([
   "  styles: {layout.type: flex, layout.gap: *gap}",
 ]);
 
-/** A document without the top-level `node` key. */
+/** A document without the top-level `node` key, which names its own key (1:1). */
 export const NO_NODE = joinLines(["uri: global.component.button"]);
 
-/** An edge without a target: a structural error, which has no location. */
+/** An edge without a target, located at the edge's mapping (4:7). */
 export const EDGE_WITHOUT_TARGET = joinLines([
   "node:",
   "  uri: global.component.button",
@@ -151,4 +151,102 @@ export const SECOND_DOCUMENT = joinLines([
   "---",
   "node:",
   "  uri: global.component.link",
+]);
+
+/** A misspelt key on the root node, rejected at the key (3:3). */
+export const UNKNOWN_KEY = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  style:",
+  "    layout.type: flow",
+]);
+
+/** A child's `edges` written beside its edge's `node`, rejected at 7:7. */
+export const EDGE_LEVEL_EDGES = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  edges:",
+  "    - node: { uri: global.subcomponent.button_label }",
+  "      relation:",
+  '        cardinality: "1"',
+  "      edges:",
+  "        - uri: global.component.icon",
+  "          relation:",
+  '            cardinality: "1"',
+]);
+
+/** An edge without its `relation`, located at the edge's mapping (4:7). */
+export const MISSING_RELATION = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  edges:",
+  "    - node: { uri: global.subcomponent.button_label }",
+]);
+
+/**
+ * A node projection reused as a relation projection through an alias: the
+ * relation's copy is rejected (a relation projection takes no `on`), and the
+ * key sits in the anchored mapping, so it is located at the alias (6:52).
+ */
+export const ALIASED_PROJECTION = joinLines([
+  "node:",
+  "  uri: global.component.list",
+  "  projection: &shared { on: Thing, field: items }",
+  "  edges:",
+  "    - node: { role: row }",
+  '      relation: { cardinality: "0..*", projection: *shared }',
+]);
+
+/** A relation without its `cardinality`, located at the relation's mapping (6:9). */
+export const MISSING_CARDINALITY = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  edges:",
+  "    - node: { uri: global.subcomponent.button_label }",
+  "      relation:",
+  "        slotName: default",
+]);
+
+/** A sequence where `props` takes a mapping, located at the key (3:3). */
+export const PROPS_SEQUENCE = joinLines([
+  "node:",
+  "  uri: global.component.icon",
+  "  props: [close, small]",
+]);
+
+/** Text that is not a mapping at all: no key to point at, so no location. */
+export const NOT_A_MAPPING = joinLines(["- not an anatomy"]);
+
+/** A switch case whose `uri` is empty, located at the case (8:13). */
+export const EMPTY_CASE_URI = joinLines([
+  "node:",
+  "  uri: global.component.field",
+  "  edges:",
+  "    - switch:",
+  "        on: props",
+  "        cases:",
+  "          - uri: global.component.input",
+  "          - uri:",
+  '      relation: { cardinality: "1" }',
+]);
+
+/** A switch case whose `node` is empty, located at the case (7:13). */
+export const EMPTY_CASE_NODE = joinLines([
+  "node:",
+  "  uri: global.component.field",
+  "  edges:",
+  "    - switch:",
+  "        on: props",
+  "        cases:",
+  "          - node:",
+  "          - uri: global.component.input",
+  '      relation: { cardinality: "1" }',
+]);
+
+/** A compound state marker, located at the style key (4:5). */
+export const COMPOUND_STATE = joinLines([
+  "node:",
+  "  uri: global.component.button",
+  "  styles:",
+  "    appearance.background@selected@hover: color.background",
 ]);

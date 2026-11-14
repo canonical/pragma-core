@@ -315,6 +315,61 @@ describe("guardTokenBindings — the register admits the derivation's findings",
   });
 });
 
+describe("guardTokenBindings — an unknown key is skipped like any parse failure", () => {
+  const buildMisspeltStore = () => {
+    const store = new GraphStore();
+    store.addLiteral(
+      `${ds}global.component.button`,
+      PREDICATES.anatomyDsl,
+      "node:\n  uri: global.component.button\n  style:\n    layout.type: flow\n",
+    );
+    return store;
+  };
+
+  it("skips and reports it rather than refusing the transform", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const store = buildMisspeltStore();
+    const derivation = deriveTokenBindings(store);
+    const result = guardTokenBindings(store, {}, derivation, {
+      census: null,
+      register: [],
+    });
+    expect(result.findings).toEqual([]);
+    expect(result.skipped.map((finding) => finding.code)).toEqual(["AT23"]);
+    expect(warn.mock.calls.map(([line]) => line)).toEqual([
+      expect.stringMatching(
+        /^Skipping the anatomy of global\.component\.button — it does not parse, so its token bindings are left out of data\/: unknown anatomy key "style" at node: /,
+      ),
+    ]);
+  });
+
+  it("is admitted by an X16 row whose reason is unknown-key, and kept out of the floors", () => {
+    const store = buildMisspeltStore();
+    const derivation = deriveTokenBindings(store);
+    const register = [
+      {
+        uri: "global.component.button",
+        node: null,
+        key: null,
+        state: null,
+        value: "unknown-key",
+        category: "X16",
+        considered: [],
+        date: "2026-11-14",
+      },
+    ] as RegisterRow[];
+    const result = runBindingGuard(store, {}, derivation, {
+      census: census(0, 1),
+      register,
+    });
+    // The census never counted the admitted anatomy as parseable, so its loss is a
+    // floor finding: admission keeps it out of the skipped allowance.
+    expect(result.findings.map((finding) => finding.code)).toEqual([
+      "PARSE_FLOOR",
+    ]);
+  });
+});
+
 describe("guardTokenBindings — an anatomy that does not parse is skipped, not refused", () => {
   /** Two blocks: a card whose tree references a label that does not parse. */
   function storeWithBrokenLabel(): GraphStore {

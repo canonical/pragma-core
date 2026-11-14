@@ -1,3 +1,5 @@
+export { default as AnatomyKeyError } from "./AnatomyKeyError.js";
+export { STYLE_STATES } from "./constants.js";
 export { AnatomySyntaxError, parseAnatomyDocument } from "./document/index.js";
 export { parseAnatomyYAML } from "./parse.js";
 
@@ -21,6 +23,7 @@ export type {
   RelationProjection,
   Specification,
   Style,
+  StyleStateEntry,
   Switch,
   SwitchCase,
 } from "./types.js";

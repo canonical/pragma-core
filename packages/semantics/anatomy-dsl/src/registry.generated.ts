@@ -103,6 +103,22 @@ export const STYLE_KEYS: Record<string, StyleKeyEntry> = {
     valueKind: "either",
     tokenNamespace: ["dimension.", "modifier.dimension.", "surface.dimension."],
   },
+  "appearance.radius.block.end.inline.end": {
+    valueKind: "either",
+    tokenNamespace: ["dimension.", "modifier.dimension.", "surface.dimension."],
+  },
+  "appearance.radius.block.end.inline.start": {
+    valueKind: "either",
+    tokenNamespace: ["dimension.", "modifier.dimension.", "surface.dimension."],
+  },
+  "appearance.radius.block.start.inline.end": {
+    valueKind: "either",
+    tokenNamespace: ["dimension.", "modifier.dimension.", "surface.dimension."],
+  },
+  "appearance.radius.block.start.inline.start": {
+    valueKind: "either",
+    tokenNamespace: ["dimension.", "modifier.dimension.", "surface.dimension."],
+  },
   "appearance.visibility": {
     valueKind: "primitive",
     tokenNamespace: [],

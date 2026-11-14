@@ -5,9 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadSymbolIndex } from "../transform/symbols.js";
 import validateAnatomies, {
   CATEGORIES,
-  classifyParseFailure,
   classifyUnresolved,
-  danglingReference,
   EMPTY_REASONS,
   RETIRED_PATH,
   renderValidateResult,
@@ -126,38 +124,6 @@ describe("RETIRED_PATH", () => {
   });
 });
 
-describe("classifyParseFailure", () => {
-  it("maps each failure to a stable reason, not to the parser's prose", () => {
-    expect(
-      classifyParseFailure("… the slash-delimited token path is retired …"),
-    ).toBe("retired-slash-path");
-    expect(classifyParseFailure("… the trailing `?` marker is retired …")).toBe(
-      "retired-marker",
-    );
-    expect(classifyParseFailure("… a primitive may only end a value: …")).toBe(
-      "primitive-not-last",
-    );
-    expect(
-      classifyParseFailure(
-        "An anatomy document is a mapping with one `node` key",
-      ),
-    ).toBe("not-an-anatomy");
-    expect(
-      classifyParseFailure("Implicit keys need to be on a single line"),
-    ).toBe("yaml-error");
-  });
-});
-
-describe("danglingReference", () => {
-  it("takes the uri: out of the finding", () => {
-    expect(
-      danglingReference(
-        "a: uri: global.component.gone resolves to no ds: subject",
-      ),
-    ).toBe("global.component.gone");
-  });
-});
-
 describe("validateAnatomies", () => {
   it("passes a corpus whose every element resolves", async () => {
     await corpus({
@@ -268,6 +234,25 @@ describe("validateAnatomies", () => {
     expect(
       written.register.rows.find((row) => row.category === "X16")?.value,
     ).toBe("retired-slash-path");
+  });
+
+  it("files an unknown key under X16 as unknown-key, and admits it by that row", async () => {
+    await corpus({
+      "global.component.misspelt":
+        "node:\n  uri: global.component.misspelt\n  style:\n    layout.type: flow\n",
+    });
+    expect(codes(run().findings)).toContain("AT23");
+    const written = run({ writeRegister: true });
+    expect(written.exitCode).toBe(0);
+    expect(written.register.rows).toMatchObject([
+      {
+        uri: "global.component.misspelt",
+        category: "X16",
+        value: "unknown-key",
+      },
+    ]);
+    expect(written.census.categories.X16).toBe(1);
+    expect(written.census.parseable).toBe(0);
   });
 
   it("admits a dangling uri: under X11 and refuses it without the row", async () => {
