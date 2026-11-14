@@ -41,6 +41,8 @@ import {
   hasFinding,
   type RegisterRow,
   readBindingRecords,
+  UNKNOWN_KEY_CODE,
+  UNPARSEABLE_CODE,
 } from "./tokenBindings.js";
 
 /** The dotted prefixes a style key admits, from the imported registry. */
@@ -48,8 +50,11 @@ export function tokenNamespaceOf(key: string): readonly string[] | undefined {
   return STYLE_KEYS[key]?.tokenNamespace;
 }
 
-/** The derivation's code for an anatomy that does not parse. */
-const UNPARSEABLE = "X16";
+/** The derivation's codes for an anatomy that does not parse, whatever the reason. */
+const UNPARSEABLE: ReadonlySet<string> = new Set([
+  UNPARSEABLE_CODE,
+  UNKNOWN_KEY_CODE,
+]);
 
 /** What the guard found, and the floors it measured. */
 export interface GuardResult {
@@ -110,14 +115,14 @@ export function runBindingGuard(
   // line the sync's run summary and pull request list. The report is taken from the
   // findings BEFORE admission, so a failure a register row admits is still named on
   // every run until it parses.
-  const skipped = derived.filter((finding) => finding.code === UNPARSEABLE);
-  const findings = reported.filter((finding) => finding.code !== UNPARSEABLE);
+  const skipped = derived.filter((finding) => UNPARSEABLE.has(finding.code));
+  const findings = reported.filter((finding) => !UNPARSEABLE.has(finding.code));
   // The floors account only for the failures no row admits: an admitted one did not
   // parse in the committed corpus either, so the census counted neither it among the
   // parseable anatomies nor its records.
   const newlySkipped = new Set(
     reported
-      .filter((finding) => finding.code === UNPARSEABLE)
+      .filter((finding) => UNPARSEABLE.has(finding.code))
       .map((finding) => finding.block),
   );
 

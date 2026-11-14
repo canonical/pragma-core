@@ -25,7 +25,11 @@ import type {
   StyleStateEntry,
   Switch,
 } from "@canonical/anatomy-dsl";
-import { parseAnatomyYAML, STYLE_STATES } from "@canonical/anatomy-dsl";
+import {
+  AnatomyKeyError,
+  parseAnatomyYAML,
+  STYLE_STATES,
+} from "@canonical/anatomy-dsl";
 import { DataFactory } from "n3";
 import { CLASSES, NAMESPACES, PREDICATES } from "../constants.js";
 import type { GraphStore } from "../graph/index.js";
@@ -41,10 +45,21 @@ const { blankNode, defaultGraph, literal, namedNode, quad } = DataFactory;
 const CUSTOM_URI = "$custom";
 
 /** The path step the root node occupies, and the DSL's own spelling for it. */
-const ROOT_STEP = "$root";
+export const ROOT_STEP = "$root";
 
 /** The state a record carries for the unmarked key. */
 export const DEFAULT_STATE = "default";
+
+/** The derivation's code for an anatomy that does not parse. */
+export const UNPARSEABLE_CODE = "X16";
+
+/**
+ * The code for a key outside the mapping or the vocabulary that takes it (AT.23): an
+ * anatomy key the parser rejects, and, on the authored path, a style key outside the
+ * roster or a state outside the vocabulary. The register files a parse failure of
+ * this kind under X16, so it is admitted and skipped as every other one is.
+ */
+export const UNKNOWN_KEY_CODE = "AT23";
 
 /** The lint for a binding under a state the vocabulary marks experimental (AT.24). */
 export const EXPERIMENTAL_STATE_CODE = "AT24";
@@ -130,6 +145,11 @@ export interface BindingFinding {
    * reached the unparseable one, and so lost the records it would have reached.
    */
   reachedFrom?: string;
+  /**
+   * Carried by a key the parser rejects (AT23): the X16 reason the register files it
+   * under, decided from the error itself rather than from its message.
+   */
+  reason?: string;
 }
 
 /** What `deriveTokenBindings` derived, and what it could not. */
@@ -317,6 +337,17 @@ function walkReference(context: WalkContext, uri: string): void {
   walkNode(context, specification.root, iri, ROOT_STEP);
 }
 
+/**
+ * The X16 reason for a key the parser rejects: `not-an-anatomy` for a document
+ * missing its `node`, `unknown-key` for a key the mapping does not take, and
+ * `malformed-key` for one it takes that is missing, of the wrong shape or not
+ * going with another.
+ */
+function keyReason(error: AnatomyKeyError): string {
+  if (error.path.length === 0 && error.key === "node") return "not-an-anatomy";
+  return error.allowed.includes(error.key) ? "malformed-key" : "unknown-key";
+}
+
 function parse(
   context: WalkContext,
   text: string,
@@ -328,12 +359,14 @@ function parse(
   } catch (error) {
     const via =
       reachedFrom === undefined ? "" : `, reached from ${reachedFrom}`;
+    const keyed = error instanceof AnatomyKeyError;
     context.findings.push({
-      code: "X16",
+      code: keyed ? UNKNOWN_KEY_CODE : UNPARSEABLE_CODE,
       severity: "finding",
       message: `${block}: ds:anatomyDsl does not parse as an anatomy document${via} — ${(error as Error).message}`,
       block,
       ...(reachedFrom === undefined ? {} : { reachedFrom }),
+      ...(keyed ? { reason: keyReason(error) } : {}),
     });
     return null;
   }

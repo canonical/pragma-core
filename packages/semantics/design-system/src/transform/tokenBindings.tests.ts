@@ -359,6 +359,27 @@ describe("deriveBindingRecords", () => {
     expect(parseFailures[0].message).toContain("slash-delimited token path");
   });
 
+  it("reports a key the parser rejects under its own code, AT23", () => {
+    const { findings, parsed } = derive({
+      "global.component.misspelt": anatomy([
+        "node:",
+        "  uri: global.component.misspelt",
+        "  style:",
+        "    layout.type: flow",
+      ]),
+    });
+    expect(parsed).toBe(0);
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({
+      code: "AT23",
+      severity: "finding",
+      block: `${ds}global.component.misspelt`,
+    });
+    expect(findings[0].message).toContain(
+      'does not parse as an anatomy document — unknown anatomy key "style" at node',
+    );
+  });
+
   it("skips a referenced anatomy that does not parse, keeping the referring block's own records", () => {
     const { findings, records } = derive({
       "global.component.button": BUTTON,

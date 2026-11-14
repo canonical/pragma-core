@@ -1584,7 +1584,9 @@ bun src/cli.ts anatomies validate --authored
 
 Exit 0 with `0 findings` is the verdict on lawfulness; a finding names the file, the uri
 and the rule it broke, and a warning — `AT11`, a state binding differing from its base —
-is usually the implementation telling the truth. What exit 0 does NOT settle is
+is usually the implementation telling the truth. `AT23` is a key the parser or the vocabulary rejects:
+a mapping key that is unknown, missing or of the wrong shape (any of the parser's
+rules), a style key outside the roster, or a state outside the vocabulary. What exit 0 does NOT settle is
 anything in the paragraphs above: the semantic calls travel to review, so say in the
 pull request which ones you made and what you read to make them.
 

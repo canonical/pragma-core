@@ -30,9 +30,12 @@ import {
   exitCodeFor,
   NAMESPACE_CATEGORY,
   type RegisterRow,
+  UNKNOWN_KEY_CODE,
+  UNPARSEABLE_CODE,
 } from "../transform/tokenBindings.js";
 import {
   admitRegistered,
+  classifyAdmission,
   classifyParseFailure,
   danglingReference,
 } from "./admission.js";
@@ -260,14 +263,18 @@ export default function validateAnatomies(
         date,
       });
     }
-    if (finding.code === "X16") {
+    if (
+      finding.code === UNPARSEABLE_CODE ||
+      finding.code === UNKNOWN_KEY_CODE
+    ) {
+      const { category, value } = classifyAdmission(finding);
       derived.push({
         uri: (finding.block as string).split("/").pop() as string,
         node: null,
         key: null,
         state: null,
-        value: classifyParseFailure(finding.message),
-        category: "X16",
+        value,
+        category,
         considered: [],
         date,
       });
