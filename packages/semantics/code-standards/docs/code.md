@@ -459,93 +459,25 @@ const processUser = (user: User) => { /* ... */ };
 
 **Identifier:** `cs:code.types.file`
 
-Reusable domain types must be collected in a `types.ts` file using named exports (no default export), colocated at the level of the domain that owns them. Types that are only used in a single file may be declared inline in that file instead of being extracted to `types.ts`.
+Types several files use live in their domain's `types.ts`; a type one file uses stays inline. Except: a framework standard's types file wins (component Props in the folder's `types.ts`, hook types in `hooks/types.ts`); shared test and story types live in `testing/types.ts`.
 
 ### Do
 
-Create a `types.ts` file with named exports for types shared across the domain
-```typescript
-// features/pricing/types.ts
-export type Currency = "USD" | "EUR" | "GBP";
-export interface PriceBreakdown {
-  base: number;
-  tax: number;
-  total: number;
-}
-export type DiscountStrategy = "percentage" | "fixed";
+Keep a domain's shared types in its `types.ts`
 ```
-
-Colocate `types.ts` inside the domain folder it belongs to
-```
-features/
-├── pricing/
-│   ├── types.ts              # Shared domain types live here
-│   ├── constants.ts
-│   ├── constants.test.ts
-│   ├── calculatePrice.ts
-│   ├── calculatePrice.test.ts
-│   └── index.ts
-├── auth/
-│   ├── types.ts              # Auth-specific types
-│   ├── validateToken.ts
-│   ├── validateToken.test.ts
-│   └── index.ts
-```
-
-Keep single-use types inline in the file that uses them
-```typescript
-// features/pricing/applyDiscount.ts
-type DiscountResult = { discounted: number; savings: number };
-
-export default function applyDiscount(price: number, rate: number): DiscountResult {
-  const savings = price * rate;
-  return { discounted: price - savings, savings };
-}
-```
-
-Import shared types from the owning domain's `types.ts`
-```typescript
-// features/pricing/calculatePrice.ts
-import type { Currency, PriceBreakdown } from "./types.js";
+features/pricing/
+├── index.ts
+├── types.ts            # shared pricing types
+├── calculatePrice.ts
+└── calculatePrice.test.ts
 ```
 
 ### Don't
 
-Use a default export in a types file
+Declare a shared type in an implementation file
 ```typescript
-// Bad: default export for a collection of types
-export default interface PriceBreakdown {
-  base: number;
-  tax: number;
-  total: number;
-}
-```
-
-Extract single-use types to `types.ts` when they are only used in one file
-```typescript
-// Bad: types.ts contains a type only used in applyDiscount.ts
-// types.ts
-export type DiscountResult = { discounted: number; savings: number };
-
-// applyDiscount.ts
-import type { DiscountResult } from "./types.js"; // Unnecessary indirection
-```
-
-Place types far from the domain that owns them
-```typescript
-// Bad: all types dumped in a top-level shared file
-// src/types.ts
-export type Currency = "USD" | "EUR" | "GBP";  // Belongs in pricing/
-export type AuthToken = { jwt: string };         // Belongs in auth/
-export type RetryPolicy = { max: number };       // Belongs in network/
-```
-
-Mix types with functions, constants, or other non-type exports
-```typescript
-// Bad: types.ts should only contain type declarations
-export type Currency = "USD" | "EUR" | "GBP";
-export const DEFAULT_CURRENCY: Currency = "USD";
-export const formatCurrency = (value: number, currency: Currency) => `${currency} ${value}`;
+// calculatePrice.ts
+export type Currency = "USD" | "EUR";
 ```
 
 ---

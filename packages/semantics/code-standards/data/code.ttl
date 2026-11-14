@@ -402,103 +402,23 @@ export type RetryConfig = { max: number };
 cs:code.types.file a cs:CodeStandard ;
     rdfs:label "Reusable types in types.ts"@en ;
     cs:hasCategory cs:code ;
-    cs:description "Reusable domain types must be collected in a `types.ts` file using named exports (no default export), colocated at the level of the domain that owns them. Types that are only used in a single file may be declared inline in that file instead of being extracted to `types.ts`." ;
+    cs:description "Types several files use live in their domain's `types.ts`; a type one file uses stays inline. Except: a framework standard's types file wins (component Props in the folder's `types.ts`, hook types in `hooks/types.ts`); shared test and story types live in `testing/types.ts`." ;
     cs:do [
-        cs:description "Create a `types.ts` file with named exports for types shared across the domain" ;
-        cs:language "typescript" ;
+        cs:description "Keep a domain's shared types in its `types.ts`" ;
         cs:code """
-// features/pricing/types.ts
-export type Currency = "USD" | "EUR" | "GBP";
-export interface PriceBreakdown {
-  base: number;
-  tax: number;
-  total: number;
-}
-export type DiscountStrategy = "percentage" | "fixed";
-    """
-    ] ;
-    cs:do [
-        cs:description "Colocate `types.ts` inside the domain folder it belongs to" ;
-        cs:code """
-features/
-├── pricing/
-│   ├── types.ts              # Shared domain types live here
-│   ├── constants.ts
-│   ├── constants.test.ts
-│   ├── calculatePrice.ts
-│   ├── calculatePrice.test.ts
-│   └── index.ts
-├── auth/
-│   ├── types.ts              # Auth-specific types
-│   ├── validateToken.ts
-│   ├── validateToken.test.ts
-│   └── index.ts
-    """
-    ] ;
-    cs:do [
-        cs:description "Keep single-use types inline in the file that uses them" ;
-        cs:language "typescript" ;
-        cs:code """
-// features/pricing/applyDiscount.ts
-type DiscountResult = { discounted: number; savings: number };
-
-export default function applyDiscount(price: number, rate: number): DiscountResult {
-  const savings = price * rate;
-  return { discounted: price - savings, savings };
-}
-    """
-    ] ;
-    cs:do [
-        cs:description "Import shared types from the owning domain's `types.ts`" ;
-        cs:language "typescript" ;
-        cs:code """
-// features/pricing/calculatePrice.ts
-import type { Currency, PriceBreakdown } from "./types.js";
+features/pricing/
+├── index.ts
+├── types.ts            # shared pricing types
+├── calculatePrice.ts
+└── calculatePrice.test.ts
     """
     ] ;
     cs:dont [
-        cs:description "Use a default export in a types file" ;
+        cs:description "Declare a shared type in an implementation file" ;
         cs:language "typescript" ;
         cs:code """
-// Bad: default export for a collection of types
-export default interface PriceBreakdown {
-  base: number;
-  tax: number;
-  total: number;
-}
-    """
-    ] ;
-    cs:dont [
-        cs:description "Extract single-use types to `types.ts` when they are only used in one file" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: types.ts contains a type only used in applyDiscount.ts
-// types.ts
-export type DiscountResult = { discounted: number; savings: number };
-
-// applyDiscount.ts
-import type { DiscountResult } from "./types.js"; // Unnecessary indirection
-    """
-    ] ;
-    cs:dont [
-        cs:description "Place types far from the domain that owns them" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: all types dumped in a top-level shared file
-// src/types.ts
-export type Currency = "USD" | "EUR" | "GBP";  // Belongs in pricing/
-export type AuthToken = { jwt: string };         // Belongs in auth/
-export type RetryPolicy = { max: number };       // Belongs in network/
-    """
-    ] ;
-    cs:dont [
-        cs:description "Mix types with functions, constants, or other non-type exports" ;
-        cs:language "typescript" ;
-        cs:code """
-// Bad: types.ts should only contain type declarations
-export type Currency = "USD" | "EUR" | "GBP";
-export const DEFAULT_CURRENCY: Currency = "USD";
-export const formatCurrency = (value: number, currency: Currency) => `${currency} ${value}`;
+// calculatePrice.ts
+export type Currency = "USD" | "EUR";
     """
     ] .
 
