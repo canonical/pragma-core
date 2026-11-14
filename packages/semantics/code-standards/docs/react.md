@@ -771,56 +771,31 @@ export { InternalHelper };
 
 **Identifier:** `cs:react.component.tsdoc`
 
-Component TSDoc documentation must use the description from the design system ontology (DSL). The TSDoc should NOT include @example blocks since stories serve as the examples. The description should be copied verbatim from the DSL, maintaining the original wording and meaning.
+A component's TSDoc copies its block's `ds:summary` verbatim and whole, names the block in `@implements`, and has no `@example`. Except: in `_work_in_progress/`, a block drafted under `specs/` and not yet entered in `data/` is that source.
 
 ### Do
 
-Use the description from the DSL ontology verbatim.
+Copy the whole summary, give the import line, and name the block
 ```typescript
 /**
- * The label component is a compact, non-interactive visual element used to
- * categorize content or indicate a status. Its primary role is metadata
- * visualization. While it has similar visual properties to the Chip, it is
- * purely informational and does not trigger actions or allow for removal.
+ * Displays a small thumbnail image within a card, typically used alongside
+ * content for logo/icon representation.
  *
- * @implements ds:global.component.label
+ * `import { Card } from "@canonical/react-ds-global";`
+ *
+ * @implements ds:global.subcomponent.card-thumbnail
  */
-const Label = ({ children, criticality, className, ...props }: LabelProps) => (
-  <span className={[componentCssClassName, criticality, className].filter(Boolean).join(" ")} {...props}>
-    {children}
-  </span>
-);
 ```
 
 ### Don't
 
-Write custom descriptions that deviate from the DSL.
+Paraphrase the summary, add an `@example`, or omit `@implements`
 ```typescript
-// Bad: Custom title and paraphrased description
 /**
- * Label component
- *
- * A compact visual element for status indication.
- */
-```
-
-Include @example blocks - stories fulfill this role.
-```typescript
-// Bad: Examples belong in stories, not TSDoc
-/**
- * The label component is a compact...
+ * Label component: a compact visual element for status.
  *
  * @example
  * <Label>Default</Label>
- * <Label criticality="warning">Warning</Label>
- */
-```
-
-Omit the @implements tag that links to the DSL.
-```typescript
-// Bad: Missing @implements tag
-/**
- * The label component is a compact...
  */
 ```
 
