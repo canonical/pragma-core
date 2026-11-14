@@ -24,6 +24,7 @@ import { resolveSources } from "../../kernel/runtime/resolveSources.js";
 import {
   checkRegistryVersion,
   detectInstallSource,
+  isSemverNewer,
   PRAGMA_PACKAGE,
   pmUpdateCommand,
   updateGuidance,
@@ -47,9 +48,10 @@ export async function collectInfo(runtime: PragmaRuntime): Promise<InfoData> {
   const registry = await checkRegistryVersion(PRAGMA_PACKAGE, config.channel);
   // Only a GLOBAL install gets a command; every other state gets the honest
   // guidance sentence — a confidently wrong `npm i -g` against a linked
-  // checkout would overwrite the development link.
+  // checkout would overwrite the development link. An update exists only when
+  // the tag is STRICTLY newer (semver): a lagging dist-tag is no update.
   const update: InfoUpdate | undefined =
-    registry && registry.latest !== runtime.version
+    registry && isSemverNewer(registry.latest, runtime.version)
       ? {
           current: runtime.version,
           latest: registry.latest,

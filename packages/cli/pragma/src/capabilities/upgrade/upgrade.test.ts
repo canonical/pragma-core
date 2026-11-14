@@ -170,6 +170,15 @@ describe("upgrade — offline & already-latest (no exec)", () => {
     expect(data.executed).toBe(false);
     expect(data.latest).toBe(VERSION);
   });
+
+  it("an OLDER tag reports already-latest with no exec — never a downgrade", async () => {
+    // A lagging dist-tag (e.g. `experimental` behind `latest`) is not a
+    // reason to run `npm i -g`.
+    stubRegistry("0.43.0-experimental.1");
+    const data = await realData(bootRuntime(FLAGS_JSON, tmpCwd()));
+    expect(data.alreadyLatest).toBe(true);
+    expect(data.executed).toBe(false);
+  });
 });
 
 describe("upgrade — update needed", () => {

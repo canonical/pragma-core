@@ -32,6 +32,7 @@ import {
   checkRegistryVersion,
   detectInstallSource,
   guardMissingBinary,
+  isSemverNewer,
   PRAGMA_PACKAGE,
   pmUpdateCommand,
   updateGuidance,
@@ -82,7 +83,9 @@ export async function runUpgrade(
     });
   }
 
-  if (registry.latest === current) {
+  // Equal or OLDER (a lagging dist-tag, e.g. `experimental` behind `latest`)
+  // is "already at the latest" — upgrade must never suggest a downgrade.
+  if (!isSemverNewer(registry.latest, current)) {
     const data: UpgradeData = {
       pm,
       kind,

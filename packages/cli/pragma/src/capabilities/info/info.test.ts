@@ -133,6 +133,15 @@ describe("info — update-check enrichment", () => {
     expect(data.update).toBeUndefined();
     expect(data.updateSkipped).toBe(false);
   });
+
+  it("an OLDER tag is NOT an update — a lagging dist-tag implies no downgrade", async () => {
+    // The `experimental` tag sits behind `latest`; it must not surface as an
+    // update for a newer installed version.
+    stubRegistry("0.43.0-experimental.1");
+    const data = await collect(bootRuntime(FLAGS_JSON, tmpCwd()));
+    expect(data.update).toBeUndefined();
+    expect(data.updateSkipped).toBe(false);
+  });
 });
 
 describe("info — storeless entity total", () => {
