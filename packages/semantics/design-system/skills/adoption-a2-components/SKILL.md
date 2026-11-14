@@ -255,9 +255,8 @@ Do NOT assume a 1:1 mapping from Vanilla names and `p-*` classes. Boundaries mov
 what was one blob may now be a component plus subcomponents (e.g. `Accordion` with
 `Accordion.Item`), and icon semantics changed to `currentColor`. The block's `ds:usage`
 When-to-use / When-not-to-use guidance decides what replaces what — read it with
-`pragma graph inspect <block IRI>` (the IRI from the block's `pragma block list` row;
-`block lookup` does not render the usage field today) — often the honest swap is a
-DIFFERENT component than the old name suggests.
+`pragma block lookup <Name or ds: IRI>` (MCP: `block_lookup`) — often the honest swap
+is a DIFFERENT component than the old name suggests.
 
 ## Accessibility warnings are contract
 
