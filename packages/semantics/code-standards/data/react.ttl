@@ -712,7 +712,7 @@ cs:react.component.link_component a cs:CodeStandard ;
     rdfs:label "Router integration via LinkComponent"@en ;
     cs:hasCategory cs:react ;
     cs:extends cs:react.component.props ;
-    cs:description """Many-link components take one `LinkComponent` prop (`LinkComponentProps`, default `"a"`); others use `as`. Unlinked or disabled items: `<span>`; the active one has `aria-current`. Except: a menu's `<a href>` sends unmodified primary clicks to `onSelect`, preventing default.""" ;
+    cs:description """Many-link components take one `LinkComponent` prop (`LinkComponentProps`, default `"a"`); others use `as`. Unlinked or disabled items: `<span>`; the active one has `aria-current`. Except: a menu's `<a href>` sends unmodified primary clicks to `onSelect`, preventing default; an unreachable icon link: a named `<button aria-disabled="true">`.""" ;
     cs:do [
         cs:description "Render each item through the injected link, or a span without a destination" ;
         cs:language "tsx" ;

@@ -181,7 +181,7 @@ Add redundant prefixes to domain-level files.
 
 **Identifier:** `cs:react.component.link_component`
 
-Many-link components take one `LinkComponent` prop (`LinkComponentProps`, default `"a"`); others use `as`. Unlinked or disabled items: `<span>`; the active one has `aria-current`. Except: a menu's `<a href>` sends unmodified primary clicks to `onSelect`, preventing default.
+Many-link components take one `LinkComponent` prop (`LinkComponentProps`, default `"a"`); others use `as`. Unlinked or disabled items: `<span>`; the active one has `aria-current`. Except: a menu's `<a href>` sends unmodified primary clicks to `onSelect`, preventing default; an unreachable icon link: a named `<button aria-disabled="true">`.
 
 ### Do
 
