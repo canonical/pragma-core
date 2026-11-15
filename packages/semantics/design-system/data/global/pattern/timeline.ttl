@@ -11,6 +11,7 @@ ds:global.pattern.timeline a ds:Pattern;
     ds:guidelines "**Time Formatting**\n\nAlways use a consistent time format that complies with the copy guide (e.g., Relative like \"2 hours ago\" vs. Absolute like \"Oct 24, 2023, 10:00 AM\"). For global products, ensure the timezone is clear if the timing is critical.\n\n**Visual Continuity**\n\nThe line connecting the nodes should be solid for completed events and can be dashed or greyed out for future/planned events to indicate status.\n\n";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needsfulldocumentation;
+    ds:hasSubcomponent ds:global.subcomponent.timeline-event, ds:global.subcomponent.timeline-expansion_indicator, ds:global.subcomponent.timeline-content, ds:global.subcomponent.timeline-header;
     ds:hasProperty [
         a ds:Property;
         ds:name "Show controls";
@@ -91,7 +92,6 @@ ds:global.pattern.timeline a ds:Pattern;
         ds:timestamp "2026-03-13T00:00:00.000+01:00";
         ds:changeType "change"
     ];
-    ds:hasSubcomponent ds:global.subcomponent.timeline-event, ds:global.subcomponent.timeline-expansion_indicator, ds:global.subcomponent.timeline-content, ds:global.subcomponent.timeline-header;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.timeline-event;

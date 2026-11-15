@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global_dataviews.modifier.presence a ds:Modifier;
+    ds:name "Presence";
+    ds:summary "The record holds a value for the field.";
+    ds:modifierFamily ds:global_dataviews.modifier_family.condition.

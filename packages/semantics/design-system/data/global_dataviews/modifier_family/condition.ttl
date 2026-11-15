@@ -1,0 +1,9 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global_dataviews.modifier_family.condition a ds:ModifierFamily;
+    ds:name "Condition";
+    ds:summary "Condition names what a clause's operator asserts about a record: that the record's value is one of the given values, is not, holds the given text, lies within a range, or is present. A component that shows or summarises a clause takes the value its clause asserts, and the tokens give each value its treatment, so the treatment can change without changing what the clause means.";
+    ds:tier ds:global_dataviews;
+    ds:hasModifier ds:global_dataviews.modifier.inclusion, ds:global_dataviews.modifier.exclusion, ds:global_dataviews.modifier.match, ds:global_dataviews.modifier.range, ds:global_dataviews.modifier.presence.

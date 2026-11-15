@@ -11,6 +11,7 @@ ds:global.component.breadcrumbs a ds:Component;
     ds:guidelines "- use current page breadcrumb item as the last level of hierarchy, indicating the current location in the navigation structure\n- use parent page breadcrumb items for the higher levels of navigation from the current location in the navigation structure  \n\n\nOverflow\n\n- Ideally breadcrumbs should be used in the design in a way where they do not overflow. But if they do for some reason overflow they should overflow in the following way: A 4px vertical distance. The slash should always be at the start of the second line (and not at the end of the first line).  \n  \n\n\n\n\n# Accessibility\n\n## **How it works**\n\nIt establishes a landmark on the page which assists the user in understanding where they currently are and which pages exist in the current page’s hierarchical order.\n\nIt comprises a set of links structured using an ordered list. A `nav` element using `aria-label=\"Breadcrumbs\"` identifies the structure as a breadcrumb trail and makes it a navigation landmark so that it is easy to locate. It can be navigated via keyboard using the `Tab` key.\n\nTo prevent screen reader announcement of the visual separators between links, they are added via CSS. The separators are part of the visual presentation that signifies the breadcrumb trail, which is already semantically represented by the `nav` element.\n\n## **Considerations**\n\nThis component strives to follow [WCAG 2.2 (level AA) guidelines](https://www.w3.org/TR/WCAG22/), and care must be taken to ensure this effort is maintained when the component is implemented across other projects. This section offers advice to that effect:\n\n- The breadcrumb text should reflect the page title accurately and concisely.\n- The breadcrumb should remain in the same relative order and location on each web page.\n- The breadcrumb indicating the current page should be visually distinct from the preceding breadcrumbs.\n- If the breadcrumb reflecting the current page is a link, it should have an `aria-current=\"page\"` attribute.\n\n## **Resources**\n\n- [WAI-ARIA practices: Breadcrumbs](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/)\n- [WAI-ARIA practices: Breadcrumb example](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/examples/breadcrumb/)\n- Guidelines:\n  - [2.4.4: Link Purpose (in Context)](https://www.w3.org/TR/WCAG22/#link-purpose-in-context)\n  - [3.2.3: Consistent Navigation](https://www.w3.org/TR/WCAG22/#consistent-navigation)";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needsfulldocumentation;
+    ds:hasSubcomponent ds:global.subcomponent.breadcrumbs-item;
     ds:hasProperty [
         a ds:Property;
         ds:name "children";
@@ -29,7 +30,6 @@ ds:global.component.breadcrumbs a ds:Component;
         a ds:ChangeLogEntry;
         ds:timestamp "2026-10-14T00:00:00.000+02:00"
     ];
-    ds:hasSubcomponent ds:global.subcomponent.breadcrumbs-item;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.breadcrumbs;

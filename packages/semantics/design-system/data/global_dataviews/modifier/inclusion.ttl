@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global_dataviews.modifier.inclusion a ds:Modifier;
+    ds:name "Inclusion";
+    ds:summary "The record's value is one of the given values.";
+    ds:modifierFamily ds:global_dataviews.modifier_family.condition.

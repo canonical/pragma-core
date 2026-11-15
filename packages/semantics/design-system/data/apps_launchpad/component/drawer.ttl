@@ -10,6 +10,7 @@ ds:apps_launchpad.component.drawer a ds:Component;
     ds:usage "Modal provides a native dialog-based overlay with two composition paths: declarative trigger/command wiring and imperative instance control. In practice, teams can build either structured confirmation dialogs or fully custom content while preserving consistent open, close, and dismissal behavior.\n\n## When to use\n\nUse SidePanel for adjacent workflows where users benefit from keeping the main page in view.\n\n## When not to use\n\n### **Lightweight contextual actions**\n\n**Incorrect pattern**: using a blocking dialog for quick contextual choices that should not interrupt page interaction.  \n**Remediation strategy**: use a non-modal surface for quick, in-context choices.\n\n### **Fully replacing page navigation**\n\n**Incorrect pattern**: using a side panel as a secondary page destination with independent navigation context.  \n**Remediation strategy**: route to a dedicated page instead.";
     ds:guidelines "## **Trigger and dialog relationship**\n\nEnsure trigger props are applied to an interactive control so assistive technologies can identify side panel intent and ownership.\n\n## **Explicit close controls**\n\nProvide at least one visible close action inside the side panel content, especially when light dismissal is disabled.";
     ds:tier ds:apps_launchpad;
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.side_panel-content;
     ds:hasProperty [
         a ds:Property;
         ds:name "trigger";
@@ -36,5 +37,4 @@ ds:apps_launchpad.component.drawer a ds:Component;
         ds:name "Dialog passthrough attributes";
         ds:summary "Forwarded HTML dialog attributes.";
         ds:optional "true"
-    ];
-    ds:hasSubcomponent ds:apps_launchpad.subcomponent.side_panel-content.
+    ].

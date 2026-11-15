@@ -11,6 +11,7 @@ ds:global.component.chip a ds:Component;
     ds:guidelines "Accessibility\n\n## **Color accessibility**\n\n- Chips border colors need to satisfy 3:1 contrast against the lightest/darkest background color state.\n- Use a modifier if it makes sense semantically for your use case.\n- Avoid using semantic color modifiers on top of colored backgrounds.\n- Ensure you don’t use colour as the only visual means of conveying information or an action.\n\n## Alternative text\n\n- There should be an alternative text specified when the value (text) doesn't provide enough contextual information E.g. \"status important\" instead of the default \"important\" as the value of the chip\n\n## Keyboard interactions and focus\n\n- When pressing `Enter` a default chip should perform the filtering action based on its value, the dismissible chip should revert the filtering behavior.\n- When tabulating through chips, the focus area should be the whole chip for the default chip, the dismissible area for the dismissible chip. ";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needscoredocumentation;
+    ds:hasModifierFamily ds:global.modifier_family.criticality;
     ds:hasProperty [
         a ds:Property;
         ds:name "value";

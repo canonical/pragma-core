@@ -11,12 +11,12 @@ ds:global.component.code_snippet a ds:Component;
     ds:guidelines "";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needsdesign;
+    ds:hasSubcomponent ds:global.component.code_snippet-content, ds:global.component.code_snippet-header;
     ds:changeLog [
         a ds:ChangeLogEntry;
         ds:timestamp "2026-03-21T00:00:00.000+01:00";
         ds:changeType "change"
     ];
-    ds:hasSubcomponent ds:global.component.code_snippet-content, ds:global.component.code_snippet-header;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.code_snippet;

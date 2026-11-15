@@ -11,6 +11,7 @@ ds:global.component.card a ds:Component;
     ds:guidelines "Styling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=2124-397&t=ch8BFFPUe9gCvMdg-1";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needsfulldocumentation;
+    ds:hasSubcomponent ds:global.subcomponent.card-footer, ds:global.subcomponent.card-thumbnail, ds:global.subcomponent.card-content, ds:global.subcomponent.card-image, ds:global.subcomponent.card-header;
     ds:hasProperty [
         a ds:Property;
         ds:optional "false"
@@ -32,7 +33,6 @@ ds:global.component.card a ds:Component;
         ds:timestamp "2026-04-06T00:00:00.000+02:00";
         ds:changeType "change"
     ];
-    ds:hasSubcomponent ds:global.subcomponent.card-footer, ds:global.subcomponent.card-thumbnail, ds:global.subcomponent.card-content, ds:global.subcomponent.card-image, ds:global.subcomponent.card-header;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.card;

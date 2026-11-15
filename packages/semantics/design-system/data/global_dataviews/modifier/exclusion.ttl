@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global_dataviews.modifier.exclusion a ds:Modifier;
+    ds:name "Exclusion";
+    ds:summary "The test is negated: the record's value is none of the given values, differs from the given value, does not hold the given text, or is absent.";
+    ds:modifierFamily ds:global_dataviews.modifier_family.condition.
