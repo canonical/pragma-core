@@ -499,35 +499,20 @@ export const formatCurrency = (value: number, currency: Currency) => `${currency
 cs:code.assertion.non_null a cs:CodeStandard ;
     rdfs:label "Assert invariants at runtime"@en ;
     cs:hasCategory cs:code ;
-    cs:description "Prefer runtime assertions over non-null assertions (`!`). TypeScript's `!` operator suppresses null/undefined checks at the type level without any runtime effect. When the invariant breaks (refactoring, upstream change), the program silently proceeds with `undefined` instead of failing fast. Use a runtime assert to document the invariant and fail visibly. Exception: inline expressions where a throw would add noise (`.map()` callbacks, ternaries). There `as T` or `!` are acceptable when the proof is on the same line." ;
+    cs:description "Assert an invariant at runtime instead of `!` or an `as T` that drops nullability, which fail silently. Except: inline `as T` or `!` with the proof on the same line, or a hot typed-array `a[i] as number` whose loop bound proves it." ;
     cs:do [
-        cs:description "Use a runtime assertion to document and enforce the invariant." ;
+        cs:description "Assert the invariant so it fails visibly" ;
         cs:language "typescript" ;
         cs:code """
-// assertInvariant throws if the value is null or undefined
 const first = assertInvariant(items.at(0), "expected at least one item");
     """
     ] ;
-    cs:do [
-        cs:description "In inline expressions where an assertion would add noise, `as T` or `!` is acceptable when the proof is on the same line." ;
-        cs:language "typescript" ;
-        cs:code """
-// Acceptable — filter guarantees non-empty rows, proof is one line up
-const maxLen = Math.max(...rows.map((r) => (r.name as string).length));
-    """
-    ] ;
     cs:dont [
-        cs:description "Use `!` to suppress the type checker — it has no runtime effect and fails silently when the invariant breaks." ;
+        cs:description "Silence the check with `!` or `as T`" ;
         cs:language "typescript" ;
         cs:code """
 const first = items.at(0)!;
-    """
-    ] ;
-    cs:dont [
-        cs:description "Use `as T` to cast away nullability outside of inline expressions." ;
-        cs:language "typescript" ;
-        cs:code """
-const config = loadConfig() as Config;
+const admin = users.find(isAdmin) as User;
     """
     ] .
 
@@ -535,21 +520,19 @@ const config = loadConfig() as Config;
 cs:code.array.safe_access a cs:CodeStandard ;
     rdfs:label "Safe array access with .at()"@en ;
     cs:hasCategory cs:code ;
-    cs:description "Use `.at(index)` instead of bracket notation for array element access. Bracket notation (`arr[i]`) returns `T` in TypeScript even though the index may be out of bounds — the type system hides a potential `undefined`. `.at(index)` returns `T | undefined`, making the fallibility visible at the type level and forcing callers to handle the missing case." ;
+    cs:description "Read array elements with `.at(i)`. Except: a hot loop over a number typed array may read `a[i] as number` when its loop bound holds `i` in range." ;
     cs:do [
-        cs:description "Use `.at()` for index-based array access." ;
+        cs:description "Use `.at()` for index-based array access" ;
         cs:language "typescript" ;
         cs:code """
-// .at() returns T | undefined — callers must handle the missing case
 const first = items.at(0);
 const last = items.at(-1);
     """
     ] ;
     cs:dont [
-        cs:description "Use bracket notation — TypeScript infers `T` instead of `T | undefined`, hiding potential out-of-bounds access." ;
+        cs:description "Read an array element by brackets" ;
         cs:language "typescript" ;
         cs:code """
-// TypeScript says this is `string`, but it can be `undefined` at runtime
 const first = items[0];
     """
     ] .
