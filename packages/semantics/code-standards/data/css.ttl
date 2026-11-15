@@ -260,9 +260,6 @@ cs:css.selectors.child_elements a cs:CodeStandard ;
   /* Already scoped by parent, no need to repeat */
 }
 
-.ds.timeline-event .timeline-event-marker {
-  /* Verbose and BEM-like */
-}
     """
     ] .
 
@@ -270,17 +267,23 @@ cs:css.selectors.child_elements a cs:CodeStandard ;
 cs:css.selectors.naming_convention a cs:CodeStandard ;
     rdfs:label "Kebab-case class names"@en ;
     cs:hasCategory cs:css ;
-    cs:description "Component CSS class names must be the kebab-case version of the component's PascalCase name." ;
+    cs:description "A component's class is the kebab-case of its name. A subcomponent's root class is the kebab-case of its ontology id (`data_table-header_cell` gives `.ds.data-table-header-cell`), or of Parent plus Sub when it has no entry." ;
     cs:do [
-        cs:description """Convert PascalCase component names to kebab-case for CSS classes:
-- `MyComponent` -> `.ds.my-component`
-- `UserProfile` -> `.ds.user-profile`
-- `Button` -> `.ds.button`"""
+        cs:description "Derive classes from the name or the ontology id" ;
+        cs:language "css" ;
+        cs:code """
+.ds.user-profile { /* UserProfile */ }
+.ds.data-table-header-cell { /* ds:apps.subcomponent.data_table-header_cell */ }
+.ds.slider-thumb { /* Slider's private Thumb, no entry */ }
+    """
     ] ;
     cs:dont [
-        cs:description """Use PascalCase or other formats in CSS class names:
-- `.ds.MyComponent` (Bad: Not kebab-case)
-- `.ds.user_profile` (Bad: Not kebab-case)"""
+        cs:description "Keep PascalCase, or drop the parent from a part's class" ;
+        cs:language "css" ;
+        cs:code """
+.ds.UserProfile { }
+.ds.header-cell { }
+    """
     ] .
 
 cs:css.selectors.has a cs:CodeStandard ;
