@@ -181,67 +181,27 @@ Add redundant prefixes to domain-level files.
 
 **Identifier:** `cs:react.component.link_component`
 
-A *complex* component — one that renders a set of navigable items (a list, tree, tab strip, breadcrumb trail, menu) and injects an inner link renderer for them — MUST integrate with a consumer's router through a single `LinkComponent` prop against the shared `LinkComponentProps` contract, NOT through a per-component re-authored interface and NOT through the polymorphic `as` prop. (A *simple* component that merely re-targets its own wrapper element uses `as` instead — see the boundary below.)
-
-The contract is deliberately narrow: `LinkComponent?: ComponentType<LinkComponentProps> | "a"`, defaulting to the intrinsic `"a"`. `LinkComponentProps` forwards only `href`, `className`, `children`, and `aria-current` — not the full anchor attribute set — so the same router `Link` adapter works across every component that uses it. Define `LinkComponentProps` once in a shared location and import it; do not copy the interface per component.
-
-Boundary with the polymorphic `as` prop — the deciding question is *what is being configured*: the component's own wrapper element, or an inner link renderer among other structure.
-
-- **Simple component → `as`.** When the component IS the element (its own root wrapper is what gets swapped for the consumer's link/element — e.g. a `Link`, `Button`, `Box`, or any single-element component the consumer re-targets), use the polymorphic `as`/`ElementType` prop. The consumer configures the wrapper directly.
-- **Complex component → `LinkComponent`.** When the component renders multiple navigable items and injects ONE inner link renderer for each (a list, tree, tab strip, breadcrumb trail, menu), use `LinkComponent`. Here `as` would be wrong: there is no single wrapper to re-target, and threading `as`-style generics through the subcomponents to reach each inner link is the anti-pattern this standard exists to prevent.
-
-Fallback semantics: a non-navigable item (one with no `url`/`href`) MUST render a plain element such as `<span>` — never the injected link, and never a `<button>`. When an item is disabled, its `href` is omitted. Active state drives `aria-current` (e.g. `"page"`) on the rendered link.
+Many-link components take one `LinkComponent` prop (`LinkComponentProps`, default `"a"`); others use `as`. Unlinked or disabled items: `<span>`; the active one has `aria-current`. Except: a menu's `<a href>` sends unmodified primary clicks to `onSelect`, preventing default.
 
 ### Do
 
-Inject the link via a single `LinkComponent` prop typed against the shared `LinkComponentProps`, defaulting to the intrinsic anchor, and render a plain element for non-navigable items.
-```typescript
-// types.ts — shared contract, defined once and imported (not re-declared per component)
-export interface LinkComponentProps {
-  href?: string;
-  className?: string;
-  children?: ReactNode;
-  "aria-current"?: HTMLAttributes<HTMLElement>["aria-current"];
-}
-
-export interface TabsProps extends HTMLAttributes<HTMLElement> {
-  items: NavItem[];
-  /** Router integration. Defaults to "a". Pass a router Link (e.g. @canonical/router-react). */
-  LinkComponent?: ComponentType<LinkComponentProps> | "a";
-}
-
-// Item.tsx — navigable items render through the injected component; others fall back to a span
+Render each item through the injected link, or a span without a destination
+```tsx
 const Item = ({ url, label, active, disabled, LinkComponent = "a" }: ItemProps) => {
-  const Link = LinkComponent;
-  return url ? (
-    <Link href={disabled ? undefined : url} aria-current={active ? "page" : undefined}>
-      {label}
-    </Link>
-  ) : (
-    <span aria-current={active ? "page" : undefined}>{label}</span>
-  );
+  const current = active ? "page" : undefined;
+  return url && !disabled
+    ? <LinkComponent href={url} aria-current={current}>{label}</LinkComponent>
+    : <span aria-current={current}>{label}</span>;
 };
 ```
 
 ### Don't
 
-Re-author the link contract per component, reach for the polymorphic `as` prop for router integration, or render a link for a non-navigable item.
+Use `as` for a component of many links
 ```typescript
-// Bad: a bespoke, wider interface copied into this component instead of the shared LinkComponentProps
 interface TabsProps {
-  // Bad: `as` on a COMPLEX multi-item component — there is no single wrapper to
-  // re-target; the link renderer is inner. Use LinkComponent here. (`as` is for
-  // SIMPLE components whose own wrapper element is what gets configured.)
   as?: ElementType;
-  items: { href: string }[];
 }
-
-const Item = ({ href, active, as: As = "a" }: ItemProps) => (
-  // Bad: renders the link even when there is no destination; forwards arbitrary anchor props
-  <As href={href} aria-selected={active}>   {/* Bad: aria-selected on a link is non-conformant */}
-    {label}
-  </As>
-);
 ```
 
 ---
