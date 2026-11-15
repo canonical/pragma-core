@@ -768,7 +768,7 @@ export { InternalHelper };
 
 **Identifier:** `cs:react.component.tsdoc`
 
-A component's TSDoc copies its block's whole Coda `ds:summary`, names the block in `@implements`, and omits `@example`. Except: before entry, it copies an uncommitted draft in `_work_in_progress/`.
+A component's TSDoc copies its block's whole Coda `ds:summary`, may follow it with one paragraph on what ships beyond the block, names the block in `@implements`, and omits `@example`. Except: before entry, it copies an uncommitted draft in `_work_in_progress/`.
 
 ### Do
 

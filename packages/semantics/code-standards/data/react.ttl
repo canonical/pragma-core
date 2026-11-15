@@ -14,7 +14,7 @@ cs:react a cs:Category ;
 cs:react.component.tsdoc a cs:CodeStandard ;
     rdfs:label "Component TSDoc from the ontology"@en ;
     cs:hasCategory cs:react ;
-    cs:description "A component's TSDoc copies its block's whole Coda `ds:summary`, names the block in `@implements`, and omits `@example`. Except: before entry, it copies an uncommitted draft in `_work_in_progress/`." ;
+    cs:description "A component's TSDoc copies its block's whole Coda `ds:summary`, may follow it with one paragraph on what ships beyond the block, names the block in `@implements`, and omits `@example`. Except: before entry, it copies an uncommitted draft in `_work_in_progress/`." ;
     cs:do [
         cs:description "Copy the whole summary, give the import line, and name the block" ;
         cs:language "typescript" ;
