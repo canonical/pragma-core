@@ -6,39 +6,21 @@ Standards for webcomponents development.
 
 **Identifier:** `cs:webcomponents.component.a11y.aria`
 
-Apply ARIA attributes to the element that receives user focus and interaction. In wrapper components, this is usually an inner native control (for example, button or input), not the custom-element host. When the accessible name is dynamic, expose an explicit API (for example, an aria-label property) rather than relying on projected content to infer it.
+Apply ARIA to the element that receives focus, usually an inner native control, not the custom-element host. Expose a dynamic accessible name as an explicit prop, such as `aria-label`, instead of inferring it from projected content.
 
 ### Do
 
-Forward accessible-name attributes to the inner interactive element.
+Name an icon-only control with the explicit prop
 ```html
-<ds-button aria-label="Close dialog"></ds-button>
-
-<!-- Component output contract -->
-<button aria-label="Close dialog">...</button>
-```
-
-Treat explicit aria props as the primary accessibility contract for icon-only controls.
-```html
-<ds-button aria-label="Close">
-  <ds-icon name="close"></ds-icon>
-</ds-button>
+<ds-button aria-label="Close" icon-name="close"></ds-button>
 ```
 
 ### Don't
 
-Set ARIA only on the host when a separate inner control receives focus.
+Set ARIA only on the host when an inner control receives focus
 ```typescript
 // Bad: aria on host does not label the focused inner button
 this.setAttribute("aria-label", "Close dialog");
-```
-
-Rely exclusively on projected content to derive accessible names for critical controls.
-```html
-<!-- Bad: no explicit accessible name contract -->
-<ds-button>
-  <ds-icon name="close"></ds-icon>
-</ds-button>
 ```
 
 ---
@@ -53,15 +35,16 @@ Use `delegatesFocus: true` when attaching a shadow root so host focus forwards t
 
 Attach shadow root with focus delegation enabled.
 ```typescript
-class DsButton extends HTMLElement {
+class Button extends HTMLElement {
   constructor() {
     super();
     const root = this.attachShadow({ mode: "open", delegatesFocus: true });
-    root.innerHTML = `<button part="button"><slot></slot></button>`;
+    root.innerHTML = `<button class="${componentCssClassName}" part="button">
+      ...
+    </button>`;
   }
 }
-
-customElements.define("ds-button", DsButton);
+customElements.define("ds-button", Button);
 ```
 
 ### Don't
@@ -145,7 +128,7 @@ const componentCssClassName = "ds button";
 
 const template = `
   <button class="${componentCssClassName}">
-    <slot></slot>
+    ...
   </button>
 `;
 ```

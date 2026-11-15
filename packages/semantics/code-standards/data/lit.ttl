@@ -481,66 +481,31 @@ cs:lit.component.a11y.aria a cs:CodeStandard ;
     rdfs:label "ARIA on the inner element"@en ;
   cs:extends cs:webcomponents.component.a11y.aria ;
     cs:hasCategory cs:lit ;
-    cs:description """Apply ARIA attributes to the inner interactive element, not the host.
-
-In Lit components, model the accessible-name contract as an explicit reactive prop and forward it to the inner interactive element. Consumers must supply it when the component's slot contains non-text content (e.g. an icon-only button).
-
-As a client-only progressive enhancement, `aria-label` can also be derived from slotted text content via `@slotchange`. However, `slotchange` is a browser DOM event — it never fires during SSR. Components rendered server-side will have no derived label until hydration completes. Do not rely on the derived value as a substitute for an explicit `aria-label` prop in SSR contexts.""" ;
+    cs:description "Forward an explicit `aria-label` prop to the inner interactive element, never the host: it is the only accessible name in server-rendered markup. Render the icon from a typed `iconName` prop; a name derived from slotted text is a client-only extra." ;
     cs:do [
-        cs:description "Require `aria-label` explicitly and treat slot-derived text as a client-side enhancement only." ;
+        cs:description "Forward the explicit prop to the inner button" ;
         cs:language "typescript" ;
         cs:code """
-@property({ type: String, attribute: "aria-label" })
-ariaLabel: string | null = null;
-
-// Client-only enhancement: populated after hydration via the slotchange event.
-// Never available during SSR — do not depend on it for accessible names.
-private slottedText = "";
-
-private onSlotChange(e: Event): void {
-  const slot = e.target as HTMLSlotElement;
-  this.slottedText = slot
-    .assignedNodes({ flatten: true })
-    .map((node) => node.textContent ?? "")
-    .join("")
-    .trim();
-}
-
+import "../Icon/Icon.js";
+@property({ attribute: "aria-label" }) ariaLabel: string | null = null;
+@property({ attribute: "icon-name" }) iconName = "";
 render() {
-  // ariaLabel is the SSR-safe path.
-  // slottedText is only populated after the browser fires slotchange.
-  const label = this.ariaLabel || this.slottedText || undefined;
-  return html`
-    <button
-      class="${componentCssClassName}"
-      aria-label=${ifDefined(label)}
-    >
-      <slot @slotchange=${this.onSlotChange}></slot>
-    </button>
-  `;
+  return html`<button class=${componentCssClassName}
+    aria-label=${this.ariaLabel ?? nothing}>
+    <ds-icon name=${this.iconName}></ds-icon>
+  </button>`;
 }
     """
     ] ;
     cs:dont [
-        cs:description "Set ARIA on the host when wrapping a native interactive element." ;
+        cs:description "Set ARIA on the host, or derive the name from light-DOM text" ;
         cs:language "typescript" ;
         cs:code """
-// Bad: aria-label on the host is ignored when the inner button is focused
+// Bad: the host is not focused, and connectedCallback skips SSR
 connectedCallback() {
   super.connectedCallback();
-  this.setAttribute('aria-label', 'Click me');
+  this.setAttribute("aria-label", this.textContent ?? "");
 }
-    """
-    ] ;
-    cs:dont [
-        cs:description "Omit an explicit `aria-label` prop and rely solely on slot-derived text — this produces components with no accessible name during SSR." ;
-        cs:language "html" ;
-        cs:code """
-<!-- Bad: icon-only button with no aria-label prop. -->
-<!-- In SSR, slottedText is always empty, so aria-label is never written to the markup. -->
-<ds-button>
-  <ds-icon name="close"></ds-icon>
-</ds-button>
     """
     ] .
 
@@ -634,17 +599,11 @@ render() {
         cs:description "Rely on `@slotchange` to derive values used in the server-rendered markup — the event never fires during SSR, so any value populated by it will be absent in the initial HTML." ;
         cs:language "typescript" ;
         cs:code """
-// Bad: slottedText is always '' during SSR.
-// Any attribute derived from it (like aria-label) will be missing
-// in the server-rendered HTML.
-private slottedText = '';
-
-private onSlotChange(e: Event) {
-  const slot = e.target as HTMLSlotElement;
-  this.slottedText = slot.assignedNodes({ flatten: true })
-    .map(n => n.textContent ?? '')
-    .join('')
-    .trim();
+// Bad: slotText stays "" in SSR, so an aria-label built from it is missing
+@state() private slotText = "";
+private handleSlotChange({ target }: Event): void {
+  if (!(target instanceof HTMLSlotElement)) throw new Error("expected a slot");
+  this.slotText = target.assignedNodes().map((n) => n.textContent).join("");
 }
     """
     ] .
