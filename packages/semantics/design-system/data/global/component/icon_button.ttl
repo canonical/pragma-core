@@ -4,10 +4,32 @@
 
 ds:global.component.icon_button a ds:Component;
     ds:name "IconButton";
-    ds:summary "When space is limited and the actions have recognizable icons, [Button](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-8SdtbQUhTr)s  may use an icon without text. Reserve this for very common actions that have easily recognizable icons, such as delete, edit, or close. Always pair an icon-only button with a [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) that states the action clearly. Add a delay to the [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) so it does not interrupt the user.";
+    ds:summary "An icon button is a square Button with one icon and no visible label. Use it for common actions with a recognizable icon, such as edit or delete in a table row, a settings panel trigger, or toolbar actions. Its baseline matches a labelled Button's, and it is always named and paired with a Tooltip.";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
-    ds:usage "";
-    ds:guidelines "";
+    ds:usage "A Button with only an icon, for actions whose icon is widely recognized. It keeps Button’s hierarchy, states and density.\n\n### When to use\n\n- Common actions with a recognizable icon (edit, delete, copy, close) where space is short\n- Triggers of a menu or panel whose icon names the action (a gear, three vertical dots)\n- Rows of actions in toolbars and tables\n\n### When not to use\n\n- The icon alone is unclear: use a Button with a label\n- A menu needs a visible cue: use a DropdownButton\n- Navigation: use a link\n- The main action of a page: use a Button with a label";
+    ds:guidelines "### Tooltip\n\n- Always pair it with a Tooltip that states the action, composed around the button; the button stays the root.\n- Keep the Tooltip closed while a panel the button opened is open.\n\n### Content\n\n- One icon, no text. The Tooltip is a short verb and noun in sentence case.\n\n### Size and responsiveness\n\n- The box is the density cell both ways, and its baseline matches a labelled Button’s. The icon is centred.\n- On touch screens, prefer the comfortable density. A dense box is smaller than the Icon block’s hit area, an open point.\n\n### Hierarchy\n\n- Takes Importance and Anticipation. Most icon buttons are tertiary.\n\n### Localization\n\n- Translate the accessible name and the Tooltip.\n- Mirror directional icons in right-to-left layouts.\n\n### Animation\n\n- No colour transitions under `prefers-reduced-motion: reduce`, as for Button.\n\n### Accessibility and keyboard\n\n- Name it with an accessible label or a reference; the icon is hidden from assistive technology.\n- Focusable with Button’s focus ring; `Enter` or `Space` runs it; a panel trigger exposes whether the panel is expanded.";
     ds:tier ds:global;
-    ds:documentationStage ds:tag.needscoredocumentation.
+    ds:documentationStage ds:tag.needscoredocumentation;
+    ds:hasModifierFamily ds:global.modifier_family.importance, ds:global.modifier_family.anticipation;
+    ds:inheritsFrom ds:global.component.button;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "icon";
+        ds:summary "The icon, the button's only visible content.";
+        ds:propertyType "choice";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The accessible name, as text or a reference to an element.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "anticipation";
+        ds:summary "Consumes the Anticipation family.";
+        ds:propertyType "choice";
+        ds:optional "true";
+        ds:constraints "Affects background and border"
+    ].

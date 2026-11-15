@@ -10,6 +10,7 @@ ds:apps_launchpad.component.modal a ds:Component;
     ds:usage "Modal provides a native dialog-based overlay with two composition paths: declarative trigger/command wiring and imperative instance control. In practice, teams can build either structured confirmation dialogs or fully custom content while preserving consistent open, close, and dismissal behavior.\n\n## When to use\n\nUse Modal when the interaction should take focus and block background interaction until the user makes a decision or completes a task.\n\n## When not to use\n\n### **Lightweight contextual actions**\n\n**Incorrect pattern**: using a blocking dialog for quick contextual choices that should not interrupt page interaction.  \n**Remediation strategy**: use a non-modal surface for quick, in-context choices.\n\n### **Persistent side-docked workflows**\n\n**Incorrect pattern**: using Modal when the expected behavior is a side-attached, panel-style layout.  \n**Remediation strategy**: use a dedicated side panel component that composes modal mechanics but preserves panel ergonomics.";
     ds:guidelines "## **Trigger and dialog relationship**\n\nEnsure trigger props are applied to an interactive control so assistive technologies can identify dialog intent and ownership.\n\n## **Explicit close controls**\n\nProvide at least one visible close action inside the modal content, especially when light dismissal is disabled.";
     ds:tier ds:apps_launchpad;
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.modal-content;
     ds:hasProperty [
         a ds:Property;
         ds:name "trigger";
@@ -34,5 +35,4 @@ ds:apps_launchpad.component.modal a ds:Component;
         a ds:ChangeLogEntry;
         ds:timestamp "2026-06-19T00:00:00.000+02:00";
         ds:changeType "change"
-    ];
-    ds:hasSubcomponent ds:apps_launchpad.subcomponent.modal-content.
+    ].

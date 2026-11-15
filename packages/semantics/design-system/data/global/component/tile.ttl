@@ -11,6 +11,7 @@ ds:global.component.tile a ds:Component;
     ds:guidelines "";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needsfulldocumentation;
+    ds:hasSubcomponent ds:global.subcomponent.tile-content, ds:global.subcomponent.tile-header;
     ds:hasProperty [
         a ds:Property;
         ds:name "children";
@@ -30,7 +31,6 @@ ds:global.component.tile a ds:Component;
         ds:timestamp "2026-04-24T00:00:00.000+02:00";
         ds:changeType "change"
     ];
-    ds:hasSubcomponent ds:global.subcomponent.tile-content, ds:global.subcomponent.tile-header;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.tile;

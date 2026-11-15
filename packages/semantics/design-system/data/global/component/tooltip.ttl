@@ -217,8 +217,8 @@ ds:global.component.tooltip a ds:Component;
         ds:timestamp "2026-05-12T00:00:00.000+02:00";
         ds:changeType "change"
     ];
-    ds:hasVariant ds:global.variant.tooltip_dense;
     ds:specializedBy ds:global.component.data_tooltip;
+    ds:hasVariant ds:global.variant.tooltip_dense;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.tooltip;

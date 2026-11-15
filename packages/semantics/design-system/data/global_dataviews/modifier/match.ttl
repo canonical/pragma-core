@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global_dataviews.modifier.match a ds:Modifier;
+    ds:name "Match";
+    ds:summary "The record's value holds the given text.";
+    ds:modifierFamily ds:global_dataviews.modifier_family.condition.

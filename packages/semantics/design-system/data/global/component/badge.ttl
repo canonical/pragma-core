@@ -11,6 +11,7 @@ ds:global.component.badge a ds:Component;
     ds:guidelines "# Accessibility\n\n## **Color**\n\n- Use a modifier if it makes sense semantically for your use case.\n- Avoid using semantic color modifiers on top of colored backgrounds.\n- Ensure you don’t use colour as the only visual means of conveying information or an action.\n\n## **Aria labels**\n\n- Use `aria-label` to provide full context for screen readers. For example “999+ notifications unread”.\n- If the badge is used to represent a live status of some value, using `role=\"status\"` should be considered.\n\n## **Accessibility resources**\n\nApplicable WCAG guidelines:\n\n- [1.3.3: Sensory Characteristics](https://www.w3.org/TR/WCAG22/#sensory-characteristics)\n- [1.4.1: Use of Color](https://www.w3.org/TR/WCAG22/#use-of-color)\n- [3.1.4: Abbreviations](https://www.w3.org/TR/WCAG22/#abbreviations)\n\n";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needscoredocumentation;
+    ds:hasModifierFamily ds:global.modifier_family.criticality, ds:global.modifier_family.release;
     ds:hasProperty [
         a ds:Property;
         ds:name "criticality";
@@ -45,5 +46,4 @@ ds:global.component.badge a ds:Component;
         a ds:ChangeLogEntry;
         ds:timestamp "2026-04-09T00:00:00.000+02:00";
         ds:changeType "change"
-    ];
-    ds:hasModifierFamily ds:global.modifier_family.criticality, ds:global.modifier_family.release.
+    ].

@@ -1,0 +1,8 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:global_dataviews.modifier.range a ds:Modifier;
+    ds:name "Range";
+    ds:summary "The record's value lies at or beyond one bound, or between two.";
+    ds:modifierFamily ds:global_dataviews.modifier_family.condition.
