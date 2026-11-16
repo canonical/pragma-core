@@ -73,8 +73,8 @@ function snapshot(dir: string): Map<string, string> {
  * from `create`'s own declaration, so dropping a noun from the surface turns
  * this red rather than silently shrinking the guard.
  *
- * No case installs dependencies: `package` and `application` default
- * `runInstall` to true, so they pass `--no-run-install`. Every tree is
+ * No case installs dependencies: `package`, `playground` and `application`
+ * default `runInstall` to true, so they pass `--no-run-install`. Every tree is
  * then generator output alone and byte-comparable; an installed tree carries a
  * `bun.lock` whose transitive resolution can differ between two installs.
  */
@@ -102,6 +102,18 @@ const CASES: ReadonlyArray<{
       "--yes",
     ],
   },
+  ...(["react", "svelte"] as const).map((framework) => ({
+    label: `playground ${framework}`,
+    args: [
+      "create",
+      "playground",
+      "probe-playground",
+      "--framework",
+      framework,
+      "--no-run-install",
+      "--yes",
+    ],
+  })),
   {
     label: "application",
     // `react` is a path segment here too — the declared binding is

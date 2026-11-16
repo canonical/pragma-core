@@ -35,6 +35,9 @@ export const CREATE_GENERATORS = {
   package: {
     paths: ["package"],
   },
+  playground: {
+    paths: ["playground"],
+  },
   application: {
     paths: ["application/react"],
   },

@@ -73,13 +73,24 @@ interface CrossCliFixture extends ConformanceFixture {
 }
 
 /**
- * The shared fixtures, plus pragma's own for the one binding they do not
- * name: `page` adds to an existing domain, so its cwd is seeded with the
+ * The shared fixtures, plus pragma's own for the bindings they do not name:
+ * `playground`, run without its install so the matrix stays offline, and
+ * `page`, which adds to an existing domain, so its cwd is seeded with the
  * domain's routes.ts. The seed is identical for every producer, and it stays
  * in each snapshot, so it cannot hide a difference.
  */
 const FIXTURES: readonly CrossCliFixture[] = [
   ...CONFORMANCE_FIXTURES,
+  {
+    name: "playground",
+    generator: "playground",
+    answers: {
+      playgroundPath: "my-playground",
+      framework: "svelte",
+      dsApp: true,
+      runInstall: false,
+    },
+  },
   {
     name: "page",
     generator: "page",

@@ -200,7 +200,7 @@ describe("surface conformance — capabilities ⊆ covenant (PROTECTED)", () => 
     // args carry the kebab positional the usage line prints, so the covenant
     // names `--no-with-styles` and `[component-path]`, never a
     // `--with-styles` the CLI rejects or a `[componentPath]` its help never
-    // prints. Pin the four entries verbatim so a prompt edit that moves the
+    // prints. Pin the five entries verbatim so a prompt edit that moves the
     // covenant is SEEN.
     expect(emitted.nouns.create?.verbs).toEqual([
       {
@@ -230,6 +230,21 @@ describe("surface conformance — capabilities ⊆ covenant (PROTECTED)", () => 
         ],
         mutates: true,
         mcp: "create_package",
+      },
+      {
+        v: "playground",
+        args: ["[playground-path]"],
+        // dsGlobalForm is asked for React only (its `when`), but the flag is
+        // registered for both: the generator refuses it explicitly on Svelte.
+        flags: [
+          "--framework",
+          "--no-ds-global",
+          "--no-ds-global-form",
+          "--ds-app",
+          "--no-run-install",
+        ],
+        mutates: true,
+        mcp: "create_playground",
       },
       {
         v: "application",
@@ -405,14 +420,14 @@ describe("surface COMPLETE — emitted == covenant (PROTECTED)", () => {
   // The CLOSING direction: assertConforms already proves emitted ⊆ covenant;
   // this proves covenant ⊆ emitted, so together the tool sets are EQUAL — the
   // surface-complete milestone. After PR7, every covenant tool is realized.
-  it("emits every covenant tool (all 51) — set equality with the covenant", () => {
+  it("emits every covenant tool (all 52) — set equality with the covenant", () => {
     const emittedTools = new Set(emitted.mcpSurface.tools);
     const missing = golden.mcpSurface.tools.filter((t) => !emittedTools.has(t));
     expect(missing).toEqual([]);
     expect([...emitted.mcpSurface.tools].sort()).toEqual(
       [...golden.mcpSurface.tools].sort(),
     );
-    expect(emitted.mcpSurface.tools).toHaveLength(51);
+    expect(emitted.mcpSurface.tools).toHaveLength(52);
   });
 
   // The covenant edit: the non-tool MCP surface is frozen too.

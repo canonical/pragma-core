@@ -462,6 +462,43 @@ pragma create page invoices/detail  # writes src/domains/invoices/DetailPage.tsx
 pragma create page invoices/detail --undo  # delete the page again
 ```
 
+### pragma create playground
+
+Scaffold a Storybook playground with the design system installed, to prototype components in.
+
+Use when asked for a quick place to prototype or experiment with design-system components in Storybook, in React or Svelte.
+
+```
+pragma create playground [playground-path] [options]
+```
+
+**Arguments**
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `[playground-path]` | no | Playground directory. (default: playground) |
+
+**Flags**
+
+| Flag | Value | Description |
+| --- | --- | --- |
+| `--framework` | `<react\|svelte>` | Framework. (one of: react, svelte) (default: react) |
+| `--no-ds-global` | — | Install the global components (ds-global). (default: true) |
+| `--no-ds-global-form` | — | Install the form fields (ds-global-form). (default: true) |
+| `--ds-app` | — | Install the application components (ds-app). (default: false) |
+| `--no-run-install` | — | Run package manager install after creation. (default: true) |
+
+- Store: storeless.
+- Mutation: plan-first — preview with `--dry-run`, apply with `--yes`, reverse with `--undo`.
+- MCP: exposed as the `create_playground` tool.
+
+**Examples**
+
+```bash
+pragma create playground my-prototype  # React, with ds-global and ds-global-form
+pragma create playground my-prototype --framework svelte --ds-app
+```
+
 ## doctor
 
 ### pragma doctor

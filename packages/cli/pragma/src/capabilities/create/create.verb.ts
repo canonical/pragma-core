@@ -1,6 +1,6 @@
 /**
- * The `create` verbs — `component` / `package` / `application` / `page`, the
- * FOUR binding-level VerbSpecs (the MCP/covenant/reference grammar). Their params
+ * The `create` verbs — `component` / `package` / `playground` /
+ * `application` / `page`, the FIVE binding-level VerbSpecs (the MCP/covenant/reference grammar). Their params
  * DERIVE mechanically from the generators' own prompts, projected at build
  * time into `createSurface.generated.ts` — no hand mirrors, no flag aliases:
  * the prompt names ARE the param/MCP-arg names, the FLAG tokens are
@@ -125,6 +125,9 @@ const componentParams: ParamSpec[] = [
 const packageParams: ParamSpec[] = generatorToParams(
   surfaceFor("package").prompts,
 );
+const playgroundParams: ParamSpec[] = generatorToParams(
+  surfaceFor("playground").prompts,
+);
 const applicationParams: ParamSpec[] = generatorToParams(
   surfaceFor("application/react").prompts,
 );
@@ -138,6 +141,7 @@ const pageParams: ParamSpec[] = generatorToParams(surfaceFor("page").prompts);
 const PATH_PARAM: Record<CreateKind, string | undefined> = {
   component: "componentPath",
   package: undefined,
+  playground: "playgroundPath",
   application: "appPath",
   page: undefined,
 };
@@ -539,6 +543,25 @@ export const createVerbs: Record<
     {
       useWhen: "when asked to start a new npm package inside the monorepo",
       example: { name: "@canonical/my-lib", type: "library" },
+    },
+  ),
+  playground: createVerb(
+    "playground",
+    "Scaffold a Storybook playground with the design system installed, to prototype components in.",
+    playgroundParams,
+    [
+      {
+        cmd: `${BIN_NAME} create playground my-prototype`,
+        note: "React, with ds-global and ds-global-form",
+      },
+      {
+        cmd: `${BIN_NAME} create playground my-prototype --framework svelte --ds-app`,
+      },
+    ],
+    {
+      useWhen:
+        "when asked for a quick place to prototype or experiment with design-system components in Storybook, in React or Svelte",
+      example: { playgroundPath: "my-prototype", framework: "react" },
     },
   ),
   application: createVerb(
