@@ -73,6 +73,31 @@ function run(
 }
 
 describe("the mounted create grammar (subprocess)", () => {
+  it("rejects Relay explicitly for Svelte and omits the GraphQL option", () => {
+    const relay = run([
+      "create",
+      "application",
+      "svelte",
+      "my-app",
+      "--relay",
+      "--yes",
+    ]);
+    expect(relay.status).toBe(2);
+    expect(relay.stderr).toContain(
+      "Relay is not supported for Svelte applications",
+    );
+    expect(readdirSync(relay.cwd)).not.toContain("my-app");
+    const graphql = run([
+      "create",
+      "application",
+      "svelte",
+      "my-app",
+      "--graphql",
+      "--yes",
+    ]);
+    expect(graphql.status).toBe(2);
+    expect(graphql.stderr).toContain("unknown option '--graphql'");
+  }, 60_000);
   it("bare `create` prints the topic tree and exits 0", () => {
     const { status, stdout } = run(["create"]);
     expect(status).toBe(0);
@@ -678,7 +703,11 @@ describe("the mounted create grammar (subprocess)", () => {
       "--app-path": "replied-app",
       "--rendering": "spa",
     },
-    page: { "--page-path": "replied/detail" },
+    "application/svelte": {
+      "--app-path": "replied-app",
+      "--rendering": "spa",
+    },
+    page: { "--page-path": "replied/detail", "--framework": "react" },
   };
   // A leaf that adds to an existing application needs that part of it
   // present: `page` refuses to run without its domain's routes.ts.

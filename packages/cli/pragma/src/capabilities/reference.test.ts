@@ -40,7 +40,7 @@ describe("reference docs drift-guard — emitReference == committed (PROTECTED)"
     // tree segment and the registered positional token — copying it must not
     // exit 2 with the operand parsed as an unknown subcommand.
     expect(chapter).toContain(
-      "pragma create application react [app-path] [options]",
+      "pragma create application <framework> [app-path] [options]",
     );
     expect(chapter).toContain(
       "pragma create component <framework> [component-path] [options]",

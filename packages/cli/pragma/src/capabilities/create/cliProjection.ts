@@ -123,6 +123,7 @@ function referenceSyntax(
   const prompts = unionPrompts(paths);
   const positional = prompts.find((prompt) => prompt.positional === true);
   const positionalTokens: Record<string, string> = {};
+  if (paths.length > 1) positionalTokens.framework = "<framework>";
   if (positional) {
     const token = `[${syntaxFor(paths, positional.name).kebabName}]`;
     tokens.push(token);
@@ -220,7 +221,7 @@ const REFERENCE_INTRO =
   "The `create` surface is a PROJECTION of the summon generator tree: " +
   `\`${BIN_NAME} create <path...>\` ≡ \`summon <path...>\` over the declared bindings — ` +
   "same grammar, same flags, same wizard, byte-identical trees. Tree segments are " +
-  "subcommands (`create component react|svelte|lit`, `create application react`), and " +
+  "subcommands (`create component react|svelte|lit`, `create application react|svelte`), and " +
   "every flag derives from the generators' own prompts (a default-on confirm registers " +
   "only its `--no-` form). The contract is EXECUTED, not written down: " +
   "`crossCli.subprocess.test.ts` runs both CLIs over the same argv and compares " +

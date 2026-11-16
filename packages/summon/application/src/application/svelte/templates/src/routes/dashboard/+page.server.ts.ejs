@@ -1,0 +1,5 @@
+<% if (forms) { %>import { readSettings } from "$lib/settings";
+import { readInstances } from "$lib/instances";
+<% } %>
+import type { PageServerLoad } from "./$types";
+export const load: PageServerLoad = ({ cookies }) => ({ name: <%- forms ? 'readSettings(cookies.get("demo-settings")).name' : '"Demo"' %>, count: <%- forms ? 'readInstances(cookies.get("demo-instances")).length' : '0' %> });

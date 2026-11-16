@@ -32,7 +32,11 @@ import { BIN_NAME } from "../../constants.js";
 import { PragmaError } from "../../kernel/error/index.js";
 import type { PragmaRuntime } from "../../kernel/runtime/index.js";
 import type { ParamSpec, VerbSpec } from "../../kernel/spec/index.js";
-import { COMPONENT_FRAMEWORKS, CREATE_GENERATORS } from "./constants.js";
+import {
+  APPLICATION_FRAMEWORKS,
+  COMPONENT_FRAMEWORKS,
+  CREATE_GENERATORS,
+} from "./constants.js";
 import { createFormatters, formatCreatePlan } from "./create.render.js";
 import { CREATE_SURFACE } from "./createSurface.generated.js";
 import { generatorToParams, promptToParam } from "./generatorToVerbSpec.js";
@@ -66,8 +70,8 @@ const FRAMEWORK_PARAM: ParamSpec = {
  * prompt default applies at run time); a prompt not present on every
  * framework gets its doc suffixed with the declaring frameworks.
  */
-function unionComponentParams(): ParamSpec[] {
-  const paths = CREATE_GENERATORS.component.paths;
+function unionFrameworkParams(kind: "component" | "application"): ParamSpec[] {
+  const paths: readonly string[] = CREATE_GENERATORS[kind].paths;
   const byName = new Map<
     string,
     { prompt: ProjectedPrompt; frameworks: string[]; defaults: unknown[] }
@@ -120,7 +124,7 @@ function surfaceFor(commandPath: string) {
 
 const componentParams: ParamSpec[] = [
   FRAMEWORK_PARAM,
-  ...unionComponentParams(),
+  ...unionFrameworkParams("component"),
 ];
 const packageParams: ParamSpec[] = generatorToParams(
   surfaceFor("package").prompts,
@@ -128,9 +132,17 @@ const packageParams: ParamSpec[] = generatorToParams(
 const playgroundParams: ParamSpec[] = generatorToParams(
   surfaceFor("playground").prompts,
 );
-const applicationParams: ParamSpec[] = generatorToParams(
-  surfaceFor("application/react").prompts,
-);
+const applicationParams: ParamSpec[] = [
+  {
+    kind: "enum",
+    name: "framework",
+    doc: "Application framework (defaults to React over MCP).",
+    values: APPLICATION_FRAMEWORKS,
+    default: "react",
+    positional: true,
+  },
+  ...unionFrameworkParams("application"),
+];
 const pageParams: ParamSpec[] = generatorToParams(surfaceFor("page").prompts);
 
 /**
@@ -260,13 +272,21 @@ export async function runCreate(
   const generator = pickGenerator(commandPath);
   const kind = kindOf(commandPath);
 
-  // For `create component`, the tree segment is not an answer: drop a stray
-  // `framework` key so the generator (whose prompts never include it) sees
-  // only its own answers. Every other kind carries `framework` as a real
-  // prompt — `package` is where a library chooses none|react|svelte — so it
-  // must survive.
+  // For `create component` and `create application`, the tree segment is not
+  // an answer: drop a stray `framework` key so the generators (whose prompts
+  // never include it) see only their own answers. Every other kind carries
+  // `framework` as a real prompt — `package` is where a library chooses
+  // none|react|svelte — so it must survive.
   const answers: Record<string, unknown> = { ...params };
-  if (kind === "component") delete answers.framework;
+  if (kind === "component" || kind === "application") delete answers.framework;
+  if (commandPath === "application/svelte" && answers.relay === true) {
+    throw new PragmaError({
+      code: "UNSUPPORTED",
+      message:
+        "Relay is not supported for Svelte applications. The --relay option is React-only.",
+    });
+  }
+  if (commandPath === "application/svelte") delete answers.relay;
 
   // Reject a flag/arg-provided answer that fails its prompt's own constraint,
   // with a clean INVALID_INPUT (execute re-validates as a backstop). Runs
@@ -303,6 +323,10 @@ export async function runCreate(
   // host-level backstop behind the validators, and the only tier that catches
   // a symlink RESOLVING outside the workspace.
   if (pathParam) assertInsideWorkspace(pathParam, answers[pathParam], rt.cwd);
+  if (kind === "page" && typeof answers.pagePath === "string") {
+    const root = answers.framework === "svelte" ? "src/routes" : "src/domains";
+    assertInsideWorkspace("pagePath", `${root}/${answers.pagePath}`, rt.cwd);
+  }
 
   // An ABSENT interaction context defaults to `yes: false` — nothing may
   // silently auto-apply just because a caller forgot to say how it is driven.
@@ -478,14 +502,18 @@ function createVerb(
     capability: CREATE_CAPABILITY,
     run: (params_, rt) => {
       let commandPath: string;
-      if (kind === "component") {
-        const framework = String(params_.framework ?? "");
-        if (!COMPONENT_FRAMEWORKS.includes(framework)) {
+      if (kind === "component" || kind === "application") {
+        const frameworks =
+          kind === "component" ? COMPONENT_FRAMEWORKS : APPLICATION_FRAMEWORKS;
+        const framework = String(
+          params_.framework ?? (kind === "application" ? "react" : ""),
+        );
+        if (!frameworks.includes(framework)) {
           throw PragmaError.invalidInput("framework", framework, {
-            validOptions: [...COMPONENT_FRAMEWORKS],
+            validOptions: [...frameworks],
           });
         }
-        commandPath = `component/${framework}`;
+        commandPath = `${kind}/${framework}`;
       } else {
         commandPath = CREATE_GENERATORS[kind].paths[0];
       }
@@ -566,23 +594,24 @@ export const createVerbs: Record<
   ),
   application: createVerb(
     "application",
-    "Scaffold a full React application with routing, an application shell with a dashboard, and either server-side rendering or a client-only SPA.",
+    "Scaffold a React or Svelte application with server rendering or a client-only SPA.",
     applicationParams,
     [
       { cmd: `${BIN_NAME} create application react my-app` },
       { cmd: `${BIN_NAME} create application react my-app --relay` },
       { cmd: `${BIN_NAME} create application react my-app --rendering spa` },
       { cmd: `${BIN_NAME} create application react my-app --no-app-shell` },
+      { cmd: `${BIN_NAME} create application svelte my-app` },
     ],
     {
       useWhen:
-        "when asked to start a new React application, server-rendered or client-only, with or without an application shell",
+        "when asked to start a new React or Svelte application, server-rendered or client-only, with or without an application shell",
       example: { appPath: "my-app" },
     },
   ),
   page: createVerb(
     "page",
-    "Add a page component to an existing domain of a scaffolded application, and print how to route it.",
+    "Add a React page to an existing domain or a SvelteKit page to an existing route.",
     pageParams,
     [
       {
@@ -592,6 +621,10 @@ export const createVerbs: Record<
       {
         cmd: `${BIN_NAME} create page invoices/detail --undo`,
         note: "delete the page again",
+      },
+      {
+        cmd: `${BIN_NAME} create page invoices/detail --framework svelte`,
+        note: "creates src/routes/invoices/detail/+page.svelte",
       },
     ],
     {

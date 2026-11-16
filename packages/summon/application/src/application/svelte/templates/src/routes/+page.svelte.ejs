@@ -1,0 +1,9 @@
+<% if (intl) { %><script lang="ts">
+  import { getLocaleSource, getTranslator } from "$lib/i18n";
+  const locale = getLocaleSource();
+  let t = $derived(getTranslator($locale));
+</script>
+<% } %><svelte:head><title><%= name %></title></svelte:head>
+<h1><%= name %></h1>
+<p><%- intl ? '{t("welcome")}' : 'Welcome to your SvelteKit application.' %></p>
+<p><a href="/catalog"><%- intl ? '{t("catalog")}' : 'Explore the catalog' %></a></p>

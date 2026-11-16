@@ -39,7 +39,7 @@ export const CREATE_GENERATORS = {
     paths: ["playground"],
   },
   application: {
-    paths: ["application/react"],
+    paths: ["application/react", "application/svelte"],
   },
   page: {
     paths: ["page"],
@@ -52,5 +52,10 @@ export const CREATE_GENERATORS = {
  */
 export const COMPONENT_FRAMEWORKS: readonly string[] =
   CREATE_GENERATORS.component.paths.map(
+    (commandPath) => commandPath.split("/")[1] as string,
+  );
+
+export const APPLICATION_FRAMEWORKS: readonly string[] =
+  CREATE_GENERATORS.application.paths.map(
     (commandPath) => commandPath.split("/")[1] as string,
   );

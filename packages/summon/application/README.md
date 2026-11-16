@@ -1,8 +1,45 @@
 # @canonical/summon-application
 
-Summon generators for scaffolding application structure: full applications, domains, pages, and wrappers. Produces code aligned with the [boilerplate reference app](https://github.com/canonical/pragma-web/tree/main/apps/react/boilerplate-vite).
+Summon generators for scaffolding application structure: full applications, domains, pages, and wrappers. Each generator's templates are the source of truth for the code it produces.
 
 ## Generators
+
+### `summon application/svelte <name>`
+
+Scaffolds a SvelteKit application with adapter-node SSR by default, a local
+catalog and Canonical Svelte breadcrumbs. The SSR app offers request-scoped
+theme selection, sitemap, a demo account and a three-page dashboard. Choose
+`--rendering spa` for a client-only static fallback, `--intl` for English,
+French and Arabic, `--no-forms` to omit the native contact demonstration, and
+`--no-app-shell` to omit the Canonical layouts and example dashboard. Use
+`--framework svelte` with the page, domain and wrapper generators for SvelteKit
+output.
+
+Forms use native controls with application-owned decoding and validation, so
+the generated app installs from the public registry. The contact form does not
+deliver messages. Generated Storybook contact examples are isolated
+demonstrations, not the live Kit action. With forms and shell enabled, SSR
+instance removal uses a native confirmation page and a hydrated Modal; SPA
+instances use localStorage and the same Modal. Settings offers a
+demonstration-only project confirmation, with a no-JavaScript SSR route. The
+overview reads demo settings and instance counts from cookies in SSR and
+localStorage in SPA, shows separately labelled illustrative activity, and links
+to a preselected creation form. SPA theme and settings are local to the
+browser; the SPA demo account uses sessionStorage and has no server actions.
+Neither account path authenticates.
+
+Pathname navigation focuses the page heading. The dashboard rail and create
+panel use native disclosures; the hydrated create panel opens as a side sheet.
+With `--intl`, locales are negotiated from the cookie and `Accept-Language`, and
+the catalog includes a localized plural and number example.
+
+GraphQL and Relay are not included: `--relay` is a React-only option, and
+Svelte requests are rejected.
+
+```bash
+summon application/svelte my-app --intl
+summon application/svelte my-app --rendering spa
+```
 
 ### `summon application/react <name>`
 

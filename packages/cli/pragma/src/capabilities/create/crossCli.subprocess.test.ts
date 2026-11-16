@@ -74,7 +74,8 @@ interface CrossCliFixture extends ConformanceFixture {
 
 /**
  * The shared fixtures, plus pragma's own for the bindings they do not name:
- * `playground`, run without its install so the matrix stays offline, and
+ * `playground` and `application/svelte`, run without their install so the
+ * matrix stays offline, and
  * `page`, which adds to an existing domain, so its cwd is seeded with the
  * domain's routes.ts. The seed is identical for every producer, and it stays
  * in each snapshot, so it cannot hide a difference.
@@ -88,6 +89,30 @@ const FIXTURES: readonly CrossCliFixture[] = [
       playgroundPath: "my-playground",
       framework: "svelte",
       packages: ["ds-global", "ds-app"],
+      runInstall: false,
+    },
+  },
+  {
+    name: "application/svelte",
+    generator: "application/svelte",
+    answers: {
+      appPath: "my-app",
+      forms: true,
+      appShell: true,
+      intl: true,
+      rendering: "spa",
+      runInstall: false,
+    },
+  },
+  {
+    name: "application/svelte-ssr",
+    generator: "application/svelte",
+    answers: {
+      appPath: "my-app",
+      forms: true,
+      appShell: true,
+      intl: true,
+      rendering: "ssr",
       runInstall: false,
     },
   },
@@ -357,7 +382,6 @@ describe("cross-CLI conformance matrix (PROTECTED)", () => {
       }
 
       expect(pragma.size).toBeGreaterThan(0);
-
       const pragmaVsSummon = diffTrees(pragma, summon);
       expect(
         isIdentical(pragmaVsSummon),

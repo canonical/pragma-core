@@ -44,7 +44,7 @@ import {
   registerGeneratorCommands,
 } from "@canonical/summon-core/projection/commander";
 import type { Task } from "@canonical/task";
-import { type Command, CommanderError } from "commander";
+import { type Command, CommanderError, Option } from "commander";
 import { PragmaError } from "../../kernel/error/index.js";
 import { renderErrorForFormat } from "../../kernel/error/renderError.js";
 import { canPrompt } from "../../kernel/interactivity.js";
@@ -263,6 +263,16 @@ export function mountCreateTree(parent: Command, host: CliMountHost): void {
     renderHelp: renderCreateHelp,
     action: async (entry, positionalValue, options) => {
       const generator = entry.generator as SurfaceEntry;
+      if (
+        generator.commandPath === "application/svelte" &&
+        options.relay === true
+      ) {
+        writeRefusal(
+          "Relay is not supported for Svelte applications. The --relay option is React-only.",
+          host.globalFlags,
+        );
+        return;
+      }
       const explicit = explicitLeafAnswers(
         generator.prompts,
         positionalValue,
@@ -354,6 +364,10 @@ export function mountCreateTree(parent: Command, host: CliMountHost): void {
   };
 
   registerGeneratorCommands(parent, surfaceBarrel(), cliHost);
+  parent.commands
+    .find((cmd) => cmd.name() === "application")
+    ?.commands.find((cmd) => cmd.name() === "svelte")
+    ?.addOption(new Option("--relay").hideHelp());
 }
 
 /**

@@ -1,0 +1,17 @@
+<script lang="ts">
+  import { page } from "$app/state";
+<% if (intl) { %>  import { getLocaleSource, getTranslator } from "$lib/i18n";
+  const locale = getLocaleSource(); let t = $derived(getTranslator($locale));
+<% } %></script>
+<nav aria-label=<%- intl ? '{t("dashboardNav")}' : '"Dashboard navigation"' %> class="dashboard-navigation">
+  <details open><summary><%- intl ? '{t("dashboardNav")}' : 'Dashboard navigation' %></summary>
+    <ul class="dashboard-nav">
+      <li><a href="/dashboard" aria-current={page.url.pathname === "/dashboard" ? "page" : undefined}><%- intl ? '{t("overview")}' : 'Overview' %></a></li>
+      <li><a href="/dashboard/instances" aria-current={page.url.pathname.startsWith("/dashboard/instances") ? "page" : undefined}><%- intl ? '{t("instances")}' : 'Instances' %></a></li>
+      <li><a href="/dashboard/settings" aria-current={page.url.pathname.startsWith("/dashboard/settings") ? "page" : undefined}><%- intl ? '{t("settings")}' : 'Settings' %></a></li>
+    </ul>
+    <h2 class="navigation-heading"><%- intl ? '{t("networking")}' : 'Networking' %></h2>
+    <ul class="dashboard-nav"><li><span aria-disabled="true"><%- intl ? '{t("networks")}' : 'Networks' %> <span class="nav-unavailable">(<%- intl ? '{t("unavailable")}' : 'Unavailable' %>)</span></span></li><li><span aria-disabled="true"><%- intl ? '{t("storage")}' : 'Storage' %> <span class="nav-unavailable">(<%- intl ? '{t("unavailable")}' : 'Unavailable' %>)</span></span></li></ul>
+    <details><summary><%- intl ? '{t("help")}' : 'Help' %></summary><ul class="dashboard-nav"><li><a href="https://ubuntu.com/legal"><%- intl ? '{t("legal")}' : 'Legal information' %></a></li></ul></details>
+  </details>
+</nav>

@@ -1,0 +1,33 @@
+<script lang="ts">
+<% if (!spa) { %>  import type { PageProps } from "./$types";
+  let { data }: PageProps = $props();
+<% } else if (forms) { %>  import { onMount } from "svelte";
+  import { readSettings } from "$lib/settings";
+  import { readInstances } from "$lib/instances";
+  let name = $state("Demo"); let count = $state(0);
+  onMount(() => { name = readSettings(localStorage.getItem("demo-settings") ?? undefined).name; count = readInstances(localStorage.getItem("demo-instances") ?? undefined).length; });
+<% } else { %>  const name = "Demo", count = 0;
+<% } %><% if (intl) { %>  import { getLocaleSource, getTranslator } from "$lib/i18n";
+  const locale = getLocaleSource(); let t = $derived(getTranslator($locale));
+<% } %>  let storage = $derived(new Intl.NumberFormat(<%- intl ? '$locale' : '"en"' %>, { style: "unit", unit: "terabyte", maximumFractionDigits: 1 }));
+  let relative = $derived(new Intl.RelativeTimeFormat(<%- intl ? '$locale' : '"en"' %>, { numeric: "auto" }));
+  const events = [{ key: "activityStart", value: -2, unit: "minute" }, { key: "activitySnapshot", value: -14, unit: "minute" }, { key: "activityWarning", value: -1, unit: "hour" }, { key: "activityProfile", value: -1, unit: "day" }, { key: "activityFailed", value: -2, unit: "day" }] as const;
+<% if (!intl) { %>  const activities: Record<string, string> = { activityStart: "Alice started web-01", activitySnapshot: "Scheduler created a snapshot", activityWarning: "Monitor reported a disk warning", activityProfile: "Bob updated profile gpu", activityFailed: "Monitor reported cache-01 failed to start" };
+<% } %></script>
+<svelte:head><title><%- intl ? '{t("dashboard")}' : 'Dashboard' %> | <%= name %></title></svelte:head>
+<h1><%- intl ? '{t("dashboard")}' : 'Dashboard' %></h1>
+<p><%- intl ? `{t("welcomeName", { name: ${spa ? 'name' : 'data.name'} })}` : `Welcome, {${spa ? 'name' : 'data.name'}}.` %></p>
+<p><%- intl ? '{t("demo")}' : 'This is a demonstration dashboard.' %></p>
+<% if (forms) { %><p><a href="/dashboard/instances?create=1"><%- intl ? '{t("createInstance")}' : 'Create demo instance' %></a></p>
+<% } %>
+<div class="dashboard-overview"><div><section aria-labelledby="dashboard-resources"><h2 id="dashboard-resources"><%- intl ? '{t("overview")}' : 'Overview' %></h2>
+<ul class="instance-cards"><li><article class="instance-card"><h3><%- intl ? '{t("instances")}' : 'Instances' %></h3><p>{new Intl.NumberFormat(<%- intl ? '$locale' : '"en"' %>).format(<%- spa ? 'count' : 'data.count' %>)}</p><a href="/dashboard/instances"><%- intl ? '{t("instances")}' : 'Instances' %></a></article></li>
+<li><article class="instance-card"><h3><%- intl ? '{t("settings")}' : 'Settings' %></h3><a href="/dashboard/settings"><%- intl ? '{t("settings")}' : 'Settings' %></a></article></li>
+<li><article class="instance-card"><h3><%- intl ? '{t("catalog")}' : 'Catalog' %></h3><a href="/catalog"><%- intl ? '{t("catalog")}' : 'Browse the catalog' %></a></article></li></ul></section>
+<section aria-labelledby="sample-status"><h2 id="sample-status"><%- intl ? '{t("sampleStatus")}' : 'Sample status' %></h2><p><%- intl ? '{t("sampleData")}' : 'Illustrative data; not the instances saved in this browser.' %></p>
+  <ul class="instance-cards"><% if (intl) { %>{#each [{ label: "running", value: 128 }, { label: "stopped", value: 4 }, { label: "alerts", value: 2 }] as item}<li><article class="instance-card"><h3>{t(item.label)}</h3><p>{new Intl.NumberFormat($locale).format(item.value)}</p></article></li>{/each}<% } else { %>{#each [{ label: "Running", value: 128 }, { label: "Stopped", value: 4 }, { label: "Alerts", value: 2 }] as item}<li><article class="instance-card"><h3>{item.label}</h3><p>{item.value}</p></article></li>{/each}<% } %><li><article class="instance-card"><h3><%- intl ? '{t("sampleStorage")}' : 'Storage' %></h3><p>{storage.format(2.4)}</p><p><%- intl ? '{t("storageOf", { total: storage.format(4) })}' : 'of {storage.format(4)} used' %></p></article></li></ul>
+</section>
+<section aria-labelledby="releases-title"><h2 id="releases-title"><%- intl ? '{t("releases")}' : 'Releases' %></h2>
+  <ul class="instance-cards">{#each [{ name: "Ubuntu 24.04 LTS", code: "noble" }, { name: "Ubuntu 22.04 LTS", code: "jammy" }, { name: "Ubuntu 20.04 LTS", code: "focal" }] as release}<li><article class="instance-card"><h3>{release.name}</h3><p><%- intl ? '{t("releaseInfo")}' : 'Available release' %></p><p><a href="https://ubuntu.com/about/release-cycle"><%- intl ? '{t("releaseNotes")}' : 'Release notes' %></a></p><% if (forms) { %><a href={`/dashboard/instances?create=1&release=${release.code}`}><%- intl ? '{t("launch")}' : 'Create an instance' %></a><% } %></article></li>{/each}</ul>
+</section>
+</div><aside class="activity-panel" aria-labelledby="activity-title"><h2 id="activity-title"><%- intl ? '{t("activity")}' : 'Sample activity' %></h2><ol>{#each events as event (event.key)}<li><p><%- intl ? '{t(event.key)}' : '{activities[event.key]}' %></p><p>{relative.format(event.value, event.unit)}</p></li>{/each}</ol></aside></div>

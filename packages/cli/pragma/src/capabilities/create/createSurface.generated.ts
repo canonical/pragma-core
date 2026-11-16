@@ -81,6 +81,68 @@ export const CREATE_SURFACE: Readonly<Record<string, SurfaceCommand>> = {
       }
     ]
   },
+  "application/svelte": {
+    "path": [
+      "application",
+      "svelte"
+    ],
+    "description": "Scaffold a SvelteKit application with server rendering or a client-only SPA",
+    "prompts": [
+      {
+        "name": "appPath",
+        "type": "text",
+        "message": "Application directory name:",
+        "default": "my-app",
+        "positional": true,
+        "group": "Application"
+      },
+      {
+        "name": "forms",
+        "type": "confirm",
+        "message": "Include a native contact form demonstration?",
+        "default": true,
+        "group": "Application"
+      },
+      {
+        "name": "appShell",
+        "type": "confirm",
+        "message": "Include the application shell and its dashboard?",
+        "default": true,
+        "group": "Application"
+      },
+      {
+        "name": "intl",
+        "type": "confirm",
+        "message": "Include internationalisation (locale negotiation, translated UI, locale switcher)?",
+        "default": false,
+        "group": "Application"
+      },
+      {
+        "name": "rendering",
+        "type": "select",
+        "message": "Rendering — ssr uses adapter-node, spa is client-only",
+        "default": "ssr",
+        "choices": [
+          {
+            "label": "ssr - server-side rendering (adapter-node)",
+            "value": "ssr"
+          },
+          {
+            "label": "spa - client-only single-page app (static fallback)",
+            "value": "spa"
+          }
+        ],
+        "group": "Application"
+      },
+      {
+        "name": "runInstall",
+        "type": "confirm",
+        "message": "Install dependencies now?",
+        "default": true,
+        "group": "Application"
+      }
+    ]
+  },
   "component/lit": {
     "path": [
       "component",
@@ -307,6 +369,23 @@ export const CREATE_SURFACE: Readonly<Record<string, SurfaceCommand>> = {
         "message": "Page path, as <domain>/<name> (for example invoices/detail):",
         "positional": true,
         "group": "Page"
+      },
+      {
+        "name": "framework",
+        "type": "select",
+        "message": "Application framework:",
+        "default": "react",
+        "choices": [
+          {
+            "label": "React",
+            "value": "react"
+          },
+          {
+            "label": "SvelteKit",
+            "value": "svelte"
+          }
+        ],
+        "group": "Page"
       }
     ]
   },
@@ -423,6 +502,38 @@ export const CREATE_CLI_SYNTAX: Readonly<
       "flag": "--relay",
       "takesValue": false,
       "kebabName": "relay"
+    },
+    "runInstall": {
+      "flag": "--no-run-install",
+      "takesValue": false,
+      "kebabName": "run-install"
+    }
+  },
+  "application/svelte": {
+    "appPath": {
+      "flag": "--app-path",
+      "takesValue": true,
+      "kebabName": "app-path"
+    },
+    "forms": {
+      "flag": "--no-forms",
+      "takesValue": false,
+      "kebabName": "forms"
+    },
+    "appShell": {
+      "flag": "--no-app-shell",
+      "takesValue": false,
+      "kebabName": "app-shell"
+    },
+    "intl": {
+      "flag": "--intl",
+      "takesValue": false,
+      "kebabName": "intl"
+    },
+    "rendering": {
+      "flag": "--rendering",
+      "takesValue": true,
+      "kebabName": "rendering"
     },
     "runInstall": {
       "flag": "--no-run-install",
@@ -548,6 +659,11 @@ export const CREATE_CLI_SYNTAX: Readonly<
       "flag": "--page-path",
       "takesValue": true,
       "kebabName": "page-path"
+    },
+    "framework": {
+      "flag": "--framework",
+      "takesValue": true,
+      "kebabName": "framework"
     }
   },
   "playground": {

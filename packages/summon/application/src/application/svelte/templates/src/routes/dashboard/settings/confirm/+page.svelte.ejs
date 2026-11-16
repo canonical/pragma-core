@@ -1,0 +1,13 @@
+<script lang="ts">
+<% if (!spa) { %>  import type { PageProps } from "./$types";
+  let { form }: PageProps = $props();
+<% } else { %>  let confirmed = $state(false);
+<% } %><% if (intl) { %>  import { getLocaleSource, getTranslator } from "$lib/i18n";
+  const locale = getLocaleSource(); let t = $derived(getTranslator($locale));
+<% } else { %>  const messages: Record<string, string> = { confirmProject: "Confirm project deletion", deleteProjectBody: "This is a demonstration; no project will be deleted.", confirmedProject: "Demonstration confirmed; no project was deleted.", deleteProject: "Delete demo project", cancel: "Cancel" };
+  const t = (key: string) => messages[key] ?? key;
+<% } %></script>
+<svelte:head><title>{t("confirmProject")} | <%= name %></title></svelte:head>
+<h1>{t("confirmProject")}</h1><p>{t("deleteProjectBody")}</p>
+{#if <%- spa ? 'confirmed' : 'form?.confirmed' %>}<p role="status">{t("confirmedProject")}</p>{:else}<form <%- spa ? 'onsubmit={(event) => { event.preventDefault(); confirmed = true; }}' : 'method="POST"' %>><button type="submit">{t("deleteProject")}</button></form>{/if}
+<a href="/dashboard/settings">{t("cancel")}</a>

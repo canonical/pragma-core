@@ -1,0 +1,6 @@
+declare global {
+  namespace App {
+    interface Locals { theme: string<% if (intl) { %>; locale: string<% } %> }
+  }
+}
+export {};

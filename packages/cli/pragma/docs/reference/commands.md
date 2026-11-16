@@ -321,22 +321,23 @@ pragma config unset channel
 
 ## create
 
-The `create` surface is a PROJECTION of the summon generator tree: `pragma create <path...>` ≡ `summon <path...>` over the declared bindings — same grammar, same flags, same wizard, byte-identical trees. Tree segments are subcommands (`create component react|svelte|lit`, `create application react`), and every flag derives from the generators' own prompts (a default-on confirm registers only its `--no-` form). The contract is EXECUTED, not written down: `crossCli.subprocess.test.ts` runs both CLIs over the same argv and compares what they emit.
+The `create` surface is a PROJECTION of the summon generator tree: `pragma create <path...>` ≡ `summon <path...>` over the declared bindings — same grammar, same flags, same wizard, byte-identical trees. Tree segments are subcommands (`create component react|svelte|lit`, `create application react|svelte`), and every flag derives from the generators' own prompts (a default-on confirm registers only its `--no-` form). The contract is EXECUTED, not written down: `crossCli.subprocess.test.ts` runs both CLIs over the same argv and compares what they emit.
 
 ### pragma create application
 
-Scaffold a full React application with routing, an application shell with a dashboard, and either server-side rendering or a client-only SPA.
+Scaffold a React or Svelte application with server rendering or a client-only SPA.
 
-Use when asked to start a new React application, server-rendered or client-only, with or without an application shell.
+Use when asked to start a new React or Svelte application, server-rendered or client-only, with or without an application shell.
 
 ```
-pragma create application react [app-path] [options]
+pragma create application <framework> [app-path] [options]
 ```
 
 **Arguments**
 
 | Argument | Required | Description |
 | --- | --- | --- |
+| `<framework>` | no | Application framework (defaults to React over MCP). (one of: react, svelte) (default: react) |
 | `[app-path]` | no | Application directory name. (default: my-app) |
 
 **Flags**
@@ -347,7 +348,7 @@ pragma create application react [app-path] [options]
 | `--no-app-shell` | — | Include the application shell and its dashboard. (default: true) |
 | `--intl` | — | Include internationalisation (locale negotiation, translated UI, locale switcher). (default: false) |
 | `--rendering` | `<ssr\|spa>` | Rendering — ssr keeps the server layer (SSR servers and sitemap), spa is client-only. (one of: ssr, spa) (default: ssr) |
-| `--relay` | — | Include a Relay (GraphQL) data layer with a local mock schema. (default: false) |
+| `--relay` | — | Include a Relay (GraphQL) data layer with a local mock schema. (frameworks: react) (default: false) |
 | `--no-run-install` | — | Install dependencies now. (default: true) |
 
 - Store: storeless.
@@ -361,6 +362,7 @@ pragma create application react my-app
 pragma create application react my-app --relay
 pragma create application react my-app --rendering spa
 pragma create application react my-app --no-app-shell
+pragma create application svelte my-app
 ```
 
 ### pragma create component
@@ -437,7 +439,7 @@ pragma create package --name @canonical/my-tool --no-run-install
 
 ### pragma create page
 
-Add a page component to an existing domain of a scaffolded application, and print how to route it.
+Add a React page to an existing domain or a SvelteKit page to an existing route.
 
 Use when asked to add a page to an existing domain of an application scaffolded with create application.
 
@@ -451,6 +453,12 @@ pragma create page [page-path] [options]
 | --- | --- | --- |
 | `[page-path]` | yes | Page path, as <domain>/<name> (for example invoices/detail). |
 
+**Flags**
+
+| Flag | Value | Description |
+| --- | --- | --- |
+| `--framework` | `<react\|svelte>` | Application framework. (one of: react, svelte) (default: react) |
+
 - Store: storeless.
 - Mutation: plan-first — preview with `--dry-run`, apply with `--yes`, reverse with `--undo`.
 - MCP: exposed as the `create_page` tool.
@@ -460,6 +468,7 @@ pragma create page [page-path] [options]
 ```bash
 pragma create page invoices/detail  # writes src/domains/invoices/DetailPage.tsx and prints route examples
 pragma create page invoices/detail --undo  # delete the page again
+pragma create page invoices/detail --framework svelte  # creates src/routes/invoices/detail/+page.svelte
 ```
 
 ### pragma create playground
