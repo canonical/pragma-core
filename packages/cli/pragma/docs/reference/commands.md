@@ -484,6 +484,7 @@ pragma create playground [playground-path] [options]
 | --- | --- | --- |
 | `--framework` | `<react\|svelte>` | Framework. (one of: react, svelte) (default: react) |
 | `--packages` | `<value...>` | Packages (styles always included). |
+| `--no-git-init` | — | Initialise a git repository. (default: true) |
 | `--no-run-install` | — | Run package manager install after creation. (default: true) |
 
 - Store: storeless.
