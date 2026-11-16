@@ -73,8 +73,10 @@ function snapshot(dir: string): Map<string, string> {
  * from `create`'s own declaration, so dropping a noun from the surface turns
  * this red rather than silently shrinking the guard.
  *
- * No case installs dependencies (`runInstall` defaults false), so every tree is
- * generator output alone and byte-comparable.
+ * No case installs dependencies: `package` and `application` default
+ * `runInstall` to true, so they pass `--no-run-install`. Every tree is
+ * then generator output alone and byte-comparable; an installed tree carries a
+ * `bun.lock` whose transitive resolution can differ between two installs.
  */
 const CASES: ReadonlyArray<{
   label: string;
@@ -91,13 +93,27 @@ const CASES: ReadonlyArray<{
   })),
   {
     label: "package",
-    args: ["create", "package", "--name", "@canonical/probe", "--yes"],
+    args: [
+      "create",
+      "package",
+      "--name",
+      "@canonical/probe",
+      "--no-run-install",
+      "--yes",
+    ],
   },
   {
     label: "application",
     // `react` is a path segment here too — the declared binding is
     // `application/react`, and the tree mirrors summon's.
-    args: ["create", "application", "react", "probeapp", "--yes"],
+    args: [
+      "create",
+      "application",
+      "react",
+      "probeapp",
+      "--no-run-install",
+      "--yes",
+    ],
   },
   {
     label: "page",
