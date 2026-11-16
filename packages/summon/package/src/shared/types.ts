@@ -110,6 +110,8 @@ export interface PlaygroundAnswers {
    * has no form package, so it is skipped there.
    */
   packages: PlaygroundPackage[];
+  /** Make the playground a git repository (skipped inside an existing one) */
+  gitInit: boolean;
   /** Run package manager install after creation */
   runInstall: boolean;
 }

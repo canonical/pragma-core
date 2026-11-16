@@ -231,6 +231,7 @@ Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
 | `playgroundPath` | string | no | Playground directory. (default: playground) |
 | `framework` | enum(react, svelte) | no | Framework. (one of: react, svelte) (default: react) |
 | `packages` | string[] | no | Packages (styles always included). |
+| `gitInit` | boolean | no | Initialise a git repository. (default: true) |
 | `runInstall` | boolean | no | Run package manager install after creation. (default: true) |
 | `confirm` | boolean | no | Set true to execute; otherwise a plan is returned (default false). |
 | `cwd` | string | no | Absolute project directory to write into; defaults to the server's working directory. |

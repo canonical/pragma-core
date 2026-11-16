@@ -366,6 +366,13 @@ export const CREATE_SURFACE: Readonly<Record<string, SurfaceCommand>> = {
         "group": "Design system"
       },
       {
+        "name": "gitInit",
+        "type": "confirm",
+        "message": "Initialise a git repository?",
+        "default": true,
+        "group": "Post-setup"
+      },
+      {
         "name": "runInstall",
         "type": "confirm",
         "message": "Run package manager install after creation?",
@@ -558,6 +565,11 @@ export const CREATE_CLI_SYNTAX: Readonly<
       "flag": "--packages",
       "takesValue": true,
       "kebabName": "packages"
+    },
+    "gitInit": {
+      "flag": "--no-git-init",
+      "takesValue": false,
+      "kebabName": "git-init"
     },
     "runInstall": {
       "flag": "--no-run-install",

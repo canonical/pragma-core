@@ -294,7 +294,12 @@
         {
           "v": "playground",
           "args": ["[playground-path]"],
-          "flags": ["--framework", "--packages", "--no-run-install"],
+          "flags": [
+            "--framework",
+            "--packages",
+            "--no-git-init",
+            "--no-run-install"
+          ],
           "mutates": true,
           "mcp": "create_playground"
         },

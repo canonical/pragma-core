@@ -235,7 +235,12 @@ describe("surface conformance — capabilities ⊆ covenant (PROTECTED)", () => 
         v: "playground",
         args: ["[playground-path]"],
         // `packages` is a multiselect: one comma-separated value flag.
-        flags: ["--framework", "--packages", "--no-run-install"],
+        flags: [
+          "--framework",
+          "--packages",
+          "--no-git-init",
+          "--no-run-install",
+        ],
         mutates: true,
         mcp: "create_playground",
       },
