@@ -16,35 +16,35 @@ ds:apps_landscape.pattern.sortable_list a ds:Pattern;
         ds:name "`fields`";
         ds:summary "Ordered field records with id, label, and optional group title.";
         ds:propertyType "list of objects";
-        ds:constraints "TypeScript: `ExportField[]`, where `ExportField` is `{ id: string; label: string; groupTitle?: string }`. Ids must be stable and unique. First-render array contents become the permanent reset baseline for that mount. `SortableFieldListProps` is implementation-local, while the feature barrel separately exports `ExportField`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ExportField[]`, where `ExportField` is `{ id: string; label: string; groupTitle?: string }`. Ids must be stable and unique. First-render array contents become the permanent reset baseline for that mount. `SortableFieldListProps` is implementation-local, while the feature barrel separately exports `ExportField`."
     ], [
         a ds:Property;
         ds:name "`fields[].id`";
         ds:summary "Supplies the stable field identity used for row keys, refs, and reorder state.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`. Must be unique within `fields`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Must be unique within `fields`."
     ], [
         a ds:Property;
         ds:name "`fields[].label`";
         ds:summary "Supplies visible field text and text interpolated into accessible control names.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`."
     ], [
         a ds:Property;
         ds:name "`fields[].groupTitle`";
         ds:summary "Supplies optional group metadata rendered as a chip.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`. Rendering requires a truthy value.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Rendering requires a truthy value.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`onOrderChange`";
         ds:summary "Receives full order after successful drop, arrow/numeric move, or reset.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `(fields: ExportField[]) => void`, where `ExportField` is `{ id: string; label: string; groupTitle?: string }`. Called synchronously; source does not await, catch, or roll back callback failures. `SortableFieldListProps` is implementation-local; the feature barrel does not export a generic `SortableList` symbol or props type.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(fields: ExportField[]) => void`, where `ExportField` is `{ id: string; label: string; groupTitle?: string }`. Called synchronously; source does not await, catch, or roll back callback failures. `SortableFieldListProps` is implementation-local; the feature barrel does not export a generic `SortableList` symbol or props type."
     ].

@@ -16,143 +16,143 @@ ds:apps_landscape.pattern.progressively_expandable_table a ds:Pattern;
         ds:name "`ExpandableTable.columns`";
         ds:summary "React Table column definitions passed to `ModularTable`.";
         ds:propertyType "list of objects";
-        ds:constraints "Exact type: `Column<T>[]`, where `T extends Record<string, unknown>`. Each column must define headers and cells that remain meaningful at the available width.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `Column<T>[]`, where `T extends Record<string, unknown>`. Each column must define headers and cells that remain meaningful at the available width."
     ], [
         a ds:Property;
         ds:name "ExpandableTable.data";
         ds:summary "Currently loaded row records passed to `ModularTable`.";
         ds:propertyType "list of objects";
-        ds:constraints "Exact type: `T[]`, where `T extends Record<string, unknown>`. This is the rendered subset, not necessarily the complete result set.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `T[]`, where `T extends Record<string, unknown>`. This is the rendered subset, not necessarily the complete result set."
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.itemNames`";
         ds:summary "Nouns used by the footer's count text.";
         ds:propertyType "object";
-        ds:constraints "Exact type: `{ plural: string; singular: string }`. Supply forms that read correctly after an exact number; no locale or grammar service is invoked.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `{ plural: string; singular: string }`. Supply forms that read correctly after an exact number; no locale or grammar service is invoked."
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.onLimitChange`";
         ds:summary "Handles activation of the disclosure button.";
         ds:propertyType "callback";
-        ds:constraints "Exact type: `() => void`. The component does not pass the next limit, await a result, disable itself, or distinguish loading from navigation.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `() => void`. The component does not pass the next limit, await a result, disable itself, or distinguish loading from navigation."
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.totalCount`";
         ds:summary "Reported total before `hasNoMoreItems` adjustment.";
         ds:propertyType "number";
-        ds:constraints "Keep nonnegative and aligned with the same result scope as `data`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Keep nonnegative and aligned with the same result scope as `data`."
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.additionalCta`";
         ds:summary "Content composed at the start of the footer.";
         ds:propertyType "node";
-        ds:constraints "Exact type: `ReactNode`. It is rendered without validation or decoration; supply an accessible control or noninteractive content appropriate to this position.";
         ds:defaultValue "—";
+        ds:constraints "Exact type: `ReactNode`. It is rendered without validation or decoration; supply an accessible control or noninteractive content appropriate to this position.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.getCellProps`";
         ds:summary "Adds props to each rendered table cell.";
         ds:propertyType "callback";
-        ds:constraints "Exact type: `(cell: Cell<T>) => Partial<TableCellProps & HTMLProps<HTMLTableCellElement>>`. Preserve table semantics and header relationships.";
         ds:defaultValue "—";
+        ds:constraints "Exact type: `(cell: Cell<T>) => Partial<TableCellProps & HTMLProps<HTMLTableCellElement>>`. Preserve table semantics and header relationships.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.getRowProps`";
         ds:summary "Adds props to each rendered table row.";
         ds:propertyType "callback";
-        ds:constraints "Exact type: `(row: Row<T>) => Partial<TableRowProps & HTMLProps<HTMLTableRowElement>>`. Adding row activation requires equivalent keyboard behavior and an accessible name.";
         ds:defaultValue "—";
+        ds:constraints "Exact type: `(row: Row<T>) => Partial<TableRowProps & HTMLProps<HTMLTableRowElement>>`. Adding row activation requires equivalent keyboard behavior and an accessible name.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.hasNoMoreItems`";
         ds:summary "Replaces the effective total with `itemCount`.";
         ds:propertyType "boolean";
-        ds:constraints "Omission is treated as false. Use only when the data source establishes that no further rows exist; this can override a larger stale `totalCount`.";
         ds:defaultValue "—";
+        ds:constraints "Omission is treated as false. Use only when the data source establishes that no further rows exist; this can override a larger stale `totalCount`.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.itemCount`";
         ds:summary "Count used by footer calculations when it differs from `data.length`.";
         ds:propertyType "number";
-        ds:constraints "Keep synchronized with the rows represented to users. Values above the effective total are clamped in count copy but suppress the disclosure action.";
         ds:defaultValue "`data.length`";
+        ds:constraints "Keep synchronized with the rows represented to users. Values above the effective total are clamped in count copy but suppress the disclosure action.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTable.title`";
         ds:summary "Optional table introduction.";
         ds:propertyType "node";
-        ds:constraints "Exact type: `ReactNode`. Numbers and other non-element nodes accepted by the type are ignored; pass a semantic heading when needed.";
         ds:defaultValue "—";
+        ds:constraints "Exact type: `ReactNode`. Numbers and other non-element nodes accepted by the type are ignored; pass a semantic heading when needed.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTableFooter.itemCount`";
         ds:summary "Loaded or represented item count.";
         ds:propertyType "number";
-        ds:constraints "Keep nonnegative and synchronized with visible content.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Keep nonnegative and synchronized with visible content."
     ], [
         a ds:Property;
         ds:name "`ExpandableTableFooter.itemNames`";
         ds:summary "Nouns used in count copy.";
         ds:propertyType "object";
-        ds:constraints "Exact type: `{ plural: string; singular: string }`. Supply grammatically correct exact-count forms.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Exact type: `{ plural: string; singular: string }`. Supply grammatically correct exact-count forms."
     ], [
         a ds:Property;
         ds:name "`ExpandableTableFooter.onLimitChange`";
         ds:summary "Handles the disclosure action.";
         ds:propertyType "callback";
-        ds:constraints "Exact type: `() => void`. Own loading prevention and state changes in the caller.";
         ds:defaultValue "—";
+        ds:constraints "Exact type: `() => void`. Own loading prevention and state changes in the caller.";
         ds:optional "false"
     ], [
         a ds:Property;
         ds:name "`ExpandableTableFooter.totalCount`";
         ds:summary "Reported complete count.";
         ds:propertyType "number";
-        ds:constraints "Represents the same result scope as `itemCount`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Represents the same result scope as `itemCount`."
     ], [
         a ds:Property;
         ds:name "`ExpandableTableFooter.additionalCta`";
         ds:summary "Content before the footer's count group.";
         ds:propertyType "node";
-        ds:constraints "Exact type: `ReactNode`. Keep subordinate to the disclosure action and provide its own semantics.";
         ds:defaultValue "—";
+        ds:constraints "Exact type: `ReactNode`. Keep subordinate to the disclosure action and provide its own semantics.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTableFooter.className`";
         ds:summary "Additional class on the footer root.";
         ds:propertyType "text";
-        ds:constraints "Do not remove the flex relationship required by the count group.";
         ds:defaultValue "—";
+        ds:constraints "Do not remove the flex relationship required by the count group.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTableFooter.hasNoMoreItems`";
         ds:summary "Uses `itemCount` as the effective total.";
         ds:propertyType "boolean";
-        ds:constraints "Omission is treated as false. Set only after confirming the end of the result set.";
         ds:defaultValue "—";
+        ds:constraints "Omission is treated as false. Set only after confirming the end of the result set.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ExpandableTableFooter.viewAll`";
         ds:summary "Replaces “Show N more” with “View all”.";
         ds:propertyType "boolean";
-        ds:constraints "Omission is treated as false. This changes copy only; the callback must perform the full-load or navigation behavior.";
         ds:defaultValue "—";
+        ds:constraints "Omission is treated as false. This changes copy only; the callback must perform the full-load or navigation behavior.";
         ds:optional "true"
     ].

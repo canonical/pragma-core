@@ -16,37 +16,37 @@ ds:apps_landscape.pattern.process_flow a ds:Pattern;
         ds:name "`cards`";
         ds:summary "Supplies the ordered process entries rendered between Start and End.";
         ds:propertyType "list of objects";
-        ds:constraints "TypeScript: `FlowCardProps[]`. Array order defines DOM and visual order; an empty array renders Start, one connector, and End.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `FlowCardProps[]`. Array order defines DOM and visual order; an empty array renders Start, one connector, and End."
     ], [
         a ds:Property;
         ds:name "`cards[].iconName`";
         ds:summary "Supplies the name forwarded to Canonical `Icon`.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`. Use a valid installed icon name whose meaning is repeated in text.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `string`. Use a valid installed icon name whose meaning is repeated in text."
     ], [
         a ds:Property;
         ds:name "`cards[].description`";
         ds:summary "Supplies muted description content inside an always-rendered paragraph.";
         ds:propertyType "node";
-        ds:constraints "TypeScript: `ReactNode`. Absent content leaves an empty paragraph structure.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Absent content leaves an empty paragraph structure.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`cards[].header`";
         ds:summary "Supplies strong heading content inside the header paragraph.";
         ds:propertyType "node";
-        ds:constraints "TypeScript: `ReactNode`. Absent content leaves the icon without a visible heading.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Absent content leaves the icon without a visible heading.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`cards[].children`";
         ds:summary "Supplies supporting content below the description.";
         ds:propertyType "node";
-        ds:constraints "TypeScript: `ReactNode`. The region renders only for truthy content; keep it compact and avoid implying card selection.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. The region renders only for truthy content; keep it compact and avoid implying card selection.";
         ds:optional "true"
     ].

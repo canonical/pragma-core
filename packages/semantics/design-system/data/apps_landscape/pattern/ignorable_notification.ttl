@@ -16,45 +16,45 @@ ds:apps_landscape.pattern.ignorable_notification a ds:Pattern;
         ds:name "`IgnorableNotification.hide`";
         ds:summary "Parent callback invoked after the user confirms dismissal.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `(event: MouseEvent<HTMLElement>) => void`. It runs for every confirmation, whether or not persistence is checked. The wrapper does not itself remove transient parent state.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(event: MouseEvent<HTMLElement>) => void`. It runs for every confirmation, whether or not persistence is checked. The wrapper does not itself remove transient parent state."
     ], [
         a ds:Property;
         ds:name "`IgnorableNotification.storageKey`";
         ds:summary "Browser local-storage key controlling persistent suppression.";
         ds:propertyType "text";
-        ds:constraints "Must be stable and unique to one notification purpose. Only the exact stored string `\"true\"` suppresses rendering.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Must be stable and unique to one notification purpose. Only the exact stored string `\"true\"` suppresses rendering."
     ], [
         a ds:Property;
         ds:name "`IgnorableNotification.children`";
         ds:summary "Optional notification message, repeated inside the modal's structurally required paragraph.";
         ds:propertyType "node";
-        ds:constraints "TypeScript: `ReactNode`. Keep it valid both as Notification content and as a descendant of `<p>`; block-level children can create invalid modal markup. Omitting it leaves an empty paragraph whenever the modal is open.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Keep it valid both as Notification content and as a descendant of `<p>`; block-level children can create invalid modal markup. Omitting it leaves an empty paragraph whenever the modal is open.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`IgnorableNotification.modalProps`";
         ds:summary "Configures the grouped confirmation modal and persistence checkbox.";
         ds:propertyType "object";
-        ds:constraints "TypeScript: `Omit<ComponentProps<typeof IgnorableModal>, \"children\" | \"hideModal\" | \"hideNotification\" | \"ignore\">`. The wrapper reserves modal content, close, and confirm behavior. Includes nested `checkboxProps`.";
         ds:defaultValue "`{ confirmButtonLabel: undefined }`";
+        ds:constraints "TypeScript: `Omit<ComponentProps<typeof IgnorableModal>, \"children\" | \"hideModal\" | \"hideNotification\" | \"ignore\">`. The wrapper reserves modal content, close, and confirm behavior. Includes nested `checkboxProps`.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`IgnorableNotification.modalProps.checkboxProps`";
         ds:summary "Forwards label, id, help, validation, class, inline, and native checkbox presentation props.";
         ds:propertyType "object";
-        ds:constraints "TypeScript: `Omit<ComponentProps<typeof CheckboxInput>, \"checked\" | \"onChange\">`. The grouped modal owns checked state and changes. Supply a clear `label`; the source default is undefined.";
         ds:defaultValue "`{ label: undefined }`";
+        ds:constraints "TypeScript: `Omit<ComponentProps<typeof CheckboxInput>, \"checked\" | \"onChange\">`. The grouped modal owns checked state and changes. Supply a clear `label`; the source default is undefined.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`IgnorableNotification` inherited Notification props";
         ds:summary "Forwards `actions`, `borderless`, `className`, `inline`, `messageElement`, `severity`, `timeout`, `timestamp`, `title`, `titleElement`, and supported `<div>` props.";
         ds:propertyType "object";
-        ds:constraints "TypeScript: `Omit<ComponentProps<typeof Notification>, \"onDismiss\">`. Deprecated `close`, `status`, and `type` remain unavailable.";
         ds:defaultValue "Canonical Notification defaults";
+        ds:constraints "TypeScript: `Omit<ComponentProps<typeof Notification>, \"onDismiss\">`. Deprecated `close`, `status`, and `type` remain unavailable.";
         ds:optional "true"
     ].

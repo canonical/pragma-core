@@ -16,21 +16,21 @@ ds:apps_landscape.subcomponent.inline_cell_input a ds:Subcomponent;
         ds:name "`InlineCellInput.value`";
         ds:summary "Initial value used by `useState`.";
         ds:propertyType "text";
-        ds:constraints "Read on initial mount only; later prop changes do not replace the draft. Local `value` is always passed to Input.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Read on initial mount only; later prop changes do not replace the draft. Local `value` is always passed to Input."
     ], [
         a ds:Property;
         ds:name "`InlineCellInput.onChange`";
         ds:summary "Commit callback invoked on blur with the current draft.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `(value: string) => Promise<void> | Promise<FormikErrors<unknown>>`. The component does not await, catch, inspect Formik errors, or suppress unchanged commits.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(value: string) => Promise<void> | Promise<FormikErrors<unknown>>`. The component does not await, catch, inspect Formik errors, or suppress unchanged commits."
     ], [
         a ds:Property;
         ds:name "`InlineCellInput` remaining Input props";
         ds:summary "Forwarded to Canonical Input. Common consumers pass `label`, `labelClassName`, `className`, `wrapperClassName`, `placeholder`, Formik `name`, and `error`.";
         ds:propertyType "object";
-        ds:constraints "TypeScript: `Omit<InputProps, \"onBlur\" | \"onChange\">`. Consumers may supply any supported subset. Spread occurs after local `type=\"text\"` and `autoComplete=\"off\"`, so inherited props can override those initial values.";
         ds:defaultValue "Canonical Input defaults; local initial `type`/autocomplete values as above";
+        ds:constraints "TypeScript: `Omit<InputProps, \"onBlur\" | \"onChange\">`. Consumers may supply any supported subset. Spread occurs after local `type=\"text\"` and `autoComplete=\"off\"`, so inherited props can override those initial values.";
         ds:optional "true"
     ].

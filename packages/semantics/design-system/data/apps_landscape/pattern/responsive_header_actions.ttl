@@ -16,68 +16,68 @@ ds:apps_landscape.pattern.responsive_header_actions a ds:Pattern;
         ds:name "`actions`";
         ds:summary "Commands partitioned by consequence.";
         ds:propertyType "object";
-        ds:constraints "TypeScript: `{ destructive?: Action[]; nondestructive?: Action[] }`, where `Action` is `Omit<ButtonProps, \"children\" | \"hasIcon\"> & { icon: string; label: string; collapsed?: boolean; excluded?: boolean }`. Missing buckets become empty arrays; nondestructive actions precede destructive actions.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `{ destructive?: Action[]; nondestructive?: Action[] }`, where `Action` is `Omit<ButtonProps, \"children\" | \"hasIcon\"> & { icon: string; label: string; collapsed?: boolean; excluded?: boolean }`. Missing buckets become empty arrays; nondestructive actions precede destructive actions."
     ], [
         a ds:Property;
         ds:name "`actions.nondestructive`";
         ds:summary "Nondestructive commands in display priority order.";
         ds:propertyType "list of objects";
-        ds:constraints "TypeScript: `Action[]`. Excluded actions are removed before layout and remaining actions precede destructive actions.";
         ds:defaultValue "`[]`";
+        ds:constraints "TypeScript: `Action[]`. Excluded actions are removed before layout and remaining actions precede destructive actions.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`actions.destructive`";
         ds:summary "Destructive commands shown after nondestructive commands.";
         ds:propertyType "list of objects";
-        ds:constraints "TypeScript: `Action[]`. Collapsed presentation appends `--negative` to the icon name and uses negative treatment.";
         ds:defaultValue "`[]`";
+        ds:constraints "TypeScript: `Action[]`. Collapsed presentation appends `--negative` to the icon name and uses negative treatment.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`title`";
         ds:summary "Caller content before the actions.";
         ds:propertyType "node";
-        ds:constraints "TypeScript: `ReactNode`. Rendered unchanged; consumers own heading level and semantics.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Rendered unchanged; consumers own heading level and semantics.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`Action.icon`";
         ds:summary "Canonical icon name.";
         ds:propertyType "text";
-        ds:constraints "Visible actions use the name directly; collapsed destructive actions append `--negative`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Visible actions use the name directly; collapsed destructive actions append `--negative`."
     ], [
         a ds:Property;
         ds:name "`Action.label`";
         ds:summary "Visible and accessible text and React key.";
         ds:propertyType "text";
-        ds:constraints "Must be unique and stable within the action set.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Must be unique and stable within the action set."
     ], [
         a ds:Property;
         ds:name "`Action.collapsed`";
         ds:summary "Participates in explicit menu placement.";
         ds:propertyType "boolean";
-        ds:constraints "Forced placement applies only when more than one included action has this set to true; otherwise normal measurement applies.";
         ds:defaultValue "—";
+        ds:constraints "Forced placement applies only when more than one included action has this set to true; otherwise normal measurement applies.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`Action.excluded`";
         ds:summary "Removes the action before layout calculations.";
         ds:propertyType "boolean";
-        ds:constraints "Excluded actions do not affect the forced-collapse count or toggle disabled state.";
         ds:defaultValue "—";
+        ds:constraints "Excluded actions do not affect the forced-collapse count or toggle disabled state.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`Action` inherited props";
         ds:summary "Canonical button behavior such as click, disabled, appearance, and ARIA props.";
         ds:propertyType "object";
-        ds:constraints "TypeScript: `Omit<ButtonProps, \"children\" | \"hasIcon\">`. `collapsed` and `excluded` are stripped from visible buttons; menu adaptation is owned by `ActionsMenu`. Partition equality ignores callbacks and these props, so replacements retaining label, icon, and disabled can keep stale values.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `Omit<ButtonProps, \"children\" | \"hasIcon\">`. `collapsed` and `excluded` are stripped from visible buttons; menu adaptation is owned by `ActionsMenu`. Partition equality ignores callbacks and these props, so replacements retaining label, icon, and disabled can keep stale values.";
         ds:optional "true"
     ].

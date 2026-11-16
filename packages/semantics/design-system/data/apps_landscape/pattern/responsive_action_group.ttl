@@ -16,62 +16,62 @@ ds:apps_landscape.pattern.responsive_action_group a ds:Pattern;
         ds:name "`buttons`";
         ds:summary "Ordered nodes to present.";
         ds:propertyType "list of nodes";
-        ds:constraints "TypeScript: `ReactNode[]`. Collapse recognition is shape-based; stable keys prevent clone/reconciliation churn. Array length controls lone-node behavior.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode[]`. Collapse recognition is shape-based; stable keys prevent clone/reconciliation churn. Array length controls lone-node behavior."
     ], [
         a ds:Property;
         ds:name "`collapseFrom`";
         ds:summary "Minimum viewport width considered large.";
         ds:propertyType "choice";
-        ds:constraints "Maps to Landscape pixel constants: `xs: 460`, `sm: 620`, `md: 768`, `lg: 1036`, `xl: 1280`, and `xxl: 1400`.";
         ds:defaultValue "`md`";
+        ds:constraints "Maps to Landscape pixel constants: `xs: 460`, `sm: 620`, `md: 768`, `lg: 1036`, `xl: 1280`, and `xxl: 1400`.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`alwaysCollapse`";
         ds:summary "Forces the small-screen path regardless of media query.";
         ds:propertyType "boolean";
-        ds:constraints "Can collapse a lone eligible node, unlike ordinary small-screen behavior.";
         ds:defaultValue "false";
+        ds:constraints "Can collapse a lone eligible node, unlike ordinary small-screen behavior.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`alwaysVisible`";
         ds:summary "Leading slice retained in the visible set on the small-screen path.";
         ds:propertyType "number";
-        ds:constraints "Runtime does not validate sign, integer, or range; standard `slice` semantics apply. Unsupported later nodes can also become visible.";
         ds:defaultValue "0";
+        ds:constraints "Runtime does not validate sign, integer, or range; standard `slice` semantics apply. Unsupported later nodes can also become visible.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`menuLabel`";
         ds:summary "Overflow toggle label.";
         ds:propertyType "text";
-        ds:constraints "Visible and accessible through Canonical `ContextualMenu`; localize at the call site.";
         ds:defaultValue "`Actions`";
+        ds:constraints "Visible and accessible through Canonical `ContextualMenu`; localize at the call site.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`className`";
         ds:summary "Additional class on the root.";
         ds:propertyType "text";
-        ds:constraints "Merged with the local grouped class.";
         ds:defaultValue "—";
+        ds:constraints "Merged with the local grouped class.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`menuPosition`";
         ds:summary "Overflow alignment.";
         ds:propertyType "choice";
-        ds:constraints "Nested contextual menus retain their own position independently.";
         ds:defaultValue "`right`";
+        ds:constraints "Nested contextual menus retain their own position independently.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`grouped`";
         ds:summary "Enables segmented markup for more than one visible node and root flex styling.";
         ds:propertyType "boolean";
-        ds:constraints "Does not group the overflow menu into the segmented wrapper.";
         ds:defaultValue "true";
+        ds:constraints "Does not group the overflow menu into the segmented wrapper.";
         ds:optional "true"
     ].

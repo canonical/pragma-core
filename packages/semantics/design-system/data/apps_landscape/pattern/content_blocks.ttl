@@ -17,54 +17,54 @@ ds:apps_landscape.pattern.content_blocks a ds:Pattern;
         ds:summary "Children rendered inside the vertical Blocks container.";
         ds:propertyType "ReactNode";
         ds:optional "false";
-        ds:constraints "Use `Blocks.Item` children so section semantics, dividers, and spacing remain consistent.";
-        ds:defaultValue "None"
+        ds:defaultValue "None";
+        ds:constraints "Use `Blocks.Item` children so section semantics, dividers, and spacing remain consistent."
     ], [
         a ds:Property;
         ds:name "spaced";
         ds:summary "Selects the larger bottom margin for every descendant item heading group.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Distributed through BlocksSpacedContext; nested or independently rendered items read the nearest provider.";
-        ds:defaultValue "false"
+        ds:defaultValue "false";
+        ds:constraints "Distributed through BlocksSpacedContext; nested or independently rendered items read the nearest provider."
     ], [
         a ds:Property;
         ds:name "Blocks.Item children";
         ds:summary "Primary section body.";
         ds:propertyType "ReactNode";
         ds:optional "false";
-        ds:constraints "Rendered after all optional item anatomy and must remain understandable if no heading group is present.";
-        ds:defaultValue "None"
+        ds:defaultValue "None";
+        ds:constraints "Rendered after all optional item anatomy and must remain understandable if no heading group is present."
     ], [
         a ds:Property;
         ds:name "Blocks.Item title";
         ds:summary "Section name rendered as an <h4>.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:constraints "String-only; keep it concise and maintain a logical page heading hierarchy.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "String-only; keep it concise and maintain a logical page heading hierarchy."
     ], [
         a ds:Property;
         ds:name "Blocks.Item description";
         ds:summary "Supporting content rendered in a paragraph below the title position.";
         ds:propertyType "ReactNode";
         ds:optional "true";
-        ds:constraints "Keep to phrasing and simple inline content valid inside `<p>`; complex block descendants would create invalid HTML.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "Keep to phrasing and simple inline content valid inside `<p>`; complex block descendants would create invalid HTML."
     ], [
         a ds:Property;
         ds:name "Blocks.Item action";
         ds:summary "Section-scoped content rendered after title and description in the heading group.";
         ds:propertyType "ReactNode";
         ds:optional "true";
-        ds:constraints "The source does not provide action layout or responsive overflow handling; consumers own accessible control markup.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "The source does not provide action layout or responsive overflow handling; consumers own accessible control markup."
     ], [
         a ds:Property;
         ds:name "Blocks.Item notification";
         ds:summary "Section-specific content rendered before the heading group.";
         ds:propertyType "ReactNode";
         ds:optional "true";
-        ds:constraints "Prefer a notification/status presentation; do not duplicate a page-wide message in each item.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "Prefer a notification/status presentation; do not duplicate a page-wide message in each item."
     ].

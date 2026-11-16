@@ -16,205 +16,205 @@ ds:apps_landscape.pattern.table_pagination a ds:Pattern;
         ds:name "`TablePagination.totalItems`";
         ds:summary "Supplies the total used for page calculation and count copy.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number | undefined`. `undefined` leaves the total-pages hook at its current value; its initial value is one. `TablePaginationProps` is implementation-local and the family barrel exports only the component.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number | undefined`. `undefined` leaves the total-pages hook at its current value; its initial value is one. `TablePaginationProps` is implementation-local and the family barrel exports only the component."
     ], [
         a ds:Property;
         ds:name "`TablePagination.className`";
         ds:summary "Adds a class to the base root.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`. Merged with footer wrapper styles.";
         ds:defaultValue "`\"\"`";
+        ds:constraints "TypeScript: `string`. Merged with footer wrapper styles.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TablePagination.handleClearSelection`";
         ds:summary "Runs after any pagination request.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `() => void`. Runs for previous, next, direct input, and the reset-to-page-1 request on size change. Page-size change calls `paginate(1)`, so this callback runs before the size update. The component reads `currentPage` and `pageSize` from `usePageParams`, writes through `setPageParams`, and registers page-size values `20`, `50`, `100` plus current pages `1..totalPages`.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Runs for previous, next, direct input, and the reset-to-page-1 request on size change. Page-size change calls `paginate(1)`, so this callback runs before the size update. The component reads `currentPage` and `pageSize` from `usePageParams`, writes through `setPageParams`, and registers page-size values `20`, `50`, `100` plus current pages `1..totalPages`.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TablePagination.currentItemCount`";
         ds:summary "Supplies the current page row count.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. Falsy zero suppresses count copy.";
         ds:defaultValue "0";
+        ds:constraints "TypeScript: `number`. Falsy zero suppresses count copy.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TablePagination.pageSizeLabel`";
         ds:summary "Labels the offset page-size select accessibly.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`. Visually hidden; localize and name the entity at the call site.";
         ds:defaultValue "`Instances per page`";
+        ds:constraints "TypeScript: `string`. Visually hidden; localize and name the entity at the call site.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`SidePanelTablePagination.currentPage`";
         ds:summary "Supplies the controlled one-based page.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. Caller must update it after `paginate`. `SidePanelTablePaginationProps` is implementation-local and the family barrel exports only the component.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Caller must update it after `paginate`. `SidePanelTablePaginationProps` is implementation-local and the family barrel exports only the component."
     ], [
         a ds:Property;
         ds:name "`SidePanelTablePagination.pageSize`";
         ds:summary "Supplies the controlled offset size.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. Base options are 20, 50, and 100; caller must update it after `setPageSize`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Base options are 20, 50, and 100; caller must update it after `setPageSize`."
     ], [
         a ds:Property;
         ds:name "`SidePanelTablePagination.paginate`";
         ds:summary "Receives a previous, next, direct, or page-1 request.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `(page: number) => void`. There is no range guard beyond disabled controls and input validity.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(page: number) => void`. There is no range guard beyond disabled controls and input validity."
     ], [
         a ds:Property;
         ds:name "`SidePanelTablePagination.setPageSize`";
         ds:summary "Receives the selected size after `paginate(1)`.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `(itemsNumber: number) => void`. Calls are not awaited or transacted.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(itemsNumber: number) => void`. Calls are not awaited or transacted."
     ], [
         a ds:Property;
         ds:name "`SidePanelTablePagination.totalItems`";
         ds:summary "Supplies the total for page calculation and count copy.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number | undefined`. Uses the same total-pages hook semantics as the URL-backed variant.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number | undefined`. Uses the same total-pages hook semantics as the URL-backed variant."
     ], [
         a ds:Property;
         ds:name "`SidePanelTablePagination.className`";
         ds:summary "Adds a class to the base root.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`.";
         ds:defaultValue "`\"\"`";
+        ds:constraints "TypeScript: `string`.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`SidePanelTablePagination.currentItemCount`";
         ds:summary "Supplies the current row count.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. Falsy zero suppresses count copy. This variant does not expose `pageSizeLabel`; it always uses `Instances per page`.";
         ds:defaultValue "0";
+        ds:constraints "TypeScript: `number`. Falsy zero suppresses count copy. This variant does not expose `pageSizeLabel`; it always uses `Instances per page`.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ModalTablePagination.current`";
         ds:summary "Supplies the displayed current page and button boundaries.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. There is no runtime clamping; `current <= 1` disables previous and `current >= max` disables next. `ModalTablePaginationProps` is exported from its source module, while the family barrel exports only the component.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. There is no runtime clamping; `current <= 1` disables previous and `current >= max` disables next. `ModalTablePaginationProps` is exported from its source module, while the family barrel exports only the component."
     ], [
         a ds:Property;
         ds:name "`ModalTablePagination.max`";
         ds:summary "Supplies the displayed page count.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. The entire component returns `null` when `max <= 1`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. The entire component returns `null` when `max <= 1`."
     ], [
         a ds:Property;
         ds:name "`ModalTablePagination.onPrev`";
         ds:summary "Handles the previous-page action.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `() => void`. Receives no page argument and is not awaited.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Receives no page argument and is not awaited."
     ], [
         a ds:Property;
         ds:name "`ModalTablePagination.onNext`";
         ds:summary "Handles the next-page action.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `() => void`. Receives no page argument and is not awaited.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. Receives no page argument and is not awaited."
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.currentItemCount`";
         ds:summary "Supplies the current token page count.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. Count copy requires this and `totalItemCount` to be truthy. `TokenBasedTablePaginationProps` is exported from its source module, while the family barrel exports only the component.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Count copy requires this and `totalItemCount` to be truthy. `TokenBasedTablePaginationProps` is exported from its source module, while the family barrel exports only the component."
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.totalItemCount`";
         ds:summary "Supplies the exact total or lower bound.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. Exact zero returns `null`; inexact zero keeps controls but suppresses count copy.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. Exact zero returns `null`; inexact zero keeps controls but suppresses count copy."
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.isTotalExact`";
         ds:summary "Chooses exact versus `more than` count copy and zero rendering.";
         ds:propertyType "boolean";
-        ds:constraints "TypeScript: `boolean`. Inexact copy is `Showing X of more than Y ...`.";
         ds:defaultValue "true";
+        ds:constraints "TypeScript: `boolean`. Inexact copy is `Showing X of more than Y ...`.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.itemType`";
         ds:summary "Supplies the singular noun for the exact-count helper.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`. Used only for count copy.";
         ds:defaultValue "`item`";
+        ds:constraints "TypeScript: `string`. Used only for count copy.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.itemTypePlural`";
         ds:summary "Supplies the plural noun for count copy and the advance group.";
         ds:propertyType "text";
-        ds:constraints "TypeScript: `string`. Supply irregular plurals.";
         ds:defaultValue "`${itemType}s`";
+        ds:constraints "TypeScript: `string`. Supply irregular plurals.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.hasNextPage`";
         ds:summary "Enables the next-page action.";
         ds:propertyType "boolean";
-        ds:constraints "TypeScript: `boolean`. Must match cursor availability.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. Must match cursor availability."
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.hasPreviousPage`";
         ds:summary "Enables the previous-page action.";
         ds:propertyType "boolean";
-        ds:constraints "TypeScript: `boolean`. Must match cursor availability.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `boolean`. Must match cursor availability."
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.goToNextPage`";
         ds:summary "Handles the next-token action.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `() => void`. It is not awaited and has no pending state.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. It is not awaited and has no pending state."
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.goToPreviousPage`";
         ds:summary "Handles the previous-token action.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `() => void`. It is not awaited and has no pending state.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. It is not awaited and has no pending state."
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.pageSizeControl`";
         ds:summary "Adds the advance-size select.";
         ds:propertyType "object";
-        ds:constraints "TypeScript: `{ pageSize: number; setPageSize: (itemsNumber: number) => void }`. Options are fixed to 20, 50, and 100; changing size does not automatically reset token history.";
         ds:defaultValue "—";
+        ds:constraints "TypeScript: `{ pageSize: number; setPageSize: (itemsNumber: number) => void }`. Options are fixed to 20, 50, and 100; changing size does not automatically reset token history.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.pageSizeControl.pageSize`";
         ds:summary "Supplies the controlled token advance size.";
         ds:propertyType "number";
-        ds:constraints "TypeScript: `number`. The rendered select offers 20, 50, and 100.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `number`. The rendered select offers 20, 50, and 100."
     ], [
         a ds:Property;
         ds:name "`TokenBasedTablePagination.pageSizeControl.setPageSize`";
         ds:summary "Receives the selected token advance size.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `(itemsNumber: number) => void`. Changing size does not automatically reset token history.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(itemsNumber: number) => void`. Changing size does not automatically reset token history."
     ].

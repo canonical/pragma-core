@@ -17,94 +17,94 @@ ds:apps_landscape.component.checkbox_group a ds:Component;
         ds:summary "Shared native name forwarded to every checkbox.";
         ds:propertyType "text";
         ds:optional "false";
-        ds:constraints "Use a stable form field name.";
-        ds:defaultValue "None"
+        ds:defaultValue "None";
+        ds:constraints "Use a stable form field name."
     ], [
         a ds:Property;
         ds:name "label";
         ds:summary "Visible text rendered in the fieldset legend.";
         ds:propertyType "text";
         ds:optional "false";
-        ds:constraints "The current API does not accept rich label content.";
-        ds:defaultValue "None"
+        ds:defaultValue "None";
+        ds:constraints "The current API does not accept rich label content."
     ], [
         a ds:Property;
         ds:name "options";
         ds:summary "Ordered records with label, value, and optional disabled.";
         ds:propertyType "list of objects";
         ds:optional "false";
-        ds:constraints "Values must be unique for React keys and unambiguous selection. Each entry is a `SelectOption` with `label: string`, `value: string`, `disabled?: boolean`. An empty array renders no checkboxes.";
-        ds:defaultValue "None"
+        ds:defaultValue "None";
+        ds:constraints "Values must be unique for React keys and unambiguous selection. Each entry is a `SelectOption` with `label: string`, `value: string`, `disabled?: boolean`. An empty array renders no checkboxes."
     ], [
         a ds:Property;
         ds:name "value";
         ds:summary "Controlled selected values.";
         ds:propertyType "list of text";
         ds:optional "false";
-        ds:constraints "A checkbox is checked when its option value is included. Unknown values remain in the array until the consumer changes it.";
-        ds:defaultValue "None"
+        ds:defaultValue "None";
+        ds:constraints "A checkbox is checked when its option value is included. Unknown values remain in the array until the consumer changes it."
     ], [
         a ds:Property;
         ds:name "onChange";
         ds:summary "Receives the complete next array after a toggle.";
         ds:propertyType "function";
         ds:optional "false";
-        ds:constraints "The component does not mutate value; the consumer must provide the updated prop.";
-        ds:defaultValue "None"
+        ds:defaultValue "None";
+        ds:constraints "The component does not mutate value; the consumer must provide the updated prop."
     ], [
         a ds:Property;
         ds:name "onBlur";
         ds:summary "Shared blur handler forwarded to every checkbox.";
         ds:propertyType "function";
         ds:optional "true";
-        ds:constraints "Receives the blurred checkbox event.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "Receives the blurred checkbox event."
     ], [
         a ds:Property;
         ds:name "error";
         ds:summary "Renders a group-level validation paragraph and adds is-error to the fieldset.";
         ds:propertyType "ReactNode";
         ds:optional "true";
-        ds:constraints "Truthiness controls rendering and class state; no aria-describedby/aria-errormessage wiring is added locally.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "Truthiness controls rendering and class state; no aria-describedby/aria-errormessage wiring is added locally."
     ], [
         a ds:Property;
         ds:name "help";
         ds:summary "Renders persistent group guidance after any error and before the options.";
         ds:propertyType "ReactNode";
         ds:optional "true";
-        ds:constraints "No described-by association is added locally.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "No described-by association is added locally."
     ], [
         a ds:Property;
         ds:name "required";
         ds:summary "Adds the local required-marker class to the legend.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Visual marker only; the component does not apply required to descendant inputs or enforce a minimum selection.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "Visual marker only; the component does not apply required to descendant inputs or enforce a minimum selection."
     ], [
         a ds:Property;
         ds:name "disabled";
         ds:summary "Sets native disabled on the fieldset, disabling descendant controls.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Applies to the whole group.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "Applies to the whole group."
     ], [
         a ds:Property;
         ds:name "className";
         ds:summary "Merges consumer classes onto the fieldset.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:constraints "Added after built-in classes through classnames.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "Added after built-in classes through classnames."
     ], [
         a ds:Property;
         ds:name "style";
         ds:summary "Applies inline styles to the fieldset.";
         ds:propertyType "object";
         ds:optional "true";
-        ds:constraints "Standard React style object.";
-        ds:defaultValue "undefined"
+        ds:defaultValue "undefined";
+        ds:constraints "Standard React style object."
     ].
