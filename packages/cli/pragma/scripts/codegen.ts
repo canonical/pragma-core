@@ -91,6 +91,7 @@ export function generateCreateSurface({
   const maps: Record<string, Record<string, unknown>> = {
     component: componentGenerators as never,
     package: packageGenerators as never,
+    playground: packageGenerators as never,
     application: applicationGenerators as never,
     page: applicationGenerators as never,
   };

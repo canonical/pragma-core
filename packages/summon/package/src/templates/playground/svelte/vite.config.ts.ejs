@@ -1,0 +1,8 @@
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { defineConfig } from "vite";
+
+// Storybook's Svelte framework builds through this config: without the
+// plugin, `.svelte` files do not compile.
+export default defineConfig({
+  plugins: [svelte()],
+});

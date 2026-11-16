@@ -669,6 +669,10 @@ describe("the mounted create grammar (subprocess)", () => {
       "--description": "A replied library.",
       "--framework": "none",
     },
+    playground: {
+      "--playground-path": "replied-playground",
+      "--framework": "svelte",
+    },
     "application/react": {
       "--app-path": "replied-app",
       "--rendering": "spa",

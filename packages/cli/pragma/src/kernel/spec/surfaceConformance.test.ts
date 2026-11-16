@@ -84,8 +84,8 @@ describe("surface conformance (PROTECTED)", () => {
     );
   });
 
-  it("freezes exactly 51 designed MCP tools including info, the config family, colophon", () => {
-    expect(golden.mcpSurface.tools).toHaveLength(51);
+  it("freezes exactly 52 designed MCP tools including info, the config family, colophon", () => {
+    expect(golden.mcpSurface.tools).toHaveLength(52);
     expect(golden.mcpSurface.tools).toContain("info");
     expect(golden.mcpSurface.tools).toContain("config_show");
     expect(golden.mcpSurface.tools).toContain("config_get");

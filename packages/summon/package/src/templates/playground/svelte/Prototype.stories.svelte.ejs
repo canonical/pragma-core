@@ -1,0 +1,48 @@
+<script lang="ts" module>
+<% if (dsApp) { -%>
+  import { ApplicationLayout } from "@canonical/svelte-ds-app";
+<% } -%>
+<% if (dsGlobal) { -%>
+  import { Breadcrumbs } from "@canonical/svelte-ds-global";
+<% } -%>
+  import { defineMeta } from "@storybook/addon-svelte-csf";
+  import Prototype from "./Prototype.svelte";
+
+  const { Story } = defineMeta({
+    title: "Prototypes/Prototype",
+    component: Prototype,
+    tags: ["autodocs"],
+  });
+</script>
+
+<Story name="Default">
+  Start prototyping here.
+</Story>
+<% if (dsGlobal) { -%>
+
+<Story name="WithBreadcrumbs">
+  {#snippet template(args)}
+    <Prototype {...args}>
+      <Breadcrumbs
+        items={[
+          { label: "Home", url: "/" },
+          { label: "Prototype", url: "/prototype", current: true },
+        ]}
+      />
+    </Prototype>
+  {/snippet}
+</Story>
+<% } -%>
+<% if (dsApp) { -%>
+
+<Story name="InApplicationLayout" parameters={{ layout: "fullscreen" }}>
+  {#snippet template(args)}
+    <ApplicationLayout>
+      {#snippet navigation()}
+        <nav>Navigation</nav>
+      {/snippet}
+      <Prototype {...args}>Inside the application layout.</Prototype>
+    </ApplicationLayout>
+  {/snippet}
+</Story>
+<% } -%>

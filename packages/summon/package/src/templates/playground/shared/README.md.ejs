@@ -1,0 +1,44 @@
+# <%= name %>
+
+A Storybook playground for prototyping <%= framework === 'svelte' ? 'Svelte' : 'React' %> components with the pragma design system.
+
+## Start
+
+```sh
+bun run storybook
+```
+
+Storybook opens on <http://localhost:6006>. Edit `src/Prototype/` and the story reloads.
+
+## What is installed
+
+- `@canonical/styles`: tokens, fonts, cascade layers and base styles, loaded once in `.storybook/styles.css`.
+<% if (dsGlobal) { -%>
+- `@canonical/<%= framework %>-ds-global`: the global components.
+<% } -%>
+<% if (dsGlobalForm) { -%>
+- `@canonical/react-ds-global-form`: form fields built on react-hook-form; its stylesheet is loaded in `.storybook/styles.css`.
+<% } -%>
+<% if (dsApp) { -%>
+- `@canonical/<%= framework %>-ds-app`: application layouts and app-tier components.
+<% } -%>
+
+## Add a component
+
+```sh
+pragma create component <%= framework %> src/MyComponent
+```
+
+The generated component, its stories and its styles follow the same conventions as the design system's own packages, and appear in Storybook straight away.
+
+## Look things up
+
+`pragma block lookup <Name>` shows a design-system component's anatomy and modifiers, and `pragma token lookup <name>` a token's values.
+
+## Check
+
+```sh
+bun run check
+```
+
+Runs Biome and the type checker.

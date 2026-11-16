@@ -292,6 +292,19 @@
           "mcp": "create_package"
         },
         {
+          "v": "playground",
+          "args": ["[playground-path]"],
+          "flags": [
+            "--framework",
+            "--no-ds-global",
+            "--no-ds-global-form",
+            "--ds-app",
+            "--no-run-install"
+          ],
+          "mutates": true,
+          "mcp": "create_playground"
+        },
+        {
           "v": "application",
           "args": ["[app-path]"],
           "flags": [
@@ -403,6 +416,7 @@
       "create_component",
       "create_package",
       "create_page",
+      "create_playground",
       "doctor",
       "graph_connect",
       "graph_inspect",

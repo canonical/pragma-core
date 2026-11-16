@@ -310,6 +310,68 @@ export const CREATE_SURFACE: Readonly<Record<string, SurfaceCommand>> = {
       }
     ]
   },
+  "playground": {
+    "path": [
+      "playground"
+    ],
+    "description": "Generate a Storybook playground for prototyping components with the pragma design system",
+    "prompts": [
+      {
+        "name": "playgroundPath",
+        "type": "text",
+        "message": "Playground directory:",
+        "default": "playground",
+        "positional": true,
+        "group": "Playground"
+      },
+      {
+        "name": "framework",
+        "type": "select",
+        "message": "Framework:",
+        "default": "react",
+        "choices": [
+          {
+            "label": "react - React and @storybook/react-vite",
+            "value": "react"
+          },
+          {
+            "label": "svelte - Svelte 5 and @storybook/svelte-vite",
+            "value": "svelte"
+          }
+        ],
+        "group": "Playground"
+      },
+      {
+        "name": "dsGlobal",
+        "type": "confirm",
+        "message": "Install the global components (ds-global)?",
+        "default": true,
+        "group": "Design system"
+      },
+      {
+        "name": "dsGlobalForm",
+        "type": "confirm",
+        "message": "Install the form fields (ds-global-form)?",
+        "default": true,
+        "group": "Design system",
+        "conditional": true
+      },
+      {
+        "name": "dsApp",
+        "type": "confirm",
+        "message": "Install the application components (ds-app)?",
+        "default": false,
+        "group": "Design system"
+      },
+      {
+        "name": "runInstall",
+        "type": "confirm",
+        "message": "Run package manager install after creation?",
+        "default": true,
+        "group": "Post-setup"
+      }
+    ]
+  },
 };
 
 /**
@@ -477,6 +539,38 @@ export const CREATE_CLI_SYNTAX: Readonly<
       "flag": "--page-path",
       "takesValue": true,
       "kebabName": "page-path"
+    }
+  },
+  "playground": {
+    "playgroundPath": {
+      "flag": "--playground-path",
+      "takesValue": true,
+      "kebabName": "playground-path"
+    },
+    "framework": {
+      "flag": "--framework",
+      "takesValue": true,
+      "kebabName": "framework"
+    },
+    "dsGlobal": {
+      "flag": "--no-ds-global",
+      "takesValue": false,
+      "kebabName": "ds-global"
+    },
+    "dsGlobalForm": {
+      "flag": "--no-ds-global-form",
+      "takesValue": false,
+      "kebabName": "ds-global-form"
+    },
+    "dsApp": {
+      "flag": "--ds-app",
+      "takesValue": false,
+      "kebabName": "ds-app"
+    },
+    "runInstall": {
+      "flag": "--no-run-install",
+      "takesValue": false,
+      "kebabName": "run-install"
     }
   },
 };

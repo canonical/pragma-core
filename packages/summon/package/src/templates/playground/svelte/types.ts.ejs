@@ -1,0 +1,11 @@
+import type { Snippet } from "svelte";
+import type { HTMLAttributes } from "svelte/elements";
+
+/**
+ * Props extend the native attributes of the root element, so every attribute
+ * that element accepts (data-*, aria-*, event handlers, …) reaches the DOM.
+ */
+export interface PrototypeProps extends HTMLAttributes<HTMLDivElement> {
+  /** Content to render inside the prototype */
+  children?: Snippet;
+}

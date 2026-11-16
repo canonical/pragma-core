@@ -1,0 +1,22 @@
+<!--
+  A blank component to prototype in. Rename it, or add more next to it with
+  `pragma create component svelte src/<Name>`.
+-->
+<script lang="ts">
+<% if (dsGlobal) { -%>
+  import { Badge } from "@canonical/svelte-ds-global";
+<% } -%>
+  import type { PrototypeProps } from "./types.js";
+  import "./styles.css";
+
+  const componentCssClassName = "ds prototype";
+
+  let { class: className, children, ...rest }: PrototypeProps = $props();
+</script>
+
+<div class={[componentCssClassName, className]} {...rest}>
+  {@render children?.()}
+<% if (dsGlobal) { -%>
+  <Badge value={3} />
+<% } -%>
+</div>

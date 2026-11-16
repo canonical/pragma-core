@@ -1,0 +1,46 @@
+<% if (dsApp) { -%>
+import { ApplicationLayout } from "@canonical/react-ds-app";
+<% } -%>
+<% if (dsGlobalForm) { -%>
+import { Field, Form } from "@canonical/react-ds-global-form";
+<% } -%>
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import Prototype from "./Prototype.js";
+
+const meta: Meta<typeof Prototype> = {
+  title: "Prototypes/Prototype",
+  component: Prototype,
+  tags: ["autodocs"],
+};
+
+export default meta;
+type Story = StoryObj<typeof Prototype>;
+
+export const Default: Story = {
+  args: {
+    children: "Start prototyping here.",
+  },
+};
+<% if (dsGlobalForm) { -%>
+
+export const WithForm: Story = {
+  render: (args) => (
+    <Prototype {...args}>
+      <Form onSubmit={(data) => console.log(data)}>
+        <Field name="email" inputType="email" label="Email" />
+      </Form>
+    </Prototype>
+  ),
+};
+<% } -%>
+<% if (dsApp) { -%>
+
+export const InApplicationLayout: Story = {
+  parameters: { layout: "fullscreen" },
+  render: (args) => (
+    <ApplicationLayout navigation={<nav>Navigation</nav>}>
+      <Prototype {...args}>Inside the application layout.</Prototype>
+    </ApplicationLayout>
+  ),
+};
+<% } -%>

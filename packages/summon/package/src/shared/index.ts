@@ -16,4 +16,5 @@ export {
 } from "./resolveFramework.js";
 export type * from "./types.js";
 export { default as validatePackageName } from "./validatePackageName.js";
+export { default as validatePlaygroundPath } from "./validatePlaygroundPath.js";
 export { PRAGMA_WEB_VERSION } from "./versions.js";

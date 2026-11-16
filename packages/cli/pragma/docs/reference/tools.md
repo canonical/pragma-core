@@ -218,6 +218,25 @@ Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
 | `confirm` | boolean | no | Set true to execute; otherwise a plan is returned (default false). |
 | `cwd` | string | no | Absolute project directory to write into; defaults to the server's working directory. |
 
+### create_playground
+
+Use when asked for a quick place to prototype or experiment with design-system components in Storybook, in React or Svelte. Example: create_playground { playgroundPath: "my-prototype", framework: "react" }.
+
+Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
+
+**Input**
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `playgroundPath` | string | no | Playground directory. (default: playground) |
+| `framework` | enum(react, svelte) | no | Framework. (one of: react, svelte) (default: react) |
+| `dsGlobal` | boolean | no | Install the global components (ds-global). (default: true) |
+| `dsGlobalForm` | boolean | no | Install the form fields (ds-global-form). (default: true) |
+| `dsApp` | boolean | no | Install the application components (ds-app). (default: false) |
+| `runInstall` | boolean | no | Run package manager install after creation. (default: true) |
+| `confirm` | boolean | no | Set true to execute; otherwise a plan is returned (default false). |
+| `cwd` | string | no | Absolute project directory to write into; defaults to the server's working directory. |
+
 ### doctor
 
 Use when something is not working, to find out what. Reports the environment checks first, then one row per setup target — once for your home directory, once for this project. Each row is pass, fail, available (an optional integration you have not set up yet), or skip (nothing to do here, and the row says why), with the next step printed inline. Every row is named after the setup target that repairs it, except `harnesses`: a listing, per scope, of the AI harnesses found on this machine and whether this CLI's MCP server is registered in each — the ones actually found, or every harness it knows about under the verbose global flag. Needs no store; the store check boots lazily and never fails the run.

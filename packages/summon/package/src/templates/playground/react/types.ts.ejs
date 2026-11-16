@@ -1,0 +1,13 @@
+import type { ComponentProps, ReactNode } from "react";
+
+type OwnProps = {
+  /** Content to render inside the prototype */
+  children?: ReactNode;
+};
+
+/**
+ * Props extend the native props of the root element, so every attribute that
+ * element accepts (data-*, aria-*, event handlers, …) reaches the DOM.
+ */
+export type PrototypeProps = OwnProps &
+  Omit<ComponentProps<"div">, keyof OwnProps>;
