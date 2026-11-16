@@ -301,12 +301,17 @@ single-change migration — run a conformance pass before hand-off.
 
 The code half comes from the `design-auditor` skill. It audits the design system
 itself, and only its Standards Audit dimension applies to an app: pull the live
-code standards and read their Do/Don't pairs against the swapped code.
+code standards and read their Do/Don't pairs against the swapped code. Pull every
+category the swapped code touches, not only the app's framework: css, styling,
+ui-blocks, icons and testing apply to a web app whatever renders it, and the
+`pragma standard categories` output names the rest.
 
 ```bash
 pragma skill lookup design-auditor          # the skill in full (MCP: skill_lookup)
 pragma standard categories                  # then, per applicable category:
-pragma standard list --category <framework>
+pragma standard list --category <category>  # the app's framework AND the
+                                           # tech-independent ones — css,
+                                           # styling, ui-blocks, icons, ...
 ```
 
 Treat each violation like any other adoption finding: fix it, or report it with the
