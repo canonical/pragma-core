@@ -1,0 +1,18 @@
+import previewConfig from "@canonical/storybook-config/preview";
+
+import "./styles.css";
+
+// The root declaration: one context (`app` | `site` | `docs`) and one density
+// (`comfortable` | `dense`), which together choose the spacing and
+// control-height channel every control reads. Change them here to see a
+// prototype in another context. The light/dark toggle is in the toolbar.
+if (typeof document !== "undefined") {
+  document.documentElement.classList.add("app", "comfortable");
+}
+
+const preview = {
+  ...previewConfig,
+  tags: ["autodocs"],
+};
+
+export default preview;

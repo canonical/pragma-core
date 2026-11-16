@@ -93,3 +93,24 @@ export interface TemplateContext {
   /** Index signature for EJS compatibility */
   [key: string]: unknown;
 }
+
+/** The UI framework a playground runs its Storybook on. */
+export type PlaygroundFramework = "react" | "svelte";
+
+export interface PlaygroundAnswers {
+  /** Directory to create, relative to the working directory */
+  playgroundPath: string;
+  /** The framework the Storybook and the sample component use */
+  framework: PlaygroundFramework;
+  /** Install the global components (`<framework>-ds-global`) */
+  dsGlobal: boolean;
+  /**
+   * Install the form fields (`react-ds-global-form`). React only: Svelte has
+   * no form package, so the prompt is not asked there.
+   */
+  dsGlobalForm?: boolean;
+  /** Install the application components (`<framework>-ds-app`) */
+  dsApp: boolean;
+  /** Run package manager install after creation */
+  runInstall: boolean;
+}

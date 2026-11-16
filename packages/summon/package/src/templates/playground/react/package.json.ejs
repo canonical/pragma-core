@@ -1,0 +1,47 @@
+{
+  "name": "<%= name %>",
+  "description": "A Storybook playground for prototyping components with the pragma design system",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build",
+    "check": "bun run check:biome && bun run check:ts",
+    "check:fix": "bun run check:biome:fix && bun run check:ts",
+    "check:biome": "biome check",
+    "check:biome:fix": "biome check --write",
+    "check:ts": "tsc --noEmit"
+  },
+  "dependencies": {
+<% if (dsApp) { -%>
+    "@canonical/react-ds-app": "^<%= webVersion %>",
+<% } -%>
+<% if (dsGlobal) { -%>
+    "@canonical/react-ds-global": "^<%= webVersion %>",
+<% } -%>
+<% if (dsGlobalForm) { -%>
+    "@canonical/react-ds-global-form": "^<%= webVersion %>",
+<% } -%>
+<% if (dsApp) { -%>
+    "@canonical/router-core": "^<%= webVersion %>",
+    "@canonical/router-react": "^<%= webVersion %>",
+<% } -%>
+    "@canonical/styles": "^<%= webVersion %>",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.6",
+    "@canonical/biome-config": "^<%= coreVersion %>",
+    "@canonical/storybook-config": "^<%= webVersion %>",
+    "@canonical/typescript-config-react": "^<%= webVersion %>",
+    "@chromatic-com/storybook": "^5.0.1",
+    "@storybook/react-vite": "^10.6.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "storybook": "^10.6.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.0.1"
+  }
+}

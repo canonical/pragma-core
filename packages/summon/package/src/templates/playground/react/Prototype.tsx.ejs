@@ -1,0 +1,32 @@
+<% if (dsGlobal) { -%>
+import { Button } from "@canonical/react-ds-global";
+<% } -%>
+import type React from "react";
+import type { PrototypeProps } from "./types.js";
+import "./styles.css";
+
+const componentCssClassName = "ds prototype";
+
+/**
+ * A blank component to prototype in. Rename it, or add more next to it with
+ * `pragma create component react src/<Name>`.
+ */
+const Prototype = ({
+  className,
+  children,
+  ...props
+}: PrototypeProps): React.ReactElement => {
+  return (
+    <div
+      className={[componentCssClassName, className].filter(Boolean).join(" ")}
+      {...props}
+    >
+      {children}
+<% if (dsGlobal) { -%>
+      <Button importance="primary">Primary action</Button>
+<% } -%>
+    </div>
+  );
+};
+
+export default Prototype;

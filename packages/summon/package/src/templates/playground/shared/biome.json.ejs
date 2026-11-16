@@ -1,0 +1,6 @@
+{
+  "extends": ["@canonical/biome-config"],
+  "files": {
+    "includes": ["src", ".storybook", "*.json", "*.ts"<% if (framework === 'svelte') { %>, "*.js"<% } %>]
+  }
+}

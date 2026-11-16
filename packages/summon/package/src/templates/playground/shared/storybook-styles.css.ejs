@@ -1,0 +1,8 @@
+/* The design system's foundations: tokens, fonts, the cascade layer order and
+   the base element styles. Components load their own stylesheets. */
+@import url("@canonical/styles");
+<% if (dsGlobalForm) { -%>
+
+/* Form fields ship one stylesheet for the whole package. */
+@import url("@canonical/react-ds-global-form/dist/esm/index.css");
+<% } -%>
