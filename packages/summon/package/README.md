@@ -312,10 +312,9 @@ The CLI template includes a basic argument parser setup.
 `summon playground` (and `pragma create playground`) generates a standalone Storybook project for prototyping components with the design system: Storybook configured through `@canonical/storybook-config`, `@canonical/styles` loaded once, the chosen design-system packages installed, and a sample component in `src/Prototype` whose stories use each of them.
 
 ```bash
-summon playground my-prototype                      # React, ds-global + ds-global-form
-summon playground my-prototype --framework=svelte   # Svelte, ds-global
-summon playground my-prototype --ds-app             # add the application components
-summon playground my-prototype --no-ds-global-form  # React without the form fields
+summon playground my-prototype                      # asks the framework and the packages
+summon playground my-prototype --framework=svelte --packages=ds-global,ds-app
+summon playground my-prototype --packages=ds-global # React without the form fields
 
 cd my-prototype && bun run storybook
 ```
@@ -324,9 +323,7 @@ cd my-prototype && bun run storybook
 |--------|------|---------|----------|
 | `playgroundPath` | positional | `playground` | the directory; its last segment, lowercased, is the package name |
 | `framework` | `--framework` | `react` | `react` or `svelte` |
-| `dsGlobal` | `--no-ds-global` | on | `@canonical/<framework>-ds-global` |
-| `dsGlobalForm` | `--no-ds-global-form` | on | `@canonical/react-ds-global-form`, React only: Svelte has no form package, so the prompt is not asked there and the answer is ignored |
-| `dsApp` | `--ds-app` | off | `@canonical/<framework>-ds-app` (and, for React, the router packages it takes as peers) |
+| `packages` | `--packages` (comma-separated) | `ds-global,ds-global-form` | a multi-select of `ds-global` (`@canonical/<framework>-ds-global`), `ds-global-form` (`@canonical/react-ds-global-form` and its stylesheet, React only: Svelte has no form package, so it is skipped there) and `ds-app` (`@canonical/<framework>-ds-app`, and for React the router packages it takes as peers). `@canonical/styles` is always installed |
 | `runInstall` | `--no-run-install` | on | runs the detected package manager's install |
 
 The playground is private and is not a monorepo package: it pins the design system to the pragma-web release line (`PRAGMA_WEB_VERSION`) and the toolchain configs to this generator's version. It refuses to generate into a directory that already exists.

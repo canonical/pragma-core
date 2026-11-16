@@ -94,6 +94,9 @@ export interface TemplateContext {
   [key: string]: unknown;
 }
 
+/** A design-system package a playground can install. */
+export type PlaygroundPackage = "ds-global" | "ds-global-form" | "ds-app";
+
 /** The UI framework a playground runs its Storybook on. */
 export type PlaygroundFramework = "react" | "svelte";
 
@@ -102,15 +105,11 @@ export interface PlaygroundAnswers {
   playgroundPath: string;
   /** The framework the Storybook and the sample component use */
   framework: PlaygroundFramework;
-  /** Install the global components (`<framework>-ds-global`) */
-  dsGlobal: boolean;
   /**
-   * Install the form fields (`react-ds-global-form`). React only: Svelte has
-   * no form package, so the prompt is not asked there.
+   * Design-system packages to install. `ds-global-form` is React only: Svelte
+   * has no form package, so it is skipped there.
    */
-  dsGlobalForm?: boolean;
-  /** Install the application components (`<framework>-ds-app`) */
-  dsApp: boolean;
+  packages: PlaygroundPackage[];
   /** Run package manager install after creation */
   runInstall: boolean;
 }

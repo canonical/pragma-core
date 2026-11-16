@@ -12,9 +12,7 @@ const answers = (overrides: Partial<PlaygroundAnswers> = {}) =>
   ({
     playgroundPath: "my-playground",
     framework: "react",
-    dsGlobal: true,
-    dsGlobalForm: true,
-    dsApp: false,
+    packages: ["ds-global", "ds-global-form"],
     runInstall: false,
     ...overrides,
   }) satisfies PlaygroundAnswers;
@@ -54,10 +52,28 @@ describe("playground generator", () => {
     expect(path?.default).toBe("playground");
   });
 
-  it("asks for the form fields on React only", () => {
-    const forms = generator.prompts.find((p) => p.name === "dsGlobalForm");
-    expect(forms?.when?.({ framework: "react" })).toBe(true);
-    expect(forms?.when?.({ framework: "svelte" })).toBe(false);
+  it("offers the design-system packages as one multi-select", () => {
+    const packages = generator.prompts.find((p) => p.name === "packages");
+    expect(packages?.type).toBe("multiselect");
+    expect(packages?.choices?.map((c) => c.value)).toEqual([
+      "ds-global",
+      "ds-global-form",
+      "ds-app",
+    ]);
+    expect(packages?.default).toEqual(["ds-global", "ds-global-form"]);
+    // The styles are not a choice: they are always installed, and the
+    // question says so.
+    expect(packages?.message).toContain("styles always included");
+  });
+
+  it("always installs and loads @canonical/styles", () => {
+    const written = files(answers({ packages: [] }));
+    expect(manifest(written).dependencies["@canonical/styles"]).toBe(
+      `^${PRAGMA_WEB_VERSION}`,
+    );
+    expect(written.get("my-playground/.storybook/styles.css")).toContain(
+      '@import url("@canonical/styles");',
+    );
   });
 
   it("writes a React playground with Storybook and a sample component", () => {
@@ -84,7 +100,7 @@ describe("playground generator", () => {
 
   it("writes a Svelte playground with the Vite plugin Storybook needs", () => {
     const written = files(
-      answers({ framework: "svelte", dsGlobalForm: undefined }),
+      answers({ framework: "svelte", packages: ["ds-global"] }),
     );
     expect(written.has("my-playground/vite.config.ts")).toBe(true);
     expect(written.has("my-playground/svelte.config.js")).toBe(true);
@@ -97,7 +113,9 @@ describe("playground generator", () => {
   });
 
   it("installs the chosen React design-system packages at the pragma-web line", () => {
-    const deps = manifest(files(answers({ dsApp: true }))).dependencies;
+    const deps = manifest(
+      files(answers({ packages: ["ds-global", "ds-global-form", "ds-app"] })),
+    ).dependencies;
     const range = `^${PRAGMA_WEB_VERSION}`;
     expect(deps["@canonical/styles"]).toBe(range);
     expect(deps["@canonical/react-ds-global"]).toBe(range);
@@ -108,9 +126,7 @@ describe("playground generator", () => {
   });
 
   it("leaves out every package that is toggled off", () => {
-    const written = files(
-      answers({ dsGlobal: false, dsGlobalForm: false, dsApp: false }),
-    );
+    const written = files(answers({ packages: [] }));
     expect(Object.keys(manifest(written).dependencies).sort()).toEqual([
       "@canonical/styles",
       "react",
@@ -121,18 +137,29 @@ describe("playground generator", () => {
     expect(sources).not.toContain("react-ds-app");
   });
 
-  it("loads the form stylesheet only when the form fields are installed", () => {
-    const styles = (input: PlaygroundAnswers) =>
-      files(input).get("my-playground/.storybook/styles.css");
-    expect(styles(answers())).toContain("react-ds-global-form");
-    expect(styles(answers({ dsGlobalForm: false }))).not.toContain(
+  it("installs the form fields with their stylesheet, and neither without them", () => {
+    const formStylesheet =
+      '@import url("@canonical/react-ds-global-form/dist/esm/index.css");';
+    const withForm = files(answers());
+    expect(
+      manifest(withForm).dependencies["@canonical/react-ds-global-form"],
+    ).toBe(`^${PRAGMA_WEB_VERSION}`);
+    expect(withForm.get("my-playground/.storybook/styles.css")).toContain(
+      formStylesheet,
+    );
+
+    const without = files(answers({ packages: ["ds-global"] }));
+    expect(manifest(without).dependencies).not.toHaveProperty(
+      "@canonical/react-ds-global-form",
+    );
+    expect(without.get("my-playground/.storybook/styles.css")).not.toContain(
       "react-ds-global-form",
     );
   });
 
   it("never installs a form package for Svelte", () => {
     const deps = manifest(
-      files(answers({ framework: "svelte", dsGlobalForm: undefined })),
+      files(answers({ framework: "svelte", packages: ["ds-global"] })),
     ).dependencies;
     expect(Object.keys(deps).sort()).toEqual([
       "@canonical/styles",
@@ -141,10 +168,16 @@ describe("playground generator", () => {
     ]);
   });
 
-  it("ignores the form answer on Svelte, whichever front-end filled it", () => {
-    // summon's CLI fills a `when`-false prompt's default; pragma's does not.
+  it("skips the form package on Svelte, where it is in the default selection", () => {
+    // ds-global-form is in the default selection, so every Svelte run that
+    // takes the defaults carries it.
     const deps = manifest(
-      files(answers({ framework: "svelte", dsGlobalForm: true })),
+      files(
+        answers({
+          framework: "svelte",
+          packages: ["ds-global", "ds-global-form"],
+        }),
+      ),
     ).dependencies;
     expect(Object.keys(deps)).not.toContain("@canonical/react-ds-global-form");
   });
