@@ -16,46 +16,46 @@ ds:apps_landscape.pattern.responsive_table_filters a ds:Pattern;
         ds:name "`filters`";
         ds:summary "Supplies the ordered elements used by both render branches.";
         ds:propertyType "list of nodes";
-        ds:constraints "TypeScript: `ReactElement<FilterProps, JSXElementConstructor<{ name: string }>>[]`. Inline mode wraps each element in a `span`; collapsed mode adapts elements with a truthy `node.type.name` and renders others directly. Array indexes are used as wrapper keys.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactElement<FilterProps, JSXElementConstructor<{ name: string }>>[]`. Inline mode wraps each element in a `span`; collapsed mode adapts elements with a truthy `node.type.name` and renders others directly. Array indexes are used as wrapper keys."
     ], [
         a ds:Property;
         ds:name "`collapseFrom`";
         ds:summary "Selects the minimum width for inline mode.";
         ds:propertyType "choice";
-        ds:constraints "Builds `(min-width: Npx)` from the shared map: `xs` 460, `sm` 620, `md` 768, `lg` 1036, `xl` 1280, and `xxl` 1400.";
         ds:defaultValue "`md`";
+        ds:constraints "Builds `(min-width: Npx)` from the shared map: `xs` 460, `sm` 620, `md` 768, `lg` 1036, `xl` 1280, and `xxl` 1400.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`menuLabel`";
         ds:summary "Replaces the complete collapsed-menu toggle content.";
         ds:propertyType "node";
-        ds:constraints "TypeScript: `ReactNode`. Include an accessible text label; icon-only content is permitted by the type but is not named by this wrapper.";
         ds:defaultValue "Filter icon plus `Filters` text";
+        ds:constraints "TypeScript: `ReactNode`. Include an accessible text label; icon-only content is permitted by the type but is not named by this wrapper.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`className`";
         ds:summary "Adds classes to the outer wrapper.";
         ds:propertyType "text";
-        ds:constraints "Local flex and no-wrap styles remain applied.";
         ds:defaultValue "—";
+        ds:constraints "Local flex and no-wrap styles remain applied.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`menuPosition`";
         ds:summary "Sets both the outer menu position and every nested disclosure position.";
         ds:propertyType "choice";
-        ds:constraints "`right` places nested panels leftward; `left` places them rightward; `center` delegates horizontal panel placement to contextual-menu styling.";
         ds:defaultValue "`right`";
+        ds:constraints "`right` places nested panels leftward; `left` places them rightward; `center` delegates horizontal panel placement to contextual-menu styling.";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`isCollapsed`";
         ds:summary "Forces collapsed mode even when the media query matches.";
         ds:propertyType "boolean";
-        ds:constraints "Cannot force inline mode below `collapseFrom`.";
         ds:defaultValue "false";
+        ds:constraints "Cannot force inline mode below `collapseFrom`.";
         ds:optional "true"
     ].

@@ -4,7 +4,7 @@
 
 ds:global.group.cards a ds:Group;
     ds:name "Cards";
-    ds:summary "";
+    ds:summary "Cards are a set of Card blocks shown side by side, each one data object in the same structure. Users scan and compare attributes across the set at a glance. Use them for machine inventories, image catalogues and plan comparisons.";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";

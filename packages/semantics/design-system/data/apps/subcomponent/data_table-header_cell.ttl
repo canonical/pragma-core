@@ -23,40 +23,40 @@ ds:apps.subcomponent.data_table-header_cell a ds:Subcomponent;
         ds:summary "Whether the column header responds to sort interactions. Enable only for columns where the sort order is obvious and helpful to the user.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Not available on checkbox or action variants. Disabled entirely on keyset-paginated tables.";
-        ds:defaultValue "false"
+        ds:defaultValue "false";
+        ds:constraints "Not available on checkbox or action variants. Disabled entirely on keyset-paginated tables."
     ], [
         a ds:Property;
         ds:name "resizable";
         ds:summary "Whether the resize handle is shown at the right edge of the header cell.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Not available on checkbox or action variants.";
-        ds:defaultValue "true"
+        ds:defaultValue "true";
+        ds:constraints "Not available on checkbox or action variants."
     ], [
         a ds:Property;
         ds:name "reorderable";
         ds:summary "Whether the column can be dragged to a new position through the header cell or the settings menu.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Checkbox and action columns are never reorderable.";
-        ds:defaultValue "true"
+        ds:defaultValue "true";
+        ds:constraints "Checkbox and action columns are never reorderable."
     ], [
         a ds:Property;
         ds:name "pinnable";
         ds:summary "Whether the column can be pinned to the left side of the table through the settings menu.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Subject to smart pinning constraints. Pinning only takes effect during horizontal scrolling.";
-        ds:defaultValue "true"
+        ds:defaultValue "true";
+        ds:constraints "Subject to smart pinning constraints. Pinning only takes effect during horizontal scrolling."
     ], [
         a ds:Property;
         ds:name "sort-direction";
         ds:summary "The current sort state of the column. Follows a three-step cycle: ascending, descending, unsorted.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:constraints "Only applies when sortable is true.";
-        ds:defaultValue "unsorted"
+        ds:defaultValue "unsorted";
+        ds:constraints "Only applies when sortable is true."
     ], [
         a ds:Property;
         ds:name "column-width";

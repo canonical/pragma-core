@@ -16,41 +16,41 @@ ds:apps_landscape.subcomponent.select_all_results_prompt a ds:Subcomponent;
         ds:name "`count`";
         ds:summary "Current selected count used in status copy.";
         ds:propertyType "number";
-        ds:constraints "Formatted with `toLocaleString()` by `pluralize(..., \"exact\")`; there is no runtime range validation, so callers must keep it nonnegative and below the total while shown.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Formatted with `toLocaleString()` by `pluralize(..., \"exact\")`; there is no runtime range validation, so callers must keep it nonnegative and below the total while shown."
     ], [
         a ds:Property;
         ds:name "`itemName`";
         ds:summary "Supplies nouns used by status and action copy.";
         ds:propertyType "object";
-        ds:constraints "TypeScript: `{ plural: string; singular: string }`. Status selects the exact singular or plural; the action always uses `plural`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `{ plural: string; singular: string }`. Status selects the exact singular or plural; the action always uses `plural`."
     ], [
         a ds:Property;
         ds:name "`itemName.singular`";
         ds:summary "Noun used when the current selected count is one.";
         ds:propertyType "text";
-        ds:constraints "Used only by the status copy through exact pluralization.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Used only by the status copy through exact pluralization."
     ], [
         a ds:Property;
         ds:name "`itemName.plural`";
         ds:summary "Noun used for plural status and select-all copy.";
         ds:propertyType "text";
-        ds:constraints "The action always uses this value regardless of `totalCount`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "The action always uses this value regardless of `totalCount`."
     ], [
         a ds:Property;
         ds:name "`onClick`";
         ds:summary "Handles the select-all button.";
         ds:propertyType "callback";
-        ds:constraints "TypeScript: `() => void`. No arguments, awaiting, disabled state, error handling, or duplicate-activation prevention are provided.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. No arguments, awaiting, disabled state, error handling, or duplicate-activation prevention are provided."
     ], [
         a ds:Property;
         ds:name "`totalCount`";
         ds:summary "Total interpolated directly into the action label.";
         ds:propertyType "number";
-        ds:constraints "Unlike `count`, it does not pass through `toLocaleString()`. There is no equality or scope check; the component still renders when `totalCount <= count`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Unlike `count`, it does not pass through `toLocaleString()`. There is no equality or scope check; the component still renders when `totalCount <= count`."
     ].

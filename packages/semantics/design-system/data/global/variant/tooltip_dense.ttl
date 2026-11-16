@@ -4,7 +4,7 @@
 
 ds:global.variant.tooltip_dense a ds:Variant;
     ds:name "Tooltip+Dense";
-    ds:summary "+";
+    ds:summary "";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";

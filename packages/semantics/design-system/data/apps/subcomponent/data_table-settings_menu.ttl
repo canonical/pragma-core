@@ -17,8 +17,8 @@ ds:apps.subcomponent.data_table-settings_menu a ds:Subcomponent;
         ds:summary "Whether the settings gear icon and menu are shown in the header row.";
         ds:propertyType "boolean";
         ds:optional "false";
-        ds:constraints "Inherited from the data table. Only set to false when all column customization features are disabled.";
-        ds:defaultValue "true"
+        ds:defaultValue "true";
+        ds:constraints "Inherited from the data table. Only set to false when all column customization features are disabled."
     ], [
         a ds:Property;
         ds:name "grouping-columns";

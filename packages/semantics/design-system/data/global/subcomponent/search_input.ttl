@@ -17,8 +17,8 @@ ds:global.subcomponent.search_input a ds:Subcomponent;
         ds:summary "The placeholder text should specify what the scope of the search is. It should always include the word e.g. “Search machines”.";
         ds:propertyType "text";
         ds:optional "false";
-        ds:constraints "Include “Search” at the beginning of the placeholder string.";
-        ds:defaultValue "Search"
+        ds:defaultValue "Search";
+        ds:constraints "Include “Search” at the beginning of the placeholder string."
     ];
     ds:changeLog [
         a ds:ChangeLogEntry;

@@ -17,110 +17,110 @@ ds:apps_landscape.pattern.side_panel_form_actions a ds:Pattern;
         ds:summary "Visible primary-action content.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:constraints "No local fallback. Omitting both text and ARIA label can leave an unnamed action depending on ActionButton loading behavior.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "No local fallback. Omitting both text and ARIA label can leave an unnamed action depending on ActionButton loading behavior."
     ], [
         a ds:Property;
         ds:name "`submitButtonAriaLabel`";
         ds:summary "Sets the primary ActionButton `aria-label`.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:constraints "An ARIA label overrides the visible-text accessible name.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "An ARIA label overrides the visible-text accessible name."
     ], [
         a ds:Property;
         ds:name "`submitButtonAppearance`";
         ds:summary "Forwards ActionButton appearance.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:constraints "Choose intent in the consumer.";
-        ds:defaultValue "`positive`"
+        ds:defaultValue "`positive`";
+        ds:constraints "Choose intent in the consumer."
     ], [
         a ds:Property;
         ds:name "`submitButtonDisabled`";
         ds:summary "Consumer-controlled primary disabled state.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Combined with loading using logical OR.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Combined with loading using logical OR."
     ], [
         a ds:Property;
         ds:name "`submitButtonLoading`";
         ds:summary "Forwards ActionButton loading and disables the primary action.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Component does not start or clear loading itself.";
-        ds:defaultValue "false"
+        ds:defaultValue "false";
+        ds:constraints "Component does not start or clear loading itself."
     ], [
         a ds:Property;
         ds:name "`hasBackButton`";
         ds:summary "Renders Back before the action group.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "No local guard requires `onBackButtonPress`.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "No local guard requires `onBackButtonPress`."
     ], [
         a ds:Property;
         ds:name "`onBackButtonPress`";
         ds:summary "Handles Back activation.";
         ds:propertyType "callback";
         ds:optional "true";
-        ds:constraints "TypeScript: `() => void`. The button remains rendered but inert when omitted.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `() => void`. The button remains rendered but inert when omitted."
     ], [
         a ds:Property;
         ds:name "`onCancel`";
         ds:summary "Overrides default cancellation.";
         ds:propertyType "callback";
         ds:optional "true";
-        ds:constraints "TypeScript: `() => void`. When omitted, Cancel calls `useSidePanel().closeSidePanel`.";
-        ds:defaultValue "`closeSidePanel`"
+        ds:defaultValue "`closeSidePanel`";
+        ds:constraints "TypeScript: `() => void`. When omitted, Cancel calls `useSidePanel().closeSidePanel`."
     ], [
         a ds:Property;
         ds:name "`cancelButtonDisabled`";
         ds:summary "Disables Cancel.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Independent from submit loading.";
-        ds:defaultValue "false"
+        ds:defaultValue "false";
+        ds:constraints "Independent from submit loading."
     ], [
         a ds:Property;
         ds:name "`secondaryActionButtonTitle`";
         ds:summary "Secondary button content.";
         ds:propertyType "node";
         ds:optional "true";
-        ds:constraints "TypeScript: `ReactNode`. Must be truthy together with `secondaryActionButtonSubmit` to render.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `ReactNode`. Must be truthy together with `secondaryActionButtonSubmit` to render."
     ], [
         a ds:Property;
         ds:name "`secondaryActionButtonSubmit`";
         ds:summary "Handles secondary action activation.";
         ds:propertyType "callback";
         ds:optional "true";
-        ds:constraints "TypeScript: `(event: SyntheticEvent) => Promise<void> | void`. The promise is not awaited or caught by this component.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(event: SyntheticEvent) => Promise<void> | void`. The promise is not awaited or caught by this component."
     ], [
         a ds:Property;
         ds:name "`secondaryActionButtonDisabled`";
         ds:summary "Disables the secondary action.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Has no loading presentation.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "Has no loading presentation."
     ], [
         a ds:Property;
         ds:name "`hasActionButtons`";
         ds:summary "Controls the complete Cancel, secondary, and primary group.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:constraints "Back can remain visible when false.";
-        ds:defaultValue "true"
+        ds:defaultValue "true";
+        ds:constraints "Back can remain visible when false."
     ], [
         a ds:Property;
         ds:name "`onSubmit`";
         ds:summary "Changes primary type to `button` and handles activation.";
         ds:propertyType "callback";
         ds:optional "true";
-        ds:constraints "TypeScript: `(event: SyntheticEvent) => Promise<void> | void`. Without it, native form submission is used.";
-        ds:defaultValue "—"
+        ds:defaultValue "—";
+        ds:constraints "TypeScript: `(event: SyntheticEvent) => Promise<void> | void`. Without it, native form submission is used."
     ].

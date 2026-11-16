@@ -1,0 +1,85 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:apps.pattern.data_views a ds:Pattern;
+    ds:name "DataViews";
+    ds:summary "DataViews presents one collection of records with search, filters, sorting, pagination and saved views around a renderer, such as a table or cards. Every part reads and edits the same view, so each renderer shows the same query and the same selection. Use it for machine inventories, order lists and audit logs, where users narrow a large collection and act on what they find.";
+    ds:anatomyDsl "---\n# Authored 2026-11-14 from @canonical/dataviews-react DataViews and its connected parts\nnode:\n  uri: apps.pattern.data_views\n  edges:\n    - node:\n        uri: global.subcomponent.search_input\n      relation:\n        cardinality: \"0..1\"\n        slotName: search\n    - node:\n        role: filters\n      relation:\n        cardinality: \"0..1\"\n        slotName: filters\n    - node:\n        role: sort panel\n      relation:\n        cardinality: \"0..1\"\n        slotName: sort\n    - node:\n        role: saved views\n      relation:\n        cardinality: \"0..1\"\n        slotName: views\n    - node:\n        uri: apps.pattern.datatable\n      relation:\n        cardinality: \"0..*\"\n        slotName: table\n    - node:\n        uri: global.group.cards\n      relation:\n        cardinality: \"0..*\"\n        slotName: cards\n    - node:\n        uri: apps.subcomponent.data_table-settings_menu\n      relation:\n        cardinality: \"0..1\"\n        slotName: settings\n    - node:\n        uri: apps.subcomponent.data_table-action_bar\n      relation:\n        cardinality: \"0..1\"\n        slotName: actions\n    - node:\n        uri: apps.subcomponent.data_table-pagination_bar\n      relation:\n        cardinality: \"0..1\"\n        slotName: pagination";
+    ds:anatomyClassic "";
+    ds:usage "## When to use\n\n- A collection users search, filter, sort or page through, as a table, cards or both\n\n## When not to use\n\n- A short, fixed list: use a table or a list on its own";
+    ds:guidelines "# States & interaction\n\n- Every part edits one view, so a change in one shows in every renderer.\n- A search or filter change returns to the first page.\n- The action bar shows only while records are selected; persistent selection spans pages.\n\n# Accessibility\n\n- Every part is labelled, and a change with no visible result is announced in one polite live region.\n- Without scripting, search, filters and pagination work as links and GET forms.";
+    ds:tier ds:apps;
+    ds:documentationStage ds:tag.needscoredocumentation;
+    ds:hasSubcomponent ds:apps.subcomponent.data_views-filters, ds:apps.subcomponent.data_views-sort_panel, ds:apps.subcomponent.data_views-saved_views, ds:apps.subcomponent.data_table-pagination_bar, ds:apps.subcomponent.data_table-action_bar;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "selection-mode";
+        ds:summary "Simple selection is page-scoped and dropped on navigation; persistent selection spans pages, sorting and filtering.";
+        ds:propertyType "choice";
+        ds:optional "true";
+        ds:defaultValue "none";
+        ds:constraints "Views with grouping and selection use persistent."
+    ], [
+        a ds:Property;
+        ds:name "unique-identifier-field";
+        ds:summary "The field that identifies each record across pages.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "Required when selection-mode is not none."
+    ], [
+        a ds:Property;
+        ds:name "max-selection-count";
+        ds:summary "The most records a user can select.";
+        ds:propertyType "number";
+        ds:optional "true";
+        ds:constraints "A positive integer."
+    ], [
+        a ds:Property;
+        ds:name "pagination-mode";
+        ds:summary "Offset navigates to any page; keyset moves forward and back only.";
+        ds:propertyType "choice";
+        ds:optional "true";
+        ds:defaultValue "none";
+        ds:constraints "Keyset is incompatible with grouping and sorting."
+    ], [
+        a ds:Property;
+        ds:name "page-size-options";
+        ds:summary "The page sizes offered; the first is the default.";
+        ds:propertyType "list of text";
+        ds:optional "true";
+        ds:defaultValue "50, 75, 100";
+        ds:constraints "Each value is a positive integer."
+    ], [
+        a ds:Property;
+        ds:name "item-label";
+        ds:summary "The noun the pagination bar uses for the records, such as \"machines\".";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:defaultValue "items"
+    ], [
+        a ds:Property;
+        ds:name "bulk-actions";
+        ds:summary "The actions shown while records are selected, each a label and an optional icon, standalone or grouped in a menu.";
+        ds:propertyType "object";
+        ds:optional "true";
+        ds:constraints "At most 7 top-level actions; the deselect button does not count."
+    ], [
+        a ds:Property;
+        ds:name "on-page-change";
+        ds:summary "Called with the target page and page size when the user changes page.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "on-selection-change";
+        ds:summary "Called with the selected record identifiers.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "on-bulk-action";
+        ds:summary "Called with the action and the selected record identifiers.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ].
