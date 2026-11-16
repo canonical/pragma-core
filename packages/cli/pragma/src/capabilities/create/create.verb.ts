@@ -555,7 +555,7 @@ export const createVerbs: Record<
         note: "React, with ds-global and ds-global-form",
       },
       {
-        cmd: `${BIN_NAME} create playground my-prototype --framework svelte --ds-app`,
+        cmd: `${BIN_NAME} create playground my-prototype --framework svelte --packages ds-global,ds-app`,
       },
     ],
     {

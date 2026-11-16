@@ -33,6 +33,7 @@ import {
   PACKAGE_NAME,
   type PlaygroundAnswers,
   type PlaygroundFramework,
+  type PlaygroundPackage,
   PRAGMA_WEB_VERSION,
   packageVersion,
   validatePlaygroundPath,
@@ -144,25 +145,18 @@ const prompts: PromptDefinition[] = [
     group: "Playground",
   },
   {
-    name: "dsGlobal",
-    type: "confirm",
-    message: "Install the global components (ds-global)?",
-    default: true,
-    group: "Design system",
-  },
-  {
-    name: "dsGlobalForm",
-    type: "confirm",
-    message: "Install the form fields (ds-global-form)?",
-    default: true,
-    when: (answers) => answers.framework !== "svelte",
-    group: "Design system",
-  },
-  {
-    name: "dsApp",
-    type: "confirm",
-    message: "Install the application components (ds-app)?",
-    default: false,
+    name: "packages",
+    type: "multiselect",
+    message: "Packages (styles always included):",
+    choices: [
+      { label: "ds-global - the global components", value: "ds-global" },
+      {
+        label: "ds-global-form - form fields and their stylesheet (React only)",
+        value: "ds-global-form",
+      },
+      { label: "ds-app - the application components", value: "ds-app" },
+    ],
+    default: ["ds-global", "ds-global-form"],
     group: "Design system",
   },
   {
@@ -266,19 +260,22 @@ FRAMEWORKS (--framework):
   react     React 19 with @storybook/react-vite (the default)
   svelte    Svelte 5 with @storybook/svelte-vite
 
-DESIGN-SYSTEM PACKAGES:
-  --no-ds-global       Skip the global components
-  --no-ds-global-form  Skip the form fields (React only: Svelte has no form
-                       package)
-  --ds-app             Add the application components
+DESIGN-SYSTEM PACKAGES (--packages, comma-separated):
+  ds-global       The global components (default)
+  ds-global-form  The form fields and their stylesheet (default; React only:
+                  Svelte has no form package, so it is skipped there)
+  ds-app          The application components
+
+  @canonical/styles (tokens, fonts, cascade layers, base styles) is always
+  installed and loaded once in .storybook/styles.css.
 
 Start it with \`bun run storybook\` inside the directory. Add components with
 \`pragma create component <framework> src/<Name>\`.`,
     examples: [
       "summon playground",
       "summon playground my-prototype --framework=svelte",
-      "summon playground prototypes/navigation --ds-app",
-      "summon playground my-prototype --no-ds-global-form",
+      "summon playground prototypes/navigation --packages=ds-global,ds-global-form,ds-app",
+      "summon playground my-prototype --packages=ds-global",
     ],
   },
 
@@ -288,17 +285,17 @@ Start it with \`bun run storybook\` inside the directory. Add components with
     const playgroundPath = answers.playgroundPath.trim().replace(/\/+$/, "");
     const framework = answers.framework;
 
+    const packages = new Set<PlaygroundPackage>(answers.packages ?? []);
     const name = playgroundName(playgroundPath);
     const ctx: PlaygroundContext = {
       name,
       framework,
-      dsGlobal: answers.dsGlobal,
-      // Svelte has no form package. The prompt is not asked there, but a
-      // front-end that fills every default still hands its `true` in, so the
-      // answer is ignored rather than refused: it cannot be told apart from an
-      // explicit request.
-      dsGlobalForm: framework === "react" && answers.dsGlobalForm !== false,
-      dsApp: answers.dsApp,
+      dsGlobal: packages.has("ds-global"),
+      // Svelte has no form package. The choice is ignored there rather than
+      // refused, because it is in the default selection every front-end
+      // fills in.
+      dsGlobalForm: framework === "react" && packages.has("ds-global-form"),
+      dsApp: packages.has("ds-app"),
       componentLayer: componentLayerFor(name),
       coreVersion: packageVersion(),
       webVersion: PRAGMA_WEB_VERSION,
@@ -318,6 +315,10 @@ Start it with \`bun run storybook\` inside the directory. Add components with
       const cwd = process.cwd();
       return sequence_([
         info(`Creating ${framework} playground: ${playgroundPath}`),
+        when(
+          framework === "svelte" && packages.has("ds-global-form"),
+          info("Skipping ds-global-form: Svelte has no form package."),
+        ),
         generateFiles(ctx, playgroundPath),
         when(
           answers.runInstall,

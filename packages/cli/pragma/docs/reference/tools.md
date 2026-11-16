@@ -230,9 +230,7 @@ Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
 | --- | --- | --- | --- |
 | `playgroundPath` | string | no | Playground directory. (default: playground) |
 | `framework` | enum(react, svelte) | no | Framework. (one of: react, svelte) (default: react) |
-| `dsGlobal` | boolean | no | Install the global components (ds-global). (default: true) |
-| `dsGlobalForm` | boolean | no | Install the form fields (ds-global-form). (default: true) |
-| `dsApp` | boolean | no | Install the application components (ds-app). (default: false) |
+| `packages` | string[] | no | Packages (styles always included). |
 | `runInstall` | boolean | no | Run package manager install after creation. (default: true) |
 | `confirm` | boolean | no | Set true to execute; otherwise a plan is returned (default false). |
 | `cwd` | string | no | Absolute project directory to write into; defaults to the server's working directory. |

@@ -87,7 +87,7 @@ const FIXTURES: readonly CrossCliFixture[] = [
     answers: {
       playgroundPath: "my-playground",
       framework: "svelte",
-      dsApp: true,
+      packages: ["ds-global", "ds-app"],
       runInstall: false,
     },
   },
