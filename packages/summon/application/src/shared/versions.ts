@@ -35,7 +35,7 @@ import { info, map } from "@canonical/task";
  * `@canonical/react-ds-global`, one of the packages released at this version;
  * a bump is reviewed against the templates rather than merged on sight.
  */
-export const PRAGMA_WEB_VERSION = "0.45.0";
+export const PRAGMA_WEB_VERSION = "0.47.0";
 
 const OWN_PACKAGE = "@canonical/summon-application";
 

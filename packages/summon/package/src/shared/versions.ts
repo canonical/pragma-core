@@ -19,4 +19,4 @@
  */
 
 /** The pragma-web release every web-side dependency is pinned to. */
-export const PRAGMA_WEB_VERSION = "0.45.0";
+export const PRAGMA_WEB_VERSION = "0.47.0";
