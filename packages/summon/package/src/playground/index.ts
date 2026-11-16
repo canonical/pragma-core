@@ -17,6 +17,8 @@ import {
   template,
 } from "@canonical/summon-core";
 import {
+  attempt,
+  deleteDirectory,
   exec,
   exists,
   fail,
@@ -25,6 +27,7 @@ import {
   mkdir,
   sequence_,
   type Task,
+  warn,
   when,
 } from "@canonical/task";
 
@@ -160,6 +163,13 @@ const prompts: PromptDefinition[] = [
     group: "Design system",
   },
   {
+    name: "gitInit",
+    type: "confirm",
+    message: "Initialise a git repository?",
+    default: true,
+    group: "Post-setup",
+  },
+  {
     name: "runInstall",
     type: "confirm",
     message: "Run package manager install after creation?",
@@ -235,6 +245,34 @@ function generateFiles(ctx: PlaygroundContext, dir: string): Task<void> {
   ]);
 }
 
+/**
+ * Make the playground a git repository, so Storybook can mark the stories that
+ * changed. Skipped inside an existing repository, where a nested one would
+ * hide the playground from it, and when git is missing or fails: the
+ * playground works without it. `--undo` removes the `.git` it created.
+ */
+function initGitRepository(dir: string): Task<void> {
+  const probe = exec("git", ["rev-parse", "--is-inside-work-tree"], dir, {
+    undo: null,
+  });
+  return flatMap(attempt(probe), (inside) => {
+    if (!inside.ok) {
+      return warn("git is not available: skipping git init.");
+    }
+    if (inside.value.stdout.trim() === "true") {
+      return info("Already inside a git repository: skipping git init.");
+    }
+    const init = exec("git", ["init", "--quiet"], dir, {
+      undo: deleteDirectory(path.join(dir, ".git")),
+    });
+    return flatMap(attempt(init), (result) =>
+      result.ok && result.value.exitCode === 0
+        ? info("Initialised a git repository")
+        : warn("git init failed: the playground is not a git repository."),
+    );
+  });
+}
+
 // =============================================================================
 // Generator Definition
 // =============================================================================
@@ -268,6 +306,11 @@ DESIGN-SYSTEM PACKAGES (--packages, comma-separated):
 
   @canonical/styles (tokens, fonts, cascade layers, base styles) is always
   installed and loaded once in .storybook/styles.css.
+
+GIT (--no-git-init to skip):
+  The playground is made a git repository, so Storybook can mark the stories
+  that changed. Skipped inside an existing repository and when git is
+  missing.
 
 Start it with \`bun run storybook\` inside the directory. Add components with
 \`pragma create component <framework> src/<Name>\`.`,
@@ -320,6 +363,7 @@ Start it with \`bun run storybook\` inside the directory. Add components with
           info("Skipping ds-global-form: Svelte has no form package."),
         ),
         generateFiles(ctx, playgroundPath),
+        when(answers.gitInit, initGitRepository(playgroundPath)),
         when(
           answers.runInstall,
           flatMap(detectPackageManager(cwd), (pm) =>

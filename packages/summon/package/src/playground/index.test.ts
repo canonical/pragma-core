@@ -2,7 +2,12 @@
  * Tests for the playground generator (dry-run)
  */
 
-import { dryRun, dryRunWith } from "@canonical/task";
+import {
+  dryRun,
+  dryRunWith,
+  type Effect,
+  TaskExecutionError,
+} from "@canonical/task";
 import { describe, expect, it } from "vitest";
 import pkg from "../../package.json" with { type: "json" };
 import { type PlaygroundAnswers, PRAGMA_WEB_VERSION } from "../shared/index.js";
@@ -13,6 +18,7 @@ const answers = (overrides: Partial<PlaygroundAnswers> = {}) =>
     playgroundPath: "my-playground",
     framework: "react",
     packages: ["ds-global", "ds-global-form"],
+    gitInit: true,
     runInstall: false,
     ...overrides,
   }) satisfies PlaygroundAnswers;
@@ -198,5 +204,90 @@ describe("playground generator", () => {
     expect(() => dryRunWith(generator.generate(answers()), existing)).toThrow(
       /already exists/,
     );
+  });
+
+  describe("git init", () => {
+    interface ExecEffect {
+      _tag: "Exec";
+      command: string;
+      args: string[];
+      cwd?: string;
+    }
+    // dryRunWith answers `Exists` with true unless told otherwise, which
+    // would trip the existing-directory guard.
+    const fresh = ["Exists", () => false] as const;
+    const gitCalls = (effects: Effect[]) =>
+      effects
+        .filter((e): e is ExecEffect & Effect => e._tag === "Exec")
+        .filter((e) => e.command === "git")
+        .map((e) => `${e.args.join(" ")} @ ${e.cwd}`);
+
+    it("is a confirm that defaults to yes", () => {
+      const git = generator.prompts.find((p) => p.name === "gitInit");
+      expect(git?.type).toBe("confirm");
+      expect(git?.default).toBe(true);
+    });
+
+    it("initialises a repository in the playground", () => {
+      const { effects } = dryRun(generator.generate(answers()));
+      expect(gitCalls(effects)).toEqual([
+        "rev-parse --is-inside-work-tree @ my-playground",
+        "init --quiet @ my-playground",
+      ]);
+    });
+
+    it("runs no git command when turned off", () => {
+      const { effects } = dryRun(
+        generator.generate(answers({ gitInit: false })),
+      );
+      expect(gitCalls(effects)).toEqual([]);
+    });
+
+    it("skips init inside an existing repository", () => {
+      const insideRepo = new Map<string, (e: Effect) => unknown>([
+        fresh,
+        [
+          "Exec",
+          (e: Effect) => ({
+            stdout: (e as ExecEffect).args[0] === "rev-parse" ? "true\n" : "",
+            stderr: "",
+            exitCode: 0,
+          }),
+        ],
+      ]);
+      const { effects } = dryRunWith(generator.generate(answers()), insideRepo);
+      expect(gitCalls(effects)).toEqual([
+        "rev-parse --is-inside-work-tree @ my-playground",
+      ]);
+    });
+
+    it("carries on without a repository when git is missing", () => {
+      const noGit = new Map<string, (e: Effect) => unknown>([
+        fresh,
+        [
+          "Exec",
+          () => {
+            throw new TaskExecutionError({
+              code: "EXEC_FAILED",
+              message: "spawn git ENOENT",
+            });
+          },
+        ],
+      ]);
+      const { effects } = dryRunWith(generator.generate(answers()), noGit);
+      // The files are still written, and nothing after the probe ran.
+      expect(effects.some((e) => e._tag === "WriteFile")).toBe(true);
+      expect(gitCalls(effects)).toEqual([
+        "rev-parse --is-inside-work-tree @ my-playground",
+      ]);
+    });
+
+    it("removes the repository it created on undo", () => {
+      const { effects } = dryRun(generator.generate(answers()));
+      const init = effects.find(
+        (e) => e._tag === "Exec" && (e as ExecEffect).args[0] === "init",
+      ) as { undo?: unknown } | undefined;
+      expect(JSON.stringify(init?.undo)).toContain("my-playground/.git");
+    });
   });
 });
