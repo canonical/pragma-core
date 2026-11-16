@@ -234,15 +234,8 @@ describe("surface conformance — capabilities ⊆ covenant (PROTECTED)", () => 
       {
         v: "playground",
         args: ["[playground-path]"],
-        // dsGlobalForm is asked for React only (its `when`), but the flag is
-        // registered for both: the generator refuses it explicitly on Svelte.
-        flags: [
-          "--framework",
-          "--no-ds-global",
-          "--no-ds-global-form",
-          "--ds-app",
-          "--no-run-install",
-        ],
+        // `packages` is a multiselect: one comma-separated value flag.
+        flags: ["--framework", "--packages", "--no-run-install"],
         mutates: true,
         mcp: "create_playground",
       },

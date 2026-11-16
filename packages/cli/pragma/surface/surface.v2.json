@@ -294,13 +294,7 @@
         {
           "v": "playground",
           "args": ["[playground-path]"],
-          "flags": [
-            "--framework",
-            "--no-ds-global",
-            "--no-ds-global-form",
-            "--ds-app",
-            "--no-run-install"
-          ],
+          "flags": ["--framework", "--packages", "--no-run-install"],
           "mutates": true,
           "mcp": "create_playground"
         },

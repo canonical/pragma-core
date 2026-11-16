@@ -672,6 +672,7 @@ describe("the mounted create grammar (subprocess)", () => {
     playground: {
       "--playground-path": "replied-playground",
       "--framework": "svelte",
+      "--packages": "ds-global,ds-app",
     },
     "application/react": {
       "--app-path": "replied-app",

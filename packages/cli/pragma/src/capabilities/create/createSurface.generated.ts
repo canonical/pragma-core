@@ -342,25 +342,27 @@ export const CREATE_SURFACE: Readonly<Record<string, SurfaceCommand>> = {
         "group": "Playground"
       },
       {
-        "name": "dsGlobal",
-        "type": "confirm",
-        "message": "Install the global components (ds-global)?",
-        "default": true,
-        "group": "Design system"
-      },
-      {
-        "name": "dsGlobalForm",
-        "type": "confirm",
-        "message": "Install the form fields (ds-global-form)?",
-        "default": true,
-        "group": "Design system",
-        "conditional": true
-      },
-      {
-        "name": "dsApp",
-        "type": "confirm",
-        "message": "Install the application components (ds-app)?",
-        "default": false,
+        "name": "packages",
+        "type": "multiselect",
+        "message": "Packages (styles always included):",
+        "default": [
+          "ds-global",
+          "ds-global-form"
+        ],
+        "choices": [
+          {
+            "label": "ds-global - the global components",
+            "value": "ds-global"
+          },
+          {
+            "label": "ds-global-form - form fields and their stylesheet (React only)",
+            "value": "ds-global-form"
+          },
+          {
+            "label": "ds-app - the application components",
+            "value": "ds-app"
+          }
+        ],
         "group": "Design system"
       },
       {
@@ -552,20 +554,10 @@ export const CREATE_CLI_SYNTAX: Readonly<
       "takesValue": true,
       "kebabName": "framework"
     },
-    "dsGlobal": {
-      "flag": "--no-ds-global",
-      "takesValue": false,
-      "kebabName": "ds-global"
-    },
-    "dsGlobalForm": {
-      "flag": "--no-ds-global-form",
-      "takesValue": false,
-      "kebabName": "ds-global-form"
-    },
-    "dsApp": {
-      "flag": "--ds-app",
-      "takesValue": false,
-      "kebabName": "ds-app"
+    "packages": {
+      "flag": "--packages",
+      "takesValue": true,
+      "kebabName": "packages"
     },
     "runInstall": {
       "flag": "--no-run-install",

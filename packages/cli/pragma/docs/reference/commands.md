@@ -483,9 +483,7 @@ pragma create playground [playground-path] [options]
 | Flag | Value | Description |
 | --- | --- | --- |
 | `--framework` | `<react\|svelte>` | Framework. (one of: react, svelte) (default: react) |
-| `--no-ds-global` | — | Install the global components (ds-global). (default: true) |
-| `--no-ds-global-form` | — | Install the form fields (ds-global-form). (default: true) |
-| `--ds-app` | — | Install the application components (ds-app). (default: false) |
+| `--packages` | `<value...>` | Packages (styles always included). |
 | `--no-run-install` | — | Run package manager install after creation. (default: true) |
 
 - Store: storeless.
@@ -496,7 +494,7 @@ pragma create playground [playground-path] [options]
 
 ```bash
 pragma create playground my-prototype  # React, with ds-global and ds-global-form
-pragma create playground my-prototype --framework svelte --ds-app
+pragma create playground my-prototype --framework svelte --packages ds-global,ds-app
 ```
 
 ## doctor
