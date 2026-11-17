@@ -16,91 +16,91 @@ ds:apps_landscape.component.expandable_radio_group a ds:Component;
         ds:name "field";
         ds:summary "Formik field name read and updated by every option.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "Must be a valid key in the Formik context's values object."
+        ds:constraints "Must be a valid key in the Formik context's values object.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "formik";
         ds:summary "Supplies current values, getFieldProps, and setFieldValue.";
         ds:propertyType "object";
-        ds:defaultValue "—";
-        ds:constraints "Exact TypeScript type: FormikContextType<TFormik>, where TFormik extends Record<TField, TValue> and contains the named field with compatible values."
+        ds:constraints "Exact TypeScript type: FormikContextType<TFormik>, where TFormik extends Record<TField, TValue> and contains the named field with compatible values.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "inputs";
         ds:summary "Ordered option descriptors.";
         ds:propertyType "node";
-        ds:defaultValue "[]";
         ds:constraints "Exact TypeScript type: (Omit<ComponentProps<typeof RadioInput>, \"checked\" | \"key\" | \"onChange\" | keyof ReturnType<FormikContextType<TFormik>[\"getFieldProps\"]>> & { value: TValue; key: Key; expansion?: ReactNode; help?: ReactNode; onSelect?: () => Promise<void> | void; })[]. Empty or omitted input renders no radios.";
+        ds:defaultValue "[]";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "label";
         ds:summary "Content rendered in the visual label paragraph.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "Does not programmatically label the radios. The paragraph still renders when omitted.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "labelHeading";
         ds:summary "Declared group flag.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "Currently unused; changes neither markup nor classes.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "sideByside";
         ds:summary "Declared group flag with this exact spelling.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "Currently unused; options always use the same vertical DOM structure.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "inputs[].key";
         ds:summary "React identity for the option block.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "Exact TypeScript type: Key. Must be unique and stable; not forwarded to RadioInput."
+        ds:constraints "Exact TypeScript type: Key. Must be unique and stable; not forwarded to RadioInput.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "inputs[].value";
         ds:summary "Value compared with the current field and written on selection.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "Exact TypeScript type: TValue. Checked state uses loose ==, so coercible values can collide."
+        ds:constraints "Exact TypeScript type: TValue. Checked state uses loose ==, so coercible values can collide.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "inputs[].RadioInput props";
         ds:summary "Supplies the visible label and other supported Canonical radio configuration.";
         ds:propertyType "object";
-        ds:defaultValue "Canonical RadioInput defaults";
         ds:constraints "Exact TypeScript type: Omit<ComponentProps<typeof RadioInput>, \"checked\" | \"key\" | \"onChange\" | keyof ReturnType<FormikContextType<TFormik>[\"getFieldProps\"]>>. Consumers may supply any supported subset. Local Formik bindings and local checked and onChange cannot be overridden.";
+        ds:defaultValue "Canonical RadioInput defaults";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "inputs[].help";
         ds:summary "Renders persistent small muted text below the radio.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "No generated id or aria-describedby is added. Falsy values render nothing.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "inputs[].expansion";
         ds:summary "Composition slot rendered inside Indent for the selected option.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "Mounted only while selected; local state inside it is lost when another option is selected.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "inputs[].onSelect";
         ds:summary "Runs after setFieldValue resolves.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
         ds:constraints "Exact TypeScript type: () => Promise<void> | void. The async change handler awaits it; errors are not caught locally.";
+        ds:defaultValue "—";
         ds:optional "true"
     ].

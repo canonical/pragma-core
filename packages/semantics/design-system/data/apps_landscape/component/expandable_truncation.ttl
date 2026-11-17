@@ -16,35 +16,35 @@ ds:apps_landscape.component.expandable_truncation a ds:Component;
         ds:name "Truncated.content";
         ds:summary "Content rendered in both states and inspected by direct child node.";
         ds:propertyType "node";
-        ds:defaultValue "—";
-        ds:constraints "Exact type: ReactNode. Measurement uses DOM ranges and each child's right edge; semantic item counts require one direct node per item."
+        ds:constraints "Exact type: ReactNode. Measurement uses DOM ranges and each child's right edge; semantic item counts require one direct node per item.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "Truncated.expandedClassName";
         ds:summary "Layout/visual class added to the expanded content-layout element.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "Must provide any required background, border, stacking, and placement treatment; it is not applied while collapsed."
+        ds:constraints "Must provide any required background, border, stacking, and placement treatment; it is not applied while collapsed.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "Truncated.isExpanded";
         ds:summary "Controlled visual state.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
-        ds:constraints "When true, the disclosure disappears and no built-in control can set the value false."
+        ds:constraints "When true, the disclosure disappears and no built-in control can set the value false.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "Truncated.onExpand";
         ds:summary "Handles activation of the conditional disclosure.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "Exact type: (event: ReactMouseEvent<HTMLButtonElement, MouseEvent>) => void. The caller must update controlled state; the component does not await, disable, or debounce the callback."
+        ds:constraints "Exact type: (event: ReactMouseEvent<HTMLButtonElement, MouseEvent>) => void. The caller must update controlled state; the component does not await, disable, or debounce the callback.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "Truncated.showCount";
         ds:summary "Replaces \"Show more\" with +N.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "Omission is treated as false. N is overflowing direct child nodes, not total children and not hidden characters or words.";
+        ds:defaultValue "—";
         ds:optional "true"
     ].

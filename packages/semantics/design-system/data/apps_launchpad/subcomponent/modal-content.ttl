@@ -10,7 +10,6 @@ ds:apps_launchpad.subcomponent.modal-content a ds:Subcomponent;
     ds:usage "Modal.Content is used as the root content block inside a Modal children snippet.\n\n## When to use\n\nUse it to enforce consistent dialog composition, typically for worklfows that require user’s confirmation.\n\n## When not to use\n\n### Freeform non-dialog page layout\n\n**Incorrect pattern**: Using Modal.Content as a generic page section container.  \n**Remediation strategy**: Use standard layout containers intended for in-flow page content.\n\n### Action-only dialog with no context\n\n**Incorrect pattern**: Rendering only footer actions without body context.  \n**Remediation strategy**: Include Header and Body section that explain impact before actions.";
     ds:guidelines "## **Keep structural order meaningful**\n\nPlace title/context before actions so assistive users get intent first.\n\n\n\n";
     ds:tier ds:apps_launchpad;
-    ds:hasSubcomponent ds:apps_launchpad.subcomponent.modal-content-footer, ds:apps_launchpad.subcomponent.modal-content-body, ds:apps_launchpad.subcomponent.modal-content-header;
     ds:hasProperty [
         a ds:Property;
         ds:name "children";
@@ -19,4 +18,5 @@ ds:apps_launchpad.subcomponent.modal-content a ds:Subcomponent;
         ds:optional "true";
         ds:constraints "Typically Header, Body, Footer composition."
     ];
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.modal-content-footer, ds:apps_launchpad.subcomponent.modal-content-body, ds:apps_launchpad.subcomponent.modal-content-header;
     ds:parentComponent ds:apps_launchpad.component.modal.

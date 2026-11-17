@@ -16,52 +16,52 @@ ds:apps_landscape.pattern.form_field_help a ds:Pattern;
         ds:name "FieldDescription.label";
         ds:summary "Text rendered in the wrapper span.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "Visual text only; the component does not bind it to a control."
+        ds:constraints "Visual text only; the component does not bind it to a control.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "FieldDescription.description";
         ds:summary "Content passed to Tooltip as its message.";
         ds:propertyType "node";
-        ds:defaultValue "—";
-        ds:constraints "Exact type: ReactNode. Keep actual usage concise and non-essential."
+        ds:constraints "Exact type: ReactNode. Keep actual usage concise and non-essential.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "FieldDescription.tooltipPosition";
         ds:summary "Positions the Canonical Tooltip.";
         ds:propertyType "choice";
-        ds:defaultValue "\"top-left\"";
         ds:constraints "Exact type: \"btm-center\" | \"btm-left\" | \"btm-right\" | \"left\" | \"right\" | \"top-center\" | \"top-left\" | \"top-right\" | undefined.";
+        ds:defaultValue "\"top-left\"";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "CheckboxInputWithHelp.tooltipMessage";
         ds:summary "Fixed string passed to Tooltip as its message.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "Rich React content is not accepted by this wrapper's type."
+        ds:constraints "Rich React content is not accepted by this wrapper's type.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "CheckboxInputWithHelp.label";
         ds:summary "Passed explicitly to Canonical Input.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "Exact type: ReactNode. Uses Canonical Input's behavior when omitted; use a visible, specific checkbox label.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "CheckboxInputWithHelp.disabled";
         ds:summary "Passed to Input and controls the icon opacity class.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "Exact type: InputProps[\"disabled\"]. Omission uses Canonical Input's behavior and does not apply the disabled icon class. It does not locally disable the Tooltip.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "CheckboxInputWithHelp.remaining InputProps";
         ds:summary "Forwarded to Canonical Input after local type, label, and disabled.";
         ds:propertyType "object";
-        ds:defaultValue "—";
         ds:constraints "Exact contract: CheckboxInputWithHelpProps extends InputProps { readonly tooltipMessage: string }. Inherited props use their Canonical defaults. Because the spread is last, props such as type may override type=\"checkbox\"; consumers should not do so.";
+        ds:defaultValue "—";
         ds:optional "true"
     ].

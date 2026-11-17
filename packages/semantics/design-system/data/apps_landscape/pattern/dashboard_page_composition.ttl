@@ -17,94 +17,94 @@ ds:apps_landscape.pattern.dashboard_page_composition a ds:Pattern;
         ds:summary "Route-level content inside the panel shell.";
         ds:propertyType "ReactNode";
         ds:optional "false";
-        ds:defaultValue "None";
-        ds:constraints "Conventionally compose one Page Header followed by one Page Content. The source does not enforce child types, order, or count."
+        ds:constraints "Conventionally compose one Page Header followed by one Page Content. The source does not enforce child types, order, or count.";
+        ds:defaultValue "None"
     ], [
         a ds:Property;
         ds:name "PageHeader title";
         ds:summary "Page identity rendered as that Page Header instance's `<h1>`, visible or off screen.";
         ds:propertyType "text";
         ds:optional "false";
-        ds:defaultValue "None";
-        ds:constraints "Compose one Page Header per route so the result has one page-level `<h1>`; the component cannot prevent sibling headers or headings."
+        ds:constraints "Compose one Page Header per route so the result has one page-level `<h1>`; the component cannot prevent sibling headers or headings.";
+        ds:defaultValue "None"
     ], [
         a ds:Property;
         ds:name "PageHeader hideTitle";
         ds:summary "Applies the off-screen utility to the semantic <h1>.";
         ds:propertyType "boolean";
         ds:optional "false";
-        ds:defaultValue "false";
-        ds:constraints "Use only when another visible treatment supplies sighted page identity."
+        ds:constraints "Use only when another visible treatment supplies sighted page identity.";
+        ds:defaultValue "false"
     ], [
         a ds:Property;
         ds:name "PageHeader breadcrumbs";
         ds:summary "Ordered breadcrumb records rendered above the title.";
         ds:propertyType "list of objects";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Each entry is a `Breadcrumb`: a non-current item requires `label: string` and `path: string`; a current item requires `current: true` and `label: string`. An empty array renders no navigation."
+        ds:constraints "Each entry is a `Breadcrumb`: a non-current item requires `label: string` and `path: string`; a current item requires `current: true` and `label: string`. An empty array renders no navigation.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "PageHeader actions";
         ds:summary "Page-scoped content rendered in the panel controls region.";
         ds:propertyType "list of nodes";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "An empty array renders no controls container. Keep actions few or use an established responsive action composition."
+        ds:constraints "An empty array renders no controls container. Keep actions few or use an established responsive action composition.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "PageHeader className";
         ds:summary "Additional class on the Vanilla panel header root.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Preserve panel header layout and semantics."
+        ds:constraints "Preserve panel header layout and semantics.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "PageHeader visualTitle";
         ds:summary "Visible non-heading title rendered only when hideTitle is truthy.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "It is ignored in normal-title mode and does not replace the semantic <h1>."
+        ds:constraints "It is ignored in normal-title mode and does not replace the semantic <h1>.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "PageHeader helperContent";
         ds:summary "Content rendered immediately after the visible <h1>.";
         ds:propertyType "ReactNode";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "It is not rendered when `hideTitle` is truthy. Supplying it also removes right padding from the header."
+        ds:constraints "It is not rendered when `hideTitle` is truthy. Supplying it also removes right padding from the header.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "PageContent children";
         ds:summary "Primary route content wrapped by AppErrorBoundary.";
         ds:propertyType "ReactNode";
         ds:optional "false";
-        ds:defaultValue "None";
-        ds:constraints "Errors thrown by descendants are handled at this page-content boundary."
+        ds:constraints "Errors thrown by descendants are handled at this page-content boundary.";
+        ds:defaultValue "None"
     ], [
         a ds:Property;
         ds:name "PageContent container";
         ds:summary "Selects the type-safe content alignment contract.";
         ds:propertyType "\"fluid\" | \"medium\"";
         ds:optional "true";
-        ds:defaultValue "\"fluid”";
-        ds:constraints "Omit or use `\"fluid\"` without `align`; use `\"medium\"` to enable `align`."
+        ds:constraints "Omit or use `\"fluid\"` without `align`; use `\"medium\"` to enable `align`.";
+        ds:defaultValue "\"fluid”"
     ], [
         a ds:Property;
         ds:name "PageContent align";
         ds:summary "Centers medium children or caps a left-aligned medium column at 60rem.";
         ds:propertyType "\"center\" | \"left\"";
         ds:optional "true";
-        ds:defaultValue "\"center”";
-        ds:constraints "Type-valid only with container=\"medium\". Runtime classes also apply only in medium mode."
+        ds:constraints "Type-valid only with container=\"medium\". Runtime classes also apply only in medium mode.";
+        ds:defaultValue "\"center”"
     ], [
         a ds:Property;
         ds:name "PageContent hasTable";
         ds:summary "Adds the table-page class, setting the outer content minimum height to zero.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Use for table-led pages that need the panel's table sizing behavior."
+        ds:constraints "Use for table-led pages that need the panel's table sizing behavior.";
+        ds:defaultValue "undefined"
     ].

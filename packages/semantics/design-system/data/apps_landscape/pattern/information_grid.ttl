@@ -16,78 +16,78 @@ ds:apps_landscape.pattern.information_grid a ds:Pattern;
         ds:name "`InfoGrid.children`";
         ds:summary "Content rendered by the inner grid.";
         ds:propertyType "node";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `ReactNode`. `InfoGrid.Item` is the supported composition for consistent item anatomy."
+        ds:constraints "TypeScript: `ReactNode`. `InfoGrid.Item` is the supported composition for consistent item anatomy.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`InfoGrid.spaced`";
         ds:summary "Adds source-defined vertical margins to the outer wrapper.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "It does not change grid tracks or child spacing.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`InfoGrid.dense`";
         ds:summary "Replaces the default grid gap with the smaller dense gap.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "It does not reduce typography or interactive target sizes.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`InfoGrid.className`";
         ds:summary "Additional class on the outer query wrapper.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "Unlike other inherited attributes, it is not applied to the inner grid.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`InfoGrid` other HTML attributes";
         ds:summary "Attributes spread onto the inner grid.";
         ds:propertyType "object";
-        ds:defaultValue "HTML defaults";
         ds:constraints "TypeScript: `HTMLAttributes<HTMLDivElement>`. Event handlers, ids, ARIA, and data attributes target the inner `div`; `children` is included in this spread.";
+        ds:defaultValue "HTML defaults";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`InfoGrid.Item.label`";
         ds:summary "Visible label above the value.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `ReactNode`. No `id`, `<label>`, or description-list relationship is generated.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`InfoGrid.Item.value`";
         ds:summary "Value content.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `ReactNode`. Required for regular and truncated variants and unavailable for password. Regular values treat only `0` and truthy nodes as present; truncated values additionally require truthiness before mounting the disclosure.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`InfoGrid.Item.type`";
         ds:summary "Selects the value implementation.";
         ds:propertyType "choice";
-        ds:defaultValue "`regular`";
         ds:constraints "TypeScript: `\"regular\" | \"password\" | \"truncated\"`. It may be omitted for regular behavior and is required to select password or truncated. The password variant omits `value`; the truncated variant uses internal expansion state.";
+        ds:defaultValue "`regular`";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`InfoGrid.Item.large`";
         ds:summary "Makes the item span two grid columns.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "In the two-column layout it occupies the full row; no one-column fallback exists.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`InfoGrid.Item` other HTML attributes";
         ds:summary "Props applied to the regular item's root `div`.";
         ds:propertyType "object";
-        ds:defaultValue "HTML defaults";
         ds:constraints "TypeScript: `HTMLAttributes<HTMLDivElement>`. A caller `className` is spread after the generated `large` class and can replace it rather than merging.";
+        ds:defaultValue "HTML defaults";
         ds:optional "true"
     ].

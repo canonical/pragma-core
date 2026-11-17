@@ -17,30 +17,30 @@ ds:apps_landscape.component.read_only_field a ds:Component;
         ds:summary "Supplies text for the always-rendered label element.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`. The label has no `htmlFor` and does not programmatically label a control."
+        ds:constraints "TypeScript: `string`. The label has no `htmlFor` and does not programmatically label a control.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`value`";
         ds:summary "Supplies the immutable value displayed in the locked row.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`. Every falsy value, including `\"\"`, renders shared `NoData` text `---`; whitespace-only strings remain visible."
+        ds:constraints "TypeScript: `string`. Every falsy value, including `\"\"`, renders shared `NoData` text `---`; whitespace-only strings remain visible.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`tooltipMessage`";
         ds:summary "Supplies the message passed to Canonical Tooltip.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`. The Tooltip renders even when this prop is absent and uses `followMouse`."
+        ds:constraints "TypeScript: `string`. The Tooltip renders even when this prop is absent and uses `followMouse`.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`required`";
         ds:summary "Prefixes the label with the literal text `*` .";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `boolean`. Adds no native `required`, `aria-required`, validation, or explanatory legend."
+        ds:constraints "TypeScript: `boolean`. Adds no native `required`, `aria-required`, validation, or explanatory legend.";
+        ds:defaultValue "—"
     ].

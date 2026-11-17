@@ -16,14 +16,14 @@ ds:apps_landscape.pattern.instance_association a ds:Pattern;
         ds:name "`InstanceAssociation.formik`";
         ds:summary "Supplies field bindings, current values, and async-compatible `setFieldValue`.";
         ds:propertyType "object";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `FormikContextType<T>` where `T extends AssociationBlockFormProps` and includes `all_computers: boolean` and `tags: string[]`. The component does not expose loading or error parameters for tag fetching."
+        ds:constraints "TypeScript: `FormikContextType<T>` where `T extends AssociationBlockFormProps` and includes `all_computers: boolean` and `tags: string[]`. The component does not expose loading or error parameters for tag fetching.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`InstanceAssociation.titleClass`";
         ds:summary "Merged onto the \"Association\" paragraph with `u-no-margin--bottom`.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "Does not affect a root wrapper because none exists.";
+        ds:defaultValue "—";
         ds:optional "true"
     ].

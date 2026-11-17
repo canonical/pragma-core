@@ -11,6 +11,65 @@ ds:global_dataviews.subcomponent.query_chip-entry a ds:Subcomponent;
     ds:guidelines "### Accessibility\n\n- The Entry is a native `<input>`, never a `<textarea>`, which admits no combobox role. A long  \nvalue scrolls inside the input rather than wrapping.\n- It renders only once scripts run. It takes `role=\"combobox\"` and is named by `label`, such as  \n“Value for status”. It reads QueryInput’s suggestions through QueryInput’s context, and while  \nit has focus it carries `aria-controls`, `aria-expanded` and `aria-activedescendant` for  \nQueryInput’s listbox. It keeps focus while an option is highlighted.\n- Inside a roving composite, the Entry is its chip’s toolbar item while it is present, as  \n`<id>:entry`, and takes `tabindex=\"0\"` only while it holds the tab stop.\n- Its accessible description is always its `formatDescription`, when given, followed while  \ninvalid by its `description`, and, while QueryInput’s suggestions are open and carry a  \n`footer`, by that footer, which QueryInput supplies through its context. While invalid it  \nalso carries `aria-invalid`.\n- A format template is hidden from assistive technology; `formatDescription` says the format  \nin words.\n- Typing is never blocked by key filtering, so paste, dictation and input methods work. The  \nhost parses what was typed.\n\n### States & interaction\n\nThe Entry is default, focused, invalid, or disabled when its chip is disabled. It has its own  \nlook, an input fill with an underline, so the chip shows no editing state. While invalid it  \nshows the error underline; it takes no error fill and no glyph. Keys the combobox does not  \nhandle reach the host, which owns moving between parts and chips. Blur ends an edit only when  \nfocus leaves QueryInput’s root, a `focusout` whose `relatedTarget` is outside it.";
     ds:tier ds:global_dataviews;
     ds:documentationStage ds:tag.needstriage;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The typed text.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "on_value_change";
+        ds:summary "Called with the typed text after each input.";
+        ds:propertyType "callback";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The accessible name, such as \"Value for status\".";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "placeholder";
+        ds:summary "Shown while nothing is typed.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "template";
+        ds:summary "```A format template shown behind the typed text, such as `YYYY-MM-DD`.```";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "format_description";
+        ds:summary "```The format in words, such as \"Date, format YYYY-MM-DD\", from the host's messages. It is always in the accessible description, before `description` while invalid.```";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "```required with `template````"
+    ], [
+        a ds:Property;
+        ds:name "suffix";
+        ds:summary "```Text after the typed text, such as a unit, as TextInput's `suffix` is.```";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "is_invalid";
+        ds:summary "Marks the typed text invalid.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:constraints "```requires `description````";
+        ds:defaultValue "false"
+    ], [
+        a ds:Property;
+        ds:name "description";
+        ds:summary "The message, such as \"Invalid: <message>\".";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "```required with `is_invalid````"
+    ];
     ds:parentComponent ds:global_dataviews.component.query_chip;
     ds:hasTokenBinding [
         a ds:TokenBinding;

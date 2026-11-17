@@ -11,6 +11,21 @@ ds:global_dataviews.group.query_chips a ds:Group;
     ds:guidelines "### Accessibility\n\n- The group is a list: a `<ul role=\"list\">` with one `<li>` per chip. The explicit role keeps  \nthe list’s semantics in browsers that drop them from a list without bullets.\n- Exactly one of `label` and `aria-labelledby` names the list.\n- The container that hosts the group decides the keyboard model and carries its composite role.  \nA QueryInput makes its chips and its entry one roving tab stop inside a toolbar. The group  \nitself handles no keys.\n- The gap between chips is not a target; nothing is inserted between chips.\n\n### Layout\n\n- Chips wrap. A host that must hold one line clips and fades the overflow, and says how many  \nchips are hidden.";
     ds:tier ds:global_dataviews;
     ds:documentationStage ds:tag.needstriage;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The accessible name of the set.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "```required unless `aria-labelledby` is given, and not given with it```"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The query chips.";
+        ds:propertyType "node";
+        ds:optional "false";
+        ds:constraints "one or more query chips"
+    ];
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global_dataviews.group.query_chips;

@@ -17,8 +17,8 @@ ds:apps.pattern.notification_center a ds:Pattern;
         ds:summary "Represents variation along the X axis, refer to variant_guidelines for usage details.";
         ds:propertyType "choice";
         ds:optional "false";
-        ds:defaultValue "normal";
-        ds:constraints "[normal, inverted]"
+        ds:constraints "[normal, inverted]";
+        ds:defaultValue "normal"
     ], [
         a ds:Property;
         ds:name "avatarType";

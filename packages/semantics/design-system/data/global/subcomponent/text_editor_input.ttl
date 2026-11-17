@@ -2,12 +2,12 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:apps.group.key_value_pairs a ds:Group;
-    ds:name "KeyValuePairs";
+ds:global.subcomponent.text_editor_input a ds:Subcomponent;
+    ds:name "TextEditorInput";
     ds:summary "";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";
     ds:guidelines "";
-    ds:tier ds:apps;
-    ds:documentationStage ds:tag.designin-progress.
+    ds:tier ds:global;
+    ds:documentationStage ds:tag.triagedbacklog.

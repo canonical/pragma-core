@@ -17,14 +17,14 @@ ds:apps_landscape.subcomponent.bold_substring a ds:Subcomponent;
         ds:summary "Complete plain-text value to search and render.";
         ds:propertyType "text";
         ds:optional "false";
-        ds:defaultValue "None";
-        ds:constraints "The rendered slices come from this value, so casing and spacing are preserved."
+        ds:constraints "The rendered slices come from this value, so casing and spacing are preserved.";
+        ds:defaultValue "None"
     ], [
         a ds:Property;
         ds:name "substring";
         ds:summary "Query used to find the emphasized slice.";
         ds:propertyType "text";
         ds:optional "false";
-        ds:defaultValue "None";
-        ds:constraints "Matching is case-insensitive; only the first occurrence is wrapped; an empty or unmatched value returns `text` directly."
+        ds:constraints "Matching is case-insensitive; only the first occurrence is wrapped; an empty or unmatched value returns `text` directly.";
+        ds:defaultValue "None"
     ].

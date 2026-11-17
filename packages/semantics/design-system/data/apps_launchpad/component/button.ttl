@@ -22,8 +22,8 @@ ds:apps_launchpad.component.button a ds:Component;
         ds:summary "The variant of the button.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "secondary";
-        ds:constraints "primary, secondary, tertiary, danger"
+        ds:constraints "primary, secondary, tertiary, danger";
+        ds:defaultValue "secondary"
     ], [
         a ds:Property;
         ds:name "disabled";

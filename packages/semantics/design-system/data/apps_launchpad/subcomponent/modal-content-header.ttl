@@ -10,7 +10,6 @@ ds:apps_launchpad.subcomponent.modal-content-header a ds:Subcomponent;
     ds:usage "Header is used inside Modal.Content to provide title context, optionally with a close button aligned to the end.\n\n## When to use\n\nUse it to present modal purpose immediately.\n\n## When not to use\n\n### Placing primary actions in header\n\n**Incorrect pattern**: Treating header as main action row.  \n**Remediation strategy**: Move main actions to Footer and keep header for context and dismiss affordance.\n\n### Long body text in header\n\n**Incorrect pattern**: Using header for paragraphs and explanatory copy.  \n**Remediation strategy**: Keep explanatory content in Body and keep header concise.";
     ds:guidelines "## Provide a clear heading\n\nUse short, descriptive title text for quick context establishment.";
     ds:tier ds:apps_launchpad;
-    ds:hasSubcomponent ds:apps_launchpad.subcomponent.modal-content-header-close_button;
     ds:hasProperty [
         a ds:Property;
         ds:name "children";
@@ -18,4 +17,5 @@ ds:apps_launchpad.subcomponent.modal-content-header a ds:Subcomponent;
         ds:propertyType "Snippet";
         ds:optional "true"
     ];
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.modal-content-header-close_button;
     ds:parentComponent ds:apps_launchpad.subcomponent.modal-content.

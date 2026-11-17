@@ -16,85 +16,85 @@ ds:apps_landscape.component.progress_bar a ds:Component;
         ds:name "`ProgressBar.progress`";
         ds:summary "Current completion percentage.";
         ds:propertyType "number";
-        ds:defaultValue "—";
-        ds:constraints "Rounded to the nearest integer and clamped to `0`–`100`; callers must provide a finite number."
+        ds:constraints "Rounded to the nearest integer and clamped to `0`–`100`; callers must provide a finite number.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.secondsRemaining`";
         ds:summary "Estimated seconds remaining, or an unresolved estimate.";
         ds:propertyType "number";
-        ds:defaultValue "—";
-        ds:constraints "Accepts `null` to show estimating copy; values at or below five seconds show almost-done copy."
+        ds:constraints "Accepts `null` to show estimating copy; values at or below five seconds show almost-done copy.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.fullWidth`";
         ds:summary "Removes the progress track's default maximum width.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
         ds:constraints "The outer wrapper remains full width in either mode.";
+        ds:defaultValue "false";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.loading`";
         ds:summary "Adds a decorative spinner before the progress content.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
         ds:constraints "The spinner is `aria-hidden`; determinate progress remains represented by the progressbar.";
+        ds:defaultValue "false";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.label`";
         ds:summary "Accessible name used when no labelled-by relationship exists.";
         ds:propertyType "text";
-        ds:defaultValue "`Progress`";
         ds:constraints "Ignored when `labelledBy` is provided.";
+        ds:defaultValue "`Progress`";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.labelledBy`";
         ds:summary "ID of an existing visible label for the progressbar.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "Suppresses `aria-label`; the referenced element must exist and identify this operation.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.className`";
         ds:summary "Additional class names applied to the outer wrapper.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "Use for placement only; do not obscure the indicator or visible status labels.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.showPercentage`";
         ds:summary "Controls the visible percentage label.";
         ds:propertyType "boolean";
-        ds:defaultValue "true";
         ds:constraints "The semantic current value remains available when the visible label is hidden.";
+        ds:defaultValue "true";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.showEta`";
         ds:summary "Controls the visible ETA and ETA portion of value text.";
         ds:propertyType "boolean";
-        ds:defaultValue "true";
         ds:constraints "When false, `aria-valuetext` contains only the percentage.";
+        ds:defaultValue "true";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.estimatingLabel`";
         ds:summary "Copy displayed while the estimate is unresolved.";
         ds:propertyType "text";
-        ds:defaultValue "`Estimating...`";
         ds:constraints "Used only when `secondsRemaining` is `null`.";
+        ds:defaultValue "`Estimating...`";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ProgressBar.almostDoneLabel`";
         ds:summary "Copy displayed when little time remains.";
         ds:propertyType "text";
-        ds:defaultValue "`Almost done`";
         ds:constraints "Used when `secondsRemaining` is five seconds or less, including negative input.";
+        ds:defaultValue "`Almost done`";
         ds:optional "true"
     ].

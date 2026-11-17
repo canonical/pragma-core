@@ -16,60 +16,60 @@ ds:apps_landscape.component.managed_file_input a ds:Component;
         ds:name "`ManagedFileInput.value`";
         ds:summary "Selects empty or selected render state.";
         ds:propertyType "object";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `File | null`. Only one file is represented; parent updates control state."
+        ds:constraints "TypeScript: `File | null`. Only one file is represented; parent updates control state.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`ManagedFileInput.onFileUpload`";
         ds:summary "Awaited after a non-empty native `FileList` is copied to an array.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `(files: File[]) => Promise<void>`. The picker forces `multiple={false}`, so normal UI selection supplies one item despite the array API. Rejections are not caught."
+        ds:constraints "TypeScript: `(files: File[]) => Promise<void>`. The picker forces `multiple={false}`, so normal UI selection supplies one item despite the array API. Rejections are not caught.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`ManagedFileInput.onFileRemove`";
         ds:summary "Passed directly to the remove Button's click handler.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `() => Promise<void>`. Parent must update `value`; no local pending, disabled, or error behavior is added. Rejections are not caught."
+        ds:constraints "TypeScript: `() => Promise<void>`. Parent must update `value`; no local pending, disabled, or error behavior is added. Rejections are not caught.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`ManagedFileInput.error`";
         ds:summary "Empty state passes it to Canonical Input; selected state adds `is-error` and renders custom error markup.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `string | undefined`. The selected error id is derived verbatim from `value.name`; Button has `aria-errormessage` even when no error exists.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "ManagedFileInput.help";
         ds:summary "Empty state passes it to Input; selected state renders it before the filename.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `string | ReactNode`. React content is supported according to `InputProps`.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ManagedFileInput.label`";
         ds:summary "Labels the empty-state Input; selected state renders label-styled text.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `string | ReactNode`. The selected-state `<label>` is not associated with a form control.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ManagedFileInput.onBlur`";
         ds:summary "Not forwarded normally. The picker stores its blur event, then calls this callback only after a later awaited upload if such an event exists.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `(event: FocusEvent<HTMLInputElement>) => void`. There is no callback on blur alone, after a rejected upload, or without a stored event.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`ManagedFileInput` remaining Input props";
         ds:summary "Forwarded to the empty-state Canonical Input, including contracts such as `accept`, `name`, `required`, `disabled`, classes, and data/ARIA props where supported.";
         ds:propertyType "object";
-        ds:defaultValue "Canonical Input defaults";
         ds:constraints "TypeScript: `Omit<InputProps, \"multiple\" | \"onChange\" | \"type\" | \"value\">`. Consumers may supply any supported subset. They are not forwarded to selected-state markup. Local feedback, label, multiple, blur, and change props cannot be overridden.";
+        ds:defaultValue "Canonical Input defaults";
         ds:optional "true"
     ].

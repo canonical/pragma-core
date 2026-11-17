@@ -17,118 +17,118 @@ ds:apps_landscape.component.code_editor a ds:Component;
         ds:summary "Visible text rendered in the label element.";
         ds:propertyType "text";
         ds:optional "false";
-        ds:defaultValue "None";
-        ds:constraints "The current label uses the fixed `htmlFor=\"code\"`; repeated instances do not receive unique associations from this API."
+        ds:constraints "The current label uses the fixed `htmlFor=\"code\"`; repeated instances do not receive unique associations from this API.";
+        ds:defaultValue "None"
     ], [
         a ds:Property;
         ds:name "valule";
         ds:summary "Controlled Monaco value.";
         ds:propertyType "text | undefined";
         ds:optional "false";
-        ds:defaultValue "None";
-        ds:constraints "Pass changes back through onChange; avoid switching ownership modes during one mount."
+        ds:constraints "Pass changes back through onChange; avoid switching ownership modes during one mount.";
+        ds:defaultValue "None"
     ], [
         a ds:Property;
         ds:name "className";
         ds:summary "Additional class on the Monaco editor wrapper.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Does not apply to the outer form group."
+        ds:constraints "Does not apply to the outer form group.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "error";
         ds:summary "Adds error styling and an Error: message.";
         ds:propertyType "text | undefined";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "An empty string or undefined renders no error. Error and warning can both render."
+        ds:constraints "An empty string or undefined renders no error. Error and warning can both render.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "warning";
         ds:summary "Adds caution styling and a Warning: message.";
         ds:propertyType "text | undefined";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "An empty string or undefined renders no warning. When both states are truthy, both form classes and messages are emitted; avoid ambiguous simultaneous feedback."
+        ds:constraints "An empty string or undefined renders no warning. When both states are truthy, both form classes and messages are emitted; avoid ambiguous simultaneous feedback.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "labelClassName";
         ds:summary "Additional class on the visible label.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Use for established label presentation only; do not hide the sole visible label."
+        ds:constraints "Use for established label presentation only; do not hide the sole visible label.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "onChange";
         ds:summary "Receives Monaco value changes.";
         ds:propertyType "function";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Monaco can report undefined; consumers must handle it."
+        ds:constraints "Monaco can report undefined; consumers must handle it.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "onBlur";
         ds:summary "Runs when focus leaves the editor control group.";
         ds:propertyType "function";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Moving focus within the control group does not call it. Moving to `headerContent` does, because the header is outside that group."
+        ds:constraints "Moving focus within the control group does not call it. Moving to `headerContent` does, because the header is outside that group.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "required";
         ds:summary "Applies the Vanilla required-label class.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:defaultValue "false";
-        ds:constraints "This is a visual label treatment; validation remains consumer-owned."
+        ds:constraints "This is a visual label treatment; validation remains consumer-owned.";
+        ds:defaultValue "false"
     ], [
         a ds:Property;
         ds:name "language";
         ds:summary "Monaco language identifier.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "“shell”";
-        ds:constraints "Register custom languages through the shared Monaco setup or `monacoBeforeMount`."
+        ds:constraints "Register custom languages through the shared Monaco setup or `monacoBeforeMount`.";
+        ds:defaultValue "“shell”"
     ], [
         a ds:Property;
         ds:name "defaultValue";
         ds:summary "Initial value forwarded to Monaco.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Intended for Monaco's initial/uncontrolled value contract; do not use it as a second source of truth beside a changing `value`."
+        ds:constraints "Intended for Monaco's initial/uncontrolled value contract; do not use it as a second source of truth beside a changing `value`.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "headerContent";
         ds:summary "Supporting content rendered opposite the label.";
         ds:propertyType "ReactNode";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Keep controls compact, labelled, and in a logical focus order."
+        ds:constraints "Keep controls compact, labelled, and in a logical focus order.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "options";
         ds:summary "Monaco editor options merged over Landscape defaults.";
         ds:propertyType "object";
         ds:optional "true";
-        ds:defaultValue "Landscape Monaco defaults";
-        ds:constraints "Consumer values override the default disabled minimap, hidden line highlight, and 8px top/bottom editor padding. For Monaco options type, see Monaco Editor documentation."
+        ds:constraints "Consumer values override the default disabled minimap, hidden line highlight, and 8px top/bottom editor padding. For Monaco options type, see Monaco Editor documentation.";
+        ds:defaultValue "Landscape Monaco defaults"
     ], [
         a ds:Property;
         ds:name "monacoBeforeMount";
         ds:summary "Runs before Monaco mounts.";
         ds:propertyType "function";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Use for language or editor registration that must exist before rendering. Monaco parameter is the Monaco Editor API instance."
+        ds:constraints "Use for language or editor registration that must exist before rendering. Monaco parameter is the Monaco Editor API instance.";
+        ds:defaultValue "undefined"
     ], [
         a ds:Property;
         ds:name "onMount";
         ds:summary "Receives the mounted editor and Monaco instance.";
         ds:propertyType "function";
         ds:optional "true";
-        ds:defaultValue "undefined";
-        ds:constraints "Consumers own any setup and cleanup introduced through the callback. Parameters are the mounted Editor instance and Monaco API."
+        ds:constraints "Consumers own any setup and cleanup introduced through the callback. Parameters are the mounted Editor instance and Monaco API.";
+        ds:defaultValue "undefined"
     ].

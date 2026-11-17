@@ -11,13 +11,13 @@ ds:global.component.tag a ds:Component;
     ds:guidelines "";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needsfulldocumentation;
-    ds:hasModifierFamily ds:global.modifier_family.criticality;
     ds:hasProperty [
         a ds:Property;
         ds:name "children";
         ds:propertyType "text";
         ds:optional "false"
     ];
+    ds:hasModifierFamily ds:global.modifier_family.criticality;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.component.tag;
