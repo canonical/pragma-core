@@ -10,7 +10,6 @@ ds:apps_launchpad.component.combobox a ds:Component;
     ds:usage "### 1. General Description\n\nThe Combobox is used when you need to provide a search and filtering functionality for a list of options. It is a powerful component that can be used in a variety of situations.\n\n### 2. Implementation Guidelines\n\n2.1 When to Use\n\n- **Long lists:** Use when you have a long list of options that is difficult to navigate.\n- **Filtering:** Use to provide a powerful filtering mechanism.\n- **Autocomplete:** Use to provide suggestions as the user types.\n\n2.2 When Not to Use\n\n- **Short lists:** Do not use for short lists of options that can be easily scanned.\n\n";
     ds:guidelines "### Accessibility\n\n- **ARIA attributes:** Use the appropriate ARIA attributes to make the combobox accessible.\n- **Keyboard navigation:** Ensure that the combobox can be fully operated with the keyboard.";
     ds:tier ds:apps_launchpad;
-    ds:hasSubcomponent ds:apps_launchpad.subcomponent.combobox-footer, ds:apps_launchpad.subcomponent.combobox-group, ds:apps_launchpad.subcomponent.combobox-helper, ds:apps_launchpad.subcomponent.combobox-no_results, ds:apps_launchpad.subcomponent.combobox-search, ds:apps_launchpad.subcomponent.combobox-checkbox_option, ds:apps_launchpad.subcomponent.combobox-radio_option, ds:apps_launchpad.subcomponent.combobox-loading;
     ds:hasProperty [
         a ds:Property;
         ds:name "children";
@@ -35,8 +34,8 @@ ds:apps_launchpad.component.combobox a ds:Component;
         ds:summary "Combobox type.";
         ds:propertyType "choice";
         ds:optional "false";
-        ds:defaultValue "multi-select";
-        ds:constraints "multi-select, single-select"
+        ds:constraints "multi-select, single-select";
+        ds:defaultValue "multi-select"
     ], [
         a ds:Property;
         ds:name "aria-busy";
@@ -56,4 +55,5 @@ ds:apps_launchpad.component.combobox a ds:Component;
         ds:summary "Footer content, often used for actions related to the panel's content.";
         ds:propertyType "node";
         ds:optional "true"
-    ].
+    ];
+    ds:hasSubcomponent ds:apps_launchpad.subcomponent.combobox-footer, ds:apps_launchpad.subcomponent.combobox-group, ds:apps_launchpad.subcomponent.combobox-helper, ds:apps_launchpad.subcomponent.combobox-no_results, ds:apps_launchpad.subcomponent.combobox-search, ds:apps_launchpad.subcomponent.combobox-checkbox_option, ds:apps_launchpad.subcomponent.combobox-radio_option, ds:apps_launchpad.subcomponent.combobox-loading.

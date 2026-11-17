@@ -16,21 +16,21 @@ ds:apps_landscape.subcomponent.pluralized_bold_count a ds:Subcomponent;
         ds:name "`count`";
         ds:summary "Supplies the bold quantity and selects the noun form.";
         ds:propertyType "number";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `number`. Formatted with `toLocaleString()`; singular is selected only when the value is exactly `1`."
+        ds:constraints "TypeScript: `number`. Formatted with `toLocaleString()`; singular is selected only when the value is exactly `1`.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`singular`";
         ds:summary "Supplies the noun used when `count` is exactly `1`.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`. Also seeds the default plural form."
+        ds:constraints "TypeScript: `string`. Also seeds the default plural form.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`plural`";
         ds:summary "Supplies the noun used for every other count.";
         ds:propertyType "text";
-        ds:defaultValue "`${singular}s`";
         ds:constraints "TypeScript: `string`. Supply it when the plural is not the singular plus `s`.";
+        ds:defaultValue "`${singular}s`";
         ds:optional "true"
     ].

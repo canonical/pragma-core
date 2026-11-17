@@ -17,32 +17,32 @@ ds:apps.subcomponent.data_table-body_cell a ds:Subcomponent;
         ds:summary "The type of content the cell displays. Determines the available interactions and visual treatment.";
         ds:propertyType "choice";
         ds:optional "false";
-        ds:defaultValue "text";
-        ds:constraints "A column must use a single cell type."
+        ds:constraints "A column must use a single cell type.";
+        ds:defaultValue "text"
     ], [
         a ds:Property;
         ds:name "highlighted";
         ds:summary "Whether the cell appears in a highlighted visual state instead of the default state.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:defaultValue "false";
-        ds:constraints "Applies to text and icon+text cell types."
+        ds:constraints "Applies to text and icon+text cell types.";
+        ds:defaultValue "false"
     ], [
         a ds:Property;
         ds:name "editable";
         ds:summary "Whether the cell supports inline editing.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:defaultValue "false";
-        ds:constraints "Applies to text, icon+text, and compatible custom cell types only. Not available on checkbox or action cell types."
+        ds:constraints "Applies to text, icon+text, and compatible custom cell types only. Not available on checkbox or action cell types.";
+        ds:defaultValue "false"
     ], [
         a ds:Property;
         ds:name "edit-mode";
         ds:summary "The editing interface used when the cell enters edit mode. Text is for short single-line values. Textarea is for longer multi-line values. Select is for values from a predefined set of options.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "text";
-        ds:constraints "Only applies when editable is true."
+        ds:constraints "Only applies when editable is true.";
+        ds:defaultValue "text"
     ], [
         a ds:Property;
         ds:name "select-options";
@@ -56,24 +56,24 @@ ds:apps.subcomponent.data_table-body_cell a ds:Subcomponent;
         ds:summary "How changes are persisted. Auto-save saves on Enter or blur. Explicit save shows Cancel and Save buttons beneath the cell. Use explicit save when the consequence of an incorrect value is high.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "auto-save";
-        ds:constraints "Only applies when editable is true."
+        ds:constraints "Only applies when editable is true.";
+        ds:defaultValue "auto-save"
     ], [
         a ds:Property;
         ds:name "always-show-edit-icon";
         ds:summary "Whether the edit icon is always visible on editable cells or only shown on hover. When true, edit icons appear in every editable cell across all rows.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:defaultValue "false";
-        ds:constraints "Only applies when editable is true."
+        ds:constraints "Only applies when editable is true.";
+        ds:defaultValue "false"
     ], [
         a ds:Property;
         ds:name "validation-state";
         ds:summary "The current validation state of the cell. When active, the focus ring and background reflect the state (for example, a red focus ring and red-tinted background for an error).";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "none";
-        ds:constraints "Only applies when editable is true."
+        ds:constraints "Only applies when editable is true.";
+        ds:defaultValue "none"
     ], [
         a ds:Property;
         ds:name "validation-message";
@@ -87,8 +87,8 @@ ds:apps.subcomponent.data_table-body_cell a ds:Subcomponent;
         ds:summary "Whether the cell uses a checkbox (multi-select) or radio (single-select) control. When radios are used, the header cell in that column is empty.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "checkbox";
-        ds:constraints "Only applies when cell-type is checkbox. A column must use either checkboxes or radios, not a mix."
+        ds:constraints "Only applies when cell-type is checkbox. A column must use either checkboxes or radios, not a mix.";
+        ds:defaultValue "checkbox"
     ], [
         a ds:Property;
         ds:name "inline-actions";
@@ -102,7 +102,7 @@ ds:apps.subcomponent.data_table-body_cell a ds:Subcomponent;
         ds:summary "Whether inline action icons are always visible or appear only on the currently hovered row.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "always";
-        ds:constraints "Only applies when cell-type is action."
+        ds:constraints "Only applies when cell-type is action.";
+        ds:defaultValue "always"
     ];
     ds:parentComponent ds:apps.pattern.datatable.

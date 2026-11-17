@@ -28,6 +28,6 @@ ds:apps_launchpad.component.avatar a ds:Component;
         ds:summary "The size of the avatar.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "medium";
-        ds:constraints "small, medium, large"
+        ds:constraints "small, medium, large";
+        ds:defaultValue "medium"
     ].

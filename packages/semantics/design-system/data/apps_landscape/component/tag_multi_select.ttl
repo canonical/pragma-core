@@ -16,37 +16,37 @@ ds:apps_landscape.component.tag_multi_select a ds:Component;
         ds:name "`tags`";
         ds:summary "Supplies controlled tag names rendered as chips and excluded from fetched results.";
         ds:propertyType "list of text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string[]`. Source does not deduplicate. Dismiss removes all equal strings; add appends even if the value already exists. Creation trims before validation and append. Internal Yup `validationSchema` is neither a prop nor a top-level export: it requires `^[a-zA-Z]`, then `^[a-zA-Z][a-zA-Z0-9_-]*$`. Its first error is `Tag must starts with a letter`. After an initial failure, change-time validation uses untrimmed input while creation validates trimmed input."
+        ds:constraints "TypeScript: `string[]`. Source does not deduplicate. Dismiss removes all equal strings; add appends even if the value already exists. Creation trims before validation and append. Internal Yup `validationSchema` is neither a prop nor a top-level export: it requires `^[a-zA-Z]`, then `^[a-zA-Z][a-zA-Z0-9_-]*$`. Its first error is `Tag must starts with a letter`. After an initial failure, change-time validation uses untrimmed input while creation validates trimmed input.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`onTagsChange`";
         ds:summary "Receives the full next selection after add, create, or dismiss.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `(value: string[]) => void`. Consumer must update `tags`; no optimistic local selection state exists."
+        ds:constraints "TypeScript: `(value: string[]) => void`. Consumer must update `tags`; no optimistic local selection state exists.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`label`";
         ds:summary "Supplies visible label text.";
         ds:propertyType "text";
-        ds:defaultValue "`Tags`";
         ds:constraints "TypeScript: `string`. Falsy values fall back to `Tags` because the source uses a logical-OR fallback.";
+        ds:defaultValue "`Tags`";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`labelClassName`";
         ds:summary "Adds a label class.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `string`. Combined with `p-form__label` and the optional required class.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`required`";
         ds:summary "Adds `is-required` to the label.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `boolean`. Does not validate selection count or set an input `required` attribute.";
+        ds:defaultValue "—";
         ds:optional "true"
     ].

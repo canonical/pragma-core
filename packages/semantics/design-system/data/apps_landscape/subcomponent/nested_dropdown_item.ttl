@@ -16,46 +16,46 @@ ds:apps_landscape.subcomponent.nested_dropdown_item a ds:Subcomponent;
         ds:name "`el`";
         ds:summary "Supplies the nested panel content.";
         ds:propertyType "element";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `ReactElement<FilterProps, JSXElementConstructor<{ name: string }>> | ReactNode`. Valid non-fragment elements are cloned with `inline: true`; other nodes pass through unchanged."
+        ds:constraints "TypeScript: `ReactElement<FilterProps, JSXElementConstructor<{ name: string }>> | ReactNode`. Valid non-fragment elements are cloned with `inline: true`; other nodes pass through unchanged.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`label`";
         ds:summary "Supplies trigger content before label inference.";
         ds:propertyType "node";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `ReactNode`. Falsy values fall back to `el.props.label`; if neither resolves, the button has no text label.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`disabled`";
         ds:summary "Disables the native trigger button.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
         ds:constraints "TypeScript: `boolean`. A disabled trigger cannot toggle the panel.";
+        ds:defaultValue "false";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`onMenuClose`";
         ds:summary "Notifies the owning menu from the panel click handler.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `() => void`. Runs for every click that bubbles to the open content container; outside clicks do not call it.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`className`";
         ds:summary "Adds classes to the root wrapper.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `string`. Local root and alignment classes remain applied.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`position`";
         ds:summary "Selects alignment and directional icon arrangement.";
         ds:propertyType "choice";
-        ds:defaultValue "`left`";
         ds:constraints "TypeScript: `\"left\" | \"center\" | \"right\"`. The names select source alignment classes; `left` places the panel to the trigger's right and `right` places it to the trigger's left.";
+        ds:defaultValue "`left`";
         ds:optional "true"
     ].

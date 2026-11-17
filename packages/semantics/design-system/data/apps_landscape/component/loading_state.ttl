@@ -17,14 +17,14 @@ ds:apps_landscape.component.loading_state a ds:Component;
         ds:summary "Adds the full-viewport-height centering class to the outer non-inline wrapper.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "It does not add another element. Ignored when `inline` is truthy because the inline branch returns before wrapper rendering."
+        ds:constraints "It does not add another element. Ignored when `inline` is truthy because the inline branch returns before wrapper rendering.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`LoadingState.inline`";
         ds:summary "Renders a bare status span instead of the contained strip structure.";
         ds:propertyType "boolean";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "Takes precedence over `centerOnScreen`; intended for compact placements."
+        ds:constraints "Takes precedence over `centerOnScreen`; intended for compact placements.";
+        ds:defaultValue "—"
     ].

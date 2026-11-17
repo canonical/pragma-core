@@ -22,8 +22,8 @@ ds:apps_launchpad.component.tooltip a ds:Component;
         ds:summary "The position of the tooltip relative to the trigger.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "block-start";
-        ds:constraints "[<position-area>](https://developer.mozilla.org/en-US/docs/Web/CSS/position-area)"
+        ds:constraints "[<position-area>](https://developer.mozilla.org/en-US/docs/Web/CSS/position-area)";
+        ds:defaultValue "block-start"
     ], [
         a ds:Property;
         ds:name "delay";

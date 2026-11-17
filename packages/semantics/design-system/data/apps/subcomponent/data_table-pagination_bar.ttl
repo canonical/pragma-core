@@ -17,24 +17,24 @@ ds:apps.subcomponent.data_table-pagination_bar a ds:Subcomponent;
         ds:summary "The pagination strategy. Offset provides random-access page navigation with a page selector, jump-to-first, and jump-to-last buttons. Keyset supports forward and back navigation only and displays an approximate item count.";
         ds:propertyType "choice";
         ds:optional "false";
-        ds:defaultValue "offset";
-        ds:constraints "Inherited from the data table. Keyset pagination is incompatible with grouping and sorting."
+        ds:constraints "Inherited from the data table. Keyset pagination is incompatible with grouping and sorting.";
+        ds:defaultValue "offset"
     ], [
         a ds:Property;
         ds:name "page-size-options";
         ds:summary "The set of page sizes available in the page-size selector dropdown. The first value in the list is used as the default page size.";
         ds:propertyType "list of text";
         ds:optional "true";
-        ds:defaultValue "50, 75, 100";
-        ds:constraints "Inherited from the data table. Each value must be a positive integer."
+        ds:constraints "Inherited from the data table. Each value must be a positive integer.";
+        ds:defaultValue "50, 75, 100"
     ], [
         a ds:Property;
         ds:name "item-label";
         ds:summary "A context-specific noun used in the item amount label and the item count summary in place of \"Items\" (for example, \"Machines\" or \"Orders\").";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "Items";
-        ds:constraints "Inherited from the data table."
+        ds:constraints "Inherited from the data table.";
+        ds:defaultValue "Items"
     ], [
         a ds:Property;
         ds:name "item-count-display";

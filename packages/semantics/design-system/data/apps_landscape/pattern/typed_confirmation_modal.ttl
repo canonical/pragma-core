@@ -16,73 +16,73 @@ ds:apps_landscape.pattern.typed_confirmation_modal a ds:Pattern;
         ds:name "`confirmationText`";
         ds:summary "Supplies the displayed phrase, input placeholder, and comparison target.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`. Compared as `inputText.toLowerCase() === confirmationText.toLowerCase()` with no trim or locale argument. An empty string makes untouched input valid."
+        ds:constraints "TypeScript: `string`. Compared as `inputText.toLowerCase() === confirmationText.toLowerCase()` with no trim or locale argument. An empty string makes untouched input valid.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`isOpen`";
         ds:summary "Controls whether the complete modal is rendered.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `boolean`. False returns `null` but does not itself clear local text."
+        ds:constraints "TypeScript: `boolean`. False returns `null` but does not itself clear local text.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`close`";
         ds:summary "Handles consumer-owned modal closure.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `() => void`. The wrapper's modal-close path invokes it before clearing text. Consumer must update `isOpen`."
+        ds:constraints "TypeScript: `() => void`. The wrapper's modal-close path invokes it before clearing text. Consumer must update `isOpen`.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`onConfirm`";
         ds:summary "Runs the protected asynchronous action.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `() => Promise<void>`. Called only when text is valid. Rejection is not caught; text clears only after resolution. The component does not close automatically."
+        ds:constraints "TypeScript: `() => Promise<void>`. Called only when text is valid. Rejection is not caught; text clears only after resolution. The component does not close automatically.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`confirmButtonDisabled`";
         ds:summary "Supplies an external disabled condition.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: inherited Canonical `ConfirmationModal` `confirmButtonDisabled`. Combined with invalid text and loading.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`confirmButtonLoading`";
         ds:summary "Controls forwarded loading presentation and contributes to disabled state.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: inherited Canonical `ConfirmationModal` `confirmButtonLoading`. Parent owns transitions; text input and cancel remain enabled unless `ConfirmationModal` changes them.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`children`";
         ds:summary "Supplies required consequence content before the instruction.";
         ds:propertyType "node";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `ReactNode`. Supply enough context to identify the target and impact. The wrapper renders it inside the confirmation Form."
+        ds:constraints "TypeScript: `ReactNode`. Supply enough context to identify the target and impact. The wrapper renders it inside the confirmation Form.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`confirmButtonLabel`";
         ds:summary "Supplies required content for the modal-owned confirm action.";
         ds:propertyType "node";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: inherited `ReactNode`. Forwarded to `ConfirmationModal`; the action row remains outside the wrapper's Form."
+        ds:constraints "TypeScript: inherited `ReactNode`. Forwarded to `ConfirmationModal`; the action row remains outside the wrapper's Form.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`confirmButtonProps`";
         ds:summary "Nominally accepts inherited confirm-action overrides.";
         ds:propertyType "object";
-        ds:defaultValue "`{ type: \"submit\" }`";
         ds:constraints "TypeScript: Canonical `Partial<ActionButtonProps>`. A consumer value enters `...props` and is then discarded because the wrapper replaces it with `{ type: \"submit\" }`; consumer `confirmButtonProps` do not survive the later assignment.";
+        ds:defaultValue "`{ type: \"submit\" }`";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`...props`";
         ds:summary "Forwards title, labels, appearance, portal behavior, and other modal options.";
         ds:propertyType "object";
-        ds:defaultValue "Canonical defaults";
         ds:constraints "TypeScript: `ComponentProps<typeof ConfirmationModal>`, including inherited supported props and `children`. The wrapper replaces `confirmButtonDisabled`, `confirmButtonProps`, `confirmButtonLoading`, `onConfirm`, and `close`. The explicitly documented inherited props above remain part of this public contract subject to those replacement rules.";
+        ds:defaultValue "Canonical defaults";
         ds:optional "true"
     ].

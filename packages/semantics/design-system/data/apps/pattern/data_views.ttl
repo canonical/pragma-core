@@ -11,15 +11,14 @@ ds:apps.pattern.data_views a ds:Pattern;
     ds:guidelines "# States & interaction\n\n- Every part edits one view, so a change in one shows in every renderer.\n- A search or filter change returns to the first page.\n- The action bar shows only while records are selected; persistent selection spans pages.\n\n# Accessibility\n\n- Every part is labelled, and a change with no visible result is announced in one polite live region.\n- Without scripting, search, filters and pagination work as links and GET forms.";
     ds:tier ds:apps;
     ds:documentationStage ds:tag.needscoredocumentation;
-    ds:hasSubcomponent ds:apps.subcomponent.data_views-filters, ds:apps.subcomponent.data_views-sort_panel, ds:apps.subcomponent.data_views-saved_views, ds:apps.subcomponent.data_table-pagination_bar, ds:apps.subcomponent.data_table-action_bar;
     ds:hasProperty [
         a ds:Property;
         ds:name "selection-mode";
         ds:summary "Simple selection is page-scoped and dropped on navigation; persistent selection spans pages, sorting and filtering.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "none";
-        ds:constraints "Views with grouping and selection use persistent."
+        ds:constraints "Views with grouping and selection use persistent.";
+        ds:defaultValue "none"
     ], [
         a ds:Property;
         ds:name "unique-identifier-field";
@@ -40,16 +39,16 @@ ds:apps.pattern.data_views a ds:Pattern;
         ds:summary "Offset navigates to any page; keyset moves forward and back only.";
         ds:propertyType "choice";
         ds:optional "true";
-        ds:defaultValue "none";
-        ds:constraints "Keyset is incompatible with grouping and sorting."
+        ds:constraints "Keyset is incompatible with grouping and sorting.";
+        ds:defaultValue "none"
     ], [
         a ds:Property;
         ds:name "page-size-options";
         ds:summary "The page sizes offered; the first is the default.";
         ds:propertyType "list of text";
         ds:optional "true";
-        ds:defaultValue "50, 75, 100";
-        ds:constraints "Each value is a positive integer."
+        ds:constraints "Each value is a positive integer.";
+        ds:defaultValue "50, 75, 100"
     ], [
         a ds:Property;
         ds:name "item-label";
@@ -82,4 +81,5 @@ ds:apps.pattern.data_views a ds:Pattern;
         ds:summary "Called with the action and the selected record identifiers.";
         ds:propertyType "callback";
         ds:optional "true"
-    ].
+    ];
+    ds:hasSubcomponent ds:apps.subcomponent.data_views-filters, ds:apps.subcomponent.data_views-sort_panel, ds:apps.subcomponent.data_views-saved_views, ds:apps.subcomponent.data_table-pagination_bar, ds:apps.subcomponent.data_table-action_bar.

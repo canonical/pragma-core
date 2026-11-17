@@ -16,6 +16,6 @@ ds:apps_landscape.pattern.recurring_schedule a ds:Pattern;
         ds:name "`formik`";
         ds:summary "Supplies values, field bindings, touched/errors state, and `setFieldValue`.";
         ds:propertyType "object";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `FormikContextType<T>` where `T extends ScheduleBlockFormProps`. Multi-select updates call async `setFieldValue`; the component does not handle errors from that promise."
+        ds:constraints "TypeScript: `FormikContextType<T>` where `T extends ScheduleBlockFormProps`. Multi-select updates call async `setFieldValue`; the component does not handle errors from that promise.";
+        ds:defaultValue "—"
     ].

@@ -17,30 +17,30 @@ ds:apps_landscape.subcomponent.label_with_description a ds:Subcomponent;
         ds:summary "Additional class on the primary paragraph only.";
         ds:propertyType "text";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "Does not style the description container or link. Preserve the relationship and visibility of both text levels."
+        ds:constraints "Does not style the description container or link. Preserve the relationship and visibility of both text levels.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`LabelWithDescription.description`";
         ds:summary "Supporting content rendered inside `<small>`.";
         ds:propertyType "node";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `ReactNode`. Use phrasing and inline content valid within `<small>`; block descendants can create unsuitable markup."
+        ds:constraints "TypeScript: `ReactNode`. Use phrasing and inline content valid within `<small>`; block descendants can create unsuitable markup.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`LabelWithDescription.label`";
         ds:summary "Primary content rendered inside a paragraph.";
         ds:propertyType "node";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `ReactNode`. Use concise inline content valid within `<p>`. This does not label a form control."
+        ds:constraints "TypeScript: `ReactNode`. Use concise inline content valid within `<p>`. This does not label a form control.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "LabelWithDescription.link";
         ds:summary "Destination for the conditional `learn more` anchor.";
         ds:propertyType "url";
         ds:optional "true";
-        ds:defaultValue "—";
-        ds:constraints "Opens with `target=\"_blank\"` and `rel=\"noopener noreferrer\"`; clicking stops propagation but keyboard activation remains native link behavior."
+        ds:constraints "Opens with `target=\"_blank\"` and `rel=\"noopener noreferrer\"`; clicking stops propagation but keyboard activation remains native link behavior.";
+        ds:defaultValue "—"
     ].

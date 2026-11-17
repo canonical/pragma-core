@@ -11,6 +11,47 @@ ds:global_dataviews.subcomponent.query_chip-segment a ds:Subcomponent;
     ds:guidelines "### Accessibility\n\n- Once scripts run, and when it has `onActivate`, a Segment is a native button named by its  \ntext, or by its `label` when one is given. Otherwise, and before scripts run, it is plain  \ntext; when its `label` differs from its text, the text is `aria-hidden` and the label renders  \nbeside it as visually hidden text, so a symbol such as `≥` is spoken as “at least”.\n- A Segment with a `condition` shows that Condition value’s mark before its text. The mark is  \nhidden from assistive technology, because the `label` speaks the operator.\n- Inside a roving composite, the chip’s first Segment is the chip’s toolbar item and takes  \n`tabindex=\"0\"` only while it holds the tab stop; every other Segment button takes  \n`tabindex=\"-1\"`, reached by Enter on the chip, then Tab.\n- Each Segment button is at least 24 by 24 px, whatever its text, so a one-glyph operator such  \nas `≥` is still a full target.\n- An invalid Segment carries its state in its accessible description, through  \n`aria-describedby` on its `description`, because `aria-invalid` does not apply to a button.  \nThe `description` renders as a `hidden` element, which `aria-describedby` still resolves, so  \nit never joins the Segment’s name from content or reads inline in browse mode.  \nWhile it is invalid, the chip’s first Segment is described by it too.\n\n### States & interaction\n\nA Segment is default, hovered, selected, invalid or disabled. It is selected when its chip is  \nselected, and disabled when its chip is disabled. Its tone comes from its `condition`, or from  \nthe chip’s Criticality value, which tints every Segment; Error also marks the chip refused. Its  \nown `@invalid` state wins over either. Every transition belongs to the host.";
     ds:tier ds:global_dataviews;
     ds:documentationStage ds:tag.needstriage;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The part’s text, such as `status` or `≥`.";
+        ds:propertyType "node";
+        ds:optional "false";
+        ds:constraints "text"
+    ], [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "```The spoken text when it differs from the shown text, such as \"at least\" for `≥`.```";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "condition";
+        ds:summary "The Condition value, on the operator Segment.";
+        ds:propertyType "choice";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "is_invalid";
+        ds:summary "Marks the part at fault.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:constraints "```requires `description````";
+        ds:defaultValue "false"
+    ], [
+        a ds:Property;
+        ds:name "description";
+        ds:summary "The accessible description, such as \"Invalid: <message>\", or on the first Segment of a refused chip \"Refused: <reason>\".";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "```required with `is_invalid````"
+    ], [
+        a ds:Property;
+        ds:name "on_activate";
+        ds:summary "Called when the Segment is activated. Passing it makes the Segment a button; without it, it is plain text.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ];
     ds:hasModifierFamily ds:global_dataviews.modifier_family.condition;
     ds:parentComponent ds:global_dataviews.component.query_chip;
     ds:hasTokenBinding [

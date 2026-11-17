@@ -16,186 +16,186 @@ ds:apps_landscape.pattern.table_filter a ds:Pattern;
         ds:name "`TableFilter.type`";
         ds:summary "Selects the implementation and legal branch props.";
         ds:propertyType "choice";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `\"single\" | \"multiple\" | \"custom\"`. Shared discriminator for `SingleFilterProps`, `MultipleFilterProps`, and `CustomFilterProps`. There is no fallback branch for unknown runtime values."
+        ds:constraints "TypeScript: `\"single\" | \"multiple\" | \"custom\"`. Shared discriminator for `SingleFilterProps`, `MultipleFilterProps`, and `CustomFilterProps`. There is no fallback branch for unknown runtime values.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.label`";
         ds:summary "Supplies non-inline toggle content.";
         ds:propertyType "node";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `ReactNode`. Inline mode renders no toggle and does not display this prop."
+        ds:constraints "TypeScript: `ReactNode`. Inline mode renders no toggle and does not display this prop.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.inline`";
         ds:summary "Returns the branch body without `ContextualMenu`.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
         ds:constraints "TypeScript: `boolean`. Inline mode has no toggle or menu-open search reset. Custom content still receives a close function, but it cannot find a root toggle and therefore no-ops.";
+        ds:defaultValue "false";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.hasBadge`";
         ds:summary "Enables branch-specific active indicators.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `boolean`. Single shows an unlabeled dot only for truthy `selectedItem`; multiple shows a numeric badge only when selections exist; custom ignores it.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.hasToggleIcon`";
         ds:summary "Exists in `BaseFilterProps`.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `boolean`. No branch reads it. Every non-inline menu gets `hasToggleIcon: true` from the shared helper, so a consumer value is ignored.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.position`";
         ds:summary "Requests menu alignment.";
         ds:propertyType "text";
-        ds:defaultValue "`left`";
         ds:constraints "TypeScript: Canonical `Position`. Only multiple mode reads it. Single and custom always receive the shared `\"left\"` position. The imported dependency type is not a repository-owned finite literal union, so no immutable option list is asserted here.";
+        ds:defaultValue "`left`";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.options`";
         ds:summary "Supplies choices in render order.";
         ds:propertyType "list of objects";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `readonly GroupedOption[]`, where `GroupedOption` extends `{ label: string; value: string; disabled?: boolean }` with `group?: string`. Required for single/multiple and excluded from custom. Values are React keys and selection identifiers and should be unique. `option.disabled` is not read."
+        ds:constraints "TypeScript: `readonly GroupedOption[]`, where `GroupedOption` extends `{ label: string; value: string; disabled?: boolean }` with `group?: string`. Required for single/multiple and excluded from custom. Values are React keys and selection identifiers and should be unique. `option.disabled` is not read.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.options[].label`";
         ds:summary "Supplies visible option content.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`."
+        ds:constraints "TypeScript: `string`.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.options[].value`";
         ds:summary "Supplies the selection identifier and React key.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`. Values should be unique."
+        ds:constraints "TypeScript: `string`. Values should be unique.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.options[].disabled`";
         ds:summary "Exists on the inherited option contract.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `boolean`. This field is not read from `options`; use `disabledOptions` to disable choices.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.options[].group`";
         ds:summary "Marks visual group boundaries.";
         ds:propertyType "text";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `string`. The string is never displayed. A separator appears only when the current option has a truthy group, a next option exists, and the next group differs.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.disabledOptions`";
         ds:summary "Disables choices by matching `value`.";
         ds:propertyType "list of objects";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `SelectOption[]`, where `SelectOption` is `{ label: string; value: string; disabled?: boolean }`. The separate list controls disabled state; labels and `disabled` fields are ignored for matching. Select all still emits every option value, including disabled ones.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.disabledOptions[].label`";
         ds:summary "Supplies an unused label required by the option contract.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`. Ignored when matching disabled values."
+        ds:constraints "TypeScript: `string`. Ignored when matching disabled values.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.disabledOptions[].value`";
         ds:summary "Supplies the value matched to disable a choice.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`."
+        ds:constraints "TypeScript: `string`.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.disabledOptions[].disabled`";
         ds:summary "Exists on the inherited option contract.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `boolean`. Ignored when matching disabled values.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single/multiple.onSearch`";
         ds:summary "Enables a local-state option-search form and receives its raw text.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `(search: string) => void`. Opening a non-inline menu calls `onSearch(\"\")`; Search submits untrimmed text; Clear sets local input empty and calls `onSearch(\"\")`. The search form and `SearchBox.onSearch` both invoke it, so one Canonical search action can dispatch the same query twice. The component does not filter `options`."
+        ds:constraints "TypeScript: `(search: string) => void`. Opening a non-inline menu calls `onSearch(\"\")`; Search submits untrimmed text; Clear sets local input empty and calls `onSearch(\"\")`. The search form and `SearchBox.onSearch` both invoke it, so one Canonical search action can dispatch the same query twice. The component does not filter `options`.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single.selectedItem`";
         ds:summary "Controlled selected value.";
         ds:propertyType "text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string`. A matching option renders as non-interactive selected text instead of a button. The component stores no selection."
+        ds:constraints "TypeScript: `string`. A matching option renders as non-interactive selected text instead of a button. The component stores no selection.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single.onItemSelect`";
         ds:summary "Reports a clicked unselected value, then programmatically closes the contextual menu.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `(item: string) => void`. In inline mode no toggle exists, so the optional close helper has no effect."
+        ds:constraints "TypeScript: `(item: string) => void`. In inline mode no toggle exists, so the optional close helper has no effect.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.single.showSelectionOnToggleLabel`";
         ds:summary "Uses the matched selected option label as toggle content.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
         ds:constraints "TypeScript: `boolean`. Falls back to `label` when no option matches.";
+        ds:defaultValue "false";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.multiple.selectedItems`";
         ds:summary "Controlled selected-value array.";
         ds:propertyType "list of text";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `string[]`. Checkbox state uses `includes`; the component stores no selection and does not deduplicate values."
+        ds:constraints "TypeScript: `string[]`. Checkbox state uses `includes`; the component stores no selection and does not deduplicate values.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.multiple.onItemsSelect`";
         ds:summary "Reports the complete next array after checkbox or footer actions.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `(items: string[]) => void`. Checking appends the value; unchecking removes all equal values; Select all emits every option value; Clear emits `[]`."
+        ds:constraints "TypeScript: `(items: string[]) => void`. Checking appends the value; unchecking removes all equal values; Select all emits every option value; Clear emits `[]`.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.multiple.showSelectedItemCount`";
         ds:summary "Replaces Clear with selected-count text.";
         ds:propertyType "boolean";
-        ds:defaultValue "false";
         ds:constraints "TypeScript: `boolean`. The text is `${selectedItems.length} of ${options.length} selected`; it is plain muted text and includes values absent from `options`.";
+        ds:defaultValue "false";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.multiple.hideSelectAllButton`";
         ds:summary "Omits Select all and reverses footer direction.";
         ds:propertyType "boolean";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `boolean`. Clear or selected-count content still renders.";
+        ds:defaultValue "—";
         ds:optional "true"
     ], [
         a ds:Property;
         ds:name "`TableFilter.custom.customComponent`";
         ds:summary "Supplies custom body content.";
         ds:propertyType "node";
-        ds:defaultValue "—";
-        ds:constraints "TypeScript: `FC<CustomFilterComponentProps>`, where `CustomFilterComponentProps` is `{ closeMenu?: () => void }`. `closeMenu` simulates a click on the root contextual-menu toggle and should run only after a completed action. In inline mode it is present but no-ops because no toggle is mounted."
+        ds:constraints "TypeScript: `FC<CustomFilterComponentProps>`, where `CustomFilterComponentProps` is `{ closeMenu?: () => void }`. `closeMenu` simulates a click on the root contextual-menu toggle and should run only after a completed action. In inline mode it is present but no-ops because no toggle is mounted.";
+        ds:defaultValue "—"
     ], [
         a ds:Property;
         ds:name "`TableFilter.custom.customComponent.closeMenu`";
         ds:summary "Lets custom content request contextual-menu closure.";
         ds:propertyType "callback";
-        ds:defaultValue "—";
         ds:constraints "TypeScript: `() => void`. It is supplied by TableFilter in menu and inline renderings; in inline mode it cannot find a root toggle and no-ops.";
+        ds:defaultValue "—";
         ds:optional "true"
     ].

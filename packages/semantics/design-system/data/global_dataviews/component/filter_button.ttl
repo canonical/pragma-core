@@ -11,6 +11,53 @@ ds:global_dataviews.component.filter_button a ds:Component;
     ds:guidelines "### Accessibility\n\n- The trigger is a native button that opens a non-modal panel, a native popover. Both work  \nbefore scripts run.\n- The panel follows DropdownButton’s: a non-modal dialog, `role=\"dialog\"`, named by the trigger  \nthrough `aria-labelledby`, and the trigger takes `aria-haspopup=\"dialog\"`.\n- The trigger opens a panel, so it takes no `aria-pressed`. Its accessible name carries the  \napplied count instead: `label` followed by `appliedLabel`, as in “Status, 2 applied”, or  \n“Status, none of 2” with an Exclusion clause. FilterButton writes no words of its own: the  \nhost takes `appliedLabel` from its messages. It renders as visually hidden text after the  \nlabel, preceded by a comma and a space that FilterButton adds, and the Badge is  \n`aria-hidden`, so the name reads “Status, 2 applied” and the visible label stays its prefix.\n- A Badge shows the count, so the applied state does not rest on colour.\n- While the filter applies, the trigger shows its clause’s Condition mark before the count,  \nsuch as `≠` for an Exclusion clause, so the condition does not rest on the name alone. The  \nmark is hidden from assistive technology, because `appliedLabel` already says so.\n- The panel stays open while its controls change.\n- In a checkbox list, an option’s count is part of its checkbox’s accessible name, because the  \noption is a `<label>` around the checkbox, its text and its count, with a visually hidden  \ncomma and space before the count: “deployed, 12”.\n\n### Without scripts\n\nThe trigger and its native popover open the panel before scripts run in every case.  \nFilterButton renders no form: the panel’s content is the host’s `children`. A host that can  \nspell addresses may pass a GET form with a visible Apply submit, hidden once scripts run; a  \nhost that cannot, as under an in-memory query state, renders its controls inert, and they work  \nonce scripts run.\n\n### States & interactionStateEntered byShown asdefaultnothing appliesButton’s tertiary face, fixed: FilterButton takes no `importance`hoverthe pointerthe tertiary hover stepopenactivationthe hover step, with the chevron turnedapplied`applied` above 0the Badge with the count; the applied fill has no symbol yetwith a condition`applied` above 0 and `condition` setthe applied state, with the Condition value’s mark before the countdisabled`disabled`Button’s disabled face\n\n- With scripts, each choice commits when it is ticked: one transition per choice. Closing the  \npanel commits nothing.\n- Without scripts, where the host’s children are a GET form, its Apply submit commits.\n- Escape and an outside click close the panel; focus leaving it does not. Escape returns focus  \nto the trigger, as the trigger does when it closes the panel. An outside click leaves focus  \nwhere the person moved it.\n\n### Composition\n\n- FilterButton is a component around DropdownButton’s `withDropdownButton` applied to Button  \nonce, at module scope. FilterButton provides its own props through a context above the  \ntrigger, and the render function reads them, so its count and its panel stay dynamic.\n- Its rest props are Button’s and reach the trigger unchanged. An `onClick` composes with the  \ntoggle: the consumer’s handler runs first, and `preventDefault()` cancels the toggle.\n- There is no `open` property: the open state lives in the popover. A consumer hears it change  \nthrough `onToggle`, which fires for Escape, light dismiss, the trigger and `hide()` alike, and  \ndrives the panel through `panelRef`.\n- There are no `triggerProps` or `panelProps` objects: the trigger takes Button’s rest props,  \nand the panel takes its `id`, its `ref` (exposed as `panelRef`), `aria-labelledby` naming the  \ntrigger, and `onToggle`.";
     ds:tier ds:global_dataviews;
     ds:documentationStage ds:tag.needstriage;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The filter's name.";
+        ds:propertyType "node";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "applied";
+        ds:summary "How many values the filter applies; 0 means none.";
+        ds:propertyType "number";
+        ds:optional "true";
+        ds:constraints "an integer, 0 or more";
+        ds:defaultValue "0"
+    ], [
+        a ds:Property;
+        ds:name "applied_label";
+        ds:summary "The resolved words for the count in the trigger's name, such as \"2 applied\" or \"none of 2\", from the host's messages.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "```required while `applied` is above 0```"
+    ], [
+        a ds:Property;
+        ds:name "condition";
+        ds:summary "```The Condition value of the applied clause. The trigger shows its mark before the count, and the host's `applied_label` says it in words, such as \"none of 2\" for Exclusion.```";
+        ds:propertyType "choice";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The panel's content: a checkbox list, or any control.";
+        ds:propertyType "node";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "on_toggle";
+        ds:summary "The panel's native toggle event, composed with the panel's own listener, so a consumer hears the panel open or close however it happens.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "panel_ref";
+        ds:summary "The panel's handle, for a host that takes the filter over.";
+        ds:propertyType "object";
+        ds:optional "true";
+        ds:constraints "````{ show, hide, toggle }````"
+    ];
     ds:hasModifierFamily ds:global.modifier_family.density, ds:global.modifier_family.surface;
     ds:inheritsFrom ds:global.component.button;
     ds:hasTokenBinding [

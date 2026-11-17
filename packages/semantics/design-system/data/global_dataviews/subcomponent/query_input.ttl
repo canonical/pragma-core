@@ -11,6 +11,142 @@ ds:global_dataviews.subcomponent.query_input a ds:Subcomponent;
     ds:guidelines "### Accessibility\n\n- The entry is a native `<input>`, never a `<textarea>`, which admits no combobox role. A long  \nvalue scrolls inside the input rather than wrapping.\n- Once scripts run, the entry takes `role=\"combobox\"` and controls the suggestions, a  \n`listbox` of `option`s, through `aria-controls`, `aria-expanded` and  \n`aria-activedescendant`. The entry keeps focus while an option is highlighted. QueryInput  \ngives the same suggestions to a chip’s Entry through its context: whichever entry has focus  \ncarries `aria-controls`, and its `aria-expanded` reflects whether the suggestions are open;  \nthe other entry carries `aria-expanded=\"false\"`.\n- Once scripts run, the chips and the entry are the items of one element with `role=\"toolbar\"`,  \nnamed by `label` and described by `description`; neither the role nor the description renders  \nbefore scripts run. Exactly one item is in the tab order at a time. QueryInput is the roving  \nhost. The item that holds the stop is `activeItem`, which the host may control with  \n`onActiveItemChange`; QueryInput keeps it itself when both are left out. A roving context  \npasses the item and its setter down to the chips and the entry, which read it to set their  \nown `tabindex`. Each chip is one item. Item ids are unique across the toolbar: a chip is  \n`<id>` on its first Segment, or `<id>:entry` while it holds an Entry, a read-only chip’s  \nremove control is `<id>:remove`, and the free-text entry is `entry`. The chips’ list keeps  \n`role=\"list\"` inside it. Each chip’s remove control takes `tabindex=\"-1\"` there, unless the  \nchip is read-only and the control is its roving item: it stays reachable by pointer, and  \nDelete or Backspace on the selected chip is its keyboard path. When a host hides the chips,  \nit sets `activeItem` to `entry`, and moves focus to the entry if focus was within a chip. A  \ndisabled chip is not a roving item: the host skips it on Left and Right and after a removal,  \nand QueryInput falls back to `entry` when `activeItem` names a disabled item. A chip that is  \nneither interactive nor removable has no roving item, and is skipped the same way.\n- A chip’s Entry is a part of that chip, never inside a Segment’s button, so no input ever  \nsits inside a button. Blur ends an edit only when focus leaves QueryInput’s root, a  \n`focusout` whose `relatedTarget` is outside it, never when focus moves between the entries.\n- The field is not focusable itself. While focus is within it, it shows a 3 px inset ring  \n(`color.focusRing`) and a highlighted underline. The ring lies on the input fill: 4.64:1 in  \nlight mode and 5.52:1 in dark mode.\n- The clear button is named by `clearLabel`, which the host takes from its messages, and is at  \nleast 24 by 24 px. It is a native button, or a link when `clearHref` is given.\n- A disabled option, and the option marked `current`, carry `aria-disabled` and are never  \n`aria-selected`, which the combobox keeps for the highlighted option. Group dividers are  \npresentational. An option’s hint, such as a count, is part of its accessible name, after a  \nvisually hidden comma and space, as in “deployed, 12 machines”, and its `name`, when given,  \nreplaces its label in it.\n- While the suggestions are open and a `footer` is given, the focused entry’s  \n`aria-describedby` also includes the footer element, after its `formatDescription` and  \n`description`, so the hint is heard.\n- Loading and an empty list are each announced once, through a visually hidden polite  \n`role=\"status\"` region that is always rendered in QueryInput’s root, outside the popover, and  \nwhose text changes when loading or the empty state begins: `loadingLabel` while loading, and  \n`emptyText` for an empty list. The visible spinner and empty text sit beside the listbox,  \nwhich holds only options, and are `aria-hidden`.\n- Typing is never blocked by key filtering, so paste, dictation and input methods work. The host  \nparses what was typed.\n\n### Without scripts\n\nQueryInput renders a working baseline only when its host passes a `name` for the entry, which  \na host passes only when it can spell addresses. Then QueryInput is a plain text input in its  \nhost’s GET form: the entry is an `<input type=\"search\">` with no combobox role, no toolbar  \nrole and no suggestions, and the chips render as their own baseline. `clearHref` controls only  \nthe clear button, which is then a link to it. Without a `name`, as under an in-memory query  \nstate, the server renders the field inert, and it works once scripts run.\n\n### States & interaction\n\nQueryInput is default, hovered, focused within or disabled. Unfocused, it holds one line, fades  \nthe chips that overflow it, and shows the words `hiddenLabel` returns for the number of chips  \nit hides, such as “+3 more”; focused, it wraps and overlays what follows it, except a host’s  \nerror row, which the host moves below the expanded field. Its suggestions are closed or open;  \nwhile open they are loading, loaded or empty, and one option may be highlighted. They open  \nwhile an entry has focus, there is something to show, options, a loading state or the empty  \ntext, and they have not been dismissed: Escape dismisses them until the next input, or until  \nDown or Alt+Down reopens them. They are anchored to the entry that has focus, wherever it sits,  \nflip above it when there is no room below, and stay inside the viewport. Keys other than those  \nthe combobox handles reach the host, which owns chip navigation. Every other transition is the  \nhost’s. A pointer press on the field outside a chip and the clear button, including the search  \nicon and the hidden count, focuses the free-text entry and sets `activeItem` to `entry`.  \nUnfocused, the entry stays on the visible line, at least 24 px wide, and the chips are clipped  \nbefore it.\n\n### Composition\n\nThe suggestions belong to QueryInput, not to its host. The combobox ties the entry to its  \nlistbox: `aria-controls` and `aria-activedescendant` name the listbox and its options by id,  \nand one state machine opens the list, highlights an option and chooses it. QueryInput owns the  \nfree-text entry and its combobox ARIA, so it owns the listbox too, as **ComboboxInput** owns  \nits results list, and lends it to a chip’s Entry through its context. Its host decides only  \nwhat the options are: their labels, hints and groups, and which are disabled. A query bar  \noffers fields, operators and values through them.";
     ds:tier ds:global_dataviews;
     ds:documentationStage ds:tag.needstriage;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "label";
+        ds:summary "The accessible name of the entry and of the toolbar.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "description";
+        ds:summary "The toolbar's accessible description: the keys its host handles.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "children";
+        ds:summary "The chips, shown before the entry.";
+        ds:propertyType "node";
+        ds:optional "true";
+        ds:constraints "one QueryChips group"
+    ], [
+        a ds:Property;
+        ds:name "value";
+        ds:summary "The typed text.";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "on_value_change";
+        ds:summary "Called with the typed text after each input.";
+        ds:propertyType "callback";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "placeholder";
+        ds:summary "Shown while nothing is typed and no chip is held.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "options";
+        ds:summary "The suggestions, in order. `name` is the spoken name when it differs from the label; `current` marks the option already held, shown bold and not selectable; consecutive options with different `group` values are divided by a line.";
+        ds:propertyType "list of objects";
+        ds:optional "true";
+        ds:constraints "```each `{ id, label, name?, hint?, disabled?, current?, group? }````";
+        ds:defaultValue "none"
+    ], [
+        a ds:Property;
+        ds:name "on_option_select";
+        ds:summary "Called with an option's id when it is chosen.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "is_loading";
+        ds:summary "Shows the spinner in the suggestions.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ], [
+        a ds:Property;
+        ds:name "loading_label";
+        ds:summary "The words the status region announces while the suggestions load, such as \"Loading suggestions\", from the host's messages.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "```required while `is_loading` is true```"
+    ], [
+        a ds:Property;
+        ds:name "empty_text";
+        ds:summary "Shown in the suggestions when there are no options.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "footer";
+        ds:summary "A hint at the foot of the suggestions, such as \"Separate multiple values with commas\".";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "is_disabled";
+        ds:summary "Disables the field.";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "false"
+    ], [
+        a ds:Property;
+        ds:name "on_clear";
+        ds:summary "```Called by the clear button. Passing it, or `clear_href`, shows the button.```";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "clear_href";
+        ds:summary "Makes the clear button a link to this address, so that clearing works before scripts run; a click still calls `on_clear` when it is given. Passing it, or `on_clear`, shows the button.";
+        ds:propertyType "url";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "clear_label";
+        ds:summary "The clear button's accessible name, such as \"Clear filters and search\".";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "required with `on_clear` or `clear_href`"
+    ], [
+        a ds:Property;
+        ds:name "active_item";
+        ds:summary "The item that holds the toolbar's tab stop. Left out, QueryInput keeps it itself.";
+        ds:propertyType "text";
+        ds:optional "true";
+        ds:constraints "a roving item id"
+    ], [
+        a ds:Property;
+        ds:name "hidden_label";
+        ds:summary "Called with the number of chips the unfocused field hides; returns their words, such as \"+3 more\", from the host's messages.";
+        ds:propertyType "callback";
+        ds:optional "true";
+        ds:constraints "required with chips"
+    ], [
+        a ds:Property;
+        ds:name "name";
+        ds:summary "The entry's form name. Passing it renders the no-JS baseline, a plain search input in the host's GET form; left out, the field renders inert until scripts run.";
+        ds:propertyType "text";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "on_active_item_change";
+        ds:summary "Called with the item id when the tab stop moves, by a key, a click or a removal.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ], [
+        a ds:Property;
+        ds:name "on_highlight_change";
+        ds:summary "Called with the highlighted option's id, or undefined, whenever the highlight changes. The host uses it to commit the highlighted choice on Tab or blur.";
+        ds:propertyType "callback";
+        ds:optional "true"
+    ];
     ds:hasModifierFamily ds:global.modifier_family.density, ds:global.modifier_family.surface;
     ds:hasTokenBinding [
         a ds:TokenBinding;
