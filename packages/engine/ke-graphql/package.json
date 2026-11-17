@@ -52,7 +52,7 @@
     "demo": "bun demo/server.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.6",
+    "@biomejs/biome": "2.6.8",
     "@canonical/biome-config": "^0.46.0",
     "@canonical/ke": "^0.46.0",
     "@canonical/typescript-config": "^0.46.0",
