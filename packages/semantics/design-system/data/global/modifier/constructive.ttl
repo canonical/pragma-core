@@ -4,5 +4,5 @@
 
 ds:global.modifier.constructive a ds:Modifier;
     ds:name "Constructive";
-    ds:summary "";
+    ds:summary "The constructive modifier highlights the additive or positive nature of the consequences of an action. As opposed to [Destructive](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-aygAVqOfFj/_rui-VZYLmDJC1O) , Constructive should only be applied in tandem with [Destructive](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-aygAVqOfFj/_rui-VZYLmDJC1O) . When action UI blocks are used standalone, they should use their default, unmodified, appearance.";
     ds:modifierFamily ds:global.modifier_family.anticipation.

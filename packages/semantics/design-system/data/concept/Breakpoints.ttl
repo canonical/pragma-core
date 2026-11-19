@@ -1,0 +1,10 @@
+@prefix ds: <https://ds.canonical.com/>.
+@prefix anatomy: <https://anatomy.canonical.com/>.
+@prefix dt: <https://dt.canonical.com/>.
+
+ds:concept.Breakpoints a ds:Concept;
+    ds:name "Breakpoints";
+    ds:summary "";
+    ds:tier ds:global;
+    ds:content "Thoughts on breakpoints - on sites, medium has 2 options right now, and we need onely one - the medikum breakpoint maybe should start at a higher point and span more. \n\n\n\nbetweel large and extralarge the column width jumps too much, it makes items that consume 4 columns to stretch too mutch";
+    ds:knownEdgeCases "".
