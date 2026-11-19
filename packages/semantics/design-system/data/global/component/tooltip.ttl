@@ -55,7 +55,7 @@ ds:global.component.tooltip a ds:Component;
         a ds:Property;
         ds:name "Max width";
         ds:summary "Maximum width of tooltip container";
-        ds:optional "false";
+        ds:optional "true";
         ds:propertyType "number";
         ds:constraints "px";
         ds:defaultValue "284"
@@ -99,7 +99,7 @@ ds:global.component.tooltip a ds:Component;
         a ds:Property;
         ds:name "Max width";
         ds:summary "Optional width override for wrapper tooltip";
-        ds:optional "false";
+        ds:optional "true";
         ds:propertyType "number";
         ds:constraints "px";
         ds:defaultValue "284"
