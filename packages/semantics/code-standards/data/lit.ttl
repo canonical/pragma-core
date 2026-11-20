@@ -497,7 +497,7 @@ ariaLabel: string | null = null;
 // Never available during SSR — do not depend on it for accessible names.
 private slottedText = "";
 
-private onSlotChange(e: Event): void {
+private handleSlotChange(e: Event): void {
   const slot = e.target as HTMLSlotElement;
   this.slottedText = slot
     .assignedNodes({ flatten: true })
@@ -515,7 +515,7 @@ render() {
       class="${componentCssClassName}"
       aria-label=${ifDefined(label)}
     >
-      <slot @slotchange=${this.onSlotChange}></slot>
+      <slot @slotchange=${this.handleSlotChange}></slot>
     </button>
   `;
 }
@@ -639,7 +639,7 @@ render() {
 // in the server-rendered HTML.
 private slottedText = '';
 
-private onSlotChange(e: Event) {
+private handleSlotChange(e: Event) {
   const slot = e.target as HTMLSlotElement;
   this.slottedText = slot.assignedNodes({ flatten: true })
     .map(n => n.textContent ?? '')

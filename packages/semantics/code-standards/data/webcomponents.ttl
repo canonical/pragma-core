@@ -210,7 +210,7 @@ cs:webcomponents.component.a11y.keyboard a cs:CodeStandard ;
         cs:description "Handle keyboard events for the component's widget role." ;
         cs:language "typescript" ;
         cs:code """
-private onKeyDown(e: KeyboardEvent): void {
+private handleKeyDown(e: KeyboardEvent): void {
   switch (e.key) {
     case "ArrowDown":
       e.preventDefault();

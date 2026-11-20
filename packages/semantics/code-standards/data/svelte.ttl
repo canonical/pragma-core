@@ -393,24 +393,20 @@ cs:svelte.composition.snippet-attributes a cs:CodeStandard ;
 cs:svelte.composition.attachment-naming a cs:CodeStandard ;
     rdfs:label "Name attachments by behavior"@en ;
   cs:hasCategory cs:svelte ;
-    cs:description """Name functions used with `{@attach ...}` according to observable behavior or intent (for example tooltip, focusTrap, observeHover), so call sites communicate what is being attached; avoid generic names that hide purpose.""" ;
+    cs:description """Name an `{@attach}` function with a verb for what it attaches (`showTooltip`, `trapFocus`), never a generic name such as `handler`.""" ;
     cs:do [
         cs:description """
-(Do) Use verbs or nouns that describe the attachment's behavior (e.g., `tooltip`, `observeHover`).
+(Do) Use a verb that says what the attachment does.
 ```svelte
-<button {@attach tooltip("Save changes")}>
-  Save
-</button>
+<button {@attach showTooltip("Save changes")}>Save</button>
 ```
 """
     ] ;
     cs:dont [
         cs:description """
-(Don't) Use vague or generic names like `handler` or `myAttachment`.
+(Don't) Use a generic name.
 ```svelte
-<button {@attach handler(someData)}>
-  Save
-</button>
+<button {@attach handler(someData)}>Save</button>
 ```
 """
     ] .

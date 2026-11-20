@@ -215,24 +215,20 @@ function useFormatDate(date) {
 
 **Identifier:** `cs:svelte.composition.attachment-naming`
 
-Name functions used with `{@attach ...}` according to observable behavior or intent (for example tooltip, focusTrap, observeHover), so call sites communicate what is being attached; avoid generic names that hide purpose.
+Name an `{@attach}` function with a verb for what it attaches (`showTooltip`, `trapFocus`), never a generic name such as `handler`.
 
 ### Do
 
-(Do) Use verbs or nouns that describe the attachment's behavior (e.g., `tooltip`, `observeHover`).
+(Do) Use a verb that says what the attachment does.
 ```svelte
-<button {@attach tooltip("Save changes")}>
-  Save
-</button>
+<button {@attach showTooltip("Save changes")}>Save</button>
 ```
 
 ### Don't
 
-(Don't) Use vague or generic names like `handler` or `myAttachment`.
+(Don't) Use a generic name.
 ```svelte
-<button {@attach handler(someData)}>
-  Save
-</button>
+<button {@attach handler(someData)}>Save</button>
 ```
 
 ---
