@@ -8,49 +8,30 @@ Standards for testing development.
 
 **Identifier:** `cs:testing.file.structure`
 
-Unit test files must be colocated with the source they test, using the `.test.ts` suffix (`.test.tsx` for component tests). Other test types (browser, e2e) may follow different naming conventions. Shared test infrastructure — fixtures, factory helpers, custom matchers, type definitions — lives in a `testing/` directory at the package root (not inside `src/`). This directory stays out of the package's public API, but not out of its tests: each helper file in it has a colocated test, as a source file does, and the directory counts toward coverage, so a fixture or factory that tests rely on is tested itself. Integration tests that exercise multiple modules together go in `src/testing/integration/`. Do not place test files in a top-level `__tests__/` or `tests/` directory mirroring the source tree. Do not use `.spec.ts` — the convention is `.test.ts`.
+Every source file has a colocated, type-checked test named after it: `X.test.ts(x)` or `X.<facet>.test.ts(x)`. Except: barrels, `*.d.ts`, pure type files, stories, stylesheets, and the configs and entry files a tool loads. `testing/` may ship only as an `@experimental` `./testing` subpath.
 
 ### Do
 
-Colocate test files next to the source they test, with shared infrastructure in `testing/`.
+Name each unit test after the file it covers, with shared helpers in a root `testing/`
 ```
-packages/my-package/
-├── src/
-│   ├── parseThing.ts
-│   ├── parseThing.test.ts        # colocated with source
-│   ├── formatThing.ts
-│   └── formatThing.test.ts
-├── testing/
-│   ├── fixtures.ts               # shared test data
-│   ├── fixtures.test.ts          # helpers have colocated tests too
-│   ├── createTestDb.ts             # factory helpers
-│   ├── createTestDb.test.ts
-│   ├── registerMatchers.ts        # custom vitest matchers
-│   ├── registerMatchers.test.ts
-│   └── types.ts                   # test-only type definitions
-└── vitest.config.ts
-```
-
-Place integration tests in `src/testing/integration/`.
-```
-packages/my-package/
-├── src/
-│   ├── testing/
-│   │   └── integration/
-│   │       └── checkout-flow.test.ts
+src/
+├── parseThing.ts
+└── parseThing.test.ts
+testing/
+├── fixtures.ts
+└── fixtures.test.ts
 ```
 
 ### Don't
 
-Place test files in a separate `__tests__/` or `tests/` directory mirroring the source tree, or use `.spec.ts`.
+Leave a file untested, write a type test, or mirror the source in `__tests__/`
 ```
-packages/my-package/
-├── src/
-│   ├── parseThing.ts
-│   └── formatThing.ts
-├── __tests__/                    # Bad: mirrored directory
-│   ├── parseThing.spec.ts        # Bad: .spec.ts suffix
-│   └── formatThing.spec.ts
+src/
+├── parseThing.ts
+├── readHeader.ts           # Bad: no readHeader.test.ts
+├── parseThing.types.test.ts  # Bad: no type tests
+└── __tests__/
+    └── parseThing.spec.ts  # Bad: not colocated, and .spec
 ```
 
 ---
@@ -74,7 +55,7 @@ export default defineConfig({
   test: {
     coverage: {
       provider: "v8",
-      include: ["src/**/*.ts"],
+      include: ["src/**/*.ts", "testing/**/*.ts"],
       exclude: [
         "**/index.ts",       // barrel re-exports
         "**/*.test.ts",      // test files

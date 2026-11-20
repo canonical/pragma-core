@@ -146,11 +146,15 @@ Colocate `constants.ts` inside the domain folder it belongs to
 features/
 ├── pricing/
 │   ├── constants.ts          # Domain constants live here
+│   ├── constants.test.ts
 │   ├── calculatePrice.ts
+│   ├── calculatePrice.test.ts
 │   └── index.ts
 ├── auth/
 │   ├── constants.ts          # Auth-specific constants
+│   ├── constants.test.ts
 │   ├── validateToken.ts
+│   ├── validateToken.test.ts
 │   └── index.ts
 ```
 
@@ -477,11 +481,14 @@ features/
 ├── pricing/
 │   ├── types.ts              # Shared domain types live here
 │   ├── constants.ts
+│   ├── constants.test.ts
 │   ├── calculatePrice.ts
+│   ├── calculatePrice.test.ts
 │   └── index.ts
 ├── auth/
 │   ├── types.ts              # Auth-specific types
 │   ├── validateToken.ts
+│   ├── validateToken.test.ts
 │   └── index.ts
 ```
 
