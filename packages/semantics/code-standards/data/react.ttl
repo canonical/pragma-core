@@ -786,7 +786,8 @@ cs:react.hooks.custom a cs:CodeStandard ;
     - Side effects need to be encapsulated
 
 All of the types for a domain level's hooks must be defined in the `hooks/types.ts` file of that folder.
-Each hook must define a [HookName]Props and [HookName]Result type in `hooks/types.ts`.""" ;
+Each hook must define a [HookName]Props and [HookName]Result type in `hooks/types.ts`.
+A hook with exactly one input and no options may take that input positionally, typed as its [HookName]Props. A hook with two or more inputs, or with options, takes one object of props as the example shows.""" ;
     cs:do [
         cs:description "Create a custom hook that focuses on a single concern within the domain." ;
         cs:language "typescript" ;
@@ -834,6 +835,16 @@ export interface UseWindowFitmentResult {
    */
   popupPositionStyle: CSSProperties;
 }
+    """
+    ] ;
+    cs:do [
+        cs:description "Take a single input positionally when the hook has exactly one input and no options." ;
+        cs:language "typescript" ;
+        cs:code """
+// [MyComponent]/hooks/useLocalized.ts
+const useLocalized = <T>(
+  messages: UseLocalizedProps<T>,
+): UseLocalizedResult<T> => {
     """
     ] ;
     cs:dont [
