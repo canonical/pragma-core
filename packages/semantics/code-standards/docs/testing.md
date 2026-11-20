@@ -264,50 +264,30 @@ src/testing/regression/bugfix.test.ts
 
 **Identifier:** `cs:testing.unit.describe_organization`
 
-Test files must use hierarchical `describe` blocks that mirror the module's public API. Each exported function or behavior gets its own `describe`. The top-level `describe` names the module under test. Nested `describe` blocks group by exported function, method, or logical behavior. Individual `it` blocks describe specific input/output scenarios. For files that export multiple functions, use a top-level `describe` per export. Do not use `test()` as a synonym for `it()` — use `it()` consistently. Do not create deeply nested describe trees (3+ levels) — flatten by splitting into separate describe blocks or separate test files.
+Test files nest `describe` blocks that mirror the module's API: the top level names the module, inner blocks group by export or behaviour, and each `it` states one scenario. Use `it`, not `test`, and at most two levels of `describe`.
 
 ### Do
 
-Use hierarchical `describe` blocks mirroring the module's public API.
+Name the module, then group its scenarios
 ```typescript
-// parseThing.test.ts
 describe("parseThing", () => {
   describe("with valid input", () => {
-    it("parses a simple value", () => { /* ... */ });
-    it("handles optional fields", () => { /* ... */ });
+    it("parses a value", () => { /* ... */ });
   });
-
   describe("with invalid input", () => {
-    it("throws on empty string", () => { /* ... */ });
-    it("throws on malformed structure", () => { /* ... */ });
-  });
-
-  describe("edge cases", () => {
-    it("handles unicode characters", () => { /* ... */ });
-    it("handles maximum length input", () => { /* ... */ });
+    it("throws on empty input", () => { /* ... */ });
   });
 });
 ```
 
-Use a top-level `describe` per export when a file exports multiple functions.
-```typescript
-// formatEffects.test.ts
-describe("formatLogEffect", () => { /* ... */ });
-describe("formatPromptEffect", () => { /* ... */ });
-describe("formatFileEffect", () => { /* ... */ });
-```
-
 ### Don't
 
-Use `test()` instead of `it()`, or create deeply nested describe trees.
+Use `test`, or nest `describe` three levels deep
 ```typescript
-// Bad: mixing test() and it(), deeply nested
 describe("parseThing", () => {
   describe("valid", () => {
-    describe("simple", () => {
-      describe("strings", () => {
-        test("parses a string", () => { /* ... */ }); // Bad: test() instead of it()
-      });
+    describe("strings", () => {
+      test("parses a string", () => { /* ... */ });
     });
   });
 });
@@ -346,7 +326,7 @@ export const multiServerConfig = {
 Place factory helpers that create stateful objects in their own files in `testing/`.
 ```typescript
 // testing/createTestDb.ts
-export function createTestDb(seed: Record<string, unknown>[]): Database {
+export default function createTestDb(seed: Record<string, unknown>[]): Database {
   const db = new Database(":memory:");
   for (const row of seed) db.insert(row);
   return db;
@@ -382,7 +362,7 @@ Prefer real execution over mocks. Mock only at system boundaries where real exec
 Use a factory helper to create real test dependencies instead of mocking them.
 ```typescript
 // testing/createTestDb.ts
-export function createTestDb(seed: Record<string, unknown>[]): Database {
+export default function createTestDb(seed: Record<string, unknown>[]): Database {
   const db = new Database(":memory:");
   for (const row of seed) db.insert(row);
   return db;
