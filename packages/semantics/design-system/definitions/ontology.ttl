@@ -88,7 +88,7 @@ ds:Subcomponent
     a owl:Class ;
     rdfs:subClassOf ds:UIBlock ;
     rdfs:label "Subcomponent" ;
-    skos:definition "A named part of a Component that has design-system identity but is typically not used independently outside its parent" .
+    skos:definition "A named part of a UIBlock that has design-system identity but is typically not used independently outside its parent" .
 
 ds:Group
     a owl:Class ;
@@ -374,18 +374,18 @@ ds:standalone
 ds:parentComponent
     a owl:ObjectProperty ;
     rdfs:domain ds:Subcomponent ;
-    rdfs:range ds:Component ;
+    rdfs:range ds:UIBlock ;
     rdfs:label "parentComponent" ;
-    skos:definition "The component to which this subcomponent structurally belongs" ;
-    ds:acceptanceCriteria "Must reference a valid ds:Component instance" .
+    skos:definition "The UIBlock to which this subcomponent structurally belongs" ;
+    ds:acceptanceCriteria "Must reference a valid ds:UIBlock instance" .
 
 ds:hasSubcomponent
     a owl:ObjectProperty ;
-    rdfs:domain ds:Component ;
+    rdfs:domain ds:UIBlock ;
     rdfs:range ds:Subcomponent ;
     owl:inverseOf ds:parentComponent ;
     rdfs:label "hasSubcomponent" ;
-    skos:definition "Subcomponents that are structural parts of this component" ;
+    skos:definition "Subcomponents that are structural parts of this UIBlock" ;
     ds:acceptanceCriteria "Inverse of ds:parentComponent. Each referenced entity must be a ds:Subcomponent." .
 
 # Layout
