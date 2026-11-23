@@ -248,69 +248,28 @@ const meta = {
 
 **Identifier:** `cs:storybook.story.format`
 
-Stories must use one of three formats, each serving specific needs:
-1. CSF3 (object-based) format must be used for standard component variations where args define the component state.
-2. Function-based format must be used when the story needs to directly control component rendering or wrap the component with custom elements.
-3. Template-based format must be used when multiple stories share the same logic but differ in their args, and the template differs from the component markup.
+Write each story as a CSF3 object driven by `args`. Except: a story that holds state or composes children adds a `render` function; stories sharing one template set `render` once on the meta.
 
 ### Do
 
-Use the format that matches your specific use case.
+Hold state in a CSF3 `render` function.
 ```typescript
-// CSF3: For standard component variations through args
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {
-  args: {
-    variant: "primary",
-    children: "Click me",
-    disabled: false
-  }
+export const Controlled: Story = {
+  args: { label: "Filters" },
+  render: function RenderControlled(args) {
+    const [open, setOpen] = useState(false);
+    return <Component {...args} open={open} onOpenChange={setOpen} />;
+  },
 };
-
-// Function-based: When story needs dynamic rendering logic
-export const WithDynamicChildren = (args: ComponentProps) => {
-  const [items] = useState(["Item 1", "Item 2"]);
-  return (
-    <Component {...args}>
-      {items.map((item) => (
-        <ListItem key={item}>{item}</ListItem>
-      ))}
-    </Component>
-  );
-};
-
-// Template-based: When multiple stories share logic
-const Template: StoryFn<typeof Component> = (args) => (
-  <div className="button-container">
-    <Label>Button:</Label>
-    <Component {...args} />
-  </div>
-);
-
-export const Primary = Template.bind({});
-Primary.args = { variant: "primary" };
 ```
 
 ### Don't
 
-Use a format that doesn't match your use case.
+Hold state in a bare function story.
 ```typescript
-// Bad: Using function format for simple args variation
-export const SimpleButton = () => (
-  <Component variant="primary" disabled={false}>
-    Click me
-  </Component>
-);
-
-// Bad: Duplicating complex logic without template
-export const First: Story = {
-  decorators: [(Story) => (
-    <div className="button-container">
-      <Label>Button:</Label>
-      <Story />
-    </div>
-  )]
+export const Controlled = (args: ComponentProps) => {
+  const [open, setOpen] = useState(false);
+  return <Component {...args} open={open} onOpenChange={setOpen} />;
 };
 ```
 
