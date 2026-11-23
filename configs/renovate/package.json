@@ -28,7 +28,7 @@
     "test": "bun run check:renovate"
   },
   "devDependencies": {
-    "renovate": "44.222.5"
+    "renovate": "44.257.9"
   },
   "renovate-config": {
     "default": {
