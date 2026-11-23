@@ -195,51 +195,25 @@ export const Default: Story = {
 
 **Identifier:** `cs:storybook.story.folders`
 
-Stories and component folders must be organized by ontology tier under `src/lib/`, and each story's `title` must mirror its tier so it matches the shared Storybook sidebar order (`Documentation` → `subcomponents` → `components` → `patterns` → `common` → `utils` → `_work_in_progress`).
-
-Placement is ontology-gated: a folder only goes under `component/`, `pattern/`, or `subcomponent/` if it is an actual entry in the design-system ontology at that type. Items not present in the ontology, or not yet ready for their tier, live under the verbatim `_work_in_progress/` folder (the leading underscore is literal — the sidebar sort order references this exact name). Non-tier machinery and shared helpers live under `src/lib/common/` and `src/lib/utils/`. Documentation `.mdx` lives in `src/docs/`, titled under `Documentation/...`.
-
-Every story title's top segment must be one of the seven order keys — there is no wildcard catch-all, so a title whose top segment is not an order key will sort unpredictably in the sidebar.
+Folder stories by ontology tier under `src/lib/` (`component/`, `pattern/`, `subcomponent/`, else `_work_in_progress/`) and title them by that tier. Except: machinery folders such as `hooks/` and `virtualization/` sit beside `common/` and `utils/`; recipes sit beside their component and title under it.
 
 ### Do
 
-Folder by ontology tier and mirror the tier in each story title.
+Title by tier, with recipes under their component.
 ```typescript
-// src/lib/component/Accordion/Accordion.stories.tsx
-// Accordion IS an ontology entry of type Component.
-const meta = {
-  title: "components/Accordion",
-  component: Component,
-} satisfies Meta<typeof Component>;
+// src/lib/component/DataTable/DataTable.stories.tsx
+const meta = { title: "components/DataTable" } satisfies Meta<typeof Component>;
 
-// src/lib/pattern/Timeline/Timeline.stories.tsx
-// Timeline IS an ontology entry of type Pattern.
-const meta = {
-  title: "patterns/Timeline",
-  component: Component,
-} satisfies Meta<typeof Component>;
-
-// src/lib/_work_in_progress/ColorPicker/ColorPicker.stories.tsx
-// Not (yet) an ontology entry: lives under the verbatim _work_in_progress folder.
-const meta = {
-  title: "_work_in_progress/ColorPicker",
-  component: Component,
-} satisfies Meta<typeof Component>;
+// src/lib/component/DataTable/DataTable.recipes.stories.tsx
+const meta = { title: "components/DataTable/Recipes" } satisfies Meta<typeof Component>;
 ```
 
 ### Don't
 
-Title with a maturity tag or an un-foldered segment that matches no order key.
+Title under a top segment that is not a tier.
 ```typescript
-// Bad: maturity tag as the top segment (not an order key — floats in the sidebar).
-const meta = {
-  title: "Stable/Accordion",
-} satisfies Meta<typeof Component>;
-
-// Bad: un-foldered segment matching no order key.
-const meta = {
-  title: "Styles / Typography",
-} satisfies Meta<typeof Component>;
+const meta = { title: "Stable/Accordion" } satisfies Meta<typeof Component>;
+const meta = { title: "Recipes/DataTable" } satisfies Meta<typeof Component>;
 ```
 
 ---
