@@ -80,25 +80,45 @@ export type SuppressionDirective =
 
 import type {
   ArtifactDeclaration,
-  ArtifactEnvelope,
   ArtifactTier,
   ArtifactToken,
   KnownTokenTier,
-  WrappedArtifactEnvelope,
 } from "@canonical/token-types";
 
-/** @see ArtifactEnvelope from @canonical/token-types */
-export type RawArtifact = ArtifactEnvelope;
-/** @see ArtifactToken from @canonical/token-types */
-export type RawArtifactToken = ArtifactToken;
+/**
+ * A raw artifact token as read from disk — the input contract to
+ * `parseArtifactToken`. The parser fills or derives a small set of fields, and
+ * an artifact document may omit or carry them: `cssVar` is the record KEY (the
+ * parser injects it from the key rather than reading the token); `isPaired` is
+ * derived (defaults false); `cssOutputFile` resolves through a path helper that
+ * tolerates absence; `tier` is defaulted to null. Every other field keeps its
+ * `@canonical/token-types` shape, so the input document still says exactly what
+ * it carries.
+ */
+export type RawArtifactToken = Omit<
+  ArtifactToken,
+  "cssVar" | "isPaired" | "cssOutputFile" | "tier"
+> &
+  Partial<
+    Pick<ArtifactToken, "cssVar" | "isPaired" | "cssOutputFile" | "tier">
+  >;
+
+/** A flat raw artifact: CSS var name → raw token. */
+export type RawArtifact = Record<string, RawArtifactToken> | RawWrappedArtifact;
+
+/** A raw artifact in the wrapped envelope form (version, generator, tokens). */
+export type RawWrappedArtifact = {
+  version: string;
+  generator: string;
+  tokens: Record<string, RawArtifactToken>;
+};
+
 /** @see ArtifactDeclaration from @canonical/token-types */
 export type RawArtifactDeclaration = ArtifactDeclaration;
 /** @see ArtifactTier from @canonical/token-types */
 export type SharedArtifactTier = ArtifactTier;
 /** @see KnownTokenTier from @canonical/token-types */
 export type SharedKnownTokenTier = KnownTokenTier;
-/** @see WrappedArtifactEnvelope from @canonical/token-types */
-export type RawWrappedArtifact = WrappedArtifactEnvelope;
 
 // ---------------------------------------------------------------------------
 // Plugin contribution API  (§9.10)
