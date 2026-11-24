@@ -47,6 +47,8 @@ describe("provideRename", () => {
       fileUri: "file:///a.css",
       line: 2,
       column: 16,
+      varNameColumn: 20,
+      varNameLength: 10,
       property: "color",
       fallback: null,
     });
@@ -55,16 +57,23 @@ describe("provideRename", () => {
       fileUri: "file:///b.css",
       line: 5,
       column: 22,
+      varNameColumn: 26,
+      varNameLength: 10,
       property: "background-color",
       fallback: null,
     });
 
     const result = provideRename("--color-fg", "--color-foreground", graph);
     expect(result).not.toBeNull();
-    expect(result?.requiresRebuild).toBe(true);
+    const resultValue = result;
+    expect(resultValue).not.toBeNull();
+    if (resultValue === null) {
+      throw new Error("expected a rename result");
+    }
+    expect(resultValue.requiresRebuild).toBe(true);
 
     // Should have edits for both files
-    const uris = Object.keys(result?.edit.changes);
+    const uris = Object.keys(resultValue.edit.changes);
     expect(uris).toContain("file:///a.css");
     expect(uris).toContain("file:///b.css");
   });
@@ -120,6 +129,8 @@ describe("provideRename", () => {
       fileUri: "file:///comp.css",
       line: 8,
       column: 14,
+      varNameColumn: 18,
+      varNameLength: 7,
       property: "color",
       fallback: null,
     });
@@ -130,6 +141,9 @@ describe("provideRename", () => {
 
     const edits = result?.edit.changes["file:///comp.css"];
     expect(edits).toBeDefined();
+    if (edits === undefined) {
+      throw new Error("expected edits for comp.css");
+    }
     // Should include both declaration and usage edits
     expect(edits.length).toBe(2);
   });
@@ -151,6 +165,8 @@ describe("provideRename", () => {
       fileUri: "file:///a.css",
       line: 5,
       column: 16,
+      varNameColumn: 20,
+      varNameLength: 8,
       property: "color",
       fallback: null,
     });

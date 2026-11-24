@@ -457,7 +457,11 @@ describe("Integration: artifact load → graph → reachability", () => {
     it("dimension token (px) is assignable to width property", () => {
       const graph = buildFullGraph();
       const spacing = graph.resolveToken("--spacing-unit-1x");
-      expect(isAssignable(spacing?.cssType, "<length-percentage>")).toBe(true);
+      expect(spacing?.cssType).toBeDefined();
+      if (spacing?.cssType === undefined) {
+        throw new Error("expected a resolved --spacing-unit-1x");
+      }
+      expect(isAssignable(spacing.cssType, "<length-percentage>")).toBe(true);
     });
 
     it("@property-registered color token has correct CSS type", () => {

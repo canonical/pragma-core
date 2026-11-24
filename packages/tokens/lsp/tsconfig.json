@@ -5,6 +5,5 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.tests.ts"]
+  "include": ["src/**/*.ts"]
 }
