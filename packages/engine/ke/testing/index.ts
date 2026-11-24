@@ -9,6 +9,7 @@ export {
   PEOPLE_TTL,
   STANDARDS_TTL,
 } from "./fixtures.js";
+export { expectAsk, expectConstruct, expectSelect } from "./narrow.js";
 export { registerMatchers } from "./registerMatchers.js";
 export type {
   GraphSource,

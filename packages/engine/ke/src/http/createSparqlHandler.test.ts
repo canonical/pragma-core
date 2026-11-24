@@ -3,6 +3,44 @@ import createTestStore from "../../testing/createTestStore.js";
 import type { TestStoreResult } from "../../testing/types.js";
 import createSparqlHandler from "./createSparqlHandler.js";
 
+/** A handler response body parsed from JSON: either a query result or an error. */
+type SparqlResponse =
+  | { type: "select"; bindings: Array<{ [k: string]: string }> }
+  | { type: "ask"; result: boolean }
+  | { error: string };
+
+/** Parse a handler response's JSON body with its response shape typed. */
+async function readBody(response: Response): Promise<SparqlResponse> {
+  return (await response.json()) as SparqlResponse;
+}
+
+/** Narrow a parsed body to a SELECT result, failing the test otherwise. */
+function expectSelect(body: SparqlResponse): {
+  type: "select";
+  bindings: Array<{ [k: string]: string }>;
+} {
+  if (!("type" in body) || body.type !== "select") {
+    throw new Error("expected a SELECT result body");
+  }
+  return body;
+}
+
+/** Narrow a parsed body to an ASK result, failing the test otherwise. */
+function expectAsk(body: SparqlResponse): { type: "ask"; result: boolean } {
+  if (!("type" in body) || body.type !== "ask") {
+    throw new Error("expected an ASK result body");
+  }
+  return body;
+}
+
+/** Narrow a parsed body to an error payload, failing the test otherwise. */
+function expectError(body: SparqlResponse): { error: string } {
+  if ("error" in body) {
+    return body;
+  }
+  throw new Error("expected an error body");
+}
+
 describe("createSparqlHandler", () => {
   let testResult: TestStoreResult | undefined;
 
@@ -21,9 +59,9 @@ describe("createSparqlHandler", () => {
     const response = await handler(request);
 
     expect(response.status).toBe(200);
-    const body = await response.json();
-    expect(body.type).toBe("select");
-    expect(body.bindings.length).toBeGreaterThan(0);
+    const body = await readBody(response);
+    const select = expectSelect(body);
+    expect(select.bindings.length).toBeGreaterThan(0);
   });
 
   it("handles POST with application/sparql-query", async () => {
@@ -38,9 +76,9 @@ describe("createSparqlHandler", () => {
     const response = await handler(request);
 
     expect(response.status).toBe(200);
-    const body = await response.json();
-    expect(body.type).toBe("ask");
-    expect(body.result).toBe(true);
+    const body = await readBody(response);
+    const ask = expectAsk(body);
+    expect(ask.result).toBe(true);
   });
 
   it("handles POST with form-urlencoded", async () => {
@@ -55,8 +93,8 @@ describe("createSparqlHandler", () => {
     const response = await handler(request);
 
     expect(response.status).toBe(200);
-    const body = await response.json();
-    expect(body.type).toBe("select");
+    const body = await readBody(response);
+    expectSelect(body);
   });
 
   it("returns 400 for missing query", async () => {
@@ -67,8 +105,8 @@ describe("createSparqlHandler", () => {
     const response = await handler(request);
 
     expect(response.status).toBe(400);
-    const body = await response.json();
-    expect(body.error).toContain("Missing query");
+    const body = await readBody(response);
+    expect(expectError(body).error).toContain("Missing query");
   });
 
   it("returns 405 for unsupported methods", async () => {
@@ -93,8 +131,8 @@ describe("createSparqlHandler", () => {
     const response = await handler(request);
 
     expect(response.status).toBe(400);
-    const body = await response.json();
-    expect(body.error).toContain("maximum length");
+    const body = await readBody(response);
+    expect(expectError(body).error).toContain("maximum length");
   });
 
   it("includes CORS headers when enabled", async () => {
@@ -148,8 +186,8 @@ describe("createSparqlHandler", () => {
     const response = await handler(request);
 
     expect(response.status).toBe(400);
-    const body = await response.json();
-    expect(body.error).toContain("Missing query");
+    const body = await readBody(response);
+    expect(expectError(body).error).toContain("Missing query");
   });
 
   it("returns generic message when query throws a non-Error value", async () => {
@@ -172,7 +210,7 @@ describe("createSparqlHandler", () => {
     const response = await handler(request);
 
     expect(response.status).toBe(400);
-    const body = await response.json();
-    expect(body.error).toBe("Query execution failed");
+    const body = await readBody(response);
+    expect(expectError(body).error).toBe("Query execution failed");
   });
 });

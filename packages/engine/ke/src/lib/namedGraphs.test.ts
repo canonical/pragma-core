@@ -5,11 +5,16 @@ import {
   ONTOLOGY_TTL,
   STANDARDS_TTL,
 } from "../../testing/fixtures.js";
+import {
+  expectAsk,
+  expectConstruct,
+  expectSelect,
+} from "../../testing/index.js";
 import { registerMatchers } from "../../testing/registerMatchers.js";
 import type { TestStoreResult } from "../../testing/types.js";
 import definePlugin from "./definePlugin.js";
 import { sparql } from "./sparql.js";
-import type { AskResult, ResolvedSource, SelectResult } from "./types.js";
+import type { ResolvedSource } from "./types.js";
 
 registerMatchers();
 
@@ -47,7 +52,7 @@ describe("Named graphs", () => {
         } ORDER BY ?name`,
       );
       expect(components.type).toBe("select");
-      expect((components as SelectResult).bindings.map((b) => b.name)).toEqual([
+      expect(expectSelect(components).bindings.map((b) => b.name)).toEqual([
         "Button",
         "Card",
         "Tile",
@@ -60,7 +65,7 @@ describe("Named graphs", () => {
         } ORDER BY ?name`,
       );
       expect(standards.type).toBe("select");
-      expect((standards as SelectResult).bindings.length).toBe(2);
+      expect(expectSelect(standards).bindings.length).toBe(2);
     });
 
     it("components are not visible in the standards graph", async () => {
@@ -80,7 +85,7 @@ describe("Named graphs", () => {
           GRAPH <urn:test:standards> { ?c ds:name ?name }
         }`,
       );
-      expect((result as SelectResult).bindings).toHaveLength(0);
+      expect(expectSelect(result).bindings).toHaveLength(0);
     });
 
     it("ontology in default graph is separate from named graphs", async () => {
@@ -99,7 +104,7 @@ describe("Named graphs", () => {
           }
         }`,
       );
-      expect((result as AskResult).result).toBe(false);
+      expect(expectAsk(result).result).toBe(false);
     });
   });
 
@@ -126,7 +131,7 @@ describe("Named graphs", () => {
       const components = await store.query(
         sparql`SELECT ?name WHERE { ?c ds:name ?name } ORDER BY ?name`,
       );
-      expect((components as SelectResult).bindings.map((b) => b.name)).toEqual([
+      expect(expectSelect(components).bindings.map((b) => b.name)).toEqual([
         "Button",
         "Card",
         "Tile",
@@ -136,7 +141,7 @@ describe("Named graphs", () => {
       const standards = await store.query(
         sparql`SELECT ?name WHERE { ?s cso:name ?name }`,
       );
-      expect((standards as SelectResult).bindings.length).toBe(2);
+      expect(expectSelect(standards).bindings.length).toBe(2);
     });
 
     it("ontology from default graph is visible alongside named graph data", async () => {
@@ -157,7 +162,7 @@ describe("Named graphs", () => {
              ds:name ?name
         } ORDER BY ?name`,
       );
-      expect((result as SelectResult).bindings.map((b) => b.name)).toEqual([
+      expect(expectSelect(result).bindings.map((b) => b.name)).toEqual([
         "Button",
         "Card",
         "Tile",
@@ -173,7 +178,7 @@ describe("Named graphs", () => {
       const { store } = testResult;
 
       const result = await store.query(sparql`ASK { ?c ds:name "Button" }`);
-      expect((result as AskResult).result).toBe(true);
+      expect(expectAsk(result).result).toBe(true);
     });
   });
 
@@ -199,7 +204,7 @@ describe("Named graphs", () => {
           GRAPH <urn:test:components> { ?c ds:name ?name }
         } ORDER BY ?name`,
       );
-      const names = (result as SelectResult).bindings.map((b) => b.name);
+      const names = expectSelect(result).bindings.map((b) => b.name);
       expect(names).toEqual(["Button", "Card", "Tile"]);
     });
 
@@ -248,7 +253,7 @@ describe("Named graphs", () => {
         }`,
       );
 
-      const bindings = (result as SelectResult).bindings;
+      const bindings = expectSelect(result).bindings;
       expect(bindings).toHaveLength(1);
       expect(bindings[0].componentName).toBe("Button");
       expect(bindings[0].standardName).toBe("react/component/props");
@@ -272,7 +277,8 @@ describe("Named graphs", () => {
           }`,
       );
       expect(result.type).toBe("construct");
-      expect(result.triples.length).toBe(3);
+      const constructResult = expectConstruct(result);
+      expect(constructResult.triples.length).toBe(3);
       expect(result).toContainTriple({
         predicate: "https://ds.canonical.com/name",
         object: "Button",

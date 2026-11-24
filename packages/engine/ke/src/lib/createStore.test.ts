@@ -16,12 +16,16 @@ import {
   ORGANIZATIONS_TTL,
   PEOPLE_TTL,
 } from "../../testing/fixtures.js";
+import {
+  expectAsk,
+  expectConstruct,
+  expectSelect,
+} from "../../testing/index.js";
 import { registerMatchers } from "../../testing/registerMatchers.js";
 import type { TestStoreResult } from "../../testing/types.js";
 import createStore from "./createStore.js";
 import definePlugin from "./definePlugin.js";
 import { sparql } from "./sparql.js";
-import type { AskResult, ConstructResult, SelectResult } from "./types.js";
 
 registerMatchers();
 
@@ -40,7 +44,8 @@ describe("Store creation", () => {
       sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
     );
     expect(result.type).toBe("select");
-    expect(result.bindings.length).toBeGreaterThan(0);
+    const selectResult = expectSelect(result);
+    expect(selectResult.bindings.length).toBeGreaterThan(0);
   });
 
   it("creates a store from multiple TTL sources", async () => {
@@ -52,7 +57,8 @@ describe("Store creation", () => {
       sparql`SELECT ?name WHERE { ?s a <http://schema.org/Organization> ; <http://schema.org/name> ?name }`,
     );
     expect(result.type).toBe("select");
-    expect(result.bindings.length).toBe(2);
+    const selectResult = expectSelect(result);
+    expect(selectResult.bindings.length).toBe(2);
   });
 
   it("creates a store from inline sources without touching the filesystem", async () => {
@@ -72,7 +78,7 @@ describe("Store creation", () => {
       sparql`SELECT ?s ?o WHERE { ?s <http://example.org/p> ?o }`,
     );
     expect(result.type).toBe("select");
-    expect((result as SelectResult).bindings.length).toBe(2);
+    expect(expectSelect(result).bindings.length).toBe(2);
     store.dispose();
   });
 
@@ -105,7 +111,8 @@ describe("Store creation", () => {
       sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
     );
     expect(result.type).toBe("ask");
-    expect(result.result).toBe(true);
+    const askResult = expectAsk(result);
+    expect(askResult.result).toBe(true);
   });
 });
 
@@ -124,7 +131,7 @@ describe("SPARQL query execution", () => {
       sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name } ORDER BY ?name`,
     );
     expect(result.type).toBe("select");
-    const selectResult = result as SelectResult;
+    const selectResult = expectSelect(result);
     expect(selectResult.variables).toContain("name");
     expect(selectResult.bindings.length).toBe(3);
     expect(selectResult.bindings.map((b) => b.name)).toContain("Alice");
@@ -139,7 +146,7 @@ describe("SPARQL query execution", () => {
       sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
     );
     expect(result.type).toBe("construct");
-    const constructResult = result as ConstructResult;
+    const constructResult = expectConstruct(result);
     expect(constructResult.triples.length).toBeGreaterThan(0);
     expect(constructResult).toContainTriple({
       predicate: "http://schema.org/name",
@@ -155,13 +162,13 @@ describe("SPARQL query execution", () => {
       sparql`ASK { ?s <http://schema.org/name> "Alice" }`,
     );
     expect(trueResult.type).toBe("ask");
-    expect((trueResult as AskResult).result).toBe(true);
+    expect(expectAsk(trueResult).result).toBe(true);
 
     const falseResult = await store.query(
       sparql`ASK { ?s <http://schema.org/name> "NonExistent" }`,
     );
     expect(falseResult.type).toBe("ask");
-    expect((falseResult as AskResult).result).toBe(false);
+    expect(expectAsk(falseResult).result).toBe(false);
   });
 
   it("preserves term kinds, datatypes, and language tags in termBindings", async () => {
@@ -177,9 +184,11 @@ describe("SPARQL query execution", () => {
       `,
     });
     const { store } = testResult;
-    const result = (await store.query(
-      sparql`SELECT ?p ?o WHERE { <http://example.org/thing> ?p ?o }`,
-    )) as SelectResult;
+    const result = expectSelect(
+      await store.query(
+        sparql`SELECT ?p ?o WHERE { <http://example.org/thing> ?p ?o }`,
+      ),
+    );
 
     expect(result.termBindings.length).toBe(result.bindings.length);
     const objects = result.termBindings.map((b) => b.o);
@@ -213,9 +222,11 @@ describe("SPARQL query execution", () => {
       `,
     });
     const { store } = testResult;
-    const result = (await store.query(
-      sparql`SELECT ?o WHERE { <http://example.org/thing> <http://example.org/greeting> ?o }`,
-    )) as SelectResult;
+    const result = expectSelect(
+      await store.query(
+        sparql`SELECT ?o WHERE { <http://example.org/thing> <http://example.org/greeting> ?o }`,
+      ),
+    );
     // language + direction kept; the implied rdf:dirLangString datatype omitted.
     expect(result.termBindings[0]?.o).toEqual({
       termType: "Literal",
@@ -233,9 +244,9 @@ describe("SPARQL query execution", () => {
       `,
     });
     const { store } = testResult;
-    const result = (await store.query(
-      sparql`CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }`,
-    )) as ConstructResult;
+    const result = expectConstruct(
+      await store.query(sparql`CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }`),
+    );
 
     expect(result.quads.length).toBe(result.triples.length);
     for (const quad of result.quads) {
@@ -271,7 +282,7 @@ describe("Cache", () => {
     const result1 = await store1.query(
       sparql`ASK { ?s <http://schema.org/name> "Alice" }`,
     );
-    expect((result1 as AskResult).result).toBe(true);
+    expect(expectAsk(result1).result).toBe(true);
 
     // Dispose first store
     store1.dispose();
@@ -286,7 +297,7 @@ describe("Cache", () => {
     const result2 = await store2.query(
       sparql`ASK { ?s <http://schema.org/name> "Alice" }`,
     );
-    expect((result2 as AskResult).result).toBe(true);
+    expect(expectAsk(result2).result).toBe(true);
 
     store2.dispose();
   });
@@ -335,7 +346,7 @@ describe("Plugin hooks", () => {
       sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
     );
     expect(result.type).toBe("select");
-    expect((result as SelectResult).bindings.length).toBe(1);
+    expect(expectSelect(result).bindings.length).toBe(1);
   });
 
   it("handles onResult that returns undefined", async () => {
@@ -375,7 +386,7 @@ describe("Plugin hooks", () => {
       sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
     );
     expect(result.type).toBe("select");
-    const selectResult = result as SelectResult;
+    const selectResult = expectSelect(result);
     for (const binding of selectResult.bindings) {
       expect(binding.modified).toBe("true");
     }
@@ -402,7 +413,7 @@ describe("Prefix expansion", () => {
       sparql`SELECT ?name WHERE { ?s schema:name ?name }`,
     );
     expect(result.type).toBe("select");
-    expect((result as SelectResult).bindings.length).toBeGreaterThan(0);
+    expect(expectSelect(result).bindings.length).toBeGreaterThan(0);
   });
 
   it("reports its quad count without a query", async () => {
@@ -414,9 +425,9 @@ describe("Prefix expansion", () => {
     });
     const { store } = testResult;
 
-    const counted = (await store.query(
-      "SELECT (COUNT(*) AS ?n) WHERE { ?s ?p ?o }" as never,
-    )) as SelectResult;
+    const counted = expectSelect(
+      await store.query("SELECT (COUNT(*) AS ?n) WHERE { ?s ?p ?o }" as never),
+    );
 
     expect(store.size).toBe(Number(counted.bindings.at(0)?.n));
     expect(store.size).toBeGreaterThan(0);
@@ -452,7 +463,7 @@ describe("Reload", () => {
     const before = await store.query(
       sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
     );
-    expect((before as AskResult).result).toBe(true);
+    expect(expectAsk(before).result).toBe(true);
 
     // Modify the source file
     const filePath = join(tmpDir, "test-0.ttl");
@@ -469,7 +480,7 @@ describe("Reload", () => {
     const after = await store.query(
       sparql`ASK { <http://example.org/newSubject> <http://example.org/newPredicate> "newObject" }`,
     );
-    expect((after as AskResult).result).toBe(true);
+    expect(expectAsk(after).result).toBe(true);
   });
 });
 
@@ -491,7 +502,7 @@ describe("Plugin lifecycle — onReady", () => {
           sparql`ASK { ?s <http://schema.org/name> "Alice" }`,
         );
         expect(result.type).toBe("ask");
-        expect((result as AskResult).result).toBe(true);
+        expect(expectAsk(result).result).toBe(true);
         readyCount++;
       },
     });
@@ -518,7 +529,7 @@ describe("Plugin lifecycle — onReady", () => {
     const result = await store.query(
       sparql`ASK { <http://example.org/injected> <http://example.org/by> "plugin" }`,
     );
-    expect((result as AskResult).result).toBe(true);
+    expect(expectAsk(result).result).toBe(true);
   });
 
   it("can inject triples via ctx.load() in onReady", async () => {
@@ -538,7 +549,7 @@ describe("Plugin lifecycle — onReady", () => {
     const result = await store.query(
       sparql`ASK { <http://example.org/loaded> <http://example.org/via> "ctx.load" }`,
     );
-    expect((result as AskResult).result).toBe(true);
+    expect(expectAsk(result).result).toBe(true);
   });
 });
 
@@ -637,9 +648,11 @@ describe("Plugin API — store.api()", () => {
     const plugin = definePlugin<CountApi>({
       name: "counter",
       async onReady(ctx) {
-        const result = (await ctx.query(
-          sparql`SELECT (COUNT(*) AS ?count) WHERE { ?s ?p ?o }`,
-        )) as SelectResult;
+        const result = expectSelect(
+          await ctx.query(
+            sparql`SELECT (COUNT(*) AS ?count) WHERE { ?s ?p ?o }`,
+          ),
+        );
         const binding = result.bindings[0] as (typeof result.bindings)[number];
         const total = Number.parseInt(binding.count ?? "0", 10);
         return { getTotal: () => total };
@@ -736,7 +749,7 @@ describe("inferFormat — file extension detection", () => {
       const result = await store.query(
         sparql`ASK { <http://example.org/s> <http://example.org/p> "ntriples" }`,
       );
-      expect((result as AskResult).result).toBe(true);
+      expect(expectAsk(result).result).toBe(true);
       store.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -766,7 +779,7 @@ describe("inferFormat — file extension detection", () => {
       const result = await store.query(
         sparql`ASK { <http://example.org/s> <http://example.org/p> "rdfxml" }`,
       );
-      expect((result as AskResult).result).toBe(true);
+      expect(expectAsk(result).result).toBe(true);
       store.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -796,7 +809,7 @@ describe("termToString — BlankNode handling", () => {
       sparql`SELECT ?s WHERE { ?s <http://example.org/name> "anon" }`,
     );
     expect(result.type).toBe("select");
-    const selectResult = result as SelectResult;
+    const selectResult = expectSelect(result);
     expect(selectResult.bindings[0].s).toMatch(/^_:/);
   });
 });
@@ -825,7 +838,7 @@ describe("Cache edge cases", () => {
       const result = await store.query(
         sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
       );
-      expect((result as AskResult).result).toBe(true);
+      expect(expectAsk(result).result).toBe(true);
       store.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -890,7 +903,7 @@ describe("Cache edge cases", () => {
       const result = await store.query(
         sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
       );
-      expect((result as AskResult).result).toBe(true);
+      expect(expectAsk(result).result).toBe(true);
       expect(existsSync(cachePath)).toBe(true);
       store.dispose();
     } finally {
@@ -920,11 +933,11 @@ describe("Cache edge cases", () => {
       const valid = await store.query(
         sparql`ASK { <http://example.org/a> <http://example.org/p> "valid" }`,
       );
-      expect((valid as AskResult).result).toBe(true);
+      expect(expectAsk(valid).result).toBe(true);
       const unvalidated = await store.query(
         sparql`ASK { <http://example.org/b> ?p "skipped" }`,
       );
-      expect((unvalidated as AskResult).result).toBe(true);
+      expect(expectAsk(unvalidated).result).toBe(true);
       store.dispose();
 
       rmSync(`${cachePath}.sha256`, { force: true });
@@ -935,7 +948,7 @@ describe("Cache edge cases", () => {
       const result = await strict.query(
         sparql`ASK { <http://example.org/a> <http://example.org/p> "valid" }`,
       );
-      expect((result as AskResult).result).toBe(false);
+      expect(expectAsk(result).result).toBe(false);
       strict.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -964,7 +977,7 @@ describe("Cache edge cases", () => {
       const result = await store.query(
         sparql`ASK { <http://example.org/a> <http://example.org/p> "valid" }`,
       );
-      expect((result as AskResult).result).toBe(false);
+      expect(expectAsk(result).result).toBe(false);
       store.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -996,11 +1009,11 @@ describe("Cache edge cases", () => {
       const original = await store2.query(
         sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
       );
-      expect((original as AskResult).result).toBe(true);
+      expect(expectAsk(original).result).toBe(true);
       const extra = await store2.query(
         sparql`ASK { <http://example.org/extra> <http://example.org/p> "added" }`,
       );
-      expect((extra as AskResult).result).toBe(true);
+      expect(expectAsk(extra).result).toBe(true);
       store2.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -1028,7 +1041,7 @@ describe("Cache edge cases", () => {
       const result = await store2.query(
         sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
       );
-      expect((result as AskResult).result).toBe(true);
+      expect(expectAsk(result).result).toBe(true);
       store2.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -1058,7 +1071,7 @@ describe("Reload edge cases", () => {
     const result = await store.query(
       sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
     );
-    expect((result as AskResult).result).toBe(true);
+    expect(expectAsk(result).result).toBe(true);
   });
 
   it("onReload plugin can return updated API", async () => {
@@ -1102,7 +1115,7 @@ describe("Reload edge cases", () => {
     const result = await store.query(
       sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
     );
-    expect((result as AskResult).result).toBe(true);
+    expect(expectAsk(result).result).toBe(true);
   });
 
   it("reload calls onLoad for each source", async () => {
@@ -1209,7 +1222,7 @@ describe("Prefix expansion — empty prefix map", () => {
     const result = await store.query(
       sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
     );
-    expect((result as AskResult).result).toBe(true);
+    expect(expectAsk(result).result).toBe(true);
   });
 });
 
@@ -1233,8 +1246,8 @@ describe("Query result parsing", () => {
       sparql`SELECT ?x WHERE { <http://nonexistent/> <http://no/> ?x }`,
     );
     expect(result.type).toBe("select");
-    expect((result as SelectResult).bindings.length).toBe(0);
-    expect((result as SelectResult).termBindings).toEqual([]);
+    expect(expectSelect(result).bindings.length).toBe(0);
+    expect(expectSelect(result).termBindings).toEqual([]);
   });
 });
 
@@ -1265,7 +1278,7 @@ describe("Source resolution — glob patterns", () => {
       const result = await store.query(
         sparql`SELECT ?x WHERE { ?s <http://example.org/type> ?x } ORDER BY ?x`,
       );
-      expect((result as SelectResult).bindings.length).toBe(2);
+      expect(expectSelect(result).bindings.length).toBe(2);
       store.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -1285,7 +1298,7 @@ describe("Source resolution — glob patterns", () => {
       const result = await store.query(
         sparql`ASK { <http://example.org/subject> <http://example.org/predicate> "object" }`,
       );
-      expect((result as AskResult).result).toBe(true);
+      expect(expectAsk(result).result).toBe(true);
       store.dispose();
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -1313,9 +1326,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as ConstructResult;
+    const result = expectConstruct(
+      await store.query(
+        sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     expect(result).toContainTriple({ object: "Alice" });
   });
@@ -1324,9 +1339,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as ConstructResult;
+    const result = expectConstruct(
+      await store.query(
+        sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     // Find an actual subject from results to match against
     const alice = result.triples.find((t) => t.object === "Alice");
@@ -1342,9 +1359,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as ConstructResult;
+    const result = expectConstruct(
+      await store.query(
+        sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     expect(result).not.toContainTriple({ object: "NonExistent" });
   });
@@ -1353,9 +1372,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as SelectResult;
+    const result = expectSelect(
+      await store.query(
+        sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     expect(result).toContainBinding("name", "Alice");
   });
@@ -1364,9 +1385,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as SelectResult;
+    const result = expectSelect(
+      await store.query(
+        sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     expect(result).not.toContainBinding("name", "NonExistent");
   });
@@ -1375,9 +1398,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as ConstructResult;
+    const result = expectConstruct(
+      await store.query(
+        sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     expect(() =>
       expect(result).toContainTriple({ object: "NonExistent" }),
@@ -1388,9 +1413,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as ConstructResult;
+    const result = expectConstruct(
+      await store.query(
+        sparql`CONSTRUCT { ?s <http://schema.org/name> ?name } WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     expect(() =>
       expect(result).not.toContainTriple({ object: "Alice" }),
@@ -1401,9 +1428,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as SelectResult;
+    const result = expectSelect(
+      await store.query(
+        sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     expect(() =>
       expect(result).toContainBinding("name", "NonExistent"),
@@ -1414,9 +1443,11 @@ describe("Custom matchers", () => {
     testResult = await createTestStore();
     const { store } = testResult;
 
-    const result = (await store.query(
-      sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
-    )) as SelectResult;
+    const result = expectSelect(
+      await store.query(
+        sparql`SELECT ?name WHERE { ?s <http://schema.org/name> ?name }`,
+      ),
+    );
 
     expect(() => expect(result).not.toContainBinding("name", "Alice")).toThrow(
       "Expected result not to contain binding",
@@ -1448,6 +1479,34 @@ describe("PluginContext.load() — default graph", () => {
     const result = await store.query(
       sparql`ASK { <http://example.org/defaultLoaded> <http://example.org/via> "ctx.load-no-graph" }`,
     );
-    expect((result as AskResult).result).toBe(true);
+    expect(expectAsk(result).result).toBe(true);
+  });
+});
+
+describe("query result narrowing helpers", () => {
+  let testResult: TestStoreResult | undefined;
+
+  afterEach(() => {
+    testResult?.cleanup();
+    testResult = undefined;
+  });
+
+  it("fails loudly when a result is not the expected query form", async () => {
+    testResult = await createTestStore();
+    const { store } = testResult;
+    const select = await store.query(
+      sparql`SELECT ?s WHERE { ?s ?p ?o } LIMIT 1`,
+    );
+    const ask = await store.query(sparql`ASK { ?s ?p ?o }`);
+
+    expect(() => expectAsk(select)).toThrow(
+      "expected an ASK result, got select",
+    );
+    expect(() => expectConstruct(select)).toThrow(
+      "expected a CONSTRUCT result, got select",
+    );
+    expect(() => expectSelect(ask)).toThrow(
+      "expected a SELECT result, got ask",
+    );
   });
 });
