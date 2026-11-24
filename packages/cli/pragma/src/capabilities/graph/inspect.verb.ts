@@ -8,11 +8,7 @@
  * name or absolute IRI addresses the subject exactly.
  */
 
-import {
-  BIN_NAME,
-  DEFAULT_DETAIL_LEVEL,
-  DETAIL_LEVELS,
-} from "../../constants.js";
+import { DEFAULT_DETAIL_LEVEL, DETAIL_LEVELS } from "../../constants.js";
 import type { PragmaRuntime } from "../../kernel/runtime/index.js";
 import type { InspectResult } from "../../kernel/runtime/readEntity.js";
 import { readEntity } from "../../kernel/runtime/readEntity.js";
@@ -45,9 +41,17 @@ const inspectVerb: VerbSpec<Record<string, unknown>, InspectResult> = {
   // was one an agent could not actually reach.
   disclosure: { levels: [...DETAIL_LEVELS], default: DEFAULT_DETAIL_LEVEL },
   examples: [
-    { cmd: `${BIN_NAME} graph inspect ds:global.component.button` },
     {
-      cmd: `${BIN_NAME} graph inspect https://ds.canonical.com/global.component.button`,
+      call: {
+        verb: "graph inspect",
+        params: { uri: "ds:global.component.button" },
+      },
+    },
+    {
+      call: {
+        verb: "graph inspect",
+        params: { uri: "https://ds.canonical.com/global.component.button" },
+      },
     },
   ],
   capability: {

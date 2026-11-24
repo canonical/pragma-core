@@ -339,13 +339,11 @@ describe("graph connect over the shipped pack — invariants (PROTECTED)", () =>
     expect(positionals).toHaveLength(2);
 
     for (const [index, example] of (connect.examples ?? []).entries()) {
-      // Both endpoints, read from the example's own `cmd` rather than retyped:
-      // the tokens after the verb, up to the first flag.
-      const endpoints: string[] = [];
-      for (const token of example.cmd.trim().split(/\s+/).slice(3)) {
-        if (token.startsWith("--")) break;
-        endpoints.push(token);
-      }
+      // Both endpoints, read from the example's own call rather than retyped:
+      // the `a` and `b` params.
+      const endpoints = [example.call.params?.a, example.call.params?.b].map(
+        (value) => String(value ?? ""),
+      );
       expect(endpoints, `example ${index} names two endpoints`).toHaveLength(2);
       const result = await ask(endpoints[0] as string, endpoints[1] as string);
       // Coherent with itself, whichever answer it gave.

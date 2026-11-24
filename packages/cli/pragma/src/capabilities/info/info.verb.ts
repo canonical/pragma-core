@@ -6,7 +6,6 @@
  * the config reader or zod onto the fast path.
  */
 
-import { BIN_NAME } from "../../constants.js";
 import { asVerb } from "../../kernel/spec/asVerb.js";
 import type { CapabilityModule, VerbSpec } from "../../kernel/spec/index.js";
 import { infoFormatters } from "./info.render.js";
@@ -21,9 +20,9 @@ const infoVerb: VerbSpec<Record<string, unknown>, InfoData> = {
   params: [],
   output: { formatters: infoFormatters },
   examples: [
-    { cmd: `${BIN_NAME} info`, note: "human-readable summary" },
+    { call: { verb: "info" }, note: "human-readable summary" },
     {
-      cmd: `${BIN_NAME} info --format json`,
+      call: { verb: "info", cliFlags: ["--format", "json"] },
       note: "the full {ok,data,meta} envelope",
     },
   ],

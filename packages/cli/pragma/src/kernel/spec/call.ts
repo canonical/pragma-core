@@ -84,6 +84,10 @@ export function callTool(
 /** Quote a CLI word unless the shell would read it bare. */
 function quoteWord(value: unknown): string {
   const word = String(value);
+  // A doc placeholder (`<name>`) is not a real argument to quote — it names
+  // where an argument goes, and a quoted placeholder would tell a reader to
+  // type the angle brackets around a value.
+  if (/^<[^>]*>$/.test(word)) return word;
   return /^[\w.:/@=,+-]+$/.test(word)
     ? word
     : `'${word.replaceAll("'", "'\\''")}'`;
@@ -105,7 +109,15 @@ function renderCliCall(call: Call): string {
       else if (defaultsTrue) flags.push(`--no-${kebabCase(name)}`);
       continue;
     }
-    // A list-valued flag is repeated, one value each.
+    // A list-valued flag is repeated, one value each, unless the verb's CLI
+    // reads one comma-separated value.
+    if (
+      Array.isArray(value) &&
+      declared.get(call.verb)?.cliListStyle === "comma"
+    ) {
+      flags.push(`${flag} ${quoteWord(value.join(","))}`);
+      continue;
+    }
     for (const item of [value].flat()) flags.push(`${flag} ${quoteWord(item)}`);
   }
   const words = positional
@@ -113,16 +125,18 @@ function renderCliCall(call: Call): string {
     .flatMap((name) => [params[name]].flat().map(quoteWord));
   // A positional that looks like a flag needs the end-of-options marker.
   const guard = words.some((word) => word.startsWith("-")) ? ["--"] : [];
-  // A mounted noun's tree segments come right after the verb path, before any
-  // flag or positional (`create application react my-app`).
+  // A mounted noun's tree segments come right after the verb path
+  // (`create application react my-app`). Positionals follow, then the verb's
+  // flags, then the global CLI flags — the order a user writes them and the
+  // order the examples and help show.
   const segments = declared.get(call.verb)?.cliSegments ?? [];
   return [
     `${RECOVERY_CLI_PREFIX}${call.verb}`,
     ...segments,
-    ...(call.cliFlags ?? []),
-    ...flags,
     ...guard,
     ...words,
+    ...flags,
+    ...(call.cliFlags ?? []),
   ].join(" ");
 }
 

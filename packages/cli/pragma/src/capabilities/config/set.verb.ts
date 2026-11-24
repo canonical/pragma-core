@@ -15,7 +15,6 @@
  */
 
 import type { Task } from "@canonical/task";
-import { BIN_NAME } from "../../constants.js";
 import { asVerb } from "../../kernel/spec/asVerb.js";
 import type { VerbSpec } from "../../kernel/spec/index.js";
 import { configFieldFormatters } from "./field.render.js";
@@ -52,11 +51,22 @@ const setVerb: VerbSpec<Record<string, unknown>, ConfigFieldResult> = {
   output: { formatters: configFieldFormatters },
   examples: [
     {
-      cmd: `${BIN_NAME} config set tier apps/lxd`,
+      call: {
+        verb: "config set",
+        params: { key: "tier", value: "apps/lxd" },
+      },
       note: "scope reads to a tier",
     },
-    { cmd: `${BIN_NAME} config set channel experimental` },
-    { cmd: `${BIN_NAME} config unset tier`, note: "clear the tier" },
+    {
+      call: {
+        verb: "config set",
+        params: { key: "channel", value: "experimental" },
+      },
+    },
+    {
+      call: { verb: "config unset", params: { key: "tier" } },
+      note: "clear the tier",
+    },
   ],
   capability: {
     needsStore: false,

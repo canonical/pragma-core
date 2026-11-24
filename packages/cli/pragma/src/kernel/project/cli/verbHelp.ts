@@ -87,17 +87,21 @@ export function formatVerbHelp(programName: string, verb: VerbSpec): string {
   }
 
   // The verb's declared example leads, spelled as a command by the same
-  // renderer that spells it as a tool call in the MCP description.
+  // renderer that spells it as a tool call in the MCP description. The extra
+  // authored examples carry a call each and are spelled the same way, so an
+  // example that merely repeats the generated one is not shown twice.
   const declaredExample = exampleCall(verb);
   const generated = declaredExample && renderCall(declaredExample, "cli");
-  const examples = [
-    ...(generated ? [{ cmd: generated } as Example] : []),
-    ...(verb.examples ?? []).filter((example) => example.cmd !== generated),
+  const examples: Example[] = [
+    ...(generated && declaredExample ? [{ call: declaredExample }] : []),
+    ...(verb.examples ?? []).filter(
+      (example) => renderCall(example.call, "cli") !== generated,
+    ),
   ];
   if (examples.length > 0) {
     lines.push("", helpHeading("Examples"));
     for (const example of examples) {
-      lines.push(`  ${helpTerm(example.cmd)}`);
+      lines.push(`  ${helpTerm(renderCall(example.call, "cli"))}`);
       if (example.note) lines.push(`    ${helpDim(example.note)}`);
     }
   }

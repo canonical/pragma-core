@@ -9,7 +9,6 @@
  * query surfaces as INVALID_INPUT with a recovery pointer to `ontology list`.
  */
 
-import { BIN_NAME } from "../../constants.js";
 import type { PragmaRuntime } from "../../kernel/runtime/index.js";
 import { asVerb } from "../../kernel/spec/asVerb.js";
 import type { VerbSpec } from "../../kernel/spec/index.js";
@@ -38,11 +37,21 @@ const queryVerb: VerbSpec<Record<string, unknown>, QueryResult> = {
   output: { formatters: queryFormatters },
   examples: [
     {
-      cmd: `${BIN_NAME} graph query "SELECT ?s WHERE { ?s a ds:Component }"`,
+      call: {
+        verb: "graph query",
+        params: { sparql: "SELECT ?s WHERE { ?s a ds:Component }" },
+      },
       note: "list every component subject",
     },
     {
-      cmd: `${BIN_NAME} graph query "ASK { <https://ds.canonical.com/global.component.button> a ds:Component }" --format json`,
+      call: {
+        verb: "graph query",
+        params: {
+          sparql:
+            "ASK { <https://ds.canonical.com/global.component.button> a ds:Component }",
+        },
+        cliFlags: ["--format", "json"],
+      },
     },
   ],
   capability: {

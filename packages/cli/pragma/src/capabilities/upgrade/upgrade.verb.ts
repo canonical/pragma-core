@@ -28,9 +28,9 @@ const upgradeVerb: VerbSpec<Record<string, unknown>, UpgradeData> = {
   params: [],
   output: { formatters: upgradeFormatters },
   examples: [
-    { cmd: `${BIN_NAME} upgrade` },
+    { call: { verb: "upgrade" } },
     {
-      cmd: `${BIN_NAME} upgrade --dry-run`,
+      call: { verb: "upgrade", cliFlags: ["--dry-run"] },
       note: "show the delta and the command",
     },
   ],

@@ -15,7 +15,6 @@
  * `config show` for the whole picture.
  */
 
-import { BIN_NAME } from "../../constants.js";
 import { asVerb } from "../../kernel/spec/asVerb.js";
 import type { Formatters, VerbSpec } from "../../kernel/spec/index.js";
 import { CONFIG_FIELDS } from "./fields.js";
@@ -53,8 +52,14 @@ const getVerb: VerbSpec<Record<string, unknown>, ConfigGetData> = {
   ],
   output: { formatters: configGetFormatters },
   examples: [
-    { cmd: `${BIN_NAME} config get tier` },
-    { cmd: `${BIN_NAME} config get channel --format json` },
+    { call: { verb: "config get", params: { key: "tier" } } },
+    {
+      call: {
+        verb: "config get",
+        params: { key: "channel" },
+        cliFlags: ["--format", "json"],
+      },
+    },
   ],
   capability: {
     needsStore: false,

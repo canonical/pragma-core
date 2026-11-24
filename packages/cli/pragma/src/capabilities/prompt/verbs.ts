@@ -12,7 +12,6 @@
  * formatters).
  */
 
-import { BIN_NAME } from "../../constants.js";
 import { callRecovery, PragmaError } from "../../kernel/error/index.js";
 import { VOCABULARY } from "../../kernel/index.js";
 import type { PragmaRuntime } from "../../kernel/runtime/index.js";
@@ -41,7 +40,7 @@ const listVerb: VerbSpec<Record<string, unknown>, PromptListData> = {
     "when asked which ready-made workflow prompts the design system offers",
   params: [],
   output: { formatters: promptListFormatters },
-  examples: [{ cmd: `${BIN_NAME} prompt list` }],
+  examples: [{ call: { verb: "prompt list" } }],
   capability: READ_CAPABILITY,
   run: (_params: Record<string, unknown>, rt: PragmaRuntime) =>
     import("../../kernel/project/mcp/prompts/source.js").then(async (m) => {

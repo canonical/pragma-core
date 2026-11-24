@@ -261,8 +261,16 @@ export const fixtureReferenceModule: CapabilityModule = {
       ],
       output: { formatters: passthroughFormatters },
       examples: [
-        { cmd: "pragma gizmo scan", note: "scan everything" },
-        { cmd: "pragma gizmo scan alpha --mode slow" },
+        {
+          call: { verb: "gizmo scan" },
+          note: "scan everything",
+        },
+        {
+          call: {
+            verb: "gizmo scan",
+            params: { targets: ["alpha"], mode: "slow" },
+          },
+        },
       ],
       disclosure: { levels: ["summary", "detailed"], default: "summary" },
       capability: {

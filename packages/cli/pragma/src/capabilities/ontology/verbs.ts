@@ -21,7 +21,6 @@
  * any level), so the covenant is untouched.
  */
 
-import { BIN_NAME } from "../../constants.js";
 import { callRecovery, PragmaError } from "../../kernel/error/index.js";
 import { resolvePackDetail } from "../../kernel/packs/disclosure.js";
 import type { PragmaRuntime } from "../../kernel/runtime/index.js";
@@ -77,7 +76,7 @@ const listVerb: VerbSpec<Record<string, unknown>, OntologySummary[]> = {
     "when asked which vocabularies (namespaces and their prefixes) the data uses — the first step before writing a raw query",
   params: [],
   output: { formatters: ontologyListFormatters },
-  examples: [{ cmd: `${BIN_NAME} ontology list` }],
+  examples: [{ call: { verb: "ontology list" } }],
   capability: {
     needsStore: true,
     mutates: false,
@@ -232,9 +231,19 @@ export const ontologyLookupVerb = asVerb({
   params: BY_NAME_PARAMS,
   output: { formatters: ontologyShowFormatters },
   examples: [
-    { cmd: `${BIN_NAME} ontology lookup ds` },
-    { cmd: `${BIN_NAME} ontology lookup ds --properties` },
-    { cmd: `${BIN_NAME} ontology lookup ds --class Component` },
+    { call: { verb: "ontology lookup", params: { prefix: "ds" } } },
+    {
+      call: {
+        verb: "ontology lookup",
+        params: { prefix: "ds", properties: true },
+      },
+    },
+    {
+      call: {
+        verb: "ontology lookup",
+        params: { prefix: "ds", class: "Component" },
+      },
+    },
   ],
   disclosure: BY_NAME_DISCLOSURE,
   capability: BY_NAME_CAPABILITY,

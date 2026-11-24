@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import { afterAll, describe, expect, it } from "vitest";
+import { declareVerbs } from "../../spec/call.js";
 import type { VerbSpec } from "../../spec/types.js";
 import { formatNounHelp, formatVerbHelp } from "./verbHelp.js";
 
@@ -36,7 +37,12 @@ const get: VerbSpec = {
     { kind: "boolean", name: "withAnatomy", doc: "Include the anatomy tree." },
   ],
   output: { formatters: passthrough },
-  examples: [{ cmd: "pragma block get Button", note: "the primary button" }],
+  examples: [
+    {
+      call: { verb: "block get", params: { name: "Button" } },
+      note: "the primary button",
+    },
+  ],
   capability: { needsStore: true, mutates: false, mcp: { expose: true } },
   run: async () => null,
 };
@@ -76,6 +82,11 @@ const mutating: VerbSpec = {
   capability: { needsStore: false, mutates: true, mcp: { expose: true } },
   run: async () => null,
 };
+
+// The examples render through {@link renderCall}, which spells a call's
+// positionals only for a verb it knows; declare these fixture verbs so the
+// examples render the way the real CLI would.
+declareVerbs([get, list, selfVerb, mutating]);
 
 describe("formatVerbHelp", () => {
   const help = formatVerbHelp("pragma", get);

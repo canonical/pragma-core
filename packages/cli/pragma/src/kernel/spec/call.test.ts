@@ -63,6 +63,23 @@ describe("a call is spelled for the surface it is printed on", () => {
     ).toBe("pragma create component react src/Button");
   });
 
+  it("joins a create call's list flag with commas, the form the create mount parses", () => {
+    // The create mount splits ONE value on commas and keeps only the last of a
+    // repeated flag, so `--packages a --packages b` would silently drop `a`.
+    expect(
+      renderCall(
+        {
+          verb: "create playground",
+          params: {
+            playgroundPath: "proto",
+            packages: ["ds-global", "ds-app"],
+          },
+        },
+        "cli",
+      ),
+    ).toBe("pragma create playground proto --packages ds-global,ds-app");
+  });
+
   it("spells flags the way the CLI parses them", () => {
     // A default-true boolean is negated; a default-false one is simply absent.
     expect(

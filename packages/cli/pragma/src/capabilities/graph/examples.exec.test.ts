@@ -33,16 +33,14 @@ const positionalOf = (spec: VerbSpec): string =>
   spec.params.find((p) => p.positional)?.name ?? "";
 
 /**
- * The argument an example passes, recovered from the example's own `cmd`.
- *
- * Read from the declaration rather than retyped, so editing an example without
- * editing this file cannot leave the test asserting the old one.
+ * The argument an example passes, recovered from the example's own call —
+ * the value the example's `call` gives the verb's positional. Read from the
+ * declaration rather than retyped, so editing an example without editing this
+ * file cannot leave the test asserting the old one.
  */
 function exampleArg(spec: VerbSpec, index: number): string {
-  const cmd = spec.examples?.[index]?.cmd ?? "";
-  const quoted = cmd.match(/"([^"]*)"/);
-  if (quoted?.[1]) return quoted[1];
-  return cmd.trim().split(/\s+/).slice(3).join(" ");
+  const params = spec.examples?.[index]?.call.params ?? {};
+  return String(params[positionalOf(spec)] ?? "");
 }
 
 // ONE store for the file. Booting per case tripled this suite's cost against
@@ -80,7 +78,9 @@ describe("documented examples resolve against the shipped graph (PROTECTED)", ()
     // The old example returned `false` — syntactically fine, semantically a lie
     // about the graph. Asserting the ANSWER is what catches that.
     const query = verb("graph query");
-    const ask = (query.examples ?? []).findIndex((e) => e.cmd.includes("ASK"));
+    const ask = (query.examples ?? []).findIndex((e) =>
+      String(e.call.params?.sparql ?? "").includes("ASK"),
+    );
     expect(ask, "no ASK example to execute").toBeGreaterThanOrEqual(0);
 
     const result = (await query.run(

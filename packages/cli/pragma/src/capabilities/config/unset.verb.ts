@@ -9,7 +9,6 @@
  */
 
 import type { Task } from "@canonical/task";
-import { BIN_NAME } from "../../constants.js";
 import { asVerb } from "../../kernel/spec/asVerb.js";
 import type { VerbSpec } from "../../kernel/spec/index.js";
 import { configFieldFormatters } from "./field.render.js";
@@ -37,8 +36,11 @@ const unsetVerb: VerbSpec<Record<string, unknown>, ConfigFieldResult> = {
   ],
   output: { formatters: configFieldFormatters },
   examples: [
-    { cmd: `${BIN_NAME} config unset tier`, note: "read the full graph again" },
-    { cmd: `${BIN_NAME} config unset channel` },
+    {
+      call: { verb: "config unset", params: { key: "tier" } },
+      note: "read the full graph again",
+    },
+    { call: { verb: "config unset", params: { key: "channel" } } },
   ],
   capability: {
     needsStore: false,
