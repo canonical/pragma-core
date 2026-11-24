@@ -6,4 +6,4 @@ ds:global.modifier_family.surface a ds:ModifierFamily;
     ds:name "Surface";
     ds:summary "";
     ds:tier ds:global;
-    ds:hasModifier ds:global.modifier.modal, ds:global.modifier.surface3, ds:global.modifier.surface2, ds:global.modifier.surface1.
+    ds:hasModifier ds:global.modifier.modal, ds:global.modifier.surface3, ds:global.modifier.surface2, ds:global.modifier.surface1, ds:global.modifier.elevated.
