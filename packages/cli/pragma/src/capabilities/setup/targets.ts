@@ -314,6 +314,30 @@ const lspChildren = (d: LspDetection, roots: Roots): PlanChildRow[] =>
   });
 
 /**
+ * The child rows of a REMOVAL plan: what each editor would contribute to an
+ * uninstall.
+ *
+ * Deliberately distinct from {@link lspChildren}. A forward child reads
+ * "already installed → unchanged", which is the honest answer to "what will
+ * the install do". A removal reads the same editor differently: a copy that
+ * is present but whose folder is blocked is a `skip` with the block reason —
+ * the uninstall needs a write pragma must not make — never `unchanged`, which
+ * would read as "nothing to remove" over a copy this command put there.
+ *
+ * Editors without a copy stay `unchanged`: there is nothing to uninstall.
+ */
+const lspRemovalChildren = (d: LspDetection): PlanChildRow[] =>
+  d.editors.map((e): PlanChildRow => {
+    const label = `${e.editor.cli} — ${e.editor.name}`;
+    if (!e.present) return { key: e.editor.cli, label, action: "unchanged" };
+    const reason = lspBlockReason(e);
+    if (reason !== undefined) {
+      return { key: e.editor.cli, label, action: "skip", reason };
+    }
+    return { key: e.editor.cli, label, action: "update" };
+  });
+
+/**
  * The row-level skip for a machine where nothing can be done at all —
  * `undefined` when there is still something the row can say for itself.
  *
@@ -329,9 +353,10 @@ const lspChildren = (d: LspDetection, roots: Roots): PlanChildRow[] =>
 const draftLspRowBlock = (
   d: LspDetection,
   actionable: number,
+  removal = false,
 ): TargetDraft | undefined => {
   if (actionable > 0) return undefined;
-  const block = firstLspBlock(d);
+  const block = firstLspBlock(d, removal);
   if (block === undefined) return undefined;
   return {
     action: "skip",
@@ -346,7 +371,7 @@ const lspTarget = defineTarget<LspDetection>({
   title: "Terrazzo LSP extension",
   noun: ["editor", "editors"],
   scopes: ["global"],
-  detect: (rt, _scope, probe) => detectLsp(rt.cwd, undefined, probe),
+  detect: (rt, _scope, probe) => detectLsp(rt.cwd, { probe }),
   plan: (d, _scope, roots) => {
     if (d.state === "unknown") return draftLspNothingFound(d);
     const children = lspChildren(d, roots);
@@ -385,10 +410,13 @@ const lspTarget = defineTarget<LspDetection>({
     const owned = ownedLspEditors(d);
     // Nothing owned AND something blocked is the same skip the forward row
     // reports, for the same reason: the uninstall would need a CLI this
-    // machine has not got, or a write pragma must not make.
-    const blocked = draftLspRowBlock(d, owned.length);
+    // machine has not got, or a write pragma must not make. The remedy points
+    // the REMOVAL direction (a copy this command put there cannot be un-made
+    // through a folder it must not touch), and the children use the removal
+    // reading so an owned-but-blocked editor is a skip, never `unchanged`.
+    const blocked = draftLspRowBlock(d, owned.length, true);
     if (blocked !== undefined) {
-      return { ...blocked, children: lspChildren(d, roots) };
+      return { ...blocked, children: lspRemovalChildren(d) };
     }
     if (owned.length === 0) {
       return { action: "none", detail: "no editor carries the extension" };
@@ -398,11 +426,7 @@ const lspTarget = defineTarget<LspDetection>({
       detail: `Terrazzo extension from ${owned
         .map((e) => e.editor.name)
         .join(", ")}`,
-      children: owned.map((e) => ({
-        key: e.editor.cli,
-        label: `${e.editor.cli} — ${e.editor.name}`,
-        action: "update" as const,
-      })),
+      children: lspRemovalChildren(d).filter((c) => c.action === "update"),
     };
   },
   compose: (d, chosen) => composeLsp(d, chosen),
@@ -471,8 +495,8 @@ const mcpTarget = defineTarget<McpDetection>({
     if (block !== undefined) {
       return {
         action: "skip",
-        detail: block.reason,
-        reason: block.reason,
+        detail: block.headline,
+        reason: block.headline,
         remedy: block.remedy,
         children,
       };
@@ -491,6 +515,23 @@ const mcpTarget = defineTarget<McpDetection>({
   removalPlan: (d, _scope, roots) => {
     const owned = ownedMcpGroups(d);
     if (owned.length === 0) {
+      // Nothing removable AND something blocked that holds a pragma entry is
+      // the same finding the forward row reports: the file cannot be written,
+      // so it cannot be un-written either. Say so rather than reporting "no
+      // entry to remove" over an entry that is genuinely there.
+      const block = firstMcpBlock(
+        d,
+        roots,
+        (group) => mcpGroupState(d, group.path) !== "absent",
+      );
+      if (block !== undefined) {
+        return {
+          action: "skip",
+          detail: block.headline,
+          reason: block.headline,
+          remedy: block.remedy,
+        };
+      }
       return { action: "none", detail: "no entry to remove" };
     }
     return {

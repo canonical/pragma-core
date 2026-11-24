@@ -381,7 +381,7 @@ describe("upgrade — a failed exec maps to an actionable runtime error (exit 1)
     expect(err.code).toBe("UNSUPPORTED");
     expect(mapExitCode(err.code)).toBe(1);
     expect(err.message).toContain("pragma-nonexistent-binary-xyz");
-    expect(err.message).toMatch(/not found on your PATH/i);
+    expect(err.message).toMatch(/is missing or cannot be run/i);
     expect(err.recovery?.message).not.toContain("report this issue");
     expect(err.recovery?.message).toMatch(/PATH/);
   });

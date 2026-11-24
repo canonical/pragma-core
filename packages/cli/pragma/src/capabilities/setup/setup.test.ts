@@ -115,11 +115,15 @@ const withShell = it.skipIf(SHELL === null);
  *
  * Root ignores the mode bits — `access(W_OK)` succeeds on a `0o500` directory
  * it owns — so `probeWritable` finds nothing to block and the case asserts the
- * opposite of what it means. GitHub-hosted runners are non-root and run these;
- * a devcontainer or a bare `docker run` of the suite is root and stands down,
- * which is honest rather than red.
+ * opposite of what it means. Windows is the same through a different mechanism:
+ * NTFS does not honour the POSIX mode bits at all, so `chmod 0o500` changes
+ * nothing and `access(W_OK)` also succeeds. GitHub-hosted runners are non-root
+ * and run these; a devcontainer, a bare `docker run`, or a Windows host stands
+ * down, which is honest rather than red.
  */
-const notRoot = it.skipIf(process.getuid?.() === 0);
+const notRoot = it.skipIf(
+  process.getuid?.() === 0 || process.platform === "win32",
+);
 
 /**
  * A PATH directory carrying a `pragma` stub. The completions target refuses to
@@ -2286,7 +2290,7 @@ describe("setup lsp — prerequisites (bun absent / no editor CLI)", () => {
     expect(err.code).toBe("UNSUPPORTED");
     expect(err.code).not.toBe("INTERNAL_ERROR");
     expect(err.message).toContain("bun");
-    expect(err.message).toMatch(/not found on your PATH/i);
+    expect(err.message).toMatch(/is missing or cannot be run/i);
     // The recovery is the actionable install hint, not "report this issue".
     expect(err.recovery?.message ?? "").not.toMatch(/report this issue/i);
   });
@@ -3334,7 +3338,7 @@ describe("setup mcp — the VS Code family's per-user mcp.json", () => {
   });
 
   it("VSCodium's per-user file is its OWN, detected by its own directory", async () => {
-    // Per the owner, 2026-09-16: VSCodium is an MCP client row. Its user
+    // VSCodium is an MCP client row. Its user
     // directory is the signal, and `VSCodium/User/mcp.json` is the file — a
     // bare `.vscode` project dir must never stand in for it.
     installVscode("VSCodium");
@@ -3451,6 +3455,65 @@ describe("setup — a Nix-managed or read-only location is a named skip", () => 
     expect(effects).toEqual([]);
   });
 
+  /** One row's removal draft, straight off the target table. */
+  const removalDraftOf = <D>(
+    id: "mcp" | "lsp",
+    detection: D,
+    scope: Scope,
+    roots: Roots,
+  ) =>
+    (findTarget(id) as unknown as TargetDefinition<D>).removalPlan(
+      detection,
+      scope,
+      roots,
+    );
+
+  it("mcp: --undo over a store-managed file that holds the entry is a SKIP, not 'no entry'", async () => {
+    // The entry is genuinely there, so "no entry to remove" would be false;
+    // the file cannot be written, so the reversal cannot be composed either.
+    const cwd = tmp("pragma-setup-proj-");
+    const xdg = process.env.XDG_CONFIG_HOME as string;
+    const userDir = join(xdg, "Code", "User");
+    mkdirSync(userDir, { recursive: true });
+    writeFileSync(
+      join(userDir, "mcp.json"),
+      JSON.stringify({
+        servers: { pragma: { command: "pragma", args: ["mcp", "serve"] } },
+      }),
+    );
+    const rt = bootRuntime(FLAGS, cwd);
+    const detection = await detectMcp(rt, "global", storeProbe(xdg));
+    const draft = removalDraftOf(
+      "mcp",
+      detection,
+      "global",
+      await resolveRoots(rt),
+    );
+
+    expect(draft.action).toBe("skip");
+    expect(draft.reason).toContain("managed by Nix");
+    expect(draft.detail).not.toContain("no entry to remove");
+  });
+
+  it("mcp: --undo over a store-managed file WITHOUT the entry has nothing to remove", async () => {
+    // The negative: a blocked file that never held the entry is not a finding
+    // for the removal, so the row stays the ordinary "nothing to remove".
+    const cwd = tmp("pragma-setup-proj-");
+    const xdg = process.env.XDG_CONFIG_HOME as string;
+    mkdirSync(join(xdg, "Code", "User"), { recursive: true });
+    const rt = bootRuntime(FLAGS, cwd);
+    const detection = await detectMcp(rt, "global", storeProbe(xdg));
+    const draft = removalDraftOf(
+      "mcp",
+      detection,
+      "global",
+      await resolveRoots(rt),
+    );
+
+    expect(draft.action).toBe("none");
+    expect(draft.detail).toBe("no entry to remove");
+  });
+
   it("mcp: a blocked TOML config gets its entry as TOML, not as JSON", async () => {
     // Codex keeps `config.toml`. A JSON body pasted into it is not an entry,
     // it is a syntax error — and this row's whole job is to say what to write.
@@ -3517,11 +3580,9 @@ describe("setup — a Nix-managed or read-only location is a named skip", () => 
     const extensions = join(home, ".vscode-oss", "extensions");
     mkdirSync(extensions, { recursive: true });
     const rt = bootRuntime(FLAGS, tmp("pragma-setup-proj-"));
-    const detection = await detectLsp(
-      rt.cwd,
-      undefined,
-      storeProbe(extensions),
-    );
+    const detection = await detectLsp(rt.cwd, {
+      probe: storeProbe(extensions),
+    });
     const draft = draftOf("lsp", detection, "global", await resolveRoots(rt));
 
     expect(draft.action).toBe("skip");
@@ -3570,11 +3631,9 @@ describe("setup — a Nix-managed or read-only location is a named skip", () => 
     );
     mkdirSync(extensions, { recursive: true });
     const rt = bootRuntime(FLAGS, tmp("pragma-setup-proj-"));
-    const detection = await detectLsp(
-      rt.cwd,
-      undefined,
-      storeProbe(extensions),
-    );
+    const detection = await detectLsp(rt.cwd, {
+      probe: storeProbe(extensions),
+    });
     const remedy = draftOf("lsp", detection, "global", await resolveRoots(rt))
       .remedy as string;
     // The remedy is prose plus the expression; the expression starts at the
@@ -3675,10 +3734,12 @@ describe("setup lsp — how each editor was found", () => {
     mkdirSync(bundleBin, { recursive: true });
     writeFileSync(join(bundleBin, "code"), "");
     const detection = await detectLsp(tmp("pragma-setup-proj-"), {
-      platform: "darwin",
-      env: {},
-      home,
-      isWsl: false,
+      platform: {
+        platform: "darwin",
+        env: {},
+        home,
+        isWsl: false,
+      },
     });
     expect(detection.editors.map((e) => [e.editor.id, e.foundBy])).toEqual([
       ["vscode", "bundle"],
@@ -3750,7 +3811,9 @@ describe("setup lsp — how each editor was found", () => {
     const detection = await detectLsp(rt.cwd);
     const remedy = firstLspBlock(detection)?.remedy;
     expect(remedy).toContain("Install 'codium' command in PATH");
-    expect(remedy).toContain("setup lsp");
+    // The remedy unifies on "run this again", matching the skills and no-editor
+    // skips, rather than naming the forward verb in the middle of an install.
+    expect(remedy).toContain("then run this again");
     expect(remedy).not.toContain("\n");
     expect(dryRun(composeLsp(detection)).effects).toEqual([]);
     expect(selectedEditors(detection)).toEqual([]);
@@ -3849,7 +3912,7 @@ describe("setup lsp — the row's quiet answers", () => {
         expect(row?.outcome?.status).toBe("skipped");
         const remedy = row?.outcome?.remedy as string;
         expect(remedy).toBe(
-          `make the extensions folder writable, then run \`${BIN_NAME} setup lsp\` again`,
+          `make the extensions folder writable, then run this again`,
         );
         // Never the VSIX. `composeLsp` fetches nothing when no editor is
         // installable, so a `--install-extension <vsix>` line would name a file
@@ -3888,6 +3951,13 @@ describe("setup lsp — the row's quiet answers", () => {
         expect(row?.reason).toContain("not writable");
         expect(row?.outcome?.remedy).toContain(
           "make the extensions folder writable",
+        );
+        // The removal's child rows use the removal reading, not the forward
+        // one: an owned-but-blocked editor is a `skip` with the block's reason,
+        // never `unchanged` (which would read as "nothing to remove" over a
+        // copy this command put there).
+        expect(row?.children?.find((c) => c.key === "codium")?.action).toBe(
+          "skip",
         );
       } finally {
         chmodSync(extensions, 0o700);

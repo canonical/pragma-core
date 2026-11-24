@@ -122,11 +122,16 @@ export function isMissingBinaryError(error: unknown): boolean {
 
 /**
  * Wrap an `exec`-composing Task so a missing-binary spawn (ENOENT) surfaces as a
- * named UNSUPPORTED "`<bin>` not found on PATH" error with actionable recovery,
- * rather than the interpreter's raw reject collapsing to INTERNAL_ERROR ("please
- * report this issue") at the CLI/MCP boundary. Every spawn site that may hit an
- * absent binary (`upgrade`'s package manager, `setup lsp`'s `bunx`) wraps its
- * Task with this so they never reach the catch-all.
+ * named UNSUPPORTED error with actionable recovery, rather than the
+ * interpreter's raw reject collapsing to INTERNAL_ERROR ("please report this
+ * issue") at the CLI/MCP boundary. Every spawn site that may hit an absent
+ * binary (`upgrade`'s package manager, `setup lsp`'s `bunx`) wraps its Task
+ * with this so they never reach the catch-all.
+ *
+ * `bin` may be a bare name (a PATH lookup) OR a resolved full path (an editor
+ * CLI found inside a macOS app bundle, which was never on PATH), so the message
+ * must not claim PATH — each is a missing file this machine lacks. The recovery
+ * names the action, PATH-based or not.
  *
  * Only real execution can trip it: a dry-run/plan mocks `exec` (exit 0, no
  * spawn), so the guard is transparent to the preview. A nonzero exit RESOLVES
@@ -152,7 +157,7 @@ export function guardMissingBinary<A>(
       return failPragma(
         new PragmaError({
           code: "UNSUPPORTED",
-          message: `\`${bin}\` was not found on your PATH.`,
+          message: `\`${bin}\` is missing or cannot be run.`,
           recovery,
         }),
       );

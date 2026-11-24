@@ -379,6 +379,19 @@ describe("doctor — the scoped rows can see the GLOBAL scope", () => {
     const project = rows.find((r) => r.name === "mcp" && r.scope === "project");
     expect(project?.status).toBe("skip");
   });
+
+  it("names the project's config files on its opt-in skip", async () => {
+    // A skip that names no file leaves the reader to guess WHICH file a
+    // per-project registration would write, so the opt-in row carries its
+    // items just as the global row does.
+    const cwd = tmp("pragma-doctor-proj-");
+    mkdirSync(join(cwd, ".cursor"), { recursive: true });
+
+    const rows = await scopedChecks(bootRuntime(FLAGS, cwd), "pragma");
+    const project = rows.find((r) => r.name === "mcp" && r.scope === "project");
+    expect(project?.status).toBe("skip");
+    expect(project?.items?.some((i) => i.label.includes(".cursor"))).toBe(true);
+  });
 });
 
 describe("doctor — the harness inventory", () => {
@@ -764,10 +777,10 @@ describe("doctor — an unconfigured opt-in integration is available, not a faul
  * The `lsp` row's per-editor provenance, and the rows that say a step was
  * skipped rather than failing at it.
  *
- * Per the owner, 2026-09-16: doctor says per editor HOW it was found and WHY a
- * step was skipped. A colleague whose macOS run reported no editor had VS Code
- * installed the whole time, and a one-line row could not tell them whether
- * pragma had missed the editor or found it and could not act.
+ * Doctor says per editor HOW it was found and WHY a step was
+ * skipped. A colleague whose macOS run reported no editor had VS Code installed
+ * the whole time, and a one-line row could not tell them whether pragma had
+ * missed the editor or found it and could not act.
  *
  * The blocked arms read a filesystem no CI host has, so they are driven over
  * `scopedChecks`'s own probe seam — the same entry point `doctor` runs, with

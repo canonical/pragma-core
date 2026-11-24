@@ -39,9 +39,8 @@
  * `~/.vscode/extensions` is a symlink into `/nix/store`, so
  * `--install-extension` there failed with a raw fs error or silently changed
  * nothing; that is now a named skip carrying the declaration that does work.
- * Per the owner, 2026-09-16, the decision is made by the DIRECTORY, never by
- * the OS: a Nix user's home is ordinary, and a non-Nix user can have a
- * read-only mount.
+ * The decision is made by the DIRECTORY, never by the OS: a Nix user's home
+ * is ordinary, and a non-Nix user can have a read-only mount.
  *
  * Every one of those is a NAMED SKIP, not an error: the message says what was
  * looked for and what to do, and the run exits 0 — there is nothing on this
@@ -179,10 +178,11 @@ interface EditorFacts {
 }
 
 /** One detected editor: the facts, plus what found it. */
-export type DetectedEditor = EditorFacts & EditorSource;
+type DetectedEditor = EditorFacts & EditorSource;
 
 /** An editor with a CLI to run — what {@link installable} narrows to. */
-type RunnableEditor = EditorFacts & Extract<EditorSource, { cliPath: string }>;
+type RunnableEditor = EditorFacts &
+  Extract<EditorSource, { cliPath: string }> & { readonly block: undefined };
 
 /**
  * An editor nothing can be installed into: no CLI to run at all, or a folder
@@ -192,11 +192,10 @@ type RunnableEditor = EditorFacts & Extract<EditorSource, { cliPath: string }>;
  */
 type BlockedEditor =
   | (EditorFacts & Extract<EditorSource, { foundBy: "user-dir" }>)
-  | (EditorFacts & {
-      readonly foundBy: "path" | "bundle";
-      readonly cliPath: string;
-      readonly block: WriteBlock;
-    });
+  | (EditorFacts &
+      Extract<EditorSource, { cliPath: string }> & {
+        readonly block: WriteBlock;
+      });
 
 /**
  * Whether an install can act on an editor at all: there is a CLI to RUN, and
@@ -214,9 +213,12 @@ type BlockedEditor =
 const installable = (e: DetectedEditor): e is RunnableEditor =>
   e.foundBy !== "user-dir" && e.block === undefined;
 
+/** Whether nothing can be installed into an editor: the negation of {@link installable}. */
+const isBlocked = (e: DetectedEditor): e is BlockedEditor => !installable(e);
+
 /** The editors nothing can be installed into, in registry order. */
 const blockedEditors = (d: LspDetection): readonly BlockedEditor[] =>
-  d.editors.filter((e): e is BlockedEditor => !installable(e));
+  d.editors.filter(isBlocked);
 
 /**
  * The detected LSP state: every editor the three probes found (each with its
@@ -446,19 +448,25 @@ const findEditor = (
  * dir; and whether that dir could be written. No spawns (see the module
  * docblock for why).
  *
+ * The two test seams — the captured platform and the writability probe — ride
+ * on one options object rather than stacked positionally, so a caller that
+ * only wants the probe never has to name the platform to reach it.
+ *
  * @param _cwd - Unused; kept so every `detectX` shares the (cwd) shape.
- * @param platform - The captured host; defaults to the live one. Injected so a
- *   test can drive the darwin arm — the one this repo's CI host cannot run.
- * @param probe - The writability filesystem seam; defaults to the real one.
+ * @param options - The injected seams, both optional.
+ * @param options.platform - The captured host; defaults to the live one. A test
+ *   injects the darwin arm — the one this repo's CI host cannot run.
+ * @param options.probe - The writability filesystem seam; defaults to the real
+ *   one.
  * @returns The detected {@link LspDetection}.
  * @note Impure — reads PATH dirs, app bundles and editor extension dirs off
  * the real fs.
  */
 export async function detectLsp(
   _cwd: string,
-  platform?: PlatformEnv,
-  probe?: FsProbe,
+  options: { platform?: PlatformEnv; probe?: FsProbe } = {},
 ): Promise<LspDetection> {
+  const { platform, probe } = options;
   const {
     appBundleCandidates,
     editorClis,
@@ -618,6 +626,7 @@ const nixDeclarationRemedy = (d: LspDetection): string =>
  */
 const describeBlock = (
   e: BlockedEditor,
+  removal = false,
 ): { reason: string; remedy: (d: LspDetection) => string } => {
   // Keyed by PROVENANCE, not by a block: an editor found only by its user
   // directory has no CLI whatever its folder permits, so "no launcher" is a
@@ -626,14 +635,17 @@ const describeBlock = (
     return {
       reason: "no command-line launcher — found only its user directory",
       remedy: () =>
-        `run "Shell Command: Install '${e.editor.cli}' command in PATH" from ${e.editor.name}'s command palette, then run \`${BIN_NAME} setup lsp\` again`,
+        `run "Shell Command: Install '${e.editor.cli}' command in PATH" from ${e.editor.name}'s command palette, then run this again`,
     };
   }
   switch (e.block.kind) {
     case "nix-store":
       return {
         reason: `extensions folder managed by Nix (it resolves to ${e.block.resolved})`,
-        remedy: nixDeclarationRemedy,
+        remedy: removal
+          ? () =>
+              `remove the extension from your home-manager declaration, then run this again`
+          : nixDeclarationRemedy,
       };
     case "read-only":
       return {
@@ -641,7 +653,7 @@ const describeBlock = (
         // remedy can say "the extensions folder" instead of repeating it.
         reason: `extensions folder is not writable (${e.block.path})`,
         remedy: () =>
-          `make the extensions folder writable, then run \`${BIN_NAME} setup lsp\` again`,
+          `make the extensions folder writable, then run this again`,
       };
   }
 };
@@ -654,7 +666,7 @@ const describeBlock = (
  * @returns The reason, or `undefined` when the editor is actionable.
  */
 export const lspBlockReason = (e: DetectedEditor): string | undefined =>
-  installable(e) ? undefined : describeBlock(e).reason;
+  isBlocked(e) ? describeBlock(e).reason : undefined;
 
 /**
  * The FIRST editor nothing can be installed into, with its row headline and
@@ -672,10 +684,11 @@ export const lspBlockReason = (e: DetectedEditor): string | undefined =>
  */
 export const firstLspBlock = (
   d: LspDetection,
+  removal = false,
 ): { readonly headline: string; readonly remedy: string } | undefined => {
   const first = blockedEditors(d).at(0);
   if (first === undefined) return undefined;
-  const { reason, remedy } = describeBlock(first);
+  const { reason, remedy } = describeBlock(first, removal);
   return { headline: `${first.editor.name}: ${reason}`, remedy: remedy(d) };
 };
 

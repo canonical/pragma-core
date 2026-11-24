@@ -105,8 +105,8 @@ const configHealth = (
  * Provenance per editor is the point. A colleague whose macOS `setup lsp`
  * reported nothing had VS Code installed the whole time, and a one-line row
  * ("not installed in …", or a bare skip) could not tell them whether pragma had
- * missed the editor or found it and could not act. Per the owner, 2026-09-16,
- * this report says per editor how it was found and why a step was skipped.
+ * missed the editor or found it and could not act. So this report says, per editor,
+ * how it was found and why a step was skipped.
  *
  * The row's own status keeps the report's invariant that every `available` row
  * has a remedy: any editor that CAN be installed into makes the row
@@ -222,7 +222,7 @@ async function mcpHealth(
   if (block !== undefined) {
     return {
       status: "skip",
-      detail: block.reason,
+      detail: block.headline,
       items,
       remedy: block.remedy,
     };
@@ -246,6 +246,7 @@ async function mcpHealth(
           status: "skip",
           detail:
             "not registered for this project — per-project registration is opt-in",
+          items,
         }
       : {
           status: "available",
