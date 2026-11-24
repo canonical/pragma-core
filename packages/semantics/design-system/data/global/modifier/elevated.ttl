@@ -5,4 +5,4 @@
 ds:global.modifier.elevated a ds:Modifier;
     ds:name "Elevated (?)";
     ds:summary "";
-    ds:modifierFamily ds:global.modifier_family._other.
+    ds:modifierFamily ds:global.modifier_family.surface.
