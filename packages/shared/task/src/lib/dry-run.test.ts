@@ -532,7 +532,10 @@ describe("Dry-Run - dryRunWith", () => {
     const customMocks = new Map<string, (e: Effect) => unknown>();
     customMocks.set("ReadFile", () => "custom content");
 
-    const task = sequence([readFile("/test.txt"), exists("/other.txt")]);
+    const task = sequence<string | boolean>([
+      readFile("/test.txt"),
+      exists("/other.txt"),
+    ]);
     const { value } = dryRunWith(task, customMocks);
 
     expect(value[0]).toBe("custom content");
@@ -1263,7 +1266,7 @@ describe("Dry-Run - Parallel and Race in dryRun", () => {
   it("shares virtual filesystem state between Parallel children", () => {
     // First child writes a file, second child checks if it exists
     // Due to parallel execution, virtual FS state is shared
-    const task = parallel([
+    const task = parallel<boolean | void>([
       writeFile("/marker.txt", "x"),
       exists("/marker.txt"),
     ]);
@@ -1305,7 +1308,7 @@ describe("Dry-Run - Parallel and Race in dryRun", () => {
       writeFile("/x.txt", "x"),
       writeFile("/y.txt", "y"),
     ]);
-    const task = parallel([inner, writeFile("/z.txt", "z")]);
+    const task = parallel<void[] | void>([inner, writeFile("/z.txt", "z")]);
 
     const { effects } = dryRun(task);
 

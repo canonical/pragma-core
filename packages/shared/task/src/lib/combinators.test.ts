@@ -83,7 +83,11 @@ describe("Combinators - Sequencing", () => {
 
     it("handles mixed pure and effect tasks", () => {
       const eff: Effect = { _tag: "ReadFile", path: "/test.txt" };
-      const tasks = [pure(1), effect<string>(eff), pure(3)];
+      const tasks: Task<string | number>[] = [
+        pure(1),
+        effect<string>(eff),
+        pure(3),
+      ];
       const t = sequence(tasks);
 
       const { value, effects } = dryRunWith(
