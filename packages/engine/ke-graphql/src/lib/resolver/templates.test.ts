@@ -52,7 +52,16 @@ const entity = (over: Partial<EntityValue>): EntityValue => ({
 });
 
 /** Mock context whose loaders are plain spies. */
-const makeCtx = (over: Partial<CompilerContext> = {}): CompilerContext => {
+/**
+ * Context overrides: a test replaces one loader/map member at a time with a
+ * minimal stub carrying only the method the resolver under test calls. The
+ * members are typed loosely (`load`/`toGraphQL` functions) because they are
+ * not exercised in full — `makeCtx` supplies the rest of the real contract
+ * from its defaults.
+ */
+type CtxOverrides = Record<string, unknown>;
+
+const makeCtx = (over: CtxOverrides = {}): CompilerContext => {
   const warn = vi.fn();
   return {
     entityLoader: {
@@ -178,7 +187,7 @@ describe("createObjectSingularResolver", () => {
     );
     const ctx = makeCtx({
       inverseLoader: { load: vi.fn(async () => [`${NS}back`]) },
-    } as Partial<CompilerContext>);
+    });
     const parent = entity({ uri: `${NS}thing`, triples: triples() });
     const result = (await resolve(
       parent,
@@ -196,7 +205,7 @@ describe("createObjectSingularResolver", () => {
     );
     const ctx = makeCtx({
       inverseLoader: { load: vi.fn(async () => [] as string[]) },
-    } as Partial<CompilerContext>);
+    });
     const parent = entity({ uri: `${NS}thing`, triples: triples() });
     expect(await resolve(parent, noArgs, ctx, {} as never)).toBeNull();
   });
@@ -286,7 +295,7 @@ describe("createInverseResolver", () => {
     const resolve = createInverseResolver(field({}), `${NS}fwd`);
     const ctx = makeCtx({
       inverseLoader: { load: vi.fn(async () => [`${NS}b`]) },
-    } as Partial<CompilerContext>);
+    });
     const parent = entity({
       uri: `${NS}thing`,
       triples: triples([[`${NS}p`, [uri(`${NS}a`), lit("skip")]]]),
@@ -365,7 +374,7 @@ describe("createEmbeddedListResolver", () => {
     // falls back to the range typename.
     const ctx = makeCtx({
       nameMap: { toGraphQL: () => undefined },
-    } as Partial<CompilerContext>);
+    });
     const t = triples([[RDF_TYPE, [uri(`${NS}Unknown`), lit("ignored")]]]);
     const parent = entity({ triples: triples([[`${NS}p`, [blankVal(t)]]]) });
     const result = (await resolve(

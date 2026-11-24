@@ -379,7 +379,7 @@ graphql:Term a owl:Class ; rdfs:label "Term" .
     expect(diagnostics).toEqual([]);
     // Sorted for the assertion: the list follows namespace DISCOVERY order,
     // which is the store's to decide.
-    expect([...output.deferredSyntheticNamespaces].sort()).toEqual([
+    expect([...(output.deferredSyntheticNamespaces ?? [])].sort()).toEqual([
       "https://direct.test/",
       "https://hash.test/ontology#",
       "https://slash.test/v/",

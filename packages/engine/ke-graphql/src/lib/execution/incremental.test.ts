@@ -4,7 +4,7 @@
 // =============================================================================
 
 import { createTestStore } from "@canonical/ke/testing";
-import { parse } from "graphql";
+import { GraphQLError, parse } from "graphql";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   assertData,
@@ -284,7 +284,7 @@ describe("mergeIncremental (crafted payloads)", () => {
     // the `?? null`/`?? []` defaults fire because data/pending are absent.
     const merged = await mergeIncremental(
       makeResults(
-        { errors: [{ message: "seed" }] },
+        { errors: [new GraphQLError("seed")] },
         { hasNext: true },
         {
           incremental: [{ id: "ghost", data: { ignored: true } }],
@@ -351,7 +351,7 @@ describe("relayFormatAdapter (crafted payloads)", () => {
         makeResults(
           {
             data: { node: { name: "x" } },
-            errors: [{ message: "warn" }],
+            errors: [new GraphQLError("warn")],
             pending: [{ id: "0", path: ["node"], label: "frag" }],
           },
           {
