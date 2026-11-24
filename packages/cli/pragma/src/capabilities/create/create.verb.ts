@@ -134,6 +134,22 @@ const applicationParams: ParamSpec[] = generatorToParams(
 const pageParams: ParamSpec[] = generatorToParams(surfaceFor("page").prompts);
 
 /**
+ * The literal CLI tree segments a binding's single-leaf mount inserts between
+ * the noun verb and its params. A multi-leaf binding (`component`) carries the
+ * segment as the required `framework` positional, so it needs no extra segment
+ * here; a single leaf whose path is more than one segment (`application/react`)
+ * is reached through that extra segment on the CLI even though the binding
+ * params do not carry it.
+ */
+function cliSegmentsOf(kind: CreateKind): readonly string[] {
+  const first = CREATE_GENERATORS[kind].paths[0] as string;
+  if (CREATE_GENERATORS[kind].paths.length > 1 || !first.includes("/")) {
+    return [];
+  }
+  return [first.split("/")[1] as string];
+}
+
+/**
  * The path param each noun jails. `package` writes into a name-derived subdir;
  * `page`'s answer is two name segments (letters, digits, hyphens), never a
  * filesystem path, so neither has one to jail.
@@ -473,6 +489,7 @@ function createVerb(
     summary,
     ...guidance,
     params,
+    cliSegments: cliSegmentsOf(kind),
     output: CREATE_OUTPUT,
     examples,
     capability: CREATE_CAPABILITY,

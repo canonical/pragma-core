@@ -15,9 +15,10 @@
  * param as a flag rather than throwing: this runs inside error rendering,
  * where a second failure helps no one.
  *
- * NOT derivable here: a noun whose CLI is mounted by its own projection
- * (`create`, whose commands carry a generator segment the verb's params do
- * not). Its calls spell correctly as tool calls only.
+ * A noun whose CLI is mounted by its own projection (`create`) inserts literal
+ * tree segments the verb's params do not carry; the verb declares them as
+ * {@link VerbSpec.cliSegments} so a call still spells as the command the CLI
+ * accepts.
  *
  * Zod-free: it is reachable from the `--help` path.
  */
@@ -112,8 +113,12 @@ function renderCliCall(call: Call): string {
     .flatMap((name) => [params[name]].flat().map(quoteWord));
   // A positional that looks like a flag needs the end-of-options marker.
   const guard = words.some((word) => word.startsWith("-")) ? ["--"] : [];
+  // A mounted noun's tree segments come right after the verb path, before any
+  // flag or positional (`create application react my-app`).
+  const segments = declared.get(call.verb)?.cliSegments ?? [];
   return [
     `${RECOVERY_CLI_PREFIX}${call.verb}`,
+    ...segments,
     ...(call.cliFlags ?? []),
     ...flags,
     ...guard,

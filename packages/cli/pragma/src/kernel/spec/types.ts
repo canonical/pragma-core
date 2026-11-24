@@ -332,6 +332,14 @@ export interface VerbSpec<P = Record<string, unknown>, R = unknown> {
   };
   readonly examples?: readonly Example[];
   readonly disclosure?: DisclosureSpec;
+  /**
+   * Literal path segments a mounted CLI inserts between the verb path and its
+   * params — the tree segments of the `create` noun (`create application
+   * react`). A mounted noun's CLI grammar can differ from the binding-level
+   * params, and {@link renderCall} spells a call as the command the CLI really
+   * accepts, so the segment is declared on the verb rather than guessed.
+   */
+  readonly cliSegments?: readonly string[];
   readonly capability: Capability;
   readonly run: (p: P, rt: PragmaRuntime) => Promise<R> | Task<R>;
   readonly errors?: readonly ErrorSpec[];
