@@ -23,7 +23,31 @@ import {
   opendesignMcpEntry,
 } from "./mcpEntries.js";
 import type { PlatformEnv } from "./platformPaths.js";
-import type { ConfigTarget } from "./types.js";
+import type { ConfigTarget, McpServerConfig } from "./types.js";
+
+/**
+ * A parsed harness config file written by the functions under test. The MCP
+ * server containers are materialized by every write under test (a write always
+ * emits the container — dropping it when empty is itself asserted via the
+ * `in`/`toEqual` checks below), so they are typed present to keep every
+ * assertion chain checked; other keys fall through as `unknown`.
+ */
+interface McpConfigFile {
+  readonly mcpServers: Readonly<Record<string, McpServerConfig>>;
+  readonly mcp: Readonly<Record<string, unknown>>;
+  /** VS Code's container key for MCP server entries. */
+  readonly servers: Readonly<Record<string, McpServerConfig>>;
+  readonly $schema?: string;
+  readonly options?: Readonly<Record<string, unknown>>;
+  readonly disabledServers?: readonly string[];
+  readonly autoEnableCodemode?: boolean;
+  readonly [key: string]: unknown;
+}
+
+/** Parse a written config file's content with its shape checked. */
+function readJson(content: string): McpConfigFile {
+  return JSON.parse(content);
+}
 
 const claude = harnesses[0];
 
@@ -146,7 +170,7 @@ describe("writeMcpConfig", () => {
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects.length).toBe(1);
 
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toEqual({
       command: "pragma",
       args: ["mcp"],
@@ -176,7 +200,7 @@ describe("writeMcpConfig", () => {
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects.length).toBe(1);
 
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.figma).toEqual({ command: "figma-mcp" });
     expect(written.mcpServers.pragma).toEqual({
       command: "pragma",
@@ -205,7 +229,7 @@ describe("writeMcpConfig", () => {
     );
 
     const writeEffects = filterEffects(result.effects, "WriteFile");
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toEqual({
       command: "pragma",
       args: ["mcp"],
@@ -264,7 +288,7 @@ describe("Crush config (crush.json)", () => {
     expect(writeEffects.length).toBe(1);
     expect(writeEffects[0].path).toBe("/project/crush.json");
 
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcp.pragma).toEqual({
       type: "stdio",
       command: "pragma",
@@ -294,7 +318,7 @@ describe("Crush config (crush.json)", () => {
       }),
     );
 
-    const written = JSON.parse(
+    const written = readJson(
       filterEffects(result.effects, "WriteFile")[0].content,
     );
     expect(written.mcp.context7).toEqual({
@@ -356,7 +380,7 @@ describe("Oh My Pi config (.omp/mcp.json)", () => {
     expect(writeEffects.length).toBe(1);
     expect(writeEffects[0].path).toBe("/project/.omp/mcp.json");
 
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toEqual({
       command: "pragma",
       args: ["mcp"],
@@ -388,7 +412,7 @@ describe("Oh My Pi config (.omp/mcp.json)", () => {
       }),
     );
 
-    const written = JSON.parse(
+    const written = readJson(
       filterEffects(result.effects, "WriteFile")[0].content,
     );
     expect(written.mcpServers.context7).toEqual({ command: "context7-mcp" });
@@ -468,7 +492,7 @@ describe("Pi config (.pi/mcp.json)", () => {
     expect(writeEffects.length).toBe(1);
     expect(writeEffects[0].path).toBe("/project/.pi/mcp.json");
 
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toEqual({
       command: "pragma",
       args: ["mcp"],
@@ -498,7 +522,7 @@ describe("Pi config (.pi/mcp.json)", () => {
       }),
     );
 
-    const written = JSON.parse(
+    const written = readJson(
       filterEffects(result.effects, "WriteFile")[0].content,
     );
     expect(written.mcpServers.filesystem).toEqual({
@@ -555,7 +579,7 @@ describe("Junie config (.junie/mcp/mcp.json)", () => {
     expect(writeEffects.length).toBe(1);
     expect(writeEffects[0].path).toBe("/project/.junie/mcp/mcp.json");
 
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toEqual({
       command: "pragma",
       args: ["mcp"],
@@ -582,7 +606,7 @@ describe("Junie config (.junie/mcp/mcp.json)", () => {
       }),
     );
 
-    const written = JSON.parse(
+    const written = readJson(
       filterEffects(result.effects, "WriteFile")[0].content,
     );
     expect(written.mcpServers.context7).toEqual({
@@ -648,7 +672,7 @@ describe("removeMcpConfig", () => {
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects.length).toBe(1);
 
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toBeUndefined();
     expect(written.mcpServers.figma).toEqual({ command: "figma-mcp" });
   });
@@ -668,7 +692,7 @@ describe("removeMcpConfig", () => {
 
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects.length).toBe(1);
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written).toEqual({ otherField: true });
     expect("mcpServers" in written).toBe(false);
   });
@@ -685,7 +709,7 @@ describe("removeMcpConfig", () => {
       }),
     );
 
-    const written = JSON.parse(
+    const written = readJson(
       filterEffects(result.effects, "WriteFile")[0].content,
     );
     expect(written).toEqual({ theme: "dark" });
@@ -707,7 +731,7 @@ describe("removeMcpConfig", () => {
     );
 
     expect(filterEffects(result.effects, "DeleteFile")).toHaveLength(0);
-    const written = JSON.parse(
+    const written = readJson(
       filterEffects(result.effects, "WriteFile")[0].content,
     );
     expect(written).toEqual({});
@@ -749,7 +773,7 @@ describe("removeMcpConfig", () => {
     );
 
     expect(filterEffects(result.effects, "DeleteFile")).toHaveLength(0);
-    const written = JSON.parse(
+    const written = readJson(
       filterEffects(result.effects, "WriteFile")[0].content,
     );
     expect(written).toEqual({ mcpServers: { figma: { command: "f" } } });
@@ -985,7 +1009,7 @@ describe("scope-aware read/write (explicit band + platform)", () => {
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects.length).toBe(1);
     expect(writeEffects[0].path).toBe("/home/tester/.claude.json");
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toEqual({
       command: "pragma",
       args: ["mcp"],
@@ -1023,7 +1047,7 @@ describe("scope-aware read/write (explicit band + platform)", () => {
     );
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects[0].path).toBe("/home/tester/.claude.json");
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toBeUndefined();
     expect(written.mcpServers.keep).toEqual({ command: "k" });
   });
@@ -1059,7 +1083,7 @@ describe("writeMcpConfigTargets — shared-file multi-key write", () => {
     );
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects.length).toBe(1); // single read-modify-write
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.servers.pragma.command).toBe("pragma");
     expect(written.mcpServers.pragma.command).toBe("pragma");
   });
@@ -1080,7 +1104,7 @@ describe("writeMcpConfigTargets — shared-file multi-key write", () => {
     );
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects.length).toBe(1);
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.servers.existing).toEqual({ command: "other" });
     expect(written.servers.pragma).toEqual({ command: "pragma" });
     expect(written.mcpServers.pragma).toEqual({ command: "pragma" });
@@ -1114,7 +1138,7 @@ describe("writeMcpConfigTargets — shared-file multi-key write", () => {
       }),
     );
     const writeEffects = filterEffects(result.effects, "WriteFile");
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     // McpLocalConfig: type required, command is command+args as ONE string
     // array, no `args` key (additionalProperties: false rejects it).
     expect(written.mcp.pragma).toEqual({
@@ -1145,7 +1169,7 @@ describe("writeMcpConfigTargets — shared-file multi-key write", () => {
       }),
     );
     const writeEffects = filterEffects(result.effects, "WriteFile");
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(typeof written.mcpServers.pragma.env).toBe("object");
     expect(written.mcpServers.pragma.env).toEqual({});
   });
@@ -1188,7 +1212,7 @@ describe("SEC-1 — non-destructive JSONC handling", () => {
 
     const writeEffects = filterEffects(result.effects, "WriteFile");
     expect(writeEffects.length).toBe(1);
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.figma).toEqual({ command: "figma-mcp" });
     expect(written.mcpServers.pragma).toEqual({ command: "pragma" });
   });
@@ -1204,7 +1228,7 @@ describe("SEC-1 — non-destructive JSONC handling", () => {
     );
 
     const writeEffects = filterEffects(result.effects, "WriteFile");
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toEqual({ command: "pragma" });
     expect(written.otherField).toBe(true);
   });
@@ -1261,7 +1285,7 @@ describe("SEC-1 — non-destructive JSONC handling", () => {
     );
 
     const writeEffects = filterEffects(result.effects, "WriteFile");
-    const written = JSON.parse(writeEffects[0].content);
+    const written = readJson(writeEffects[0].content);
     expect(written.mcpServers.pragma).toEqual({ command: "pragma" });
     expect(written.otherField).toBe(true);
   });
