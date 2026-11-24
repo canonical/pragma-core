@@ -40,6 +40,7 @@ import {
 import { createLazyStore } from "../../kernel/runtime/store.js";
 import type { GlobalFlags, PragmaRuntime } from "../../kernel/runtime/types.js";
 import type { VerbSpec } from "../../kernel/spec/types.js";
+import { withNormalisedNotice } from "../../testing/helpers/parity.js";
 import { projectMcp } from "../../testing/helpers/projectMcp.js";
 import { discoverSkills } from "../skill/discover.js";
 import { collectStatus } from "./collectStatus.js";
@@ -1263,11 +1264,17 @@ describe("sources status CLI-json == MCP tool (PROTECTED)", () => {
     const mcpEnvelope = await mcp.callTool("sources_status");
     await mcp.cleanup();
 
-    expect(cliEnvelope).toEqual(mcpEnvelope);
     expect(cliEnvelope.ok).toBe(true);
     // Nothing built here, and the packs are the distribution's own — so the
     // embedded snapshot is what answers reads, and status says exactly that.
     expect((cliEnvelope.data as { store: string }).store).toBe("embedded");
+    // Equal except for the surface spelling of the next call inside
+    // `meta.notice` (a command here, a tool call over MCP) — normalise exactly
+    // that, as every parity case does, so a sentence missing from one surface
+    // still fails.
+    expect(withNormalisedNotice(cliEnvelope)).toEqual(
+      withNormalisedNotice(mcpEnvelope),
+    );
   });
 });
 

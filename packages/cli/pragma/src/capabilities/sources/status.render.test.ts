@@ -153,4 +153,29 @@ describe("sources status — the condensed form keeps the next step", () => {
     );
     expect(statusFormatters.llm(BUILT)).toContain("- Store: ready");
   });
+
+  it("the MCP machine surface names the next call when nothing is built", () => {
+    // The plain and llm forms carry the next step on the Store line; over MCP
+    // the JSON payload is bare, so the notice seam must add it, spelled as the
+    // tool call the agent would make.
+    const unavailable: SourcesStatusData = {
+      ...BUILT,
+      store: "unavailable",
+      contentHash: null,
+      sourceRef: null,
+      builtAt: null,
+      entityCount: null,
+    };
+    expect(statusFormatters.notice?.(unavailable, "mcp")).toContain(
+      "sources_update",
+    );
+    expect(statusFormatters.notice?.(unavailable, "cli")).toContain(
+      "pragma sources update",
+    );
+    expect(
+      statusFormatters.notice?.({ ...unavailable, store: "embedded" }, "mcp"),
+    ).toContain("sources_update");
+    // A ready store has nothing to be told to do.
+    expect(statusFormatters.notice?.(BUILT, "mcp")).toBeUndefined();
+  });
 });
