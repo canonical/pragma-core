@@ -19,7 +19,7 @@ Create `biome.json` in the root of your project and extend this configuration.
     "@canonical/biome-config"
   ],
   "files": {
-    "include": [
+    "includes": [
       "src",
       "*.json"
     ]
@@ -52,7 +52,11 @@ This configuration enables the following behavior:
 4. Disable version control integration: no interaction with Git
    1. Ignores `.gitignore`: Explicitly includes all files unless they are ignored manually or other files are included explicitly.
    2. Ignores Git add status: No need to stage files before running `biome check` or `biome format`.
-5. Ignores checking all files in `node_modules` and `dist` directories. Please note that if you specify your own ignored files using `files.ignore` in `biome.json`, you will override this behavior.
+5. Excludes files with idiomatic `files.includes` patterns:
+   1. `node_modules` is already ignored by Biome's defaults, so it is not listed.
+   2. Build output (`dist`, `storybook-static`, `coverage`, `.build-cache`) uses Biome's force-ignore form (`!!`), so these directories are never scanned or indexed.
+   3. Generated source (`*.gen.ts`) is a regular exclusion (`!`), so it stays indexed and can provide types to the module graph.
+   4. A consumer that sets its own `files.includes` replaces this array entirely (Biome 2 extension is not transitive for `files.includes`), so list every pattern it needs.
    
 ### Caveats
 #### Monorepos
