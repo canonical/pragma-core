@@ -119,12 +119,14 @@ export const unless = (condition: boolean, task: Task<void>): Task<void> =>
 
 /**
  * Choose between two tasks based on a condition.
+ * The two branches may carry different value types; the result is the union of
+ * whichever branch the condition selects.
  */
-export const ifElse = <A>(
+export const ifElse = <A, B>(
   condition: boolean,
   onTrue: Task<A>,
-  onFalse: Task<A>,
-): Task<A> => (condition ? onTrue : onFalse);
+  onFalse: Task<B>,
+): Task<A | B> => (condition ? onTrue : onFalse);
 
 /**
  * Run a task only if a condition task returns true.
@@ -136,12 +138,14 @@ export const whenM = (
 
 /**
  * Choose between two tasks based on a condition task.
+ * The two branches may carry different value types; the result is the union of
+ * whichever branch the condition task selects.
  */
-export const ifElseM = <A>(
+export const ifElseM = <A, B>(
   conditionTask: Task<boolean>,
   onTrue: Task<A>,
-  onFalse: Task<A>,
-): Task<A> =>
+  onFalse: Task<B>,
+): Task<A | B> =>
   flatMap(conditionTask, (condition) => ifElse(condition, onTrue, onFalse));
 
 // =============================================================================
@@ -292,12 +296,15 @@ export const timeout = <A>(task: Task<A>, _ms: number): Task<A> => {
 
 /**
  * Fold over a task, handling both success and failure.
+ * The two branches may produce different result types; the result is the union
+ * of whichever branch runs.
  */
-export const fold = <A, B>(
+export const fold = <A, B, C>(
   task: Task<A>,
   onSuccess: (a: A) => B,
-  onFailure: (error: TaskError) => B,
-): Task<B> => recover(map(task, onSuccess), (error) => pure(onFailure(error)));
+  onFailure: (error: TaskError) => C,
+): Task<B | C> =>
+  recover(map(task, onSuccess), (error) => pure(onFailure(error)));
 
 /**
  * Combine two tasks into a tuple.

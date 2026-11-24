@@ -102,16 +102,19 @@ export const ap = <A, B, E = Effect>(
 
 /**
  * Error recovery.
- * If the task fails, the handler can produce a new task.
+ * If the task fails, the handler can produce a new task, of the same value
+ * type or a different one — recovery to a fallback value of another type is a
+ * normal recovery. The result carries either the original value type or the
+ * handler's, which nothing downstream should assume is one in particular.
  *
  * Builds an internal `Recover` trampoline node; the interpreter routes a `Fail`
  * raised while evaluating the inner task to the handler on its explicit
  * handler-frame stack, so recovery is stack-safe like bind.
  */
-export const recover = <A, E = Effect>(
+export const recover = <A, B, E = Effect>(
   task: Task<A, E>,
-  handler: (error: TaskError) => Task<A, E>,
-): Task<A, E> => ({
+  handler: (error: TaskError) => Task<B, E>,
+): Task<A | B, E> => ({
   _tag: "Recover",
   inner: task,
   handler,
