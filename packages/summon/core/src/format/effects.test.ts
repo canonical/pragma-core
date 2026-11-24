@@ -67,7 +67,12 @@ const prompt: Effect = {
 const existsEff: Effect = { _tag: "Exists", path: "foo" };
 
 const mockGen = {
-  meta: { name: "test-gen", description: "A test generator", version: "1.0.0" },
+  meta: {
+    name: "test-gen",
+    displayName: "test-gen",
+    description: "A test generator",
+    version: "1.0.0",
+  },
   prompts: [
     { name: "name", message: "Component name", type: "text" as const },
     {

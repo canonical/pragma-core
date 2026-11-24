@@ -18,6 +18,11 @@
       "$comment": "CODE-CARRIED, not data: a pure function `(answers) => Task<void>`. Present on every real generator; absent from any JSON projection of one.",
       "description": "Declared here for completeness only — a JSON document cannot carry it.",
       "type": "null"
+    },
+    "reconcileAnswers": {
+      "$comment": "CODE-CARRIED, not data: a pure function `(answers) => answers`. Optional; absent from any JSON projection of one.",
+      "description": "Declared here for completeness only — a JSON document cannot carry it.",
+      "type": "null"
     }
   },
   "$defs": {
