@@ -70,7 +70,7 @@ const fr: Record<MessageKey, MessageValue> = {
     "Un composant simple généré avec l'application. Il est livré avec une story Storybook (`ExampleComponent.stories.tsx`) et un test : le point de départ de vos propres composants.",
   "home.exampleGreeting": "Bonjour de la part d'ExampleComponent",
   "home.streamingBody":
-    "`LazyComponent` lit une requête simulée et retardée avec `use()` de React 19 ; il se met donc en suspens. Dans cette limite `Suspense`, le serveur envoie d'abord la structure de la page, affiche le contenu de repli, puis y insère le contenu résolu, sans aller-retour complet côté client.",
+    "`LazyComponent` lit une requête simulée et retardée avec `use()` de React 19 ; il se met donc en suspens. Dans cette limite `Suspense`, le contenu de repli s'affiche d'abord, puis le contenu résolu est inséré une fois prêt.",
   "home.streamed": "Diffusé après un délai",
   "catalog.intro":
     "Cette page présente la couche de données Relay. `ProductList` lance un `useLazyLoadQuery`, chaque `ProductCard` lit son propre `useFragment`, et l'environnement résout les opérations avec le schéma simulé local de `src/relay/schema.ts`. Définissez `VITE_GRAPHQL_URL` pour le diriger vers un vrai point d'accès.",

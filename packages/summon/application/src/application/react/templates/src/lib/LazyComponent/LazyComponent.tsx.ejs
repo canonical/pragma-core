@@ -7,14 +7,13 @@ import type { MessageKey } from "#i18n/en.js";
 <% } -%>
 
 /**
- * Demonstrates streaming SSR with Suspense.
+ * Demonstrates rendering a suspended subtree with React 19's `use()`.
  *
  * The component reads a promise with React 19's `use()`, which suspends
- * rendering until the promise resolves. When rendered inside a `<Suspense>`
- * boundary on a streaming server (`renderToPipeableStream` /
- * `renderToReadableStream`), the server flushes the surrounding shell
- * immediately and streams this content in once the data is ready — so the
- * fallback is shown first, then replaced without a full client round-trip.
+ * rendering until the promise resolves. Rendered inside a `<Suspense>`
+ * boundary, the fallback shows first and the content replaces it once the
+ * data is ready — on the SSR arm this streams over the wire without a full
+ * client round-trip.
  *
  * Here the "fetch" is synthetic: a promise that resolves after a short delay.
  * Replace `createDelayedData` with a real data source in your own routes.

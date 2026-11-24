@@ -1,7 +1,8 @@
 /**
- * Server-side negotiation and catalog integrity, exercised through the
+ * Locale negotiation and catalog integrity, exercised through the
  * `@canonical/i18n-core` APIs with this app's real configuration — the same
- * calls the dev servers, the compiled renderer, and the client entry make.
+ * calls the client entry makes (and, on the SSR arm, the servers and the
+ * compiled renderer too).
  * (Ported from the former app-local `src/lib/i18n` seam.)
  */
 import {
