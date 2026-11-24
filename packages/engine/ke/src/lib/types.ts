@@ -141,9 +141,11 @@ export interface StoreConfig {
 
   /**
    * Plugin chain. Plugins are called in array order for each lifecycle event.
-   * See the Plugin interface for hook details.
+   * Each plugin may expose its own API via `onReady`; the array is typed over
+   * `unknown` so a plugin that returns a typed API and one that returns nothing
+   * coexist in the same chain.
    */
-  plugins?: Plugin[];
+  plugins?: Plugin<unknown>[];
 
   /**
    * Namespace prefix map. These prefixes are prepended as PREFIX declarations

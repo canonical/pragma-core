@@ -455,7 +455,7 @@ class KeStore implements Store {
   private oxStore: OxStore;
   private config: StoreConfig;
   private _prefixes: PrefixMap;
-  private plugins: Plugin[];
+  private plugins: Plugin<unknown>[];
   private oxNamedNode: (value: string) => OxNamedNode;
   private pluginApis: Map<string, unknown>;
 
@@ -463,7 +463,7 @@ class KeStore implements Store {
     oxStore: OxStore,
     config: StoreConfig,
     prefixes: PrefixMap,
-    plugins: Plugin[],
+    plugins: Plugin<unknown>[],
     oxNamedNode: (value: string) => OxNamedNode,
   ) {
     this.oxStore = oxStore;
