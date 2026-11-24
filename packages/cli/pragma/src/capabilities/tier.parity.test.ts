@@ -15,6 +15,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { compilePack } from "../kernel/packs/compile.js";
 import type { LookupOutput } from "../kernel/packs/resolveEntity.js";
 import type { PackPage } from "../kernel/packs/types.js";
+import { distributionSource } from "../kernel/packs/types.js";
 import { verbKey } from "../kernel/packs/uniqueness.js";
 import { DEFAULT_PREFIX_MAP } from "../kernel/render/prefixes.js";
 import type { PragmaRuntime } from "../kernel/runtime/types.js";
@@ -55,7 +56,12 @@ ds:modal a ds:Component ; ds:name "Modal" ; ds:tier ds:global .
 ds:lxdPanel a ds:Component ; ds:name "LXD Panel" ; ds:tier ds:apps_lxd .
 `;
 
-const verbs = () => compilePack(tierPack, "pragma.conf.ts", DEFAULT_PREFIX_MAP);
+const verbs = () =>
+  compilePack(
+    tierPack,
+    distributionSource("pragma.conf.ts"),
+    DEFAULT_PREFIX_MAP,
+  );
 const verb = (label: string) =>
   verbs().find((v) => verbKey(v.path) === `tier ${label}`) as VerbSpec;
 

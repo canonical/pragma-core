@@ -105,9 +105,10 @@ describe("graphpack round-trip (PROTECTED)", () => {
         "SELECT (COUNT(*) AS ?n) WHERE { ?s ?p ?o }" as never,
       );
       expect(count.type).toBe("select");
-      expect(
-        Number((count as { bindings: { n: string }[] }).bindings[0]?.n),
-      ).toBeGreaterThan(0);
+      if (count.type !== "select") {
+        throw new Error("expected a select result");
+      }
+      expect(Number(count.bindings[0]?.n)).toBeGreaterThan(0);
 
       // compileFromExtraction produced a working schema.
       expect(session.schema.getType("Component")).toBeDefined();

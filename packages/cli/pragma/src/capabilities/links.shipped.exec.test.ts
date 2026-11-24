@@ -24,7 +24,6 @@ import {
   distributionSource,
   isNestedExpand,
   type NounLookups,
-  type PackCellLink,
   type PackDefinition,
   type PackEntity,
   type PackList,
@@ -72,25 +71,25 @@ const lookupCellsOf = (stories: Stories): LookupCell[] =>
   [...stories].flatMap(([noun, story]) => {
     const lookup = story.lookup;
     if (!lookup) return [];
-    const named = (cell: PackCellLink): cell is { noun: string } =>
-      cell.noun !== undefined;
     return [
       ...[...(lookup.fields ?? []), ...(lookup.sections ?? [])]
-        .filter(named)
-        .map((cell) => ({ noun, names: cell.noun, field: cell.name })),
+        .map((cell) => {
+          if (cell.noun === undefined) return null;
+          return { noun, names: cell.noun, field: cell.name };
+        })
+        .filter((cell): cell is LookupCell => cell !== null),
       ...(lookup.expand ?? []).flatMap((expand) =>
-        expand.select.flatMap((entry) =>
-          isNestedExpand(entry) || !named(entry)
-            ? []
-            : [
-                {
-                  noun,
-                  names: entry.noun,
-                  expand: expand.name,
-                  field: entry.name,
-                },
-              ],
-        ),
+        expand.select.flatMap((entry) => {
+          if (isNestedExpand(entry) || entry.noun === undefined) return [];
+          return [
+            {
+              noun,
+              names: entry.noun,
+              expand: expand.name,
+              field: entry.name,
+            },
+          ];
+        }),
       ),
     ];
   });

@@ -15,6 +15,7 @@ import { describe, expect, it } from "vitest";
 import { compilePack } from "../kernel/packs/compile.js";
 import { parsePackDefinition } from "../kernel/packs/schema.js";
 import { storyIssues } from "../kernel/packs/storyRules.js";
+import { distributionSource } from "../kernel/packs/types.js";
 import { DEFAULT_PREFIX_MAP } from "../kernel/render/prefixes.js";
 import type { VerbSpec } from "../kernel/spec/types.js";
 import { VOCABULARY } from "../kernel/vocabulary.js";
@@ -152,7 +153,11 @@ describe("the distribution's declared stories (PROTECTED)", () => {
     // whatever the docblocks say.
     for (const [noun, story] of declaredStories) {
       const registered = capabilities.find((entry) => entry.name === noun);
-      const compiled = compilePack(story, "pragma.conf.ts", DEFAULT_PREFIX_MAP);
+      const compiled = compilePack(
+        story,
+        distributionSource("pragma.conf.ts"),
+        DEFAULT_PREFIX_MAP,
+      );
       // Two halves, because a spec carries closures a fresh compile cannot
       // reproduce by identity. (1) SHAPE: recompiling the story alone must
       // yield the same verbs, declared the same way — an extra verb or an extra

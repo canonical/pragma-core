@@ -206,6 +206,11 @@ async function rows(
   return [...(await page(label, params)).rows];
 }
 
+/** Narrow a possibly-undefined string to a present one. */
+function isDefinedString(value: string | undefined): value is string {
+  return value !== undefined;
+}
+
 async function lookupAll(...names: string[]): Promise<LookupOutput> {
   return (await verb("lookup").run({ name: names }, rt)) as LookupOutput;
 }
@@ -236,7 +241,10 @@ describe("variable list — the platform names, and what they stand for (PROTECT
       "typography-weight-semi-bold",
       "typography-weight-semiBold",
     ]);
-    expect(names.some((name) => name.startsWith("--"))).toBe(false);
+    // Every row always carries `name`, so the values are all present strings.
+    expect(
+      names.filter(isDefinedString).some((name) => name.startsWith("--")),
+    ).toBe(false);
   });
 
   it("reads the platform out of the IRI base rather than an assertion", async () => {
@@ -432,7 +440,7 @@ describe("variable chain — the transitive walk (PROTECTED)", () => {
 describe("variable — the name literal is the whole grammar (PROTECTED)", () => {
   it("every published name resolves through lookup, verbatim", async () => {
     const names = (await rows("list")).map((row) => row.name);
-    const out = await lookupAll(...names);
+    const out = await lookupAll(...names.filter(isDefinedString));
     expect(out.errors).toEqual([]);
     expect(out.results.map((r) => (r as { name: string }).name).sort()).toEqual(
       [...names].sort(),

@@ -210,6 +210,7 @@ describe("the setup plan renders as one table", () => {
           action: "skip",
           detail: "no AI harness in this project keeps a per-project config",
           reason: "no AI harness in this project keeps a per-project config",
+          summary: "no AI harness in this project keeps a per-project config",
           selected: false,
         },
       ],

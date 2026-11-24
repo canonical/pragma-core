@@ -193,7 +193,7 @@ function helpOf(
   // summon's shared renderer never colours, so its bytes are unaffected.
   // FORCE_COLOR is removed rather than merely overridden — Bun warns on
   // stderr when it sees both, and this helper folds stderr into the text.
-  const env = { ...process.env, NO_COLOR: "1" };
+  const env: NodeJS.ProcessEnv = { ...process.env, NO_COLOR: "1" };
   delete env.FORCE_COLOR;
   const result =
     bin === "pragma"

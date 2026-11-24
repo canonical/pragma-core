@@ -14,6 +14,7 @@
  * goldens stay deterministic; the color tests opt a level back in explicitly.
  */
 
+import type { ColorSupportLevel } from "chalk";
 import chalk from "chalk";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { doctorFormatters } from "./doctor.render.js";
@@ -89,7 +90,7 @@ function withStdoutTty(value: boolean | undefined, body: () => void): void {
   }
 }
 
-let prevLevel: number;
+let prevLevel: ColorSupportLevel;
 beforeAll(() => {
   prevLevel = chalk.level;
 });

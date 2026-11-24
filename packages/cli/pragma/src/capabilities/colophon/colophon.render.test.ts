@@ -8,6 +8,7 @@
  * "human-styled / condensed-for-llm" render model in one file.
  */
 
+import type { ColorSupportLevel } from "chalk";
 import chalk from "chalk";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { colophonFormatters } from "./colophon.render.js";
@@ -32,7 +33,7 @@ const FIXTURE: ColophonData = {
   ],
 };
 
-let prevLevel: number;
+let prevLevel: ColorSupportLevel;
 beforeAll(() => {
   prevLevel = chalk.level;
 });

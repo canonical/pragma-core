@@ -7,8 +7,9 @@ import { infoModule } from "../../capabilities/info/index.js";
 import { completeVerb } from "../../capabilities/meta/complete.verb.js";
 import { sourcesModule } from "../../capabilities/sources/index.js";
 import { executeVerb } from "../project/cli/dispatch.js";
-import type { GlobalFlags, VerbSpec } from "../spec/types.js";
+import type { VerbSpec } from "../spec/types.js";
 import { bootRuntime } from "./boot.js";
+import type { GlobalFlags } from "./types.js";
 
 const NO_MUT = { dryRun: false, undo: false, yes: false };
 const FLAGS: GlobalFlags = {

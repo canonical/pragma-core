@@ -8,11 +8,12 @@
  * own chalk styling. Also pins that clean Markdown still styles as before.
  */
 
+import type { ColorSupportLevel } from "chalk";
 import chalk from "chalk";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { renderMarkdownToTerminal } from "./markdownTerminal.js";
 
-let prevLevel: number;
+let prevLevel: ColorSupportLevel;
 beforeAll(() => {
   prevLevel = chalk.level;
   chalk.level = 0;

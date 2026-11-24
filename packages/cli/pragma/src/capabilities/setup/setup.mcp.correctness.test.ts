@@ -81,9 +81,11 @@ const cursorProject = (): { cwd: string; config: string } => {
   return { cwd, config: join(cwd, ".cursor", "mcp.json") };
 };
 
-const install = (cwd: string, params = LOCAL) =>
+type InstallParams = { global?: boolean; local?: boolean };
+
+const install = (cwd: string, params: InstallParams = LOCAL) =>
   executeVerb(mcpVerb, params, YES, bootRuntime(FLAGS, cwd));
-const undo = (cwd: string, params = LOCAL) =>
+const undo = (cwd: string, params: InstallParams = LOCAL) =>
   executeVerb(mcpVerb, params, UNDO, bootRuntime(FLAGS, cwd));
 
 // =============================================================================

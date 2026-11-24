@@ -236,6 +236,7 @@ describe("plain list table contract (headers, rectangular grid, cell discipline)
       dim: (t) => t,
       cyan: (t) => t,
       green: (t) => t,
+      red: (t) => t,
       yellow: (t) => t,
     };
     const lines = renderListPlain(widgets, options, TTY_CONTEXT, tagged).split(
@@ -270,6 +271,7 @@ describe("lookup beautify (TTY style seam)", () => {
       dim: (t) => `D(${t})`,
       cyan: (t) => `C(${t})`,
       green: (t) => t,
+      red: (t) => t,
       yellow: (t) => t,
     };
     const lines = renderLookupPlain(

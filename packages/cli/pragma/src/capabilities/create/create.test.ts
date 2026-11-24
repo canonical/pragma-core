@@ -832,9 +832,11 @@ describe("declared generator bindings (PROTECTED)", () => {
     // rejected — the hazard this names. (That every value resolves is the
     // test above; the derivation shape is pinned in the projection describe.)
     expect(framework?.kind).toBe("enum");
-    const values = (framework as { values: readonly string[] }).values;
-    expect(values.length).toBeGreaterThan(0);
-    expect(framework?.default).toBeUndefined();
+    if (framework === undefined || framework.kind !== "enum") {
+      throw new Error("expected an enum framework param");
+    }
+    expect(framework.values.length).toBeGreaterThan(0);
+    expect(framework.default).toBeUndefined();
   });
 
   it("create surfaces exactly the five declared nouns", () => {
