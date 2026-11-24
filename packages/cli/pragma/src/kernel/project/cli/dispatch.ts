@@ -164,10 +164,10 @@ export function extractParams(
  *
  * @note Impure — reads stdout's capture state for the render context.
  */
-function renderData(
-  verb: VerbSpec,
+function renderData<R>(
+  verb: VerbSpec<Record<string, unknown>, R>,
   flags: GlobalFlags,
-  data: unknown,
+  data: R,
   meta: Record<string, unknown>,
 ): DispatchOutcome {
   if (flags.format === "json") {
@@ -315,8 +315,8 @@ function renderError(error: PragmaError, flags: GlobalFlags): DispatchOutcome {
  * @returns The dispatch outcome.
  * @note Impure — a mutation's node/undo interpreter touches the filesystem.
  */
-export async function executeVerb(
-  verb: VerbSpec,
+export async function executeVerb<R>(
+  verb: VerbSpec<Record<string, unknown>, R>,
   params: Record<string, unknown>,
   mutation: MutationFlags,
   runtime: PragmaRuntime,
@@ -366,9 +366,7 @@ export async function executeVerb(
           : (message: string) => process.stderr.write(`${message}\n`),
     };
     const task = await Promise.resolve(
-      verb.run(params, mutationRuntime) as
-        | Task<unknown>
-        | Promise<Task<unknown>>,
+      verb.run(params, mutationRuntime) as Task<R> | Promise<Task<R>>,
     );
     if (mutation.dryRun) {
       // The HONEST preview (PR7): reads hit the real filesystem, writes are
@@ -461,7 +459,7 @@ export async function executeVerb(
     const exec = mutationRuntime.exec ?? {};
     const onSigint = (): void => controller.abort();
     process.once("SIGINT", onSigint);
-    let value: unknown;
+    let value: R;
     try {
       value = await runTask(task, { onLog: logSink(flags), ...exec });
     } finally {
@@ -471,9 +469,7 @@ export async function executeVerb(
     return renderData(verb, flags, value, {});
   }
 
-  const data = await Promise.resolve(
-    verb.run(params, runtime) as Promise<unknown>,
-  );
+  const data = await (verb.run(params, runtime) as Promise<R>);
   return renderData(verb, flags, data, storeMeta(session));
 }
 
