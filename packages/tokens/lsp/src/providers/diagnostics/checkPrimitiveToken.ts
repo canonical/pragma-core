@@ -11,7 +11,7 @@ export default function checkPrimitiveToken(
 ): void {
   const severity = ctx.config.diagnostics.get("css/primitive-token");
   if (!severity) return;
-  if (!ctx.token || ctx.token.provenance.kind !== "artifact") return;
+  if (ctx.token?.provenance.kind !== "artifact") return;
   if (ctx.token.tier !== "primitive") return;
   if (
     ctx.token.cssOutputFile &&
