@@ -370,9 +370,8 @@ const harnesses: readonly HarnessDefinition[] = [
     name: "VSCodium",
     version: "*",
     scope: "both",
-    // Per the owner, 2026-09-16: VSCodium is an MCP client row, the same shape
-    // as VS Code's. VSCodium is upstream VS Code with the branding and
-    // telemetry stripped, so it reads the same per-user `mcp.json` under the
+    // VSCodium is an MCP client row, the same shape as VS Code's. VSCodium is
+    // upstream VS Code with the branding and telemetry stripped, so it reads the same per-user `mcp.json` under the
     // same `servers` key — only the product directory (`VSCodium`), the
     // dataFolderName (`.vscode-oss`) and the CLI (`codium`) differ.
     //

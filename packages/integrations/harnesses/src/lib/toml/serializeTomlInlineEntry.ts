@@ -1,3 +1,5 @@
+import { formatTomlValue } from "./toml-values.js";
+
 /**
  * One MCP entry as a SINGLE LINE of TOML — the dotted-key inline-table
  * spelling of exactly what {@link serializeTomlSection} writes as a table.
@@ -9,11 +11,7 @@
  * `formatTomlValue` — the formatter the file writer uses — so the two
  * spellings can never disagree about how a string, a number or an array is
  * written.
- */
-
-import { formatTomlValue } from "./toml-values.js";
-
-/**
+ *
  * @param sectionPrefix - The server-map key (e.g. `mcp_servers`).
  * @param name - The server entry name.
  * @param fields - The already-serialized entry fields.
