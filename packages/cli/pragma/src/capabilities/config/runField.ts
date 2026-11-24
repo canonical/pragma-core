@@ -7,7 +7,8 @@
  * and the MCP zod schema already reject a non-member before `run`, but a
  * direct call (a test, a future caller) must not slip an invalid value to
  * disk. Clearing a field is its own verb ({@link runUnset}); the values that
- * used to double as clear-markers are refused with the verb named.
+ * used to double as clear-markers, and an empty value (which would mean the
+ * same thing), are refused with the verb named.
  */
 
 import { map, type Task } from "@canonical/task";
@@ -32,7 +33,10 @@ export function runField(
 ): Task<ConfigFieldResult> {
   const value = String(params[spec.positional] ?? "");
 
-  if (spec.kind === "string" && RESERVED_CLEAR_VALUES.includes(value)) {
+  if (
+    spec.kind === "string" &&
+    (value === "" || RESERVED_CLEAR_VALUES.includes(value))
+  ) {
     throw PragmaError.invalidInput(spec.field, value, {
       recovery: callRecovery(
         { verb: "config unset", params: { key: spec.field } },
