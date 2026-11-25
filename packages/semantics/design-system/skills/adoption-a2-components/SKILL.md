@@ -234,17 +234,42 @@ notation in full.
 **A block being in the graph does not mean the package exports it.** The graph
 records what the design system has DOCUMENTED; the package ships what has been
 BUILT, and the two run ahead of each other in both directions. So before you
-swap a type, confirm the named export in the package you installed:
+swap a type, first ask which library implements the block and where:
 
 ```bash
-node -e "console.log(Object.keys(require('@canonical/react-ds-global')))" | tr ',' '\n' | grep -i '<Name>'
+pragma implementation list --library @canonical/react-ds-global --search <Name>   # MCP: implementation_list
 ```
 
-If the export is absent, the block is documented but not available — file the
-gap and leave the existing markup in place. Do not infer availability from a
-Storybook story either: a story can exist for a block that ships no
-implementation and no export, so a story CORROBORATES an export you have
-already confirmed, and never substitutes for it.
+The list records source files carrying an `@implements` annotation, not the
+package's exports, and carries no status column. Two limits follow. A
+stories-only entry can appear: `Heading` lists a source but ships no export,
+because its recorded implementation is `Heading.stories.tsx`. A work-in-progress
+entry is not flagged: `Announcement` lists beside the stable rows, and only the
+`_work_in_progress/` segment in its source path tells you it is one.
+
+A row is not an export, so confirm the named export in the package you
+installed. The package is ESM and imports CSS, so `require()` throws
+`ERR_UNKNOWN_FILE_EXTENSION` on a `.css` file; read its type declarations
+instead, which are a barrel of re-exports:
+
+```bash
+grep -rn "export[^;]*\b<Name>\b" node_modules/@canonical/react-ds-global/dist/types
+```
+
+Read a match by its path, not by its count. A match means the name is
+exported; the folder in the matching path says from which bucket:
+`lib/component/`, `lib/group/`, `lib/pattern/` and `lib/subcomponent/`
+are stable, while `lib/_work_in_progress/` — the same segment that flags a
+list row — is the work-in-progress bucket, re-exported by the barrel beside
+the stable ones. A work-in-progress export is real but can change or move
+without notice: swap it in only when the team accepts that, and name the
+bucket in the summary.
+
+No match at all — `Heading` has none — means the block is documented but not
+available: file the gap and leave the existing markup in place. Do not infer
+availability from a Storybook story either: a story can exist for a block that
+ships no implementation and no export, so a story CORROBORATES an export you
+have already confirmed, and never substitutes for it.
 
 If the name has no row and the lookup errors, the block may be a Group — `block list`/`block lookup` cover no groups; the name query above returns its IRI for `pragma graph inspect <IRI>`.
 Run it before calling a type uncovered: `Cards` and `KeyboardKeys` are groups, and both
