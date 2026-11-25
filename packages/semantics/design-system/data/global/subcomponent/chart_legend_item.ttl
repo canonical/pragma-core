@@ -10,7 +10,7 @@ ds:global.subcomponent.chart_legend_item a ds:Subcomponent;
     ds:usage "";
     ds:guidelines "";
     ds:tier ds:global;
-    ds:parentComponent ds:global.component.data_tooltip;
+    ds:parentComponent ds:global.component.tooltip_data;
     ds:hasTokenBinding [
         a ds:TokenBinding;
         ds:viaBlock ds:global.subcomponent.chart_legend_item;

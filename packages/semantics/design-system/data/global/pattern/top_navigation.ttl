@@ -2,8 +2,8 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:global.pattern.navigation a ds:Pattern;
-    ds:name "Navigation";
+ds:global.pattern.top_navigation a ds:Pattern;
+    ds:name "TopNavigation";
     ds:summary "";
     ds:anatomyDsl "";
     ds:anatomyClassic "";

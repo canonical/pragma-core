@@ -2,8 +2,8 @@
 @prefix anatomy: <https://anatomy.canonical.com/>.
 @prefix dt: <https://dt.canonical.com/>.
 
-ds:global.component.data_tooltip a ds:Component;
-    ds:name "DataTooltip";
+ds:global.component.tooltip_data a ds:Component;
+    ds:name "TooltipData";
     ds:summary "The data tooltip is a tooltip designed specifically for data visualisation. \n\nIts primary purpose is to reveal values when users interact with charts, graphs, maps, or other data-driven elements. \n\nIt is used for displaying metrics on hover, clarifying data points that cannot be fully shown in the visual itself. \n\nThis variant helps users interpret information accurately without cluttering the interface with labels that are always visible.\n\nRelated to [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) and [TooltipWrapper](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-69TNyYt7M9)";
     ds:anatomyDsl "---\n# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form\n# A notation migration of the previous DSL (the Coda block \"Tooltip.Data\"):\n# structure and bindings kept, values migrated, dangling uri: references\n# repaired. react-ds-global implements one Tooltip — the chip bound in\n# ds:global.component.tooltip — and no data variant.\nnode:\n  uri: global.component.data_tooltip\n  edges:\n    - node:\n        role: surface\n        styles:\n          # Was `color/surface/tooltip`; no symbol declares\n          # color.background.tooltip, so this is the declared background the\n          # surface correspondence lands on. (The live Tooltip reads the\n          # surface channel: [surface.color.background, color.background].)\n          appearance.background: color.background\n          # Was `size.max.width: size/tooltip/data/max` — dropped, since no\n          # dimension symbol corresponds to it.\n          layout.type: flex   # was stack\n          layout.direction: column   # was vertical\n          layout.align: start\n          # Was `spacing.internal.vertical|horizontal: dimension/100`; the\n          # roster's keys are per side, so the two axes become four.\n          spacing.internal.block.start: dimension.100\n          spacing.internal.block.end: dimension.100\n          spacing.internal.inline.start: dimension.100\n          spacing.internal.inline.end: dimension.100\n        edges:\n          - node:\n              # Was `ds:global.subcomponent:TooltipHeading`, which names no\n              # subject, so the position is an anonymous role.\n              role: heading\n              styles:\n                # Was `typography.color: color/text/onTooltip` — dropped, since\n                # no symbol declares color.text.onTooltip.\n                # Was `typography.size: text/secondary/strong`; the declared\n                # counterpart is the bold text-secondary composite, which\n                # binds typography.font.\n                typography.font: typography.text.secondary.bold\n            relation:\n              cardinality: \"0..1\"\n              slotName: heading\n          - node:\n              # Was `ds:global.subcomponent:ChartLegend`; the real subject is\n              # global.subcomponent.chart_legend.\n              uri: global.subcomponent.chart_legend\n            relation:\n              cardinality: \"1\"\n              slotName: default\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        # Was `ds:global.subcomponent:TooltipArrow`, which names no subject, so\n        # the position is an anonymous role.\n        role: arrow\n        styles:\n          # Was `color/surface/tooltip`, as above.\n          appearance.background: color.background\n      relation:\n        cardinality: \"0..1\"\n        slotName: arrow";
     ds:anatomyClassic "**Data**\n\n**https://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=12793-1400**\n\n1. Container\n\n8 px vertical and 16 px horizontal padding, no arrow. Show cursor toggles the illustrative pointer in Figma.As above.\n\n1. Chart legendText\n\nDisplays the data label and value (e.g. Ubuntu Server - 40%). One row per series: marker, label, value. Values right-align. The optional heading sits on the label keyline (14 px in). The hovered series shows as highlighted (bold label and value).\n\n1. Cursor-follow behaviour \n\nTooltip tracks pointer position with pre-defined offsets. Offset 16 px right and 8 px down from the pointer.\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=12793-1467";
@@ -86,7 +86,7 @@ ds:global.component.data_tooltip a ds:Component;
     ];
     ds:hasTokenBinding [
         a ds:TokenBinding;
-        ds:viaBlock ds:global.component.data_tooltip;
+        ds:viaBlock ds:global.component.tooltip_data;
         ds:node "$root/surface";
         anatomy:styleKey "appearance.background";
         anatomy:styleState "default";
@@ -94,7 +94,7 @@ ds:global.component.data_tooltip a ds:Component;
         ds:consumesSymbol dt:color.background
     ], [
         a ds:TokenBinding;
-        ds:viaBlock ds:global.component.data_tooltip;
+        ds:viaBlock ds:global.component.tooltip_data;
         ds:node "$root/surface";
         anatomy:styleKey "spacing.internal.block.start";
         anatomy:styleState "default";
@@ -102,7 +102,7 @@ ds:global.component.data_tooltip a ds:Component;
         ds:consumesSymbol dt:dimension.100
     ], [
         a ds:TokenBinding;
-        ds:viaBlock ds:global.component.data_tooltip;
+        ds:viaBlock ds:global.component.tooltip_data;
         ds:node "$root/surface";
         anatomy:styleKey "spacing.internal.block.end";
         anatomy:styleState "default";
@@ -110,7 +110,7 @@ ds:global.component.data_tooltip a ds:Component;
         ds:consumesSymbol dt:dimension.100
     ], [
         a ds:TokenBinding;
-        ds:viaBlock ds:global.component.data_tooltip;
+        ds:viaBlock ds:global.component.tooltip_data;
         ds:node "$root/surface";
         anatomy:styleKey "spacing.internal.inline.start";
         anatomy:styleState "default";
@@ -118,7 +118,7 @@ ds:global.component.data_tooltip a ds:Component;
         ds:consumesSymbol dt:dimension.100
     ], [
         a ds:TokenBinding;
-        ds:viaBlock ds:global.component.data_tooltip;
+        ds:viaBlock ds:global.component.tooltip_data;
         ds:node "$root/surface";
         anatomy:styleKey "spacing.internal.inline.end";
         anatomy:styleState "default";
@@ -126,7 +126,7 @@ ds:global.component.data_tooltip a ds:Component;
         ds:consumesSymbol dt:dimension.100
     ], [
         a ds:TokenBinding;
-        ds:viaBlock ds:global.component.data_tooltip;
+        ds:viaBlock ds:global.component.tooltip_data;
         ds:node "$root/surface/heading";
         anatomy:styleKey "typography.font";
         anatomy:styleState "default";
@@ -222,7 +222,7 @@ ds:global.component.data_tooltip a ds:Component;
         ds:consumesSymbol dt:color.palette.gray.180
     ], [
         a ds:TokenBinding;
-        ds:viaBlock ds:global.component.data_tooltip;
+        ds:viaBlock ds:global.component.tooltip_data;
         ds:node "$root/arrow";
         anatomy:styleKey "appearance.background";
         anatomy:styleState "default";

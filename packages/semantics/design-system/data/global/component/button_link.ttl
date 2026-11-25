@@ -4,7 +4,7 @@
 
 ds:global.component.button_link a ds:Component;
     ds:name "ButtonLink";
-    ds:summary "";
+    ds:summary "reference: [https://github.com/canonical/design-system/discussions/8](https://github.com/canonical/design-system/discussions/8)";
     ds:anatomyDsl "";
     ds:anatomyClassic "";
     ds:usage "";
