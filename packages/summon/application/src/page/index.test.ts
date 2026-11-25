@@ -211,9 +211,10 @@ describe("page generator against the filesystem", () => {
       domainGenerator.generate({ domainName: "billing" }),
       wrapperGenerator.generate({ wrapperName: "settings" }),
     ]) {
-      await runTask(task, { cwd });
-      const undo = await runUndo(task, { cwd });
-      expect(undo.undoCount).toBe(0);
+      await expect(runTask(task, { cwd })).rejects.toMatchObject({
+        code: GENERATOR_INVALID_ANSWER,
+        message: expect.stringContaining("--framework svelte"),
+      });
     }
     expect(readFileSync(pageFile(), "utf8")).toBe("user content\n");
     expect(existsSync(path.join(cwd, "src/domains/billing"))).toBe(false);

@@ -1,8 +1,9 @@
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import type {
-  GeneratorDefinition,
-  PromptDefinition,
+import {
+  GENERATOR_INVALID_ANSWER,
+  type GeneratorDefinition,
+  type PromptDefinition,
 } from "@canonical/summon-core";
 import {
   exists,
@@ -11,7 +12,6 @@ import {
   info,
   mkdir,
   sequence_,
-  warn,
   writeFile,
 } from "@canonical/task";
 import { toCamelCase, toTitleCase } from "@canonical/utils";
@@ -133,7 +133,11 @@ Add more pages with: summon page <domain>/<name>`,
     }
     return flatMap(exists("svelte.config.js"), (svelte) =>
       svelte
-        ? warn("This is a SvelteKit application; select --framework svelte.")
+        ? fail({
+            code: GENERATOR_INVALID_ANSWER,
+            message:
+              "This is a SvelteKit application; run again with --framework svelte.",
+          })
         : flatMap(exists(domainDir), (present) =>
             present
               ? fail({

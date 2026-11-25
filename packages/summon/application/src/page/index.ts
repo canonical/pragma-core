@@ -11,7 +11,6 @@ import {
   flatMap,
   info,
   sequence_,
-  warn,
   writeFile,
 } from "@canonical/task";
 import { toCamelCase, toPascalCase, toTitleCase } from "@canonical/utils";
@@ -244,7 +243,11 @@ Requires the domain to exist and refuses an existing page file.
     }
     return flatMap(exists("svelte.config.js"), (svelte) =>
       svelte
-        ? warn("This is a SvelteKit application; select --framework svelte.")
+        ? fail({
+            code: GENERATOR_INVALID_ANSWER,
+            message:
+              "This is a SvelteKit application; run again with --framework svelte.",
+          })
         : flatMap(exists(routesFile), (domainPresent) =>
             !domainPresent
               ? fail({

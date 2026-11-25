@@ -6,8 +6,8 @@ SvelteKit's `src/routes` file-based routing, `+layout.svelte` layouts and
 `200.html` fallback and no server actions. Optional contact forms are native
 demonstrations, the shell uses Canonical Svelte layouts, and i18n uses a
 per-layout locale source. The page, domain and wrapper generators accept an
-explicit `--framework svelte`; their default React mode warns and does nothing
-in a SvelteKit application, including on undo.
+explicit `--framework svelte`; their default React mode refuses to run in a
+SvelteKit application, including on undo, and names the flag to pass.
 The first Svelte release omits GraphQL and Relay.
 
 > From `@canonical/summon-application`
