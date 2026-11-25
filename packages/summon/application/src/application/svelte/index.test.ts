@@ -138,6 +138,14 @@ describe("Svelte application generator", () => {
               has("src/routes/dashboard/instances/remove/+page.server.ts"),
             ).toBe(appShell && forms && rendering === "ssr");
             expect(has("src/lib/instances.ts")).toBe(appShell && forms);
+            if (appShell) {
+              // Without forms the page lists samples, not stored instances.
+              expect(
+                tree
+                  .get("my-app/src/routes/dashboard/instances/+page.svelte")
+                  ?.includes('t("sampleInstancesDemo")'),
+              ).toBe(!forms);
+            }
             expect(has("src/routes/+layout.ts")).toBe(rendering === "spa");
             expect(files.some((file) => file.endsWith(".tsx"))).toBe(false);
             expect(files.some((file) => /graphql|relay/i.test(file))).toBe(

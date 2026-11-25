@@ -1,7 +1,7 @@
 <script lang="ts">
 <% if (intl) { %>  import { getLocaleSource, getTranslator } from "$lib/i18n";
   const locale = getLocaleSource(); let t = $derived(getTranslator($locale));
-<% } else { %>  const messages: Record<string, string> = { instances: "Instances", instancesDemo: "Demo instances are stored only in this browser's cookie; they are not provisioned.", instanceEmpty: "No demo instances yet.", createInstance: "Create demo instance", instanceName: "Instance name", release: "Release", instanceStatus: "Status", demoStatus: "Demo only", instanceAddress: "Address", instanceMemory: "Memory", enablePro: "Enable Pro", cloudInit: "Cloud-init", yes: "Yes", no: "No", removeInstance: "Remove demo instance", instanceInvalid: "Use a lowercase name with letters, numbers or hyphens (maximum 40) and choose a valid release.", instanceDuplicate: "That instance name already exists.", instanceLimit: "The demo can contain at most 10 instances.", compute: "Compute", storage: "Storage", sample: "Sample" };
+<% } else { %>  const messages: Record<string, string> = { instances: "Instances", instancesDemo: "Demo instances are stored only in this browser's cookie; they are not provisioned.", sampleInstancesDemo: "These are sample instances only.", instanceEmpty: "No demo instances yet.", createInstance: "Create demo instance", instanceName: "Instance name", release: "Release", instanceStatus: "Status", demoStatus: "Demo only", instanceAddress: "Address", instanceMemory: "Memory", enablePro: "Enable Pro", cloudInit: "Cloud-init", yes: "Yes", no: "No", removeInstance: "Remove demo instance", instanceInvalid: "Use a lowercase name with letters, numbers or hyphens (maximum 40) and choose a valid release.", instanceDuplicate: "That instance name already exists.", instanceLimit: "The demo can contain at most 10 instances.", compute: "Compute", storage: "Storage", sample: "Sample" };
   const t = (key: string) => messages[key] ?? key;
 <% } %><% if (forms && !spa) { %>  import type { PageProps } from "./$types";
   let { data, form }: PageProps = $props();
@@ -47,7 +47,7 @@
 <% } %>
 <svelte:head><title>{t("instances")} | <%= name %></title></svelte:head>
 <h1>{t("instances")}</h1>
-<p><%- forms && spa ? (intl ? '{t("spaInstancesDemo")}' : 'Demo instances are stored only in this browser; they are not provisioned.') : '{t("instancesDemo")}' %></p>
+<p><%- forms && spa ? (intl ? '{t("spaInstancesDemo")}' : 'Demo instances are stored only in this browser; they are not provisioned.') : forms ? '{t("instancesDemo")}' : '{t("sampleInstancesDemo")}' %></p>
 <% if (forms && !spa) { %><div class="instance-layout"><div>{#if data.instances.length}
   <ul class="instance-cards">{#each data.instances as instance (instance.name)}<li><article class="instance-card"><h2><a href={`/dashboard/instances?selected=${encodeURIComponent(instance.name)}`} aria-current={data.selected?.name === instance.name ? "true" : undefined}>{instance.name}</a></h2><p>{t("release")}: {instance.release}</p></article></li>{/each}</ul>
 {:else}<p>{t("instanceEmpty")}</p>{/if}
