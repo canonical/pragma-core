@@ -4,10 +4,55 @@
 
 ds:apps.pattern.page_header a ds:Pattern;
     ds:name "PageHeader";
-    ds:summary "", "The **Page Header** (l-main_header) establishes user orientation by clearly communicating where the user is within an application and provides immediate access to page-level context and actions.";
-    ds:anatomyDsl "";
-    ds:anatomyClassic "", "Figma preview pending\n\n\n\nThe header component is made up of three elements:\n\nTable 82";
-    ds:usage "", "**When to use**\n\n1. Should be used at the top of every page in an application.";
+    ds:summary "", "The **Page Header** (l-main_header) is a highly customisable UI block used to orient users on new pages by clearly communicating where the user is within an application and providing immediate access to page-level context and actions. \n\n It is positioned at the top of a page’s Main area, and is mandatory for every application page.";
+    ds:anatomyDsl "", "Page header — vertical layout\n├── Breadcrumb row (optional)\n│   └── Breadcrumbs\n│\n└── Header row — horizontal layout\n    ├── Title wrapper\n    │   ├── Page image (optional)\n    │   └── Text stack — vertical layout\n    │       ├── Title row — horizontal layout\n    │       │   ├── Page title\n    │       │   ├── Title Info wrapper (optional)\n    │       │   │   └── Information icon\n    │       │   └── Title status tag (optional)\n    │       └── Metadata slot (optional)\n    │           └── Supporting text or custom content\n    │\n    └── Action bar (optional)\n        ├── Primary action\n        ├── Secondary action (repeatable)\n        └── Tertiary action (repeatable)\n";
+    ds:anatomyClassic "", "Anatomy\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=14579-7657&t=WLa5VR7fRSsbUeyJ-4\n\nStyling\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=14579-7679&t=WLa5VR7fRSsbUeyJ-4";
+    ds:usage "", "**When to use**\n\nThe Page Header component should be always be used at the top of every page in an application.";
     ds:guidelines "";
     ds:tier ds:apps;
-    ds:documentationStage ds:tag.needstriage.
+    ds:documentationStage ds:tag.needstriage;
+    ds:hasProperty [
+        a ds:Property;
+        ds:name "Breadcrumbs";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "`false`"
+    ], [
+        a ds:Property;
+        ds:name "Page image";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "`false`"
+    ], [
+        a ds:Property;
+        ds:name "Page title";
+        ds:propertyType "text";
+        ds:optional "false"
+    ], [
+        a ds:Property;
+        ds:name "Page title icon";
+        ds:propertyType "boolean";
+        ds:optional "true";
+        ds:defaultValue "`false`"
+    ], [
+        a ds:Property;
+        ds:name "Page status tag";
+        ds:propertyType "boolean";
+        ds:optional "false";
+        ds:defaultValue "`false`"
+    ], [
+        a ds:Property;
+        ds:name "Action bar";
+        ds:propertyType "list of objects";
+        ds:optional "true";
+        ds:defaultValue "`true`"
+    ], [
+        a ds:Property;
+        ds:name "Meta data";
+        ds:propertyType "list of objects";
+        ds:optional "true"
+    ];
+    ds:changeLog [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-11-25T00:00:00.000+01:00"
+    ].

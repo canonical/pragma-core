@@ -4,13 +4,94 @@
 
 ds:global.variant.tooltip_dense a ds:Variant;
     ds:name "Tooltip+Dense";
-    ds:summary "";
-    ds:anatomyDsl "";
-    ds:anatomyClassic "";
-    ds:usage "";
+    ds:summary "The dense tooltip is a compact tooltip variant intended for interfaces where space is limited or information needs to be delivered efficiently. Its primary purpose is to provide brief, essential guidance while maintaining a smaller footprint than the standard tooltip.\n\nVariant of [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW).";
+    ds:anatomyDsl "---\n# The compact tooltip: text only, with no icon and no arrow. Its variable mode\n# is set to dark, so it is dark on a light page by default and its colours are\n# bound directly, not through surface channels.\nnode:\n  uri: global.variant.tooltip_dense\n  styles:\n    layout.type: flex\n    layout.direction: row\n    # Clips its content so the text never draws outside the border.\n    layout.overflow: hidden\n    appearance.background: color.background.container\n    typography.color: color.text\n    appearance.border.color: color.border.muted\n    appearance.border.style: solid\n    appearance.border.width: dimension.stroke.thickness.medium\n    appearance.radius: dimension.radius.small\n    typography.font: typography.text.tertiary\n    size.max.width: 284px\n    spacing.internal.inline.start: dimension.100\n    spacing.internal.inline.end: dimension.100\n    spacing.internal.block.start: dimension.050\n    spacing.internal.block.end: dimension.050\n  edges:\n    - node:\n        role: text\n      relation:\n        cardinality: \"1\"\n        slotName: default";
+    ds:anatomyClassic "## Anatomy\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=14521-1929&t=pA5l7Omuxa3ATwVS-1\n\n1. **Container**\n\nCompact, inverted surface that holds the text. No arrow.\n\n1. **Text**\n\nShort supplementary copy that explains or clarifies the trigger.\n\n## Styling\n\n**Layout and spacing**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=14521-2082&t=pA5l7Omuxa3ATwVS-1\n\n**Colors**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=14521-2217&t=pA5l7Omuxa3ATwVS-1\n\n**Typography**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=14521-2270&t=pA5l7Omuxa3ATwVS-1\n\n**Oveflow**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=14521-7598&t=pA5l7Omuxa3ATwVS-1";
+    ds:usage "### When to use\n\n- When space is limited, such as in tables, toolbars, or dashboards\n- When clarifying truncated labels, abbreviations, acronyms, or status indicators. \n- When tooltips appear frequently and should not visually dominate the interface\n\n### When not to use\n\n- When content requires multiple lines or comfortable reading space\n  - Incorrect: A dense tooltip is used for a multi-line explanatory message\n  - Remediation: Use a standard [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) for improved readability\n- When content is descriptive or longer than a short phrase\n  - Incorrect: A dense tooltip contains multiple lines of explanatory text\n  - Remediation: Use a standard [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW) \n- When content is complex or structured\n  - Incorrect: A dense tooltip includes multiple elements such as icons and key-value pairs\n  - Remediation: Use [TooltipWrapper](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-69TNyYt7M9)\n- When used on touch interfaces, where small hover targets reduce usability\n- When the element is already clearly labelled or self-explanatory.\n\n**In essence:**\n\nWhen in doubt, start with standard [Tooltip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ONb9LwkGvW). Move to its [Tooltip+Dense](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-PFE_wK_bWT) variant for space constraints; [TooltipWrapper](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-69TNyYt7M9) for structured content and complex hierarchies; [TooltipData](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-Y1ha3zI_b_) for data visualization.";
     ds:guidelines "";
     ds:tier ds:global;
     ds:documentationStage ds:tag.needscoredocumentation;
     ds:hasSubcomponent ds:global.variant.tooltip_dense;
     ds:variantOf ds:global.component.tooltip;
-    ds:parentComponent ds:global.variant.tooltip_dense.
+    ds:parentComponent ds:global.variant.tooltip_dense;
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.background.container
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.medium
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "appearance.radius";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.radius.small
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.tertiary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.050
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.variant.tooltip_dense;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.050
+    ].
