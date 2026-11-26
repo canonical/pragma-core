@@ -130,6 +130,74 @@ If that reading cannot be assumed, ask exactly one scope question before startin
 
 > Same look, or pragma conventions?
 
+### Adopting the shell (interim)
+
+`ApplicationLayout` takes `navigation` plus its default `children`;
+`ViewLayout` takes `children` and an optional `aside`. Neither has a title or
+action slot, so the page header is composed inside the view.
+
+```tsx
+import Link from "next/link";
+import { Button } from "@canonical/react-ds-global";
+import {
+  ApplicationLayout,
+  SideNavigation,
+  ViewLayout,
+  type LinkComponentProps,
+} from "@canonical/react-ds-app";
+
+const NextLink = ({ href, ...props }: LinkComponentProps) =>
+  href === undefined ? <span {...props} /> : <Link href={href} {...props} />;
+
+<ApplicationLayout
+  navigation={
+    <SideNavigation
+      brand={<a href="/" aria-label="Example Product home"><img src={logo} alt="" /></a>}
+      applicationName="Example Product"
+      root={{ key: "main", items: [
+        { key: "overview", label: "Overview", items: [
+          { label: "Dashboard", url: "/dashboard", icon: "home" },
+        ] },
+      ] }}
+      footerRoot={{ key: "account", items: [
+        { label: "Ada Lovelace", icon: "user", url: "/account" },
+        { label: "Log out", icon: "log-out", control: "button", onClick: logout },
+      ] }}
+      LinkComponent={NextLink}
+      currentUrl={pathname}
+    />
+  }
+>
+  <main id="main-content">
+    <ViewLayout>
+      <header>
+        <h1>Dashboard</h1>
+        <Button importance="primary">Create project</Button>
+      </header>
+    </ViewLayout>
+  </main>
+</ApplicationLayout>
+```
+
+`LinkComponent` is `ComponentType<LinkComponentProps>` — `href`, `className`,
+`children` and `aria-current`, so `next/link` needs the adapter above: it
+requires `href`, and the contract carries no ref to forward. Without an `href`
+(for example, on a disabled row), the adapter renders a noninteractive span.
+In the Next.js App Router, compose the navigation and its callbacks inside a
+Client Component. Placement: the
+product mark goes in the navigation header (`brand`), the product name in
+`applicationName`, and the user and logout in its footer (`footerRoot`; logout
+is a `button` row); one `h1` per page goes in the page header inside
+`ViewLayout`, with the actions beside it (`aside` is a detail panel or
+filters, not page actions). The header currently renders `applicationName` as
+an `h1`, which conflicts with the Verify rule (one `h1` per page, in the page
+header; the product name is not a heading): treat that as a finding to
+report, not something to work around with app CSS or by moving the name into
+`brand`. Keep the page title as the `h1`.
+
+This note is interim: the shell gets its own skill once the layout blocks
+carry usage text.
+
 ## Install
 
 ```bash
@@ -319,6 +387,18 @@ scope: run the A3 steps for each form as part of the change, and the `Field`/`Fo
 frame brings the label, description, error wiring and field spacing with it. A
 presentational, non-react-hook-form layout is not shipped yet — report that as a
 finding rather than hand-stacking the inputs.
+
+## Testing
+
+A component test that imports the published packages needs setup under both runners.
+Vitest externalises `node_modules`, so Node meets the components' CSS imports and fails
+with `TypeError: Unknown file extension ".css"`: inline `@canonical/` in
+`test.server.deps`, and add `module` to `resolve.mainFields` for
+`@canonical/react-ds-app`, which publishes only that field. Jest needs
+`moduleNameMapper` entries for `react-ds-app`, `react-hooks` and `ds-types`, the ESM
+transform and a CSS stub. Under both, jsdom has no dialog API, so a test that opens a
+`Modal` needs a `showModal`/`close` polyfill. Setup for each is in
+[`@canonical/react-ds-global`'s "Testing with Jest"](https://github.com/canonical/pragma-web/blob/main/packages/react/ds-global/README.md#testing-with-jest).
 
 ## Verify per PR
 

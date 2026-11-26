@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/canonical/pragma-core/compare/v0.46.0...v0.47.0) (2026-11-26)
+
+### Bug Fixes
+
+* **design-system,pragma-cli:** lands the follow-ups left out of the journey skills and the doctor version check ([#253](https://github.com/canonical/pragma-core/issues/253)) ([030691d](https://github.com/canonical/pragma-core/commit/030691d44b36194a815ae6aadb5a88b8196dceb6))
+* **pragma-cli:** keeps packs written by another pragma version from crashing or under-counting ([#170](https://github.com/canonical/pragma-core/issues/170)) ([53f5338](https://github.com/canonical/pragma-core/commit/53f53383a7560e0aa7170537b674d3afe43721a6))
+
+### Features
+
+* **pragma-cli:** shows unreleased changes beside the version in info and doctor ([#252](https://github.com/canonical/pragma-core/issues/252)) ([b11b58c](https://github.com/canonical/pragma-core/commit/b11b58c1da37f880e291af93bf8afc00b0beedcc))
+* **summon-package,pragma-cli:** adds a Storybook playground for prototyping with the design system ([#195](https://github.com/canonical/pragma-core/issues/195)) ([c0c37ea](https://github.com/canonical/pragma-core/commit/c0c37eaef14b4a91ad76cc486aaea34802766eab))
+* **summon-package,pragma-cli:** asks for the playground's design-system packages in one multi-select ([#196](https://github.com/canonical/pragma-core/issues/196)) ([13f8cb9](https://github.com/canonical/pragma-core/commit/13f8cb9af1386f00b94d2744ee4bb7bfbee671ff))
+* **summon-package,pragma-cli:** initialises a git repository in new playgrounds ([#197](https://github.com/canonical/pragma-core/issues/197)) ([ebbeb56](https://github.com/canonical/pragma-core/commit/ebbeb564cd8b6410bca669746f3c7f185932a5b6))
+
+
 # [0.46.0](https://github.com/canonical/pragma-core/compare/v0.45.0...v0.46.0) (2026-11-14)
 
 ### Bug Fixes

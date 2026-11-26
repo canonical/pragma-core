@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/canonical/pragma-core/compare/v0.46.0...v0.47.0) (2026-11-26)
+
+### Bug Fixes
+
+* **design-system,pragma-cli:** lands the follow-ups left out of the journey skills and the doctor version check ([#253](https://github.com/canonical/pragma-core/issues/253)) ([030691d](https://github.com/canonical/pragma-core/commit/030691d44b36194a815ae6aadb5a88b8196dceb6))
+
+### Features
+
+* **design-system:** adds the map-journeys skill for personas, jobs and journeys ([#250](https://github.com/canonical/pragma-core/issues/250)) ([f077e81](https://github.com/canonical/pragma-core/commit/f077e812b670a189b9d6eb53bee250410580f312))
+* **design-system:** adds the model-domains skill for domains, paths, views and layouts ([#251](https://github.com/canonical/pragma-core/issues/251)) ([9187287](https://github.com/canonical/pragma-core/commit/9187287147978be91c8b0b1534b51922241a031a))
+
+
 # [0.46.0](https://github.com/canonical/pragma-core/compare/v0.45.0...v0.46.0) (2026-11-14)
 
 **Note:** Version bump only for package @canonical/design-system

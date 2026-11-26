@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/canonical/pragma-core/compare/v0.46.0...v0.47.0) (2026-11-26)
+
+### Bug Fixes
+
+* **summon-application:** serves the application's own icons from public/icons in development ([#243](https://github.com/canonical/pragma-core/issues/243)) ([2cda360](https://github.com/canonical/pragma-core/commit/2cda3601a28dc71a9ae8a50e94ecffedb58bc0f4))
+
+### Features
+
+* **summon-package,pragma-cli:** adds a Storybook playground for prototyping with the design system ([#195](https://github.com/canonical/pragma-core/issues/195)) ([c0c37ea](https://github.com/canonical/pragma-core/commit/c0c37eaef14b4a91ad76cc486aaea34802766eab))
+
+
 # [0.46.0](https://github.com/canonical/pragma-core/compare/v0.45.0...v0.46.0) (2026-11-14)
 
 ### Bug Fixes

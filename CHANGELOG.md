@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/canonical/pragma-core/compare/v0.46.0...v0.47.0) (2026-11-26)
+
+### Bug Fixes
+
+* **code-standards:** decodes Turtle escapes in generated docs ([#138](https://github.com/canonical/pragma-core/issues/138)) ([0678097](https://github.com/canonical/pragma-core/commit/067809708e8e3a4576297d1fa2aa671056516067))
+* **design-system,pragma-cli:** lands the follow-ups left out of the journey skills and the doctor version check ([#253](https://github.com/canonical/pragma-core/issues/253)) ([030691d](https://github.com/canonical/pragma-core/commit/030691d44b36194a815ae6aadb5a88b8196dceb6))
+* **pragma-cli:** keeps packs written by another pragma version from crashing or under-counting ([#170](https://github.com/canonical/pragma-core/issues/170)) ([53f5338](https://github.com/canonical/pragma-core/commit/53f53383a7560e0aa7170537b674d3afe43721a6))
+* **summon-application:** serves the application's own icons from public/icons in development ([#243](https://github.com/canonical/pragma-core/issues/243)) ([2cda360](https://github.com/canonical/pragma-core/commit/2cda3601a28dc71a9ae8a50e94ecffedb58bc0f4))
+
+### Features
+
+* **code-standards:** tightens eight code standards ([#249](https://github.com/canonical/pragma-core/issues/249)) ([288c789](https://github.com/canonical/pragma-core/commit/288c789666900c1e68565d710f0ea2e26e9d3203))
+* **design-system:** adds the map-journeys skill for personas, jobs and journeys ([#250](https://github.com/canonical/pragma-core/issues/250)) ([f077e81](https://github.com/canonical/pragma-core/commit/f077e812b670a189b9d6eb53bee250410580f312))
+* **design-system:** adds the model-domains skill for domains, paths, views and layouts ([#251](https://github.com/canonical/pragma-core/issues/251)) ([9187287](https://github.com/canonical/pragma-core/commit/9187287147978be91c8b0b1534b51922241a031a))
+* **pragma-cli:** shows unreleased changes beside the version in info and doctor ([#252](https://github.com/canonical/pragma-core/issues/252)) ([b11b58c](https://github.com/canonical/pragma-core/commit/b11b58c1da37f880e291af93bf8afc00b0beedcc))
+* **summon-package,pragma-cli:** adds a Storybook playground for prototyping with the design system ([#195](https://github.com/canonical/pragma-core/issues/195)) ([c0c37ea](https://github.com/canonical/pragma-core/commit/c0c37eaef14b4a91ad76cc486aaea34802766eab))
+* **summon-package,pragma-cli:** asks for the playground's design-system packages in one multi-select ([#196](https://github.com/canonical/pragma-core/issues/196)) ([13f8cb9](https://github.com/canonical/pragma-core/commit/13f8cb9af1386f00b94d2744ee4bb7bfbee671ff))
+* **summon-package,pragma-cli:** initialises a git repository in new playgrounds ([#197](https://github.com/canonical/pragma-core/issues/197)) ([ebbeb56](https://github.com/canonical/pragma-core/commit/ebbeb564cd8b6410bca669746f3c7f185932a5b6))
+
+
 # [0.46.0](https://github.com/canonical/pragma-core/compare/v0.45.0...v0.46.0) (2026-11-14)
 
 ### Bug Fixes

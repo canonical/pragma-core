@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/canonical/pragma-core/compare/v0.46.0...v0.47.0) (2026-11-26)
+
+### Bug Fixes
+
+* **code-standards:** decodes Turtle escapes in generated docs ([#138](https://github.com/canonical/pragma-core/issues/138)) ([0678097](https://github.com/canonical/pragma-core/commit/067809708e8e3a4576297d1fa2aa671056516067))
+
+### Features
+
+* **code-standards:** tightens eight code standards ([#249](https://github.com/canonical/pragma-core/issues/249)) ([288c789](https://github.com/canonical/pragma-core/commit/288c789666900c1e68565d710f0ea2e26e9d3203))
+
+
 # [0.46.0](https://github.com/canonical/pragma-core/compare/v0.45.0...v0.46.0) (2026-11-14)
 
 **Note:** Version bump only for package @canonical/code-standards
