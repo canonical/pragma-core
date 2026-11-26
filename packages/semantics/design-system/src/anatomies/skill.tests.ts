@@ -201,8 +201,8 @@ describe("the anatomy-author skill's examples", () => {
   it("teaches the value form, the roster and the comment", () => {
     const skill = readFileSync(FILES[0], "utf-8");
     // The things an author has to know, each stated in the skill itself.
-    expect(skill).toContain("A style value is the symbol consumed");
-    expect(skill).toContain("an ordered list of symbol names");
+    expect(skill).toContain("A style value may be **a token symbol**");
+    expect(skill).toContain("an ordered list of token symbols");
     expect(skill).toContain("The style keys are a closed roster");
     // The record for a name no stratum declares is the comment, not a register row.
     expect(skill).toContain("The comment is the record");

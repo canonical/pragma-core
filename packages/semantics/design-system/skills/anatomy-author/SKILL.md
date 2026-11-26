@@ -9,10 +9,11 @@ Write component anatomy specifications using the Design System Anatomy DSL. This
 
 ## When to Use
 
-- Writing anatomy specifications for new or existing components
-- Documenting component structure before implementation
+- Creating anatomy from an existing Figma design before implementation
+- Documenting anatomy from an existing implementation, with or without a Figma design
+- Creating anatomy from scratch without a Figma design or implementation
 - Discussing component composition with the team ("these nodes should be siblings, not parent-child")
-- Auditing a codebase against its specifications
+- Auditing component implementations against their Anatomy DSL specifications
 - Supporting code generation from specifications
 - Serving as step 7 of the `specify-component` flow (and of `specify-pattern`)
 
@@ -31,9 +32,9 @@ This skill helps you author these specifications correctly and consistently.
 
 ## Working mode: assistant to a design authority
 
-Most of the time this skill runs in collaboration with a senior designer or engineer —
-they are the design authority, you are the assistant whose job is to make them
-successful. Default to that mode: lay out where the flow stands, do the legwork
+This skill runs in collaboration with a designer, engineer, or other person responsible for the
+component's design decisions — they are the design authority, you are the assistant whose job
+is to make them successful. Default to that mode: lay out where the flow stands, do the legwork
 (discovery queries, template drafting, validation) and return digestible findings, and
 bring structural decisions to the person as a recommendation plus a question rather
 than a fait accompli. An anatomy encodes opinions the graph cannot settle alone —
@@ -43,7 +44,8 @@ Full autonomy is the exception, not the default: run the whole flow alone only w
 explicitly asked to. Even then, list every judgment call made unilaterally in the
 final report so a human can revisit them.
 
-Decision gates — in collaboration, pause at each and resolve it WITH the person:
+Decision gates — in collaboration, pause only for unresolved decisions and resolve them
+WITH the person:
 
 1. Node boundaries: what is a named subcomponent vs. an anonymous structural role.
 2. Slot names — they become API surface.
@@ -87,7 +89,8 @@ form to fill in:
 
 A sketch is enough to begin: discovery turns it into the real node set, and the sketch
 is what you check that set against. Ask again only for what the next step genuinely
-blocks on.
+blocks on. If the source is unclear, ask whether a Figma design, an existing
+implementation, both, or neither are available.
 
 If the activation message already carries the starting point, do not re-ask — say what
 you took it to be, and go.
@@ -178,7 +181,7 @@ silently work around.
 
 ## Discovery Flow
 
-Before writing an anatomy, understand the component's context:
+Before writing an anatomy, examine the available Figma design, implementation, or existing requirements according to the authoring scenario. Use the following queries to explore the component's context in the Pragma graph:
 
 ```bash
 pragma block list                               # every component, pattern, layout and subcomponent, with its type and tier
@@ -338,23 +341,27 @@ overwritten by the next sync. An authored anatomy lands in a file of its own, an
 
 ### Where the anatomy lands
 
-An anatomy is written by hand, from the component's implementation stylesheet, into
-one file in the design-system repository:
+An anatomy is authored from available sources and confirmed structural decisions, then
+written into one file in the design-system repository:
 
     anatomies/authored/<tier>/<uri>.yaml
 
 The file name IS the dotted uri (`anatomies/authored/global/global.component.button.yaml`),
 which is how the write finds the row it belongs to, and the text of the file is the
-text of the `anatomy_dsl` cell verbatim. Open the file with a comment saying where it
-was read from — the package, the stylesheet and the selector — because the next reader
-has to be able to check it:
+text of the `anatomy_dsl` cell verbatim. Start the YAML file with the document marker
+(---) followed by the root node:
 
 ```yaml
 ---
-# Authored 2026-09-13 from @canonical/react-ds-global src/lib/component/Button/styles.css on .ds.button
 node:
   uri: global.component.button
 ```
+
+For new components or subcomponents not yet registered in Pragma, author and validate
+their Anatomy DSL files as usual. Before publishing, verify that the corresponding
+component records and writable anatomy fields exist in the documentation source. If
+they do not, report registration as a publishing prerequisite. Do not assume that
+`anatomies write` creates missing component records.
 
 Then, in order:
 
@@ -383,8 +390,8 @@ whatever the cell said before — today, for most blocks, the retired notation. 
 `color/text/muted` in that output is history, not a house style to copy.
 
 There is no derivation step, no `references.yaml` and no register category for a
-stylesheet fact: reading an implementation and choosing the node, the key and the
-symbol is judgement, which is why it happens in a file under review.
+stylesheet fact: analysing available sources and choosing the node, the key and the
+symbol requires judgement, which is why it happens in a file under review.
 
 ## Commenting Guidelines
 
@@ -400,7 +407,7 @@ symbol is judgement, which is why it happens in a file under review.
 Include the following comments when applicable:
 
 - **Non-obvious decisions:** Explain structural choices, exceptions, agreed assumptions, or limitations when the reason is not clear from the DSL. This includes CSS pseudo-elements and anonymous nodes used for components that do not yet exist.
-- **Differences:** Explain any known differences between the documented anatomy and the design or implementation specifications, identifying what differs and why.
+- **Differences:** Explain non-obvious decisions in YAML comments when necessary to understand the anatomy. Report discrepancies among the design, implementation, and Pragma graph separately, outside the YAML.
 
 ### Excluded comments
 
@@ -599,9 +606,10 @@ edges:
 **Which blocks a `uri:` may reach.** A reference points at a block in the same tier or
 in `global`, and never the other way: a `global` anatomy that reached into an app
 tier would make the global block depend on one product. Where the part is real but the
-block it would name does not exist, write an anonymous `role:` node and say so in a
-comment — the reference is a claim about the graph, and a claim about a block nobody
-has created is one an anatomy must not make:
+block it would name does not exist and is not explicitly being introduced as a new named
+block, write an anonymous `role:` node and say so in a comment — a named reference must
+point to an existing block or a new named block explicitly introduced in the
+specification:
 
 ```yaml
 edges:
@@ -864,11 +872,11 @@ Common slot conventions:
 
 **Convention:** `slotName: default` implies the main children slot (`children` in React, default slot in Vue).
 
-### A style value is the symbol consumed
+### Style values: tokens and literals
 
-A style value is **the name of a token symbol**, written in the symbol's own dotted
-spelling — or **an ordered list of symbol names**, which is the fallback order the
-implementation reads, ending in the one literal it falls back to last.
+A style value may be **a token symbol** written in its dotted spelling, **a literal
+permitted by the style key**, or **an ordered list of token symbols**, which represents
+a confirmed fallback order and may end with one literal fallback.
 
 ```yaml
 styles:
@@ -892,11 +900,12 @@ Three things that are **retired** and rejected by the parser:
 | a trailing `?` marker — `shadow/card?` | nothing: a name no stratum declares is not written at all, and a `#` comment on the line records it |
 | `root` or `$root` inside a value | the dotted name without it — `color.text` |
 
-**Consume the channel where the implementation reads the channel.** A modifier or
-surface family reaches a component through a channel variable, and the anatomy says so
-by consuming the channel by name: `modifier.color.text` is the channel of `color.text`,
-and it is a symbol of its own. Where the implementation reads the semantic token
-directly, the anatomy consumes the semantic token. Nothing is inferred either way.
+**When documenting an implementation without a design, consume the channel where the
+implementation reads the channel.** A modifier or surface family reaches a component
+through a channel variable, and the anatomy says so by consuming the channel by name:
+`modifier.color.text` is the channel of `color.text`, and it is a symbol of its own.
+Where the implementation reads the semantic token directly, the anatomy consumes the
+semantic token. Nothing is inferred either way.
 
 **This is also how a component's SUPPORT for a modifier family is expressed — and it is
 the only way.** There is no key that names a family, no `@state` for one, and no
@@ -916,11 +925,12 @@ nowhere. The family is in the channel, not in the tree.
 
 Two consequences worth holding on to. A component whose spec claims a family and whose
 anatomy consumes no channel of the symbols that family covers does not in fact support
-it — that mismatch is a finding, and the anatomy is where it shows. And the reverse:
-where the stylesheet reads the plain semantic token with no channel in front of it, the
-anatomy binds the plain token, and the component is correctly saying it is NOT
-family-sensitive at that key. Do not add a channel to express a family the
-implementation does not read.
+it — that mismatch is a finding, and the anatomy is where it shows. And the reverse,
+when documenting an implementation without a design: where the stylesheet reads the
+plain semantic token with no channel in front of it, the anatomy binds the plain token,
+and the component is correctly saying it is NOT family-sensitive at that key. When
+design and implementation conflict, follow the design authority's confirmed decision
+and report any resulting discrepancy.
 
 **A name no stratum declares is never written. The comment is the record.** An
 implementation reads plenty of variables that stand for no symbol — a component-local
@@ -944,10 +954,11 @@ resolve. `pragma token lookup <symbol>` settles whether a name resolves before y
 write it; `pragma variable lookup <name>` settles what a variable in the stylesheet
 stands for (see Discovery Flow above).
 
-**A list is the implementation's fallback chain, and the first element wins.** The head
-is what the slot reads, each later element is what it falls back to, and a chain may
-end in the one literal the implementation writes last. A list of one element is written
-as the scalar instead, and a primitive anywhere but last is a parse error.
+**When documenting an implementation without a design, a list transcribes its fallback
+chain, and the first element wins.** The head is what the slot reads, each later
+element is what it falls back to, and a chain may end in the one literal the
+implementation writes last. A list of one element is written as the scalar instead, and
+a primitive anywhere but last is a parse error.
 
 ### The style keys are a closed roster
 
@@ -998,8 +1009,10 @@ roles resolves to the same dimension in every product context, and the implement
 read `--dimension-*` directly for padding and gaps. So where the stylesheet reads
 `--dimension-200`, the anatomy writes `dimension.200` on the spacing key, and the
 second namespace is in the roster for exactly as long as that is true — it comes back
-out once a semantic spacing namespace lands. Write the symbol the implementation reads,
-not the role you would have chosen.
+out once a semantic spacing namespace lands. When documenting an implementation without
+a design, write the symbol the implementation reads, not the role you would have
+chosen. When design and implementation conflict, follow the design authority's
+confirmed decision.
 
 **Not every CSS property has a key.** `box-shadow`, `animation`, a vendor prefix, a
 mask: no key in the roster takes them, so an anatomy does not bind what the
@@ -1009,8 +1022,11 @@ left unbound. Do not invent a key for a property that has none.
 ### The keys, by family
 
 Every key below is in the roster, and the comment says what it admits. Where a key
-takes `either`, the choice is not taste: bind the symbol where the implementation
-reads a variable, and write the literal where it writes a literal.
+takes `either`, use a verified token symbol or permitted literal according to the
+confirmed specification. When documenting an implementation without a design, bind the
+symbol where the implementation reads a variable and write the literal where it writes
+a literal. When design and implementation conflict, follow the design authority's
+confirmed decision.
 
 #### Layout — primitives throughout
 ```yaml
@@ -1393,12 +1409,67 @@ node:
 
 ## Workflow
 
-### 1. Identify the Component
+The workflow adapts to four authoring scenarios:
 
-First, a pre-step: could the name be a Group? Run the group query before the
-lookup — neither `pragma block lookup` nor `pragma block list` covers groups, and
-a name can be BOTH a Group and another tier's block (`BlogCards` is the Group
-`sites.group.blog_cards` AND the Component
+- **Create from design:** Use the Figma design and designer-confirmed decisions as the
+  source of truth.
+- **Document existing implementation:** Use the implementation when no Figma design
+  exists.
+- **Document design and implementation:** Analyse both sources. When they conflict, ask
+  the design authority to resolve or explicitly defer the discrepancy. Record confirmed
+  decisions, explicit deferrals, and any differences from the implementation.
+- **Create from scratch:** Establish the anatomy through targeted questions when neither
+  source exists.
+
+Skip design or implementation analysis when neither source exists, and ask targeted
+questions only when information is missing, ambiguous, or conflicting.
+
+### 1. Establish Component Context
+
+Analyse the available Figma design, implementation, or existing requirements according
+to the authoring scenario. Extract the component's visual anatomy, variants, and
+structural properties. When creating from scratch, establish the necessary information
+through clarification. Use the Pragma graph to identify existing components and related
+structures.
+
+When additional component documentation is available, include it as an optional source
+of evidence. Extract relevant visual and structural requirements, including documented
+component relationships. Compare these requirements with Figma, implementation, and
+Pragma definitions where available. Identify contradictions and resolve them through
+clarification rather than assuming any source is automatically authoritative.
+
+When analysing a Figma component set, inspect every variant individually, without
+exceptions. Examine each variant's structure, hierarchy, constituent parts, visibility,
+layout, and relevant visual properties. Compare variants to identify all structural and
+visual differences, including those caused by combinations of variant properties. Do
+not assume that variants share identical anatomy without verifying each one. Track
+structural and visual verification separately for each variant. Metadata inspection
+alone does not establish that all relevant visual properties have been verified. An
+overview screenshot is sufficient only when every variant is clearly visible at a
+scale that allows its relevant visual properties to be verified. Otherwise, inspect
+individual variants or smaller groups at sufficient resolution. Do not report visual
+verification as complete when relevant details cannot be distinguished in the
+rendered evidence. Before declaring Stage 1 complete, provide a verification summary
+that distinguishes structural inspection from rendered visual verification. Record how
+each variant was verified, which relevant visual properties were checked, and any
+properties that remain unverified. Programmatic inspection of Figma properties and
+variable bindings does not substitute for rendered visual verification. If relevant
+visual details cannot be verified at sufficient resolution, report Stage 1 as
+incomplete and identify the affected variants and properties. Use batch retrieval where
+supported, but do not substitute sampling or assumptions for inspecting each variant.
+Distinguish uninspected variants from supported optional configurations that are not
+rendered in any variant.
+
+If technical limitations prevent complete inspection despite reasonable attempts,
+report Stage 1 as incomplete and identify the affected variants and properties. Proceed
+to Stage 2 only if the design authority explicitly accepts these limitations. Carry
+unverified requirements into the audit and Stage 3 for resolution or explicit deferral.
+Never treat unverified properties as confirmed.
+
+Before using the block lookup, check whether the name could refer to a Group. Run the
+group query before the lookup — neither `pragma block lookup` nor `pragma block list`
+covers groups, and a name can be BOTH a Group and another tier's block (`BlogCards` is
+the Group `sites.group.blog_cards` AND the Component
 `sites_webcomponentsprototype.component.blog_cards`; the lookup answers with the
 component and never mentions the group):
 
@@ -1407,23 +1478,23 @@ pragma graph query "SELECT ?b ?name WHERE { ?b a ds:Group ; ds:name ?name }"
 ```
 
 If the name is in the answer and the Group is the block you were asked to write,
-it is an existing block: take the URI from that query row (no §3 derivation),
+it is an existing block: take the URI from that query row (no URI derivation),
 gather its context with `pragma graph inspect <IRI>`, and continue from §2.
 
 Otherwise, determine if the component exists in the design system:
 
 ```bash
-pragma block lookup Card
+pragma block lookup <ComponentName>
 ```
 
 Two branches:
 
-- **Not found** (`ENTITY_NOT_FOUND`) — this is a NEW block: derive its URI in §3
-  below, then continue from §2.
+- **Not found** (`ENTITY_NOT_FOUND`) — this is a NEW block: continue to §2, then derive
+  its URI in Determine Tier and Type under Stage 4.
 - **Found** — this is a draft for an existing block (the empty-anatomy worklist path):
-  take the URI from the block's `pragma block list` row and skip §3. The list carries a
-  row per block it covers, not per tier declaring the name, and the lookup above
-  resolved it globally — the name query
+  take the URI from the block's `pragma block list` row and skip URI derivation. The
+  list carries a row per block it covers, not per tier declaring the name, and the
+  lookup above resolved it globally — the name query
   `pragma graph query "SELECT ?b WHERE { ?b ds:name ?n . FILTER(LCASE(?n) = LCASE('<Name>')) }"`
   lists every tier's IRI, so you take the one you meant.
   Gather the full context — anatomy, modifiers, properties come with the lookup (a
@@ -1434,36 +1505,108 @@ Two branches:
   pragma graph inspect ds:global.component.card
   ```
 
-### 2. Gather Structural Requirements
 
-Ask:
+### 2. Audit Completeness
+
+Read `completeness-checklist.md` and assess all relevant visual and structural
+requirements against available sources and confirmed decisions. Identify missing,
+ambiguous, or conflicting information, including requirements not represented in Figma
+or supported by the current DSL.
+
+### 3. Gather Structural Requirements
+
+Use `clarification-guidelines.md` to resolve missing, ambiguous, or conflicting
+requirements identified during the completeness audit. Ask only questions that cannot
+be answered from available sources or confirmed decisions.
+
+Before declaring Stage 3 complete, reconcile every outstanding requirement using the
+exit criteria in `clarification-guidelines.md`. Do not treat unasked questions or
+unsupported assumptions as resolved decisions.
+
+Before proceeding to Stage 4, produce the consolidated visual and structural
+requirements specification described in `clarification-guidelines.md`. Preserve the
+conditions and exceptions associated with each requirement, along with source
+discrepancies, confirmed decisions, and explicit deferrals. Do not simplify or omit
+requirements because the current DSL cannot express them.
+
+Examples of structural clarification questions include:
 - What are the main parts? (header, body, footer, icon, label)
 - Which parts are required vs optional?
 - Can any parts repeat?
 - Are there anonymous structural wrappers needed?
 
-Two sources answer these, and they disagree more often than you would expect: the
-block's `ds:hasProperty` rows in the graph, and the implementation you are authoring
-from. The graph records what was DOCUMENTED; the implementation ships what was BUILT,
-and the two run ahead of each other in both directions. Chip is the live case — the
-graph lists `icon` and `badge` as properties that the current `ChipProps` does not
-have, and marks `value` as required where the code renders it conditionally.
+These questions are examples, not an exhaustive list. Clarification also covers
+unresolved visual and structural requirements identified during the completeness audit,
+including sizing, layout, overflow, truncation, responsive and RTL presentation, and
+state-dependent appearance, even when the node tree remains unchanged.
 
-**An anatomy transcribes the implementation, so where they disagree the implementation
-wins — and the disagreement is recorded, not smoothed over.** Write the tree the
-stylesheet and the component file support, put a `#` comment on the node (or in the
-file header) saying which graph row it departs from and why, and raise the mismatch:
-a property in the graph that the code cannot reach is a documentation gap, and a part
-in the code that the graph does not list is a specification gap. Neither is fixed by
-inventing a node for a property nothing renders, or by marking a node required because
-a row said `optional: "false"`.
+Available sources may disagree: the block's `ds:hasProperty` rows in the graph, a Figma
+design, and an existing implementation you are authoring from. The graph records what
+was DOCUMENTED; the implementation ships what was BUILT, and the two run ahead of each
+other in both directions. Chip is the live case — the graph lists `icon` and `badge` as
+properties that the current `ChipProps` does not have, and marks `value` as required
+where the code renders it conditionally.
 
-The one exception is a block you were asked to author from its SPEC rather than from an
-implementation — a component not built yet. There the graph is all there is, and the
-anatomy follows it; say so in the file header, because the next reader cannot tell the
-two situations apart from the file alone.
+When sources disagree, distinguish the observed discrepancy from its cause. Identify
+which source requires correction only when supported by evidence or an explicit
+decision from the design authority. Do not assume that a source is incorrect merely
+because it differs from another source.
 
-### 3. Determine Tier and Type
+**When both design and implementation exist, do not automatically prefer either source
+when they conflict.** Ask the design authority to resolve or explicitly defer each
+discrepancy before generating the Anatomy DSL. Record the confirmed decision and report
+any resulting differences from the implementation outside the YAML.
+
+**When only an implementation exists,** document the structure supported by the
+component file and stylesheet. Treat the Pragma graph as supporting context and report
+discrepancies between the graph and implementation outside the YAML. Do not invent
+nodes for properties that nothing renders or mark nodes as required solely because the
+graph lists them as required.
+
+When no implementation exists, use the available Figma design, additional component
+documentation, and designer-confirmed decisions to establish the intended anatomy. If
+only documentation or requirements are available, use them as evidence and ask targeted
+questions about missing, ambiguous, or conflicting requirements. If no sources exist,
+establish the anatomy through clarification with the design authority. Use the Pragma
+graph as supporting context, not as a substitute for confirmed design decisions.
+
+When the design authority explicitly corrects a Figma value, property mapping, or
+variant specification, use the confirmed correction when authoring the DSL. Record the
+original Figma value, the corrected value, and the affected configurations. Report the
+discrepancy outside the YAML. Do not silently treat the Figma source as corrected or
+extend the correction to other configurations without evidence.
+
+### 4. Generate Anatomy DSL
+
+When a confirmed visual or structural requirement cannot be expressed by the current
+DSL, report it separately in the response, outside the YAML. Follow the existing
+Commenting Guidelines for all YAML comments. Do not invent unsupported syntax or
+silently omit requirements.
+
+For each confirmed variant, responsive change, conditional structure, or state-dependent
+appearance, determine whether it changes the structure or styles. Use `cardinality` for
+optional or repeating parts, `switch` for structural alternatives, and `@state` for
+supported state-specific styles.
+
+When applying state-dependent styles to nested nodes, verify which element owns the
+state and which elements must visually change. Do not assume that a state on the parent
+automatically applies to its children, or that a state on a child represents the
+parent's state. Check whether the DSL can express the required relationship. If not,
+report the limitation rather than encoding a misleading state binding.
+
+#### Determine Tier and Type
+
+When documentation describes a main component and its subcomponents:
+
+1. Identify the component hierarchy and distinguish named subcomponents from anonymous
+  structural nodes.
+2. Check which components and subcomponents already exist in the Pragma graph.
+3. Confirm missing or ambiguous component identities and relationships with the design
+  authority.
+4. Generate a separate Anatomy DSL file for each named component or subcomponent within
+  the agreed scope, referencing named children from their parent anatomy.
+5. Do not automatically turn every Figma frame or documented part into a separate
+  subcomponent.
 
 The URI is `{tier}.{type}.{snake_name}` (see URI Encoding Convention above). The tier
 segment comes from the live tier set — run `pragma tier list` and pick from what it
@@ -1479,14 +1622,22 @@ UIBlock classes:
 | Does it divide space? | Yes | `{tier}.layout.{name}` |
 | Is it many instances of ONE sibling block laid out together? | Yes | `{tier}.group.{name}` |
 
-### 4. Define Edges
+#### Define Edges
 
 For each child:
 1. Is it named (in DS) or anonymous (structural wrapper)?
 2. What is its cardinality?
 3. Does it map to a slot?
 
-### 5. Apply Styles
+#### Apply Styles
+
+When only an implementation exists, derive style values from its stylesheet using the
+rules above. When both design and implementation exist, compare their styles and ask the
+design authority to resolve any discrepancies before selecting values. When no
+implementation exists, use available Figma designs, additional component documentation,
+and designer-confirmed requirements. Resolve any conflicting evidence through Stage 3
+clarification. Verify token symbols against the Pragma graph, and do not invent CSS
+variables or fallback chains.
 
 For each node, consider:
 - **Layout**: How is content arranged?
@@ -1496,11 +1647,24 @@ For each node, consider:
 - **Typography**: Text styling (for text-containing nodes)
 - **Interaction**: Cursor, transitions (for interactive nodes)
 
+For constrained layouts, verify that the combined styles of parent and child nodes
+preserve the confirmed resizing behaviour. Check minimum and maximum dimensions, flex
+growth and shrinkage, text overflow, and parts that must retain their size. Do not
+assume that specifying text truncation alone establishes the required resizing
+behaviour. Represent supported constraints in the DSL and report unsupported
+requirements separately.
+
+Verify dimensional consistency between parent and child nodes. Check that child
+dimensions, padding, borders, and gaps fit within the intended container dimensions,
+accounting for the applicable box-sizing model. Identify unintended overflow or
+conflicting constraints. Resolve discrepancies using available evidence or
+clarification rather than silently adjusting values.
+
 **Rule of thumb**:
 - Structural values (`flex`, `center`, `100%`) = invariant
 - A symbol (spacing.inset.surface.block) = themeable
 
-### 6. Bind Data and Pin Props
+#### Bind Data and Pin Props
 
 Both are optional, and both are decision gates — bring them to the person
 rather than deciding alone.
@@ -1514,11 +1678,12 @@ and multiplicity. Generic containers project nothing — that is a real answer.
 
 **Pins** — for each named child, ask what the spec FIXES versus what it leaves
 to the consumer. An intrinsic icon is pinned (`props: { icon: … }`); a
-consumer-filled icon slot is not. Confirm each prop name against
-`pragma block lookup <Component>`; a pin naming a prop the component does not
-have is invisible to schema validation and will only fail later.
+consumer-filled icon slot is not. For existing components, confirm each prop name
+against `pragma block lookup <Component>`; for new components, confirm planned prop
+names with the design authority; a pin naming a prop the component does not have is
+invisible to schema validation and will only fail later.
 
-### 7. Validate
+### 5. Validate
 
 Two checks, and they cover different ground. Know which is which before you read an
 exit code as approval.
@@ -1530,31 +1695,37 @@ RESOLVES in a stratum, and that each symbol sits inside the namespace its key ad
 That is a great deal, and it is all mechanical.
 
 **What the gate does not check is whether the anatomy is TRUE of the component.** It
-cannot: it never reads the stylesheet. So every one of these passes the gate silently —
+cannot: it does not compare the DSL with the available design, implementation, or
+confirmed decisions. So every one of these passes the gate silently —
 a lawful key that is the wrong key for the CSS property (`layout.align` where the
 stylesheet wrote `align-self`), a resolving symbol in the right namespace that is the
 wrong symbol for the part, a node boundary drawn in the wrong place, a cardinality that
 contradicts the component's own props, a missing node for a part the stylesheet draws.
 Exit 0 with no findings means the file is LAWFUL. It does not mean the judgment calls
 were right, and it is not a second opinion on them. The check that catches those is the
-pull-request review by someone who can open the same stylesheet — which is why the file
-goes through review at all.
+pull-request review against available sources and confirmed decisions — which is why the
+file goes through review at all.
 
 So read the list below as the author's own pass, and keep its items honest about which
 kind they are: the ones the gate will confirm, and the ones only a reader can.
 
+Apply implementation-specific checks only when an implementation exists. Otherwise,
+assess visual and structural correctness against the available Figma design or confirmed
+requirements.
+
 Check your anatomy against:
+- [ ] Verify the generated DSL against the consolidated Stage 3 specification, including all applicable conditions and exceptions. Report missing, partially represented, or unsupported requirements separately. Do not treat valid syntax or YAML comments as proof of completeness.
 - [ ] Root node is named (has `uri`)
 - [ ] All cardinalities are valid notation
 - [ ] Every style key is in the roster — the gate confirms this one
-- [ ] Each key is the key for the CSS property the stylesheet actually wrote (judgment: `layout.align` for `align-items`, `layout.alignSelf` for `align-self`; the gate accepts either)
+- [ ] Each style key represents the confirmed intended property. When documenting an implementation without a design, check it against the stylesheet (`layout.align` for `align-items`, `layout.alignSelf` for `align-self`). When design and implementation conflict, validate against the design authority's confirmed decision rather than automatically following the stylesheet.
 - [ ] Every style value is one dotted symbol, a fallback chain with at most one primitive LAST, or a primitive — no slash path, no `?` marker, no `root`/`$root` segment
 - [ ] Every symbol resolves (`pragma token lookup <symbol>`) and sits in its key's namespace; a name that does not resolve is a `#` comment, never a value — the gate confirms both
 - [ ] Every component-local variable that came back `ENTITY_NOT_FOUND` was followed through the component's own `:root` to a declared variable or a literal before it was written off
 - [ ] `layout.type` and `layout.direction` are spelled as CSS spells them (`flex`, `grid`, `inline-flex`, `block`; `row`, `column`)
 - [ ] Anonymous nodes have `role`, not `uri`
 - [ ] Multi-word names encode word boundaries with `_`; `-` appears only where the name carries a dot (per the URI Encoding Convention table)
-- [ ] Every non-root `uri:` either resolves (`pragma graph inspect ds:<uri>`) or is `$custom`, a template placeholder, or a new block or child this same spec introduces (§3)
+- [ ] Every non-root `uri:` either resolves (`pragma graph inspect ds:<uri>`) or is `$custom`, a template placeholder, or a new block or child this same spec introduces (see Determine Tier and Type)
 - [ ] Named (`uri:`) children carry no copy of their own subtree — contextual style overrides only
 - [ ] Nested components make semantic sense (judgment — nothing checks this but a reader)
 - [ ] Every symbol is the right symbol for the part, not merely one that resolves in the key's namespace (judgment — the gate checks resolution and namespace, never fit)
@@ -1564,7 +1735,7 @@ Check your anatomy against:
 - [ ] Every node `projection` has at least one of `on` / `field`; every relation `projection` has `field` and no `on`
 - [ ] No projection spells an unwrapping path (`edges.node`), and every projected field name exists in the provider SDL
 - [ ] Each projected relation's cardinality matches the field's nullability and multiplicity
-- [ ] `props` appears only on named nodes, holds scalars only, and every pinned prop name exists on that component (`pragma block lookup`)
+- [ ] `props` appears only on named nodes, holds scalars only, and every pinned prop name matches the existing component's properties (`pragma block lookup`) or the confirmed properties of a new component
 - [ ] A part the stylesheet draws as `::before`/`::after` is an anonymous `role:` node with a comment saying so, and no `slotName`
 - [ ] Every `uri:` names a block in this tier or in `global`, and a `global` anatomy reaches into no app tier
 
@@ -1601,16 +1772,27 @@ When creating an anatomy, respond with:
 {yaml content}
 \`\`\`
 
+### Validation
+
+- DSL validation: {command, exit code, findings, and warnings}
+- Specification coverage: {confirmed coverage and any missing, partially represented,
+  or unverified requirements}
+
 ### Notes
 - {Design decision 1}
 - {Design decision 2}
+- {Explicitly deferred requirements and their impact on DSL completeness, if any}
+- {Unsupported DSL requirements and why they cannot be represented, if any}
+- {Discrepancies among the design, implementation, and Pragma graph, if any}
 
 ### Next Steps
 1. Land the file at `anatomies/authored/{tier}/{uri}.yaml` in the design-system
    repository — never under `data/`, which the pull sync regenerates
 2. `bun src/cli.ts anatomies validate --authored` — exit 0, and no findings
 3. Review it as a file, in a pull request
-4. `anatomies write` — dry, then a `--only <uri> --apply` canary, then `--apply`;
+4. For new components or subcomponents, confirm that their records and anatomy
+   fields exist in the documentation source before publishing.
+5. `anatomies write` — dry, then a `--only <uri> --apply` canary, then `--apply`;
    after that the document is the source of record
 ```
 
@@ -1627,7 +1809,8 @@ When creating an anatomy, respond with:
 
 ## Limitations
 
-- Does not handle conditional rendering (show/hide based on state)
+- Does not support arbitrary conditional rendering (show/hide based on state);
+  `cardinality` defines optional parts and `switch` defines structural alternatives
 - Does not represent portal content (elements rendered elsewhere in DOM)
 - Style inheritance is not yet supported (e.g., "inherits from Card")
 - No runtime behavior specification (only static structure)
