@@ -140,7 +140,7 @@ exports[`build output snapshots > modifiers.lifecycle.css matches snapshot 1`] =
 		--modifier-color-icon: var(--color-icon-information);
 		--modifier-color-text: var(--color-text-information);
 	}
-	.inProgress {
+	.in_progress {
 		--modifier-color-border: var(--color-border-information);
 		--modifier-color-foreground-secondary: var(--color-foreground-secondary-information);
 		--modifier-color-icon: var(--color-icon-information);
@@ -35347,7 +35347,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
-        "selector": ".inProgress",
+        "selector": ".in_progress",
         "file": "modifiers.lifecycle.css",
         "line": 9,
         "atRules": [
@@ -35777,7 +35777,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
-        "selector": ".inProgress",
+        "selector": ".in_progress",
         "file": "modifiers.lifecycle.css",
         "line": 11,
         "atRules": [
@@ -35978,7 +35978,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
-        "selector": ".inProgress",
+        "selector": ".in_progress",
         "file": "modifiers.lifecycle.css",
         "line": 12,
         "atRules": [
@@ -36146,7 +36146,7 @@ exports[`build output snapshots > tokens.json matches snapshot 1`] = `
         ]
       },
       {
-        "selector": ".inProgress",
+        "selector": ".in_progress",
         "file": "modifiers.lifecycle.css",
         "line": 10,
         "atRules": [

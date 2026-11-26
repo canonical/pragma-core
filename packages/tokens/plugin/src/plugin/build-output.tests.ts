@@ -535,6 +535,25 @@ describe("3.5 modifiers.{family}.css", () => {
 });
 
 // ---------------------------------------------------------------------------
+// 3.5b Validate modifiers.lifecycle.css
+// ---------------------------------------------------------------------------
+describe("3.5b modifiers.lifecycle.css", () => {
+  const css = dist("modifiers.lifecycle.css");
+  const selectors = extractSelectors(css);
+
+  it("selects the snake_case in_progress context", () => {
+    expect(selectors).toContain(".in_progress");
+    expect(selectors).not.toContain(".inProgress");
+  });
+
+  it("emits no lifecycle selector with an uppercase letter", () => {
+    for (const selector of selectors) {
+      expect(selector, selector).not.toMatch(/[A-Z]/);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
 // 3.6 Validate modifiers.surfaces.css
 // ---------------------------------------------------------------------------
 describe("3.6 modifiers.surfaces.css", () => {
