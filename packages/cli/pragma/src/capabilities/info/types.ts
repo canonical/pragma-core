@@ -17,6 +17,18 @@ export interface InfoConfig {
   readonly globalExists: boolean;
 }
 
+/**
+ * One part of the CLI or its store that is past its release. Declared here,
+ * not imported from the detector, so the spec's static graph stays free of the
+ * config and pack readers the detector uses.
+ */
+export interface InfoUnreleasedPart {
+  /** `CLI` for the command itself, or the pack's package name. */
+  readonly name: string;
+  /** What is unreleased about it, in one line. */
+  readonly detail: string;
+}
+
 /** An available CLI update — present only when a newer release is published. */
 export interface InfoUpdate {
   readonly current: string;
@@ -44,6 +56,9 @@ export interface InfoData {
   readonly update?: InfoUpdate;
   /** True when the registry could not be reached (the update-check was skipped). */
   readonly updateSkipped: boolean;
+  /** The parts of the CLI and its store that are past their release; absent
+   * when everything running is a release. */
+  readonly unreleased?: readonly InfoUnreleasedPart[];
   /** Total indexed entities from the storeless pack index, when reachable. */
   readonly entities?: number;
   readonly config: InfoConfig;
