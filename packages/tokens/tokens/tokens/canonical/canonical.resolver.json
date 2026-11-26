@@ -145,7 +145,7 @@
       }
     },
     "lifecycle": {
-      "description": "Lifecycle modifier family. Contexts: planned, inProgress, completed, failed.",
+      "description": "Lifecycle modifier family. Contexts: planned, in_progress, completed, failed.",
       "default": "none",
       "contexts": {
         "none": [],
@@ -154,7 +154,7 @@
             "$ref": "global/semantic/modifier/lifecycle/planned.tokens.json"
           }
         ],
-        "inProgress": [
+        "in_progress": [
           {
             "$ref": "global/semantic/modifier/lifecycle/in-progress.tokens.json"
           }
