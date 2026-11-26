@@ -211,8 +211,8 @@ Vite and Bun resolve the bare package specifiers in those two `@import` lines on
 their own, so they need nothing extra. Webpack does not: its css-loader reads the
 `@font-face` URLs inside `@canonical/styles/fonts` as relative paths, and the build
 fails with `Can't resolve './@canonical/ds-assets/fonts/ubuntu-sans/UbuntuSans[wdth,wght].woff2'`.
-Next.js builds styles through that same pipeline, so `next build` fails on the fonts
-import (Turbopack, as in `next dev --turbopack`, resolves it). The
+Next.js hits the same failure when it builds with webpack (`next build` on Next.js 15
+by default, or `next build --webpack` on Next.js 16). Turbopack handles the import. The
 `NormalModuleReplacementPlugin` workaround is in
 [`@canonical/styles`' "Webpack and Next.js"](https://github.com/canonical/pragma-web/blob/main/packages/styles/main/README.md#webpack-and-nextjs).
 
