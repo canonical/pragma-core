@@ -775,10 +775,11 @@ Component TSDoc documentation must use the description from the design system on
 Use the description from the DSL ontology verbatim.
 ```typescript
 /**
- * The tag component is a compact, non-interactive visual element used to
+ * The label component is a compact, non-interactive visual element used to
  * categorize content or indicate a status. Its primary role is metadata
- * visualization. While it has similar visual properties to the Chip, it is
- * purely informational and does not trigger actions or allow for removal.
+ * visualization. While it has similar visual properties to the
+ * [Chip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-N-fnT7n4mU),
+ * it is purely informational and does not trigger actions or allow for removal.
  *
  * @implements ds:global.component.tag
  */
