@@ -88,7 +88,7 @@ Standard identifiers follow a hierarchical compact IRI pattern: `cs:{category}.{
 - Be specific but not overly verbose
 - Follow existing naming patterns in the same category
 - Treat the subject IRI as the only canonical identifier
-- Use `cs:name` only for an optional human-readable display title
+- Use `rdfs:label` for the human-readable display title, with a language tag (`"Human Readable Title"@en`); it is a display title only and never an identifier. `cs:name` is deprecated (ontology 2.1.0) and must not be used in new standards.
 
 ### 4. Write the Standard
 
@@ -98,7 +98,7 @@ Create a new standard instance in the appropriate data file under `data/`.
 
 ```turtle
 cs:category.domain.topic a cs:CodeStandard ;
-    cs:name "Human Readable Title" ;
+    rdfs:label "Human Readable Title"@en ;
     cs:hasCategory cs:category ;
     cs:description "Clear, concise description of what this standard covers and why it matters." ;
     cs:do [
@@ -142,14 +142,17 @@ Each `cs:do` and `cs:dont` is a blank node (`cs:Example`) with structured fields
 
 **Required Properties:**
 - subject IRI - Canonical compact identifier
+- `rdfs:label` - Human-readable display title, language-tagged (`"…"@en`). Required by house rule, and checked at warning severity by `definitions/shapes.ttl` (exactly one label per language) until that gate is promoted to an error
 - `cs:hasCategory` - Reference to a Category instance
 - `cs:description` - What and why (plain text or markdown)
 - `cs:do` - One or more positive examples (blank nodes)
 - `cs:dont` - One or more negative examples (blank nodes)
 
 **Optional Properties:**
-- `cs:name` - Human-readable display title
 - `cs:extends` - Reference to a parent standard this builds upon
+
+**Deprecated:**
+- `cs:name` - Superseded by `rdfs:label` in ontology 2.1.0. It was invisible to the quality shapes and, because it was asserted on a minority of standards, a downstream consumer that addressed standards by it could reach almost none of them. Retained only so a reader who meets it in an older graph is told what replaced it; never write it.
 
 ### 5. Create a New Category (if needed)
 
@@ -168,7 +171,7 @@ When your standard builds on another:
 
 ```turtle
 cs:react.component.props.special_case a cs:CodeStandard ;
-    cs:name "React Props Special Case" ;
+    rdfs:label "React Props Special Case"@en ;
     cs:extends cs:react.component.props ;
     cs:hasCategory cs:react ;
     cs:description "Specific guidance that builds on the general props standard." ;
@@ -211,7 +214,7 @@ Then verify the standard loads correctly:
 sem_lookup(type: "cs:CodeStandard", filters: {"@id": "cs:category.domain.topic"})
 ```
 
-The `@id` must always use the canonical compact IRI. Do not look up standards by `cs:name`.
+The `@id` must always use the canonical compact IRI. Never look up a standard by its label.
 
 ## File Organization
 
@@ -220,7 +223,8 @@ Standards are organized by category in `data/`:
 ```
 code-standards/
 ├── definitions/
-│   └── CodeStandard.ttl    # Ontology schema
+│   ├── CodeStandard.ttl    # Ontology schema
+│   └── shapes.ttl          # SHACL constraints on the instances
 ├── data/
 │   ├── react.ttl           # React standards
 │   ├── css.ttl             # CSS standards
@@ -229,8 +233,8 @@ code-standards/
 │   ├── storybook.ttl       # Storybook standards
 │   └── icons.ttl           # Icon standards
 └── skills/
-    └── standards-guide/
-        └── SKILL.md
+    └── add-standard/
+        └── SKILL.md        # this skill
 ```
 
 Add new standards to the file matching their category.
@@ -272,7 +276,7 @@ Adding a new standard for React error boundaries:
 # In data/react.ttl
 
 cs:react.component.error_boundaries a cs:CodeStandard ;
-    cs:name "React Error Boundaries" ;
+    rdfs:label "React Error Boundaries"@en ;
     cs:hasCategory cs:react ;
     cs:description "Error boundaries must be used to catch JavaScript errors in component trees and display fallback UI. They should be placed strategically to isolate failures without breaking the entire application." ;
     cs:do [

@@ -5,7 +5,7 @@ Standards documentation generated from the code-standards ontology.
 ## Categories
 
 - [Code](./code.md) (10)
-- [CSS](./css.md) (15)
+- [CSS](./css.md) (25)
 - [Git](./git.md) (7)
 - [Icons](./icons.md) (8)
 - [Lit](./lit.md) (13)
