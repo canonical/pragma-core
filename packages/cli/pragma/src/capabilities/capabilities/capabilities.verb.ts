@@ -36,9 +36,9 @@ const capabilitiesVerb: VerbSpec<Record<string, unknown>, CapabilitiesData> = {
   params: [],
   output: { formatters: capabilitiesFormatters },
   examples: [
-    { cmd: `${BIN_NAME} capabilities`, note: "the annotated tool catalog" },
+    { call: { verb: "capabilities" }, note: "the annotated tool catalog" },
     {
-      cmd: `${BIN_NAME} capabilities --format json`,
+      call: { verb: "capabilities", cliFlags: ["--format", "json"] },
       note: "the structured map",
     },
   ],

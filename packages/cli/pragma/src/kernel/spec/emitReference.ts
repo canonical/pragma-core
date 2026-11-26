@@ -18,6 +18,7 @@
 import { BIN_NAME, PROJECT_CONFIG_FILENAME } from "../../constants.js";
 import type { RawConfig } from "../config/types.js";
 import { ERROR_CODES } from "../error/index.js";
+import { declareVerbs, renderCall } from "./call.js";
 import {
   FIXED_SURFACE,
   kebabCase,
@@ -212,9 +213,8 @@ function formatExamples(examples: readonly Example[] | undefined): string {
   if (!examples || examples.length === 0) return "";
   const lines = ["```bash"];
   for (const example of examples) {
-    lines.push(
-      example.note ? `${example.cmd}  # ${example.note}` : example.cmd,
-    );
+    const cmd = renderCall(example.call, "cli");
+    lines.push(example.note ? `${cmd}  # ${example.note}` : cmd);
   }
   lines.push("```");
   return `**Examples**\n\n${lines.join("\n")}`;
@@ -678,6 +678,11 @@ export function emitReference(
   modules: readonly CapabilityModule[],
 ): ReferenceDocs {
   const verbs = collectDocVerbs(modules);
+  // The examples render through {@link renderCall}, which spells a call's
+  // positionals only for a verb it knows; declare these verbs so a documented
+  // example renders the way the CLI accepts it (additive and idempotent, so a
+  // caller that already declared them is unchanged).
+  declareVerbs(modules.flatMap((module) => module.verbs));
   return new Map<string, string>([
     ["index.md", renderIndexPage(verbs, modules)],
     [

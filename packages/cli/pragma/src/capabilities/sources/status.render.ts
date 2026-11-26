@@ -4,7 +4,7 @@
 
 import { defaultStyle, type RenderStyle } from "../../kernel/render/style.js";
 import { describeIgnoredPack } from "../../kernel/runtime/resolveSources.js";
-import { renderCall } from "../../kernel/spec/call.js";
+import { renderCall, renderNextStep } from "../../kernel/spec/call.js";
 import type { Formatters } from "../../kernel/spec/index.js";
 import { BUILD_STORE_CALL } from "../shared/calls.js";
 import type { SourcesStatusData } from "./types.js";
@@ -91,5 +91,15 @@ export const statusFormatters: Formatters<SourcesStatusData> = {
 
   json(data) {
     return JSON.stringify(data);
+  },
+
+  // The machine half of the same next-step the plain and llm forms carry on the
+  // Store line: over `--format json` and MCP the payload is bare, so the notice
+  // seam spells the next call for the surface it is about to be printed on.
+  notice(data, surface = "cli") {
+    if (data.store === "built") return undefined;
+    return data.store === "embedded"
+      ? `Reads are answered by the embedded snapshot, not a freshly built pack. ${renderNextStep(BUILD_STORE_CALL, surface)}`
+      : `The store is not built, so no pack answers reads. ${renderNextStep(BUILD_STORE_CALL, surface)}`;
   },
 };

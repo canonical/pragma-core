@@ -30,7 +30,6 @@
  * store already give every other read.
  */
 
-import { BIN_NAME } from "../../constants.js";
 import { PragmaError } from "../../kernel/error/index.js";
 import { asVerb } from "../../kernel/spec/asVerb.js";
 import type { VerbSpec } from "../../kernel/spec/index.js";
@@ -138,11 +137,21 @@ const connectVerb: VerbSpec<Record<string, unknown>, ConnectResult> = {
   output: { formatters: connectFormatters },
   examples: [
     {
-      cmd: `${BIN_NAME} graph connect ds:global.component.button dt:color.text`,
+      call: {
+        verb: "graph connect",
+        params: { a: "ds:global.component.button", b: "dt:color.text" },
+      },
       note: "a block and a token symbol",
     },
     {
-      cmd: `${BIN_NAME} graph connect ds:global.component.button ds:apps.pattern.datatable --format json`,
+      call: {
+        verb: "graph connect",
+        params: {
+          a: "ds:global.component.button",
+          b: "ds:apps.pattern.datatable",
+        },
+        cliFlags: ["--format", "json"],
+      },
       note: "an honest unlinked answer, with the policy it was found under",
     },
   ],

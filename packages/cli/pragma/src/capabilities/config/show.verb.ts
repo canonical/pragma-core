@@ -5,7 +5,7 @@
  * later PR — this ships only the reader.
  */
 
-import { BIN_NAME, PROJECT_CONFIG_FILENAME } from "../../constants.js";
+import { PROJECT_CONFIG_FILENAME } from "../../constants.js";
 import { asVerb } from "../../kernel/spec/asVerb.js";
 import type { CapabilityModule, VerbSpec } from "../../kernel/spec/index.js";
 import { configGetVerb } from "./get.verb.js";
@@ -23,8 +23,8 @@ const showVerb: VerbSpec<Record<string, unknown>, ConfigShowData> = {
   params: [],
   output: { formatters: configShowFormatters },
   examples: [
-    { cmd: `${BIN_NAME} config show` },
-    { cmd: `${BIN_NAME} config show --format json` },
+    { call: { verb: "config show" } },
+    { call: { verb: "config show", cliFlags: ["--format", "json"] } },
   ],
   capability: {
     needsStore: false,

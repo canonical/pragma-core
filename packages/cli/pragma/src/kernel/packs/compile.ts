@@ -14,7 +14,7 @@
  * facade).
  */
 
-import { BIN_NAME, DETAIL_LEVELS } from "../../constants.js";
+import { DETAIL_LEVELS } from "../../constants.js";
 import { PragmaError } from "../error/index.js";
 import { compactUri, DEFAULT_PREFIX_MAP } from "../render/index.js";
 import type { PragmaRuntime } from "../runtime/index.js";
@@ -304,17 +304,25 @@ function compileListVerb(shape: PackList, meta: ListVerbMeta): VerbSpec {
       }),
     },
     examples: [
-      { cmd: `${BIN_NAME} ${meta.noun} ${meta.verb}` },
+      { call: { verb: `${meta.noun} ${meta.verb}` } },
       ...(filterExample
         ? [
             {
-              cmd: `${BIN_NAME} ${meta.noun} ${meta.verb} --${filterExample.param} ${quoteExample(
-                filterExample.values?.at(0) ?? "",
-              )}`,
+              call: {
+                verb: `${meta.noun} ${meta.verb}`,
+                params: {
+                  [filterExample.param]: filterExample.values?.at(0),
+                },
+              },
             },
           ]
         : []),
-      { cmd: `${BIN_NAME} ${meta.noun} ${meta.verb} --format llm` },
+      {
+        call: {
+          verb: `${meta.noun} ${meta.verb}`,
+          cliFlags: ["--format", "llm"],
+        },
+      },
     ],
     capability: READ_CAPABILITY,
     run: (params: Record<string, unknown>, rt: PragmaRuntime) =>
@@ -375,11 +383,14 @@ function compileLookupVerb(
     params: [nameParam, ...tierParams(tierScope)],
     output: { formatters: lookupFormatters(lookup, prefixes) },
     examples: [
-      { cmd: `${BIN_NAME} ${noun} lookup <name>` },
+      { call: { verb: `${noun} lookup`, params: { name: "<name>" } } },
       ...(tierScope
         ? [
             {
-              cmd: `${BIN_NAME} ${noun} lookup --tier all <name>`,
+              call: {
+                verb: `${noun} lookup`,
+                params: { name: "<name>", tier: EVERY_TIER },
+              },
               note: "every tier, not just the ones in scope",
             },
           ]
@@ -459,8 +470,10 @@ function compileSampleVerb(
     params: countParam,
     output: { formatters: sampleFormatters(lookup, noun, prefixes) },
     examples: [
-      { cmd: `${BIN_NAME} ${noun} sample` },
-      ...(config?.fixedCount ? [] : [{ cmd: `${BIN_NAME} ${noun} sample 3` }]),
+      { call: { verb: `${noun} sample` } },
+      ...(config?.fixedCount
+        ? []
+        : [{ call: { verb: `${noun} sample`, params: { count: "3" } } }]),
     ],
     capability: READ_CAPABILITY,
     run: (params: Record<string, unknown>, rt: PragmaRuntime) =>
@@ -577,11 +590,6 @@ function projectSearch(search: PackSearch | undefined): ParamSpec[] {
       doc: search.description ?? `Search in ${search.variables.join(", ")}.`,
     },
   ];
-}
-
-/** Quote a filter example value when it is not a bare word. */
-function quoteExample(value: string): string {
-  return /^[\w.-]+$/.test(value) ? value : JSON.stringify(value);
 }
 
 function capitalize(value: string): string {

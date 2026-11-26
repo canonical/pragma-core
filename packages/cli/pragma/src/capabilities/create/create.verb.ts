@@ -134,6 +134,21 @@ const applicationParams: ParamSpec[] = generatorToParams(
 const pageParams: ParamSpec[] = generatorToParams(surfaceFor("page").prompts);
 
 /**
+ * The literal CLI tree segments a binding's single-leaf mount inserts between
+ * the noun verb and its params. A multi-leaf binding (`component`) carries the
+ * segment as the required `framework` positional, so it needs no extra segment
+ * here; a single leaf whose path is more than one segment (`application/react`)
+ * is reached through that extra segment on the CLI even though the binding
+ * params do not carry it.
+ */
+function cliSegmentsOf(kind: CreateKind): readonly string[] {
+  const [only, ...rest] = CREATE_GENERATORS[kind].paths as readonly string[];
+  if (only === undefined || rest.length > 0) return [];
+  const [, segment] = only.split("/");
+  return segment === undefined ? [] : [segment];
+}
+
+/**
  * The path param each noun jails. `package` writes into a name-derived subdir;
  * `page`'s answer is two name segments (letters, digits, hyphens), never a
  * filesystem path, so neither has one to jail.
@@ -473,6 +488,8 @@ function createVerb(
     summary,
     ...guidance,
     params,
+    cliSegments: cliSegmentsOf(kind),
+    cliListStyle: "comma",
     output: CREATE_OUTPUT,
     examples,
     capability: CREATE_CAPABILITY,
@@ -514,11 +531,21 @@ export const createVerbs: Record<
     componentParams,
     [
       {
-        cmd: `${BIN_NAME} create component react src/components/Button`,
+        call: {
+          verb: "create component",
+          params: {
+            framework: "react",
+            componentPath: "src/components/Button",
+          },
+        },
         note: "React component with tests, stories, and styles",
       },
       {
-        cmd: `${BIN_NAME} create component svelte src/lib/Card --dry-run`,
+        call: {
+          verb: "create component",
+          params: { framework: "svelte", componentPath: "src/lib/Card" },
+          cliFlags: ["--dry-run"],
+        },
         note: "preview the files without writing",
       },
     ],
@@ -534,10 +561,16 @@ export const createVerbs: Record<
     packageParams,
     [
       {
-        cmd: `${BIN_NAME} create package --name @canonical/my-lib --type library`,
+        call: {
+          verb: "create package",
+          params: { name: "@canonical/my-lib", type: "library" },
+        },
       },
       {
-        cmd: `${BIN_NAME} create package --name @canonical/my-tool --no-run-install`,
+        call: {
+          verb: "create package",
+          params: { name: "@canonical/my-tool", runInstall: false },
+        },
       },
     ],
     {
@@ -551,11 +584,21 @@ export const createVerbs: Record<
     playgroundParams,
     [
       {
-        cmd: `${BIN_NAME} create playground my-prototype`,
+        call: {
+          verb: "create playground",
+          params: { playgroundPath: "my-prototype" },
+        },
         note: "React, with ds-global and ds-global-form",
       },
       {
-        cmd: `${BIN_NAME} create playground my-prototype --framework svelte --packages ds-global,ds-app`,
+        call: {
+          verb: "create playground",
+          params: {
+            playgroundPath: "my-prototype",
+            framework: "svelte",
+            packages: ["ds-global", "ds-app"],
+          },
+        },
       },
     ],
     {
@@ -569,10 +612,25 @@ export const createVerbs: Record<
     "Scaffold a full React application with routing, an application shell with a dashboard, and either server-side rendering or a client-only SPA.",
     applicationParams,
     [
-      { cmd: `${BIN_NAME} create application react my-app` },
-      { cmd: `${BIN_NAME} create application react my-app --relay` },
-      { cmd: `${BIN_NAME} create application react my-app --rendering spa` },
-      { cmd: `${BIN_NAME} create application react my-app --no-app-shell` },
+      { call: { verb: "create application", params: { appPath: "my-app" } } },
+      {
+        call: {
+          verb: "create application",
+          params: { appPath: "my-app", relay: true },
+        },
+      },
+      {
+        call: {
+          verb: "create application",
+          params: { appPath: "my-app", rendering: "spa" },
+        },
+      },
+      {
+        call: {
+          verb: "create application",
+          params: { appPath: "my-app", appShell: false },
+        },
+      },
     ],
     {
       useWhen:
@@ -586,11 +644,18 @@ export const createVerbs: Record<
     pageParams,
     [
       {
-        cmd: `${BIN_NAME} create page invoices/detail`,
+        call: {
+          verb: "create page",
+          params: { pagePath: "invoices/detail" },
+        },
         note: "writes src/domains/invoices/DetailPage.tsx and prints route examples",
       },
       {
-        cmd: `${BIN_NAME} create page invoices/detail --undo`,
+        call: {
+          verb: "create page",
+          params: { pagePath: "invoices/detail" },
+          cliFlags: ["--undo"],
+        },
         note: "delete the page again",
       },
     ],

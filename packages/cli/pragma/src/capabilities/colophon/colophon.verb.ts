@@ -22,11 +22,11 @@ const colophonVerb: VerbSpec<Record<string, unknown>, ColophonData> = {
   output: { formatters: colophonFormatters },
   examples: [
     {
-      cmd: `${BIN_NAME} colophon`,
+      call: { verb: "colophon" },
       note: "the active domain's story",
     },
     {
-      cmd: `${BIN_NAME} colophon --format llm`,
+      call: { verb: "colophon", cliFlags: ["--format", "llm"] },
       note: "condensed Markdown for agents",
     },
   ],

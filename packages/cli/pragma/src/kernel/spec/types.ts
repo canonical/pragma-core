@@ -242,9 +242,14 @@ export interface Formatters<T> {
   readonly meta?: (d: T) => Record<string, unknown> | undefined;
 }
 
-/** A usage example shown in verb help. */
+/** A usage example shown in verb help and the reference. */
 export interface Example {
-  readonly cmd: string;
+  /**
+   * The call the example makes — the same checked {@link Call} every example
+   * and recovery uses, spelled per surface by {@link renderCall}, so a
+   * hand-typed verb path cannot rot.
+   */
+  readonly call: Call;
   readonly note?: string;
 }
 
@@ -332,6 +337,22 @@ export interface VerbSpec<P = Record<string, unknown>, R = unknown> {
   };
   readonly examples?: readonly Example[];
   readonly disclosure?: DisclosureSpec;
+  /**
+   * Literal path segments a mounted CLI inserts between the verb path and its
+   * params — the tree segments of the `create` noun (`create application
+   * react`). A mounted noun's CLI grammar can differ from the binding-level
+   * params, and {@link renderCall} spells a call as the command the CLI really
+   * accepts, so the segment is declared on the verb rather than guessed.
+   */
+  readonly cliSegments?: readonly string[];
+  /**
+   * How the CLI reads a list-valued flag. The default repeats the flag once
+   * per value, which Commander collects; a mounted noun whose parser splits
+   * one value on commas instead (the `create` noun, projected from summon,
+   * keeps only the last occurrence of a repeated flag) declares `"comma"`,
+   * so {@link renderCall} joins the values into one flag.
+   */
+  readonly cliListStyle?: "repeat" | "comma";
   readonly capability: Capability;
   readonly run: (p: P, rt: PragmaRuntime) => Promise<R> | Task<R>;
   readonly errors?: readonly ErrorSpec[];

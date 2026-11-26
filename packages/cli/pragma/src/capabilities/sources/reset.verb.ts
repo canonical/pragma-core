@@ -15,7 +15,6 @@
  */
 
 import type { Task } from "@canonical/task";
-import { BIN_NAME } from "../../constants.js";
 import type { VerbSpec } from "../../kernel/spec/index.js";
 import { resetFormatters } from "./reset.render.js";
 import type { SourcesResetData } from "./types.js";
@@ -31,11 +30,11 @@ export const resetVerb: VerbSpec<Record<string, unknown>, SourcesResetData> = {
   output: { formatters: resetFormatters },
   examples: [
     {
-      cmd: `${BIN_NAME} sources reset`,
+      call: { verb: "sources reset" },
       note: "drop the built pack and read the shipped snapshot",
     },
     {
-      cmd: `${BIN_NAME} sources reset --dry-run`,
+      call: { verb: "sources reset", cliFlags: ["--dry-run"] },
       note: "show what would be removed",
     },
   ],

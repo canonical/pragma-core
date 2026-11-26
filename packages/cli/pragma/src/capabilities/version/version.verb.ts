@@ -7,7 +7,7 @@
  * server handshake's `serverInfo`.
  */
 
-import { BIN_NAME, VERSION } from "../../constants.js";
+import { VERSION } from "../../constants.js";
 import { asVerb } from "../../kernel/spec/asVerb.js";
 import type { VerbSpec } from "../../kernel/spec/index.js";
 
@@ -24,7 +24,7 @@ const versionVerb: VerbSpec<Record<string, unknown>, string> = {
       json: (version) => JSON.stringify({ version }),
     },
   },
-  examples: [{ cmd: `${BIN_NAME} version` }],
+  examples: [{ call: { verb: "version" } }],
   capability: {
     needsStore: false,
     mutates: false,

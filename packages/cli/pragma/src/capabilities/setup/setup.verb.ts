@@ -464,17 +464,17 @@ const setupAllVerb = setupVerb(
     example: { scope: "project" },
     doc: "Shows what each target needs, then applies the ones you keep. Everything is configured in your home directory by default; the scope option moves the run to this project alone, or covers both. Without an attended terminal the plan is printed and nothing is written unless the run is explicitly confirmed.",
     examples: [
-      { cmd: `${BIN_NAME} setup` },
+      { call: { verb: "setup" } },
       {
-        cmd: `${BIN_NAME} setup --dry-run`,
+        call: { verb: "setup", cliFlags: ["--dry-run"] },
         note: "show the plan, write nothing",
       },
       {
-        cmd: `${BIN_NAME} setup --local`,
+        call: { verb: "setup", params: { local: true } },
         note: "configure this project instead of your home directory",
       },
       {
-        cmd: `${BIN_NAME} setup mcp`,
+        call: { verb: "setup mcp" },
         note: "only register the MCP server",
       },
     ],

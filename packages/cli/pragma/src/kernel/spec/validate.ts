@@ -90,7 +90,16 @@ const verbSpecSchema = z.object({
     formatters: z.object({ plain: fn, llm: fn, json: fn }),
   }),
   examples: z
-    .array(z.object({ cmd: z.string(), note: z.string().optional() }))
+    .array(
+      z.object({
+        call: z.object({
+          verb: z.string().min(1),
+          params: z.record(z.string(), z.unknown()).optional(),
+          cliFlags: z.array(z.string()).optional(),
+        }),
+        note: z.string().optional(),
+      }),
+    )
     .optional(),
   disclosure: z
     .object({ levels: z.array(z.string()), default: z.string() })

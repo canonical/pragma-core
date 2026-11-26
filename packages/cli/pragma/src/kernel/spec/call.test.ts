@@ -37,6 +37,49 @@ describe("a call is spelled for the surface it is printed on", () => {
     expect(renderCall(verbose, "mcp")).toBe("sources_update {}");
   });
 
+  it("spells a create call as the mounted command, with the generator tree segment", () => {
+    // The create mount inserts the generator tree segment between the noun
+    // verb and the params: `create application react my-app`, not
+    // `create application my-app`.
+    expect(
+      renderCall(
+        { verb: "create application", params: { appPath: "my-app" } },
+        "cli",
+      ),
+    ).toBe("pragma create application react my-app");
+    // A single-segment binding has no tree segment to insert.
+    expect(
+      renderCall({ verb: "create package", params: { name: "my-lib" } }, "cli"),
+    ).toBe("pragma create package --name my-lib");
+    // A multi-leaf binding carries its framework as a positional param.
+    expect(
+      renderCall(
+        {
+          verb: "create component",
+          params: { framework: "react", componentPath: "src/Button" },
+        },
+        "cli",
+      ),
+    ).toBe("pragma create component react src/Button");
+  });
+
+  it("joins a create call's list flag with commas, the form the create mount parses", () => {
+    // The create mount splits ONE value on commas and keeps only the last of a
+    // repeated flag, so `--packages a --packages b` would silently drop `a`.
+    expect(
+      renderCall(
+        {
+          verb: "create playground",
+          params: {
+            playgroundPath: "proto",
+            packages: ["ds-global", "ds-app"],
+          },
+        },
+        "cli",
+      ),
+    ).toBe("pragma create playground proto --packages ds-global,ds-app");
+  });
+
   it("spells flags the way the CLI parses them", () => {
     // A default-true boolean is negated; a default-false one is simply absent.
     expect(

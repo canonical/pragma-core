@@ -13,7 +13,6 @@
  */
 
 import type { Task } from "@canonical/task";
-import { BIN_NAME } from "../../constants.js";
 import type { VerbSpec } from "../../kernel/spec/index.js";
 import type { SourcesUpdateData } from "./types.js";
 import { updateFormatters } from "./update.render.js";
@@ -38,9 +37,9 @@ export const updateVerb: VerbSpec<
   ],
   output: { formatters: updateFormatters },
   examples: [
-    { cmd: `${BIN_NAME} sources update`, note: "resolve and build" },
+    { call: { verb: "sources update" }, note: "resolve and build" },
     {
-      cmd: `${BIN_NAME} sources update --skip-invalid`,
+      call: { verb: "sources update", params: { skipInvalid: true } },
       note: "build from the sources that parse, and name the ones dropped",
     },
   ],

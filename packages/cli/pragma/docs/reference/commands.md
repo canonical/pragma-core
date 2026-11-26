@@ -67,7 +67,7 @@ pragma block lookup <name...> [options]
 
 ```bash
 pragma block lookup <name>
-pragma block lookup --tier all <name>  # every tier, not just the ones in scope
+pragma block lookup <name> --tier all  # every tier, not just the ones in scope
 ```
 
 ### pragma block sample
@@ -204,7 +204,7 @@ pragma concept lookup <name...> [options]
 
 ```bash
 pragma concept lookup <name>
-pragma concept lookup --tier all <name>  # every tier, not just the ones in scope
+pragma concept lookup <name> --tier all  # every tier, not just the ones in scope
 ```
 
 ## config
@@ -612,8 +612,8 @@ pragma graph query <sparql>
 **Examples**
 
 ```bash
-pragma graph query "SELECT ?s WHERE { ?s a ds:Component }"  # list every component subject
-pragma graph query "ASK { <https://ds.canonical.com/global.component.button> a ds:Component }" --format json
+pragma graph query 'SELECT ?s WHERE { ?s a ds:Component }'  # list every component subject
+pragma graph query 'ASK { <https://ds.canonical.com/global.component.button> a ds:Component }' --format json
 ```
 
 ## implementation
@@ -781,7 +781,7 @@ pragma modifier lookup <name...> [options]
 
 ```bash
 pragma modifier lookup <name>
-pragma modifier lookup --tier all <name>  # every tier, not just the ones in scope
+pragma modifier lookup <name> --tier all  # every tier, not just the ones in scope
 ```
 
 ### pragma modifier sample

@@ -8,7 +8,6 @@
  * the config reader off the fast path, exactly like `info`.
  */
 
-import { BIN_NAME } from "../../constants.js";
 import type { VerbSpec } from "../../kernel/spec/index.js";
 import { statusFormatters } from "./status.render.js";
 import type { SourcesStatusData } from "./types.js";
@@ -27,11 +26,11 @@ export const statusVerb: VerbSpec<
   output: { formatters: statusFormatters },
   examples: [
     {
-      cmd: `${BIN_NAME} sources status`,
+      call: { verb: "sources status" },
       note: "human-readable readiness summary",
     },
     {
-      cmd: `${BIN_NAME} sources status --format json`,
+      call: { verb: "sources status", cliFlags: ["--format", "json"] },
       note: "the full envelope",
     },
   ],

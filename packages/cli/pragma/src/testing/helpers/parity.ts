@@ -68,9 +68,13 @@ export function noticeOf(
 /**
  * The envelope with its notice's surface spellings blanked: every backticked
  * span (a call, an argument) and the `Run`/`Call` lead before one. The prose
- * around them — which sentences are present, in what order — is kept.
+ * around them — which sentences are present, in what order — is kept. Exported
+ * for a case that asserts envelope equality by hand rather than through
+ * {@link assertCliMcpParity}.
  */
-function withNormalisedNotice(envelope: Record<string, unknown>): unknown {
+export function withNormalisedNotice(
+  envelope: Record<string, unknown>,
+): unknown {
   const notice = noticeOf(envelope);
   if (notice === undefined) return envelope;
   const normalised = notice

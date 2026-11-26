@@ -145,6 +145,35 @@ describe("config set — the reserved clear-markers are refused, naming unset", 
       /Invalid channel/,
     );
   });
+
+  it("an empty value is refused like a clear-marker: clearing is unset's job", async () => {
+    // `config set tier ""` wrote an empty tier instead of refusing. Setting is
+    // not clearing; an empty value means "remove the field", which unset owns.
+    const cwd = tmp("pragma-proj-");
+    await executeVerb(
+      setVerb,
+      { key: "tier", value: "apps/lxd" },
+      REAL,
+      bootRuntime(FLAGS, cwd),
+    );
+    let caught: unknown;
+    try {
+      await executeVerb(
+        setVerb,
+        { key: "tier", value: "" },
+        REAL,
+        bootRuntime(FLAGS, cwd),
+      );
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(PragmaError);
+    expect((caught as PragmaError).code).toBe("INVALID_INPUT");
+    expect(JSON.stringify((caught as PragmaError).recovery)).toContain(
+      "config unset tier",
+    );
+    expect(readGlobal().tier).toBe("apps/lxd");
+  });
 });
 
 describe("config set — input rejection (INVALID_INPUT)", () => {

@@ -8,7 +8,6 @@
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { BIN_NAME } from "../../constants.js";
 import { callRecovery, PragmaError } from "../../kernel/error/index.js";
 import { suggestNames } from "../../kernel/project/cli/suggestNames.js";
 import type { PragmaRuntime } from "../../kernel/runtime/index.js";
@@ -28,7 +27,7 @@ const listVerb: VerbSpec<Record<string, unknown>, DiscoveredSkill[]> = {
   useWhen: "when asked which agent skills (guided workflows) are available",
   params: [],
   output: { formatters: skillListFormatters },
-  examples: [{ cmd: `${BIN_NAME} skill list` }],
+  examples: [{ call: { verb: "skill list" } }],
   capability: {
     needsStore: false,
     mutates: false,
@@ -57,7 +56,7 @@ const lookupVerb: VerbSpec<Record<string, unknown>, SkillLookup> = {
     },
   ],
   output: { formatters: skillLookupFormatters },
-  examples: [{ cmd: `${BIN_NAME} skill lookup docx` }],
+  examples: [{ call: { verb: "skill lookup", params: { name: "docx" } } }],
   capability: {
     needsStore: false,
     mutates: false,
