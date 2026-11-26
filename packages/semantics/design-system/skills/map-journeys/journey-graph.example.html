@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Journey graph: adoption tracker</title>
+<!--
+  Example output of the map-journeys skill: one page drawn from one JSON document.
+  The data block below is the whole source. Leave it empty and the page reads
+  journeys.json from the same folder instead. Nothing else on the page is written by hand.
+-->
+<script type="application/json" id="journeys-data">
+{
+  "goal": "Show how far along each app is, and whether it is moving.",
+  "personas": [
+    { "id": "steward", "name": "Design system steward",
+      "description": "Whoever is looking after the design system at that moment, usually the managers who work on it.",
+      "interests": ["Knowing where adoption stands", "Putting effort where it lands", "Trusting the numbers"] },
+    { "id": "pm", "name": "Project manager",
+      "description": "Whoever plans and reports adoption across the apps. This can be the same person as the steward, wearing a different hat.",
+      "interests": ["Progress they can report", "Seeing stalls early", "Sizing what is left"] },
+    { "id": "owner", "name": "App owner",
+      "description": "Whoever answers for one app's adoption work.",
+      "interests": ["Knowing what to fix next", "Confirming the work landed", "Fair numbers for their app"] }
+  ],
+  "jobs": [
+    { "id": "J1", "name": "See where every app stands", "personas": ["steward", "pm"],
+      "story": "When I review the portfolio, I want each app's stage, adoption share and counts in one place, so I can see who needs help, without opening each repository." },
+    { "id": "J2", "name": "See which components are in use", "personas": ["steward"],
+      "story": "When I plan work on the design system, I want to know which components apps rely on and which none use, so I can put effort where it lands, without guessing from import counts." },
+    { "id": "J3", "name": "Find impure component usage", "personas": ["steward"],
+      "story": "When a design-system component is used with a custom class or style, I want to see where, so I can fix the component or its guidance, without auditing apps by hand." },
+    { "id": "J4", "name": "Trace a number to its evidence", "personas": ["steward", "owner"],
+      "story": "When a figure surprises me, I want to open the usages behind it down to the line of code, so I can trust or dispute it, without re-running the analysis myself." },
+    { "id": "J5", "name": "Bring a new app into scope", "personas": ["steward"], "outside": ["app manifest"],
+      "story": "When a new app joins the programme, I want to describe its scope in one validated file, so I can see it in the next nightly run, without changing the analyzer." },
+    { "id": "J6", "name": "Report progress over time", "personas": ["pm"],
+      "story": "When I report on adoption, I want the change in each app's share since a date I choose, so I can show movement with evidence, without assembling it from manual audits." },
+    { "id": "J7", "name": "Spot stalled apps", "personas": ["pm"],
+      "story": "When I plan the next cycle, I want to see which apps have stopped moving, so I can ask why early, without waiting for a team to raise it." },
+    { "id": "J8", "name": "Size the remaining legacy footprint", "personas": ["pm"],
+      "story": "When I estimate remaining work, I want an app's legacy usages by component and by folder, so I can plan it in pieces, without treating the app as one block." },
+    { "id": "J9", "name": "Know my app's next step", "personas": ["owner"],
+      "story": "When I look at my app, I want its stage and its most used legacy components, so I can choose what to convert next, without reading the adapter documentation end to end." },
+    { "id": "J10", "name": "Get a worklist of usages", "personas": ["owner"],
+      "story": "When I pick up adoption work, I want the usages in one folder with file and line, so I can fix them in one pull request, without searching the codebase." },
+    { "id": "J11", "name": "Check a branch before merging", "personas": ["owner"], "outside": ["analyze command"],
+      "story": "When I finish a change, I want to run the same analysis locally, so I can confirm the usages are gone, without waiting for the nightly run." },
+    { "id": "J12", "name": "Correct what is counted", "personas": ["owner"], "outside": ["app manifest"],
+      "story": "When generated or backend code distorts my numbers, I want to exclude it in the manifest, so I can get a fair report, without asking for an analyzer change." },
+    { "id": "J13", "name": "See what the design system is missing", "personas": ["steward"], "deferred": true,
+      "story": "When I plan what the design system should offer next, I want the components apps build for themselves ranked by use, so I can add what is missing, without surveying every team." },
+    { "id": "J14", "name": "See what a change would affect", "personas": ["steward"], "deferred": true,
+      "story": "When I change a component, I want the props and values apps pass and the components that render it, so I can change it safely, without searching every app." },
+    { "id": "J15", "name": "Check the nightly run", "personas": ["steward"],
+      "story": "When I open the tracker, I want to see that last night's run happened and what it could not analyze, so I can trust the figures, without reading CI logs." }
+  ],
+  "journeys": [
+    { "persona": "steward", "question": "Which components are in use, and can I trust the numbers?", "jobs": ["J15", "J1", "J2", "J4"] },
+    { "persona": "pm", "question": "Are we moving, and what is left?", "jobs": ["J1", "J6", "J7", "J8"] },
+    { "persona": "owner", "question": "What do I fix next in my app?", "jobs": ["J9", "J4", "J10", "J11", "J12"] }
+  ]
+}
+</script>
+<style>
+/* Colours: text always wears the ink tokens; a persona's colour is carried by lines and borders only.
+   Persona colours are assigned in list order from eight fixed slots and never cycled. */
+:root {
+  --page: #f9f9f9; --surface: #ffffff; --ink: #191919; --ink-2: #666666; --line: #c2c2c2; --hair: #e7e7e7;
+  --p1: #257de0; --p2: #f47230; --p3: #00b894; --p4: #f2a600; --p5: #ee7fac; --p6: #008a17; --p7: #6a4ce2; --p8: #ec4647;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --page: #0b0b0b; --surface: #191919; --ink: #efefef; --ink-2: #9c9c9c; --line: #474747; --hair: #303030;
+  --p1: #338ced; --p2: #e76624; --p3: #00a888; --p4: #d28e05; --p5: #e24d8b; --p6: #0aac23; --p7: #9887ef; --p8: #eb6263;
+} }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1180px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 26px; line-height: 1.2; margin: 0 0 6px; }
+h2 { font-size: 18px; margin: 40px 0 10px; }
+p { margin: 0; max-width: 70ch; }
+.muted { color: var(--ink-2); }
+
+.scroll { overflow-x: auto; margin-top: 20px; background: var(--surface); border: 1px solid var(--hair); border-radius: 8px; }
+.graph { position: relative; min-width: 900px; padding: 16px; display: grid; grid-template-columns: 210px 300px minmax(300px, 1fr); column-gap: 72px; }
+.graph svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.col { position: relative; }
+.col h3 { margin: 0 0 12px; height: 16px; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+#col-jobs { display: flex; flex-direction: column; gap: 8px; }
+#col-jobs h3 { margin-bottom: 4px; }
+
+.node { --c: var(--line); position: relative; z-index: 1; display: block; width: 100%; text-align: left; font: inherit; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--c); border-radius: 6px; padding: 7px 10px; cursor: default; transition: opacity .15s; }
+.col:not(#col-jobs) .node { position: absolute; left: 0; }
+.node:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.node .small { display: block; font-size: 12px; color: var(--ink-2); }
+.node.persona { font-weight: 600; padding: 10px 12px; }
+.node.persona .small { font-weight: 400; }
+.node.off, .node.deferred { border-style: dashed; border-left-style: dashed; }
+.node.job { --c: var(--line); border-left-width: 1px; padding-left: 12px; }
+.node.job .id { font: 12px ui-monospace, Menlo, Consolas, monospace; color: var(--ink-2); margin-right: 8px; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--c); margin-right: 6px; }
+.node.job { display: flex; align-items: center; }
+.node.job .name { flex: 1; }
+.node.job .who { display: inline-flex; gap: 3px; margin-left: 8px; }
+.node.job .who .dot { margin: 0; }
+.tag { font-size: 11px; color: var(--ink-2); border: 1px solid var(--line); border-radius: 3px; padding: 0 5px; margin-left: 6px; white-space: nowrap; }
+
+.edge { fill: none; stroke-width: 2; transition: opacity .15s; }
+.edge.thin { stroke-width: 1.5; stroke-dasharray: 5 4; }
+.badge circle { fill: var(--surface); stroke-width: 2; }
+.badge text { fill: var(--ink); font: 600 11px system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; }
+.dim { opacity: .13; }
+@media (prefers-reduced-motion: reduce) { .node, .edge { transition: none; } }
+
+.key { margin-top: 10px; font-size: 13px; color: var(--ink-2); max-width: 90ch; }
+#tip { position: fixed; z-index: 5; max-width: 360px; background: var(--ink); color: var(--surface); font-size: 13px; line-height: 1.45;
+  padding: 8px 10px; border-radius: 6px; pointer-events: none; }
+#tip[hidden] { display: none; }
+
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th { text-align: left; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+th, td { padding: 8px 12px 8px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+td.id { font: 12px ui-monospace, Menlo, Consolas, monospace; color: var(--ink-2); white-space: nowrap; }
+td.name { font-weight: 500; min-width: 170px; }
+td.story { min-width: 300px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Who uses the adoption tracker, for what, and in what order</h1>
+  <p class="muted" id="lede"></p>
+
+  <div class="scroll">
+    <section class="graph" id="graph" aria-label="Personas on the left, their journeys in the middle, jobs on the right. The jobs table below holds the same information.">
+      <svg id="edges" aria-hidden="true"></svg>
+      <div class="col" id="col-personas"><h3>Personas</h3></div>
+      <div class="col" id="col-journeys"><h3>Journeys</h3></div>
+      <div class="col" id="col-jobs"><h3>Jobs</h3></div>
+    </section>
+  </div>
+  <p class="key">A solid line joins a journey to its jobs, and the number is the order they are done in. A job shared by two journeys has a number from each, and the dots on a job show every persona that holds it. A dashed line joins a persona to jobs that are not part of a journey. A dashed box is a deferred job. Hover or focus any box to trace its links and read its detail.</p>
+  <div id="tip" role="status" hidden></div>
+
+  <h2>Jobs</h2>
+  <p class="muted">Every job is a draft until real users confirm it.</p>
+  <div class="table"><table>
+    <thead><tr><th>Id</th><th>Job</th><th>Personas</th><th>Story</th><th>Where</th></tr></thead>
+    <tbody id="jobs-table"></tbody>
+  </table></div>
+</main>
+
+<script type="module">
+const block = document.getElementById("journeys-data").textContent.trim();
+const data = block ? JSON.parse(block) : await (await fetch("journeys.json")).json();
+const { personas, jobs, journeys } = data;
+
+const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const color = (personaId) => `var(--p${Math.min(personas.findIndex((p) => p.id === personaId) + 1, 8)})`;
+const jobOf = Object.fromEntries(jobs.map((j) => [j.id, j]));
+
+// The middle column: each persona's journeys, then one "off the journey" box for the jobs it holds outside them.
+const mids = [];
+for (const p of personas) {
+  const own = journeys.filter((j) => j.persona === p.id);
+  for (const j of own) mids.push({ kind: "journey", persona: p.id, label: j.question, jobs: j.jobs });
+  const onJourney = new Set(own.flatMap((j) => j.jobs));
+  const off = jobs.filter((j) => j.personas.includes(p.id) && !onJourney.has(j.id)).map((j) => j.id);
+  if (off.length) mids.push({ kind: "off", persona: p.id, label: "Off the journey", jobs: off });
+}
+mids.forEach((m, i) => { m.id = `m:${i}`; });
+
+// Jobs are listed in the order the middle column first reaches them, so most lines run level.
+const order = [];
+for (const m of mids) for (const id of m.jobs) if (!order.includes(id)) { order.push(id); m.first = [...(m.first ?? []), id]; }
+for (const j of jobs) if (!order.includes(j.id)) order.push(j.id);
+
+// Who holds a job: the personas it lists, and any persona whose journey includes it.
+const holders = (j) => personas.filter((p) => j.personas.includes(p.id) || journeys.some((y) => y.persona === p.id && y.jobs.includes(j.id)));
+const where = (j) => j.deferred ? "Deferred" : (j.outside ?? []).length ? `Outside the app: ${j.outside.join(", ")}` : "";
+const tips = {};
+const col = (id) => document.getElementById(id);
+const add = (parent, html) => { parent.insertAdjacentHTML("beforeend", html); return parent.lastElementChild; };
+
+for (const p of personas) {
+  add(col("col-personas"), `<button class="node persona" data-id="p:${p.id}" style="--c:${color(p.id)}">${esc(p.name)}</button>`);
+  tips[`p:${p.id}`] = `${p.description} Cares about: ${p.interests.join("; ").toLowerCase()}.`;
+}
+for (const m of mids) {
+  const n = m.kind === "journey" ? `<span class="small">${m.jobs.length} jobs, in order</span>` : "";
+  add(col("col-journeys"), `<button class="node ${m.kind}" data-id="${m.id}" style="--c:${color(m.persona)}">${esc(m.label)}${n}</button>`);
+  tips[m.id] = m.kind === "journey"
+    ? `${personas.find((p) => p.id === m.persona).name}: ${m.jobs.map((id) => jobOf[id].name).join(" → ")}`
+    : "Jobs this persona holds that are not part of one of its journeys.";
+}
+for (const id of order) {
+  const j = jobOf[id];
+  const tags = (j.deferred ? `<span class="tag">deferred</span>` : "") + (j.outside ?? []).map((o) => `<span class="tag">${esc(o)}</span>`).join("");
+  add(col("col-jobs"), `<button class="node job${j.deferred ? " deferred" : ""}" data-id="j:${j.id}"><span class="id">${j.id}</span><span class="name">${esc(j.name)}${tags}</span><span class="who">${holders(j).map((p) => `<span class="dot" style="--c:${color(p.id)}" title="${esc(p.name)}"></span>`).join("")}</span></button>`);
+  tips[`j:${j.id}`] = j.story;
+}
+
+document.getElementById("lede").textContent =
+  `${data.goal} ${personas.length} personas, ${journeys.length} journeys, ${jobs.filter((j) => !j.deferred).length} jobs and ${jobs.filter((j) => j.deferred).length} more deferred.`;
+document.getElementById("jobs-table").innerHTML = order.map((id) => { const j = jobOf[id]; return `<tr>
+  <td class="id">${j.id}</td><td class="name">${esc(j.name)}</td>
+  <td>${holders(j).map((p) => `<span style="--c:${color(p.id)};white-space:nowrap"><span class="dot"></span>${esc(p.name)}</span>`).join("<br>")}</td>
+  <td class="story">${esc(j.story)}</td>
+  <td>${[...journeys.flatMap((y) => y.jobs.includes(j.id) ? [`Job ${y.jobs.indexOf(j.id) + 1} of “${esc(y.question)}”`] : []), where(j)].filter(Boolean).join("<br>") || "Off the journey"}</td></tr>`; }).join("");
+
+// Layout: jobs flow as a list; a middle box sits beside its jobs; a persona sits beside its middle boxes.
+const graph = col("graph"), svg = col("edges");
+const el = (id) => graph.querySelector(`[data-id="${CSS.escape(id)}"]`);
+const box = (id) => { const g = graph.getBoundingClientRect(), r = el(id).getBoundingClientRect();
+  return { left: r.left - g.left, right: r.right - g.left, mid: r.top - g.top + r.height / 2, height: r.height }; };
+function stack(column, items) {
+  let floor = 28;
+  for (const { id, centre } of items) {
+    const node = el(id), top = Math.max(centre - column.getBoundingClientRect().top + graph.getBoundingClientRect().top - node.offsetHeight / 2, floor);
+    node.style.top = `${top}px`;
+    floor = top + node.offsetHeight + 10;
+  }
+  column.style.minHeight = `${floor}px`;
+}
+const mean = (ys) => ys.reduce((a, b) => a + b, 0) / ys.length;
+
+function draw() {
+  stack(col("col-journeys"), mids.map((m) => ({ id: m.id, centre: mean((m.first ?? m.jobs).map((id) => box(`j:${id}`).mid)) })));
+  stack(col("col-personas"), personas.map((p) => ({ id: `p:${p.id}`, centre: mean(mids.filter((m) => m.persona === p.id).map((m) => box(m.id).mid)) })));
+  const curve = (a, b) => { const x = (a.right + b.left) / 2; return `M${a.right},${a.mid} C${x},${a.mid} ${x},${b.mid} ${b.left},${b.mid}`; };
+  let out = "", badges = "";
+  const seen = {};
+  for (const m of mids) {
+    const thin = m.kind === "off" ? " thin" : "";
+    out += `<path class="edge${thin}" data-a="p:${m.persona}" data-b="${m.id}" stroke="${color(m.persona)}" d="${curve(box(`p:${m.persona}`), box(m.id))}"/>`;
+    m.jobs.forEach((id, i) => {
+      const b = box(`j:${id}`);
+      out += `<path class="edge${thin}" data-a="${m.id}" data-b="j:${id}" stroke="${color(m.persona)}" d="${curve(box(m.id), b)}"/>`;
+      if (m.kind !== "journey") return;
+      const x = b.left - 16 - 24 * (seen[id] ?? 0); seen[id] = (seen[id] ?? 0) + 1;
+      badges += `<g class="badge edge" data-a="${m.id}" data-b="j:${id}"><circle cx="${x}" cy="${b.mid}" r="9" stroke="${color(m.persona)}"/><text x="${x}" y="${b.mid}">${i + 1}</text></g>`;
+    });
+  }
+  svg.innerHTML = out + badges;
+}
+draw();
+addEventListener("resize", draw);
+document.fonts?.ready.then(draw);
+
+// Hover or focus: keep the box, what it links to, and the lines between them; dim the rest.
+function related(id) {
+  const keep = new Set([id]);
+  for (const m of mids) {
+    const mine = id === m.id || id === `p:${m.persona}`;
+    if (!mine && !m.jobs.includes(id.slice(2))) continue;
+    keep.add(m.id);
+    if (!id.startsWith("p:")) keep.add(`p:${m.persona}`);
+    if (mine) for (const j of m.jobs) keep.add(`j:${j}`);
+  }
+  return keep;
+}
+const tip = col("tip");
+function show(node) {
+  const id = node?.dataset.id, keep = id ? related(id) : null;
+  for (const n of graph.querySelectorAll(".node")) n.classList.toggle("dim", !!keep && !keep.has(n.dataset.id));
+  for (const e of svg.querySelectorAll(".edge")) {
+    const lit = !keep || (keep.has(e.dataset.a) && keep.has(e.dataset.b) && (!id.startsWith("j:") || e.dataset.b === id || e.dataset.a.startsWith("p:")));
+    e.classList.toggle("dim", !lit);
+  }
+  tip.hidden = !id;
+  if (!id) return;
+  tip.textContent = tips[id];
+  const r = node.getBoundingClientRect();
+  tip.style.maxWidth = `${Math.max(r.width, 240)}px`;
+  tip.style.left = `${Math.max(8, Math.min(r.left, innerWidth - tip.offsetWidth - 8))}px`;
+  tip.style.top = `${r.bottom + 8 + tip.offsetHeight > innerHeight ? r.top - tip.offsetHeight - 8 : r.bottom + 8}px`;
+}
+for (const n of graph.querySelectorAll(".node")) {
+  n.addEventListener("mouseenter", () => show(n));
+  n.addEventListener("focus", () => show(n));
+  n.addEventListener("mouseleave", () => show(null));
+  n.addEventListener("blur", () => show(null));
+}
+</script>
+</body>
+</html>
