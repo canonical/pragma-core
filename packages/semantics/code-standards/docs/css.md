@@ -312,10 +312,6 @@ Use verbose prefixed class names that repeat the component name.
 .ds.accordion-item .accordion-item-chevron {
   /* Already scoped by parent, no need to repeat */
 }
-
-.ds.timeline-event .timeline-event-marker {
-  /* Verbose and BEM-like */
-}
 ```
 
 ---
@@ -375,20 +371,24 @@ Omit the `.ds` namespace from component selectors.
 
 **Identifier:** `cs:css.selectors.naming_convention`
 
-Component CSS class names must be the kebab-case version of the component's PascalCase name.
+A component's class is the kebab-case of its name. A subcomponent's root class is the kebab-case of its ontology id (`data_table-header_cell` gives `.ds.data-table-header-cell`), or of Parent plus Sub when it has no entry.
 
 ### Do
 
-Convert PascalCase component names to kebab-case for CSS classes:
-- `MyComponent` -> `.ds.my-component`
-- `UserProfile` -> `.ds.user-profile`
-- `Button` -> `.ds.button`
+Derive classes from the name or the ontology id
+```css
+.ds.user-profile { /* UserProfile */ }
+.ds.data-table-header-cell { /* ds:apps.subcomponent.data_table-header_cell */ }
+.ds.slider-thumb { /* Slider's private Thumb, no entry */ }
+```
 
 ### Don't
 
-Use PascalCase or other formats in CSS class names:
-- `.ds.MyComponent` (Bad: Not kebab-case)
-- `.ds.user_profile` (Bad: Not kebab-case)
+Keep PascalCase, or drop the parent from a part's class
+```css
+.ds.UserProfile { }
+.ds.header-cell { }
+```
 
 ---
 
