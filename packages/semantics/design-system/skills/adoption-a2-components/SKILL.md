@@ -320,6 +320,18 @@ frame brings the label, description, error wiring and field spacing with it. A
 presentational, non-react-hook-form layout is not shipped yet — report that as a
 finding rather than hand-stacking the inputs.
 
+## Testing
+
+A component test that imports the published packages needs setup under both runners.
+Vitest externalises `node_modules`, so Node meets the components' CSS imports and fails
+with `TypeError: Unknown file extension ".css"`: inline `@canonical/` in
+`test.server.deps`, and add `module` to `resolve.mainFields` for
+`@canonical/react-ds-app`, which publishes only that field. Jest needs
+`moduleNameMapper` entries for `react-ds-app`, `react-hooks` and `ds-types`, the ESM
+transform and a CSS stub. Under both, jsdom has no dialog API, so a test that opens a
+`Modal` needs a `showModal`/`close` polyfill. Setup for each is in
+[`@canonical/react-ds-global`'s "Testing with Jest"](https://github.com/canonical/pragma-web/blob/main/packages/react/ds-global/README.md#testing-with-jest).
+
 ## Verify per PR
 
 - [ ] Root context and density classes present (track A1) — swapped components size
