@@ -104,13 +104,19 @@ ds:Modifier
     a owl:Class ;
     rdfs:subClassOf ds:UIElement ;
     rdfs:label "Modifier" ;
-    skos:definition "A named variant value within a ModifierFamily that alters the appearance or behaviour of a UIBlock (e.g. 'primary', 'secondary' within the 'importance' family)" .
+    skos:definition "An intentional, non-essential (without altering its identity) variation in how a UI block is perceived or understood, without changing what users can do with it." .
 
 ds:ModifierFamily
     a owl:Class ;
     rdfs:subClassOf ds:UIElement ;
     rdfs:label "Modifier Family" ;
-    skos:definition "A grouping of related modifiers that can be applied to UI Blocks" .
+    skos:definition "A modifier family is the aspect of a UI block whose possible expressions are partitioned by its modifier values." .
+
+ds:State
+    a owl:Class ;
+    rdfs:subClassOf ds:UIElement ;
+    rdfs:label "State" ;
+    skos:definition "A condition of a UI block that changes or signals the availability, progress or history of its content and actions." .
 
 ds:Property
     a owl:Class ;
