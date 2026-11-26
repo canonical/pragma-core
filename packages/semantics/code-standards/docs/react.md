@@ -777,12 +777,13 @@ Use the description from the DSL ontology verbatim.
 /**
  * The label component is a compact, non-interactive visual element used to
  * categorize content or indicate a status. Its primary role is metadata
- * visualization. While it has similar visual properties to the Chip, it is
- * purely informational and does not trigger actions or allow for removal.
+ * visualization. While it has similar visual properties to the
+ * [Chip](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-N-fnT7n4mU),
+ * it is purely informational and does not trigger actions or allow for removal.
  *
- * @implements ds:global.component.label
+ * @implements ds:global.component.tag
  */
-const Label = ({ children, criticality, className, ...props }: LabelProps) => (
+const Tag = ({ children, criticality, className, ...props }: TagProps) => (
   <span className={[componentCssClassName, criticality, className].filter(Boolean).join(" ")} {...props}>
     {children}
   </span>
@@ -795,7 +796,7 @@ Write custom descriptions that deviate from the DSL.
 ```typescript
 // Bad: Custom title and paraphrased description
 /**
- * Label component
+ * Tag component
  *
  * A compact visual element for status indication.
  */
@@ -805,11 +806,11 @@ Include @example blocks - stories fulfill this role.
 ```typescript
 // Bad: Examples belong in stories, not TSDoc
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  *
  * @example
- * <Label>Default</Label>
- * <Label criticality="warning">Warning</Label>
+ * <Tag>Default</Tag>
+ * <Tag criticality="warning">Warning</Tag>
  */
 ```
 
@@ -817,7 +818,7 @@ Omit the @implements tag that links to the DSL.
 ```typescript
 // Bad: Missing @implements tag
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  */
 ```
 
@@ -834,12 +835,12 @@ A component's TSDoc must show how a consumer imports it: a single import stateme
 Add the backtick-wrapped import line before @implements.
 ```typescript
 /**
- * The label component is a compact, non-interactive visual element used to
+ * The tag component is a compact, non-interactive visual element used to
  * categorize content or indicate a status.
  *
- * `import { Label } from "@canonical/react-ds-global";`
+ * `import { Tag } from "@canonical/react-ds-global";`
  *
- * @implements ds:global.component.label
+ * @implements ds:global.component.tag
  */
 ```
 
@@ -849,10 +850,10 @@ Use an @example or a fenced code block instead of the single backtick line.
 ```typescript
 // Bad: @example is forbidden; a fenced block is heavier than needed
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  *
  * @example
- * import { Label } from "@canonical/react-ds-global";
+ * import { Tag } from "@canonical/react-ds-global";
  */
 ```
 
@@ -860,9 +861,9 @@ Omit the blank line before the import, or drop the backticks.
 ```typescript
 // Bad: no blank line before, and no backticks
 /**
- * The label component is a compact...
- * import { Label } from "@canonical/react-ds-global";
- * @implements ds:global.component.label
+ * The tag component is a compact...
+ * import { Tag } from "@canonical/react-ds-global";
+ * @implements ds:global.component.tag
  */
 ```
 
