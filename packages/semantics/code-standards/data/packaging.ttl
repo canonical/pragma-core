@@ -853,3 +853,232 @@ npm warn EBADENGINE   current: { node: 'v20.19.0' }
 npm warn EBADENGINE }
     """
     ] .
+
+# ── Application folder-structure standards (DRAFT) ─────────────────────
+# Derived from restructuring a real application package. These lift the
+# design-system's ds:UIBlock tier+kind model into concrete FOLDER law for
+# application packages. DRAFT pending a completed migration proving them
+# in practice.
+
+# Domain-owned blocks/{kind} UI kit, mirroring the global tier
+cs:packaging.application.domain_blocks a cs:CodeStandard ;
+    rdfs:label "Domain-Owned Block Kit"@en ;
+    cs:extends cs:packaging.application.structure ;
+    cs:hasCategory cs:packaging ;
+    cs:description "In an application (or hybrid) package that renders UI, the shared/global tier (`src/lib/`) and every bounded-context domain (`src/domains/<name>/`) each own a `blocks/` folder with an IDENTICAL shape — sub-folders named by the design-system's block kinds (`component/`, `pattern/`, `layout/`, `group/`; a `page/` kind where the design system authors one). A single, kind-split block taxonomy that is byte-for-byte the same at the global tier and the app-domain tier makes file placement deterministic and cross-tier navigation predictable: a reader who knows `lib/blocks/` already knows `domains/<x>/blocks/`. This lifts the design-system's `ds:UIBlock` tier+kind model into a concrete folder law. The global-vs-domain-local axis is decided by REUSE — reused across two or more domains lands in the `lib/` tier; owned by one bounded context lands in that domain. A subcomponent is NOT a peer kind-folder: it nests inside its parent block's folder under `common/<Sub>/` per cs:react.component.dependencies. The specific kind NAMES are supplied by the design system, not by this standard; where a design system authors a different set of block kinds, mirror THAT set identically in both tiers." ;
+    cs:do [
+        cs:description "Give the global `lib/` tier and every domain the SAME `blocks/{kind}` split, kinds supplied by the design system (`component/ pattern/ layout/ group/`)." ;
+        cs:code """
+packages/my-app/src/
+├── lib/
+│   └── blocks/               # GLOBAL tier — reused across ≥2 domains
+│       ├── component/        # GlyphCell, Row, BaseChip, Legend
+│       ├── pattern/          # Fold, RowList, OverlayCard
+│       ├── layout/           # Frame, PaneSplit, Aside
+│       └── group/
+└── domains/
+    └── room/
+        └── blocks/           # DOMAIN tier — IDENTICAL shape
+            ├── component/     # domain-local blocks only
+            ├── pattern/
+            ├── layout/        # RoomLayout, ChatLayout
+            └── group/
+        """
+    ] ;
+    cs:do [
+        cs:description "Nest a subcomponent inside its parent block's `common/<Sub>/`, not in a flat `blocks/subcomponent/`. Cite cs:react.component.dependencies; dependencies stay unidirectional (parent → sub, never sub → parent)." ;
+        cs:code """
+blocks/pattern/RowList/
+├── RowList.tsx
+├── common/
+│   └── Seat/
+│       ├── Seat.tsx
+│       ├── Seat.test.tsx
+│       └── index.ts
+├── types.ts
+└── index.ts
+        """
+    ] ;
+    cs:do [
+        cs:description "Decide the tier by reuse — a block used by two or more domains is global (`lib/blocks/`); a block owned by one bounded context is domain-local (`domains/<name>/blocks/`)." ;
+        cs:language "typescript" ;
+        cs:code """
+// Reused by timeline, asks, and room → global tier
+// lib/blocks/pattern/RowList/RowList.tsx
+
+// Owned only by the room bounded context → domain tier
+// domains/room/blocks/layout/ChatLayout/ChatLayout.tsx
+        """
+    ] ;
+    cs:dont [
+        cs:description "Give a domain a different block layout from the global tier, so placement stops being predictable across tiers." ;
+        cs:code """
+// Bad: global tier is kind-split but the domain invents its own scheme
+lib/blocks/{component,pattern,layout,group}/    # kind-split
+domains/room/ui/{chat,roster,composer}/         # ad-hoc, non-mirroring
+        """
+    ] ;
+    cs:dont [
+        cs:description "Promote a subcomponent to a fifth peer kind-folder — it is a part-of-parent, not a standalone kind." ;
+        cs:code """
+// Bad: a flat subcomponent kind-folder breaks part-of-parent locality
+blocks/subcomponent/Seat/Seat.tsx
+
+// Good: the sub nests inside its one parent
+blocks/pattern/RowList/common/Seat/Seat.tsx
+        """
+    ] .
+
+# Render / no-render split — only rendered UI lives in blocks/
+cs:packaging.application.spine_vs_blocks a cs:CodeStandard ;
+    rdfs:label "Domain Spine vs Blocks"@en ;
+    cs:extends cs:packaging.application.structure ;
+    cs:hasCategory cs:packaging ;
+    cs:description "Within an application domain, ONLY files that render UI (return JSX / framework nodes) may live under `blocks/`. The non-rendering SPINE — data reads, the routing seam, projection folds, registry/citizenship wiring, types, constants, and the barrel — stays FLAT at the domain root, with `routes.ts` (or the equivalent) as the domain's single public seam that sibling domains import through. Splitting a domain along the render boundary keeps the rendered surface swappable and the data/wiring core testable in isolation, and makes 'where does this file go?' answerable by one question: does it render? A rendering file sitting at the flat spine, or a pure data/wiring file placed under `blocks/`, is a structural defect. The public seam concentrates the cross-domain contract in one importable file so refactors inside a domain never ripple to siblings. The specific spine members (read/fold/projections/citizenship) are examples of the data-and-wiring core, not an exhaustive list — the law is the render/no-render partition plus one public seam per domain." ;
+    cs:do [
+        cs:description "Keep the non-rendering spine flat at the domain root; pull ONLY rendered UI out into `blocks/`. `routes.ts` is the single public seam." ;
+        cs:code """
+domains/room/
+├── read.ts          # fragment reader / store read      — spine
+├── routes.ts        # the PUBLIC SEAM siblings import    — spine
+├── fold.ts          # projection fold                    — spine
+├── projections.ts   # derived projections               — spine
+├── citizenship.ts   # registry citizenship               — spine
+├── types.ts         #                                    — spine
+├── constants.ts     #                                    — spine
+├── index.ts         #                                    — spine
+└── blocks/          # ← only rendered UI lives here
+    └── layout/RoomLayout/RoomLayout.tsx
+        """
+    ] ;
+    cs:do [
+        cs:description "Import a sibling domain through its single public seam (`routes.ts`), never into its internals." ;
+        cs:language "typescript" ;
+        cs:code """
+// sibling domain imports the room contract through its one seam
+import { roomRoutes } from "../room/routes.js";
+        """
+    ] ;
+    cs:dont [
+        cs:description "Leave a rendering file (returns JSX) sitting at the flat spine instead of under `blocks/`." ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: RoomView renders but sits at the flat spine
+domains/room/RoomView.tsx        // returns JSX → belongs in blocks/
+
+// Good: rendered UI moves under blocks/
+domains/room/blocks/layout/RoomLayout/RoomLayout.tsx
+        """
+    ] ;
+    cs:dont [
+        cs:description "Bury a pure data / wiring file (no render) under `blocks/` — the spine must stay flat and discoverable." ;
+        cs:code """
+// Bad: a non-rendering fold hidden inside blocks/
+domains/room/blocks/pattern/fold.ts
+
+// Good: non-rendering spine stays flat
+domains/room/fold.ts
+        """
+    ] .
+
+# Group a shared lib/ surface by concern, each sub-group barrel-sealed
+cs:packaging.library.concern_grouping a cs:CodeStandard ;
+    rdfs:label "Concern-Grouped Library Surface"@en ;
+    cs:extends cs:packaging.library.structure ;
+    cs:hasCategory cs:packaging ;
+    cs:description "When a package's shared `lib/` surface grows past a flat pile of peer subsystems, group its second level by CONCERN — each group barrel-sealed, with the `lib/index.ts` tier barrel re-exporting ONLY the curated group sub-barrels (`export *` over sub-barrels, never over a raw directory of internals). Placement is by a member's DEFINING trait. A flat `lib/` of a dozen peer folders hides the KINDS of code it contains; a concern grouping makes the shape legible and moves the barrel-seam guarantee one level deeper (`lib/<group>/<domain>/index.ts`) so the no-deep-import rule still holds. This is an amendment to apply ONLY when the flat surface is genuinely large — small libraries stay flat per cs:packaging.library.structure. The concern names are chosen per package to fit what it contains; one worked example set is `ui` (things that render), `runtime` (engine/store machinery), and `support` (cross-cutting home-less helpers) — these are ILLUSTRATIVE, not mandated names. The canonical rule is 'group a large shared surface by concern, keep each barrel-sealed, and let the tier barrel re-export only curated sub-barrels'." ;
+    cs:do [
+        cs:description "Group a large `lib/` by concern; barrel-seal each group; let `lib/index.ts` re-export only the curated group sub-barrels. (Concern names are per-package; `ui`/`runtime`/`support` shown as one example set.)" ;
+        cs:code """
+lib/
+├── ui/                    # concern: everything that RENDERS
+│   ├── blocks/
+│   ├── shell/
+│   └── index.ts           # group barrel
+├── runtime/               # concern: engine + store machinery
+│   ├── grammar/
+│   ├── state/
+│   ├── relay/
+│   └── index.ts           # group barrel
+├── support/               # concern: cross-cutting home-less helpers
+│   ├── encodings/
+│   ├── pointer/
+│   ├── utils/
+│   └── index.ts           # group barrel
+└── index.ts               # tier barrel: export * over the 3 group sub-barrels
+        """
+    ] ;
+    cs:do [
+        cs:description "Place a member by its DEFINING trait — a thing that renders the shell → `ui`; pure reference-data tables → `support`; the store/engine → `runtime`." ;
+        cs:language "typescript" ;
+        cs:code """
+// lib/index.ts — tier barrel over CURATED group sub-barrels only
+export * from "./ui/index.js";
+export * from "./runtime/index.js";
+export * from "./support/index.js";
+        """
+    ] ;
+    cs:dont [
+        cs:description "`export *` over a raw directory of internals — the tier barrel re-exports only curated sub-barrels." ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: tier barrel spraying a raw folder's internals
+export * from "./runtime/state/PathStore.js";
+export * from "./runtime/state/reducer.js";
+
+// Good: re-export the curated group sub-barrel
+export * from "./runtime/index.js";
+        """
+    ] ;
+    cs:dont [
+        cs:description "Impose the concern grouping on a small, still-legible flat `lib/` — group only once the flat surface stops scaling." ;
+        cs:code """
+// Bad: three files ceremonially split into ui/runtime/support
+lib/ui/Button/… · lib/runtime/store.ts · lib/support/clamp.ts
+
+// Good: a small lib stays flat per cs:packaging.library.structure
+lib/Button/… · lib/store.ts · lib/clamp.ts
+        """
+    ] .
+
+# A route's content is a Layout by default, promoted to a Page on context or a hook
+cs:packaging.application.route_content a cs:CodeStandard ;
+    rdfs:label "Route Content — Layout vs Page"@en ;
+    cs:extends cs:packaging.application.domain_blocks ;
+    cs:hasCategory cs:packaging ;
+    cs:description "The content a route mounts is either a Layout (pure arrangement of space — no situated meaning, no data or effect) or a Page (a Layout situated with semantic context or backed by a hook). Default to a bare Layout; PROMOTE to a Page if and only if EITHER (a) the situation carries semantic meaning beyond arrangement, OR (b) the content needs a hook (data read, effect, or lifecycle). Route content that calls a hook must be a Page, never a raw Layout. Separating pure arrangement (Layout) from situated/behavioral content (Page) keeps layouts trivially reusable and testable with no data dependency, and concentrates reads and effects at the Page tier where the route boundary already sits. The promote-iff rule is a mechanical test a fence can enforce, so route content cannot silently smuggle a hook into a 'layout'. Pages live under `blocks/page/` (domain-local) or the `lib/` page kit (reusable), pairing with the design-system's `ds:Page` block kind and with cs:packaging.application.domain_blocks. This standard is independent of any particular query/prefetch HoC, which is an implementation detail." ;
+    cs:do [
+        cs:description "Keep a route's content a bare Layout when it is pure arrangement — no hook, no situated meaning. It stays trivially reusable and data-free." ;
+        cs:language "typescript" ;
+        cs:code """
+// blocks/layout/RoomLayout/RoomLayout.tsx — pure arrangement, no hook
+export const RoomLayout = ({ roster, thread, composer }: RoomLayoutProps) => (
+  <PaneSplit>
+    <Aside>{roster}</Aside>
+    <Frame>{thread}{composer}</Frame>
+  </PaneSplit>
+);
+        """
+    ] ;
+    cs:do [
+        cs:description "Promote to a Page (under `blocks/page/`) exactly when the content needs a hook or carries semantic context — the Page reads, the Layout arranges." ;
+        cs:language "typescript" ;
+        cs:code """
+// blocks/page/RoomPage/RoomPage.tsx — needs a read hook → a Page
+export const RoomPage = () => {
+  const room = useRoomRecord();          // a hook → must be a Page
+  return <RoomLayout roster={room.roster} thread={room.thread} composer={<Composer />} />;
+};
+        """
+    ] ;
+    cs:dont [
+        cs:description "Call a hook inside a file named/placed as a Layout — hook-bearing route content must be a Page." ;
+        cs:language "typescript" ;
+        cs:code """
+// Bad: a 'Layout' that secretly reads — it is a Page in disguise
+export const RoomLayout = () => {
+  const room = useRoomRecord();          // hook → this is NOT a Layout
+  return <PaneSplit>…</PaneSplit>;
+};
+        """
+    ] .
