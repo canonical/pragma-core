@@ -508,7 +508,7 @@ const ThumbnailSection = ({ src, alt, width, ...props }: ThumbnailSectionProps) 
 
 **Identifier:** `cs:react.component.structure.context`
 
-Context providers must use `Provider.tsx` as the main component file instead of the standard component naming pattern `[MyComponent].tsx`. Provider prop and return types must be defined in the hook-level types file `hooks/types.ts` with `UseProviderStateProps` (containing all `ProviderProps` minus `children`) and `UseProviderStateResult` (matching the context options).
+Context providers must use `Provider.tsx` as the main component file instead of the standard component naming pattern `[MyComponent].tsx`. Provider prop and return types must be defined in the hook-level types file `hooks/types.ts` with `UseProviderStateProps` (the tuple of the hook's arguments: required provider props by position, optional ones in one `options` object, never `children`) and `UseProviderStateResult` (matching the context options).
 
 ### Do
 
@@ -553,7 +553,10 @@ create the provider props type within `types.ts`, accepting `children` at a mini
 export interface ProviderProps {
     // The child nodes which will have access to the provider state
     children: React.ReactNode;
-    // ...other props...
+    // Where the provider keeps its state
+    storageKey: string;
+    // Whether the grid is shown before the user toggles it
+    defaultShown?: boolean;
 }
 ```
 
@@ -575,8 +578,8 @@ import Context from "./Context.js";
 import { useProviderState } from "./hooks/index.js";
 import type { [MyComponent]Component, ProviderProps } from "./types.js";
 
-const Provider = ({ children }: ProviderProps) => {
-  const state = useProviderState();
+const Provider = ({ children, storageKey, defaultShown }: ProviderProps) => {
+  const state = useProviderState(storageKey, { defaultShown });
   return <Context.Provider value={state}>{children}</Context.Provider>;
 };
 
@@ -601,8 +604,12 @@ Create provider state hook types in `hooks/types.ts` for context providers.
 // [MyComponent]/hooks/types.ts
 import type { ContextOptions, ProviderProps } from "../types.js";
 
-// The props expected by the provider state hook. The children prop is omitted, as it is not passed to the hook - it is only rendered by the provider component.
-export type UseProviderStateProps = Omit<ProviderProps, "children">;
+// The hook's arguments: required props by position, optional ones in one
+// options object. children is only rendered by the provider, never passed.
+export type UseProviderStateProps = [
+  storageKey: ProviderProps["storageKey"],
+  options?: Pick<ProviderProps, "defaultShown">,
+];
 
 // The result of the provider state hook. This should match the context options defined in the main component types file.
 export type UseProviderStateResult = ContextOptions;
@@ -617,9 +624,9 @@ import type { UseProviderStateProps, UseProviderStateResult } from "./types.js";
 /**
  * Hook to manage the state of the provider
  */
-const useProviderState = ({
-    // ..props...
-}: UseProviderStateProps): UseProviderStateResult => {
+const useProviderState = (
+  ...[storageKey, { defaultShown = false } = {}]: UseProviderStateProps
+): UseProviderStateResult => {
  // centralize the entire provider state here...
 }
 ```
@@ -822,83 +829,32 @@ Name the local identifier, or give a private subcomponent a line
 
 **Identifier:** `cs:react.hooks.custom`
 
-Custom hooks must separate concerns at the domain level. All hooks within a ComponentDomain/hooks directory are considered within the domain scope and should focus on a single concern. Custom hooks must be used when:
-    - Logic needs to be shared between components
-    - Component logic becomes complex
-    - State management needs to be abstracted
-    - Side effects need to be encapsulated
-
-All of the types for a domain level's hooks must be defined in the `hooks/types.ts` file of that folder.
-Each hook must define a [HookName]Props and [HookName]Result type in `hooks/types.ts`.
+A hook takes its required inputs positionally and its optional ones — any that may be omitted or has a default — in one trailing `options` object. `[HookName]Props` is the tuple of its arguments, in `hooks/types.ts`.
 
 ### Do
 
-Create a custom hook that focuses on a single concern within the domain.
+Pass required inputs by position and optional ones in `options`
 ```typescript
-// [MyComponent]/hooks/useWindowFitment.ts
-const useWindowFitment = ({
-  onBestPositionChange,
-  autoFit = false,
-}: UseWindowFitmentProps): UseWindowFitmentResult => {
-```
+// hooks/types.ts
+export type UseDataViewsValueProps<T, S> = [
+  channel: Channel<T>,
+  options?: { select?: (value: T) => S; isEqual?: (a: S, b: S) => boolean },
+];
 
-Create hook types in `hooks/types.ts`.
-```typescript
-// [MyComponent]/hooks/types.ts
-export interface UseWindowFitmentProps {
-  /**
-   * Whether the popup should automatically fit into the viewport.
-   * If true, the hook will try to fit the popup into the viewport if it doesn't fit in the preferred directions.
-   * Defaults to false.
-   */
-  autoFit?: boolean;
-  /**
-   * An optional callback to be called when the best position of the popup changes.
-   */
-  onBestPositionChange?: (bestPosition?: BestPosition) => void;
-}
-
-export interface UseWindowFitmentResult {
-  /**
-   * A ref to be attached to the target element.
-   */
-  targetRef: RefObject<HTMLDivElement | null>;
-  /**
-   * A ref to be attached to the popup element.
-   */
-  popupRef: RefObject<HTMLDivElement | null>;
-  /**
-   * The calculated best possible position of the popup element.
-   */
-  bestPosition?: BestPosition;
-  /**
-   * The style object to be applied to the popup element.
-   */
-  popupPositionStyle: CSSProperties;
-}
+useDataViewsValue(channel, { select, isEqual });
+useDataViewsFilter(collection, field, { operator });
+useLocalized(messages);
 ```
 
 ### Don't
 
-Create a custom hook for simple, non-reusable state.
-```tsx
-// Bad: Unnecessary abstraction for a simple counter
-const useCounter = () => {
-  const [count, setCount] = useState(0);
-  return { count, setCount };
-};
-```
-
-Mix multiple concerns in a single hook
+Put a required input in an object, or an optional one by position
 ```typescript
-// Bad: Multiple concerns in one hook
-const useUserData = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [profile, setProfile] = useState(null);
-  const [settings, setSettings] = useState({});
-  const [notifications, setNotifications] = useState([]);
-  return { isAuthenticated, profile, settings, notifications };
-};
+// Bad: channel is required
+useDataViewsValue({ channel, select });
+
+// Bad: disabled is optional
+useQueryChip(children, disabled);
 ```
 
 ---
