@@ -4,10 +4,10 @@
 
 ds:global.component.file_upload_field a ds:Component;
     ds:name "FileUploadField";
-    ds:summary "A form field for attaching one or more files. It wraps the upload control ([FileUploadInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ueHBQBbs9M)) in the standard field frame: a label, a description with the file limits, the control itself, and a validation message when a file is rejected. It is the component to use when a form needs a file from the user.";
-    ds:anatomyDsl "**Initial** (temp)\n\n```yaml\n---\n# Authored 2026-09-13 from @canonical/react-ds-global-form src/lib/common/Wrapper/styles.css on .ds.field\n# The field is the Wrapper's chrome: a subgrid whose label row sits above a\n# payload row carrying the description, the control and any error. The control\n# is file upload input — src/lib/subcomponent/FileUploadInput/styles.css on `.ds.input.file-upload` — and its own styles\n# live in its own anatomy, not copied here.\nnode:\n  uri: global.component.file_upload_field\n  styles:\n    layout.type: grid\n    layout.grid.columns: subgrid\n    # reads --form-field-columns, the component-local track placement a caller\n    # overrides to put the field in part of the form grid.\n    layout.grid.column: \"1 / -1\"\n    layout.align: baseline\n    # The block gap from the label row down to the payload row reads\n    # --form-field-label-gap, which resolves through --space-100 to\n    # --dimension-100; this is the spacing semantic that resolves to it. When a\n    # description LEADS the payload the gap tightens to\n    # --form-field-label-description-gap (--dimension-050), for which no\n    # spacing semantic resolves, so that conditional is not carried.\n    spacing.gap.block: spacing.gap.field.block\n  edges:\n    - node:\n        uri: global.subcomponent.field-label\n        styles:\n          # reads --form-label-columns.\n          layout.grid.column: \"1 / -1\"\n      relation:\n        cardinality: \"1\"\n        slotName: label\n    - node:\n        role: payload\n        styles:\n          layout.type: grid\n          layout.grid.columns: subgrid\n          # reads --form-payload-columns.\n          layout.grid.column: \"1 / -1\"\n          # reads --form-group-gap (--space-100 -> --dimension-100).\n          spacing.gap.block: spacing.gap.field.block\n        edges:\n          - node:\n              uri: global.subcomponent.field-description\n              styles:\n                layout.grid.column: \"1 / -1\"\n            relation:\n              cardinality: \"0..1\"\n              slotName: description\n          - node:\n              uri: global.subcomponent.file_upload_input\n              styles:\n                layout.grid.column: \"1 / -1\"\n            relation:\n              cardinality: \"1\"\n              slotName: default\n          - node:\n              uri: global.subcomponent.field-error\n              styles:\n                layout.grid.column: \"1 / -1\"\n            relation:\n              cardinality: \"0..1\"\n              slotName: error\n      relation:\n        cardinality: \"1\"\n```\n\n**Regenerated** (using extended anatomy authoring skill)\n\n```yaml\n---\n# The field frames the file upload input with a label, an optional description\n# and a field-level error. The input's own parts live in its own anatomy.\nnode:\n  uri: global.component.file_upload_field\n  styles:\n    layout.type: flex\n    layout.direction: column\n    # 16px between the text wrapper and the input; no spacing semantic resolves\n    # to it, so the dimension is bound directly.\n    spacing.gap.block: dimension.200\n  edges:\n    - node:\n        # Groups the label with its description so the pair sits closer\n        # together than the rest of the field.\n        role: text wrapper\n        styles:\n          layout.type: flex\n          layout.direction: column\n          spacing.gap.block: dimension.050\n        edges:\n          - node:\n              uri: global.subcomponent.field-label\n              styles:\n                # The disabled state belongs to the field; the label dims with it.\n                typography.color@disabled: color.text.disabled\n            relation:\n              cardinality: \"1\"\n              slotName: label\n          - node:\n              uri: global.subcomponent.field-description\n              styles:\n                typography.color@disabled: color.text.muted.disabled\n            relation:\n              cardinality: \"0..1\"\n              slotName: description\n      relation:\n        cardinality: \"1\"\n    - node:\n        uri: global.subcomponent.file_upload_input\n      relation:\n        cardinality: \"1\"\n        slotName: default\n    - node:\n        uri: global.subcomponent.field-error\n      relation:\n        cardinality: \"0..1\"\n        slotName: error\n```";
+    ds:summary "A form field for attaching one or more files. It wraps the upload control ([FileUploadInput](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-ueHBQBbs9M)) in the standard field frame: a label, a description with the file limits, and the control itself, which shows the validation messages when a file is rejected. It is the component to use when a form needs a file from the user.";
+    ds:anatomyDsl "---\n# The field frames the file upload input with a label and an optional\n# description. The input's own parts, including the field-level validation\n# message, live in its own anatomy.\nnode:\n  uri: global.component.file_upload_field\n  styles:\n    layout.type: flex\n    layout.direction: column\n    # 16px between the text wrapper and the input; no spacing semantic resolves\n    # to it, so the dimension is bound directly.\n    spacing.gap.block: dimension.200\n  edges:\n    - node:\n        # Groups the label with its description so the pair sits closer\n        # together than the rest of the field.\n        role: text wrapper\n        styles:\n          layout.type: flex\n          layout.direction: column\n          spacing.gap.block: dimension.050\n        edges:\n          - node:\n              uri: global.subcomponent.field-label\n              styles:\n                # The disabled state belongs to the field; the label dims with it.\n                typography.color@disabled: color.text.disabled\n            relation:\n              cardinality: \"1\"\n              slotName: label\n          - node:\n              uri: global.subcomponent.field-description\n              styles:\n                typography.color@disabled: color.text.muted.disabled\n            relation:\n              cardinality: \"0..1\"\n              slotName: description\n      relation:\n        cardinality: \"1\"\n    - node:\n        uri: global.subcomponent.file_upload_input\n      relation:\n        cardinality: \"1\"\n        slotName: default";
     ds:anatomyClassic "**Anatomy**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=13355-8568&t=cEAarkbWU6qDCTl8-1\n\n**Styling / Layout and spacing**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=13355-8580&t=cEAarkbWU6qDCTl8-1\n\n**Styling / Colors**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=13355-8590&t=cEAarkbWU6qDCTl8-1\n\n**Styling / Typography**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=13355-8608&t=cEAarkbWU6qDCTl8-1\n\n**Styling / Overflow**\n\nhttps://www.figma.com/design/WGHcOmGMEUF9hMAEoRafL8/%F0%9F%93%95-Pragma---documentation-visuals?node-id=13355-8615&t=cEAarkbWU6qDCTl8-1";
-    ds:usage "A form field for attaching one or more files. It combines a label, description with the file limits, the upload control and validation messages.\n\n## **When to use**\n\n- Users need to attach one or more files as part of a form submission.\n- Users should see the files they've added, and remove or retry a file before submitting.\n\n## **When not to use**\n\n- The value is a short, free-form entry – use [TextField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-QAuX4qtecx).\n- The value is a link or reference to a file hosted elsewhere, not the file itself – use [TextField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-QAuX4qtecx) and ask for the URL.";
+    ds:usage "A form field for attaching one or more files. It combines a label, a description with the file limits, and the upload control, which shows the validation messages.\n\n## **When to use**\n\n- Users need to attach one or more files as part of a form submission.\n- Users should see the files they've added, and remove or retry a file before submitting.\n\n## **When not to use**\n\n- The value is a short, free-form entry – use [TextField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-QAuX4qtecx).\n- The value is a link or reference to a file hosted elsewhere, not the file itself – use [TextField](https://docs.superhuman.com/d/_dNyzE_TLZDh#_tugrid-20dWwIHYhx/_rui-QAuX4qtecx) and ask for the URL.";
     ds:guidelines "";
     ds:tier ds:global;
     ds:documentationStage ds:tag.designin-progress;
@@ -15,4 +15,673 @@ ds:global.component.file_upload_field a ds:Component;
         a ds:ChangeLogEntry;
         ds:timestamp "2026-11-22T17:00:00.000+01:00";
         ds:changeType "change"
+    ], [
+        a ds:ChangeLogEntry;
+        ds:timestamp "2026-11-25T13:00:00.000+01:00";
+        ds:changeType "decision"
+    ];
+    ds:hasTokenBinding [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.file_upload_field;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.file_upload_field;
+        ds:node "$root/text wrapper";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.050
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.file_upload_field;
+        ds:node "$root/text wrapper/global.subcomponent.field-label";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root";
+        anatomy:styleKey "typography.weight";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.weight.regular
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root/required marker";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-label;
+        ds:node "$root/optional hint";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.file_upload_field;
+        ds:node "$root/text wrapper/global.subcomponent.field-description";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-description;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.border.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.medium
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.foreground.input
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.foreground.input
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "hover";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input.hover
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "active";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input.active
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.input.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area/helper text";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area/helper text";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/drop area and message/drop area/helper text";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.width";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.stroke.thickness.medium
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.foreground.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.foreground.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "hover";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.primary.hover
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "active";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.primary.active
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.foreground.primary.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.border.highlighted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "default";
+        ds:rank 3;
+        ds:consumesSymbol dt:color.border
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.border.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.border.highlighted.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.outline.color";
+        anatomy:styleState "focus";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.focusRing
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root";
+        anatomy:styleKey "appearance.outline.color";
+        anatomy:styleState "focus";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.focusRing
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root/icon";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.icon
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root/icon";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:modifier.color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.component.button;
+        ds:node "$root/icon";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "disabled";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.icon.disabled
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-error;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.field-error;
+        ds:node "$root";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.text.error
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.200
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item";
+        anatomy:styleKey "spacing.gap.block";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details";
+        anatomy:styleKey "spacing.internal.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.050
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details";
+        anatomy:styleKey "spacing.internal.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.050
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details";
+        anatomy:styleKey "spacing.internal.inline.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.150
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details";
+        anatomy:styleKey "spacing.internal.inline.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.050
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.foreground.input
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details";
+        anatomy:styleKey "appearance.background";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.foreground.input
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/file info";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/file info/file name";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.primary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/file info/file name";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.text.onForegroundSecondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/file info/file name";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.text.onForegroundSecondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/file info/file size";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/file info/file size";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/file info/file size";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/status and actions/file status";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.100
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/status and actions/file status/upload progress";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/tile body/tile details/status and actions/file status/upload progress";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:color.text.muted
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message";
+        anatomy:styleKey "spacing.gap";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.050
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/case[global.component.icon][1]";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.icon
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/case[global.component.icon][1]";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.icon
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/case[global.component.icon][1]";
+        anatomy:styleKey "spacing.external.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.025
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/case[global.component.icon][1]";
+        anatomy:styleKey "spacing.external.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.025
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/case[global.component.icon][2]";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.icon
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/case[global.component.icon][2]";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.icon
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/case[global.component.icon][2]";
+        anatomy:styleKey "spacing.external.block.start";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.025
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/case[global.component.icon][2]";
+        anatomy:styleKey "spacing.external.block.end";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:dimension.025
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/message text";
+        anatomy:styleKey "typography.font";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:typography.text.secondary
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/message text";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 1;
+        ds:consumesSymbol dt:modifier.color.text
+    ], [
+        a ds:TokenBinding;
+        ds:viaBlock ds:global.subcomponent.file_upload_input;
+        ds:node "$root/file list/file item/validation message/message text";
+        anatomy:styleKey "typography.color";
+        anatomy:styleState "default";
+        ds:rank 2;
+        ds:consumesSymbol dt:color.text.destructive
     ].
