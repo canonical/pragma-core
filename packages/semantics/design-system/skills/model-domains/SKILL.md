@@ -14,8 +14,9 @@ done.
 are never one guess: several designs are laid out, and the journeys choose between
 them.** That is what following domain-driven design strictly means here.
 
-- **A domain** is a group of things people talk about together: Apps. It is named with
-  a noun people say.
+- **A domain** is a part of the application people name as one: Apps, Settings,
+  Onboarding. It is named with a word people say. Not every domain holds a kind of
+  thing.
 - **A path** is an address: `/apps/lxd-ui`. A `:name` in a path stands for one object,
   one thing you can point at.
 - **A view** answers one question at one path, for at least one job.
@@ -43,8 +44,9 @@ is to make them successful:
   Ask about one concrete view or path at a time, and say what each option would mean.
   A question about an abstract rule gets no useful answer.
 
-Full autonomy is the exception. Run the whole flow alone only when explicitly asked to,
-and list every judgment call made alone in the final report.
+Full autonomy is the exception. Run the whole flow alone only when explicitly asked to.
+Then no gate can be passed: run to the end, record every gate decision as a guess,
+leave every row `not reviewed`, and list each judgment call in the final report.
 
 Decision gates — pause at each and resolve it WITH the operator:
 
@@ -146,13 +148,16 @@ This skill adds to the output `map-journeys` wrote, in the same form and the sam
 place. It never starts a second document. In a decision record, the designs are the
 alternatives and the operator's choice is the decision.
 
-With the recommended form, `journeys.json` gains three lists, and each job gains its
-views. The page gains a views table drawn from them.
+With the recommended form, `journeys.json` gains four lists, and each job gains its
+views. The page embeds a copy of the data, so refill its data block from the file, and
+add a views table drawn from it.
 
 ```json
 {
   "words": [{ "word": "", "meaning": "" }],
-  "domains": [{ "name": "", "holds": "" }],
+  "designs": [{ "name": "", "paths": [""], "perJob": 0, "setAside": "why, if so",
+                "chosen": true }],
+  "domains": [{ "name": "", "holds": "one sentence" }],
   "views": [{ "id": "", "domain": "", "name": "", "path": "", "question": "",
               "decision": "", "layout": "", "status": "" }],
   "jobs": [{ "id": "J1", "views": [""] }],
@@ -161,8 +166,9 @@ views. The page gains a views table drawn from them.
 ```
 
 The link between a job and its views is stored once, on the job. A view's jobs, and
-the views of a journey, are worked out from it. The scores are recorded so that a later
-update can tell whether the journeys or the views have moved since.
+the views of a journey, are worked out from it. The designs and the scores are recorded
+so that a later update can tell what was compared, and whether the journeys or the
+views have moved since.
 
 Where the output is committed, that repository's rules and the `git` standards apply
 (`pragma standard categories` lists the current set). A new layout is a design-system
@@ -205,8 +211,16 @@ under them:
 /components/:component  one component across apps
 ```
 
-Designs differ in which things are domains of their own, and which sit under another.
+Designs differ in which parts are domains of their own, and which sit under another.
 "Is a component its own domain, or does it live under each app?" gives two designs.
+
+Not every domain holds a kind of thing. Many do: Instances holds instances. Some are
+one of a kind, such as settings or a colophon. Some are a way through several kinds,
+such as onboarding. Some are a mix. There is no need to sort them into classes. Let
+each be what people call it.
+
+Give each domain one sentence saying what belongs in it (`holds`). If the sentence
+needs "and" to join unrelated things, it may be two domains.
 
 **For an existing application, today's routes are the first design**, written as they
 are and scored like any other.
@@ -225,42 +239,48 @@ and each becomes something else:
 So a domain is never named after a persona, a question, a layout or a menu heading.
 Views are shared freely: one view can serve several jobs and several personas.
 
-For each design, write the shortest way to do each job: which list or which facts the
-persona reads. It is usually one place, sometimes two. A design that cannot serve a job
-is set aside before scoring, and you say which job it failed.
+For each design, write the shortest way to do each job, as the views the persona
+opens. It is usually one view, sometimes two. A design that cannot serve a job is set
+aside before scoring, and you say which job it failed.
 
-Outcome gate: **at least two designs, each a path tree with the shortest way to do
-every job.**
+Outcome gate: **at least two designs, each a path tree with a sentence per domain and
+the shortest way to do every job.**
 
 ### 4. Score and choose
 
-Walk every journey through every design, job by job. Price each move by what the
-persona reads next:
+Walk every journey through every design, job by job, and price each move by what the
+persona keeps:
 
-| Cost | The next thing the persona reads is |
-|---|---|
-| 1 | the same list, or the same facts |
-| 2 | something else about the same object |
-| 3 | another object in the same domain |
-| 4 | another domain, or something outside the application |
+| Cost | The move keeps | Example |
+|---|---|---|
+| 1 | the view | Filtering the instances list |
+| 2 | the object, in another view | One instance, then that instance's history |
+| 3 | the domain, with another object | The instances list, then one instance |
+| 4 | nothing: another domain, or outside the application | One instance, then a network |
 
-**A journey's score is the total cost of its moves, divided by its number of jobs.** A
-design's score is the same sum over all journeys. Lower is better.
+A journey's score is the total cost of its moves divided by its number of jobs. A
+design's score is the total over all journeys divided by all their jobs. Lower is
+better. Dividing by jobs matters: the jobs are the same in every design, so extra
+views for a job make a score worse, never better.
 
-- **Divide by jobs, never by moves.** The jobs are the same in every design, so a
-  design that needs more clicks for a job scores worse.
-- **Price what is read, not the page.** A page that holds several lists is scored as if
-  each list were its own view, so putting everything on one page gains nothing.
-- Reaching a journey's first job is free. Moves inside a job count.
-- All journeys weigh the same unless the operator says one matters more.
+Price by meaning, not by how a path is spelled. Use judgment, and say how you priced
+anything unusual. A few things that come up:
 
-Show the designs in one table: the score per journey, the score overall, the number of
-views, and every move that costs 4. Give a recommendation, the fallback, and what would
-change your recommendation.
+- A view opened twice in one job is priced once. A picker in a dialog is not a view.
+- A list filtered to one object keeps that object, wherever the list lives.
+- A leading part every domain shares, such as a project, is a scope and not a domain.
+- One large view does not score 1 everywhere: a view answers one question, so a view
+  that needs two is priced as two.
 
-The score informs. It does not decide. The operator may take a costlier design for a
-reason the score cannot see, and that reason is written down. A journey that stays
-costly in every design goes back to `map-journeys` as a question.
+Show the designs side by side: the score per journey and overall, the number of views,
+and the moves that cost 4. Give a recommendation, a fallback, and what would change
+your mind.
+
+The score is a guide, not a verdict. It compares designs on the same journeys, and it
+mostly reflects the order of the jobs, so different designs can tie and a merge of two
+domains can look like a win. Say so when you see it. The operator chooses, sometimes
+for a reason the score cannot see, and that reason is written down. A journey that
+stays costly in every design goes back to `map-journeys` as a question.
 
 Outcome gate: **the operator picks one design, with the comparison in front of them,
 and its scores are recorded with the date.**
@@ -280,7 +300,7 @@ back to `map-journeys`.
 
 Defaults for spelling a path:
 
-- A domain is the first segment.
+- A domain is the first segment, after any scope that all domains share.
 - Depth is zoom: all of them, then one, then something about that one.
 - Time is a sub-path of the object it describes.
 - Sibling views of one object are tabs, each with its own path.
@@ -289,9 +309,10 @@ Defaults for spelling a path:
 An existing application may spell paths another way, such as a prefix before the
 domain. Keep its spelling.
 
-With the Pragma router, `:name` is the whole grammar, a trailing `*` matches the rest
-of the path without capturing it, and routes are navigated by name. So every path needs
-a stable route name. Read the router reference in `pragma-web` before writing paths.
+Only when the application uses the Pragma router: `:name` is the whole grammar, a
+trailing `*` matches the rest of the path without capturing it, and routes are
+navigated by name, so every path needs a stable route name. With any other router,
+keep what the application already does.
 
 Outcome gate: **a full path tree; every `:name` has its one-sentence definition.**
 
@@ -322,28 +343,34 @@ outside the application, or deferred.**
 
 ### 7. Layouts
 
-Each view takes one layout. Look the layouts up live:
+Each view takes one layout. Look the layouts up live, from the application's folder:
 
 ```bash
-pragma block list --tier all                 # layouts are blocks; read the layout rows
+pragma graph query "SELECT ?l ?name WHERE { ?l a ds:Layout ; ds:name ?name }"
 pragma block lookup --tier all <name>        # one layout in full, with its guidance
 pragma ontology lookup ds --class Layout     # what a layout declares
 ```
+
+The query lists every layout in every tier. If it answers `STORE_UNAVAILABLE`, run
+`pragma sources update` in that folder first. A lookup that prints only a tier is not
+an error: that layout is a name with no guidance yet.
 
 > The covered set is whatever the graph answers today. Query it live — never copy its
 > output into documentation, PRs, or this skill.
 
 Choose in this order:
 
-1. A layout whose guidance fits the view's question. Many layouts in the graph are
-   names with no content yet.
+1. A layout whose guidance fits the view's question.
 2. A layout that fits by name, said to be unproven.
 3. A new layout, only when none fits. It is labelled new.
 
+A layout may come from another product's tier. Label it "borrowed from `<tier>`" and
+list it as a candidate to move to a shared tier.
+
 A new layout gets a short proposal: its purpose in one sentence; the parts of the page
-it has, and for each optional part the job that brings it in; its grid; the kind of
-content it arranges (`ds:domain`: one object, many of one kind, a series over time, a
-structure to move through); and its tier. Its spec is then written with
+it has, and for each optional part the job that brings it in; its grid; the category of
+content it organises (`ds:domain`, in the graph's own words: read the values existing
+layouts carry before choosing one); and its tier. Its spec is then written with
 `specify-component`, as a layout, and its anatomy with `anatomy-author`. Never write
 into the design system's `data/`.
 
@@ -353,9 +380,9 @@ Outcome gate: **every view has a layout; the operator has seen every new layout'
 proposal.**
 
 Then read every outcome gate again against the finished lists, check that every view
-sits in exactly one domain, and write the output. In a Pragma application, each domain
-becomes a domain folder, and each approved view is later added with
-`pragma create page <domain>/<name>`.
+sits in exactly one domain, and write the output. Only in an application made with
+`pragma create application`: each domain becomes a domain folder, and each approved
+view is later added with `pragma create page <domain>/<name>`.
 
 ## Running as an update
 
@@ -409,8 +436,8 @@ Output: <form> at <place>
 - [ ] 3. Designs: <n> compared (set aside: … because …)
 - [ ] 4. Chosen: <design>, score <x> per job (fallback: …; would change if: …)
 - [ ] 5. Paths: <n>; every :name defined
-- [ ] 6. Views: <n> approved, <n> deferred
-- [ ] 7. Layouts: <n> from the graph, <n> new (proposals: …)
+- [ ] 6. Views: <n> approved, <n> not reviewed, <n> deferred
+- [ ] 7. Layouts: <n> from the graph (<n> unproven, <n> borrowed), <n> new (proposals: …)
 
 On an update, what moved: … (patched | design reopened, because …)
 Jobs handed back to map-journeys: …
@@ -437,9 +464,9 @@ decides:
 | Job | B | C |
 |---|---|---|
 | Check the nightly run | free: the apps list shows each app's last run | free: the runs list |
-| See where every app stands | 1: the same list | 4: Runs to Apps |
+| See where every app stands | 1: the view is kept | 4: Runs to Apps |
 | See which components are in use | 4: Apps to Components | 4: Apps to Components |
-| Trace a number to its evidence | 3: one component | 3: one component |
+| Trace a number to its evidence | 3: the domain is kept, one component | 3: the same |
 | **Per job** | **2.0** | **2.75** |
 
 **The choice.** B is cheaper, and the operator took C: the commit, the scope and the
