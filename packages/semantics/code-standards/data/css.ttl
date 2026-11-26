@@ -70,26 +70,24 @@ cs:css.component.encapsulation a cs:CodeStandard ;
 cs:css.component.states a cs:CodeStandard ;
     rdfs:label "State attributes and modifier classes"@en ;
     cs:hasCategory cs:css ;
-    cs:description "Component states must be handled using attribute selectors for native states and class modifiers for custom states." ;
+    cs:description "Native states use attribute selectors and custom states use modifier classes. Except: a transient interaction state, a value from a closed set the data supplies, and `data-hydrated`, present once the root's script runs, are `data-*` attributes on the root." ;
     cs:do [
-        cs:description "Use attribute selectors for native element states." ;
+        cs:description "Select native states by attribute, and the admitted states by `data-*` on the root" ;
         cs:language "css" ;
         cs:code """
-.ds.button {
-  &[disabled] {
-    opacity: var(--button-disabled-opacity);
-  }
-}
+.ds.button[disabled] { opacity: var(--disabled-opacity); }
+.ds.data-table-resize-handle[data-mode="placing"] { cursor: col-resize; }
+.ds.load-status[data-status="failed"] { /* ... */ }
+.ds.pager[data-hydrated] > .submit { display: none; }
     """
     ] ;
     cs:dont [
-        cs:description "Use class modifiers for native states." ;
+        cs:description "Use a class for a native state, `data-*` for a variant, or a state on a part" ;
         cs:language "css" ;
         cs:code """
-/* Bad: Using class for native state */
-.ds.button.disabled {
-  opacity: var(--button-disabled-opacity);
-}
+.ds.button.disabled { /* ... */ }
+.ds.button[data-importance="primary"] { /* ... */ }
+.ds.data-table-resize-handle > .strip[data-mode="placing"] { /* ... */ }
     """
     ] .
 
@@ -355,29 +353,22 @@ ro.observe(card);
 cs:css.media.scripting a cs:CodeStandard ;
     rdfs:label "Guard hydration flash with scripting"@en ;
     cs:hasCategory cs:css ;
-    cs:description """Use the `scripting` media feature when hydration gating would cause a FOUC-like "flash of un-javascripted content" on first paint.""" ;
+    cs:description "Reveal script-only controls with `@media (scripting: enabled)`. Never hide the only way to finish a task with it; hide that on `[data-hydrated]`." ;
     cs:do [
-        cs:description "When hydration gating causes first-paint flash, hide JS-only affordances by default and reveal them when scripting is enabled." ;
+        cs:description "Reveal script-only controls by the query, and hide baseline ones on `[data-hydrated]`" ;
         cs:language "css" ;
         cs:code """
-.menu-button {
-  display: none;
-}
-
-@media (scripting: enabled) {
-  .menu-button { display: inline-flex; }
-}
+.ds.pager > .select, .ds.pager[data-hydrated] > .submit { display: none; }
+@media (scripting: enabled) { .ds.pager > .select { display: flex; } }
         """
     ] ;
     cs:dont [
-        cs:description "Allow JS-only affordances to flash on first paint when they are hydration-gated." ;
-        cs:language "html" ;
+        cs:description "Hide the only way to finish a task under the query" ;
+        cs:language "css" ;
         cs:code """
-<button hidden class="menu-button">Menu</button>
-
-<script type="module">
-  document.querySelector('.menu-button').removeAttribute('hidden');
-</script>
+@media (scripting: enabled) {
+  .ds.pager > .submit { display: none; }
+}
         """
     ] .
 

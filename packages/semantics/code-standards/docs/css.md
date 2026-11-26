@@ -114,27 +114,25 @@ Don't style internal elements without the component namespace.
 
 **Identifier:** `cs:css.component.states`
 
-Component states must be handled using attribute selectors for native states and class modifiers for custom states.
+Native states use attribute selectors and custom states use modifier classes. Except: a transient interaction state, a value from a closed set the data supplies, and `data-hydrated`, present once the root's script runs, are `data-*` attributes on the root.
 
 ### Do
 
-Use attribute selectors for native element states.
+Select native states by attribute, and the admitted states by `data-*` on the root
 ```css
-.ds.button {
-  &[disabled] {
-    opacity: var(--button-disabled-opacity);
-  }
-}
+.ds.button[disabled] { opacity: var(--disabled-opacity); }
+.ds.data-table-resize-handle[data-mode="placing"] { cursor: col-resize; }
+.ds.load-status[data-status="failed"] { /* ... */ }
+.ds.pager[data-hydrated] > .submit { display: none; }
 ```
 
 ### Don't
 
-Use class modifiers for native states.
+Use a class for a native state, `data-*` for a variant, or a state on a part
 ```css
-/* Bad: Using class for native state */
-.ds.button.disabled {
-  opacity: var(--button-disabled-opacity);
-}
+.ds.button.disabled { /* ... */ }
+.ds.button[data-importance="primary"] { /* ... */ }
+.ds.data-table-resize-handle > .strip[data-mode="placing"] { /* ... */ }
 ```
 
 ---
@@ -174,30 +172,23 @@ ro.observe(card);
 
 **Identifier:** `cs:css.media.scripting`
 
-Use the `scripting` media feature when hydration gating would cause a FOUC-like "flash of un-javascripted content" on first paint.
+Reveal script-only controls with `@media (scripting: enabled)`. Never hide the only way to finish a task with it; hide that on `[data-hydrated]`.
 
 ### Do
 
-When hydration gating causes first-paint flash, hide JS-only affordances by default and reveal them when scripting is enabled.
+Reveal script-only controls by the query, and hide baseline ones on `[data-hydrated]`
 ```css
-.menu-button {
-  display: none;
-}
-
-@media (scripting: enabled) {
-  .menu-button { display: inline-flex; }
-}
+.ds.pager > .select, .ds.pager[data-hydrated] > .submit { display: none; }
+@media (scripting: enabled) { .ds.pager > .select { display: flex; } }
 ```
 
 ### Don't
 
-Allow JS-only affordances to flash on first paint when they are hydration-gated.
-```html
-<button hidden class="menu-button">Menu</button>
-
-<script type="module">
-  document.querySelector('.menu-button').removeAttribute('hidden');
-</script>
+Hide the only way to finish a task under the query
+```css
+@media (scripting: enabled) {
+  .ds.pager > .submit { display: none; }
+}
 ```
 
 ---
