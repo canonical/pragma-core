@@ -120,8 +120,8 @@ packages/my-cli/
 Import directly from files inside a sibling domain — always go through the domain barrel
 ```typescript
 // Bad: reaching into a sibling domain's internals
-import { resolveConfig } from "../operations/resolveConfig.js";
-import { formatOutput } from "../utils/formatOutput.js";
+import resolveConfig from "../operations/resolveConfig.js";
+import formatOutput from "../utils/formatOutput.js";
 
 // Good: import through the domain barrel
 import { resolveConfig } from "../operations/index.js";
@@ -164,22 +164,21 @@ Every domain folder must have a barrel file (`index.ts`) that defines its API su
 Use a barrel at the package entry point to define the public API (library packages)
 ```typescript
 // src/index.ts
-export { Button } from "./components/Button.js";
-export type { ButtonProps } from "./components/Button.types.js";
+export { Button, type ButtonProps } from "./lib/index.js";
 ```
 
 Use a barrel at each domain folder to define the domain's API (application packages)
 ```typescript
 // src/operations/index.ts
-export { resolveConfig } from "./resolveConfig.js";
-export { runValidation } from "./runValidation.js";
+export { default as resolveConfig } from "./resolveConfig.js";
+export { default as runValidation } from "./runValidation.js";
 ```
 
 Import internal implementation code within a domain from the owning file directly
 ```typescript
 // src/build/buildTheme.ts — same domain, import the file
-import { computeDeltas } from "./computeDeltas.js";
-import { recoverPrimitiveRef } from "./recoverPrimitiveRef.js";
+import computeDeltas from "./computeDeltas.js";
+import recoverPrimitiveRef from "./recoverPrimitiveRef.js";
 ```
 
 Import cross-domain code through the sibling domain's barrel
@@ -191,8 +190,8 @@ import { resolveConfig } from "../operations/index.js";
 Keep compatibility barrels thin and documented as public facades
 ```typescript
 /** Public compatibility surface. */
-export { computeDeltas } from "./computeDeltas.js";
-export { formatDelta } from "./formatDelta.js";
+export { default as computeDeltas } from "./computeDeltas.js";
+export { default as formatDelta } from "./formatDelta.js";
 ```
 
 ### Don't
@@ -207,7 +206,7 @@ import { computeDeltas, recoverPrimitiveRef } from "./index.js";
 Import cross-domain code by reaching into individual files
 ```typescript
 // Bad: bypassing the domain barrel
-import { resolveConfig } from "../operations/resolveConfig.js";
+import resolveConfig from "../operations/resolveConfig.js";
 
 // Good: through the barrel
 import { resolveConfig } from "../operations/index.js";
@@ -233,75 +232,31 @@ src/operations/
 
 **Identifier:** `cs:packaging.export.declaration`
 
-Exports must be declared on the definition itself (e.g. `export default function` or `export const`), not gathered at the end of the file. When a wrapper (HOC, decorator, middleware) is applied, declare the unwrapped binding with `const`, then export the wrapped result as default on a separate line.
+Declare each export on its definition. Except: a story's `meta`, a tool config, a context, or a wrapped or cast component or function may be a `const` exported as the default on a separate line; a Svelte module lists its snippets.
 
 ### Do
 
-Declare the export directly on the function or class definition
-```typescript
+Export on the definition, or bind a wrapped or cast value first
+```tsx
 // formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-```
+export default function formatCurrency(value: number): string { /* ... */ }
 
-Declare the export directly on a named constant
-```typescript
-// MAX_RETRIES.ts
-export const MAX_RETRIES = 3;
-```
-
-When a wrapper is involved, declare the raw binding with `const`, then export the wrapped result as default
-```typescript
-// UserProfile.tsx
-const UserProfile = ({ user }: UserProfileProps) => {
-  return <div>{user.name}</div>;
-};
-
-export default memo(UserProfile);
-```
-
-Apply the same pattern for higher-order functions and middleware
-```typescript
-// connectDatabase.ts
-const connectDatabase = (config: DbConfig): Connection => {
-  return new Connection(config);
-};
-
-export default withRetry(connectDatabase);
+// CardItem.tsx
+const CardItem = <T,>({ item }: CardItemProps<T>) => <li>{item.name}</li>;
+export default memo(CardItem) as typeof CardItem;
 ```
 
 ### Don't
 
-Define a symbol and then export it at the end of the file
-```typescript
-// Bad: export is separated from definition
-function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-
+Export away from the definition, or wrap a `function` declaration
+```tsx
+// formatCurrency.ts
+const formatCurrency = (value: number) => { /* ... */ };
 export default formatCurrency;
-```
 
-Gather multiple exports at the bottom of the file
-```typescript
-// Bad: exports collected at the end
-const helperA = () => {};
-const helperB = () => {};
-
-export { helperA, helperB };
-```
-
-Use `export default` on the raw binding when a wrapper is needed
-```typescript
-// Bad: exports the unwrapped version, then wraps elsewhere
-export default function UserProfile({ user }: UserProfileProps) {
-  return <div>{user.name}</div>;
-}
-
-// consumer.ts — has to wrap it themselves
-import UserProfile from "./UserProfile.js";
-const Memoized = memo(UserProfile);
+// CardItem.tsx
+function CardItem({ item }: CardItemProps) { /* ... */ }
+export default memo(CardItem);
 ```
 
 ---
@@ -310,78 +265,30 @@ const Memoized = memo(UserProfile);
 
 **Identifier:** `cs:packaging.export.shape`
 
-Files must use either a single default export or multiple named exports. When using multiple named exports, all exports must have the same type or shape.
+A file exports one thing, as its default export, named exactly as the file: `formatName.ts` → `export default function formatName`. Except, these use named exports only, never a default: `types.ts` (only types); `constants.ts` (only plain values); a family file of functions with one signature, named after the family (`formatters.ts`: `formatName`, `formatNumber`, both `(value) => string`) — a type, hook or component never joins a family; barrels (`index.ts`), stories, fixtures and files a tool loads.
 
 ### Do
 
-Use a single default export for files implementing a single component or function
+Export one default named as the file, or a family of one signature by name
 ```typescript
-// ComponentName.tsx
-export default ComponentName;
-```
+// formatName.ts
+export default function formatName(value: User): string { /* ... */ }
 
-Name atomic function files after the function they export
-```typescript
-// assignElement.ts
-export default function assignElement(target: Element, source: Partial<Element>) {
-  // ...
-}
-
-// formatCurrency.ts
-export default function formatCurrency(value: number) {
-  // ...
-}
-```
-
-Use multiple named exports for files providing a public API or a collection of related items, and ensure all exports have the same type
-```typescript
-// index.ts
-export { ComponentA, ComponentB };
-
-// types.ts
-export type TypeA = { ... };
-export type TypeB = { ... };
-
-// Consistent export shape:
-export const myFuncA = (value: string) => {};
-export const myFuncB = (value: string) => {};
-export const myFuncC = (value: string) => {};
+// formatters.ts: each is (value) => string
+export const formatName = (value: User): string => { /* ... */ };
+export const formatNumber = (value: number): string => { /* ... */ };
 ```
 
 ### Don't
 
-Mix default and unrelated named exports in a way that confuses the file's purpose
-```typescript
-export default ComponentName;
-export const helper = () => {};
-```
+Export a type, a hook and a default from one file
+```tsx
+// MenuContext.tsx
+export interface MenuContextValue { open: boolean }
 
-Name an atomic function file with a name that doesn't match its exported function
-```typescript
-// helpers.ts — wrong: generic name instead of function name
-export default function assignElement(target: Element, source: Partial<Element>) {
-  // ...
-}
-
-// utils.ts — wrong: generic name instead of function name
-export default function formatCurrency(value: number) {
-  // ...
-}
-```
-
-Provide multiple unrelated exports from a file meant for a single domain
-```typescript
-export default debounce;
-export const throttle = () => {};
-export const logger = () => {};
-```
-
-Export objects of different types or shapes from the same file
-```typescript
-export const transformer = (value: string) => {};
-export const reducer = (map: string[]) => {};
-class ABC {}
-export { ABC };
+const MenuContext = createContext<MenuContextValue | null>(null);
+export const useMenuContext = () => useContext(MenuContext);
+export default MenuContext;
 ```
 
 ---
@@ -499,7 +406,7 @@ Use `paths` in `tsconfig.json` as a substitute for subpath imports — it's a ma
 Reach across domains into individual files — cross-domain imports go through the domain's barrel: behind the `#` alias in an application, via a relative path to the barrel in a distributable package
 ```typescript
 // Bad: bypasses the barrel, couples to internal file structure
-import { PragmaError } from "../../error/PragmaError.js";
+import PragmaError from "../../error/PragmaError.js";
 
 // Good (application): the alias points at the barrel
 import { PragmaError } from "#error";
@@ -511,7 +418,7 @@ import { PragmaError } from "../error/index.js";
 Import specific files through the `#` alias — go through the barrel instead
 ```typescript
 // Bad: bypasses the barrel, couples to internal file structure
-import { readConfig } from "#config/readConfig.js";
+import readConfig from "#config/readConfig.js";
 
 // Good: import through the barrel
 import { readConfig } from "#config";
@@ -640,76 +547,34 @@ npm warn EBADENGINE }
 
 **Identifier:** `cs:packaging.naming.single_export_file`
 
-Files that contain a single export must be named after that export. This applies to functions, classes, types, constants, and any other single-export module. The file name must match the exported identifier exactly, preserving its casing (camelCase for functions/variables, PascalCase for classes/types/components).
+A file is named after its export, in its casing: `isAccepted.ts`, `EventEmitter.ts`. Except: `index.ts`, `types.ts`, `constants.ts`, `testing/fixtures.ts` and the files a tool loads keep their names; a family file is named after its family.
 
 ### Do
 
-Name files after the single function they export
+Name the file after its export, or after its family
 ```typescript
 // isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
+export default function isAccepted(status: string): boolean { /* ... */ }
 
-// formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-```
-
-Name files after the single type or interface they export
-```typescript
-// ConnectionConfig.ts
-export interface ConnectionConfig {
-  host: string;
-  port: number;
-}
-
-// UserRole.ts
-export type UserRole = "admin" | "editor" | "viewer";
-```
-
-Name files after the single class they export
-```typescript
 // EventEmitter.ts
-export class EventEmitter {
-  // ...
-}
-```
+export default class EventEmitter { /* ... */ }
 
-Name files after the single constant they export
-```typescript
-// DEFAULT_TIMEOUT.ts
-export const DEFAULT_TIMEOUT = 5000;
+// formatters.ts
+export const formatName = (value: User): string => { /* ... */ };
 ```
 
 ### Don't
 
-Use generic names like `helpers.ts`, `utils.ts`, or `types.ts` for files with a single export
+Name the file generically, by its domain, or in another casing
 ```typescript
-// helpers.ts — wrong: should be isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
+// helpers.ts: should be isAccepted.ts
+export default function isAccepted(status: string): boolean { /* ... */ }
 
-// utils.ts — wrong: should be formatCurrency.ts
-export default function formatCurrency(value: number): string {
-  return `$${value.toFixed(2)}`;
-}
-```
+// network.ts: should be ConnectionConfig.ts
+export default class ConnectionConfig { /* ... */ }
 
-Use names that describe the domain instead of the export
-```typescript
-// validation.ts — wrong: should be isAccepted.ts
-export const isAccepted = (status: string): boolean => {
-  return status === "accepted";
-};
-
-// network.ts — wrong: should be ConnectionConfig.ts
-export interface ConnectionConfig {
-  host: string;
-  port: number;
-}
+// eventEmitter.ts: should be EventEmitter.ts
+export default class EventEmitter { /* ... */ }
 ```
 
 ---
