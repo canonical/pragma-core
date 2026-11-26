@@ -70,22 +70,20 @@ interface QueueConfig {
 
 **Identifier:** `cs:code.array.safe_access`
 
-Use `.at(index)` instead of bracket notation for array element access. Bracket notation (`arr[i]`) returns `T` in TypeScript even though the index may be out of bounds — the type system hides a potential `undefined`. `.at(index)` returns `T | undefined`, making the fallibility visible at the type level and forcing callers to handle the missing case.
+Read array elements with `.at(i)`. Except: a hot loop over a number typed array may read `a[i] as number` when its loop bound holds `i` in range.
 
 ### Do
 
-Use `.at()` for index-based array access.
+Use `.at()` for index-based array access
 ```typescript
-// .at() returns T | undefined — callers must handle the missing case
 const first = items.at(0);
 const last = items.at(-1);
 ```
 
 ### Don't
 
-Use bracket notation — TypeScript infers `T` instead of `T | undefined`, hiding potential out-of-bounds access.
+Read an array element by brackets
 ```typescript
-// TypeScript says this is `string`, but it can be `undefined` at runtime
 const first = items[0];
 ```
 
@@ -95,32 +93,21 @@ const first = items[0];
 
 **Identifier:** `cs:code.assertion.non_null`
 
-Prefer runtime assertions over non-null assertions (`!`). TypeScript's `!` operator suppresses null/undefined checks at the type level without any runtime effect. When the invariant breaks (refactoring, upstream change), the program silently proceeds with `undefined` instead of failing fast. Use a runtime assert to document the invariant and fail visibly. Exception: inline expressions where a throw would add noise (`.map()` callbacks, ternaries). There `as T` or `!` are acceptable when the proof is on the same line.
+Assert an invariant at runtime instead of `!` or an `as T` that drops nullability, which fail silently. Except: inline `as T` or `!` with the proof on the same line, or a hot typed-array `a[i] as number` whose loop bound proves it.
 
 ### Do
 
-Use a runtime assertion to document and enforce the invariant.
+Assert the invariant so it fails visibly
 ```typescript
-// assertInvariant throws if the value is null or undefined
 const first = assertInvariant(items.at(0), "expected at least one item");
-```
-
-In inline expressions where an assertion would add noise, `as T` or `!` is acceptable when the proof is on the same line.
-```typescript
-// Acceptable — filter guarantees non-empty rows, proof is one line up
-const maxLen = Math.max(...rows.map((r) => (r.name as string).length));
 ```
 
 ### Don't
 
-Use `!` to suppress the type checker — it has no runtime effect and fails silently when the invariant breaks.
+Silence the check with `!` or `as T`
 ```typescript
 const first = items.at(0)!;
-```
-
-Use `as T` to cast away nullability outside of inline expressions.
-```typescript
-const config = loadConfig() as Config;
+const admin = users.find(isAdmin) as User;
 ```
 
 ---
