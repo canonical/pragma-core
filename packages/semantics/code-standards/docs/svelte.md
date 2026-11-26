@@ -463,20 +463,14 @@ When a component contains repeated items or non-trivial layout composition, expo
 (Do) Expose constituent parts as subcomponents to give consumers control over HTML.
 ```svelte
 <OptionsPanel>
-  <form action="?/updateProfile" method="POST">
-    <OptionsPanel.Group title="Profile">
-      {#each groups[0].options as option}
-        <OptionsPanel.Option
-          name="profile-field"
-          value={option.value}
-          aria-label={option.label}
-        >
-          {option.label}
-        </OptionsPanel.Option>
-      {/each}
-    </OptionsPanel.Group>
-    <OptionsPanel.SubmitButton>Save</OptionsPanel.SubmitButton>
-  </form>
+  <OptionsPanel.Group title="Profile">
+    {#each profile.options as option}
+      <OptionsPanel.Option name="profile" value={option.value}>
+        {option.label}
+      </OptionsPanel.Option>
+    {/each}
+  </OptionsPanel.Group>
+  <OptionsPanel.SubmitButton>Save</OptionsPanel.SubmitButton>
 </OptionsPanel>
 ```
 
