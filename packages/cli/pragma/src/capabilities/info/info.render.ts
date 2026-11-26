@@ -12,11 +12,19 @@ function originMarker(origin: ConfigOrigin): string {
   return origin === "default" ? "" : ` [${origin}]`;
 }
 
+/** The version, flagged when any part of the CLI or its store is unreleased. */
+function versionLabel(data: InfoData): string {
+  return `${BIN_NAME} v${data.version}${data.unreleased ? " + unreleased changes" : ""}`;
+}
+
 export const infoFormatters: Formatters<InfoData> = {
   plain(data) {
     const { config } = data;
     const lines = [
-      `${BIN_NAME} v${data.version}`,
+      versionLabel(data),
+      ...(data.unreleased ?? []).map(
+        (part) => `  unreleased: ${part.name} — ${part.detail}`,
+      ),
       `  Installed via: ${data.installSource}`,
       `  tier: ${config.tier ?? "(none)"}${originMarker(config.origins.tier)}`,
       `  channel: ${config.channel}${originMarker(config.origins.channel)}`,
@@ -48,7 +56,10 @@ export const infoFormatters: Formatters<InfoData> = {
   llm(data) {
     const { config } = data;
     const lines = [
-      `# ${BIN_NAME} v${data.version}`,
+      `# ${versionLabel(data)}`,
+      ...(data.unreleased ?? []).map(
+        (part) => `- Unreleased: ${part.name} — ${part.detail}`,
+      ),
       `- Installed via: ${data.installSource}`,
       `- Tier: ${config.tier ?? "(none)"}${originMarker(config.origins.tier)}`,
       `- Channel: ${config.channel}${originMarker(config.origins.channel)}`,

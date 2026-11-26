@@ -29,6 +29,9 @@ import {
   pmUpdateCommand,
   updateGuidance,
 } from "../shared/index.js";
+// Imported directly, not through the shared barrel: the barrel sits on the
+// fast path, and this detector reads config and runs git.
+import { detectUnreleased } from "../shared/releaseState.js";
 import type { InfoData, InfoUpdate } from "./types.js";
 
 /**
@@ -66,6 +69,7 @@ export async function collectInfo(runtime: PragmaRuntime): Promise<InfoData> {
   // configured-but-unbuilt project reports no total rather than the snapshot's.
   const index = readPackIndex(resolveSources(layers, runtime.cwd));
   const entities = index ? entityTotal(index) : undefined;
+  const unreleased = detectUnreleased(layers, runtime.cwd);
 
   return {
     version: runtime.version,
@@ -73,6 +77,7 @@ export async function collectInfo(runtime: PragmaRuntime): Promise<InfoData> {
     installKind: install.kind,
     ...(update ? { update } : {}),
     updateSkipped,
+    ...(unreleased.length > 0 ? { unreleased } : {}),
     ...(entities !== undefined ? { entities } : {}),
     config: {
       ...(config.tier !== undefined ? { tier: config.tier } : {}),
