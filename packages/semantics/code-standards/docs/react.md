@@ -696,75 +696,33 @@ styles/
 
 **Identifier:** `cs:react.component.subcomponent_export_api`
 
-Subcomponents are **public** if they are intended to be directly used by the consumer of the parent component to construct a UI.
-
-Subcomponents are **private** if they are internal implementation details of the parent component, and are not intended for direct use by the consumer.
-
-Public subcomponents must be:
-- Exported by attaching them to the parent component using dot notation.
-- Named semantically.
-- Kept to a single level of nesting.
-
-Private subcomponents must remain internal to the component's implementation and not be exported by any file.
+A subcomponent a consumer places as a child is public: attach it to its parent with dot notation (`Card.Header`), one level deep. Never export a subcomponent under its own name from the package root. A subcomponent the parent renders from its props or data stays private.
 
 ### Do
 
-Export public subcomponents by attaching them to the parent component using dot notation
-```typescript
-const Item = (props: ItemProps) => { /* ... */ };
-const Accordion = (props: AccordionProps) => { /* ... */ };
-Accordion.Item = Item;
-export default Accordion;
-```
-
-Use semantic, self-descriptive names for subcomponents
-```typescript
-Accordion.Item
-Card.Header
-Card.Footer
-```
-
-Keep subcomponent nesting to a single level
-```typescript
+Attach a subcomponent the consumer places; keep one the parent renders private
+```tsx
+// Card.Header is placed by the consumer: public
 <Card>
   <Card.Header />
-  <Card.Footer />
 </Card>
+
+// SideNavigation renders its items from data: private
+<SideNavigation items={tree} />
 ```
 
 ### Don't
 
-Repeat the parent component name in subcomponent names
-```typescript
-Card.CardHeader = Header; // Bad: Redundant 'Card' prefix
-```
+Export a subcomponent flat, or nest one a second level deep
+```tsx
+// src/index.ts
+export { Card, CardHeader } from "./lib/index.js";
 
-Map a subcomponent to a different name (renaming)
-```typescript
-Card.Top = Header; // Bad: Mapping 'Header' to 'Top' is not allowed
-```
-
-Use non-semantic or unclear subcomponent names
-```
-Card/
-  └── common/
-      ├── Part/           # Bad: Too vague, not semantic - what part?
-      ├── Element/        # Bad: Too vague, not semantic - what element?
-```
-
-Nest subcomponents more than one level deep
-```typescript
 <Card>
   <Card.Header>
     <Card.Header.Title />
   </Card.Header>
 </Card>
-```
-
-Export private subcomponents that are not intended for public use.
-```typescript
-// Bad: Exporting internal-only subcomponents
-export { InternalHelper };
 ```
 
 ---
@@ -832,56 +790,30 @@ Omit the @implements tag that links to the DSL.
 
 **Identifier:** `cs:react.component.tsdoc.import`
 
-A component's TSDoc must show how a consumer imports it: a single import statement wrapped in backticks, on its own line, with a blank line before it, placed just before the @implements tag. This documents the public import surface without an @example block (which cs:react.component.tsdoc forbids). The imported name must match the component's exact public export API — the identifier a consumer actually imports from the package's published name — which is not always the local declaration name (a component may be renamed at its barrel, e.g. a local `FieldError` re-exported as `Error`).
+A component's TSDoc gives its consumer import in backticks, on its own line before `@implements`, naming what the package exports; a public subcomponent's line names its parent (`` `import { Card } from "@canonical/react-ds-global";` `` for `Card.Header`). Except: a private subcomponent has none.
 
 ### Do
 
-Add the backtick-wrapped import line before @implements.
+Give the consumer's import on its own line before `@implements`
 ```typescript
 /**
- * The label component is a compact, non-interactive visual element used to
- * categorize content or indicate a status.
+ * The header of a card, holding its title and actions.
  *
- * `import { Label } from "@canonical/react-ds-global";`
+ * `import { Card } from "@canonical/react-ds-global";`
  *
- * @implements ds:global.component.label
+ * @implements ds:global.subcomponent.card-header
  */
 ```
 
 ### Don't
 
-Use an @example or a fenced code block instead of the single backtick line.
+Name the local identifier, or give a private subcomponent a line
 ```typescript
-// Bad: @example is forbidden; a fenced block is heavier than needed
-/**
- * The label component is a compact...
- *
- * @example
- * import { Label } from "@canonical/react-ds-global";
- */
-```
+// Bad: the package exports FieldError as Error
+/** `import { FieldError } from "@canonical/react-ds-global-form";` */
 
-Omit the blank line before the import, or drop the backticks.
-```typescript
-// Bad: no blank line before, and no backticks
-/**
- * The label component is a compact...
- * import { Label } from "@canonical/react-ds-global";
- * @implements ds:global.component.label
- */
-```
-
-Use the local declaration name when the barrel re-exports it under a different name.
-```typescript
-// The component is declared locally as FieldError but exported as `Error`.
-// Bad: imports the local name, which the consumer cannot import
-/**
- * `import { FieldError } from "@canonical/react-ds-global-form";`
- */
-// Good: use the exported (consumer-facing) name
-/**
- * `import { Error } from "@canonical/react-ds-global-form";`
- */
+// Bad: Item, a private subcomponent of SideNavigation
+/** `import { SideNavigation } from "@canonical/react-ds-global";` */
 ```
 
 ---
