@@ -146,14 +146,13 @@ import {
   type LinkComponentProps,
 } from "@canonical/react-ds-app";
 
-const NextLink = ({ href = "#", ...props }: LinkComponentProps) => (
-  <Link href={href} {...props} />
-);
+const NextLink = ({ href, ...props }: LinkComponentProps) =>
+  href === undefined ? <span {...props} /> : <Link href={href} {...props} />;
 
 <ApplicationLayout
   navigation={
     <SideNavigation
-      brand={<a href="/"><img src={logo} alt="" /></a>}
+      brand={<a href="/" aria-label="Example Product home"><img src={logo} alt="" /></a>}
       applicationName="Example Product"
       root={{ key: "main", items: [
         { key: "overview", label: "Overview", items: [
@@ -182,7 +181,10 @@ const NextLink = ({ href = "#", ...props }: LinkComponentProps) => (
 
 `LinkComponent` is `ComponentType<LinkComponentProps>` — `href`, `className`,
 `children` and `aria-current`, so `next/link` needs the adapter above: it
-requires `href`, and the contract carries no ref to forward. Placement: the
+requires `href`, and the contract carries no ref to forward. Without an `href`
+(for example, on a disabled row), the adapter renders a noninteractive span.
+In the Next.js App Router, compose the navigation and its callbacks inside a
+Client Component. Placement: the
 product mark goes in the navigation header (`brand`), the product name in
 `applicationName`, and the user and logout in its footer (`footerRoot`; logout
 is a `button` row); one `h1` per page goes in the page header inside
