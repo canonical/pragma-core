@@ -197,6 +197,8 @@ Boundary with the polymorphic `as` prop — the deciding question is *what is be
 
 Fallback semantics: a non-navigable item (one with no `url`/`href`) MUST render a plain element such as `<span>` — never the injected link, and never a `<button>`. When an item is disabled, its `href` is omitted. Active state drives `aria-current` (e.g. `"page"`) on the rendered link.
 
+Except: a `role="menu"` whose items carry roving focus and menu ARIA renders link items as plain anchors and routes navigation through its select callback.
+
 ### Do
 
 Inject the link via a single `LinkComponent` prop typed against the shared `LinkComponentProps`, defaulting to the intrinsic anchor, and render a plain element for non-navigable items.
