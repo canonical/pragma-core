@@ -1,12 +1,11 @@
 /**
- * Unreleased-change detector, shared by `info` and `doctor`'s `pragma version`
- * check.
+ * Unreleased-change detector for `doctor`'s `pragma version` check.
  *
  * The version a CLI reports is the version in its `package.json`, so a build
  * from a checkout several pull requests past `v0.46.0` still says `0.46.0`, and
  * so does a published CLI whose store was built from a pack on `main`. This
- * module names the parts that are past their release, so the version line can
- * say so instead of implying a release that the running code or data is not.
+ * module names the parts that are past their release, so `doctor` can say so
+ * instead of implying a release that the running code or data is not.
  *
  * Two parts are checked:
  *
