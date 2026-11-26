@@ -348,7 +348,7 @@ function selectsCoordinate(c: Condition, alg: Algebra): string | null {
     const depth = s.split(" ").length;
     return alg.byContextName.get(`layer${depth}`) ?? null;
   }
-  const cls = /^\.([A-Za-z]+)$/.exec(s);
+  const cls = /^\.([A-Za-z][\w-]*)$/.exec(s);
   if (cls) return alg.byContextName.get(cls[1]) ?? null;
   return null;
 }

@@ -763,11 +763,11 @@ dt:coordinate.lifecycle.failed
     dt:concept ds:global.modifier.failed .
 dt:context.lifecycle.failed dt:encodes dt:coordinate.lifecycle.failed .
 
-dt:coordinate.lifecycle.inProgress
+dt:coordinate.lifecycle.in_progress
     a dt:Coordinate ;
     dt:family ds:global.modifier_family.lifecycle ;
     dt:concept ds:global.modifier.in_progress .
-dt:context.lifecycle.inProgress dt:encodes dt:coordinate.lifecycle.inProgress .
+dt:context.lifecycle.in_progress dt:encodes dt:coordinate.lifecycle.in_progress .
 
 dt:coordinate.lifecycle.none
     a dt:Coordinate ;
