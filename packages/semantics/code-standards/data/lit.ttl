@@ -424,15 +424,15 @@ cs:lit.component.tsdoc a cs:CodeStandard ;
         cs:language "typescript" ;
         cs:code """
 /**
- * The label component is a compact, non-interactive visual element used to
+ * The tag component is a compact, non-interactive visual element used to
  * categorize content or indicate a status. Its primary role is metadata
  * visualization. While it has similar visual properties to the Chip, it is
  * purely informational and does not trigger actions or allow for removal.
  *
- * @implements ds:global.component.label
+ * @implements ds:global.component.tag
  */
-@customElement('ds-label')
-export default class Label extends LitElement implements LabelProps {
+@customElement('ds-tag')
+export default class Tag extends LitElement implements TagProps {
   @property() criticality?: string;
 }
     """
@@ -443,7 +443,7 @@ export default class Label extends LitElement implements LabelProps {
         cs:code """
 // Bad: Custom title and paraphrased description
 /**
- * Label component
+ * Tag component
  *
  * A compact visual element for status indication.
  */
@@ -455,12 +455,12 @@ export default class Label extends LitElement implements LabelProps {
         cs:code """
 // Bad: Examples belong in stories, not TSDoc
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  *
  * @example
  * ```html
- * <ds-label>Default</ds-label>
- * <ds-label criticality="warning">Warning</ds-label>
+ * <ds-tag>Default</ds-tag>
+ * <ds-tag criticality="warning">Warning</ds-tag>
  * ```
  */
     """
@@ -471,7 +471,7 @@ export default class Label extends LitElement implements LabelProps {
         cs:code """
 // Bad: Missing @implements tag
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  */
     """
     ] .
@@ -667,7 +667,7 @@ cs:lit.component.ssr.hydration a cs:CodeStandard ;
 // entry-client.ts — order matters
 import '@lit-labs/ssr-client/lit-element-hydrate-support.js'; // must be first
 import './components/Button.js';   // registers ds-button, triggers self-hydration
-import './components/Label.js';
+import './components/Tag.js';
     """
     ] ;
     cs:dont [

@@ -331,7 +331,7 @@ Import the hydration support module first, before any component or `lit` import,
 // entry-client.ts — order matters
 import '@lit-labs/ssr-client/lit-element-hydrate-support.js'; // must be first
 import './components/Button.js';   // registers ds-button, triggers self-hydration
-import './components/Label.js';
+import './components/Tag.js';
 ```
 
 ### Don't
@@ -591,15 +591,15 @@ Component TSDoc documentation must use the description from the design system on
 Use the description from the DSL ontology verbatim.
 ```typescript
 /**
- * The label component is a compact, non-interactive visual element used to
+ * The tag component is a compact, non-interactive visual element used to
  * categorize content or indicate a status. Its primary role is metadata
  * visualization. While it has similar visual properties to the Chip, it is
  * purely informational and does not trigger actions or allow for removal.
  *
- * @implements ds:global.component.label
+ * @implements ds:global.component.tag
  */
-@customElement('ds-label')
-export default class Label extends LitElement implements LabelProps {
+@customElement('ds-tag')
+export default class Tag extends LitElement implements TagProps {
   @property() criticality?: string;
 }
 ```
@@ -610,7 +610,7 @@ Write custom descriptions that deviate from the DSL.
 ```typescript
 // Bad: Custom title and paraphrased description
 /**
- * Label component
+ * Tag component
  *
  * A compact visual element for status indication.
  */
@@ -620,12 +620,12 @@ Include `@example` blocks — stories fulfill this role.
 ```typescript
 // Bad: Examples belong in stories, not TSDoc
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  *
  * @example
  * ```html
- * <ds-label>Default</ds-label>
- * <ds-label criticality="warning">Warning</ds-label>
+ * <ds-tag>Default</ds-tag>
+ * <ds-tag criticality="warning">Warning</ds-tag>
  * ```
  */
 ```
@@ -634,7 +634,7 @@ Omit the `@implements` tag — it is the link between the component implementati
 ```typescript
 // Bad: Missing @implements tag
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  */
 ```
 

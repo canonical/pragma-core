@@ -20,14 +20,14 @@ cs:react.component.tsdoc a cs:CodeStandard ;
         cs:language "typescript" ;
         cs:code """
 /**
- * The label component is a compact, non-interactive visual element used to
+ * The tag component is a compact, non-interactive visual element used to
  * categorize content or indicate a status. Its primary role is metadata
  * visualization. While it has similar visual properties to the Chip, it is
  * purely informational and does not trigger actions or allow for removal.
  *
- * @implements ds:global.component.label
+ * @implements ds:global.component.tag
  */
-const Label = ({ children, criticality, className, ...props }: LabelProps) => (
+const Tag = ({ children, criticality, className, ...props }: TagProps) => (
   <span className={[componentCssClassName, criticality, className].filter(Boolean).join(" ")} {...props}>
     {children}
   </span>
@@ -40,7 +40,7 @@ const Label = ({ children, criticality, className, ...props }: LabelProps) => (
         cs:code """
 // Bad: Custom title and paraphrased description
 /**
- * Label component
+ * Tag component
  *
  * A compact visual element for status indication.
  */
@@ -52,11 +52,11 @@ const Label = ({ children, criticality, className, ...props }: LabelProps) => (
         cs:code """
 // Bad: Examples belong in stories, not TSDoc
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  *
  * @example
- * <Label>Default</Label>
- * <Label criticality="warning">Warning</Label>
+ * <Tag>Default</Tag>
+ * <Tag criticality="warning">Warning</Tag>
  */
     """
     ] ;
@@ -66,7 +66,7 @@ const Label = ({ children, criticality, className, ...props }: LabelProps) => (
         cs:code """
 // Bad: Missing @implements tag
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  */
     """
     ] .
@@ -81,12 +81,12 @@ cs:react.component.tsdoc.import a cs:CodeStandard ;
         cs:language "typescript" ;
         cs:code """
 /**
- * The label component is a compact, non-interactive visual element used to
+ * The tag component is a compact, non-interactive visual element used to
  * categorize content or indicate a status.
  *
- * `import { Label } from \"@canonical/react-ds-global\";`
+ * `import { Tag } from \"@canonical/react-ds-global\";`
  *
- * @implements ds:global.component.label
+ * @implements ds:global.component.tag
  */
     """
     ] ;
@@ -96,10 +96,10 @@ cs:react.component.tsdoc.import a cs:CodeStandard ;
         cs:code """
 // Bad: @example is forbidden; a fenced block is heavier than needed
 /**
- * The label component is a compact...
+ * The tag component is a compact...
  *
  * @example
- * import { Label } from \"@canonical/react-ds-global\";
+ * import { Tag } from \"@canonical/react-ds-global\";
  */
     """
     ] ;
@@ -109,9 +109,9 @@ cs:react.component.tsdoc.import a cs:CodeStandard ;
         cs:code """
 // Bad: no blank line before, and no backticks
 /**
- * The label component is a compact...
- * import { Label } from \"@canonical/react-ds-global\";
- * @implements ds:global.component.label
+ * The tag component is a compact...
+ * import { Tag } from \"@canonical/react-ds-global\";
+ * @implements ds:global.component.tag
  */
     """
     ] ;
