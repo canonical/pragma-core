@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Journey graph: adoption tracker</title>
+<title>Journey graph</title>
 <!--
   Example output of the map-journeys skill: one page drawn from one JSON document.
   The data block below is the whole source. Leave it empty and the page reads
-  journeys.json from the same folder instead. Nothing else on the page is written by hand.
+  journeys.json from the same folder instead. The title, the heading and everything
+  else are drawn from that data.
 -->
 <script type="application/json" id="journeys-data">
 {
+  "name": "Adoption tracker",
   "goal": "Show how far along each app is, and whether it is moving.",
   "personas": [
     { "id": "steward", "name": "Design system steward",
@@ -69,10 +71,14 @@
   --page: #f9f9f9; --surface: #ffffff; --ink: #191919; --ink-2: #666666; --line: #c2c2c2; --hair: #e7e7e7;
   --p1: #257de0; --p2: #f47230; --p3: #00b894; --p4: #f2a600; --p5: #ee7fac; --p6: #008a17; --p7: #6a4ce2; --p8: #ec4647;
 }
-@media (prefers-color-scheme: dark) { :root {
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --page: #0b0b0b; --surface: #191919; --ink: #efefef; --ink-2: #9c9c9c; --line: #474747; --hair: #303030;
   --p1: #338ced; --p2: #e76624; --p3: #00a888; --p4: #d28e05; --p5: #e24d8b; --p6: #0aac23; --p7: #9887ef; --p8: #eb6263;
 } }
+:root[data-theme="dark"] {
+  --page: #0b0b0b; --surface: #191919; --ink: #efefef; --ink-2: #9c9c9c; --line: #474747; --hair: #303030;
+  --p1: #338ced; --p2: #e76624; --p3: #00a888; --p4: #d28e05; --p5: #e24d8b; --p6: #0aac23; --p7: #9887ef; --p8: #eb6263;
+}
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
 main { max-width: 1180px; margin: 0 auto; padding: 32px 16px 64px; }
@@ -129,7 +135,7 @@ td.story { min-width: 300px; }
 </head>
 <body>
 <main>
-  <h1>Who uses the adoption tracker, for what, and in what order</h1>
+  <h1 id="heading">Who uses it, for what, and in what order</h1>
   <p class="muted" id="lede"></p>
 
   <div class="scroll">
@@ -140,7 +146,7 @@ td.story { min-width: 300px; }
       <div class="col" id="col-jobs"><h3>Jobs</h3></div>
     </section>
   </div>
-  <p class="key">A solid line joins a journey to its jobs, and the number is the order they are done in. A job shared by two journeys has a number from each, and the dots on a job show every persona that holds it. A dashed line joins a persona to jobs that are not part of a journey. A dashed box is a deferred job. Hover or focus any box to trace its links and read its detail.</p>
+  <p class="key">A solid line joins a journey to its jobs, and the number is the order they are done in. A job shared by two journeys has a number from each, and the dots on a job show every persona that holds it. A dashed line joins a persona to jobs that are not part of a journey. A dashed box is a deferred job. A "guess" tag marks a persona or a journey order nobody has confirmed yet. Hover or focus any box to trace its links and read its detail.</p>
   <div id="tip" role="status" hidden></div>
 
   <h2>Jobs</h2>
@@ -164,7 +170,7 @@ const jobOf = Object.fromEntries(jobs.map((j) => [j.id, j]));
 const mids = [];
 for (const p of personas) {
   const own = journeys.filter((j) => j.persona === p.id);
-  for (const j of own) mids.push({ kind: "journey", persona: p.id, label: j.question, jobs: j.jobs });
+  for (const j of own) mids.push({ kind: "journey", persona: p.id, label: j.question, jobs: j.jobs, guess: j.guess });
   const onJourney = new Set(own.flatMap((j) => j.jobs));
   const off = jobs.filter((j) => j.personas.includes(p.id) && !onJourney.has(j.id)).map((j) => j.id);
   if (off.length) mids.push({ kind: "off", persona: p.id, label: "Off the journey", jobs: off });
@@ -180,15 +186,20 @@ for (const j of jobs) if (!order.includes(j.id)) order.push(j.id);
 const holders = (j) => personas.filter((p) => j.personas.includes(p.id) || journeys.some((y) => y.persona === p.id && y.jobs.includes(j.id)));
 const where = (j) => j.deferred ? "Deferred" : (j.outside ?? []).length ? `Outside the app: ${j.outside.join(", ")}` : "";
 const tips = {};
+const guessTag = `<span class="tag">guess</span>`;
+if (data.name) {
+  document.title = `Journey graph: ${data.name}`;
+  document.getElementById("heading").textContent = `Who uses ${data.name}, for what, and in what order`;
+}
 const col = (id) => document.getElementById(id);
 const add = (parent, html) => { parent.insertAdjacentHTML("beforeend", html); return parent.lastElementChild; };
 
 for (const p of personas) {
-  add(col("col-personas"), `<button class="node persona" data-id="p:${p.id}" style="--c:${color(p.id)}">${esc(p.name)}</button>`);
+  add(col("col-personas"), `<button class="node persona" data-id="p:${p.id}" style="--c:${color(p.id)}">${esc(p.name)}${p.guess ? guessTag : ""}</button>`);
   tips[`p:${p.id}`] = `${p.description} Cares about: ${p.interests.join("; ").toLowerCase()}.`;
 }
 for (const m of mids) {
-  const n = m.kind === "journey" ? `<span class="small">${m.jobs.length} jobs, in order</span>` : "";
+  const n = m.kind === "journey" ? `<span class="small">${m.jobs.length} jobs, in order${m.guess ? guessTag : ""}</span>` : "";
   add(col("col-journeys"), `<button class="node ${m.kind}" data-id="${m.id}" style="--c:${color(m.persona)}">${esc(m.label)}${n}</button>`);
   tips[m.id] = m.kind === "journey"
     ? `${personas.find((p) => p.id === m.persona).name}: ${m.jobs.map((id) => jobOf[id].name).join(" → ")}`

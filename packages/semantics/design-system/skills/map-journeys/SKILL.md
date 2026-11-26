@@ -34,8 +34,9 @@ are the assistant whose job is to make them successful:
 - Bring each decision as a recommendation plus a question, never as a fait accompli.
   Who really uses the application, and what they care about, is in no file.
 
-Full autonomy is the exception. Run the whole flow alone only when explicitly asked to,
-and list every judgment call made alone in the final report.
+Full autonomy is the exception. Run the whole flow alone only when explicitly asked to.
+Then every persona and every journey's order stays marked as a guess, and the final
+report lists each judgment call.
 
 Decision gates — pause at each and resolve it WITH the operator:
 
@@ -149,15 +150,19 @@ that is stored twice drifts.
 
 ```json
 {
+  "name": "the application's name",
   "goal": "one sentence",
-  "personas": [{ "id": "", "name": "", "description": "", "interests": [""] }],
+  "personas": [{ "id": "", "name": "", "description": "", "interests": [""],
+                 "guess": true }],
   "jobs": [{ "id": "J1", "name": "", "personas": [""], "story": "",
-             "outside": ["a command or a file"], "deferred": true }],
-  "journeys": [{ "persona": "", "question": "", "jobs": ["J1"] }]
+             "outside": ["a command, a file or another tool"], "deferred": true }],
+  "journeys": [{ "persona": "", "question": "", "jobs": ["J1"], "guess": true }]
 }
 ```
 
-`outside` and `deferred` appear only on the jobs they apply to.
+`outside`, `deferred` and `guess` appear only where they apply. `guess` marks a persona
+the operator has not confirmed, or a journey whose order they have not confirmed. The
+page shows it as a tag.
 
 **The graph** has personas on the left, journeys in the middle and jobs on the right.
 A journey's jobs are numbered in order. Overlap is shown, not hidden: a job shared by
@@ -165,11 +170,15 @@ two journeys is one box with a numbered link from each, and dots on every job sh
 the personas that hold it. Jobs a persona holds outside its journeys hang off a dashed
 "off the journey" box. A deferred job is dashed.
 
-`journey-graph.example.html`, beside this file, is a complete example on the worked
-example's data. Start the page from it. It reads `journeys.json` from its own folder,
-or the same JSON pasted into its data block. Use the data block when the page must
-stand alone: published as a single page, or opened from disk, where a browser will not
-read a second file. The JSON file stays the source. Never edit the block by hand.
+`journey-graph.example.html` is a complete example on the worked example's data. It
+sits in this skill's folder, which is the `sourcePath` that
+`pragma skill lookup map-journeys --format json` reports. Start the page from it. Its
+title, heading and everything else are drawn from the data.
+
+The page reads `journeys.json` from its own folder, or the same JSON placed in its data
+block. Use the block when the page must stand alone: published as a single page, or
+opened from disk, where a browser will not read a second file. The JSON file stays the
+source: copy it into the block whole, and never edit the block by hand.
 
 Where the output is committed, that repository's rules and the `git` standards apply
 (`pragma standard categories` lists the current set).
@@ -243,7 +252,9 @@ It has an id (`J1`, `J2`, …) that is never reused or renumbered, a short name 
 as an instruction, and one or more personas.
 
 **Jobs are shared.** When two personas need the same thing, it is one job with two
-personas. Never copy or split a job to give each persona its own.
+personas. Never copy or split a job to give each persona its own. List a persona on a
+job when the job serves one of its interests; a job everyone passes through, such as
+signing in, lists those who care how it goes.
 
 **Jobs stay put while the solution moves.** A story never names a page, a screen or a
 feature. That is why the same jobs can judge several designs. For an existing
@@ -267,8 +278,8 @@ Mark two things where they apply:
 
 - **Deferred.** A need that is real but not for now is written in full and marked. It
   stays visible and gets no view.
-- **Outside the application.** A job done with a command or a file names it, and gets
-  no view.
+- **Outside the application.** A job done anywhere else, with a command, a file or
+  another tool, names that place as people call it, and gets no view.
 
 Jobs are drafts until real users confirm them. Say so in the output.
 
@@ -359,9 +370,9 @@ What the tutorial should bring out:
   personas because their interests differ.
 - **Step 4.** Two needs were real but not for now. They are written in full and
   deferred.
-- **Step 5.** Two jobs sit on two journeys each, at a different place in each. Two of
-  the steward's jobs are on no journey: one is occasional, the other may be a second
-  question.
+- **Step 5.** Two jobs sit on two journeys each, at a different place in each. Four of
+  the steward's jobs are on no journey: two are deferred, one is occasional, and one
+  may be a second question.
 - **Scope with no job.** In the real project, work was planned that no job asked for.
   It was found only in a later audit. Run the gates early.
 
