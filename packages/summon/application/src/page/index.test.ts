@@ -14,6 +14,7 @@ import { runTask, runUndo } from "@canonical/task/node";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { generator as domainGenerator } from "../domain/index.js";
 import { formatWithBiome } from "../testing/formatWithBiome.js";
+import { generator as wrapperGenerator } from "../wrapper/index.js";
 import { generator } from "./index.js";
 
 /**
@@ -195,5 +196,132 @@ describe("page generator against the filesystem", () => {
       message: expect.stringContaining("already exists"),
     });
     expect(readFileSync(pageFile(), "utf8")).toBe("hand-written\n");
+  });
+
+  it("refuses the React page, domain and wrapper generators in a SvelteKit app", async () => {
+    writeFileSync(path.join(cwd, "svelte.config.js"), "export default {};\n");
+    writeFileSync(pageFile(), "user content\n");
+    mkdirSync(path.join(cwd, "src/lib/SettingsLayout"), { recursive: true });
+    writeFileSync(
+      path.join(cwd, "src/lib/SettingsLayout/SettingsLayout.tsx"),
+      "user content\n",
+    );
+    for (const task of [
+      generator.generate({ pagePath: "catalog/detail" }),
+      domainGenerator.generate({ domainName: "billing" }),
+      wrapperGenerator.generate({ wrapperName: "settings" }),
+    ]) {
+      await expect(runTask(task, { cwd })).rejects.toMatchObject({
+        code: GENERATOR_INVALID_ANSWER,
+        message: expect.stringContaining("--framework svelte"),
+      });
+    }
+    expect(readFileSync(pageFile(), "utf8")).toBe("user content\n");
+    expect(existsSync(path.join(cwd, "src/domains/billing"))).toBe(false);
+    expect(
+      readFileSync(
+        path.join(cwd, "src/lib/SettingsLayout/SettingsLayout.tsx"),
+        "utf8",
+      ),
+    ).toBe("user content\n");
+  });
+
+  it("creates SvelteKit domain, page and wrapper with reversible output", async () => {
+    writeFileSync(path.join(cwd, "svelte.config.js"), "export default {};\n");
+    const createDomain = () =>
+      domainGenerator.generate({ domainName: "billing", framework: "svelte" });
+    const createPage = () =>
+      generator.generate({ pagePath: "billing/detail", framework: "svelte" });
+    const createWrapper = () =>
+      wrapperGenerator.generate({
+        wrapperName: "settings",
+        framework: "svelte",
+      });
+    await runTask(createDomain(), { cwd });
+    await runTask(createPage(), { cwd });
+    await runTask(createWrapper(), { cwd });
+    expect(
+      readFileSync(
+        path.join(cwd, "src/routes/billing/detail/+page.svelte"),
+        "utf8",
+      ),
+    ).toContain("<h1>Detail</h1>");
+    expect(
+      readFileSync(path.join(cwd, "src/lib/SettingsLayout.svelte"), "utf8"),
+    ).toContain("{@render children?.()}");
+    await runUndo(createPage(), { cwd });
+    await runUndo(createWrapper(), { cwd });
+    await runUndo(createDomain(), { cwd });
+    expect(existsSync(path.join(cwd, "src/routes/billing/+page.svelte"))).toBe(
+      false,
+    );
+    expect(existsSync(path.join(cwd, "src/lib/SettingsLayout.svelte"))).toBe(
+      false,
+    );
+  });
+
+  it("refuses existing Svelte output and preserves unrelated route files", async () => {
+    const root = path.join(cwd, "src/routes/billing");
+    mkdirSync(path.join(root, "detail"), { recursive: true });
+    writeFileSync(path.join(root, "+page.svelte"), "domain\n");
+    writeFileSync(path.join(root, "detail/+page.svelte"), "existing\n");
+    writeFileSync(path.join(root, "other.txt"), "keep\n");
+    await expect(
+      runTask(
+        generator.generate({ pagePath: "billing/detail", framework: "svelte" }),
+        { cwd },
+      ),
+    ).rejects.toMatchObject({
+      message: expect.stringContaining("already exists"),
+    });
+    await expect(
+      runTask(
+        domainGenerator.generate({
+          domainName: "billing",
+          framework: "svelte",
+        }),
+        { cwd },
+      ),
+    ).rejects.toMatchObject({ code: "DOMAIN_EXISTS" });
+    expect(readFileSync(path.join(root, "detail/+page.svelte"), "utf8")).toBe(
+      "existing\n",
+    );
+    expect(readFileSync(path.join(root, "other.txt"), "utf8")).toBe("keep\n");
+  });
+
+  it("preserves existing nonempty domain directories on Svelte undo", async () => {
+    const createDomain = () =>
+      domainGenerator.generate({ domainName: "billing", framework: "svelte" });
+    await runTask(createDomain(), { cwd });
+    writeFileSync(path.join(cwd, "src/routes/billing/keep.txt"), "user\n");
+    await runUndo(createDomain(), { cwd });
+    expect(
+      readFileSync(path.join(cwd, "src/routes/billing/keep.txt"), "utf8"),
+    ).toBe("user\n");
+  });
+
+  it("refuses a Svelte page with no domain and preserves an existing wrapper", async () => {
+    await expect(
+      runTask(
+        generator.generate({ pagePath: "missing/detail", framework: "svelte" }),
+        { cwd },
+      ),
+    ).rejects.toMatchObject({
+      code: GENERATOR_INVALID_ANSWER,
+      message: expect.stringContaining("not found"),
+    });
+    mkdirSync(path.join(cwd, "src/lib"), { recursive: true });
+    const wrapper = path.join(cwd, "src/lib/SettingsLayout.svelte");
+    writeFileSync(wrapper, "user wrapper\n");
+    await expect(
+      runTask(
+        wrapperGenerator.generate({
+          wrapperName: "settings",
+          framework: "svelte",
+        }),
+        { cwd },
+      ),
+    ).rejects.toMatchObject({ code: "WRAPPER_EXISTS" });
+    expect(readFileSync(wrapper, "utf8")).toBe("user wrapper\n");
   });
 });

@@ -1,0 +1,12 @@
+<script lang="ts">
+  import { products } from "$lib/catalog";
+<% if (intl) { %>  import { createFormatters } from "@canonical/i18n-core";
+  import { getLocaleSource, getTranslator } from "$lib/i18n";
+  const locale = getLocaleSource();
+  let t = $derived(getTranslator($locale));
+<% } %></script>
+<svelte:head><title><%- intl ? '{t("catalog")}' : 'Catalog' %> | <%= name %></title></svelte:head>
+<h1><%- intl ? '{t("catalog")}' : 'Catalog' %></h1>
+<% if (intl) { %><p>{t("catalogCount", { count: products.length }).replace(String(products.length), createFormatters($locale).formatNumber(products.length))}</p>
+<% } %>
+<ul>{#each products as product (product.id)}<li><a href={`/catalog/${product.id}`}><%- intl ? '{t(product.id)}' : '{product.name}' %></a> — <%- intl ? '{t(`${product.id}Description`)}' : '{product.description}' %></li>{/each}</ul>

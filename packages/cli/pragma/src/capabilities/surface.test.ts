@@ -246,7 +246,7 @@ describe("surface conformance — capabilities ⊆ covenant (PROTECTED)", () => 
       },
       {
         v: "application",
-        args: ["[app-path]"],
+        args: ["<framework>", "[app-path]"],
         // router is GONE: an always-on fact, not a prompt — it had no
         // reachable explicit form (only a `--no-` spelling the generator's own
         // guard rejected), so the projection no longer carries it. `rendering`
@@ -265,8 +265,8 @@ describe("surface conformance — capabilities ⊆ covenant (PROTECTED)", () => 
       },
       {
         v: "page",
-        // The one prompt is the positional page path, so there is no flag.
         args: ["[page-path]"],
+        flags: ["--framework"],
         mutates: true,
         mcp: "create_page",
       },

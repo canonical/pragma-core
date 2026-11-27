@@ -145,7 +145,7 @@ Mutation — plan-first (set `confirm: true` to apply).
 
 ### create_application
 
-Use when asked to start a new React application, server-rendered or client-only, with or without an application shell. Example: create_application { appPath: "my-app" }.
+Use when asked to start a new React or Svelte application, server-rendered or client-only, with or without an application shell. Example: create_application { appPath: "my-app" }.
 
 Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
 
@@ -153,12 +153,13 @@ Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
+| `framework` | enum(react, svelte) | no | Application framework (defaults to React over MCP). (one of: react, svelte) (default: react) |
 | `appPath` | string | no | Application directory name. (default: my-app) |
 | `forms` | boolean | no | Include form components. (default: true) |
 | `appShell` | boolean | no | Include the application shell and its dashboard. (default: true) |
 | `intl` | boolean | no | Include internationalisation (locale negotiation, translated UI, locale switcher). (default: false) |
 | `rendering` | enum(ssr, spa) | no | Rendering — ssr keeps the server layer (SSR servers and sitemap), spa is client-only. (one of: ssr, spa) (default: ssr) |
-| `relay` | boolean | no | Include a Relay (GraphQL) data layer with a local mock schema. (default: false) |
+| `relay` | boolean | no | Include a Relay (GraphQL) data layer with a local mock schema. (frameworks: react) (default: false) |
 | `runInstall` | boolean | no | Install dependencies now. (default: true) |
 | `confirm` | boolean | no | Set true to execute; otherwise a plan is returned (default false). |
 | `cwd` | string | no | Absolute project directory to write into; defaults to the server's working directory. |
@@ -215,6 +216,7 @@ Mutation — plan-first (set `confirm: true` to apply). Non-destructive.
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `pagePath` | string | yes | Page path, as <domain>/<name> (for example invoices/detail). |
+| `framework` | enum(react, svelte) | no | Application framework. (one of: react, svelte) (default: react) |
 | `confirm` | boolean | no | Set true to execute; otherwise a plan is returned (default false). |
 | `cwd` | string | no | Absolute project directory to write into; defaults to the server's working directory. |
 

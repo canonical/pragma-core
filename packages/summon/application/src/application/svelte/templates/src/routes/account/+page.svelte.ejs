@@ -1,0 +1,20 @@
+<script lang="ts">
+<% if (spa) { %>  import { goto } from "$app/navigation";
+  import { page } from "$app/state";
+  import { onMount } from "svelte";
+  let allowed = $state(false);
+  onMount(() => {
+    allowed = page.url.searchParams.get("auth") === "1" || sessionStorage.getItem("demo-session") === "yes";
+    if (!allowed) void goto("/login?from=%2Faccount", { replaceState: true });
+  });
+<% } %><% if (intl) { %>  import { getLocaleSource, getTranslator } from "$lib/i18n";
+  const locale = getLocaleSource(); let t = $derived(getTranslator($locale));
+<% } %>
+</script>
+<svelte:head><title><%- intl ? '{t("account")}' : 'Account' %> | <%= name %></title></svelte:head>
+<% if (spa) { %>{#if allowed}
+<% } %>
+<h1><%- intl ? '{t("demoAccount")}' : 'Demo account' %></h1>
+<p><%- intl ? '{t("demoWarning")}' : 'This demonstration does not authenticate users or protect real data.' %></p>
+<% if (spa) { %><a href="/dashboard"><%- intl ? '{t("enter")}' : 'Enter demo dashboard' %></a>
+{/if}<% } else { %><form method="POST"><button type="submit"><%- intl ? '{t("enter")}' : 'Enter demo dashboard' %></button></form><% } %>

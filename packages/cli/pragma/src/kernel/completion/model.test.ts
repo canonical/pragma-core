@@ -476,7 +476,7 @@ describe("mounted create completion — literal candidate pins (PROTECTED)", () 
     ).toEqual(["lit", "react", "svelte"]);
     expect(
       await runComplete(["create", "application", ""], capabilities),
-    ).toEqual(["react"]);
+    ).toEqual(["react", "svelte"]);
   });
 
   it("namespace flag tier: `create component --<TAB>` offers NO leaf prompt or mutation flags", async () => {

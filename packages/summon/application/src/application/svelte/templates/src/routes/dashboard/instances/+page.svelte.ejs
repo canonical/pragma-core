@@ -1,0 +1,101 @@
+<script lang="ts">
+<% if (intl) { %>  import { getLocaleSource, getTranslator } from "$lib/i18n";
+  const locale = getLocaleSource(); let t = $derived(getTranslator($locale));
+<% } else { %>  const messages: Record<string, string> = { instances: "Instances", instancesDemo: "Demo instances are stored only in this browser's cookie; they are not provisioned.", sampleInstancesDemo: "These are sample instances only.", instanceEmpty: "No demo instances yet.", createInstance: "Create demo instance", instanceName: "Instance name", release: "Release", instanceStatus: "Status", demoStatus: "Demo only", instanceAddress: "Address", instanceMemory: "Memory", enablePro: "Enable Pro", cloudInit: "Cloud-init", yes: "Yes", no: "No", removeInstance: "Remove demo instance", instanceInvalid: "Use a lowercase name with letters, numbers or hyphens (maximum 40) and choose a valid release.", instanceDuplicate: "That instance name already exists.", instanceLimit: "The demo can contain at most 10 instances.", compute: "Compute", storage: "Storage", sample: "Sample" };
+  const t = (key: string) => messages[key] ?? key;
+<% } %><% if (forms && !spa) { %>  import type { PageProps } from "./$types";
+  let { data, form }: PageProps = $props();
+  let confirming = $state(false);
+  let removeLink = $state<HTMLAnchorElement>();
+<% } %><% if (forms) { %>  import { Modal } from "@canonical/svelte-ds-global";
+  import { onMount } from "svelte";
+  let panel = $state<HTMLDetailsElement>();
+  let enhanced = $state(false);
+  onMount(() => { enhanced = true; });
+  function closePanel() { if (panel) { const restore = panel.contains(document.activeElement); panel.open = false; if (restore) panel.querySelector("summary")?.focus(); } }
+  function openPanel() { if (enhanced && panel && !panel.open) requestAnimationFrame(() => { if (panel?.open && panel.querySelector("summary") === document.activeElement) panel.querySelector<HTMLInputElement>("#instance-name")?.focus(); }); }
+  function handleGlobalKeydown(event: KeyboardEvent) { if (event.key === "Escape" && panel?.open && panel.contains(event.target as Node)) { event.preventDefault(); closePanel(); } }
+<% } %><% if (forms && spa) { %>  import { page } from "$app/state";
+  import { readInstances, releases, isValidInstance, type Instance } from "$lib/instances";
+  let requestedCreate = $derived(page.url.searchParams.get("create") === "1");
+  let requestedRelease = $derived(releases.find((item) => item === page.url.searchParams.get("release")) ?? "noble");
+  let instances = $state<Instance[]>([]);
+  let selected = $state<string | undefined>();
+  let issue = $state("");
+  let confirm = $state(false);
+  let opener = $state<HTMLButtonElement>();
+  onMount(() => { instances = readInstances(localStorage.getItem("demo-instances") ?? undefined); });
+  function create(event: SubmitEvent) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget as HTMLFormElement);
+    const values = { name: String(data.get("name") ?? ""), release: String(data.get("release") ?? ""), pro: data.has("pro"), cloudInit: String(data.get("cloudInit") ?? "") };
+    issue = !isValidInstance(values) ? "instanceInvalid" : instances.some((item) => item.name === values.name) ? "instanceDuplicate" : instances.length >= 10 ? "instanceLimit" : "";
+    if (issue || !isValidInstance(values)) return;
+    const next = [...instances, values];
+    if (encodeURIComponent(JSON.stringify(next)).length > 3000) { issue = "instanceLimit"; return; }
+    localStorage.setItem("demo-instances", JSON.stringify(next)); instances = next; selected = values.name; closePanel();
+  }
+  function openDialog() { confirm = true; }
+  function closeDialog() { confirm = false; }
+  function remove() {
+    instances = instances.filter((item) => item.name !== selected);
+    localStorage.setItem("demo-instances", JSON.stringify(instances)); selected = undefined;
+    confirm = false; document.getElementById("instance-create-toggle")?.focus();
+  }
+<% } %></script>
+<% if (forms) { %><svelte:window onkeydown={handleGlobalKeydown} />
+<% } %>
+<svelte:head><title>{t("instances")} | <%= name %></title></svelte:head>
+<h1>{t("instances")}</h1>
+<p><%- forms && spa ? (intl ? '{t("spaInstancesDemo")}' : 'Demo instances are stored only in this browser; they are not provisioned.') : forms ? '{t("instancesDemo")}' : '{t("sampleInstancesDemo")}' %></p>
+<% if (forms && !spa) { %><div class="instance-layout"><div>{#if data.instances.length}
+  <ul class="instance-cards">{#each data.instances as instance (instance.name)}<li><article class="instance-card"><h2><a href={`/dashboard/instances?selected=${encodeURIComponent(instance.name)}`} aria-current={data.selected?.name === instance.name ? "true" : undefined}>{instance.name}</a></h2><p>{t("release")}: {instance.release}</p></article></li>{/each}</ul>
+{:else}<p>{t("instanceEmpty")}</p>{/if}
+{#if data.selected}
+  <section aria-labelledby="instance-details"><h2 id="instance-details">{data.selected.name}</h2>
+    <dl><dt>{t("instanceStatus")}</dt><dd>{t("demoStatus")}</dd><dt>{t("release")}</dt><dd>{data.selected.release}</dd><dt>{t("instanceAddress")}</dt><dd>—</dd><dt>{t("instanceMemory")}</dt><dd>—</dd><dt>{t("enablePro")}</dt><dd>{t(data.selected.pro ? "yes" : "no")}</dd><dt>{t("cloudInit")}</dt><dd><pre>{data.selected.cloudInit || "—"}</pre></dd></dl>
+    <a bind:this={removeLink} href={`/dashboard/instances/remove?name=${encodeURIComponent(data.selected.name)}`} onclick={(event) => { if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); confirming = true; }}>{t("removeInstance")}</a>
+  </section>
+  <Modal bind:open={confirming} onclose={() => removeLink?.focus()}>
+    <Modal.Header closeButton={false}><h2><%- intl ? '{t("confirmRemove")}' : 'Confirm removal' %></h2></Modal.Header>
+    <Modal.Content><p><%- intl ? '{t("confirmRemoveBody", { name: data.selected.name })}' : 'Remove demo instance {data.selected.name}?' %></p></Modal.Content>
+    <Modal.Footer><button type="button" onclick={() => confirming = false}><%- intl ? '{t("cancel")}' : 'Cancel' %></button><form method="POST" action={`/dashboard/instances/remove?name=${encodeURIComponent(data.selected.name)}`}><input type="hidden" name="name" value={data.selected.name} /><button type="submit">{t("removeInstance")}</button></form></Modal.Footer>
+  </Modal>
+{:else}<p><%- intl ? '{t("selectInstance")}' : 'Select an instance to view its details.' %></p>
+{/if}
+</div><aside class:enhanced class="instance-panel" aria-label={t("createInstance")}><details bind:this={panel} open={!!form?.issue || data.create}><summary id="instance-create-toggle" onclick={openPanel}>{t("createInstance")}</summary><div class="instance-panel-content">
+  {#if enhanced}<button type="button" onclick={closePanel}><%- intl ? '{t("cancel")}' : 'Cancel' %></button>{/if}
+  {#if form?.issue}<p role="alert">{t(form.issue)}</p>{/if}
+  <form method="POST" action="?/create" novalidate>
+    <div class="field"><label for="instance-name">{t("instanceName")}</label><input id="instance-name" name="name" value={form?.values?.name ?? ""} maxlength="40" required /></div>
+    <div class="field"><label for="instance-release">{t("release")}</label><select id="instance-release" name="release" value={form?.values?.release ?? data.release}><option value="noble">Ubuntu 24.04 LTS</option><option value="jammy">Ubuntu 22.04 LTS</option><option value="focal">Ubuntu 20.04 LTS</option></select></div>
+    <label><input type="checkbox" name="pro" checked={form?.values?.pro ?? false} /> {t("enablePro")}</label>
+    <div class="field"><label for="instance-cloud">{t("cloudInit")}</label><textarea id="instance-cloud" name="cloudInit" maxlength="1000">{form?.values?.cloudInit ?? ""}</textarea></div>
+    <button type="submit">{t("createInstance")}</button>
+  </form>
+</div></details></aside></div>
+<% } else if (forms && spa) { %><div class="instance-layout"><div>{#if instances.length}<ul class="instance-cards">{#each instances as instance (instance.name)}<li><article class="instance-card"><h2><button type="button" aria-pressed={selected === instance.name} onclick={() => selected = instance.name}>{instance.name}</button></h2><p>{t("release")}: {instance.release}</p></article></li>{/each}</ul>{:else}<p>{t("instanceEmpty")}</p>{/if}
+{#each instances.filter((item) => item.name === selected) as instance (instance.name)}
+  <section aria-labelledby="instance-details"><h2 id="instance-details">{instance.name}</h2><dl><dt>{t("instanceStatus")}</dt><dd>{t("demoStatus")}</dd><dt>{t("release")}</dt><dd>{instance.release}</dd><dt>{t("instanceAddress")}</dt><dd>—</dd><dt>{t("instanceMemory")}</dt><dd>—</dd><dt>{t("enablePro")}</dt><dd>{t(instance.pro ? "yes" : "no")}</dd><dt>{t("cloudInit")}</dt><dd><pre>{instance.cloudInit || "—"}</pre></dd></dl>
+    <button type="button" bind:this={opener} onclick={openDialog}>{t("removeInstance")}</button>
+  </section>
+{/each}
+{#if !selected}<p><%- intl ? '{t("selectInstance")}' : 'Select an instance to view its details.' %></p>{/if}
+<Modal bind:open={confirm} onclose={() => { if (selected) opener?.focus(); }}>
+  <Modal.Header closeButton={false}><h2><%- intl ? '{t("confirmRemove")}' : 'Confirm removal' %></h2></Modal.Header>
+  <Modal.Content><p><%- intl ? '{t("confirmRemoveBody", { name: selected ?? "" })}' : 'Remove demo instance {selected}?' %></p></Modal.Content>
+  <Modal.Footer><button type="button" onclick={closeDialog}><%- intl ? '{t("cancel")}' : 'Cancel' %></button><button type="button" onclick={remove}>{t("removeInstance")}</button></Modal.Footer>
+</Modal>
+</div><aside class:enhanced class="instance-panel" aria-label={t("createInstance")}><details bind:this={panel} open={requestedCreate}><summary id="instance-create-toggle" onclick={openPanel}>{t("createInstance")}</summary><div class="instance-panel-content">
+  {#if enhanced}<button type="button" onclick={closePanel}><%- intl ? '{t("cancel")}' : 'Cancel' %></button>{/if}
+  {#if issue}<p role="alert">{t(issue)}</p>{/if}
+  <form onsubmit={create} novalidate>
+    <div class="field"><label for="instance-name">{t("instanceName")}</label><input id="instance-name" name="name" maxlength="40" required /></div>
+    <div class="field"><label for="instance-release">{t("release")}</label><select id="instance-release" name="release" value={requestedRelease}><option value="noble">Ubuntu 24.04 LTS</option><option value="jammy">Ubuntu 22.04 LTS</option><option value="focal">Ubuntu 20.04 LTS</option></select></div>
+    <label><input type="checkbox" name="pro" /> {t("enablePro")}</label>
+    <div class="field"><label for="instance-cloud">{t("cloudInit")}</label><textarea id="instance-cloud" name="cloudInit" maxlength="1000"></textarea></div>
+    <button type="submit">{t("createInstance")}</button>
+  </form>
+</div></details></aside></div>
+<% } else { %><ul><li>{t("compute")} — {t("sample")}</li><li>{t("storage")} — {t("sample")}</li></ul>
+<% } %>

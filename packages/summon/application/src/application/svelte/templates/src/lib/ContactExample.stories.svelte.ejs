@@ -1,0 +1,11 @@
+<script lang="ts" module>
+  import { defineMeta } from "@storybook/addon-svelte-csf";
+  import ContactExample from "./ContactExample.svelte";
+  const { Story } = defineMeta({ title: "Application/Contact", component: ContactExample });
+</script>
+<Story name="Empty">
+  {#snippet template(_args, context)}<ContactExample <% if (intl) { %>language={context.globals.locale}<% } %> />{/snippet}
+</Story>
+<Story name="Validation">
+  {#snippet template(_args, context)}<ContactExample invalid <% if (intl) { %>language={context.globals.locale}<% } %> />{/snippet}
+</Story>

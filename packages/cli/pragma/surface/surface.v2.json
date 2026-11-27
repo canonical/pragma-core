@@ -305,7 +305,7 @@
         },
         {
           "v": "application",
-          "args": ["[app-path]"],
+          "args": ["<framework>", "[app-path]"],
           "flags": [
             "--no-forms",
             "--no-app-shell",
@@ -320,6 +320,7 @@
         {
           "v": "page",
           "args": ["[page-path]"],
+          "flags": ["--framework"],
           "mutates": true,
           "mcp": "create_page"
         }

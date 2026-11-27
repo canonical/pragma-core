@@ -1,8 +1,9 @@
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import type {
-  GeneratorDefinition,
-  PromptDefinition,
+import {
+  GENERATOR_INVALID_ANSWER,
+  type GeneratorDefinition,
+  type PromptDefinition,
 } from "@canonical/summon-core";
 import {
   exists,
@@ -22,6 +23,7 @@ import { printVersions } from "../shared/versions.js";
 
 export interface DomainAnswers {
   readonly domainName: string;
+  readonly framework?: "react" | "svelte";
 }
 
 const prompts: PromptDefinition[] = [
@@ -38,6 +40,17 @@ const prompts: PromptDefinition[] = [
     }),
     group: "Domain",
   },
+  {
+    name: "framework",
+    type: "select",
+    message: "Application framework:",
+    choices: [
+      { label: "React", value: "react" },
+      { label: "SvelteKit", value: "svelte" },
+    ],
+    default: "react",
+    group: "Domain",
+  },
 ];
 
 /** The domain generator's own templates, copied next to it by the build. */
@@ -52,10 +65,11 @@ export const generator: GeneratorDefinition<DomainAnswers> = {
     displayName: "@canonical/summon-application:domain",
     description: "Create a domain folder with routes and a MainPage",
     version: packageVersion(),
-    help: `Creates a domain directory under src/domains/ with:
+    help: `For React, creates a domain directory under src/domains/ with:
   - MainPage.tsx — example page component with <Head>
   - routes.ts — route barrel exporting the domain's routes
 
+With --framework svelte, creates src/routes/<domain>/+page.svelte.
 Add more pages with: summon page <domain>/<name>`,
     examples: [
       "summon domain billing",
@@ -69,6 +83,17 @@ Add more pages with: summon page <domain>/<name>`,
   generate: (answers) => {
     const name = normalizeCommandPath(answers.domainName);
     const domainDir = path.join("src", "domains", name);
+    const routeDir = path.join("src", "routes", name);
+    const svelteScaffold = sequence_([
+      mkdir(routeDir),
+      writeFile(
+        path.join(routeDir, "+page.svelte"),
+        renderTemplate(templatesDir, "Page.svelte.ejs", {
+          title: toTitleCase(name),
+        }),
+      ),
+      info(`SvelteKit route created at /${name}.`),
+    ]);
 
     const scaffold = sequence_([
       printVersions("domain"),
@@ -96,13 +121,31 @@ Add more pages with: summon page <domain>/<name>`,
     // Refuse to run when the domain already exists — mkdir/writeFile undos are
     // destructive (DeleteDirectory / DeleteFile), so overwriting then `--undo`
     // could delete a pre-existing domain.
-    return flatMap(exists(domainDir), (present) =>
-      present
+    if (answers.framework === "svelte") {
+      return flatMap(exists(routeDir), (present) =>
+        present
+          ? fail({
+              code: "DOMAIN_EXISTS",
+              message: `Route "${routeDir}" already exists. Choose a different name.`,
+            })
+          : svelteScaffold,
+      );
+    }
+    return flatMap(exists("svelte.config.js"), (svelte) =>
+      svelte
         ? fail({
-            code: "DOMAIN_EXISTS",
-            message: `Domain "${domainDir}" already exists. Choose a different name or remove it first.`,
+            code: GENERATOR_INVALID_ANSWER,
+            message:
+              "This is a SvelteKit application; run again with --framework svelte.",
           })
-        : scaffold,
+        : flatMap(exists(domainDir), (present) =>
+            present
+              ? fail({
+                  code: "DOMAIN_EXISTS",
+                  message: `Domain "${domainDir}" already exists. Choose a different name or remove it first.`,
+                })
+              : scaffold,
+          ),
     );
   },
 };

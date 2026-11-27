@@ -11,6 +11,7 @@ import {
   mkdtempSync,
   readdirSync,
   readFileSync,
+  symlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -98,6 +99,73 @@ describe("create over MCP (PROTECTED)", () => {
     expect(names).not.toContain("withRelay");
     expect(names).not.toContain("ssr");
     expect(names).not.toContain("router");
+    expect(applicationSchema.properties?.framework).toMatchObject({
+      enum: ["react", "svelte"],
+      default: "react",
+    });
+    expect(applicationSchema.properties?.svelteForm).toBeUndefined();
+    expect(applicationSchema.properties?.graphql).toBeUndefined();
+  });
+
+  it("plans and creates Svelte apps, defaults to React, and rejects Svelte Relay", async () => {
+    const dir = freshCwd();
+    const prev = process.cwd();
+    process.chdir(dir);
+    try {
+      const mcp = await projectMcp([createModule], dir);
+      cleanup = mcp.cleanup;
+      const args = {
+        framework: "svelte",
+        appPath: "svelte-app",
+        runInstall: false,
+      };
+      const plan = await mcp.callTool("create_application", args);
+      expect(plan.ok).toBe(true);
+      expect(JSON.stringify(plan)).toContain("+page.svelte");
+      expect(existsSync(join(dir, "svelte-app"))).toBe(false);
+      const applied = await mcp.callTool("create_application", {
+        ...args,
+        confirm: true,
+      });
+      expect(applied.ok).toBe(true);
+      expect(existsSync(join(dir, "svelte-app/src/routes/+page.svelte"))).toBe(
+        true,
+      );
+      mkdirSync(join(dir, "src/routes/invoices"), { recursive: true });
+      writeFileSync(
+        join(dir, "src/routes/invoices/+page.svelte"),
+        "<h1>Invoices</h1>",
+      );
+      const sveltePage = await mcp.callTool("create_page", {
+        framework: "svelte",
+        pagePath: "invoices/detail",
+        confirm: true,
+      });
+      expect(sveltePage.ok).toBe(true);
+      expect(
+        existsSync(join(dir, "src/routes/invoices/detail/+page.svelte")),
+      ).toBe(true);
+      const rejected = await mcp.callTool("create_application", {
+        ...args,
+        appPath: "invalid",
+        relay: true,
+        confirm: true,
+      });
+      expect(rejected.ok).toBe(false);
+      expect(JSON.stringify(rejected)).toContain(
+        "Relay is not supported for Svelte",
+      );
+      expect(existsSync(join(dir, "invalid"))).toBe(false);
+      const react = await mcp.callTool("create_application", {
+        appPath: "react-app",
+        runInstall: false,
+        confirm: true,
+      });
+      expect(react.ok).toBe(true);
+      expect(existsSync(join(dir, "react-app/src/routes.tsx"))).toBe(true);
+    } finally {
+      process.chdir(prev);
+    }
   });
 
   it("plan-first: no confirm → a plan, no files written", async () => {
@@ -232,6 +300,22 @@ describe("create over MCP (PROTECTED)", () => {
 });
 
 describe("create page (PROTECTED)", () => {
+  it("rejects a Svelte route symlink escaping the workspace", async () => {
+    const dir = freshCwd();
+    const outside = freshCwd();
+    mkdirSync(join(dir, "src/routes"), { recursive: true });
+    writeFileSync(join(outside, "+page.svelte"), "<h1>Outside</h1>");
+    symlinkSync(outside, join(dir, "src/routes/invoices"));
+    const mcp = await projectMcp([createModule], dir);
+    cleanup = mcp.cleanup;
+    const result = await mcp.callTool("create_page", {
+      framework: "svelte",
+      pagePath: "invoices/detail",
+      confirm: true,
+    });
+    expect(result.ok).toBe(false);
+    expect(existsSync(join(outside, "detail/+page.svelte"))).toBe(false);
+  });
   /** A scratch application holding the `invoices` domain a page is added to. */
   const appWithDomain = (): string => {
     const dir = freshCwd();

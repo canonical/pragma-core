@@ -1,0 +1,45 @@
+# <%= name %>
+
+A SvelteKit application using Canonical styles<% if (appShell) { %> and application layouts<% } %>.
+Use `summon domain billing --framework svelte`, `summon page billing/detail
+--framework svelte`, and `summon wrapper settings --framework svelte` for
+SvelteKit routes and wrappers.
+
+Run `bun install`, `bun run check`, `bun run build`, `bun run test`, and `bun run dev`.
+Commit the resulting lockfile and use `bun install --frozen-lockfile` in CI;
+without a lockfile, transitive dependencies can change between installs.
+Run `bun run storybook` or `bun run build:storybook` for the example stories.
+<% if (forms) { %>After installing a Playwright Chromium browser, run `bun run test:browser`
+against the built app to check contact error isolation and draft preservation<% if (appShell) { %>,
+instance flows, heading focus and settings confirmation<% } %>.
+Set `CHROMIUM_PATH` to use an existing Chromium executable.
+<% } %>
+The catalog uses local sample data. GraphQL and Relay are not included.
+<% if (spa) { %>
+This client-only application builds to `build/`. Configure the static host to
+serve `200.html` as the fallback for application routes. Cold requests do not
+receive server-rendered content or route-specific HTTP statuses.
+Theme, dashboard settings and demo instances use local browser storage; there are no server
+actions; the demo account session uses sessionStorage and is not authentication.
+<% } else { %>
+The production server is built with adapter-node; start it with `bun run preview`.
+Configure `HOST`, `PORT` and `ORIGIN` for deployment.
+Theme and locale are selected per request, and the sitemap is served at
+`/sitemap.xml`. The dashboard's demo cookie is not authentication.<% if (appShell && forms) { %>
+Instances are bounded browser-cookie demonstrations, not provisioned resources.
+Removal uses a separate confirmation page without JavaScript and a hydrated modal.<% } %>
+<% } %>
+<% if (appShell) { %>
+Pathname navigation focuses the new page heading; query-only navigation keeps Kit's
+normal focus behavior. The settings project confirmation is a demonstration and
+does not delete data. The dashboard navigation and instance creation panel use
+native disclosures<% if (forms) { %>; when hydrated, the creation panel opens as a side sheet<% } %>.
+<% } %>
+<% if (forms) { %>
+The contact form is a local validation demonstration; it does not deliver messages.
+It uses native controls; the field definitions live in `src/lib/contact.ts`<% if (appShell) { %>
+and `src/lib/settings.ts`<% } %>, next to the decoders the server and the page share.
+<% } %>
+<% if (intl && spa) { %>
+The static shell starts in English until the browser chooses a locale.
+<% } %>

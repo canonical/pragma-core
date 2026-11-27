@@ -1,8 +1,9 @@
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import type {
-  GeneratorDefinition,
-  PromptDefinition,
+import {
+  GENERATOR_INVALID_ANSWER,
+  type GeneratorDefinition,
+  type PromptDefinition,
 } from "@canonical/summon-core";
 import {
   exists,
@@ -21,6 +22,7 @@ import { validateCommandPath } from "../shared/validators.js";
 
 export interface WrapperAnswers {
   readonly wrapperName: string;
+  readonly framework?: "react" | "svelte";
 }
 
 const prompts: PromptDefinition[] = [
@@ -35,6 +37,17 @@ const prompts: PromptDefinition[] = [
       maxSegments: 1,
       example: "settings",
     }),
+    group: "Wrapper",
+  },
+  {
+    name: "framework",
+    type: "select",
+    message: "Application framework:",
+    choices: [
+      { label: "React", value: "react" },
+      { label: "SvelteKit", value: "svelte" },
+    ],
+    default: "react",
     group: "Wrapper",
   },
 ];
@@ -55,7 +68,9 @@ export const generator: GeneratorDefinition<WrapperAnswers> = {
 
 Given a name like "settings", creates:
   - src/lib/SettingsLayout/SettingsLayout.tsx
-  - src/lib/SettingsLayout/index.ts (barrel export)`,
+  - src/lib/SettingsLayout/index.ts (barrel export)
+
+With --framework svelte, creates src/lib/SettingsLayout.svelte for use in a SvelteKit layout.`,
     examples: [
       "summon wrapper settings",
       "summon wrapper sidebar",
@@ -69,6 +84,7 @@ Given a name like "settings", creates:
     const name = normalizeCommandPath(answers.wrapperName);
     const layoutName = `${toPascalCase(name)}Layout`;
     const layoutDir = path.join("src", "lib", layoutName);
+    const svelteFile = path.join("src", "lib", `${layoutName}.svelte`);
 
     const scaffold = sequence_([
       info(`Creating wrapper "${layoutName}"...`),
@@ -89,13 +105,41 @@ Given a name like "settings", creates:
 
     // Refuse to run when the layout already exists — mkdir/writeFile undos are
     // destructive, so overwriting then `--undo` could delete a pre-existing one.
-    return flatMap(exists(layoutDir), (present) =>
-      present
+    if (answers.framework === "svelte") {
+      return flatMap(exists(svelteFile), (present) =>
+        present
+          ? fail({
+              code: "WRAPPER_EXISTS",
+              message: `Wrapper "${svelteFile}" already exists.`,
+            })
+          : sequence_([
+              writeFile(
+                svelteFile,
+                renderTemplate(templatesDir, "Layout.svelte.ejs", {
+                  className: `${toKebabCase(name)}-layout`,
+                }),
+              ),
+              info(
+                `Wrapper created at ${svelteFile}; import it in a SvelteKit layout.`,
+              ),
+            ]),
+      );
+    }
+    return flatMap(exists("svelte.config.js"), (svelte) =>
+      svelte
         ? fail({
-            code: "WRAPPER_EXISTS",
-            message: `Wrapper "${layoutDir}" already exists. Choose a different name or remove it first.`,
+            code: GENERATOR_INVALID_ANSWER,
+            message:
+              "This is a SvelteKit application; run again with --framework svelte.",
           })
-        : scaffold,
+        : flatMap(exists(layoutDir), (present) =>
+            present
+              ? fail({
+                  code: "WRAPPER_EXISTS",
+                  message: `Wrapper "${layoutDir}" already exists. Choose a different name or remove it first.`,
+                })
+              : scaffold,
+          ),
     );
   },
 };

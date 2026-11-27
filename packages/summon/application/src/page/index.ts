@@ -30,6 +30,7 @@ const templatesDir = path.join(
 
 export interface PageAnswers {
   readonly pagePath: string;
+  readonly framework?: "react" | "svelte";
 }
 
 const validateSegments = validateCommandPath({
@@ -129,6 +130,17 @@ const prompts: PromptDefinition[] = [
     validate: validatePagePath,
     group: "Page",
   },
+  {
+    name: "framework",
+    type: "select",
+    message: "Application framework:",
+    choices: [
+      { label: "React", value: "react" },
+      { label: "SvelteKit", value: "svelte" },
+    ],
+    default: "react",
+    group: "Page",
+  },
 ];
 
 export const generator: GeneratorDefinition<PageAnswers> = {
@@ -137,7 +149,8 @@ export const generator: GeneratorDefinition<PageAnswers> = {
     displayName: "@canonical/summon-application:page",
     description: "Add a page component to an existing domain",
     version: packageVersion(),
-    help: `Writes one new file, src/domains/<domain>/<Name>Page.tsx, and edits nothing.
+    help: `For React, writes src/domains/<domain>/<Name>Page.tsx and prints routing guidance.
+With --framework svelte, writes src/routes/<domain>/<name>/+page.svelte.
 
 The argument is exactly two segments: the domain, then the page name.
 "invoices/detail" writes src/domains/invoices/DetailPage.tsx.
@@ -147,7 +160,7 @@ by hand: the import line for src/domains/<domain>/routes.ts, example route
 entries to adapt (a static url, and a url with a :param with the page's params
 signature), and the group() and appRoutes lines for src/routes.tsx.
 
-Refuses to run when the domain does not exist or the page file already exists.
+Requires the domain to exist and refuses an existing page file.
 --undo deletes the page file.`,
     examples: [
       "summon page invoices/detail",
@@ -172,6 +185,8 @@ Refuses to run when the domain does not exist or the page file already exists.
     const domainDir = path.join("src", "domains", domainName);
     const pageFile = path.join(domainDir, `${pageName}.tsx`);
     const routesFile = path.join(domainDir, "routes.ts");
+    const svelteDomain = path.join("src", "routes", domainName);
+    const svelteRoute = path.join(svelteDomain, name, "+page.svelte");
 
     // No mkdir: the page goes into an *existing* domain (guarded below), and
     // mkdir's default undo would delete that domain's folder on `--undo`.
@@ -199,19 +214,54 @@ Refuses to run when the domain does not exist or the page file already exists.
     // - the domain must exist (a page is added to an existing domain);
     // - the page must NOT exist (the write's undo is a delete, so overwriting
     //   a hand-authored page then running `--undo` would destroy the original).
-    return flatMap(exists(routesFile), (domainPresent) =>
-      !domainPresent
+    if (answers.framework === "svelte") {
+      return flatMap(
+        exists(path.join(svelteDomain, "+page.svelte")),
+        (domainPresent) =>
+          !domainPresent
+            ? fail({
+                code: GENERATOR_INVALID_ANSWER,
+                message: `SvelteKit domain "${domainName}" not found. Create it first.`,
+              })
+            : flatMap(exists(svelteRoute), (present) =>
+                present
+                  ? fail({
+                      code: GENERATOR_INVALID_ANSWER,
+                      message: `Page "${svelteRoute}" already exists.`,
+                    })
+                  : sequence_([
+                      writeFile(
+                        svelteRoute,
+                        renderTemplate(templatesDir, "Page.svelte.ejs", {
+                          title: toTitleCase(name),
+                        }),
+                      ),
+                      info(`SvelteKit page created at /${domainName}/${name}.`),
+                    ]),
+              ),
+      );
+    }
+    return flatMap(exists("svelte.config.js"), (svelte) =>
+      svelte
         ? fail({
             code: GENERATOR_INVALID_ANSWER,
-            message: `Domain "${domainName}" not found: ${routesFile} is missing. Create the domain first.`,
+            message:
+              "This is a SvelteKit application; run again with --framework svelte.",
           })
-        : flatMap(exists(pageFile), (pagePresent) =>
-            pagePresent
+        : flatMap(exists(routesFile), (domainPresent) =>
+            !domainPresent
               ? fail({
                   code: GENERATOR_INVALID_ANSWER,
-                  message: `Page "${pageFile}" already exists. Choose a different page name or remove the file first.`,
+                  message: `Domain "${domainName}" not found: ${routesFile} is missing. Create the domain first.`,
                 })
-              : scaffold,
+              : flatMap(exists(pageFile), (pagePresent) =>
+                  pagePresent
+                    ? fail({
+                        code: GENERATOR_INVALID_ANSWER,
+                        message: `Page "${pageFile}" already exists. Choose a different page name or remove the file first.`,
+                      })
+                    : scaffold,
+                ),
           ),
     );
   },

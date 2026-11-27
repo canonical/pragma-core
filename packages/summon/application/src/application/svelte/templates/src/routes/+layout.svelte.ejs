@@ -1,0 +1,85 @@
+<script lang="ts">
+  import "../styles.css";
+  import { page } from "$app/state";
+  import { afterNavigate } from "$app/navigation";
+<% if (appShell) { %>  import { ApplicationLayout, ViewLayout, ContentLayout } from "@canonical/svelte-ds-app";
+  import DashboardNavigation from "$lib/DashboardNavigation.svelte";
+<% } %><% if (intl) { %>  import { createLocaleSource<% if (spa) { %>, negotiateLocale<% } %> } from "@canonical/i18n-core";
+  import { setContext<% if (spa) { %>, onMount<% } %> } from "svelte";
+  import { config, localeKey, getTranslator } from "$lib/i18n";
+<% } else if (spa) { %>  import { onMount } from "svelte";
+<% } %>  import type { LayoutProps } from "./$types";
+  let { children<% if (!spa) { %>, data<% } %> }: LayoutProps = $props();
+  afterNavigate(({ from, to }) => {
+    if (from?.url && to?.url && from.url.pathname !== to.url.pathname && !to.url.hash) {
+      const path = to.url.pathname;
+      requestAnimationFrame(() => {
+        if (location.pathname !== path || location.hash) return;
+        const heading = document.querySelector<HTMLElement>("main h1");
+        if (heading) { if (!heading.hasAttribute("tabindex")) heading.setAttribute("tabindex", "-1"); heading.focus(); }
+      });
+    }
+  });
+<% if (intl) { %>  // svelte-ignore state_referenced_locally
+  const locale = createLocaleSource(config, { initial: <%- spa ? '"en"' : 'data.locale' %> });
+  setContext(localeKey, locale);
+  let t = $derived(getTranslator($locale));
+<% if (!spa) { %>  function changeLanguage(event: SubmitEvent) {
+    event.preventDefault();
+    const value = new FormData(event.currentTarget as HTMLFormElement).get("locale");
+    if (typeof value === "string" && config.locales.includes(value)) {
+      if (value === locale.get()) document.cookie = `locale=${value}; path=/; max-age=31536000; SameSite=Lax`;
+      else locale.set(value);
+    }
+  }
+<% } %><% } %><% if (spa) { %>  let theme = $state("");
+  onMount(() => {
+    const saved = localStorage.getItem("theme");
+    theme = saved === "light" || saved === "dark" ? saved : "";
+    document.documentElement.classList.toggle("light", theme === "light");
+    document.documentElement.classList.toggle("dark", theme === "dark");
+<% if (intl) { %>    locale.set(negotiateLocale(config, { cookieHeader: document.cookie, acceptLanguage: navigator.languages.join(",") }));
+<% } %>  });
+  function changeTheme(value: string) {
+    theme = value === "light" || value === "dark" ? value : "";
+    if (theme) localStorage.setItem("theme", theme); else localStorage.removeItem("theme");
+    document.documentElement.classList.toggle("light", theme === "light");
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }
+<% } %></script>
+
+<a class="skip-link" href="#main"><%- intl ? '{t("skip")}' : 'Skip to content' %></a>
+<header>
+  <a href="/"><%= name %></a>
+<% if (spa) { %>  <label for="theme"><%- intl ? '{t("theme")}' : 'Theme' %></label>
+  <select id="theme" value={theme} onchange={(event) => changeTheme(event.currentTarget.value)}>
+    <option value=""><%- intl ? '{t("system")}' : 'System' %></option><option value="light"><%- intl ? '{t("light")}' : 'Light' %></option><option value="dark"><%- intl ? '{t("dark")}' : 'Dark' %></option>
+  </select>
+<% } else { %>  <form method="POST" action="/preferences" data-sveltekit-reload>
+    <label for="theme"><%- intl ? '{t("theme")}' : 'Theme' %></label>
+    <select id="theme" name="theme" value={data.theme}>
+      <option value=""><%- intl ? '{t("system")}' : 'System' %></option><option value="light"><%- intl ? '{t("light")}' : 'Light' %></option><option value="dark"><%- intl ? '{t("dark")}' : 'Dark' %></option>
+    </select><button type="submit"><%- intl ? '{t("apply")}' : 'Apply' %></button>
+  </form>
+<% } %><% if (intl && spa) { %>  <label for="locale">{t("language")}</label>
+  <select id="locale" value={$locale} onchange={(event) => locale.set(event.currentTarget.value)}><option value="en">English</option><option value="fr">Français</option><option value="ar">العربية</option></select>
+<% } else if (intl) { %>  <form method="POST" action="/language" onsubmit={changeLanguage}>
+    <label for="locale">{t("language")}</label>
+    <select id="locale" name="locale" value={$locale}><option value="en">English</option><option value="fr">Français</option><option value="ar">العربية</option></select>
+    <button type="submit">{t("apply")}</button>
+  </form>
+<% } %></header>
+{#snippet navigation()}
+  <nav aria-label=<%- intl ? '{t("navigation")}' : '"Main navigation"' %> class="navigation-menu"><ul>
+    <li><a href="/" aria-current={page.url.pathname === "/" ? "page" : undefined}><%- intl ? '{t("home")}' : 'Home' %></a></li>
+    <li><a href="/catalog" aria-current={page.url.pathname.startsWith("/catalog") ? "page" : undefined}><%- intl ? '{t("catalog")}' : 'Catalog' %></a></li>
+<% if (appShell) { %>    <li><a href="/dashboard" aria-current={page.url.pathname.startsWith("/dashboard") ? "page" : undefined}><%- intl ? '{t("dashboard")}' : 'Dashboard' %></a></li>
+    <li><a href="/account" aria-current={page.url.pathname === "/account" ? "page" : undefined}><%- intl ? '{t("account")}' : 'Account' %></a></li>
+<% } %><% if (forms) { %>    <li><a href="/contact" aria-current={page.url.pathname === "/contact" ? "page" : undefined}><%- intl ? '{t("contact")}' : 'Contact' %></a></li>
+<% } %>  </ul></nav>
+<% if (appShell) { %>  {#if page.url.pathname.startsWith("/dashboard")}<DashboardNavigation />{/if}
+<% } %>
+{/snippet}
+<% if (appShell) { %><ApplicationLayout {navigation}><ViewLayout><ContentLayout><main id="main" tabindex="-1">{@render children()}</main></ContentLayout></ViewLayout></ApplicationLayout>
+<% } else { %>{@render navigation()}<main id="main" tabindex="-1">{@render children()}</main>
+<% } %>

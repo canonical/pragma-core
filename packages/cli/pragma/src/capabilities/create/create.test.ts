@@ -656,6 +656,7 @@ describe("projection fidelity — the committed surface IS the live generators (
     // matrix's declaration-completeness, so scope-shrink is visible too.
     expect(audited.sort()).toEqual([
       "application/react:appPath",
+      "application/svelte:appPath",
       "component/lit:componentPath",
       "component/react:componentPath",
       "component/svelte:componentPath",
@@ -744,6 +745,7 @@ describe("projection fidelity — the committed surface IS the live generators (
     // prompts (always-on facts whose only explicit spelling the generator's
     // old guard rejected).
     expect(createVerbs.application.params.map((p) => p.name)).toEqual([
+      "framework",
       "appPath",
       "forms",
       "appShell",
