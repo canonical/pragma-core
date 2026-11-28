@@ -1,0 +1,245 @@
+<script lang="ts">
+  import { ContentLayout, ViewLayout } from "@canonical/svelte-ds-app";
+  import { Badge, Button } from "@canonical/svelte-ds-global";
+<% if (forms) { -%>
+  import { Field, Form } from "@canonical/svelte-ds-global-form";
+<% } -%>
+  import formatDocumentTitle from "../../formatDocumentTitle.js";
+<% if (intl) { -%>
+  import {
+    createAppFormatters,
+    createAppTranslator,
+    getLocaleSource,
+  } from "../../i18n/index.js";
+<% } -%>
+<% if (forms) { -%>
+  import { Icon } from "../../lib/index.js";
+<% } -%>
+<% if (forms) { -%>
+  import {
+    CREATE_DEFAULTS,
+    INSTANCES,
+    RELEASE_OPTIONS,
+    <%= intl ? "STATUS_KEYS" : "STATUS_LABELS" %>,
+  } from "./constants.js";
+  import createInstance from "./createInstance.js";
+<% } else { -%>
+  import { INSTANCES, <%= intl ? "STATUS_KEYS" : "STATUS_LABELS" %> } from "./constants.js";
+<% } -%>
+  import DashboardBreadcrumbs from "./DashboardBreadcrumbs.svelte";
+  import type { Instance } from "./types.js";
+  import "./styles.css";
+
+<% if (forms) { -%>
+  let {
+    created,
+    selected,
+    isCreating = false,
+    nameError,
+  }: {
+    /** An instance the create action added, when the form posted without JavaScript. */
+    created?: Instance;
+    /** The instance chosen through the `selected` query, without JavaScript. */
+    selected?: string;
+    /** Renders the create panel open, as `?create=1` asks without JavaScript. */
+    isCreating?: boolean;
+    /** The create action's error <%= intl ? "key" : "message" %> for the name, when it posted without one. */
+    nameError?: <%- intl ? '"dashboard.instances.nameRequired"' : "string" %>;
+  } = $props();
+
+  const panelId = $props.id();
+  const createFormId = "create-instance";
+  const openFormId = "open-create-instance";
+<% } else { -%>
+  let {
+    selected,
+  }: {
+    /** The instance chosen through the `selected` query, without JavaScript. */
+    selected?: string;
+  } = $props();
+
+<% } -%>
+  const selectFormId = "select-instance";
+<% if (intl) { -%>
+
+  const locale = getLocaleSource();
+  const t = $derived(createAppTranslator($locale));
+  const formatters = $derived(createAppFormatters($locale));
+<% } else { -%>
+  // The app has one language, so the formatter is fixed to it.
+  const number = new Intl.NumberFormat("en");
+<% } -%>
+<% if (forms) { -%>
+  // The props seed the client state: after hydration the page owns the list.
+  // svelte-ignore state_referenced_locally
+  let instances = $state<readonly Instance[]>(
+    created ? [...INSTANCES, created] : INSTANCES,
+  );
+  // svelte-ignore state_referenced_locally
+  let selectedName = $state<string | null>(created?.name ?? selected ?? null);
+  // svelte-ignore state_referenced_locally
+  let nameErrorKey = $state(nameError);
+<% } else { -%>
+  const instances: readonly Instance[] = INSTANCES;
+  // The prop seeds the client state: after hydration the page owns the choice.
+  // svelte-ignore state_referenced_locally
+  let selectedName = $state<string | null>(selected ?? null);
+<% } -%>
+  const selectedInstance = $derived(
+    instances.find((instance) => instance.name === selectedName),
+  );
+<% if (forms) { -%>
+  let panelRef = $state<HTMLDialogElement>();
+  let openerElement: HTMLElement | null = null;
+
+  function openPanel(event: MouseEvent) {
+    event.preventDefault();
+    if (!panelRef || panelRef.open) return;
+    openerElement = event.currentTarget as HTMLElement;
+    panelRef.show();
+    panelRef.focus();
+  }
+
+  function closePanel(event?: Event) {
+    event?.preventDefault();
+    panelRef?.close();
+    openerElement?.focus();
+  }
+
+  function handlePanelKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape") closePanel(event);
+  }
+<% } -%>
+
+  function selectInstance(event: MouseEvent, name: string) {
+    event.preventDefault();
+    selectedName = name;
+  }
+<% if (forms) { -%>
+
+  function handleCreate(event: SubmitEvent) {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const instance = createInstance(Object.fromEntries(new FormData(form)));
+
+    if (!instance) {
+      nameErrorKey = <%- intl ? '"dashboard.instances.nameRequired"' : '"Instance name is required"' %>;
+      return;
+    }
+
+    nameErrorKey = undefined;
+    instances = [...instances, instance];
+    selectedName = instance.name;
+    closePanel();
+  }
+<% } -%>
+</script>
+
+<svelte:head><title>{formatDocumentTitle(<%- str("dashboard.instances.title", "Instances") %>)}</title></svelte:head>
+
+<% if (forms) { -%>
+{#snippet plusIcon()}<Icon name="plus" />{/snippet}
+{#snippet closeIcon()}<Icon name="close" />{/snippet}
+
+<!-- Without JavaScript, Create instance asks for the page with the panel
+     open, and each Details button for the page with that instance chosen;
+     with JavaScript their click handlers do both in place. -->
+<form action="" hidden id={openFormId}><input name="create" type="hidden" value="1" /></form>
+<% } else { -%>
+<!-- Without JavaScript, each Details button asks for the page with that
+     instance chosen; with JavaScript its click handler does it in place. -->
+<% } -%>
+<form action="" hidden id={selectFormId}></form>
+
+<ViewLayout class="dashboard-view">
+  <ContentLayout>
+    <header class="titlebar">
+      <div>
+        <DashboardBreadcrumbs />
+        <h1><%- msg("dashboard.instances.heading", "Instances") %> <Badge value={instances.length} /></h1>
+      </div>
+<% if (forms) { -%>
+      <div class="actions">
+        <Button aria-controls={panelId} form={openFormId} icon={plusIcon} importance="primary" onclick={openPanel} type="submit"><%- msg("dashboard.instances.create", "Create instance") %></Button>
+      </div>
+<% } -%>
+    </header>
+
+    <section aria-label=<%- attr("dashboard.instances.heading", "Instances") %> class="section">
+      <ul class="tiles">
+        {#each instances as instance (instance.name)}
+          <li>
+            <div class="ds tile surface">
+              <div class="ds tile-header">{instance.name}</div>
+              <div class="ds tile-content">
+<% if (intl) { -%>
+                <p class="muted">{t("dashboard.instances.summary", { status: t(STATUS_KEYS[instance.status]), release: instance.release })}</p>
+                <Button aria-label={t("dashboard.instances.show", { name: instance.name })} aria-pressed={instance.name === selectedName} form={selectFormId} importance="tertiary" name="selected" onclick={(event) => selectInstance(event, instance.name)} type="submit" value={instance.name}>{t("dashboard.instances.details")}</Button>
+<% } else { -%>
+                <p class="muted">{STATUS_LABELS[instance.status]} · {instance.release}</p>
+                <Button aria-label={`Show details of ${instance.name}`} aria-pressed={instance.name === selectedName} form={selectFormId} importance="tertiary" name="selected" onclick={(event) => selectInstance(event, instance.name)} type="submit" value={instance.name}>Details</Button>
+<% } -%>
+              </div>
+            </div>
+          </li>
+        {/each}
+      </ul>
+    </section>
+  </ContentLayout>
+<% if (forms) { -%>
+
+  <!-- A stand-in for React's SidePanel: a non-modal dialog docked to the
+       inline-end edge, with the same markup classes. -->
+  <dialog aria-labelledby={`${panelId}-title`} bind:this={panelRef} class="ds side-panel" id={panelId} onkeydown={handlePanelKeydown} open={isCreating || undefined} tabindex="-1">
+    <div class="ds side-panel-header">
+      <span class="title p" id={`${panelId}-title`}><%- msg("dashboard.instances.create", "Create instance") %></span>
+      <Button aria-label=<%- attr("dashboard.instances.closePanel", "Close panel") %> class="close" command="close" commandfor={panelId} icon={closeIcon} importance="tertiary" onclick={closePanel} type="button" />
+    </div>
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex: the pane scrolls, so it is a tab stop, as in React's SidePanel -->
+    <div class="ds side-panel-content" tabindex="0">
+      <Form action="?/create" id={createFormId} method="post" onsubmit={handleCreate}>
+        <Field error=<%- intl ? "{nameErrorKey ? t(nameErrorKey) : undefined}" : "{nameErrorKey}" %> inputType="text" label=<%- attr("dashboard.instances.name", "Instance name") %> name="instance_name" value={CREATE_DEFAULTS.instance_name} />
+        <Field inputType="select" label=<%- attr("dashboard.instances.release", "Ubuntu release") %> name="release" options={RELEASE_OPTIONS} value={CREATE_DEFAULTS.release} />
+        <Field controlLabel=<%- attr("dashboard.instances.pro", "Enable Ubuntu Pro") %> description=<%- attr("dashboard.instances.proDescription", "Security and compliance coverage for your instances, including extended support for the packages you care about.") %> inputType="checkbox" isOptional name="enable_pro" value={CREATE_DEFAULTS.enable_pro} />
+        <Field description=<%- attr("dashboard.instances.cloudInitDescription", "Configuration to run on first boot: packages to install, users to create, commands to run.") %> inputType="textarea" isOptional label=<%- attr("dashboard.instances.cloudInit", "Cloud-init user data") %> name="cloud_init" value={CREATE_DEFAULTS.cloud_init} />
+      </Form>
+    </div>
+    <div class="ds side-panel-footer">
+      <Button command="close" commandfor={panelId} onclick={closePanel} type="button"><%- msg("dashboard.cancel", "Cancel") %></Button>
+      <Button anticipation="constructive" form={createFormId} importance="primary" type="submit"><%- msg("dashboard.instances.create", "Create instance") %></Button>
+    </div>
+  </dialog>
+<% } -%>
+
+  {#snippet aside()}
+    <section aria-labelledby="details-title" class="panel">
+      <h2 id="details-title">{selectedInstance ? selectedInstance.name : <%- str("dashboard.instances.details", "Details") %>}</h2>
+      {#if selectedInstance}
+        <dl class="details">
+          <dt><%- msg("dashboard.instances.status", "Status") %></dt>
+          <dd><%- intl ? "{t(STATUS_KEYS[selectedInstance.status])}" : "{STATUS_LABELS[selectedInstance.status]}" %></dd>
+          <dt><%- msg("dashboard.instances.release", "Ubuntu release") %></dt>
+          <dd>{selectedInstance.release}</dd>
+          <dt><%- msg("dashboard.instances.address", "IPv4 address") %></dt>
+          <dd>{selectedInstance.ipv4 || "—"}</dd>
+          <dt><%- msg("dashboard.instances.memory", "Memory") %></dt>
+<% if (intl) { -%>
+          <dd>{t("dashboard.instances.memoryValue", { value: formatters.formatNumber(selectedInstance.memoryGib) })}</dd>
+<% } else { -%>
+          <dd>{number.format(selectedInstance.memoryGib)} GiB</dd>
+<% } -%>
+        </dl>
+      {:else}
+        <p class="muted"><%- msg("dashboard.instances.selectHint", "Select an instance to see its details.") %></p>
+      {/if}
+    </section>
+  {/snippet}
+</ViewLayout>
+
+<!-- @component
+The instances page: a tile per instance with its count beside the heading, a
+details aside for the chosen one, and a side panel that creates instances in
+the page's state. Without JavaScript the panel
+opens through `?create=1`, the create form posts to the page's action, and a
+Details button chooses through `?selected=`.
+-->

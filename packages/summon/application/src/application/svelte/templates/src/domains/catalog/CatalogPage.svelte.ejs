@@ -1,0 +1,35 @@
+<script lang="ts">
+  import formatDocumentTitle from "../../formatDocumentTitle.js";
+<% if (intl) { -%>
+  import { createAppTranslator, getLocaleSource } from "../../i18n/index.js";
+<% } -%>
+  import { CodeMessage } from "../../lib/index.js";
+  import ProductList from "./ProductList.svelte";
+  import type { ProductPage } from "./types.js";
+
+  let {
+    catalog,
+  }: {
+    /** The page of products the route's `load` read. */
+    catalog: ProductPage;
+  } = $props();
+<% if (intl) { -%>
+
+  const locale = getLocaleSource();
+  const t = $derived(createAppTranslator($locale));
+<% } -%>
+</script>
+
+<svelte:head><title>{formatDocumentTitle(<%- str("catalog.title", "Catalog") %>)}</title></svelte:head>
+
+<section aria-labelledby="catalog-title">
+  <h1 id="catalog-title"><%- msg("catalog.heading", "Catalog") %></h1>
+  <CodeMessage message=<%- attr("catalog.intro", "This page demonstrates the data layer. The page's `load` reads a page of products, `ProductList` renders it and each `ProductCard` formats its own product, from the local data in `src/domains/catalog/data.ts` — replace that module with a call to a real endpoint.") %> />
+  <!-- The route's `load` reads the products before rendering, so the list is
+       server-rendered HTML. A render error in the list shows the failure
+       state instead of unmounting the page. -->
+  <svelte:boundary>
+    <ProductList {catalog} />
+    {#snippet failed()}<p role="alert"><%- msg("catalog.error", "The catalog failed to load. Reload the page to try again.") %></p>{/snippet}
+  </svelte:boundary>
+</section>

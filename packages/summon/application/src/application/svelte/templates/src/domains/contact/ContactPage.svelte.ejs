@@ -1,0 +1,62 @@
+<script lang="ts">
+  import { Button } from "@canonical/svelte-ds-global";
+  import { Field, Form } from "@canonical/svelte-ds-global-form";
+  import formatDocumentTitle from "../../formatDocumentTitle.js";
+<% if (intl) { -%>
+  import { createAppTranslator, getLocaleSource } from "../../i18n/index.js";
+<% } -%>
+  import type { ContactErrors, ContactValues } from "./types.js";
+  import { readContact, validateContact } from "./validateContact.js";
+
+  let {
+    form,
+  }: {
+    /** The action's answer, when the form posted without JavaScript. */
+    form?: { values?: ContactValues; errors?: ContactErrors } | null;
+  } = $props();
+<% if (intl) { -%>
+
+  const locale = getLocaleSource();
+  const t = $derived(createAppTranslator($locale));
+<% } -%>
+  // The action's answer seeds the errors; after hydration the page owns them.
+  // svelte-ignore state_referenced_locally
+  let errors = $state<ContactErrors>({ ...form?.errors });
+  const subjects = $derived([
+    { value: "general", label: <%- str("contact.subjectGeneral", "General enquiry") %> },
+    { value: "support", label: <%- str("contact.subjectSupport", "Support") %> },
+    { value: "feedback", label: <%- str("contact.subjectFeedback", "Feedback") %> },
+  ]);
+
+  /** Submitting logs the values; nothing is sent. */
+  function handleSubmit(event: SubmitEvent) {
+    event.preventDefault();
+    const values = readContact(
+      new FormData(event.currentTarget as HTMLFormElement),
+    );
+
+    errors = validateContact(values);
+    if (Object.keys(errors).length === 0) {
+      console.log("Form submitted:", values);
+    }
+  }
+</script>
+
+<svelte:head><title>{formatDocumentTitle(<%- str("contact.title", "Contact") %>)}</title></svelte:head>
+
+<section aria-labelledby="contact-title">
+  <h1 id="contact-title"><%- msg("contact.heading", "Contact") %></h1>
+  <Form method="post" onsubmit={handleSubmit}>
+    <Field inputType="text" label=<%- attr("contact.name", "Full name") %> name="name" value={form?.values?.name} />
+    <Field error=<%- intl ? "{errors.email ? t(errors.email) : undefined}" : "{errors.email}" %> inputType="text" label=<%- attr("contact.email", "Email address") %> name="email" value={form?.values?.email} />
+    <Field inputType="select" label=<%- attr("contact.subject", "Subject") %> name="subject" options={subjects} value={form?.values?.subject} />
+    <Field description=<%- attr("contact.messageHint", "Maximum 500 characters") %> inputType="textarea" label=<%- attr("contact.message", "Message") %> name="message" value={form?.values?.message} />
+    <Button type="submit"><%- msg("contact.send", "Send message") %></Button>
+  </Form>
+</section>
+
+<!-- @component
+The contact form. Submitting validates the email and logs the values; nothing
+is sent. Without JavaScript the form posts to the
+page's action, which validates the same way and redisplays the values.
+-->

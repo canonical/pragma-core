@@ -1,45 +1,162 @@
 # <%= name %>
 
-A SvelteKit application using Canonical styles<% if (appShell) { %> and application layouts<% } %>.
+A <%= spa ? "client-only" : "server-rendered" %> Svelte application built on Canonical's design system and
+`@canonical/styles`, with SvelteKit for routing, loading<% if (!spa) { %>, form actions and
+streaming<% } %>.
+
 Use `summon domain billing --framework svelte`, `summon page billing/detail
---framework svelte`, and `summon wrapper settings --framework svelte` for
+--framework svelte` and `summon wrapper settings --framework svelte` to add
 SvelteKit routes and wrappers.
 
-Run `bun install`, `bun run check`, `bun run build`, `bun run test`, and `bun run dev`.
-Commit the resulting lockfile and use `bun install --frozen-lockfile` in CI;
-without a lockfile, transitive dependencies can change between installs.
-Run `bun run storybook` or `bun run build:storybook` for the example stories.
-<% if (forms) { %>After installing a Playwright Chromium browser, run `bun run test:browser`
-against the built app to check contact error isolation and draft preservation<% if (appShell) { %>,
-instance flows, heading focus and settings confirmation<% } %>.
-Set `CHROMIUM_PATH` to use an existing Chromium executable.
-<% } %>
-The catalog uses local sample data. GraphQL and Relay are not included.
-<% if (spa) { %>
-This client-only application builds to `build/`. Configure the static host to
-serve `200.html` as the fallback for application routes. Cold requests do not
-receive server-rendered content or route-specific HTTP statuses.
-Theme, dashboard settings and demo instances use local browser storage; there are no server
-actions; the demo account session uses sessionStorage and is not authentication.
-<% } else { %>
-The production server is built with adapter-node; start it with `bun run preview`.
-Configure `HOST`, `PORT` and `ORIGIN` for deployment.
-Theme and locale are selected per request, and the sitemap is served at
-`/sitemap.xml`. The dashboard's demo cookie is not authentication.<% if (appShell && forms) { %>
-Instances are bounded browser-cookie demonstrations, not provisioned resources.
-Removal uses a separate confirmation page without JavaScript and a hydrated modal.<% } %>
-<% } %>
-<% if (appShell) { %>
-Pathname navigation focuses the new page heading; query-only navigation keeps Kit's
-normal focus behavior. The settings project confirmation is a demonstration and
-does not delete data. The dashboard navigation and instance creation panel use
-native disclosures<% if (forms) { %>; when hydrated, the creation panel opens as a side sheet<% } %>.
-<% } %>
-<% if (forms) { %>
-The contact form is a local validation demonstration; it does not deliver messages.
-It uses native controls; the field definitions live in `src/lib/contact.ts`<% if (appShell) { %>
-and `src/lib/settings.ts`<% } %>, next to the decoders the server and the page share.
-<% } %>
-<% if (intl && spa) { %>
-The static shell starts in English until the browser chooses a locale.
-<% } %>
+## Quick start
+
+```sh
+bun install
+bun run dev
+```
+
+Commit the lockfile and install with `bun install --frozen-lockfile` in CI.
+
+## Builds
+
+| Build | Command | Output | Serve |
+| --- | --- | --- | --- |
+<% if (spa) { -%>
+| SPA (adapter-static) | `bun run build` | `build/` | any static host, with `200.html` as the fallback for every app route |
+<% } else { -%>
+| SSR (adapter-node) | `bun run build` | `build/` | `bun run preview` (`node build/index.js`; Bun runs it too) |
+<% } -%>
+| Storybook | `bun run build:storybook` | `storybook-static/` | any static host |
+
+<% if (spa) { -%>
+Every route renders in the browser: the theme<% if (intl) { %> and locale<% } %> come from <% if (intl) { %>their cookies
+and the browser's languages<% } else { %>its cookie<% } %>, and the forms have no server to post to. A cold
+request gets no route-specific HTTP status and no server-rendered content.
+<% } else { -%>
+Set `HOST`, `PORT` and `ORIGIN` for the SSR build as adapter-node documents.
+<% } -%>
+
+## Testing
+
+```sh
+bun run test:unit     # Vitest, the pure modules, in Node
+bun run test:browser  # builds, then Playwright Chromium against the <%= spa ? "static build" : "SSR server" %>
+bun run test          # both
+```
+
+The browser tests need Playwright's Chromium (`bunx playwright install
+chromium`); set `CHROMIUM_PATH` to use another executable<% if (!spa) { %>, and
+`SERVER_RUNTIME=bun` to run the SSR build with Bun<% } %>.
+
+## Project structure
+
+```
+src/
+├── app.html                The document shell
+<% if (!spa) { -%>
+├── hooks.server.ts         Reads the theme<% if (intl) { %> and locale<% } %> cookie<% if (intl) { %>s<% } %>; writes <html class<% if (intl) { %> lang dir<% } %>>
+<% } -%>
+├── routes/
+│   ├── (top-bar)/          Every page except the 404, under the top bar
+│   │   ├── (public)/       The public pages, in one constrained column
+<% if (appShell) { -%>
+│   │   └── dashboard/      The dashboard, in the application shell
+<% } -%>
+<% if (!spa) { -%>
+│   ├── preferences/<% if (intl) { %>, language/<% } %>  The theme<% if (intl) { %> and language<% } %> form<% if (intl) { %>s<% } %>' target<% if (intl) { %>s<% } %> without JavaScript
+│   ├── home/, icons/, sitemap.xml/
+<% } -%>
+├── params/                 Route matchers (the guide slug)
+├── layouts/                The root, top bar, public and error layouts
+├── domains/                Feature domains, each owning its pages and data
+│   ├── marketing/          Home, guides
+│   ├── account/            Account (demo guard), login
+│   ├── catalog/            Product catalog, the data-layer example
+<% if (forms) { -%>
+│   ├── contact/            Contact form
+<% } -%>
+<% if (appShell) { -%>
+│   └── dashboard/          An LXD-style application: side navigation, views,
+│                           <% if (forms) { %>a side panel and <% } %>a modal
+<% } -%>
+<% if (intl) { -%>
+├── i18n/                   Locale configuration and message catalogs (en/fr/ar)
+<% } -%>
+├── lib/                    Shared components (TopBar<% if (appShell) { %>, ApplicationShell<% } %>, …)
+<% if (intl) { -%>
+├── styles/                 Application CSS, and the stand-ins' stylesheets
+└── storybook/              The locale decorator every story renders in
+<% } else { -%>
+└── styles/                 Application CSS, and the stand-ins' stylesheets
+<% } -%>
+```
+
+### Page layouts
+
+Layouts are route groups, so a page never renders its own frame. Every page
+except the 404 sits under `(top-bar)`: a top bar with the app's name, one link
+per area of the scaffold, and the theme<% if (intl) { %> and language<% } %> selector<% if (intl) { %>s<% } %>. The links are demo
+navigation for exploring what the scaffold ships — replace them with your own.
+<% if (appShell) { -%>
+Under the top bar a page takes one of two layouts:
+
+- `(public)` — the public pages: one constrained column.
+- `dashboard` — `ApplicationShell` from `src/lib`: the design system's
+  `ApplicationLayout` with its `SideNavigation`. Each dashboard page renders
+  `ViewLayout` and `ContentLayout` inside it.
+
+The dashboard's navigation is one tree of navigation items, built in
+`src/domains/dashboard/createDashboardNavigation.ts`. The side navigation
+renders it, and the breadcrumbs are projected from it.
+<% } else { -%>
+The public pages render under it in `(public)`, one constrained column.
+<% } -%>
+
+## Theme<% if (intl) { %> and language<% } %>
+
+<% if (intl) { -%>
+With JavaScript, the theme and language selectors apply on change: `setTheme`
+swaps the theme class on `<html>` and writes the `theme` cookie, and the locale
+source re-translates the page, flips `<html lang dir>` and writes the `locale`
+cookie.
+<% } else { -%>
+With JavaScript, the theme selector applies on change: `setTheme` swaps the
+theme class on `<html>` and writes the `theme` cookie.
+<% } -%>
+<% if (spa) { -%>
+The client-only build reads the cookie<% if (intl) { %>s<% } %> back on every load.
+<% } else { -%>
+Without JavaScript, each selector is a form that posts to `/preferences`<% if (intl) { %> or
+`/language`<% } %>, which sets the same cookie and sends the reader back; the server then
+renders the class<% if (intl) { %>, `lang` and `dir`<% } %>. The Apply buttons sit in `<noscript>`, so
+they never show while JavaScript runs.
+
+The cookies are `path=/`, `SameSite=Lax`, a one-year max age, `Secure` over
+HTTPS on the server, and not `httpOnly`, so the page can overwrite what the
+server set.
+<% } -%>
+<% if (!spa && (forms || appShell)) { -%>
+
+## Without JavaScript
+
+Every form keeps working:<% if (forms) { %> contact<% if (appShell) { %> and settings<% } %> post<% if (!appShell) { %>s<% } %> to <% if (appShell) { %>their<% } else { %>its<% } %> page's action,<% } %><% if (appShell && forms) { %> the
+instance panel opens through `?create=1` and creates through an action,<% } %><% if (appShell) { %> a
+Details button chooses through `?selected=`, and the danger-zone Modal opens
+and closes through invoker commands<% } %>.
+<% } -%>
+
+## Data
+
+The catalog's `load` reads a page of products from local data in
+`src/domains/catalog/data.ts`; replace that module with a call to a real
+endpoint. GraphQL and Relay are not part of this app.
+
+## Gaps
+
+`@canonical/svelte-ds-*` does not ship these blocks yet, so the app renders
+their markup itself, with their stylesheets copied from the React packages into
+`src/styles/standins/`: <% if (appShell) { %><% if (forms) { %>`SidePanel`, <% } %>`Card`, `Tile`, `Timeline`, `Icon` and <% } %>`InlineCode`. Swap
+each for the Svelte block when it lands, and delete its stand-in stylesheet.
+
+The account flow is a demo, not authentication; real reads and actions must
+authorize at the request boundary.

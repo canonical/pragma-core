@@ -1,0 +1,103 @@
+<script lang="ts">
+  import { ContentLayout, ViewLayout } from "@canonical/svelte-ds-app";
+  import { Button, Modal } from "@canonical/svelte-ds-global";
+<% if (forms) { -%>
+  import { Field, Form } from "@canonical/svelte-ds-global-form";
+<% } -%>
+  import formatDocumentTitle from "../../formatDocumentTitle.js";
+<% if (intl) { -%>
+  import { createAppTranslator, getLocaleSource } from "../../i18n/index.js";
+<% } -%>
+  import { Icon } from "../../lib/index.js";
+<% if (forms) { -%>
+  import {
+    BRIDGE_OPTIONS,
+    PROJECT_NAME,
+    SETTINGS_DEFAULTS,
+  } from "./constants.js";
+<% } else { -%>
+  import { PROJECT_NAME } from "./constants.js";
+<% } -%>
+  import DashboardBreadcrumbs from "./DashboardBreadcrumbs.svelte";
+  import "./styles.css";
+<% if (intl) { -%>
+
+  const locale = getLocaleSource();
+  const t = $derived(createAppTranslator($locale));
+<% } -%>
+<% if (forms) { -%>
+
+  /** Saving logs the settings; nothing is stored. */
+  function handleSave(event: SubmitEvent) {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    console.log("Settings saved:", Object.fromEntries(new FormData(form)));
+  }
+<% } -%>
+</script>
+
+<svelte:head><title>{formatDocumentTitle(<%- str("dashboard.settings.title", "Settings") %>)}</title></svelte:head>
+
+{#snippet deleteIcon()}<Icon name="delete" />{/snippet}
+
+<ViewLayout class="dashboard-view">
+  <ContentLayout>
+    <header class="titlebar">
+      <div>
+        <DashboardBreadcrumbs />
+        <h1><%- msg("dashboard.settings.heading", "Settings") %></h1>
+      </div>
+    </header>
+
+<% if (forms) { -%>
+    <section aria-labelledby="project-title" class="section narrow">
+      <h2 id="project-title"><%- msg("dashboard.settings.project", "Project") %></h2>
+      <Form action="?/save" method="post" onsubmit={handleSave}>
+        <Field inputType="select" label=<%- attr("dashboard.settings.bridge", "Default bridge") %> name="bridge" options={BRIDGE_OPTIONS} value={SETTINGS_DEFAULTS.bridge} />
+        <Field controlLabel=<%- attr("dashboard.settings.ipv6Control", "Enable IPv6 NAT") %> inputType="switch" isOptional label=<%- attr("dashboard.settings.ipv6", "IPv6") %> name="ipv6" value={SETTINGS_DEFAULTS.ipv6} />
+        <Field inputType="number" label=<%- attr("dashboard.settings.maxInstances", "Maximum instances") %> name="max_instances" value={SETTINGS_DEFAULTS.max_instances} />
+        <Field controlLabel=<%- attr("dashboard.settings.snapshotsControl", "Enabled") %> inputType="switch" isOptional label=<%- attr("dashboard.settings.snapshots", "Nightly snapshots") %> name="snapshots" value={SETTINGS_DEFAULTS.snapshots} />
+        <div class="actions">
+          <Button importance="primary" type="submit"><%- msg("dashboard.settings.save", "Save changes") %></Button>
+        </div>
+      </Form>
+    </section>
+<% } -%>
+
+    <section aria-labelledby="danger-title" class="section narrow">
+      <h2 id="danger-title"><%- msg("dashboard.settings.danger", "Danger zone") %></h2>
+      <p class="muted"><%- msg("dashboard.settings.dangerBody", "These actions cannot be undone.") %></p>
+      <Modal closedby="any">
+        {#snippet trigger(triggerProps)}
+          <div class="actions">
+            <Button {...triggerProps} anticipation="destructive" icon={deleteIcon} importance="primary" type="button"><%- msg("dashboard.settings.delete", "Delete project") %></Button>
+          </div>
+        {/snippet}
+        {#snippet children(closeProps)}
+          <Modal.Header>
+            <%- msg("dashboard.settings.confirmTitle", "Delete project?") %>
+            {#snippet closeButton()}<Modal.Header.CloseButton aria-label=<%- attr("dashboard.close", "Close") %> />{/snippet}
+          </Modal.Header>
+          <Modal.Content>
+<% if (intl) { -%>
+            <p>{t("dashboard.settings.confirmBody", { project: PROJECT_NAME })}</p>
+<% } else { -%>
+            <p>{`This permanently deletes the ${PROJECT_NAME} project, its instances and their storage. This cannot be undone.`}</p>
+<% } -%>
+          </Modal.Content>
+          <Modal.Footer>
+            <Button {...closeProps} importance="tertiary" type="button"><%- msg("dashboard.cancel", "Cancel") %></Button>
+            <Button {...closeProps} anticipation="destructive" icon={deleteIcon} importance="primary" type="button"><%- msg("dashboard.settings.delete", "Delete project") %></Button>
+          </Modal.Footer>
+        {/snippet}
+      </Modal>
+    </section>
+  </ContentLayout>
+</ViewLayout>
+
+<!-- @component
+The project settings: a form prefilled with the current settings, and a danger
+zone whose delete action asks for confirmation in a Modal. Saving logs the
+values; without JavaScript the form posts to the page's action, and the Modal
+opens and closes through invoker commands.
+-->

@@ -1,40 +1,76 @@
 {
   "name": "<%= name %>",
-  "version": "0.1.0",
   "private": true,
+  "version": "0.0.0",
   "type": "module",
+  "license": "GPL-3.0-only",
   "scripts": {
+    "prepare": "svelte-kit sync || echo ''",
+<% if (spa) { -%>
     "dev": "node scripts/copy-icons.js && vite dev",
     "build": "node scripts/copy-icons.js && vite build",
-    "preview": "<%= spa ? 'vite preview' : 'node build/index.js' %>",
-    "storybook": "node scripts/copy-icons.js && storybook dev -p 6009 --no-open",
-    "build:storybook": "node scripts/copy-icons.js && storybook build",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "test": "node --test test/app.test.js"<% if (forms) { %>,
-    "test:browser": "node --test test/contact.browser.test.js"<% } %>
+    "preview": "vite preview",
+<% } else { -%>
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "node build/index.js",
+<% } -%>
+    "build:all": "bun run build && bun run build:storybook",
+    "build:storybook": "storybook build",
+    "storybook": "storybook dev -p 6009 --no-open",
+    "check": "bun run check:biome && bun run check:ts",
+    "check:fix": "bun run check:biome:fix && bun run check:ts",
+    "check:biome": "biome check",
+    "check:biome:fix": "biome check --write",
+    "check:ts": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "test": "bun run test:unit && bun run test:browser",
+    "test:unit": "vitest run",
+    "test:browser": "bun run build && node --test test/<%= spa ? "spa" : "app" %>.test.js"
   },
   "dependencies": {
-    "@canonical/styles": "<%= pragmaWebVersion %>",
     "@canonical/ds-assets": "<%= pragmaWebVersion %>",
-    "@canonical/svelte-ds-global": "<%= pragmaWebVersion %>"<% if (appShell) { %>,
-    "@canonical/svelte-ds-app": "<%= pragmaWebVersion %>"<% } %><% if (intl) { %>,
-    "@canonical/i18n-core": "<%= pragmaWebVersion %>"<% } %>
+<% if (appShell) { -%>
+    "@canonical/ds-types": "<%= pragmaWebVersion %>",
+    "@canonical/ds-utils": "<%= pragmaWebVersion %>",
+<% } -%>
+    "@canonical/i18n-core": "<%= pragmaWebVersion %>",
+    "@canonical/styles": "<%= pragmaWebVersion %>",
+<% if (appShell) { -%>
+    "@canonical/svelte-ds-app": "<%= pragmaWebVersion %>",
+<% } -%>
+<% if (forms) { -%>
+    "@canonical/svelte-ds-global": "<%= pragmaWebVersion %>",
+    "@canonical/svelte-ds-global-form": "<%= pragmaWebVersion %>"
+<% } else { -%>
+    "@canonical/svelte-ds-global": "<%= pragmaWebVersion %>"
+<% } -%>
   },
-  "overrides": { "cookie": "0.7.2" },
   "devDependencies": {
-<% if (forms) { %>    "playwright": "1.61.1",
-<% } %>
+    "@biomejs/biome": "2.6.8",
+    "@canonical/biome-config": "<%= pragmaVersion %>",
     "@canonical/storybook-config": "<%= pragmaWebVersion %>",
     "@storybook/addon-svelte-csf": "^5.1.3",
     "@storybook/sveltekit": "^10.6.0",
-    "storybook": "^10.6.0",
-    "@sveltejs/adapter-<%= spa ? 'static' : 'node' %>": "<%= spa ? '3.0.10' : '5.5.4' %>",
+<% if (spa) { -%>
+    "@sveltejs/adapter-static": "3.0.11",
+<% } else { -%>
+    "@sveltejs/adapter-node": "5.5.4",
+<% } -%>
     "@sveltejs/kit": "2.70.3",
     "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "@types/node": "^26.0.0",
+    "playwright": "^1.61.1",
+    "storybook": "^10.6.0",
     "svelte": "5.57.3",
     "svelte-check": "^4.4.5",
     "typescript": "~6.0.3",
-    "vite": "8.3.5"
+    "vite": "8.3.5",
+    "vitest": "^5.0.0"
   },
-  "engines": { "node": "^22.13.0 || ^24.0.0 || ^26.0.0" }
+  "overrides": {
+    "cookie": "0.7.2"
+  },
+  "engines": {
+    "node": "^22.13.0 || ^24.0.0 || ^26.0.0"
+  }
 }

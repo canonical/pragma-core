@@ -1,0 +1,43 @@
+<script lang="ts">
+  import "../styles/index.css";
+<% if (intl) { -%>
+  import { createLocaleSource } from "@canonical/i18n-core";
+<% } -%>
+  import type { Snippet } from "svelte";
+<% if (intl) { -%>
+  import { i18nConfig, setLocaleSource } from "../i18n/index.js";
+<% } -%>
+
+  let {
+<% if (intl) { -%>
+    locale,
+<% } -%>
+    children,
+  }: {
+<% if (intl) { -%>
+    /** The negotiated locale the page first renders in. */
+    locale: string;
+<% } -%>
+    /** The page, in its layouts. */
+    children?: Snippet;
+  } = $props();
+<% if (intl) { -%>
+
+  // One source per rendered tree: the initial locale seeds it, and from then
+  // on the source owns the locale, reflects it on `<html lang dir>` and
+  // persists it to the `locale` cookie.
+  // svelte-ignore state_referenced_locally
+  setLocaleSource(createLocaleSource(i18nConfig, { initial: locale }));
+<% } -%>
+</script>
+
+{@render children?.()}
+
+<!-- @component
+<% if (intl) { -%>
+The root of every page: the application's stylesheet and the locale source
+every translated component reads.
+<% } else { -%>
+The root of every page: the application's stylesheet.
+<% } -%>
+-->

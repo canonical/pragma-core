@@ -1,0 +1,103 @@
+import {
+  createHelpItem,
+  type FooterRoot,
+  type NavRoot,
+} from "@canonical/svelte-ds-app";
+<% if (intl) { -%>
+import type { MessageKey } from "../../i18n/index.js";
+<% } -%>
+
+export interface DashboardNavigation {
+  /** The side navigation's tree<%= intl ? ", labelled in the active locale" : "" %>. */
+  readonly root: NavRoot;
+  /** The side navigation's footer rows<%= intl ? ", labelled in the active locale" : "" %>. */
+  readonly footerRoot: FooterRoot;
+}
+
+/**
+ * Builds the dashboard's side navigation<%= intl ? ", labelled by `t`" : "" %>.
+ *
+ * The first group holds the dashboard's three pages. The second shows how an
+ * area without pages yet appears: its items are disabled, so they render
+ * without a link and nothing leads to a missing page. The last group is the
+ * Help item every application's side navigation carries. The footer links to
+ * the router guide, a public page outside the dashboard.
+ */
+export default function createDashboardNavigation({
+  legalUrl,
+<% if (intl) { -%>
+  t,
+<% } -%>
+}: {
+  /** Target of the Help › Legal information item. */
+  readonly legalUrl: string;
+<% if (intl) { -%>
+  /** The active locale's translator. */
+  readonly t: (key: MessageKey) => string;
+<% } -%>
+}): DashboardNavigation {
+  return {
+    root: {
+      key: "dashboard",
+      items: [
+        {
+          key: "pages",
+          items: [
+            {
+              url: "/dashboard",
+              label: <%- str("dashboard.nav.overview", "Overview") %>,
+              icon: "switcher-dashboard",
+            },
+            {
+              url: "/dashboard/instances",
+              label: <%- str("dashboard.nav.instances", "Instances") %>,
+              icon: "containers",
+            },
+            {
+              url: "/dashboard/settings",
+              label: <%- str("dashboard.nav.settings", "Settings") %>,
+              icon: "settings",
+            },
+          ],
+        },
+        {
+          key: "networking",
+          label: <%- str("dashboard.nav.networking", "Networking") %>,
+          items: [
+            {
+              key: "networks",
+              label: <%- str("dashboard.nav.networks", "Networks") %>,
+              icon: "connected",
+              disabled: true,
+            },
+            {
+              key: "storage",
+              label: <%- str("dashboard.nav.storage", "Storage pools") %>,
+              icon: "pods",
+              disabled: true,
+            },
+          ],
+        },
+        {
+          key: "help-group",
+          items: [
+            createHelpItem(legalUrl, {
+              label: <%- str("dashboard.nav.help", "Help") %>,
+              legalLabel: <%- str("dashboard.nav.legal", "Legal information") %>,
+            }),
+          ],
+        },
+      ],
+    },
+    footerRoot: {
+      key: "dashboard-footer",
+      items: [
+        {
+          url: "/guides/router-core",
+          label: <%- str("dashboard.nav.guide", "Router guide") %>,
+          icon: "book",
+        },
+      ],
+    },
+  };
+}

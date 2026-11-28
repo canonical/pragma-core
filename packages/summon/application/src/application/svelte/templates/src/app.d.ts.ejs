@@ -1,6 +1,14 @@
+import type { Theme } from "./lib/ThemeSelector/index.js";
+
 declare global {
   namespace App {
-    interface Locals { theme: string<% if (intl) { %>; locale: string<% } %> }
+    interface Locals {
+      /** The theme the `theme` cookie pins, if any. */
+      theme: Theme | undefined;
+<% if (intl) { -%>
+      /** The locale negotiated from the `locale` cookie and Accept-Language. */
+      locale: string;
+<% } -%>
+    }
   }
 }
-export {};

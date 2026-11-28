@@ -1,0 +1,42 @@
+<script lang="ts">
+<% if (intl) { -%>
+  import { createAppTranslator, getLocaleSource } from "../../i18n/index.js";
+<% } -%>
+<% if (intl) { -%>
+  import LocaleSelector from "../LocaleSelector/index.js";
+<% } -%>
+  import ThemeSelector from "../ThemeSelector/index.js";
+  import type { NavigationProps } from "./types.js";
+
+  let { currentUrl, theme, ...rest }: NavigationProps = $props();
+<% if (intl) { -%>
+
+  const locale = getLocaleSource();
+  const t = $derived(createAppTranslator($locale));
+<% } -%>
+  const links = $derived([
+    { href: "/", path: "/", label: <%- str("nav.home", "Home") %> },
+    {
+      href: "/guides/router-core",
+      path: "/guides/router-core",
+      label: <%- str("nav.guide", "Guide") %>,
+    },
+    { href: "/catalog", path: "/catalog", label: <%- str("nav.catalog", "Catalog") %> },
+<% if (forms) { -%>
+    { href: "/contact", path: "/contact", label: <%- str("nav.contact", "Contact") %> },
+<% } -%>
+<% if (appShell) { -%>
+    { href: "/dashboard", path: "/dashboard", label: <%- str("nav.dashboard", "Dashboard") %> },
+<% } -%>
+    { href: "/account?auth=1", path: "/account", label: <%- str("nav.signIn", "Demo sign-in") %> },
+  ]);
+</script>
+
+<nav aria-label=<%- attr("nav.label", "Main") %> {...rest}>{#each links as link (link.href)}<a aria-current={link.path === currentUrl ? "page" : undefined} href={link.href}>{link.label}</a>{/each}<ThemeSelector preference={theme} /><% if (intl) { %><LocaleSelector /><% } %></nav>
+
+<!-- @component
+The demo navigation: one link per area of the scaffold, then the theme<% if (intl) { %> and
+language<% } %> selector<% if (intl) { %>s<% } %>. The link for the current page is marked `aria-current`.
+
+`import { Navigation } from "$lib";`
+-->

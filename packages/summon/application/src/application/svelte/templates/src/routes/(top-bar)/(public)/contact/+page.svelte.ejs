@@ -1,0 +1,10 @@
+<script lang="ts">
+  import ContactPage from "../../../../domains/contact/ContactPage.svelte";
+<% if (!spa) { -%>
+  import type { PageProps } from "./$types";
+
+  let { form }: PageProps = $props();
+<% } -%>
+</script>
+
+<ContactPage<% if (!spa) { %> {form}<% } %> />

@@ -1,3 +1,21 @@
 import previewConfig from "@canonical/storybook-config/preview";
-import "../src/styles.css";
-export default { ...previewConfig<% if (intl) { %>, globalTypes: { locale: { description: "Language", toolbar: { title: "Language", items: ["en", "fr", "ar"] } } }, initialGlobals: { locale: "en" }<% } %> };
+import "../src/styles/index.css";
+<% if (intl) { -%>
+import * as decorators from "../src/storybook/decorators";
+
+export default {
+  ...previewConfig,
+  // Every story renders inside the app's locale source, so translated components work in isolation.
+  decorators: [decorators.withI18n()],
+  globalTypes: {
+    locale: {
+      description: "Language",
+      toolbar: { title: "Language", items: ["en", "fr", "ar"] },
+    },
+  },
+  initialGlobals: { locale: "en" },
+};
+<% } else { -%>
+
+export default previewConfig;
+<% } -%>

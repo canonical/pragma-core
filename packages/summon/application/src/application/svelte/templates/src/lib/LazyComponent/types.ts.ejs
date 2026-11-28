@@ -1,0 +1,19 @@
+import type { Snippet } from "svelte";
+<% if (intl) { -%>
+import type { MessageKey } from "../../i18n/index.js";
+<% } -%>
+
+/** Props for `LazyComponent`. */
+export interface LazyComponentProps {
+  /**
+<% if (intl) { -%>
+   * The pending fetch: it resolves to the catalog key of the text to show.
+<% } else { -%>
+   * The pending fetch: it resolves to the text to show.
+<% } -%>
+   * A page's `load` returns it without awaiting it, so SvelteKit streams it.
+   */
+  data: Promise<<%= intl ? "MessageKey" : "string" %>>;
+  /** Rendered while `data` is pending. */
+  pending?: Snippet;
+}

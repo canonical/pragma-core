@@ -6,32 +6,25 @@ Summon generators for scaffolding application structure: full applications, doma
 
 ### `summon application/svelte <name>`
 
-Scaffolds a SvelteKit application with adapter-node SSR by default, a local
-catalog and Canonical Svelte breadcrumbs. The SSR app offers request-scoped
-theme selection, sitemap, a demo account and a three-page dashboard. Choose
-`--rendering spa` for a client-only static fallback, `--intl` for English,
-French and Arabic, `--no-forms` to omit the native contact demonstration, and
-`--no-app-shell` to omit the Canonical layouts and example dashboard. Use
+Scaffolds a SvelteKit application, the counterpart of `application/react`:
+the same pages (home, guide, catalog, account, login, contact and a three-page
+dashboard), components (`TopBar`, `ApplicationShell` with the design system's
+`SideNavigation`, `CanonicalLogo`, `CodeMessage`, `ExampleComponent`,
+`LazyComponent`), messages and stories, in Svelte idioms: route groups for the
+layouts, `load` for data, form actions and streamed promises. Server rendering
+uses adapter-node; `--rendering spa` builds a client-only app with adapter-static
+and a `200.html` fallback. `--intl` adds English, French and Arabic,
+`--no-forms` swaps the form package for native controls and omits the contact
+page, and `--no-app-shell` omits the shell and the dashboard. Use
 `--framework svelte` with the page, domain and wrapper generators for SvelteKit
 output.
 
-Forms use native controls with application-owned decoding and validation, so
-the generated app installs from the public registry. The contact form does not
-deliver messages. Generated Storybook contact examples are isolated
-demonstrations, not the live Kit action. With forms and shell enabled, SSR
-instance removal uses a native confirmation page and a hydrated Modal; SPA
-instances use localStorage and the same Modal. Settings offers a
-demonstration-only project confirmation, with a no-JavaScript SSR route. The
-overview reads demo settings and instance counts from cookies in SSR and
-localStorage in SPA, shows separately labelled illustrative activity, and links
-to a preselected creation form. SPA theme and settings are local to the
-browser; the SPA demo account uses sessionStorage and has no server actions.
-Neither account path authenticates.
-
-Pathname navigation focuses the page heading. The dashboard rail and create
-panel use native disclosures; the hydrated create panel opens as a side sheet.
-With `--intl`, locales are negotiated from the cookie and `Accept-Language`, and
-the catalog includes a localized plural and number example.
+The theme and language selectors apply on change; without JavaScript each is a
+form that posts to `/preferences` or `/language`, which set the cookie (not
+`httpOnly`) and return to a same-origin referer. Every other form posts to its
+page's action without JavaScript. Blocks the Svelte design system does not ship
+yet (`SidePanel`, `Card`, `Tile`, `Timeline`, `InlineCode`, `Icon`) render their
+markup with stylesheets copied from the React packages.
 
 GraphQL and Relay are not included: `--relay` is a React-only option, and
 Svelte requests are rejected.
