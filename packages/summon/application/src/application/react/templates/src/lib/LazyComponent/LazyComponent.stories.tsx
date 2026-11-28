@@ -6,7 +6,7 @@ const meta = {
   title: "LazyComponent",
   component: Component,
   // LazyComponent suspends, so every story renders inside a Suspense boundary —
-  // the same pattern the homepage uses to stream it during SSR.
+  // the same pattern the homepage uses to render it.
   decorators: [
     (Story) => (
       <Suspense fallback={<p>Loading…</p>}>

@@ -60,15 +60,15 @@ export interface CreateEnvironmentOptions {
   readonly graphqlUrl?: string;
   /**
    * Server-captured operations replayed into the store at construction via
-   * Relay's public `commitPayload` — only these operations' data ever crosses
-   * the SSR boundary (no whole-store serialization, nothing to scrub). Each
-   * replayed operation is retained, so the seeded data cannot be GC'd before
-   * its first reader mounts.
+   * Relay's public `commitPayload` — the SSR arm's bounded seed, so only
+   * these operations' data ever crosses the boundary (no whole-store
+   * serialization, nothing to scrub). Each replayed operation is retained,
+   * so the seeded data cannot be GC'd before its first reader mounts.
    */
   readonly payloads?: readonly RelaySeedPayload[];
   /**
    * Observe each successful single response the environment's network
-   * returns. The SSR prefetch uses this to tee responses into the
+   * returns. The SSR arm's prefetch uses this to tee responses into the
    * serializable payload list while `fetchQuery` normalizes them as usual.
    */
   readonly captureResponse?: (captured: CapturedResponse) => void;
@@ -181,8 +181,8 @@ const toFetchFunction =
 /**
  * Creates a Relay `Environment` for the app.
  *
- * Call once per browser session (module scope in the client entry) and once
- * per request on the server, so no store state leaks across requests.
+ * Call once per browser session (module scope in the client entry). The SSR
+ * arm calls it once per request, so no store state leaks across requests.
  */
 export const createEnvironment = (
   options: CreateEnvironmentOptions = {},
@@ -253,10 +253,10 @@ let browserEnvironment: Environment | null = null;
  *
  * Module scope so the client entry's provider and route-level `warm` hooks
  * share one normalized store — a navigation-time cache warm lands in the same
- * store `useLazyLoadQuery` reads from. The FIRST caller's options win (the
- * client entry seeds SSR payloads before anything else runs); later calls
- * reuse the existing environment. Server code must keep using
- * `createEnvironment()` (fresh per request).
+ * store `useLazyLoadQuery` reads from. The FIRST caller's options win (in the
+ * SSR arm, the client entry seeds the server's relay payloads before anything
+ * else runs); later calls reuse the existing environment. On the SSR arm,
+ * server code must keep using `createEnvironment()` (fresh per request).
  */
 export const getBrowserEnvironment = (
   options?: CreateEnvironmentOptions,

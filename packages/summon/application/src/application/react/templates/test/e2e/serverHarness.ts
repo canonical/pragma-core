@@ -33,8 +33,8 @@ export function getFreePort(): Promise<number> {
  * Resolve once the server answers an HTTP request on `localhost:<port>`, or
  * reject after `timeoutMs`. Probing over HTTP against `localhost` (rather than a
  * raw TCP connect to a fixed IP) confirms the server is actually serving and
- * works whether it bound IPv4 (`0.0.0.0`, the SSR servers) or IPv6 (`[::1]`,
- * Vite's default) — `fetch`/`localhost` resolves both families.
+ * works whether it bound IPv4 (`0.0.0.0`) or IPv6 (`[::1]`, Vite's
+ * default) — `fetch`/`localhost` resolves both families.
  */
 async function waitForServer(
   base: string,
@@ -66,7 +66,7 @@ async function waitForServer(
  *
  * Flakiness is designed out, not retried away:
  * - **OS-assigned port** (`getFreePort` + `PORT` env) → no collisions across the
- *   six matrix servers.
+ *   matrix servers.
  * - **Poll until the port accepts a connection** (not a fixed sleep) → no
  *   readiness race; tolerates Vite's first-boot dep-optimization and the
  *   `preview:*` build via a generous timeout.

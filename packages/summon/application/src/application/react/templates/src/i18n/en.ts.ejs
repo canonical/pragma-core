@@ -70,7 +70,7 @@ const en = {
     "A plain component scaffolded alongside the app. It ships with a Storybook story (`ExampleComponent.stories.tsx`) and a test — the starting point for your own components.",
   "home.exampleGreeting": "Hello from ExampleComponent",
   "home.streamingBody":
-    "`LazyComponent` reads a synthetic delayed fetch with React 19 `use()`, so it suspends. Inside this `Suspense` boundary the server streams the page shell first, shows the fallback, then flushes the resolved content in — no full client round-trip.",
+    "`LazyComponent` reads a synthetic delayed fetch with React 19 `use()`, so it suspends. Inside this `Suspense` boundary the fallback shows first, then the resolved content streams in.",
   "home.streamed": "Streamed in after a delay",
   "catalog.intro":
     "This page demonstrates the Relay data layer. `ProductList` issues a `useLazyLoadQuery`, each `ProductCard` reads its own `useFragment`, and the environment resolves operations against the local mock schema in `src/relay/schema.ts` — set `VITE_GRAPHQL_URL` to point it at a real endpoint instead.",

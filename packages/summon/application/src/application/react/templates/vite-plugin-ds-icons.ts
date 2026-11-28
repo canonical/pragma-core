@@ -73,10 +73,10 @@ export function dsIcons(): Plugin {
       });
     },
     async writeBundle() {
-      // The client build only: `build:server` (the SSR renderers) has no
-      // static output to serve from. The dev/preview/production servers all
-      // serve the client output directory, so the copy lands where every
-      // one of them looks.
+      // The client build only: the SSR arm's server-mode build (the
+      // renderers) has no static client output to serve from. Dev and
+      // preview serve the client output directory, so the copy lands where
+      // they look for it.
       if (config.command !== "build" || config.build.ssr) {
         return;
       }

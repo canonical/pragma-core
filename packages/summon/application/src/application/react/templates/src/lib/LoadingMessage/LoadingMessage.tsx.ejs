@@ -4,9 +4,9 @@ import { useTranslation } from "@canonical/i18n-react";
 import type { ReactElement } from "react";
 
 /**
- * The route fallback both entries render while a page suspends<% if (intl) { %>, in the active
- * locale<% } %>. The server and the client render the same one, so the streamed
- * shell hydrates without a mismatch.
+ * The route fallback rendered while a page suspends<% if (intl) { %>, in the active
+ * locale<% } %>. On the SSR arm the server and the client render the same one, so
+ * the streamed shell hydrates without a mismatch.
  *
  * `import { LoadingMessage } from "#lib/index.js";`
  */

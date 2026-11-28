@@ -16,8 +16,8 @@ function endonymOf(tag: string): string {
 /**
  * Language picker driving `useLocale` from `@canonical/i18n-react`. Changing
  * the selection re-translates every subscribed component, persists the choice
- * to the `locale` cookie (so the server renders the matching `<html lang>` on
- * the next request), and flips `<html dir>` for right-to-left locales.
+ * to the `locale` cookie (so the next load renders the matching `<html lang>`),
+ * and flips `<html dir>` for right-to-left locales.
  *
 <% if (forms) { -%>
  * Each option carries a `lang` attribute so assistive technology pronounces

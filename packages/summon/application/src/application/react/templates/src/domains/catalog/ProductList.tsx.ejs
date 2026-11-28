@@ -35,7 +35,7 @@ export const productListQuery = graphql`
  *
  * The hook suspends while the query is in flight, so render this component
  * inside a `Suspense` boundary. Whether it may render at all is
- * `CatalogPage`'s call: on the server it renders only from a seeded store.
+ * `CatalogPage`'s call: on the SSR arm it renders only from a seeded store.
  */
 export default function ProductList(): ReactElement {
 <% if (intl) { -%>

@@ -18,8 +18,9 @@ const routes = {
     // harmless, it re-fetches).
     warm: () => {
       if (typeof document === "undefined") {
-        // SSR data comes from the renderer's awaited prefetch of the same
-        // query this route declares in `serverQueries` — nothing to warm.
+        // Server-side only: on the SSR arm the renderer's awaited prefetch of
+        // this route's declared query (see `serverQueries`) already filled the
+        // store, so there is nothing to warm.
         return;
       }
 

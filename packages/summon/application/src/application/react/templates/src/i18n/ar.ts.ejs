@@ -74,7 +74,7 @@ const ar: Record<MessageKey, MessageValue> = {
     "مكوّن بسيط أُنشئ مع التطبيق. يأتي مع قصة Storybook (`ExampleComponent.stories.tsx`) واختبار، وهو نقطة البداية لمكوّناتك الخاصة.",
   "home.exampleGreeting": "مرحبًا من ExampleComponent",
   "home.streamingBody":
-    "يقرأ `LazyComponent` طلب جلب مؤخرًا ومحاكًى باستخدام `use()` في React 19، فيتعلّق عرضه. داخل حدّ `Suspense` هذا يبثّ الخادم هيكل الصفحة أولًا، ويعرض البديل، ثم يضخّ المحتوى عند جاهزيته، من دون رحلة كاملة إلى العميل.",
+    "يقرأ `LazyComponent` طلب جلب مؤخرًا ومحاكًى باستخدام `use()` في React 19، فيتعلّق عرضه. داخل حدّ `Suspense` هذا يظهر البديل أولًا، ثم يُضخّ المحتوى عند جاهزيته.",
   "home.streamed": "بُثّ بعد مهلة",
   "catalog.intro":
     "توضح هذه الصفحة طبقة بيانات Relay. يُصدر `ProductList` استعلام `useLazyLoadQuery`، ويقرأ كل `ProductCard` جزءه عبر `useFragment`، وتحلّ البيئة العمليات وفق المخطط المحاكى المحلي في `src/relay/schema.ts`. اضبط `VITE_GRAPHQL_URL` لتوجيهها إلى نقطة نهاية حقيقية.",
