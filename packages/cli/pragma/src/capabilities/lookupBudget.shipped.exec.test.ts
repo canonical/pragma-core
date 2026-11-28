@@ -77,11 +77,16 @@ const GLOB_BUDGET_BYTES: Readonly<Record<"summary" | "detailed", number>> = {
  * ceiling records a size rather than enforcing a cut; `summary` and `standard`
  * are the levels the outbound cap holds (the global Button read 28,713 at
  * `standard` before it, 18,173 after).
+ *
+ * **`detailed` re-derived 2026-11-28**, on the snapshot shipped with v0.47.0:
+ * the largest block is now QueryBar at 190,395 bytes, 154,806 of them its 200
+ * inlined token bindings; × 1.5, rounded. `summary` and `standard` held, which
+ * is the outbound cap doing its work.
  */
 const INSPECT_BUDGET_BYTES: Readonly<Record<DetailLevel, number>> = {
   summary: 8_700,
   standard: 31_000,
-  detailed: 108_000,
+  detailed: 286_000,
 };
 
 /** Every noun with a lookup, derived from the config. */

@@ -1081,3 +1081,17 @@ beside `modifier list`'s 12.7 ms, 0.3 ms beside `concept list`'s 0.4 ms.
 
 **A lookup miss** reads one pool, once per call (warm medians, `token lookup`):
 one miss 10.5 ms (10.3 before this change), eight misses 26.5 ms (58.0 before).
+
+## 2026-11-28 — the `graph inspect` ceiling at `detailed` re-derived for v0.47.0
+
+The snapshot shipped with v0.47.0 carries the query bar family, and the largest
+`detailed` inspect of a block went from 72,258 to 190,395 bytes (QueryBar; its
+QueryInput is next at about 144,000). 154,806 of those bytes are QueryBar's 200
+token bindings, inlined; the global Button has 24. `detailed` is the uncut
+neighbourhood by design, so its ceiling records a size and does not enforce a
+cut: × 1.5, rounded, it moves from 108,000 to 286,000. `summary` and `standard`
+did not move, and neither did the single-entity lookup ceilings.
+
+The guard went red on `main` only after the release, because it measures the
+shipped snapshot and the release is what refreshes it: the pull requests that
+added the data ran against the previous one.

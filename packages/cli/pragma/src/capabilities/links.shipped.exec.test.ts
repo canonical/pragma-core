@@ -359,13 +359,16 @@ describe("every printed link resolves, whole corpus (PROTECTED)", () => {
  * The printed names their noun cannot resolve TODAY — asserted exactly, so an
  * entry goes red the day it is fixed and cannot outlive its reason.
  *
- * `KeyboardKeys` is a `ds:Group`: a kind of block the design system defines,
- * one of which records token bindings, and which the block story does not
- * address — so `token consumers` prints a block that `block lookup` and
- * `--block` both miss.
+ * `KeyboardKeys` and `QueryChips` are each a `ds:Group`, and `Tooltip+Dense` is
+ * a `ds:Variant`: kinds of block the design system defines, which record token
+ * bindings, and which the block story does not address — so `token consumers`
+ * prints a block that `block lookup` and `--block` both miss. The last two
+ * arrived with the snapshot shipped in v0.47.0.
  */
 const UNRESOLVED_TODAY: readonly string[] = [
   'token consumers block: "KeyboardKeys" is no block',
+  'token consumers block: "QueryChips" is no block',
+  'token consumers block: "Tooltip+Dense" is no block',
 ];
 
 const PREFIXES = { ex: "https://example.org/shop#" };
