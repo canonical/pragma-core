@@ -17,8 +17,15 @@ function fakeGit(
     string,
     { tag?: string; commits?: number; dirty?: boolean } | undefined
   >,
+  remote?: { tagged: readonly string[]; calls?: string[] },
 ): GitReader {
   return (dir, args) => {
+    if (args[0] === "ls-remote") {
+      remote?.calls?.push(args[2] ?? "");
+      return remote?.tagged
+        .map((sha, i) => `${sha}\trefs/tags/v0.${i}.0^{}`)
+        .join("\n");
+    }
     const repo = repos[dir];
     if (repo === undefined) return undefined;
     switch (args[0]) {
@@ -169,15 +176,15 @@ describe("describeUnreleased — the packs the store was built from", () => {
     ]);
   });
 
-  it("a git pack on a branch is unreleased, with the commit it resolved to", () => {
+  const SHA = "6c25b1b50f2cede30d9260edd91ac614f1380457";
+  const RELEASE = "f9c8577bbd5e4657e793b7092c3931102714b8ca";
+
+  it("a git pack on a branch past the release tags is unreleased", () => {
     const parts = describeUnreleased({
       packs: [git("@canonical/ds-implementations", "main")],
-      packCommits: {
-        "@canonical/ds-implementations":
-          "6c25b1b50f2cede30d9260edd91ac614f1380457",
-      },
+      packCommits: { "@canonical/ds-implementations": SHA },
       cwd: "/work",
-      git: fakeGit({}),
+      git: fakeGit({}, { tagged: [RELEASE] }),
     });
     expect(parts).toEqual([
       {
@@ -185,6 +192,45 @@ describe("describeUnreleased — the packs the store was built from", () => {
         detail: "tracks main at 6c25b1b, not a release",
       },
     ]);
+  });
+
+  it("a git pack on a branch whose commit is a release tag is a release", () => {
+    // The state right after every release: `main` is the tagged commit.
+    const calls: string[] = [];
+    const parts = describeUnreleased({
+      packs: [
+        git("@canonical/design-system", "main"),
+        git("@canonical/anatomy-dsl", "main"),
+      ],
+      packCommits: {
+        "@canonical/design-system": RELEASE,
+        "@canonical/anatomy-dsl": RELEASE,
+      },
+      cwd: "/work",
+      git: fakeGit({}, { tagged: [SHA, RELEASE], calls }),
+    });
+    expect(parts).toEqual([]);
+    // Two packs from one remote ask it once.
+    expect(calls).toEqual(["https://github.com/canonical/pragma-core.git"]);
+  });
+
+  it("a branch pack is left out when the remote or its commit is unknown", () => {
+    expect(
+      describeUnreleased({
+        packs: [git("@canonical/design-system", "main")],
+        packCommits: { "@canonical/design-system": SHA },
+        cwd: "/work",
+        git: fakeGit({}),
+      }),
+    ).toEqual([]);
+    expect(
+      describeUnreleased({
+        packs: [git("@canonical/design-system", "main")],
+        packCommits: {},
+        cwd: "/work",
+        git: fakeGit({}, { tagged: [RELEASE] }),
+      }),
+    ).toEqual([]);
   });
 
   it("a git pack on a version tag, and an npm pack, are releases", () => {
