@@ -15,11 +15,15 @@
  *   uncommitted changes.
  * - **Its contents.** Only when the store answering reads was built from the
  *   configured packs (the embedded snapshot is whatever the CLI shipped). A
- *   `file://` pack is checked the same way as the CLI; a `git+…#ref` pack is
- *   unreleased unless its ref is a version tag; an npm pack is a release.
+ *   `file://` pack is checked the same way as the CLI; a `git+…#ref` pack on
+ *   a version tag is a release; one on a branch is a release only when the
+ *   commit it resolved to carries a release tag on the remote; an npm pack is
+ *   a release.
  *
  * Read-only: a handful of `git` reads with a short timeout, each of which
  * silently yields nothing when git is missing or the folder is not a checkout.
+ * A branch pack costs one `git ls-remote` per remote. When the remote cannot
+ * be reached the pack is left out: nothing is claimed that was not checked.
  */
 
 import { execFileSync } from "node:child_process";
@@ -99,6 +103,21 @@ function checkoutChanges(dir: string, git: GitReader): string[] | undefined {
   return changes;
 }
 
+/**
+ * The commits a remote's release tags point at, or `undefined` when the
+ * remote could not be read. An annotated tag lists twice, as the tag object
+ * and as the commit it points at (`^{}`); both are kept, only commits match.
+ */
+function releaseCommits(
+  url: string,
+  cwd: string,
+  git: GitReader,
+): ReadonlySet<string> | undefined {
+  const refs = git(cwd, ["ls-remote", "--tags", url, "v[0-9]*"]);
+  if (refs === undefined) return undefined;
+  return new Set(refs.split("\n").map((line) => line.split("\t")[0] ?? ""));
+}
+
 /** Whether a path sits inside a `node_modules` tree (a published install). */
 function isInstalledPackage(path: string): boolean {
   return path.split(/[\\/]/).includes("node_modules");
@@ -114,6 +133,7 @@ export function describeUnreleased(
   probe: ReleaseProbe,
 ): readonly UnreleasedPart[] {
   const parts: UnreleasedPart[] = [];
+  const tagged = new Map<string, ReadonlySet<string> | undefined>();
 
   if (probe.cliRoot !== undefined && !isInstalledPackage(probe.cliRoot)) {
     const changes = checkoutChanges(probe.cliRoot, probe.git);
@@ -141,10 +161,19 @@ export function describeUnreleased(
         });
       }
     } else if (pack.kind === "git" && !VERSION_TAG.test(pack.ref)) {
+      // A branch sits on a release whenever its head is the tagged commit,
+      // which is the state right after every release. Only the remote knows:
+      // the cached clones are shallow and carry no tags.
       const commit = probe.packCommits[pack.pkg];
+      if (commit === undefined) continue;
+      if (!tagged.has(pack.url)) {
+        tagged.set(pack.url, releaseCommits(pack.url, probe.cwd, probe.git));
+      }
+      const releases = tagged.get(pack.url);
+      if (releases === undefined || releases.has(commit)) continue;
       parts.push({
         name: pack.pkg,
-        detail: `tracks ${pack.ref}${commit ? ` at ${commit.slice(0, 7)}` : ""}, not a release`,
+        detail: `tracks ${pack.ref} at ${commit.slice(0, 7)}, not a release`,
       });
     }
   }
@@ -190,13 +219,17 @@ function findCliRoot(): string | undefined {
   }
 }
 
-/** `git -C <dir> …` with a short timeout; `undefined` on any failure. */
+/**
+ * `git -C <dir> …` with a short timeout; `undefined` on any failure. The
+ * timeout leaves room for one `ls-remote` over SSH, and git never prompts.
+ */
 const readGit: GitReader = (dir, args) => {
   try {
     return execFileSync("git", ["-C", dir, ...args], {
       encoding: "utf-8",
       stdio: ["ignore", "pipe", "ignore"],
-      timeout: 2000,
+      timeout: 5000,
+      env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
     }).trim();
   } catch {
     return undefined;
