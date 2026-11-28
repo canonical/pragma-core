@@ -64,6 +64,9 @@ const TYPE_VALUES = (blockLookup.types ?? []).join(" ");
  */
 const scope = blockLookup.scopeWeight;
 if (!scope) throw new Error('the "block" lookup declares no scopeWeight');
+// The guard above is a module-level proof; TypeScript does not carry the
+// narrowing into every nested function below, so bind the fields once.
+const { via, by } = scope;
 
 let rt: PragmaRuntime;
 beforeAll(async () => {
@@ -127,7 +130,7 @@ async function collisions(): Promise<
       `  VALUES ?class { ${TYPE_VALUES} }`,
       "  ?uri a ?class .",
       `  ?uri ${blockLookup.by} ?name .`,
-      `  OPTIONAL { ?uri ${scope.via} ?tier . ?tier ${scope.by} ?tn . }`,
+      `  OPTIONAL { ?uri ${via} ?tier . ?tier ${by} ?tn . }`,
       '  BIND(LCASE(REPLACE(STR(?name), "^\\\\s+|\\\\s+$", "")) AS ?key)',
       '  BIND(COALESCE(?tn, "") AS ?tierName)',
       "  BIND(EXISTS { ?uri a ds:Subcomponent } AS ?part)",

@@ -60,6 +60,7 @@ const DEFINITION_KEYS = {
   meta: true,
   prompts: true,
   generate: true,
+  reconcileAnswers: true,
 } satisfies Record<keyof GeneratorDefinition, unknown>;
 
 const META_KEYS = {
@@ -134,6 +135,7 @@ describe("generator-definition.v1 schema — drift guard (PROTECTED)", () => {
     // would read as "a generator has no generate".
     for (const node of [
       schema.properties?.generate,
+      schema.properties?.reconcileAnswers,
       schema.$defs?.prompt?.properties?.when,
       schema.$defs?.prompt?.properties?.validate,
     ]) {

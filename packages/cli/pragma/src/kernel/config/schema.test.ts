@@ -21,7 +21,9 @@ import { rawConfigSchema } from "./schema.js";
 /** The `field` cells of the generated page's Fields table, in page order. */
 function readDocumentedFields(): string[] {
   const page = emitReference([]).get("config.md") ?? "";
-  return [...page.matchAll(/^\| `([a-zA-Z]+)` \| /gm)].map((row) => row.at(1));
+  return [...page.matchAll(/^\| `([a-zA-Z]+)` \| /gm)]
+    .map((row) => row.at(1))
+    .filter((field): field is string => field !== undefined);
 }
 
 describe("the configuration reference agrees with the validator", () => {

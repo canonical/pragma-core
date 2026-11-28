@@ -15,7 +15,11 @@ import { freshXdgEnv, runCli } from "../helpers/runCli.js";
 describe("first-run onboarding (e2e)", () => {
   it("hints on the front door and seeds nothing", () => {
     const env = freshXdgEnv();
-    const configPath = join(env.XDG_CONFIG_HOME, "pragma", "config.json");
+    const configHome = env.XDG_CONFIG_HOME;
+    if (configHome === undefined) {
+      throw new Error("freshXdgEnv must set XDG_CONFIG_HOME");
+    }
+    const configPath = join(configHome, "pragma", "config.json");
 
     // A read-only command writes NO config and carries no banner: the greeting
     // used to interleave itself into the output of unrelated runs.

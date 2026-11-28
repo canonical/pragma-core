@@ -42,6 +42,7 @@ function makeGraphData(overrides?: Partial<TokenGraphData>): TokenGraphData {
     imports: new Map(),
     importedBy: new Map(),
     allVars: new Set(),
+    artifactFileUris: new Set(),
     ...overrides,
   };
 }

@@ -912,8 +912,9 @@ describe("provideHover", () => {
     expect(tableRows).toHaveLength(1);
     // Layer appears in its own column, not inlined with selector
     expect(result?.value).toContain("| Layer |");
-    expect(tableRows[0]).toContain("`ds.modifiers`");
-    expect(tableRows[0]).toContain("modifiers.theme.css:27");
+    const firstRow = tableRows?.at(0);
+    expect(firstRow).toContain("`ds.modifiers`");
+    expect(firstRow).toContain("modifiers.theme.css:27");
   });
 
   it("shows nested at-rules outermost-first", () => {

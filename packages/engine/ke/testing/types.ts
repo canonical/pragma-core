@@ -28,7 +28,7 @@ export interface TestStoreOptions {
   graphs?: GraphSource[];
 
   /** Plugins to register. */
-  plugins?: Plugin[];
+  plugins?: Plugin<unknown>[];
 
   /** Prefix map to register. */
   prefixes?: PrefixMap;

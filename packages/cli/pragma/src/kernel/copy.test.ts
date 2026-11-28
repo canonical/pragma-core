@@ -158,6 +158,9 @@ function scanCode(
   let braces = 0;
   for (let i = from; i < source.length; i++) {
     const char = source[i];
+    // `i < source.length` bounds the read, but `noUncheckedIndexedAccess`
+    // types the element `string | undefined`; a present char is invariant here.
+    if (char === undefined) break;
     if (char === "/" && source[i + 1] === "*") {
       const end = source.indexOf("*/", i + 2);
       if (end === -1) return source.length;

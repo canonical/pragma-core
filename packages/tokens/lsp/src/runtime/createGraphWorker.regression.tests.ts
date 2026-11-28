@@ -287,6 +287,7 @@ describe("createGraphWorker regression baseline", () => {
       id: 7,
       type: "ARTIFACT_CHANGED",
       path: fixture.artifactPath,
+      uri: fixture.artifactPath,
     });
 
     expect(fixture.worker.graph.hasToken("--size-lg")).toBe(true);

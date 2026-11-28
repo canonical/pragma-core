@@ -11,7 +11,7 @@ export default function checkUnreachableToken(
 ): void {
   const severity = ctx.config.diagnostics.get("css/unreachable-token");
   if (!severity) return;
-  if (!ctx.token || ctx.token.provenance.kind !== "artifact") return;
+  if (ctx.token?.provenance.kind !== "artifact") return;
   if (ctx.token.registered) return;
   if (!ctx.token.cssOutputFile) return;
   const outputUri = formatFileUri(ctx.token.cssOutputFile);

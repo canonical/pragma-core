@@ -6,14 +6,18 @@ import {
   provideCompletions,
   provideHover,
 } from "../providers/index.js";
-import type { RawArtifact, ResolvedConfig } from "../types/index.js";
+import type {
+  RawArtifact,
+  RawWrappedArtifact,
+  ResolvedConfig,
+} from "../types/index.js";
 
 // ---------------------------------------------------------------------------
 // Fixtures — generate a realistic-sized graph with 200 tokens
 // ---------------------------------------------------------------------------
 
 function buildLargeArtifact(count: number): RawArtifact {
-  const tokens: RawArtifact["tokens"] = {};
+  const tokens: RawWrappedArtifact["tokens"] = {};
   for (let i = 0; i < count; i++) {
     const name = `--color-${i.toString(36).padStart(4, "0")}`;
     tokens[name] = {

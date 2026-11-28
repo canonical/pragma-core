@@ -431,7 +431,7 @@ describe("collectUndos", () => {
       writeFile("/x.txt", "x"),
       writeFile("/y.txt", "y"),
     ]);
-    const task = parallel([inner, writeFile("/z.txt", "z")]);
+    const task = parallel<void[] | void>([inner, writeFile("/z.txt", "z")]);
     const undos = collectUndos(task);
 
     // inner children: x, y + outer child: z
@@ -854,7 +854,8 @@ describe("runCollectedUndos - per-undo outcomes and failure isolation", () => {
         "undone",
       ]);
       expect(result.undoCount).toBe(2);
-      expect(result.outcomes[1].error).toMatchObject({
+      const failedOutcome = result.outcomes.find((o) => o.status === "failed");
+      expect(failedOutcome?.error).toMatchObject({
         code: "EXEC_FAILED",
         message: "the middle undo broke",
       });
@@ -1067,7 +1068,7 @@ describe("collectUndos - Parallel result threaded to continuation", () => {
     // assertion fails against any placeholder shape (e.g. an array of []).
     let seenResults: unknown[] = [];
     const task = flatMap(
-      parallel([readFile("/a.txt"), writeFile("/b.txt", "b")]),
+      parallel<string | void>([readFile("/a.txt"), writeFile("/b.txt", "b")]),
       (results) => {
         seenResults = results as unknown[];
         return writeFile("/c.txt", "c");

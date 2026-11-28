@@ -217,9 +217,8 @@ describe("bundled skills — the upgrade hazard", () => {
   // code: a link to a plausible previous release's path is planted in the
   // harness directory, and the forward plan is inspected.
   const FLAGS: GlobalFlags = {
+    llm: false,
     format: "plain",
-    color: false,
-    quiet: false,
     verbose: false,
   };
 

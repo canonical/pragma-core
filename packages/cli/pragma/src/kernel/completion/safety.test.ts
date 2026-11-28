@@ -165,11 +165,13 @@ describe("script safety (PROTECTED)", () => {
 
   it("every inlined fish/zsh value list is inert", () => {
     for (const [, list] of code(scripts.fish).matchAll(/-a "([^"(][^"]*)"/g)) {
+      if (list === undefined) continue;
       expect(list).toMatch(/^[A-Za-z0-9@/:._+ -]*$/);
     }
     for (const [, list] of code(scripts.zsh).matchAll(
       /compadd -- ([^\n"]+)$/gm,
     )) {
+      if (list === undefined) continue;
       const words = list.split(";")[0] ?? "";
       expect(words.trimEnd()).toMatch(/^[A-Za-z0-9@/:._+ -]*$/);
     }

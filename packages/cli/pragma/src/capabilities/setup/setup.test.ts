@@ -13,7 +13,7 @@
  * routing, and MCP plan-first with the sub-verbs absent from the catalog.
  */
 
-import { spawnSync } from "node:child_process";
+import { type SpawnSyncReturns, spawnSync } from "node:child_process";
 import {
   chmodSync,
   cpSync,
@@ -144,7 +144,7 @@ const HOST_PATH = process.env.PATH ?? "";
 const onHost = (
   command: string,
   args: readonly string[],
-): ReturnType<typeof spawnSync<string>> =>
+): SpawnSyncReturns<string> =>
   spawnSync(command, [...args], {
     encoding: "utf-8",
     env: { ...process.env, PATH: HOST_PATH },
@@ -745,7 +745,11 @@ describe("setup lsp — per-editor multiselect (child rows)", () => {
     // it spawns the CLI FILE detection resolved, not the bare name, so an
     // editor found inside a macOS app bundle (nothing on PATH) works too.
     expect(execs.map((e) => basename(e.command))).toEqual(["bun", "codium"]);
-    expect(execs[1].command).toBe(join(stubDir, "codium"));
+    const second = execs.at(1);
+    if (second === undefined) {
+      throw new Error("expected a second editor exec");
+    }
+    expect(second.command).toBe(join(stubDir, "codium"));
   });
 
   it("composes nothing at all when every editor is deselected", async () => {
@@ -831,7 +835,11 @@ describe("setup lsp — the removal contract the other four rows implement", () 
       args: string[];
     })[];
     expect(execs.map((e) => basename(e.command))).toEqual(["code"]);
-    expect(execs[0].args).toEqual([
+    const first = execs.at(0);
+    if (first === undefined) {
+      throw new Error("expected an editor exec");
+    }
+    expect(first.args).toEqual([
       "--uninstall-extension",
       "canonical.terrazzo-lsp-extension",
     ]);
@@ -2331,15 +2339,20 @@ describe("setup lsp — prerequisites (bun absent / no editor CLI)", () => {
       // One fetch (bun add, durable staging) + one sideload per PENDING editor,
       // spawned as the resolved CLI file rather than the bare name.
       expect(execs.map((e) => basename(e.command))).toEqual(["bun", "codium"]);
-      expect(execs[1].command).toBe(join(stubDir, "codium"));
-      expect(execs[0].args).toEqual([
+      const fetchExec = execs.at(0);
+      const sideExec = execs.at(1);
+      if (fetchExec === undefined || sideExec === undefined) {
+        throw new Error("expected a fetch and a sideload exec");
+      }
+      expect(sideExec.command).toBe(join(stubDir, "codium"));
+      expect(fetchExec.args).toEqual([
         "add",
         "@canonical/terrazzo-lsp-extension@latest",
       ]);
-      expect(execs[1].args[0]).toBe("--install-extension");
+      expect(sideExec.args.at(0)).toBe("--install-extension");
       // The VSIX path is the staging dir's — durable, not a bunx /tmp cache.
-      expect(execs[1].args[1]).toContain(detected.stagingDir);
-      expect(execs[1].args[1]).toContain("terrazzo-lsp.vsix");
+      expect(sideExec.args.at(1)).toContain(detected.stagingDir);
+      expect(sideExec.args.at(1)).toContain("terrazzo-lsp.vsix");
     } finally {
       process.env.PATH = prevPath;
     }
@@ -3684,9 +3697,13 @@ describe("setup lsp — how each editor was found", () => {
       ["vscode", "bundle"],
     ]);
     expect(detection.editors[0]?.block).toBeUndefined();
+    const bundleEditor = detection.editors.at(0);
+    if (bundleEditor === undefined) {
+      throw new Error("expected one bundle-detected editor");
+    }
     expect(detection.state).toBe("absent");
     expect(
-      describeEditorSource(detection.editors[0], {
+      describeEditorSource(bundleEditor, {
         global: home,
         project: "/p",
       }),
@@ -3720,9 +3737,13 @@ describe("setup lsp — how each editor was found", () => {
     // No BLOCK: nothing is wrong with the folder. The provenance itself is why
     // nothing can be installed — there is no CLI to run.
     expect(detection.editors[0]?.block).toBeUndefined();
-    expect(
-      describeEditorSource(detection.editors[0], await resolveRoots(rt)),
-    ).toBe("via user directory");
+    const dirEditor = detection.editors.at(0);
+    if (dirEditor === undefined) {
+      throw new Error("expected one user-directory-detected editor");
+    }
+    expect(describeEditorSource(dirEditor, await resolveRoots(rt))).toBe(
+      "via user directory",
+    );
 
     const { plan } = await buildSetupRun(rt, "lsp", "global");
     const row = plan.rows.find((r) => r.target === "lsp");
@@ -3767,7 +3788,11 @@ describe("setup lsp — how each editor was found", () => {
     try {
       const detection = await detectLsp(tmp("pragma-setup-proj-"));
       expect(firstLspBlock(detection)).toBeUndefined();
-      expect(lspBlockReason(detection.editors[0])).toBeUndefined();
+      const stubEditor = detection.editors.at(0);
+      if (stubEditor === undefined) {
+        throw new Error("expected one stub-detected editor");
+      }
+      expect(lspBlockReason(stubEditor)).toBeUndefined();
       expect(lspUninstallRemedy(detection)).toBeUndefined();
     } finally {
       process.env.PATH = prevPath;

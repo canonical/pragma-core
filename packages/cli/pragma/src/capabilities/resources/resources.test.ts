@@ -416,7 +416,7 @@ describe("resource surface over the server (embedded pack)", () => {
 
     const llm = inspect.output?.formatters?.llm;
     expect(llm).toBeDefined();
-    expect(read.text).toBe(llm?.(fromCli, TEST_FLAGS));
+    expect(read.text).toBe(llm?.(fromCli));
   });
 
   it("emits Turtle an RDF parser accepts", async () => {
@@ -432,9 +432,12 @@ describe("resource surface over the server (embedded pack)", () => {
     const ke = await import("@canonical/ke");
     const store = await ke.createStore({ sources: [file] });
     const result = await store.query(
-      "SELECT (COUNT(*) AS ?n) WHERE { ?s ?p ?o }",
+      ke.sparql`SELECT (COUNT(*) AS ?n) WHERE { ?s ?p ?o }`,
     );
     store.dispose();
+    if (result.type !== "select") {
+      throw new Error("expected a select result");
+    }
     expect(Number(result.bindings[0]?.n ?? 0)).toBeGreaterThan(0);
   });
 

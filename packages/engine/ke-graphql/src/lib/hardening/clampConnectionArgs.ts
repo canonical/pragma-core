@@ -14,9 +14,18 @@ import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from "./constants.js";
  * constants). Negative values pass through unchanged — the connection helpers
  * reject those with a GraphQLError, which this must not mask. Returns a new
  * args object; the input is not mutated.
+ *
+ * Cursor members (`after`/`before`) and any other connection argument are
+ * carried through untouched, so the clamp composes over whatever an argument
+ * object carries without constraining its shape.
  */
 export default function clampConnectionArgs<
-  T extends { first?: number | null; last?: number | null },
+  T extends {
+    first?: number | null;
+    last?: number | null;
+    after?: string | null;
+    before?: string | null;
+  },
 >(
   args: T,
   limits: { defaultPageSize: number; maxPageSize: number } = {

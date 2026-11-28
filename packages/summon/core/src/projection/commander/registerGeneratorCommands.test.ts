@@ -447,7 +447,11 @@ describe("the namespace command — shared stray and bare behavior", () => {
         exitCode: 2,
       },
     ]);
-    expect(renderUsageError((outcomes[0] as { error: never }).error)).toBe(
+    const outcome = outcomes[0];
+    if (outcome?.kind !== "usage-error") {
+      throw new Error("expected a usage-error outcome");
+    }
+    expect(renderUsageError(outcome.error)).toBe(
       "error: unknown command 'reakt'\nDid you mean 'bin component react'?",
     );
     expect(calls).toEqual([]);

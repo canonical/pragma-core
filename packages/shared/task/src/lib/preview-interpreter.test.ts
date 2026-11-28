@@ -759,7 +759,10 @@ describe("runPreview — Parallel and Race", () => {
   it("drives Parallel children sequentially against the shared overlay", async () => {
     const root = tempRoot();
     const target = join(root, "p.txt");
-    const task = parallel([writeFile(target, "x"), exists(target)]);
+    const task = parallel<boolean | void>([
+      writeFile(target, "x"),
+      exists(target),
+    ]);
     const { value, effects } = await runPreview(task);
     expect(value).toEqual([undefined, true]);
     expect(effects.map((e) => e._tag)).toEqual(["WriteFile", "Exists"]);
@@ -768,13 +771,21 @@ describe("runPreview — Parallel and Race", () => {
   it("propagates a Parallel child's failure", async () => {
     const root = tempRoot();
     await expect(
-      runPreview(parallel([readFile(join(root, "absent.txt")), succeed(1)])),
+      runPreview(
+        parallel<string | number>([
+          readFile(join(root, "absent.txt")),
+          succeed(1),
+        ]),
+      ),
     ).rejects.toMatchObject({ taskError: { code: "FILE_NOT_FOUND" } });
   });
 
   it("drives only the first Race child (deterministic preview)", async () => {
     const root = tempRoot();
-    const task = race([succeed("first"), writeFile(join(root, "never"), "x")]);
+    const task = race<string | void>([
+      succeed("first"),
+      writeFile(join(root, "never"), "x"),
+    ]);
     const { value, effects } = await runPreview(task);
     expect(value).toBe("first");
     expect(effects).toEqual([]);
@@ -791,7 +802,7 @@ describe("runPreview — Parallel and Race", () => {
     const started: string[] = [];
     const completed: string[] = [];
     const { effects } = await runPreview(
-      race([parallel([succeed(1)]), succeed(2)]),
+      race<number | number[]>([parallel([succeed(1)]), succeed(2)]),
       {
         onEffectStart: (effect) => started.push(effect._tag),
         onEffectComplete: (effect) => completed.push(effect._tag),

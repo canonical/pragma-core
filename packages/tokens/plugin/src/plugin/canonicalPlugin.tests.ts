@@ -235,7 +235,7 @@ describe("canonicalPlugin", () => {
       outputs.set(file, contents);
     });
     const resolver: ResolverLike = {
-      apply(input): TokenMap {
+      apply(input: Record<string, string>): TokenMap {
         return {
           "color.text": {
             $value: {
@@ -281,7 +281,7 @@ describe("canonicalPlugin", () => {
       outputs.set(file, contents);
     });
     const resolver: ResolverLike = {
-      apply(input): TokenMap {
+      apply(input: Record<string, string>): TokenMap {
         return {
           "color.text": {
             $value: {

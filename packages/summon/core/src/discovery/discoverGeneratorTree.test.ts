@@ -47,9 +47,14 @@ const notFound = () =>
   Promise.reject(Object.assign(new Error("ENOENT"), { code: "ENOENT" }));
 
 const fakeGenerator = (name: string): GeneratorDefinition => ({
-  meta: { name, description: `${name} gen`, version: "1.0.0" },
+  meta: {
+    name,
+    displayName: name,
+    description: `${name} gen`,
+    version: "1.0.0",
+  },
   prompts: [],
-  task: () => ({ _tag: "Pure" as const, value: undefined }),
+  generate: () => ({ _tag: "Pure" as const, value: undefined }),
 });
 
 /** Real temp package paths (created before test run). */
@@ -68,7 +73,7 @@ const ALL_TEMP_DIRS = [
 ];
 
 const GEN_TEMPLATE = (name: string) =>
-  `{ meta: { name: "${name}", description: "${name}", version: "1.0.0" }, prompts: [], task: () => ({ _tag: "Pure", value: undefined }) }`;
+  `{ meta: { name: "${name}", displayName: "${name}", description: "${name}", version: "1.0.0" }, prompts: [], generate: () => ({ _tag: "Pure", value: undefined }) }`;
 
 beforeAll(() => {
   for (const d of ALL_TEMP_DIRS) rmSync(d, { recursive: true, force: true });

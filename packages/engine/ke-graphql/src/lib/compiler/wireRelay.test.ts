@@ -11,7 +11,8 @@ import type {
 import type { FieldPlan, InterfacePlan, SchemaPlan, TypePlan } from "./emit.js";
 import wireRelay from "./wireRelay.js";
 
-type Resolve = GraphQLFieldResolver<EntityValue, CompilerContext>;
+/** A resolver callable with either a real parent entity or an undefined root. */
+type Resolve = GraphQLFieldResolver<EntityValue | undefined, CompilerContext>;
 
 const nameMap: NameMap = {
   toGraphQL: () => undefined,

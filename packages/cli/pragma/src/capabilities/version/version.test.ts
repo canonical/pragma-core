@@ -25,6 +25,9 @@ const FLAGS: GlobalFlags = {
 };
 const REAL = { dryRun: false, undo: false, yes: false };
 const versionVerb = versionModule.verbs[0];
+if (versionVerb === undefined) {
+  throw new Error("expected a version verb");
+}
 
 describe("version — covenant-exact emission (PROTECTED)", () => {
   it("emits a no-argument self-verb with NO tool", () => {

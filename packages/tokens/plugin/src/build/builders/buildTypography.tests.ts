@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import type { Artifact } from "../../artifact/types.js";
 import EmittedPropertyRegistry from "../emittedPropertyRegistry.js";
-import type { GetTransformsFn, OutputFileFn, ResolverLike } from "../shims.js";
+import type {
+  GetTransformsFn,
+  OutputFileFn,
+  ResolvedTokenMap,
+  ResolverLike,
+} from "../shims.js";
 import buildTypography from "./buildTypography.js";
 
 /** A resolver whose apply() returns the given tokens for every permutation. */
@@ -167,7 +172,7 @@ describe("buildTypography", () => {
   it("emits typography that exists only in a non-default product", () => {
     const artifact: Artifact = {};
     const resolver: ResolverLike = {
-      apply(input) {
+      apply(input: Record<string, string>): ResolvedTokenMap {
         if (input.product !== "site") return {};
         return {
           "typography.heading.display": {

@@ -9,7 +9,8 @@
 import { $, gen, prompt } from "@canonical/task";
 import { describe, expect, it, vi } from "vitest";
 import { bootRuntime } from "../../runtime/boot.js";
-import type { GlobalFlags, VerbSpec } from "../../spec/types.js";
+import type { GlobalFlags } from "../../runtime/types.js";
+import type { VerbSpec } from "../../spec/types.js";
 import { executeVerb, type MutationFlags } from "./dispatch.js";
 
 const FLAGS: GlobalFlags = {

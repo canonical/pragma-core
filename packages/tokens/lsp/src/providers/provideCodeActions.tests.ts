@@ -38,7 +38,6 @@ const ARTIFACT: RawArtifact = {
       valueLight: "#0000ff",
       tier: "semantic",
       cssOutputFile: "/project/dist/tokens.css",
-      aliasOf: "--color-raw-blue",
     },
   },
 };

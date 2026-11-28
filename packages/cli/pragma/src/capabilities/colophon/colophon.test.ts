@@ -21,12 +21,13 @@ import { PragmaError } from "../../kernel/error/PragmaError.js";
 import { parsePackDefinition } from "../../kernel/packs/schema.js";
 import { executeVerb } from "../../kernel/project/cli/dispatch.js";
 import { bootRuntime } from "../../kernel/runtime/boot.js";
+import type { GlobalFlags } from "../../kernel/runtime/types.js";
 import { emitSurface, emitVerb } from "../../kernel/spec/emitSurface.js";
 import {
   assertConforms,
   type Covenant,
 } from "../../kernel/spec/surfaceConformance.js";
-import type { GlobalFlags, VerbSpec } from "../../kernel/spec/types.js";
+import type { VerbSpec } from "../../kernel/spec/types.js";
 import { projectMcp } from "../../testing/helpers/projectMcp.js";
 import { collectColophon } from "./collectColophon.js";
 import { colophonFormatters } from "./colophon.render.js";

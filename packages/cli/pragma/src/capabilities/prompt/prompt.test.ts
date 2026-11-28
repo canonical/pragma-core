@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { listPromptSummaries } from "../../kernel/project/mcp/prompts/source.js";
 import { bootRuntime } from "../../kernel/runtime/boot.js";
 import { resolveSources } from "../../kernel/runtime/resolveSources.js";
-import type { GlobalFlags } from "../../kernel/spec/types.js";
+import type { GlobalFlags } from "../../kernel/runtime/types.js";
 import { CANONICAL_TTL } from "../../testing/fixtures/graph/canonical.js";
 import {
   bootFixtureRuntime,

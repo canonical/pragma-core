@@ -25,6 +25,7 @@ const TAGGED: RenderStyle = {
   dim: (t) => `<d>${t}</d>`,
   cyan: (t) => `<c>${t}</c>`,
   green: (t) => `<g>${t}</g>`,
+  red: (t) => `<r>${t}</r>`,
   yellow: (t) => `<y>${t}</y>`,
 };
 

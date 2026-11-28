@@ -21,7 +21,7 @@ export default function checkNoColorScheme(
       if (values.isSuppressed("css/no-color-scheme", i, ctx.directives))
         continue;
       const col = lines[i].indexOf("light-dark");
-      const startCol = col >= 0 ? col : 0;
+      const startCol = Math.max(col, 0);
       const endCol = col >= 0 ? col + "light-dark".length : 0;
       results.push(
         makeDiagnostic(
