@@ -9,12 +9,11 @@
     "ignoreUnknown": false,
     "includes": [
       "**",
-      "!**/node_modules",
-      "!**/dist",
       "!**/*.gen.ts",
-      "!**/storybook-static",
-      "!**/coverage",
-      "!**/.build-cache"
+      "!!**/dist",
+      "!!**/storybook-static",
+      "!!**/coverage",
+      "!!**/.build-cache"
     ]
   },
   "formatter": {
