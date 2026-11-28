@@ -118,7 +118,7 @@ export default function InstancesPage(): ReactElement {
 <% if (intl) { -%>
           <dd>
             {t("dashboard.instances.memoryValue", {
-              value: formatters.number(selected.memoryGib),
+              value: formatters.formatNumber(selected.memoryGib),
             })}
           </dd>
 <% } else { -%>

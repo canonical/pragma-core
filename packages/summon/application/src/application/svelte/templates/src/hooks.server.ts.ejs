@@ -1,13 +1,51 @@
-<% if (intl) { %>import { getDocumentAttributes, negotiateLocale } from "@canonical/i18n-core";
-import { config } from "$lib/i18n";
-<% } %>import type { Handle } from "@sveltejs/kit";
+<% if (intl) { -%>
+import { getDocumentAttributes, negotiateLocale } from "@canonical/i18n-core";
+<% } -%>
+import type { Handle } from "@sveltejs/kit";
+<% if (intl) { -%>
+import { i18nConfig } from "./i18n/index.js";
+<% } -%>
+import readTheme from "./lib/ThemeSelector/readTheme.js";
 
+/**
+<% if (intl) { -%>
+ * Reads the request's theme and locale, and writes them into the document's
+ * `<html>` before first paint: the theme class, `lang` and `dir`. HTML is
+ * private and not stored, because both depend on the request's cookies.
+<% } else { -%>
+ * Reads the request's theme, and writes its class into the document's
+ * `<html>` before first paint. HTML is private and not stored, because it
+ * depends on the request's cookies.
+<% } -%>
+ */
 export const handle: Handle = async ({ event, resolve }) => {
-  const theme = event.cookies.get("theme");
-  event.locals.theme = theme === "light" || theme === "dark" ? theme : "";
-<% if (intl) { %>  event.locals.locale = negotiateLocale(config, { cookieHeader: event.request.headers.get("cookie"), acceptLanguage: event.request.headers.get("accept-language") });
-  const { lang, dir } = getDocumentAttributes(config, event.locals.locale);
-<% } %>  const response = await resolve(event, { transformPageChunk: ({ html }) => html.replace("%theme%", event.locals.theme)<% if (intl) { %>.replace("%lang%", lang).replace("%dir%", dir)<% } %> });
-  if (response.headers.get("content-type")?.includes("text/html")) response.headers.set("cache-control", "private, no-store");
+  const cookieHeader = event.request.headers.get("cookie");
+
+  event.locals.theme = readTheme(cookieHeader);
+<% if (intl) { -%>
+  event.locals.locale = negotiateLocale(i18nConfig, {
+    cookieHeader,
+    acceptLanguage: event.request.headers.get("accept-language"),
+  });
+  const { lang, dir } = getDocumentAttributes(i18nConfig, event.locals.locale);
+<% } -%>
+
+  const response = await resolve(event, {
+    transformPageChunk: ({ html }) =>
+<% if (intl) { -%>
+      html
+        .replace("%theme%", event.locals.theme ? ` ${event.locals.theme}` : "")
+        .replace("%lang%", lang)
+        .replace("%dir%", dir),
+<% } else { -%>
+      html.replace(
+        "%theme%",
+        event.locals.theme ? ` ${event.locals.theme}` : "",
+      ),
+<% } -%>
+  });
+  if (response.headers.get("content-type")?.includes("text/html")) {
+    response.headers.set("cache-control", "private, no-store");
+  }
   return response;
 };

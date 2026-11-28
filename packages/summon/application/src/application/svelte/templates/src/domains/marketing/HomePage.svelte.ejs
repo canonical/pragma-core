@@ -1,0 +1,47 @@
+<script lang="ts">
+  import formatDocumentTitle from "../../formatDocumentTitle.js";
+<% if (intl) { -%>
+  import {
+    createAppTranslator,
+    getLocaleSource,
+    type MessageKey,
+  } from "../../i18n/index.js";
+<% } -%>
+  import {
+    CodeMessage,
+    ExampleComponent,
+    LazyComponent,
+  } from "../../lib/index.js";
+
+  let {
+    streamed,
+  }: {
+    /** The delayed fetch the route's `load` returns without awaiting it. */
+    streamed: Promise<<%= intl ? "MessageKey" : "string" %>>;
+  } = $props();
+<% if (intl) { -%>
+
+  const locale = getLocaleSource();
+  const t = $derived(createAppTranslator($locale));
+<% } -%>
+</script>
+
+<svelte:head><title>{formatDocumentTitle(<%- str("home.title", "Home") %>)}</title></svelte:head>
+
+<section aria-labelledby="home-title">
+  <h1 id="home-title"><%- msg("home.heading", "Home") %></h1>
+  <p><%- msg("home.tagline", "Welcome to the SvelteKit boilerplate.") %></p>
+
+  <h2><%- msg("home.exampleHeading", "Example component") %></h2>
+  <!-- The explanatory paragraphs name files and APIs. They are translated like
+       the rest of the page; the names sit between backticks in every catalog,
+       and CodeMessage renders them as code. -->
+  <CodeMessage message=<%- attr("home.exampleBody", "A plain component scaffolded alongside the app. It ships with a Storybook story (`ExampleComponent.stories.svelte`) and a test — the starting point for your own components.") %> />
+  <ExampleComponent><%- msg("home.exampleGreeting", "Hello from ExampleComponent") %></ExampleComponent>
+
+  <h2><%- msg("home.streamingHeading", "Streaming with await") %></h2>
+  <CodeMessage message=<%- attr("home.streamingBody", "`LazyComponent` awaits a synthetic delayed fetch that the page's `load` returns without awaiting it. SvelteKit streams the page shell first with the fallback inside this `{#await}` block, then streams the resolved content in — no second request.") %> />
+  <LazyComponent data={streamed}>
+    {#snippet pending()}<p><%- msg("home.streamFallback", "Loading streamed content…") %></p>{/snippet}
+  </LazyComponent>
+</section>

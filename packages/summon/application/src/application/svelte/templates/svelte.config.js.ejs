@@ -1,7 +1,17 @@
-import adapter from "@sveltejs/adapter-<%= spa ? 'static' : 'node' %>";
+<% if (spa) { -%>
+import adapter from "@sveltejs/adapter-static";
+<% } else { -%>
+import adapter from "@sveltejs/adapter-node";
+<% } -%>
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
 export default {
   preprocess: vitePreprocess(),
-  kit: { adapter: adapter(<% if (spa) { %>{ fallback: "200.html" }<% } %>) },
+<% if (spa) { -%>
+  // A client-only build: the static host serves 200.html for every path it
+  // has no file for, and the router renders the page in the browser.
+  kit: { adapter: adapter({ fallback: "200.html" }) },
+<% } else { -%>
+  kit: { adapter: adapter() },
+<% } -%>
 };

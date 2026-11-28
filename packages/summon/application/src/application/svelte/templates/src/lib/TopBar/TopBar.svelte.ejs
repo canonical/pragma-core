@@ -1,0 +1,32 @@
+<script lang="ts">
+<% if (intl) { -%>
+  import { createAppTranslator, getLocaleSource } from "../../i18n/index.js";
+<% } -%>
+  import Navigation from "../Navigation/index.js";
+  import type { TopBarProps } from "./types.js";
+  import "./styles.css";
+
+  const componentCssClassName = "ds top-bar";
+
+  let { currentUrl, theme, class: className, ...rest }: TopBarProps = $props();
+<% if (intl) { -%>
+
+  const locale = getLocaleSource();
+  const t = $derived(createAppTranslator($locale));
+<% } -%>
+</script>
+
+<header {...rest} class={[componentCssClassName, "surface", className]}><a class="name" aria-current={currentUrl === "/" ? "page" : undefined} href="/"><%- msg("app.name", name) %></a><Navigation {currentUrl} {theme} /></header>
+
+<!-- @component
+The bar across the top of every page: the application's name, then the demo
+navigation — one link per area of the scaffold, followed by the theme<% if (intl) { %> and
+language<% } %> selector<% if (intl) { %>s<% } %>. It is scaffolding for exploring what the scaffold ships;
+an application replaces the links with its own.
+
+It sits above <% if (appShell) { %>both page layouts: the public pages' constrained column and the
+dashboard's application shell<% } else { %>the public pages' constrained column<% } %>. It is a `.surface`, so the selectors read the
+surface channels the design system's inputs expect.
+
+`import { TopBar } from "$lib";`
+-->

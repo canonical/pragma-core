@@ -99,7 +99,7 @@ export const CREATE_SURFACE: Readonly<Record<string, SurfaceCommand>> = {
       {
         "name": "forms",
         "type": "confirm",
-        "message": "Include a native contact form demonstration?",
+        "message": "Include form components?",
         "default": true,
         "group": "Application"
       },

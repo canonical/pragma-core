@@ -5,7 +5,7 @@
 // which the renderer links from the built HTML.
 import "#styles/app.css";
 <% if (intl) { -%>
-import { documentAttrs, isSupportedLocale } from "@canonical/i18n-core";
+import { getDocumentAttributes, isSupportedLocale } from "@canonical/i18n-core";
 import { I18nProvider } from "@canonical/i18n-react";
 <% } -%>
 import { HeadProvider } from "@canonical/react-head";
@@ -23,6 +23,7 @@ import { fetchQuery, RelayEnvironmentProvider } from "react-relay";
 import { catalogs, i18nConfig } from "#i18n/index.js";
 <% } -%>
 import LoadingMessage from "#lib/LoadingMessage/index.js";
+import { ServerThemeContext } from "#lib/ThemeSelector/index.js";
 <% if (relay) { -%>
 import { createEnvironment } from "#relay/environment.js";
 <% } -%>
@@ -284,7 +285,7 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
   // `<html lang dir>` must be right on first paint for assistive technology
   // and RTL locales; after hydration the client's locale source keeps both
   // attributes in sync with every switch.
-  const { lang, dir } = documentAttrs(i18nConfig, locale);
+  const { lang, dir } = getDocumentAttributes(i18nConfig, locale);
 
 <% } -%>
   // The root declaration plus the theme, on one element. `app` is the context
@@ -327,18 +328,22 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
           <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
             <HeadProvider titleTemplate={formatDocumentTitle}>
               <RelayEnvironmentProvider environment={relayEnvironment}>
-                <RouterProvider router={router}>
-                  <Outlet fallback={<LoadingMessage />} />
-                </RouterProvider>
+                <ServerThemeContext.Provider value={initialData.theme}>
+                  <RouterProvider router={router}>
+                    <Outlet fallback={<LoadingMessage />} />
+                  </RouterProvider>
+                </ServerThemeContext.Provider>
               </RelayEnvironmentProvider>
             </HeadProvider>
           </I18nProvider>
 <% } else { -%>
           <HeadProvider titleTemplate={formatDocumentTitle}>
             <RelayEnvironmentProvider environment={relayEnvironment}>
-              <RouterProvider router={router}>
-                <Outlet fallback={<LoadingMessage />} />
-              </RouterProvider>
+              <ServerThemeContext.Provider value={initialData.theme}>
+                <RouterProvider router={router}>
+                  <Outlet fallback={<LoadingMessage />} />
+                </RouterProvider>
+              </ServerThemeContext.Provider>
             </RelayEnvironmentProvider>
           </HeadProvider>
 <% } -%>
@@ -374,16 +379,20 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
 <% if (intl) { -%>
           <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
             <HeadProvider titleTemplate={formatDocumentTitle}>
-              <RouterProvider router={router}>
-                <Outlet fallback={<LoadingMessage />} />
-              </RouterProvider>
+              <ServerThemeContext.Provider value={initialData.theme}>
+                <RouterProvider router={router}>
+                  <Outlet fallback={<LoadingMessage />} />
+                </RouterProvider>
+              </ServerThemeContext.Provider>
             </HeadProvider>
           </I18nProvider>
 <% } else { -%>
           <HeadProvider titleTemplate={formatDocumentTitle}>
-            <RouterProvider router={router}>
-              <Outlet fallback={<LoadingMessage />} />
-            </RouterProvider>
+            <ServerThemeContext.Provider value={initialData.theme}>
+              <RouterProvider router={router}>
+                <Outlet fallback={<LoadingMessage />} />
+              </RouterProvider>
+            </ServerThemeContext.Provider>
           </HeadProvider>
 <% } -%>
         </div>

@@ -128,9 +128,11 @@ describe("create over MCP (PROTECTED)", () => {
         confirm: true,
       });
       expect(applied.ok).toBe(true);
-      expect(existsSync(join(dir, "svelte-app/src/routes/+page.svelte"))).toBe(
-        true,
-      );
+      expect(
+        existsSync(
+          join(dir, "svelte-app/src/routes/(top-bar)/(public)/+page.svelte"),
+        ),
+      ).toBe(true);
       mkdirSync(join(dir, "src/routes/invoices"), { recursive: true });
       writeFileSync(
         join(dir, "src/routes/invoices/+page.svelte"),
