@@ -77,6 +77,7 @@
  * `?? []` at the one call site with no row able to reach it.
  */
 
+import { join } from "node:path";
 import type { PlatformEnv } from "./platformPaths.js";
 import {
   userConfigBase,
@@ -117,11 +118,11 @@ export const vscodeUserDir = (
 ): string => {
   switch (p.platform) {
     case "darwin":
-      return `${userDataBase(p)}/${product}/User`;
+      return join(userDataBase(p), product, "User");
     case "win32":
-      return `${userConfigBase(p)}/${product}/User`;
+      return join(userConfigBase(p), product, "User");
     default:
-      return `${xdgConfigHome(p)}/${product}/User`;
+      return join(xdgConfigHome(p), product, "User");
   }
 };
 

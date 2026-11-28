@@ -123,7 +123,7 @@ programs.vscode.profiles.default.extensions = [
 **A managed MCP config.** A `mcp.json` that resolves into the store is skipped the same way, and the `next:` line prints the exact entry a write would have emitted — so pasting it into your own config leaves `pragma doctor` reporting the harness as registered rather than as drift:
 
 ```json
-{ "servers": { "pragma": { "command": "pragma", "args": ["mcp", "serve"] } } }
+{"servers":{"pragma":{"command":"pragma","args":["mcp","serve"]}}}
 ```
 
 A read-only path that is not in the store reports as read-only, and its remedy is about permissions instead: make the folder writable, then run the step again.

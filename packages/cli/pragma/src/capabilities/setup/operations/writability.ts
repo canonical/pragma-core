@@ -12,11 +12,11 @@
  * works there: declaring the extension, or the MCP entry, in the config that
  * owns the directory.
  *
- * Per the owner, 2026-09-16: the decision is made by the DIRECTORY, never by
- * the OS. Nix is not a platform to branch on — a Nix user's home directory is
- * ordinary, a non-Nix user can have a read-only mount, and `/etc/nixos` says
- * nothing about whether THIS path is writable. So the probe walks the path it
- * was actually given.
+ * The decision is made by the DIRECTORY, never by the OS. Nix is
+ * not a platform to branch on — a Nix user's home directory is ordinary, a
+ * non-Nix user can have a read-only mount, and `/etc/nixos` says nothing about
+ * whether THIS path is writable. So the probe walks the path it was actually
+ * given.
  *
  * The whole filesystem surface is the injected {@link FsProbe}, so every
  * branch is exercised over a seam rather than by arranging a real read-only
@@ -41,7 +41,7 @@ const NIX_STORE_PREFIX = "/nix/store/";
  */
 export interface FsProbe {
   existsSync(path: string): boolean;
-  accessSync(path: string, mode?: number): void;
+  accessSync(path: string, mode: number): void;
   realpathSync(path: string): string;
 }
 

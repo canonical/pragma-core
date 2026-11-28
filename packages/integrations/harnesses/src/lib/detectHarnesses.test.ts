@@ -90,6 +90,35 @@ describe("detectHarnesses", () => {
     expect(ids).toContain("cursor");
   });
 
+  it("records WHICH signals matched in `matched`, not just the confidence tier", () => {
+    // `matched` supplies the global-band distinction the tier cannot: a
+    // project-relative directory and one in the user's home both score `high`,
+    // and only the matched list tells them apart. Asserted against REAL
+    // detection here, inside the producer's own package, so the field is pinned
+    // at the source rather than only cross-package from the CLI's setup suite.
+    const result = dryRunWith(
+      detectHarnesses("/project", PLATFORM),
+      new Map<string, (effect: Effect) => unknown>([
+        [
+          "Exists",
+          (effect) =>
+            (effect as Effect & { _tag: "Exists"; path: string }).path ===
+            "/home/tester/.claude",
+        ],
+      ]),
+    );
+    const claude = result.value.find((d) => d.harness.id === "claude-code");
+    expect(claude).toBeDefined();
+    // The HOME `~/.claude` directory matched; the project `.mcp.json` and the
+    // `claude` process did not — `matched` records the originals that fired,
+    // which the tier alone could not tell apart (a project dir and a home dir
+    // both score `high`).
+    expect(
+      claude?.matched.filter((s) => "path" in s).map((s) => s.path),
+    ).toEqual(["~/.claude"]);
+    expect(claude?.confidence).toBe("high");
+  });
+
   it("returns empty array when no signals match", () => {
     const result = dryRunWith(
       detectHarnesses("/project", PLATFORM),

@@ -441,7 +441,7 @@ function blockedMcpRemedy(
 
 /** The groups whose file cannot be written, in `d.groups` order. */
 export const blockedMcpGroups = (d: McpDetection): readonly TargetGroup[] =>
-  d.groups.filter((group) => d.blockedByPath.has(group.path));
+  d.groups.filter((group) => mcpGroupBlock(d, group.path) !== undefined);
 
 /**
  * The FIRST group whose file cannot be written, with its reason and its remedy
@@ -454,20 +454,22 @@ export const blockedMcpGroups = (d: McpDetection): readonly TargetGroup[] =>
  *
  * @param d - The detection gathered up front.
  * @param roots - The two roots the path renders relative to.
+ * @param where - Which groups to consider; defaults to every group.
  * @returns The first block's reason and remedy, or `undefined`.
  */
 export const firstMcpBlock = (
   d: McpDetection,
   roots: Roots,
-): { readonly reason: string; readonly remedy: string } | undefined => {
+  where: (group: TargetGroup) => boolean = () => true,
+): { readonly headline: string; readonly remedy: string } | undefined => {
   // A walk rather than `blockedMcpGroups(d).at(0)`: the group and its block
   // come out together, so nothing has to assert afterwards that the block a
   // filter just proved is there really is.
-  for (const group of d.groups) {
+  for (const group of d.groups.filter(where)) {
     const block = mcpGroupBlock(d, group.path);
     if (block !== undefined) {
       return {
-        reason: describeMcpBlock(block, group.path, roots),
+        headline: describeMcpBlock(block, group.path, roots),
         remedy: blockedMcpRemedy(d, group, roots),
       };
     }
@@ -535,7 +537,7 @@ export const ownedMcpGroups = (d: McpDetection): readonly TargetGroup[] =>
       mcpGroupState(d, group.path) !== "absent" &&
       // A blocked file cannot be written, so it cannot be un-written either.
       // The row says so rather than composing a reversal that would fail.
-      !d.blockedByPath.has(group.path),
+      mcpGroupBlock(d, group.path) === undefined,
   );
 
 /**
