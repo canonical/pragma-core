@@ -6997,7 +6997,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.border ;
-    dt:coordinate dt:coordinate.lifecycle.inProgress ;
+    dt:coordinate dt:coordinate.lifecycle.in_progress ;
     dt:derivedFrom dt:color.border.information .
 
 []
@@ -7201,7 +7201,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.foreground.secondary ;
-    dt:coordinate dt:coordinate.lifecycle.inProgress ;
+    dt:coordinate dt:coordinate.lifecycle.in_progress ;
     dt:derivedFrom dt:color.foreground.secondary.information .
 
 []
@@ -7303,7 +7303,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.icon ;
-    dt:coordinate dt:coordinate.lifecycle.inProgress ;
+    dt:coordinate dt:coordinate.lifecycle.in_progress ;
     dt:derivedFrom dt:color.icon.information .
 
 []
@@ -7405,7 +7405,7 @@
 []
     a dt:ResolvedValue ;
     dt:forSymbol dt:modifier.color.text ;
-    dt:coordinate dt:coordinate.lifecycle.inProgress ;
+    dt:coordinate dt:coordinate.lifecycle.in_progress ;
     dt:derivedFrom dt:color.text.information .
 
 []

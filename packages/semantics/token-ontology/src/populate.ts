@@ -667,7 +667,6 @@ const FAMILY_ENCODING: Record<string, string> = {
   release: "release",
 };
 const CONTEXT_ENCODING: Record<string, string> = {
-  "lifecycle.inProgress": "in_progress",
   "surface.layer1": "surface1",
   "surface.layer2": "surface2",
   "surface.layer3": "surface3",

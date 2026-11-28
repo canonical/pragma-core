@@ -14945,10 +14945,10 @@ dt:context.importance.tertiary
 dt:axis.lifecycle
     a w3c-tokens:ResolverModifier ;
     w3c-tokens:name "lifecycle" ;
-    w3c-tokens:description "Lifecycle modifier family. Contexts: planned, inProgress, completed, failed." ;
+    w3c-tokens:description "Lifecycle modifier family. Contexts: planned, in_progress, completed, failed." ;
     w3c-tokens:context dt:context.lifecycle.completed ;
     w3c-tokens:context dt:context.lifecycle.failed ;
-    w3c-tokens:context dt:context.lifecycle.inProgress ;
+    w3c-tokens:context dt:context.lifecycle.in_progress ;
     w3c-tokens:context dt:context.lifecycle.none ;
     w3c-tokens:context dt:context.lifecycle.planned ;
     w3c-tokens:default dt:context.lifecycle.none .
@@ -14963,9 +14963,9 @@ dt:context.lifecycle.failed
     w3c-tokens:name "failed" ;
     w3c-tokens:includes ( <global/semantic/modifier/lifecycle/failed.tokens.json> ) .
 
-dt:context.lifecycle.inProgress
+dt:context.lifecycle.in_progress
     a w3c-tokens:ResolverContext ;
-    w3c-tokens:name "inProgress" ;
+    w3c-tokens:name "in_progress" ;
     w3c-tokens:includes ( <global/semantic/modifier/lifecycle/in-progress.tokens.json> ) .
 
 dt:context.lifecycle.none

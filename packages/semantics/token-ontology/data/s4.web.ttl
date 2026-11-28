@@ -98,17 +98,17 @@
     dt-web:selector ".failed" ;
     dt:selectsCoordinate dt:coordinate.lifecycle.failed .
 
+<cond/layer-ds-modifiers/in-progress>
+    a dt:Condition ;
+    dt-web:inAtRule ( "@layer ds.modifiers" ) ;
+    dt-web:selector ".in_progress" ;
+    dt:selectsCoordinate dt:coordinate.lifecycle.in_progress .
+
 <cond/layer-ds-modifiers/information>
     a dt:Condition ;
     dt-web:inAtRule ( "@layer ds.modifiers" ) ;
     dt-web:selector ".information" ;
     dt:selectsCoordinate dt:coordinate.criticality.information .
-
-<cond/layer-ds-modifiers/inprogress>
-    a dt:Condition ;
-    dt-web:inAtRule ( "@layer ds.modifiers" ) ;
-    dt-web:selector ".inProgress" ;
-    dt:selectsCoordinate dt:coordinate.lifecycle.inProgress .
 
 <cond/layer-ds-modifiers/media-prefers-color-scheme-dark/root-not-light>
     a dt:Condition ;
@@ -9382,7 +9382,7 @@
         dt:computedFrom <--color-border-information> ] ,
     [
         a dt:Declaration ;
-        dt:under <cond/layer-ds-modifiers/inprogress> ;
+        dt:under <cond/layer-ds-modifiers/in-progress> ;
         dt:emits "var(--color-border-information)" ;
         dt:at "modifiers.lifecycle.css:10" ;
         dt:references ( <--color-border-information> ) ;
@@ -9749,7 +9749,7 @@
         dt:computedFrom <--color-foreground-secondary-information> ] ,
     [
         a dt:Declaration ;
-        dt:under <cond/layer-ds-modifiers/inprogress> ;
+        dt:under <cond/layer-ds-modifiers/in-progress> ;
         dt:emits "var(--color-foreground-secondary-information)" ;
         dt:at "modifiers.lifecycle.css:11" ;
         dt:references ( <--color-foreground-secondary-information> ) ;
@@ -9892,7 +9892,7 @@
         dt:computedFrom <--color-icon-information> ] ,
     [
         a dt:Declaration ;
-        dt:under <cond/layer-ds-modifiers/inprogress> ;
+        dt:under <cond/layer-ds-modifiers/in-progress> ;
         dt:emits "var(--color-icon-information)" ;
         dt:at "modifiers.lifecycle.css:12" ;
         dt:references ( <--color-icon-information> ) ;
@@ -10073,7 +10073,7 @@
         dt:computedFrom <--color-text-information> ] ,
     [
         a dt:Declaration ;
-        dt:under <cond/layer-ds-modifiers/inprogress> ;
+        dt:under <cond/layer-ds-modifiers/in-progress> ;
         dt:emits "var(--color-text-information)" ;
         dt:at "modifiers.lifecycle.css:13" ;
         dt:references ( <--color-text-information> ) ;
