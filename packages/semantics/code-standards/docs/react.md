@@ -100,18 +100,19 @@ Use string concatenation or template literals to add class names.
 
 **Identifier:** `cs:react.component.dependencies`
 
-Place a subcomponent in its parent's `common/` folder. Imports flow down or sideways, never up to the parent or into another component's `common/`. A subcomponent shared by many components of one package may live in `subcomponent/<Name>/`, attached to one parent.
+Place a subcomponent in its parent's `common/`; imports flow down or sideways, never up or into another `common/`. A part shared across one package, or a public part placed inside a pattern, may live in `subcomponent/<Name>/` or `subcomponent/<Parent><Part>/`, attached to one parent.
 
 ### Do
 
-Keep a part in its parent's `common/`; put one many components share in `subcomponent/`
+Keep a part in its parent's `common/`; put a shared or pattern-placed part in `subcomponent/`
 ```
 src/lib/
   ├── component/Card/
   │   ├── Card.tsx
   │   └── common/Header/Header.tsx
-  └── subcomponent/Field/
-      └── Label/Label.tsx   // used by every *Field, attached as Field.Label
+  └── subcomponent/
+      ├── Field/Label/Label.tsx   // used by every *Field, attached as Field.Label
+      └── DataTableSettingsMenu/  // placed inside DataViews as DataTable.SettingsMenu
 ```
 
 ### Don't

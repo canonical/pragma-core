@@ -450,34 +450,24 @@ export const Variant1: Story = {
 
 **Identifier:** `cs:storybook.story.subcomponent_nesting`
 
-A subcomponent that has a parent component must stay nested inside the parent at `src/lib/component/<Parent>/common/<Part>/`, and its story `title` must nest it under the parent in the sidebar as `components/<Parent>/<Part>` (e.g. `components/Accordion/Item`). Such a subcomponent must never be hoisted to a top-level `src/lib/subcomponent/` folder or titled into the top-level `subcomponents/` sidebar group.
-
-Only free-standing subcomponents — those with no parent component — get their own top-level `src/lib/subcomponent/<Name>/` folder and a `subcomponents/<Name>` title. The top-level `subcomponents/` sidebar group is reserved for those.
+Keep a subcomponent with a parent in `<Parent>/common/<Part>/`, titled `components/<Parent>/<Part>`. A public part placed as a child of a pattern may live in `src/lib/subcomponent/<Parent><Part>/`, titled `subcomponents/<Parent><Part>`. Free-standing subcomponents use `subcomponent/<Name>/`.
 
 ### Do
 
-Nest a parented subcomponent's story under its parent component.
+Nest a part under its parent; title a pattern-placed part by parent and part
 ```typescript
 // src/lib/component/Accordion/common/Item/Item.stories.tsx
-// Item has a parent (Accordion): stays nested, title nests under the parent.
-const meta = {
-  title: "components/Accordion/Item",
-  component: Component,
-} satisfies Meta<typeof Component>;
+title: "components/Accordion/Item",
+// src/lib/subcomponent/DataTableSettingsMenu/DataTableSettingsMenu.stories.tsx
+title: "subcomponents/DataTableSettingsMenu",
 ```
 
 ### Don't
 
-Hoist a parented subcomponent to a top-level subcomponent/ folder or the subcomponents/ sidebar group.
+Hoist a component's part into `subcomponents/` under its bare name
 ```typescript
-// Bad: hoisting a parented subcomponent to a top-level subcomponent/ folder.
-// Item has a parent Accordion, so it must stay nested in the parent's common/
-// and be titled `components/Accordion/Item`, not lifted into the top-level
-// `subcomponents/` sidebar group.
 // src/lib/subcomponent/Item/Item.stories.tsx
-const meta = {
-  title: "subcomponents/Item",
-} satisfies Meta<typeof Component>;
+title: "subcomponents/Item",
 ```
 
 ---

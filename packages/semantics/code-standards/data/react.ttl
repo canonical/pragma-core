@@ -436,16 +436,17 @@ formValidation()
 cs:react.component.dependencies a cs:CodeStandard ;
     rdfs:label "Unidirectional component dependencies"@en ;
     cs:hasCategory cs:react ;
-    cs:description "Place a subcomponent in its parent's `common/` folder. Imports flow down or sideways, never up to the parent or into another component's `common/`. A subcomponent shared by many components of one package may live in `subcomponent/<Name>/`, attached to one parent." ;
+    cs:description "Place a subcomponent in its parent's `common/`; imports flow down or sideways, never up or into another `common/`. A part shared across one package, or a public part placed inside a pattern, may live in `subcomponent/<Name>/` or `subcomponent/<Parent><Part>/`, attached to one parent." ;
     cs:do [
-        cs:description "Keep a part in its parent's `common/`; put one many components share in `subcomponent/`" ;
+        cs:description "Keep a part in its parent's `common/`; put a shared or pattern-placed part in `subcomponent/`" ;
         cs:code """
 src/lib/
   ├── component/Card/
   │   ├── Card.tsx
   │   └── common/Header/Header.tsx
-  └── subcomponent/Field/
-      └── Label/Label.tsx   // used by every *Field, attached as Field.Label
+  └── subcomponent/
+      ├── Field/Label/Label.tsx   // used by every *Field, attached as Field.Label
+      └── DataTableSettingsMenu/  // placed inside DataViews as DataTable.SettingsMenu
     """
     ] ;
     cs:dont [
