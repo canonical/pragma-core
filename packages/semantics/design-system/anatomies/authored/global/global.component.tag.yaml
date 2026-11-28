@@ -1,8 +1,9 @@
 ---
-# TODO implementation: no reference in @canonical/react-ds-global or react-ds-global-form
+# TODO implementation: the work-in-progress Tag (formerly Label) in
+# @canonical/react-ds-global
 # A notation migration of the previous DSL: structure and bindings kept, values
-# migrated. The previous root uri said `global.component.label`, which names no
-# block; the block this anatomy belongs to is Tag.
+# migrated. The previous root uri said `global.component.label`, the component's
+# former name: Label is the old name of Tag, and this anatomy belongs to Tag.
 node:
   uri: global.component.tag
   styles:
