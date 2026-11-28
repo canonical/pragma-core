@@ -338,6 +338,38 @@ describe("parseThing", () => {
         """
     ] .
 
+# State Waits Standard
+cs:testing.unit.state_waits a cs:CodeStandard ;
+    rdfs:label "Wait on a state, never a duration"@en ;
+    cs:hasCategory cs:testing.unit ;
+    cs:description "A test waits for something it can observe: an element, an attribute, a settled promise, a store's value. It never waits for time to pass, and never raises a wait's timeout to outlast a delay. Except: code that schedules by time runs on a faked clock, advanced on purpose; a poll may be bounded by a count of frames; a mock may delay, but the test waits on its answer, never on the delay." ;
+    cs:do [
+        cs:description "Wait for the state the answer brings." ;
+        cs:language "typescript" ;
+        cs:code """
+it("shows the rows once the source answers", async () => {
+  const answer = Promise.withResolvers<Row[]>();
+  render(<Table load={() => answer.promise} />);
+  answer.resolve([{ id: "a" }]);
+  const table = screen.getByRole("table");
+  await waitFor(() => expect(table).toHaveAttribute("aria-busy", "false"));
+  expect(within(table).getAllByRole("row")).toHaveLength(2);
+});
+        """
+    ] ;
+    cs:dont [
+        cs:description "Sleep, or stretch a timeout to outwait latency." ;
+        cs:language "typescript" ;
+        cs:code """
+it("shows the rows once the source answers", async () => {
+  render(<Table load={fetchRows} />);
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  expect(screen.getAllByRole("row")).toHaveLength(2);
+  await screen.findByRole("img", {}, { timeout: 3000 });
+});
+        """
+    ] .
+
 # ── Integration testing standards (testing.integration.*) ─────────────
 
 # Integration Structure Standard

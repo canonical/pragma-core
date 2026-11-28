@@ -400,3 +400,37 @@ it("uses parsed config", () => {
 ```
 
 ---
+
+## Wait on a state, never a duration
+
+**Identifier:** `cs:testing.unit.state_waits`
+
+A test waits for something it can observe: an element, an attribute, a settled promise, a store's value. It never waits for time to pass, and never raises a wait's timeout to outlast a delay. Except: code that schedules by time runs on a faked clock, advanced on purpose; a poll may be bounded by a count of frames; a mock may delay, but the test waits on its answer, never on the delay.
+
+### Do
+
+Wait for the state the answer brings.
+```typescript
+it("shows the rows once the source answers", async () => {
+  const answer = Promise.withResolvers<Row[]>();
+  render(<Table load={() => answer.promise} />);
+  answer.resolve([{ id: "a" }]);
+  const table = screen.getByRole("table");
+  await waitFor(() => expect(table).toHaveAttribute("aria-busy", "false"));
+  expect(within(table).getAllByRole("row")).toHaveLength(2);
+});
+```
+
+### Don't
+
+Sleep, or stretch a timeout to outwait latency.
+```typescript
+it("shows the rows once the source answers", async () => {
+  render(<Table load={fetchRows} />);
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  expect(screen.getAllByRole("row")).toHaveLength(2);
+  await screen.findByRole("img", {}, { timeout: 3000 });
+});
+```
+
+---
