@@ -40,7 +40,7 @@ export default function OverviewPage(): ReactElement {
 
   function formatRelative(minutesAgo: number): string {
     const { value, unit } = selectRelativeTime(minutesAgo);
-    return formatters.relativeTime(value, unit, { numeric: "auto" });
+    return formatters.formatRelativeTime(value, unit, { numeric: "auto" });
   }
 <% } -%>
   const router = useRouter();
@@ -104,7 +104,7 @@ export default function OverviewPage(): ReactElement {
                 <Tile.Content>
                   <p className="figure">
 <% if (intl) { -%>
-                    {formatters.number(OVERVIEW_FIGURES.running)}
+                    {formatters.formatNumber(OVERVIEW_FIGURES.running)}
 <% } else { -%>
                     {number.format(OVERVIEW_FIGURES.running)}
 <% } -%>
@@ -118,7 +118,7 @@ export default function OverviewPage(): ReactElement {
                 <Tile.Content>
                   <p className="figure">
 <% if (intl) { -%>
-                    {formatters.number(OVERVIEW_FIGURES.stopped)}
+                    {formatters.formatNumber(OVERVIEW_FIGURES.stopped)}
 <% } else { -%>
                     {number.format(OVERVIEW_FIGURES.stopped)}
 <% } -%>
@@ -132,14 +132,14 @@ export default function OverviewPage(): ReactElement {
                 <Tile.Content>
 <% if (intl) { -%>
                   <p className="figure">
-                    {formatters.number(
+                    {formatters.formatNumber(
                       OVERVIEW_FIGURES.storageUsedTb,
                       TERABYTES,
                     )}
                   </p>
                   <p className="muted">
                     {t("dashboard.overview.storageOf", {
-                      total: formatters.number(
+                      total: formatters.formatNumber(
                         OVERVIEW_FIGURES.storageTotalTb,
                         TERABYTES,
                       ),
@@ -162,7 +162,7 @@ export default function OverviewPage(): ReactElement {
                 <Tile.Content>
                   <p className="figure">
 <% if (intl) { -%>
-                    {formatters.number(OVERVIEW_FIGURES.alerts)}
+                    {formatters.formatNumber(OVERVIEW_FIGURES.alerts)}
 <% } else { -%>
                     {number.format(OVERVIEW_FIGURES.alerts)}
 <% } -%>
