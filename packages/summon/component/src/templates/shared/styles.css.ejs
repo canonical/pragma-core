@@ -1,6 +1,13 @@
 /* Layer: <%= componentLayer %> (@canonical/styles README, "Cascade layers"). */
 
 @layer <%= componentLayer %> {
+  :root {
+    /* Border colour for the component's outline. */
+    --<%= kebabName %>-color-border: var(--color-border-muted);
+    /* Text colour for the component's content. */
+    --<%= kebabName %>-color-text: var(--color-text);
+  }
+
   .ds.<%= kebabName %> {
     /* Component styles */
   }

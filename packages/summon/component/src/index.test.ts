@@ -696,4 +696,21 @@ describe("generated stylesheet layer", () => {
     expect(content).toContain("No layer here");
     expect(content).toContain(":host {");
   });
+
+  it("documents each custom property directly above its declaration", () => {
+    const content = generateStyles(
+      "/repo/packages/react/ds-global",
+      "component/react",
+      "src/lib/component/Banner",
+    );
+
+    // The doc comment sits immediately above its --var:, never as a separate
+    // block removed from the declarations it describes.
+    expect(content).toContain(
+      `/* Border colour for the component's outline. */\n    --banner-color-border`,
+    );
+    expect(content).toContain(
+      `/* Text colour for the component's content. */\n    --banner-color-text`,
+    );
+  });
 });
