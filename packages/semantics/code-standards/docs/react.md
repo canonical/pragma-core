@@ -100,52 +100,29 @@ Use string concatenation or template literals to add class names.
 
 **Identifier:** `cs:react.component.dependencies`
 
-Component dependencies must follow a strict unidirectional flow:
-- Subcomponents must be in a `common/` folder within the parent component's directory
-- Dependencies can flow downwards (parent to subcomponent) or sideways (between siblings)
-- Dependencies must not flow upwards (subcomponent to parent)
+Place a subcomponent in its parent's `common/`; imports flow down or sideways, never up or into another `common/`. A part shared across one package, or a public part placed inside a pattern, may live in `subcomponent/<Name>/` or `subcomponent/<Parent><Part>/`, attached to one parent.
 
 ### Do
 
-Place subcomponents in a `common/` folder inside the parent component directory.
+Keep a part in its parent's `common/`; put a shared or pattern-placed part in `subcomponent/`
 ```
-Card/
-  ├── Card.tsx
-  ├── Card.test.tsx
-  ├── common/
-  │   ├── Header/
-  │   │   ├── Header.tsx
-  │   │   └── Header.test.tsx
-  │   ├── Footer/
-  │   │   ├── Footer.tsx
-  │   │   └── Footer.test.tsx
-  │   └── utils/
-  │       ├── helpers.ts
-  │       └── helpers.test.ts
-  └── index.ts
-```
-
-Allow subcomponents to depend on siblings or shared utilities within the same component scope.
-```typescript
-// Header.tsx can import from utils/
-import { helper } from '../utils/helpers.js';
-
-// Footer.tsx can import from Header.tsx
-import Header from '../Header.js';
+src/lib/
+  ├── component/Card/
+  │   ├── Card.tsx
+  │   └── common/Header/Header.tsx
+  └── subcomponent/
+      ├── Field/Label/Label.tsx   // used by every *Field, attached as Field.Label
+      └── DataTableSettingsMenu/  // placed inside DataViews as DataTable.SettingsMenu
 ```
 
 ### Don't
 
-Create dependencies that flow upwards from a subcomponent to its parent.
+Import upwards, or from another component's `common/`
 ```typescript
-// Bad: Header.tsx in Card/common/ should not import from Card.tsx
-import Card from '../../Card.js';
-```
-
-Allow external components to depend on the internal structure of another component.
-```typescript
-// Bad: AnotherComponent should not import from Card's internal common folder
-import Header from '../Card/common/Header.js';
+// Card/common/Header/Header.tsx
+import Card from "../../Card.js";
+// TextField/TextField.tsx
+import Label from "../CheckboxField/common/Label/index.js";
 ```
 
 ---

@@ -172,14 +172,15 @@ ro.observe(card);
 
 **Identifier:** `cs:css.media.scripting`
 
-Reveal script-only controls with `@media (scripting: enabled)`. Never hide the only way to finish a task with it; hide that on `[data-hydrated]`.
+Reveal a script-only control with `@media (scripting: enabled)`, or hide one under `@media (scripting: none)`, such as a trigger whose menu holds only actions. Never hide the only way to finish a task by query; hide that on `[data-hydrated]`.
 
 ### Do
 
-Reveal script-only controls by the query, and hide baseline ones on `[data-hydrated]`
+Show or hide script-only controls by the query, and hide baseline ones on `[data-hydrated]`
 ```css
 .ds.pager > .select, .ds.pager[data-hydrated] > .submit { display: none; }
 @media (scripting: enabled) { .ds.pager > .select { display: flex; } }
+@media (scripting: none) { .ds.contextual-menu-trigger.script-only { display: none; } }
 ```
 
 ### Don't
