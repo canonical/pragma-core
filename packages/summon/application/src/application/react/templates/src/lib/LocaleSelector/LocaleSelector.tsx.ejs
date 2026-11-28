@@ -1,4 +1,5 @@
 import { useLocale, useTranslation } from "@canonical/i18n-react";
+import { Button } from "@canonical/react-ds-global";
 <% if (forms) { -%>
 import { SelectInput } from "@canonical/react-ds-global-form";
 <% } -%>
@@ -29,6 +30,10 @@ function endonymOf(tag: string): string {
  * pronounces the endonym in its own language. Deliberately app-local: the
  * design-system tier ships no visual locale switcher.
 <% } -%>
+ *
+ * Without JavaScript, the form posts to `/language`, which stores the same
+ * cookie and sends the reader back; its Apply button is in `<noscript>`, so it
+ * never shows while JavaScript runs.
  */
 export default function LocaleSelector(): ReactElement {
   const { locale, locales, setLocale } = useLocale();
@@ -39,29 +44,38 @@ export default function LocaleSelector(): ReactElement {
   }
 
   return (
+    <form action="/language" method="post">
 <% if (forms) { -%>
-    <SelectInput
-      aria-label={t("locale.label")}
-      onChange={handleChange}
-      options={locales.map((tag) => ({
-        value: tag,
-        label: endonymOf(tag),
-        lang: tag,
-      }))}
-      value={locale}
-    />
+      <SelectInput
+        aria-label={t("locale.label")}
+        name="locale"
+        onChange={handleChange}
+        options={locales.map((tag) => ({
+          value: tag,
+          label: endonymOf(tag),
+          lang: tag,
+        }))}
+        value={locale}
+      />
 <% } else { -%>
-    <select
-      aria-label={t("locale.label")}
-      onChange={handleChange}
-      value={locale}
-    >
-      {locales.map((tag) => (
-        <option key={tag} value={tag} lang={tag}>
-          {endonymOf(tag)}
-        </option>
-      ))}
-    </select>
+      <select
+        aria-label={t("locale.label")}
+        name="locale"
+        onChange={handleChange}
+        value={locale}
+      >
+        {locales.map((tag) => (
+          <option key={tag} value={tag} lang={tag}>
+            {endonymOf(tag)}
+          </option>
+        ))}
+      </select>
 <% } -%>
+      <noscript>
+        <Button importance="secondary" type="submit">
+          {t("preferences.apply")}
+        </Button>
+      </noscript>
+    </form>
   );
 }

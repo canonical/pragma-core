@@ -1,23 +1,36 @@
 <% if (intl) { -%>
 import { useTranslation } from "@canonical/i18n-react";
 <% } -%>
+import { Button } from "@canonical/react-ds-global";
 <% if (forms) { -%>
 import { SelectInput } from "@canonical/react-ds-global-form";
 <% } -%>
 import { usePreferredTheme } from "@canonical/react-hooks";
+<% if (spa) { -%>
 import type { ChangeEvent, ReactElement } from "react";
-
-<% if (forms) { -%>
-/**
- * Colour-scheme picker driving `usePreferredTheme`. Built on the form
- * package's standalone `SelectInput`, so it wears the design system's input
- * chrome.
- */
 <% } else { -%>
-/** Colour-scheme picker driving `usePreferredTheme`. */
+import { type ChangeEvent, type ReactElement, useContext } from "react";
+import ServerThemeContext from "./ServerThemeContext.js";
 <% } -%>
+
+/**
+ * The colour-theme picker. With JavaScript, a change applies at once:
+ * `usePreferredTheme` swaps the class on `<html>` and writes the `theme`
+ * cookie. Without JavaScript, the form posts to `/preferences`, which stores
+ * the cookie and sends the reader back, and the server renders the theme
+ * class on `<html>`; its Apply button is in `<noscript>`, so it never shows
+ * while JavaScript runs.
+<% if (forms) { -%>
+ *
+ * Built on the form package's standalone `SelectInput`, so it wears the
+ * design system's input chrome.
+<% } -%>
+ */
 export default function ThemeSelector(): ReactElement {
   const { value, source, set, reset } = usePreferredTheme();
+<% if (!spa) { -%>
+  const serverTheme = useContext(ServerThemeContext);
+<% } -%>
 <% if (intl) { -%>
   const { t } = useTranslation();
 <% } -%>
@@ -32,30 +45,51 @@ export default function ThemeSelector(): ReactElement {
     }
   }
 
+<% if (spa) { -%>
   const selectValue = source === "system" ? "system" : value;
+<% } else { -%>
+  // The hook cannot read the cookie on the server, so there the stored
+  // theme comes from the server entry. In the browser the hook reads the same
+  // cookie, so the first client render matches.
+  const selectValue =
+    typeof document === "undefined"
+      ? (serverTheme ?? "system")
+      : source === "system"
+        ? "system"
+        : value;
+<% } -%>
 
   return (
+    <form action="/preferences" method="post">
 <% if (forms) { -%>
-    <SelectInput
-      aria-label=<%- attr("theme.label", "Color theme") %>
-      onChange={handleChange}
-      options={[
-        { value: "system", label: <%- str("theme.system", "System") %> },
-        { value: "light", label: <%- str("theme.light", "Light") %> },
-        { value: "dark", label: <%- str("theme.dark", "Dark") %> },
-      ]}
-      value={selectValue}
-    />
+      <SelectInput
+        aria-label=<%- attr("theme.label", "Color theme") %>
+        name="theme"
+        onChange={handleChange}
+        options={[
+          { value: "system", label: <%- str("theme.system", "System") %> },
+          { value: "light", label: <%- str("theme.light", "Light") %> },
+          { value: "dark", label: <%- str("theme.dark", "Dark") %> },
+        ]}
+        value={selectValue}
+      />
 <% } else { -%>
-    <select
-      aria-label=<%- attr("theme.label", "Color theme") %>
-      onChange={handleChange}
-      value={selectValue}
-    >
-      <option value="system"><%- msg("theme.system", "System") %></option>
-      <option value="light"><%- msg("theme.light", "Light") %></option>
-      <option value="dark"><%- msg("theme.dark", "Dark") %></option>
-    </select>
+      <select
+        aria-label=<%- attr("theme.label", "Color theme") %>
+        name="theme"
+        onChange={handleChange}
+        value={selectValue}
+      >
+        <option value="system"><%- msg("theme.system", "System") %></option>
+        <option value="light"><%- msg("theme.light", "Light") %></option>
+        <option value="dark"><%- msg("theme.dark", "Dark") %></option>
+      </select>
 <% } -%>
+      <noscript>
+        <Button importance="secondary" type="submit">
+          <%- msg("preferences.apply", "Apply") %>
+        </Button>
+      </noscript>
+    </form>
   );
 }

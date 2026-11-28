@@ -23,6 +23,7 @@ import { fetchQuery, RelayEnvironmentProvider } from "react-relay";
 import { catalogs, i18nConfig } from "#i18n/index.js";
 <% } -%>
 import LoadingMessage from "#lib/LoadingMessage/index.js";
+import { ServerThemeContext } from "#lib/ThemeSelector/index.js";
 <% if (relay) { -%>
 import { createEnvironment } from "#relay/environment.js";
 <% } -%>
@@ -327,18 +328,22 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
           <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
             <HeadProvider titleTemplate={formatDocumentTitle}>
               <RelayEnvironmentProvider environment={relayEnvironment}>
-                <RouterProvider router={router}>
-                  <Outlet fallback={<LoadingMessage />} />
-                </RouterProvider>
+                <ServerThemeContext.Provider value={initialData.theme}>
+                  <RouterProvider router={router}>
+                    <Outlet fallback={<LoadingMessage />} />
+                  </RouterProvider>
+                </ServerThemeContext.Provider>
               </RelayEnvironmentProvider>
             </HeadProvider>
           </I18nProvider>
 <% } else { -%>
           <HeadProvider titleTemplate={formatDocumentTitle}>
             <RelayEnvironmentProvider environment={relayEnvironment}>
-              <RouterProvider router={router}>
-                <Outlet fallback={<LoadingMessage />} />
-              </RouterProvider>
+              <ServerThemeContext.Provider value={initialData.theme}>
+                <RouterProvider router={router}>
+                  <Outlet fallback={<LoadingMessage />} />
+                </RouterProvider>
+              </ServerThemeContext.Provider>
             </RelayEnvironmentProvider>
           </HeadProvider>
 <% } -%>
@@ -374,16 +379,20 @@ export default function EntryServer(props: ServerEntrypointProps<InitialData>) {
 <% if (intl) { -%>
           <I18nProvider config={i18nConfig} catalogs={catalogs} locale={locale}>
             <HeadProvider titleTemplate={formatDocumentTitle}>
-              <RouterProvider router={router}>
-                <Outlet fallback={<LoadingMessage />} />
-              </RouterProvider>
+              <ServerThemeContext.Provider value={initialData.theme}>
+                <RouterProvider router={router}>
+                  <Outlet fallback={<LoadingMessage />} />
+                </RouterProvider>
+              </ServerThemeContext.Provider>
             </HeadProvider>
           </I18nProvider>
 <% } else { -%>
           <HeadProvider titleTemplate={formatDocumentTitle}>
-            <RouterProvider router={router}>
-              <Outlet fallback={<LoadingMessage />} />
-            </RouterProvider>
+            <ServerThemeContext.Provider value={initialData.theme}>
+              <RouterProvider router={router}>
+                <Outlet fallback={<LoadingMessage />} />
+              </RouterProvider>
+            </ServerThemeContext.Provider>
           </HeadProvider>
 <% } -%>
         </div>

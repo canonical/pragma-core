@@ -450,6 +450,24 @@ fallback.`,
           ),
           when(!spa, copy("src/server/preview.express.ts")),
           when(!spa, copy("src/server/preview.bun.ts")),
+          when(
+            !spa,
+            template({
+              source: src("src/server/handlePreferenceForm.ts.ejs"),
+              dest: dest("src/server/handlePreferenceForm.ts"),
+              vars,
+            }),
+          ),
+          when(
+            !spa,
+            template({
+              source: src("src/server/handlePreferenceForm.test.ts.ejs"),
+              dest: dest("src/server/handlePreferenceForm.test.ts"),
+              vars,
+            }),
+          ),
+          when(!spa, copy("src/server/preferenceFormMiddleware.ts")),
+          when(!spa, copy("src/server/resolveReturnTo.ts")),
 
           // Sitemap (rendered route at /sitemap.xml) — omitted by the SPA arm.
           // The getters are portable, but the renderer is the only consumer and it
@@ -782,7 +800,27 @@ fallback.`,
             dest: dest("src/lib/ThemeSelector/ThemeSelector.tsx"),
             vars,
           }),
-          copy("src/lib/ThemeSelector/index.ts"),
+          template({
+            source: src("src/lib/ThemeSelector/ThemeSelector.test.tsx.ejs"),
+            dest: dest("src/lib/ThemeSelector/ThemeSelector.test.tsx"),
+            vars,
+          }),
+          template({
+            source: src("src/lib/ThemeSelector/index.ts.ejs"),
+            dest: dest("src/lib/ThemeSelector/index.ts"),
+            vars,
+          }),
+          when(!spa, copy("src/lib/ThemeSelector/ServerThemeContext.ts")),
+          when(
+            !spa,
+            template({
+              source: src(
+                "src/lib/ThemeSelector/ThemeSelector.ssr.test.tsx.ejs",
+              ),
+              dest: dest("src/lib/ThemeSelector/ThemeSelector.ssr.test.tsx"),
+              vars,
+            }),
+          ),
 
           // Lib: LocaleSelector (when --intl is enabled)
           when(

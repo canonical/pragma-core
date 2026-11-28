@@ -571,6 +571,21 @@ describe("application/react generator", () => {
     expect(filePaths).toContain("my-app/src/server/preview.bun.ts");
     expect(filePaths).toContain("my-app/src/sitemap/renderer.ts");
     expect(filePaths).toContain("my-app/src/sitemap/getSitemapItems.ts");
+    // The theme and language forms post to the server without JavaScript.
+    expect(filePaths).toContain("my-app/src/server/handlePreferenceForm.ts");
+    expect(filePaths).toContain(
+      "my-app/src/server/handlePreferenceForm.test.ts",
+    );
+    expect(filePaths).toContain(
+      "my-app/src/server/preferenceFormMiddleware.ts",
+    );
+    expect(filePaths).toContain("my-app/src/server/resolveReturnTo.ts");
+    expect(filePaths).toContain(
+      "my-app/src/lib/ThemeSelector/ServerThemeContext.ts",
+    );
+    expect(filePaths).toContain(
+      "my-app/src/lib/ThemeSelector/ThemeSelector.ssr.test.tsx",
+    );
     // ClientOnly is an SSR-safety wrapper, so it rides --relay AND the SSR arm.
     expect(filePaths).toContain("my-app/src/lib/ClientOnly/ClientOnly.tsx");
   });
@@ -604,6 +619,13 @@ describe("application/react generator", () => {
     expect(
       filePaths.filter((p) => p?.startsWith("my-app/src/lib/ClientOnly/")),
     ).toEqual([]);
+    // With no server, nothing reads the theme on the server.
+    expect(filePaths).not.toContain(
+      "my-app/src/lib/ThemeSelector/ServerThemeContext.ts",
+    );
+    expect(filePaths).toContain(
+      "my-app/src/lib/ThemeSelector/ThemeSelector.test.tsx",
+    );
     // The e2e harness is not SSR machinery — it spawns `bun run <script>` and
     // polls HTTP, which the surviving dev/preview cells still need.
     expect(filePaths).toContain("my-app/test/e2e/serverHarness.ts");

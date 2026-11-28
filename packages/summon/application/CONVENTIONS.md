@@ -234,6 +234,7 @@ rather than `hydrateRoot`.
 | A7.5 | Router created inside entry server component from URL | `createStaticRouter` in component |
 | A7.6 | URL passed as serializable `initialData` | `{ url: string }` in initialData |
 | A7.7 | Production uses platform adapters (Vercel, Cloudflare), not dev servers | servers are dev-only |
+| A7.8 | The theme and language selectors are forms posting to `/preferences` and `/language`, with Apply in `<noscript>`; one handler answers them in every server, setting the cookie (never `HttpOnly`) and redirecting 303 to a same-origin referer | `handlePreferenceForm` wired into each server |
 
 ---
 

@@ -180,6 +180,11 @@ Layouts are router wrappers, applied to routes with `group()` in
 404 sits under `topBarLayout`: a top bar with the app's name, one link per area
 of the scaffold, and the theme<% if (intl) { %> and language<% } %> selector<% if (intl) { %>s<% } %>. The links are demo
 navigation for exploring what the scaffold ships — replace them with your own.
+<% if (!spa) { -%>
+With JavaScript a selection applies at once. Without it, each selector is a
+form that posts to `/preferences`<% if (intl) { %> or `/language`<% } %>; `src/server/handlePreferenceForm.ts`
+answers it in every server, setting the cookie and sending the reader back.
+<% } -%>
 <% if (appShell) { -%>
 Under the top bar a page takes one of two layouts:
 

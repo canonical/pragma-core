@@ -170,6 +170,62 @@ describe("server matrix (2×3) serves correctly", () => {
 <% } -%>
 <% } -%>
 <% if (!spa) { -%>
+          if (cell.ssr) {
+            // The theme form without JavaScript: it posts, gets the cookie
+            // and a 303 back, and the next render carries it.
+            const themeForm = await fetch(`${server.base}/preferences`, {
+              method: "POST",
+              redirect: "manual",
+              headers: {
+                "content-type": "application/x-www-form-urlencoded",
+                referer: `${server.base}/login`,
+              },
+              body: "theme=dark",
+            });
+            expect(themeForm.status).toBe(303);
+            expect(themeForm.headers.get("location")).toBe(
+              `${server.base}/login`,
+            );
+            const themeCookie = themeForm.headers.get("set-cookie") ?? "";
+            expect(themeCookie).toMatch(
+              /^theme=dark; Path=\/; Max-Age=31536000; SameSite=Lax/,
+            );
+            expect(themeCookie).not.toMatch(/HttpOnly/i);
+            const themed = await (
+              await fetch(`${server.base}/login`, {
+                headers: { cookie: themeCookie.split(";")[0] },
+              })
+            ).text();
+            expect(themed).toContain('class="app comfortable dark"');
+            expect(themed).toMatch(/<option value="dark" selected="">/);
+            expect(themed).toMatch(/<noscript><button[^>]*type="submit"/);
+<% if (intl) { -%>
+
+            // The language form, the same way.
+            const languageForm = await fetch(`${server.base}/language`, {
+              method: "POST",
+              redirect: "manual",
+              headers: { "content-type": "application/x-www-form-urlencoded" },
+              body: "locale=ar",
+            });
+            expect(languageForm.status).toBe(303);
+            expect(languageForm.headers.get("location")).toBe("/");
+            const localeCookie = languageForm.headers.get("set-cookie") ?? "";
+            expect(localeCookie).toMatch(
+              /^locale=ar; Path=\/; Max-Age=31536000; SameSite=Lax/,
+            );
+            const localized = await (
+              await fetch(`${server.base}/`, {
+                headers: { cookie: localeCookie.split(";")[0] },
+              })
+            ).text();
+            expect(localized).toContain('lang="ar"');
+            expect(localized).toContain('dir="rtl"');
+<% } -%>
+          }
+
+<% } -%>
+<% if (!spa) { -%>
           // SSR cells answer with the router's disposition: a matched
           // not-found page is a real 404, static redirect routes and the
           // auth guard are real HTTP redirects, and an authorized request

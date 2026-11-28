@@ -111,7 +111,8 @@ Form components are ON by default: the contact domain and its `contactRoutes` wi
 
 On by default. Every page sits under a top bar — the app's name, one link per
 area of the scaffold, and the theme selector (with `--intl`, the language
-selector too) — as an outer router wrapper the public pages' constrained
+selector too; both apply on change, and post a form without JavaScript) — as an
+outer router wrapper the public pages' constrained
 column nests inside. Under the same bar the dashboard at `/dashboard` takes a
 second layout: `ApplicationShell`, the design system's `ApplicationLayout` with
 its `SideNavigation`, and each of its three pages renders `ViewLayout` and
